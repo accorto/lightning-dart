@@ -1,14 +1,15 @@
 name: lightning_dart
-description: A starting point for Dart libraries or applications.
+description: Lightning CSS Components.
 version: 0.5.1
 author: Accorto <support@accorto.com>
-homepage: http://lightning-dart.com
+homepage: http://www.lightningdart.com
+documentation: https://github.com/accorto/lightning-dart/wiki
 
 environment:
   sdk: '>=1.0.0 <2.0.0'
 
-#dependencies:
-#  lib_name: any
+dependencies:
+  browser: any
 
 dev_dependencies:
   test: '>=0.12.0 <0.13.0'

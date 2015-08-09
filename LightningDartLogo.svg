@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2015 Accorto, Inc. All Rights Reserved
+  ~ License: GPLv3   http://www.gnu.org/licenses/gpl-3.0.txt
+  ~ License options+support:  https://www.lightningdart.com
+  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg
+		xmlns="http://www.w3.org/2000/svg"
+		width="1024"
+		height="1024"
+		viewBox="0 0 1024 1024"
+		preserveAspectRatio="xMidYMid meet"
+		>
+	<g>
+		<path fill="#0081C6" d="M 0 576 L 768 0 L 554 448 L 469 576 Z"/>
+		<path fill="#00D2B8" d="M 554 447 L 1024 448 L 256 1025 L 469 576 Z"/>
+	</g>
+</svg>
