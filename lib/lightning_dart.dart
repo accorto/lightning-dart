@@ -1,11 +1,25 @@
-// Copyright (c) 2015, <your name>. All rights reserved. Use of this source code
-// is governed by a BSD-style license that can be found in the LICENSE file.
+/*
+ * Copyright (c) 2015 Accorto, Inc. All Rights Reserved
+ * License: GPLv3   http://www.gnu.org/licenses/gpl-3.0.txt
+ * License options+support:  https://www.lightningdart.com
+ */
 
-/// The lightning_dart library.
-///
-/// This is an awesome library. More dartdocs go here.
 library lightning_dart;
 
-// TODO: Export any libraries intended for clients of this package.
+import 'dart:html';
+import 'dart:svg';
+import 'dart:async';
+
+import 'package:logging/logging.dart';
 
 export 'src/lightning_dart_base.dart';
+
+part 'components/l_component.dart';
+part 'components/l_grid.dart';
+part 'components/l_icon.dart';
+part 'components/l_page.dart';
+part 'components/l_spacing.dart';
+part 'components/l_text.dart';
+
+part 'utility/html0.dart';
+

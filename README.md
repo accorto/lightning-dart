@@ -1,6 +1,6 @@
 # lightning dart
 
-![Lightning Dart Logo](LightningDartLogo.svg =60x)
+![Lightning Dart Logo](LightningDartLogo.svg?raw=true =60x)
 
 A Dart library for developing web applications based on the Salesforce Lightning Design System CSS Framework.
 https://www.getslds.com/
@@ -27,4 +27,4 @@ Please file feature requests and bugs at the [issue tracker][tracker].
 
 [tracker]: https://github.com/accorto/lightning-dart/issues
 
-<img src="LightningDartLogo.svg" width="60"/>
+<img src="LightningDartLogo.svg?raw=true" width="60"/>
