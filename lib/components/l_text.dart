@@ -61,7 +61,7 @@ class LSectionTitle {
     element.append(a);
     //
     LIcon icon = new LIcon.utility("switch");
-    a.append(icon.svg);
+    a.append(icon.element);
     a.append(_labelElement);
     //
     this.open = open;

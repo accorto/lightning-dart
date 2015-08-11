@@ -7,17 +7,20 @@
 library lightning_dart;
 
 import 'dart:html';
-import 'dart:svg';
+import 'dart:svg' as svg;
 import 'dart:async';
 
 import 'package:logging/logging.dart';
 
 export 'src/lightning_dart_base.dart';
 
+part 'components/l_button.dart';
 part 'components/l_component.dart';
 part 'components/l_grid.dart';
 part 'components/l_icon.dart';
+part 'components/l_media.dart';
 part 'components/l_page.dart';
+part 'components/l_page_header.dart';
 part 'components/l_spacing.dart';
 part 'components/l_text.dart';
 

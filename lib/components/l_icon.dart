@@ -400,8 +400,9 @@ class LIcon {
   static const String CUSTOM_99 = "custom-99";
   static const String CUSTOM_100 = "custom-100";
 
-  final SvgSvgElement svg = new SvgSvgElement();
-  final UseElement _use = new UseElement();
+  /// SVG Element
+  final svg.SvgSvgElement element = new svg.SvgSvgElement();
+  final svg.UseElement _use = new svg.UseElement();
   final String linkName;
   final String linkPrefix;
 
@@ -424,20 +425,21 @@ class LIcon {
       : this(name.replaceAll("action-", ""), SPRITE_ACTION, size, null);
 
   /**
+   * svg
+   * - use
    * [size] C_ICON__TYNY/SMALL/MEDIUM/LARGE
    * [color] C_ICON_TEXT_DEFAULT/WARNING
    */
-  LIcon(
-      String this.linkName, String this.linkPrefix, String size, String color) {
-    svg.classes.add(C_ICON);
+  LIcon(String this.linkName, String this.linkPrefix, String size, String color) {
+    element.classes.add(C_ICON);
     if (size != null) {
-      svg.classes.add(size);
+      element.classes.add(size);
     }
     if (color != null) {
-      svg.classes.add(color);
+      element.classes.add(color);
     }
-    svg.setAttributeNS(null, "aria-hidden", "true");
-    svg.append(_use);
+    element.setAttributeNS(null, "aria-hidden", "true");
+    element.append(_use);
     _use.href.baseVal = "${linkPrefix}${linkName}";
   }
 } // LIcon
@@ -481,7 +483,7 @@ class LIconSpan {
     if (circle) {
       element.classes.add(LIcon.C_ICON__CONTAINER__CIRCLE);
     }
-    element.append(icon.svg);
+    element.append(icon.element);
     //
     if (title != null && title.isNotEmpty) {
       SpanElement span = new SpanElement()

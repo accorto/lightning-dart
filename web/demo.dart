@@ -21,6 +21,10 @@ void main() {
     ..addHeading2("Components/Anchor", headingClasses:[LText.C_TEXT_HEADING__LARGE,
         LPadding.C_TOP__MEDIUM, LPadding.C_BOTTOM__MEDIUM]);
 
+  LRecordTitle recordTitle = new LRecordTitle(
+      new LIcon.standard(LIcon.STD_USER, size: LIcon.C_ICON__LARGE));
+  main.append(recordTitle);
+
 
   LFooter footer = page.addFooter("Core/Grid")
     ..addFooterClasses([LPadding.C_TOP__X_LARGE, LPadding.C_BOTTOM__X_LARGE])
