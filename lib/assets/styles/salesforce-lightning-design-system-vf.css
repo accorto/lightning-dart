@@ -1,3 +1,15 @@
+/***
+ * Lightning Design System v0.5.2
+ */
+
+/*
+Copyright (c) 2015, salesforce.com, inc. All rights reserved.
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+Neither the name of salesforce.com, inc. nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
 @font-face {
   font-family: "Salesforce Sans";
   src: url("../fonts/webfonts/SalesforceSans-Light.woff2") format("woff2"), url("../fonts/webfonts/SalesforceSans-Light.woff") format("woff");
@@ -77,7 +89,7 @@
   border-bottom: 1px dotted; }
 
 .slds b,
-.slds strong, .slds dfn {
+.slds strong {
   font-weight: bold; }
 
 .slds dfn {
@@ -222,18 +234,24 @@
   font-weight: 300; }
 
 .slds {
+  height: 100%;
   font: 100%/1.375 "Salesforce Sans", Arial, sans-serif;
   background: white;
   color: #16325c;
-  height: 100%;
   -webkit-tap-highlight-color: transparent;
   -webkit-overflow-scrolling: touch; }
 
 @media (min-width: 64em) {
   .slds {
-    line-height: 1.5; }
-  .slds:not(html),
-  .slds body {
+    line-height: 1.5; } }
+
+.slds:not(html), .slds body {
+  height: 100%;
+  font-size: 16px;
+  background: transparent; }
+
+@media (min-width: 64em) {
+  .slds:not(html), .slds body {
     font-size: 14px; } }
 
 .slds ::-moz-selection {
@@ -244,41 +262,31 @@
   background: #ffffb0;
   text-shadow: none; }
 
-.slds abbr[title] {
-  cursor: help;
-  border: 0; }
-
+.slds h1,
+.slds h2,
+.slds h3,
+.slds h4,
+.slds h5,
+.slds h6,
+.slds p,
+.slds ol,
+.slds ul,
+.slds dl,
 .slds fieldset {
   margin: 0;
-  border: 0;
   padding: 0; }
 
-.slds hr {
-  border: 0;
-  padding: 0;
-  display: block;
-  margin: 32px 0;
-  border-top: 1px solid #d8dde6;
-  height: 1px;
-  clear: both; }
-
-.slds audio,
-.slds canvas,
-.slds iframe,
-.slds img,
-.slds svg,
-.slds video {
-  vertical-align: middle; }
-
-.slds img {
-  max-width: 100%;
-  height: auto; }
-
+.slds dd,
 .slds figure {
   margin: 0; }
 
-.slds input[type=search] {
-  box-sizing: border-box; }
+.slds abbr[title],
+.slds fieldset,
+.slds hr {
+  border: 0; }
+
+.slds hr {
+  padding: 0; }
 
 .slds h1,
 .slds h2,
@@ -286,43 +294,12 @@
 .slds h4,
 .slds h5,
 .slds h6 {
-  margin: 0;
-  padding: 0;
   font-weight: inherit;
-  font-size: 1em;
-  font-family: "Salesforce Sans", Arial, sans-serif;
-  display: inherit; }
-
-.slds p {
-  margin: 0;
-  padding: 0; }
-
-.slds table {
-  width: 100%; }
-
-.slds caption {
-  text-align: left; }
-
-.slds th,
-.slds td {
-  text-align: left;
-  font-family: "Salesforce Sans", Arial, sans-serif; }
+  font-size: 1em; }
 
 .slds ol,
 .slds ul {
-  margin: 0;
-  padding: 0;
   list-style: none; }
-
-.slds dl {
-  margin: 0;
-  padding: 0; }
-
-.slds dd {
-  margin-left: 0; }
-
-.slds mark {
-  background-color: #ffffb0; }
 
 .slds a {
   text-decoration: none;
@@ -345,6 +322,68 @@
 
 .slds a:active {
   color: #00396b; }
+
+.slds b,
+.slds strong,
+.slds dfn {
+  font-weight: 700; }
+
+.slds mark {
+  background-color: #ffffb0; }
+
+.slds abbr[title] {
+  cursor: help; }
+
+.slds input[type=search] {
+  box-sizing: border-box; }
+
+.slds table {
+  width: 100%; }
+
+.slds caption,
+.slds th,
+.slds td {
+  text-align: left; }
+
+.slds hr {
+  display: block;
+  margin: 32px 0;
+  border-top: 1px solid #d8dde6;
+  height: 1px;
+  clear: both; }
+
+.slds audio,
+.slds canvas,
+.slds iframe,
+.slds img,
+.slds svg,
+.slds video {
+  vertical-align: middle; }
+
+.slds img {
+  max-width: 100%;
+  height: auto; }
+
+.slds body {
+  padding: 0; }
+
+.slds h1,
+.slds h2,
+.slds h3,
+.slds h4,
+.slds h5,
+.slds h6,
+.slds th,
+.slds td {
+  font-family: "Salesforce Sans", Arial, sans-serif; }
+
+.slds h1,
+.slds h2,
+.slds h3,
+.slds h4,
+.slds h5,
+.slds h6 {
+  display: inherit; }
 
 .slds {
   /* ==========================================================================
@@ -1201,7 +1240,7 @@
   .slds .slds-col--padded > .slds-grid {
     margin-right: -12px;
     margin-left: -12px; }
-  @media (min-width: 48em) {
+  @media (min-width: 64em) {
     .slds .slds-col-rule--left {
       border-right: 1px solid #f4f6f9; }
     .slds .slds-col-rule--right {
@@ -1308,6 +1347,8 @@
     max-width: 960px; }
   .slds .slds-container--large {
     max-width: 1280px; }
+  .slds .slds-container--fluid {
+    width: 100%; }
   .slds .slds-container--center {
     margin-left: auto;
     margin-right: auto; }
@@ -1590,24 +1631,15 @@
   .slds .slds-dialog__body {
     padding: 12px 16px; }
   .slds .slds-picklist {
-    position: relative;
-    font-weight: 400;
-    font-size: 16px; }
-  @media (min-width: 64em) {
-    .slds .slds-picklist {
-      font-size: 14px; } }
+    position: relative; }
   .slds .slds-picklist__label {
-    position: relative;
-    display: inline-block;
-    border: 1px solid #d8dde6;
-    border-radius: 4px;
-    padding: 0 32px 0 12px;
+    padding-right: 32px;
+    min-width: 240px;
+    max-width: 320px;
     font-weight: 300;
     font-size: 20px;
-    line-height: 34px;
-    background-color: white;
     color: #16325c;
-    cursor: pointer; }
+    text-align: left; }
   @media (min-width: 64em) {
     .slds .slds-picklist__label {
       font-size: 18px; } }
@@ -1627,108 +1659,43 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none; }
+  .slds .slds-picklist__label .slds-truncate {
+    display: block; }
+  .slds .slds-picklist--draggable .slds-button {
+    margin: 4px; }
+  .slds .slds-picklist--draggable .slds-button:first-of-type {
+    margin-top: 24px; }
   .slds .slds-picklist__options {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    margin-top: 4px;
     border: 1px solid #d8dde6;
     border-radius: 4px;
     padding: 4px 0;
-    min-width: 250px;
-    max-width: 300px;
+    width: 240px;
+    height: 240px;
     background-color: white; }
-  .slds .slds-picklist__options-item {
+  .slds .slds-picklist__item {
     position: relative;
+    line-height: 1.375; }
+  .slds .slds-picklist__item > a,
+  .slds .slds-picklist__item > span {
     display: block;
-    line-height: 34px; }
-  .slds .slds-picklist__options-item > span:not(.slds-text-heading--label),
-  .slds .slds-picklist__options-item > a {
-    display: block;
-    padding: 0 12px 0 32px; }
-  .slds .slds-picklist__options-item > span:not(.slds-text-heading--label):hover,
-  .slds .slds-picklist__options-item > a:hover {
+    padding: 8px 12px; }
+  .slds .slds-picklist__item > a:hover,
+  .slds .slds-picklist__item > span:hover {
     background-color: #f4f6f9;
     cursor: pointer; }
-  .slds .slds-picklist__options-item > span:not(.slds-text-heading--label):active,
-  .slds .slds-picklist__options-item > a:active {
+  .slds .slds-picklist__item > a:active,
+  .slds .slds-picklist__item > span:active {
     background-color: #eef1f6; }
-  .slds .slds-picklist__options-item[aria-selected="true"] {
+  .slds .slds-picklist__item[aria-selected="true"] {
     background-color: #eef1f6; }
-  .slds .slds-picklist__options-item .slds-icon {
-    width: 16px;
-    height: 16px;
-    position: absolute;
-    top: 50%;
-    left: 12px;
-    margin-top: -8px;
-    fill: #0070d2; }
-  .slds .slds-picklist__options--group .slds-text-heading--label {
-    display: block;
-    margin-left: 12px;
-    padding: 12px 0 4px;
-    line-height: 1; }
-  .slds .slds-picklist .slds-shown {
-    opacity: 1;
-    -webkit-transition: opacity 0s ease-in-out;
-    transition: opacity 0s ease-in-out; }
-  .slds .slds-picklist .slds-hidden {
-    opacity: 0;
-    -webkit-transition: opacity 0s ease-in-out;
-    transition: opacity 0s ease-in-out; }
-  .slds .slds-picklists-draggable {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-pack: start;
-    -webkit-justify-content: flex-start;
-    -ms-flex-pack: start;
-    justify-content: flex-start;
-    -webkit-box-align: start;
-    -webkit-align-items: flex-start;
-    -ms-flex-align: start;
-    align-items: flex-start;
-    -webkit-flex-flow: row nowrap;
-    -ms-flex-flow: row nowrap;
-    flex-flow: row nowrap;
-    list-style: none; }
-  .slds .slds-picklists-draggable .slds-button {
-    display: block;
-    clear: left;
-    margin: 32px 8px 0 8px; }
-  .slds .slds-picklists-draggable .slds-button + .slds-button {
-    margin-top: 16px; }
-  .slds .slds-picklists-draggable .slds-form-element + .slds-form-element {
-    margin-top: 0; }
-  .slds .slds-picklist__options--multi {
-    min-width: 0;
-    max-width: 250px;
-    min-height: 200px; }
-  @media (min-width: 48em) {
-    .slds .slds-picklist__options--multi {
-      min-width: 200px; } }
-  .slds .slds-picklist__options--multi button {
-    display: block;
-    clear: left;
-    margin: 0; }
-  .slds .slds-picklist__options--multi .slds-picklist__options-item > span:not(.slds-text-heading--label),
-  .slds .slds-picklist__options--multi .slds-picklist__options-item > a {
-    padding: 0 12px;
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap; }
-  .slds .slds-picklist--quickfind .slds-dropdown {
-    margin-top: 4px; }
   .slds .slds-dropdown {
     margin-top: 2px;
-    padding: 8px 0;
+    padding: 4px 0;
     z-index: 7000;
     float: left;
     position: absolute;
     min-width: 96px;
-    max-width: 400px;
+    max-width: 320px;
     left: 50%;
     -webkit-transform: translateX(-50%);
     -ms-transform: translateX(-50%);
@@ -1749,7 +1716,9 @@
     -ms-transform: translateX(0);
     transform: translateX(0); }
   .slds .slds-dropdown--small {
-    min-width: 180px; }
+    min-width: 240px; }
+  .slds .slds-dropdown--medium {
+    min-width: 320px; }
   .slds .slds-dropdown--large {
     max-width: 512px; }
   .slds .slds-dropdown mark {
@@ -1802,13 +1771,16 @@
     margin-left: 0; }
   .slds .slds-dropdown__header {
     padding: 8px 12px; }
+  .slds .slds-dropdown__item {
+    line-height: 1.375; }
   .slds .slds-dropdown__item > a,
   .slds .slds-dropdown__item > span {
     display: block;
     padding: 8px 12px;
     color: #16325c;
     position: relative;
-    white-space: nowrap; }
+    white-space: nowrap;
+    cursor: pointer; }
   .slds .slds-dropdown__item > a:hover,
   .slds .slds-dropdown__item > a:focus,
   .slds .slds-dropdown__item > span:hover,
@@ -1840,6 +1812,8 @@
     left: 12px; }
   .slds .slds-dropdown__item .slds-icon--right {
     right: 12px; }
+  .slds .slds-dropdown .slds-has-icon {
+    position: relative; }
   .slds .slds-dropdown .slds-has-icon--left > a,
   .slds .slds-dropdown .slds-has-icon--left > span {
     padding-left: 32px; }
@@ -1957,6 +1931,7 @@
   .slds .slds-datepicker__filter--month {
     padding: 0 4px 0 0; }
   .slds .slds-datepicker .slds-picklist__label {
+    min-width: 0;
     font-size: 14px;
     font-weight: 400; }
   @media (min-width: 64em) {
@@ -3542,6 +3517,22 @@
     margin-left: 32px; }
   .slds .slds-m-around--x-large {
     margin: 32px; }
+  .slds .slds-m-top--xx-large {
+    margin-top: 48px; }
+  .slds .slds-m-right--xx-large {
+    margin-right: 48px; }
+  .slds .slds-m-bottom--xx-large {
+    margin-bottom: 48px; }
+  .slds .slds-m-left--xx-large {
+    margin-left: 48px; }
+  .slds .slds-m-vertical--xx-large {
+    margin-top: 48px;
+    margin-bottom: 48px; }
+  .slds .slds-m-horizontal--xx-large {
+    margin-right: 48px;
+    margin-left: 48px; }
+  .slds .slds-m-around--xx-large {
+    margin: 48px; }
   .slds .slds-p-top--xxx-small {
     padding-top: 2px; }
   .slds .slds-p-right--xxx-small {
@@ -3654,6 +3645,22 @@
     padding-left: 32px; }
   .slds .slds-p-around--x-large {
     padding: 32px; }
+  .slds .slds-p-top--xx-large {
+    padding-top: 48px; }
+  .slds .slds-p-right--xx-large {
+    padding-right: 48px; }
+  .slds .slds-p-bottom--xx-large {
+    padding-bottom: 48px; }
+  .slds .slds-p-left--xx-large {
+    padding-left: 48px; }
+  .slds .slds-p-vertical--xx-large {
+    padding-top: 48px;
+    padding-bottom: 48px; }
+  .slds .slds-p-horizontal--xx-large {
+    padding-right: 48px;
+    padding-left: 48px; }
+  .slds .slds-p-around--xx-large {
+    padding: 48px; }
   .slds .slds-float-left {
     float: left; }
   .slds .slds-float-right {
@@ -4335,20 +4342,19 @@
       font-size: 14px; } }
   .slds .slds-text-heading--small {
     font-weight: 300;
-    line-height: 1.25;
-    font-size: 20px; }
+    font-size: 20px;
+    line-height: 1.25; }
   @media (min-width: 64em) {
     .slds .slds-text-heading--small {
       font-size: 18px; } }
   .slds .slds-text-heading--medium {
     font-weight: 300;
-    line-height: 1.25;
-    font-size: 24px; }
+    font-size: 24px;
+    line-height: 1.25; }
   .slds .slds-text-heading--large {
-    font-weight: 300;
-    line-height: 1.25;
     font-weight: 700;
-    font-size: 24px; }
+    font-size: 24px;
+    line-height: 1.25; }
   @media (min-width: 48em) {
     .slds .slds-text-heading--large {
       font-weight: 300;
@@ -4387,22 +4393,31 @@
   .slds .slds-text-longform p,
   .slds .slds-text-longform ul,
   .slds .slds-text-longform ol,
-  .slds .slds-text-longform dl {
+  .slds .slds-text-longform dl,
+  .slds .slds-text-longform img {
     margin-bottom: 12px; }
   .slds .slds-text-longform h1:last-child,
+  .slds .slds-text-longform h1 p img,
   .slds .slds-text-longform h2:last-child,
+  .slds .slds-text-longform h2 p img,
   .slds .slds-text-longform h3:last-child,
+  .slds .slds-text-longform h3 p img,
   .slds .slds-text-longform p:last-child,
+  .slds .slds-text-longform p p img,
   .slds .slds-text-longform ul:last-child,
+  .slds .slds-text-longform ul p img,
   .slds .slds-text-longform ol:last-child,
-  .slds .slds-text-longform dl:last-child {
+  .slds .slds-text-longform ol p img,
+  .slds .slds-text-longform dl:last-child,
+  .slds .slds-text-longform dl p img,
+  .slds .slds-text-longform img:last-child,
+  .slds .slds-text-longform img p img {
     margin-bottom: 0; }
-  .slds .slds-text-longform ul,
-  .slds .slds-text-longform ol {
-    padding-left: 24px; }
-  .slds .slds-text-longform ul {
+  .slds .slds-text-longform ul:not(.slds-grid) {
+    margin-left: 48px;
     list-style: disc; }
   .slds .slds-text-longform ol {
+    margin-left: 48px;
     list-style: decimal; }
   .slds .slds-section-title {
     font-size: 20px; }
