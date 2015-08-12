@@ -463,6 +463,18 @@ class LIcon {
     element.append(_use);
     _use.href.baseVal = "${HREF_PREFIX}${linkPrefix}${linkName}";
   }
+
+  /// svg element classes
+  CssClassSet get classes => element.classes;
+
+
+  /// set [cssSize] - C_ICON__LARGE, C_ICON__MEDIUM, C_ICON__SMALL, C_ICON__TINY
+  void set size (String cssSize) {
+    element.classes.removeAll([C_ICON__LARGE, C_ICON__MEDIUM, C_ICON__SMALL, C_ICON__TINY]);
+    if (cssSize != null && cssSize.isEmpty)
+      element.classes.add(cssSize);
+  }
+
 } // LIcon
 
 /**
@@ -513,4 +525,5 @@ class LIconSpan {
       element.append(span);
     }
   }
+
 } // LIconSpan

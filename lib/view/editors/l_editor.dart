@@ -11,6 +11,12 @@ part of lightning_dart;
  */
 abstract class LEditor {
 
+  static const String C_INPUT = "slds-input";
+
+  static const String C_INPUT__ICON = "slds-input__icon";
+  static const String C_INPUT_HAS_ICON = "slds-input-has-icon";
+  static const String C_INPUT_HAS_ICON__LEFT = "slds-input-has-icon--left";
+
   /// Get Form Element
   DivElement get formElement;
 

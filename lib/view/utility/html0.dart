@@ -21,8 +21,12 @@ class Html0 {
   static const String V_ROLE_MAIN = "main";
   /// Attribute role Value
   static const String V_ROLE_GROUP = "group";
+  /// Attribute role Value
+  static const String V_ROLE_MENU = "menu";
 
   /// Attribute Aria Labelled By
   static const String A_ARIA_LABELLEDBY = "aria-labelledby";
 
+  /// Disabled attribute
+  static const String A_DISABLED = "disabled";
 } // Html0

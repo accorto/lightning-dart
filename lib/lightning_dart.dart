@@ -25,6 +25,7 @@ export 'src/lightning_dart_base.dart';
 part 'view/components/l_button.dart';
 part 'view/components/l_button_group.dart';
 part 'view/components/l_component.dart';
+part 'view/components/l_dropdown.dart';
 part 'view/components/l_grid.dart';
 part 'view/components/l_icon.dart';
 part 'view/components/l_media.dart';
