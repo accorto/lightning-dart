@@ -27,10 +27,15 @@ class LText {
   static const String C_TEXT_ALIGN__CENTER = "slds-text-align--center";
   static const String C_TEXT_ALIGN__RIGHT = "slds-text-align--right";
   static const String C_TEXT_LONGFORM = "slds-text-longform";
+
   static const String C_TYPE_FOCUS = "slds-type-focus";
+
   static const String C_SECTION_TITLE = "slds-section-title";
   static const String C_SECTION_GROUP__IS_OPEN = "section-group--is-open";
   static const String C_SECTION_GROUP__IS_CLOSED = "slds-section-group--is-closed";
+
+  /// Truncate Text
+  static const String C_TRUNCATE = "slds-truncate";
 
   /// Heading Sizes
   static final List<String> HEADING_SIZES = [C_TEXT_HEADING__LARGE, C_TEXT_HEADING__MEDIUM, C_TEXT_HEADING__SMALL];

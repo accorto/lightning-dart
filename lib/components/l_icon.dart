@@ -12,6 +12,10 @@ part of lightning_dart;
  * https://www.getslds.com/resources/icons
  */
 class LIcon {
+
+  /// Prefix for asset references
+  static const String HREF_PREFIX = "packages/lightning_dart";
+
   static const String C_ICON = "slds-icon";
   static const String C_ICON__TINY = "slds-icon--tiny";
   static const String C_ICON__SMALL = "slds-icon--small";
@@ -400,39 +404,56 @@ class LIcon {
   static const String CUSTOM_99 = "custom-99";
   static const String CUSTOM_100 = "custom-100";
 
+
+
   /// SVG Element
   final svg.SvgSvgElement element = new svg.SvgSvgElement();
+  /// Svg Use reference
   final svg.UseElement _use = new svg.UseElement();
+  /// Link name
   final String linkName;
+  /// Link Prefix
   final String linkPrefix;
 
   /**
    * Utility Icon
    */
-  LIcon.utility(String linkName, {String size: C_ICON__MEDIUM, String color})
-      : this(linkName, SPRITE_UTILITY, size, color);
+  LIcon.utility(String linkName, {String className, String size, String color})
+      : this(linkName, SPRITE_UTILITY, className, size, color);
 
   /**
    * Standard Icon [linkName] e.g. CIcon.STD_CASE
    */
-  LIcon.standard(String linkName, {String size: C_ICON__MEDIUM})
-      : this(linkName, SPRITE_STANDARD, size, null);
+  LIcon.standard(String linkName, {String className: C_ICON, String size: C_ICON__LARGE})
+      : this(linkName, SPRITE_STANDARD, size, className, "${C_ICON_STD_}${linkName}");
 
   /**
    * Action Icon - [name] e.g. CIcon.ACTION_DESCRIPTION
    */
-  LIcon.action(String name, {String size: C_ICON__MEDIUM})
-      : this(name.replaceAll("action-", ""), SPRITE_ACTION, size, null);
+  LIcon.action(String name, {String className: C_ICON, String size: C_ICON__LARGE})
+      : this(name.replaceAll("action-", ""), SPRITE_ACTION, className, size, "${C_ICON_ACTION_}${name}");
+
+  /**
+   * Custom Icon - [name] e.g. CIcon.CUSTOM_1
+   */
+  LIcon.custom(String name, {String className: C_ICON, String size: C_ICON__LARGE})
+      : this(name, SPRITE_CUSTOM, className, size, "${C_ICON_CUSTOM_}${name}");
 
   /**
    * svg
    * - use
-   * [size] C_ICON__TYNY/SMALL/MEDIUM/LARGE
-   * [color] C_ICON_TEXT_DEFAULT/WARNING
+   * [linkName] for use href #name - e.g. add
+   * [linkPrefix] for use href - e.g. SPRITE_ACTION/CUSTOM/UTILITY/...
+   * [className] optional className, e.g. C_ICON
+   * [size] optional C_ICON__TYNY/SMALL/MEDIUM/LARGE
+   * [color] optional C_ICON_TEXT_DEFAULT/WARNING
    */
-  LIcon(String this.linkName, String this.linkPrefix, String size, String color) {
-    element.classes.add(C_ICON);
-    if (size != null) {
+  LIcon(String this.linkName, String this.linkPrefix, String className, String size, String color) {
+    // css classes
+    if (className != null && className.isNotEmpty) {
+      element.classes.add(className);
+    }
+    if (size != null && size.isNotEmpty) {
       element.classes.add(size);
     }
     if (color != null) {
@@ -440,7 +461,7 @@ class LIcon {
     }
     element.setAttributeNS(null, "aria-hidden", "true");
     element.append(_use);
-    _use.href.baseVal = "${linkPrefix}${linkName}";
+    _use.href.baseVal = "${HREF_PREFIX}${linkPrefix}${linkName}";
   }
 } // LIcon
 

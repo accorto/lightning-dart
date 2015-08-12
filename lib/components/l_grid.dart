@@ -24,6 +24,7 @@ class LGrid extends LComponent {
   static const String C_GRID__ALIGN_SPREAD = "slds-grid--align-spread";
   /// slds-grid--align-space - Evenly distribute columns on the main axis | Optional, apply to .grid
   static const String C_GRID__ALIGN_SPACE = "slds-grid--align-space";
+
   /// slds-col - Initializes grid column | Optional
   static const String C_COL = "slds-col";
   /// slds-col--padded - Adds horizontal padding to column | Optional, apply to .col
@@ -36,6 +37,7 @@ class LGrid extends LComponent {
   static const String C_COL_RULE__TOP = "slds-col-rule--top";
   /// slds-col-rule--bottom - Adds border to bottom of column | Optional, apply to .col
   static const String C_COL_RULE__BOTTOM = "slds-col-rule--bottom";
+
   /// slds-wrap - Forces columns to wrap when they exceed 100% of their parent’s width | Optional, apply to .grid
   static const String C_WRAP = "slds-wrap";
   /// slds-nowrap - Forces columns to not wrap and stretch 100% of their parent's width | Optional, apply to .grid
@@ -52,6 +54,7 @@ class LGrid extends LComponent {
   static const String C_NO_FLEX = "slds-no-flex";
   /// slds-no-space - Fix for FFOX | Optional, apply to .col
   static const String C_NO_SPACE = "slds-no-space";
+
   /// slds-grow - Forces element to grow to children's content | Optional
   static const String C_GROW = "slds-grow";
   /// slds-grow-none - Prevents element from growing to children's content | Optional
@@ -60,10 +63,11 @@ class LGrid extends LComponent {
   static const String C_SHRINK = "slds-shrink";
   /// slds-shrink-none - Prevents element from shrinking to children's content | Optional
   static const String C_SHRINK_NONE = "slds-shrink-none";
+
   /// slds-align-top - Vertically aligns element to top of .grid | Optional
   static const String C_ALIGN_TOP = "slds-align-top";
   /// slds-align-center - Vertically aligns element to middle of .grid | Optional
-  static const String C_ALIGN_CENTER = "slds-align-center";
+  static const String C_ALIGN_MIDDLE = "slds-align-middle";
   /// slds-align-bottom - Vertically aligns element to bottom of .grid | Optional
   static const String C_ALIGN_BOTTOM = "slds-align-bottom";
 

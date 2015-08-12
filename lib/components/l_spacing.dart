@@ -116,3 +116,45 @@ class LPadding {
   static const String C_AROUND__LARGE = "slds-p-around--large";
   static const String C_AROUND__X_LARGE = "slds-p-around--x-large";
 }
+
+
+/**
+ * Lightning Size
+ */
+class LSize {
+
+  static const String C_SIZE__1_OF_1 = "slds-size--1-of-1";
+
+  static const String C_SIZE__1_OF_2 = "slds-size--1-of-2";
+
+  static const String C_SIZE__1_OF_3 = "slds-size--1-of-3";
+  static const String C_SIZE__2_OF_3 = "slds-size--2-of-3";
+
+  static const String C_SIZE__1_OF_4 = "slds-size--1-of-4";
+  static const String C_SIZE__2_OF_4 = "slds-size--2-of-4";
+  static const String C_SIZE__3_OF_4 = "slds-size--3-of-4";
+
+  static const String C_SIZE__1_OF_5 = "slds-size--1-of-5";
+  static const String C_SIZE__2_OF_5 = "slds-size--2-of-5";
+  static const String C_SIZE__3_OF_5 = "slds-size--3-of-5";
+  static const String C_SIZE__4_OF_5 = "slds-size--4-of-5";
+
+  static const String C_SIZE__1_OF_6 = "slds-size--1-of-6";
+  static const String C_SIZE__2_OF_6 = "slds-size--2-of-6";
+  static const String C_SIZE__3_OF_6 = "slds-size--3-of-6";
+  static const String C_SIZE__4_OF_6 = "slds-size--4-of-6";
+  static const String C_SIZE__5_OF_6 = "slds-size--5-of-6";
+
+  static const String C_SIZE__1_OF_12 = "slds-size--1-of-12";
+  static const String C_SIZE__2_OF_12 = "slds-size--2-of-12";
+  static const String C_SIZE__3_OF_12 = "slds-size--3-of-12";
+  static const String C_SIZE__4_OF_12 = "slds-size--4-of-12";
+  static const String C_SIZE__5_OF_12 = "slds-size--5-of-12";
+  static const String C_SIZE__6_OF_12 = "slds-size--6-of-12";
+  static const String C_SIZE__7_OF_12 = "slds-size--7-of-12";
+  static const String C_SIZE__8_OF_12 = "slds-size--8-of-12";
+  static const String C_SIZE__9_OF_12 = "slds-size--9-of-12";
+  static const String C_SIZE__10_OF_12 = "slds-size--10-of-12";
+  static const String C_SIZE__11_OF_12 = "slds-size--11-of-12";
+
+}

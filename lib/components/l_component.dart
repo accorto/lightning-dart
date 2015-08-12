@@ -48,6 +48,9 @@ abstract class LComponent {
     return div;
   }
 
+  /// element css classes
+  CssClassSet get classes => element.classes;
+
   /**
    * Add Heading
    * if no [id] is provided the element.id is suffixed with -heading, if element has no id, it it auto numbered

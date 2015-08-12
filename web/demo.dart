@@ -16,14 +16,19 @@ void main() {
   LContainer page = LContainer.init(id: "demo", containerSize: LContainer.C_CONTAINER__LARGE)
     ..addHeader("Salesforce Design System Tutorial");
 
-  CDiv main = page.appendDiv();
+  CDiv main = page.appendDiv()
+    ..classes.add("main")
+    ..role = Html0.V_ROLE_MAIN;
   CSection section = main.appendSection()
     ..addHeading2("Components/Anchor", headingClasses:[LText.C_TEXT_HEADING__LARGE,
         LPadding.C_TOP__MEDIUM, LPadding.C_BOTTOM__MEDIUM]);
 
-  LRecordTitle recordTitle = new LRecordTitle(
-      new LIcon.standard(LIcon.STD_USER, size: LIcon.C_ICON__LARGE));
-  main.append(recordTitle);
+  LButtonGroup buttonGroup = new LButtonGroup()
+    ..add(new LButton("a1","Action 1"))
+    ..add(new LButton("a2", "Action 2"));
+  LRecordTitle recordTitle = new LRecordTitle(new LIcon.standard(LIcon.STD_USER),
+    recordType: "Record Type", recordTitle: "Record Title", buttonGroup: buttonGroup);
+  section.append(recordTitle);
 
 
   LFooter footer = page.addFooter("Core/Grid")

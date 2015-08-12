@@ -19,6 +19,8 @@ class Html0 {
   static const String V_ROLE_CONTENTINFO = "contentinfo";
   /// Attribute role Value
   static const String V_ROLE_MAIN = "main";
+  /// Attribute role Value
+  static const String V_ROLE_GROUP = "group";
 
   /// Attribute Aria Labelled By
   static const String A_ARIA_LABELLEDBY = "aria-labelledby";
