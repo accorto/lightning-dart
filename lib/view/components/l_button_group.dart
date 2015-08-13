@@ -17,7 +17,7 @@ class LButtonGroup {
   /// Button Group
   DivElement element = new DivElement()
     ..classes.add(C_BUTTON_GROUP)
-    ..setAttribute(Html0.A_ROLE, Html0.V_ROLE_GROUP);
+    ..setAttribute(Html0.ROLE, Html0.ROLE_GROUP);
 
   /// all buttons in group
   List<LButton> buttons = new List<LButton>();

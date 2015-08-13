@@ -40,7 +40,7 @@ class LDropdown extends LComponent {
   /// Dropdown with Button
   final DivElement element = new DivElement()
     ..classes.add(C_DROPDOWN_TRIGGER)
-    ..setAttribute(Html0.A_ARIA_HASPOPUP, "true");
+    ..setAttribute(Html0.ARIA_HASPOPUP, "true");
 
   /// Dropdown Button
   final LButton button;
@@ -53,7 +53,7 @@ class LDropdown extends LComponent {
   /// Dropdown List
   final UListElement dropdownList = new UListElement()
     ..classes.add(C_DROPDOWN__LIST)
-    ..setAttribute(Html0.A_ROLE, Html0.V_ROLE_MENU);
+    ..setAttribute(Html0.ROLE, Html0.ROLE_MENU);
 
   /// Dropdown Items
   final List<LDropdownItem> items = new List<LDropdownItem>();
@@ -222,8 +222,7 @@ class LDropdownItem extends ListItem {
     element
       ..classes.add(LDropdown.C_DROPDOWN__ITEM)
       ..tabIndex = -1
-      ..attributes[Html0.A_ROLE] = "menuitem option";
-      // role="menuitemcheckbox", or role="menuitemradio"
+      ..attributes[Html0.ROLE] = Html0.ROLE_MENUITEM + " " + Html0.ROLE_OPTION;
     a
       ..classes.add(LText.C_TRUNCATE)
       ..tabIndex = -1;

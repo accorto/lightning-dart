@@ -28,6 +28,7 @@ part 'view/components/l_component.dart';
 part 'view/components/l_dropdown.dart';
 part 'view/components/l_grid.dart';
 part 'view/components/l_icon.dart';
+part 'view/components/l_image.dart';
 part 'view/components/l_lookup.dart';
 part 'view/components/l_media.dart';
 part 'view/components/l_modal.dart';

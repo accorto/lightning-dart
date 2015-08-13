@@ -28,11 +28,11 @@ class LLookup {
   /// Lookup form + menu
   final DivElement menu = new DivElement()
     ..classes.add(C_LOOKUP__MENU)
-    ..attributes[Html0.A_ROLE] = Html0.V_ROLE_LISTBOX;
+    ..attributes[Html0.ROLE] = Html0.ROLE_LISTBOX;
 
   final UListElement menuList = new UListElement()
     ..classes.add(C_LOOKUP__LIST)
-    ..attributes[Html0.A_ROLE] = Html0.V_ROLE_PRESENTATION;
+    ..attributes[Html0.ROLE] = Html0.ROLE_PRESENTATION;
 
   /// Lookup Items
   final List<LLookupItem> items = new List<LLookupItem>();
@@ -51,9 +51,9 @@ class LLookup {
     //
     input.input
       ..classes.add(LEditor.C_INPUT__BARE)
-      ..attributes[Html0.A_ROLE] = Html0.V_ROLE_COMBOBOX
-      ..attributes[Html0.A_ARIA_AUTOCOMPLETE] = "list"
-      ..attributes[Html0.A_ARIA_HASPOPUP] = "true";
+      ..attributes[Html0.ROLE] = Html0.ROLE_COMBOBOX
+      ..attributes[Html0.ARIA_AUTOCOMPLETE] = "list"
+      ..attributes[Html0.ARIA_HASPOPUP] = "true";
     input.labelInputText = lLookupLabel();
     // div .lookup
     // - div .form-element ... label...
@@ -79,7 +79,7 @@ class LLookup {
 
   /// Show Popup
   void set showResults (bool newValue) {
-    input.input.attributes[Html0.A_ARIA_EXPANED] = newValue.toString();
+    input.input.attributes[Html0.ARIA_EXPANED] = newValue.toString();
     // Input has aria-activedescendant attribute whose value is the id of the highlighted results list option, no value if nothing's highlighted in the list
   }
 
@@ -100,9 +100,9 @@ class LLookupItem extends ListItem {
       : super(id:id, label:label, href:href, leftIcon:leftIcon, rightIcon:rightIcon) {
     element
       ..classes.add(LLookup.C_LOOKUP__ITEM)
-      ..attributes[Html0.A_ROLE] = Html0.V_ROLE_PRESENTATION;
+      ..attributes[Html0.ROLE] = Html0.ROLE_PRESENTATION;
     a
-      ..attributes[Html0.A_ROLE] = Html0.V_ROLE_OPTION;
+      ..attributes[Html0.ROLE] = Html0.ROLE_OPTION;
   } // LLookupItem
 
 } // LLookupItem

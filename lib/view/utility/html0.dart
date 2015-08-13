@@ -13,60 +13,78 @@ class Html0 {
 
   // http://www.w3.org/TR/2007/WD-xhtml-role-20071004/
   /// Attribute: role
-  static const String A_ROLE = "role";
+  static const String ROLE = "role";
   /// Attribute role Value
-  static const String V_ROLE_BANNER = "banner";
+  static const String ROLE_BANNER = "banner";
   /// Attribute role Value
-  static const String V_ROLE_CONTENTINFO = "contentinfo";
+  static const String ROLE_CONTENTINFO = "contentinfo";
   /// Attribute role Value
-  static const String V_ROLE_DEFINITION = "definition";
+  static const String ROLE_DEFINITION = "definition";
   /// Attribute role Value
-  static const String V_ROLE_MAIN = "main";
+  static const String ROLE_MAIN = "main";
   /// Attribute role Value
-  static const String V_ROLE_NAVIGATION = "navigarion";
+  static const String ROLE_NAVIGATION = "navigarion";
   /// Attribute role Value
-  static const String V_ROLE_NOTE = "note";
+  static const String ROLE_NOTE = "note";
   /// Attribute role Value
-  static const String V_ROLE_SEARCH = "search";
+  static const String ROLE_SEARCH = "search";
   /// Attribute role Value
-  static const String V_ROLE_SECONDARY = "secondary";
+  static const String ROLE_SECONDARY = "secondary";
   /// Attribute role Value
-  static const String V_ROLE_SEEALSO = "seealso";
+  static const String ROLE_SEEALSO = "seealso";
 
   // http://www.w3.org/TR/wai-aria/roles
   // http://www.w3.org/TR/wai-aria/rdf_model.svg
   /// Aria Attribute role Value
-  static const String V_ROLE_PRESENTATION = "presentation";
+  static const String ROLE_PRESENTATION = "presentation";
   /// Aria Attribute role Value
-  static const String V_ROLE_LISTBOX = "listbox";
+  static const String ROLE_LISTBOX = "listbox";
   /// Aria Attribute role Value
-  static const String V_ROLE_COMBOBOX = "combobox";
+  static const String ROLE_COMBOBOX = "combobox";
   /// Aria Attribute role Value
-  static const String V_ROLE_OPTION = "option";
+  static const String ROLE_OPTION = "option";
   /// Aria Attribute role Value
-  static const String V_ROLE_GROUP = "group";
+  static const String ROLE_GROUP = "group";
   /// Aria Attribute role Value
-  static const String V_ROLE_MENU = "menu";
+  static const String ROLE_MENU = "menu";
   /// Aria Attribute role Value
-  static const String V_ROLE_DIALOG = "dialog";
+  static const String ROLE_MENUITEM = "menuitem";
+  /// Aria Attribute role Value
+  static const String ROLE_MENUITEMCHECKBOX = "menuitemcheckbox";
+  /// Aria Attribute role Value
+  static const String ROLE_MENUITEMRADIO = "menuitemradio";
+
+  /// Aria Attribute role Value
+  static const String ROLE_DIALOG = "dialog";
 
 
 
   /// Attribute Aria Labelled By
-  static const String A_ARIA_LABELLEDBY = "aria-labelledby";
-  static const String A_ARIA_LABEL = "aria-label";
-  static const String A_ARIA_DISABLED = "aria-disabled";
-  static const String A_ARIA_HIDDEN = "aria-hidden";
-  // e.g. list
-  static const String A_ARIA_AUTOCOMPLETE = "aria-autocomplete";
-  static const String A_ARIA_HASPOPUP = "aria-haspopup";
-  // e.g. assertive
-  static const String A_ARIA_LIVE = "aria-live";
+  static const String ARIA_LABELLEDBY = "aria-labelledby";
+  /// Attribute Aria Label
+  static const String ARIA_LABEL = "aria-label";
+  /// Attribute Aria
+  static const String ARIA_DISABLED = "aria-disabled";
+  /// Attribute Aria
+  static const String ARIA_HIDDEN = "aria-hidden";
+  /// Attribute Aria auto complete e.g. list
+  static const String ARIA_AUTOCOMPLETE = "aria-autocomplete";
+  static const String ARIA_AUTOCOMPLETE_LIST = "list";
+  /// Attribute Aria
+  static const String ARIA_HASPOPUP = "aria-haspopup";
+  /// Attribute Aria live assertive
+  static const String ARIA_LIVE = "aria-live";
+  static const String ARIA_LIVE_ASSERTIVE = "assertive";
 
-  static const String A_ARIA_EXPANED = "aria-expanded";
-  static const String A_ARIA_ACTIVEDECENDNT = "aria-activedescendant";
+  /// Attribute Aria
+  static const String ARIA_EXPANED = "aria-expanded";
+  /// Attribute Aria
+  static const String ARIA_ACTIVEDECENDNT = "aria-activedescendant";
 
   /// Disabled attribute
-  static const String A_DISABLED = "disabled";
+  static const String DISABLED = "disabled";
+
+  /// Data Attribute - Value
+  static const String DATA_VALUE = "data-value";
 
 } // Html0

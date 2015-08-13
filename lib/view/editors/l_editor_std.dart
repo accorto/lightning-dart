@@ -86,9 +86,9 @@ abstract class LEditorStd extends LEditor {
       input
       //..type = "text"
         ..classes.add(LEditor.C_INPUT__BARE)
-        ..attributes[Html0.A_ARIA_HASPOPUP] = "true"
-        ..attributes[Html0.A_ARIA_AUTOCOMPLETE] = "list"
-        ..attributes[Html0.A_ROLE] = Html0.V_ROLE_COMBOBOX;
+        ..attributes[Html0.ARIA_HASPOPUP] = "true"
+        ..attributes[Html0.ARIA_AUTOCOMPLETE] = "list"
+        ..attributes[Html0.ROLE] = Html0.ROLE_COMBOBOX;
       _formElementControl.append(input);
     }
     return _formElement;
@@ -108,7 +108,7 @@ abstract class LEditorStd extends LEditor {
 
   /// set Label value for input element
   void set labelInputText (String newValue) {
-    input.attributes[Html0.A_ARIA_LABEL] = newValue;
+    input.attributes[Html0.ARIA_LABEL] = newValue;
     input.attributes["label"] = newValue;
   }
 

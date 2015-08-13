@@ -463,7 +463,7 @@ class LIcon {
     if (color != null) {
       element.classes.add(color);
     }
-    element.setAttributeNS(null, Html0.A_ARIA_HIDDEN, "true");
+    element.setAttributeNS(null, Html0.ARIA_HIDDEN, "true");
     element.append(_use);
     _use.href.baseVal = "${HREF_PREFIX}${linkPrefix}${linkName}";
   }

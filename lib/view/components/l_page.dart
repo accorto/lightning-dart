@@ -174,7 +174,7 @@ class LHeader extends LComponent {
 
   /// The Element
   final Element element = new Element.header()
-    ..setAttribute(Html0.A_ROLE, Html0.V_ROLE_BANNER);
+    ..setAttribute(Html0.ROLE, Html0.ROLE_BANNER);
   /// h1
   final HeadingElement h1 = new HeadingElement.h1()
     ..classes.add(LText.C_TEXT_HEADING__LABEL);
@@ -216,7 +216,7 @@ class LFooter extends LComponent {
 
   /// footer element
   final Element element = new Element.footer()
-    ..setAttribute(Html0.A_ROLE, Html0.V_ROLE_CONTENTINFO);
+    ..setAttribute(Html0.ROLE, Html0.ROLE_CONTENTINFO);
   /// h2
   final HeadingElement h2 = new HeadingElement.h2();
 

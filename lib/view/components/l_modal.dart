@@ -30,7 +30,7 @@ class LModal extends LComponent {
 
   final DivElement dialog = new DivElement()
     ..classes.add(C_MODAL)
-    ..attributes[Html0.A_ROLE] = Html0.V_ROLE_DIALOG;
+    ..attributes[Html0.ROLE] = Html0.ROLE_DIALOG;
 
   final DivElement container = new DivElement()
     ..classes.add(C_MODAL__CONTAINER);
@@ -169,7 +169,7 @@ class LModal extends LComponent {
   bool get show => backdrop.classes.contains(C_MODAL_BACKDROP__OPEN);
   /// Show/Hide Modal
   void set show (bool newValue) {
-    dialog.attributes[Html0.A_ARIA_HIDDEN] = newValue ? "false" : "true";
+    dialog.attributes[Html0.ARIA_HIDDEN] = newValue ? "false" : "true";
     if (newValue) {
       dialog.classes.add(C_FADE_IN_OPEN);
       backdrop.classes.add(C_MODAL_BACKDROP__OPEN);

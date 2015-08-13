@@ -175,7 +175,7 @@ class LButton extends LComponent {
   /// Add More (down) icon
   void addIconMore() {
     element.classes.add(C_BUTTON__ICON_MORE);
-    element.setAttribute(Html0.A_ARIA_HASPOPUP, "true");
+    element.setAttribute(Html0.ARIA_HASPOPUP, "true");
     LIcon more = new LIcon.utility("down");
     more.element.classes.addAll([C_BUTTON__ICON, C_BUTTON__ICON__X_SMALL]);
     element.append(more.element);
@@ -247,7 +247,7 @@ class LButtonStateful {
     }
     element.classes.add(LButton.C_BUTTON__NEUTRAL);
     element.classes.add(LButton.C_NOT_SELECTED);
-    element.setAttribute(Html0.A_ARIA_LIVE, "assertive");
+    element.setAttribute(Html0.ARIA_LIVE, "assertive");
     //
     addState(new LButtonStatefulState(new LIcon.utility("add"), textNotSelected, LButton.C_TEXT_NOT_SELECTED));
     addState(new LButtonStatefulState(new LIcon.utility("check"), textSelected, LButton.C_TEXT_SELECTED));

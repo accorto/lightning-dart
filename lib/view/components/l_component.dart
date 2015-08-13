@@ -31,7 +31,14 @@ abstract class LComponent {
    * Set [roleAttribute] e.g. Html0.V_ROLE_MAIN
    */
   void set role (String roleAttribute) {
-    element.setAttribute(Html0.A_ROLE, roleAttribute);
+    element.setAttribute(Html0.ROLE, roleAttribute);
+  }
+
+  /// element data-value
+  String get dataValue => element.attributes[Html0.DATA_VALUE];
+  /// element data-value
+  void set dataValue (String newValue) {
+    element.attributes[Html0.DATA_VALUE] = newValue;
   }
 
   /// Append Div
@@ -60,7 +67,7 @@ abstract class LComponent {
     // labelled by
     String theId = _subId("heading", autoAriaLabel: true);
     h.id = theId;
-    element.setAttribute(Html0.A_ARIA_LABELLEDBY, theId);
+    element.setAttribute(Html0.ARIA_LABELLEDBY, theId);
 
     // Classes
     if (headingClass != null && headingClass.isNotEmpty)

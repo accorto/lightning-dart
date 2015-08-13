@@ -18,7 +18,7 @@ void main() {
 
   CDiv main = page.appendDiv()
     ..classes.add("main")
-    ..role = Html0.V_ROLE_MAIN;
+    ..role = Html0.ROLE_MAIN;
   CSection section = main.appendSection()
     ..addHeading2("Components/Anchor", headingClasses:[LText.C_TEXT_HEADING__LARGE,
         LPadding.C_TOP__MEDIUM, LPadding.C_BOTTOM__MEDIUM]);

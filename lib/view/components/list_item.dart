@@ -64,13 +64,13 @@ class ListItem {
   void set disabled (bool newValue) {
     _disabled = newValue;
     if (newValue) {
-      element.attributes[Html0.A_DISABLED] = "";
-      a.attributes[Html0.A_DISABLED] = "";
-      a.attributes[Html0.A_ARIA_DISABLED] = "true";
+      element.attributes[Html0.DISABLED] = "";
+      a.attributes[Html0.DISABLED] = "";
+      a.attributes[Html0.ARIA_DISABLED] = "true";
     } else {
-      element.attributes.remove(Html0.A_DISABLED);
-      a.attributes.remove(Html0.A_DISABLED);
-      a.attributes.remove(Html0.A_ARIA_DISABLED);
+      element.attributes.remove(Html0.DISABLED);
+      a.attributes.remove(Html0.DISABLED);
+      a.attributes.remove(Html0.ARIA_DISABLED);
     }
   }
   bool _disabled = false;
