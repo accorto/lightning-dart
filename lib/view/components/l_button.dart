@@ -247,7 +247,7 @@ class LButtonStateful {
     }
     element.classes.add(LButton.C_BUTTON__NEUTRAL);
     element.classes.add(LButton.C_NOT_SELECTED);
-    element.setAttribute(Html0.ARIA_LIVE, "assertive");
+    element.setAttribute(Html0.ARIA_LIVE, Html0.ARIA_LIVE_ASSERTIVE);
     //
     addState(new LButtonStatefulState(new LIcon.utility("add"), textNotSelected, LButton.C_TEXT_NOT_SELECTED));
     addState(new LButtonStatefulState(new LIcon.utility("check"), textSelected, LButton.C_TEXT_SELECTED));

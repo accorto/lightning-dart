@@ -87,7 +87,7 @@ abstract class LEditorStd extends LEditor {
       //..type = "text"
         ..classes.add(LEditor.C_INPUT__BARE)
         ..attributes[Html0.ARIA_HASPOPUP] = "true"
-        ..attributes[Html0.ARIA_AUTOCOMPLETE] = "list"
+        ..attributes[Html0.ARIA_AUTOCOMPLETE] = Html0.ARIA_AUTOCOMPLETE_LIST
         ..attributes[Html0.ROLE] = Html0.ROLE_COMBOBOX;
       _formElementControl.append(input);
     }
