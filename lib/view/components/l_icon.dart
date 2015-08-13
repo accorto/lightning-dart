@@ -424,20 +424,23 @@ class LIcon {
   /**
    * Standard Icon [linkName] e.g. CIcon.STD_CASE
    */
-  LIcon.standard(String linkName, {String className: C_ICON, String size: C_ICON__LARGE})
-      : this(linkName, SPRITE_STANDARD, size, className, "${C_ICON_STD_}${linkName}");
+  LIcon.standard(String linkName, {String className: C_ICON, String size: C_ICON__LARGE, String colorOverride})
+      : this(linkName, SPRITE_STANDARD, size, className,
+          colorOverride == null ? "${C_ICON_STD_}${linkName}" : colorOverride);
 
   /**
    * Action Icon - [name] e.g. CIcon.ACTION_DESCRIPTION
    */
-  LIcon.action(String name, {String className: C_ICON, String size: C_ICON__LARGE})
-      : this(name.replaceAll("action-", ""), SPRITE_ACTION, className, size, "${C_ICON_ACTION_}${name}");
+  LIcon.action(String name, {String className: C_ICON, String size: C_ICON__LARGE, String colorOverride})
+      : this(name.replaceAll("action-", ""), SPRITE_ACTION, className, size,
+          colorOverride == null ? "${C_ICON_ACTION_}${name}" : colorOverride);
 
   /**
    * Custom Icon - [name] e.g. CIcon.CUSTOM_1
    */
-  LIcon.custom(String name, {String className: C_ICON, String size: C_ICON__LARGE})
-      : this(name, SPRITE_CUSTOM, className, size, "${C_ICON_CUSTOM_}${name}");
+  LIcon.custom(String name, {String className: C_ICON, String size: C_ICON__LARGE, String colorOverride})
+      : this(name, SPRITE_CUSTOM, className, size,
+          colorOverride == null ? "${C_ICON_CUSTOM_}${name}" : colorOverride);
 
   /**
    * svg
@@ -448,7 +451,8 @@ class LIcon {
    * [size] optional C_ICON__TYNY/SMALL/MEDIUM/LARGE
    * [color] optional C_ICON_TEXT_DEFAULT/WARNING
    */
-  LIcon(String this.linkName, String this.linkPrefix, String className, String size, String color) {
+  LIcon(String this.linkName, String this.linkPrefix,
+        String className, String size, String color) {
     // css classes
     if (className != null && className.isNotEmpty) {
       element.classes.add(className);
@@ -459,7 +463,7 @@ class LIcon {
     if (color != null) {
       element.classes.add(color);
     }
-    element.setAttributeNS(null, "aria-hidden", "true");
+    element.setAttributeNS(null, Html0.A_ARIA_HIDDEN, "true");
     element.append(_use);
     _use.href.baseVal = "${HREF_PREFIX}${linkPrefix}${linkName}";
   }

@@ -40,7 +40,7 @@ class LDropdown extends LComponent {
   /// Dropdown with Button
   final DivElement element = new DivElement()
     ..classes.add(C_DROPDOWN_TRIGGER)
-    ..setAttribute("aria-haspopup", "true");
+    ..setAttribute(Html0.A_ARIA_HASPOPUP, "true");
 
   /// Dropdown Button
   final LButton button;
@@ -60,7 +60,7 @@ class LDropdown extends LComponent {
   /// Id Prefix
   final String idPrefix;
 
-  
+
   /**
    * Dropdown for [button] (classes are set here)
    * div  .trigger
@@ -211,58 +211,23 @@ class LDropdown extends LComponent {
 /**
  * Dropdown Item
  */
-class LDropdownItem {
-
-  /// Dropdown Item
-  LIElement element = new LIElement()
-    ..classes.add(LDropdown.C_DROPDOWN__ITEM)
-    ..tabIndex = -1;
-
-  AnchorElement a = new AnchorElement()
-    ..classes.add(LText.C_TRUNCATE)
-    ..tabIndex = -1;
-
-  LDropdownItem() {
-    element.attributes[Html0.A_ROLE] = "menuitem option";
-    // role="menuitemcheckbox", or role="menuitemradio"
-  }
+class LDropdownItem extends ListItem {
 
 
-  /// Label
-  String get label => _label;
-  void set label(String newValue) {
-    _label = newValue;
-    _rebuildLink();
-  }
-  String _label;
-
-  /// Id
-  String get id => a.id;
-  void set id(String newValue) {
-    a.id = newValue;
-    element.id = newValue + "-item";
-  }
-
-  /// Href
-  String get href => a.href;
-  void set href (String newValue) {
-    a.href = newValue;
-    element.attributes["href"] = newValue;
-  }
-
-  /// Disabled
-  bool get disabled => _disabled;
-  void set disabled (bool newValue) {
-    _disabled = newValue;
-    if (newValue) {
-      element.attributes[Html0.A_DISABLED] = "";
-      a.attributes[Html0.A_DISABLED] = "";
-    } else {
-      element.attributes.remove(Html0.A_DISABLED);
-      a.attributes.remove(Html0.A_DISABLED);
-    }
-  }
-  bool _disabled = false;
+  /**
+   * Dropdown item
+   */
+  LDropdownItem({String id, String label, String href, LIcon leftIcon, LIcon rightIcon})
+      : super(id:id, label:label, href:href, leftIcon:leftIcon, rightIcon:rightIcon) {
+    element
+      ..classes.add(LDropdown.C_DROPDOWN__ITEM)
+      ..tabIndex = -1
+      ..attributes[Html0.A_ROLE] = "menuitem option";
+      // role="menuitemcheckbox", or role="menuitemradio"
+    a
+      ..classes.add(LText.C_TRUNCATE)
+      ..tabIndex = -1;
+  } // LDropdownItem
 
   /// Divider
   bool get divider => element.classes.contains(LDropdown.C_HAS_DIVIDER);
@@ -273,53 +238,20 @@ class LDropdownItem {
       element.classes.remove(LDropdown.C_HAS_DIVIDER);
   }
 
-  /// Left icon (e.g. for selection)
-  bool get hasIconLeft => element.classes.contains(LDropdown.C_HAS_ICON__LEFT);
-  void set hasIconLeft (bool newValue) {
-    if (newValue)
-      element.classes.add(LDropdown.C_HAS_ICON__LEFT);
-    else
-      element.classes.remove(LDropdown.C_HAS_ICON__LEFT);
-  }
-
-  /// Selected
-  bool get selected => _selected;
-  void set selected(bool newValue) {
-    _selected = newValue;
-    if (newValue)
-      element.classes.add(LDropdown.C_IS_SELECTED);
-    else
-      element.classes.add(LDropdown.C_IS_SELECTED);
-    _rebuildLink();
-  }
-  bool _selected;
-
-  LIcon get icon => _rightIcon;
-  /// Richt Icon
-  void set icon (LIcon rightIcon) {
-    _rightIcon = rightIcon;
-    _rightIcon.size = LIcon.C_ICON__SMALL;
-    _rightIcon.classes.add(LDropdown.C_ICON__RIGHT);
-    _rebuildLink();
-  }
-  LIcon _rightIcon;
-
   /**
    * Create Link
    */
   void _rebuildLink() {
-    a.children.clear();
     if (_selected) {
       if (_selectedIcon == null) {
         _selectedIcon = new LIcon.standard("task2", size: LIcon.C_ICON__SMALL)
           ..classes.add(LDropdown.C_ICON__LEFT);
       }
-      a.append(_selectedIcon.element);
+      _leftIcon = _selectedIcon;
+    } else {
+      _leftIcon = null;
     }
-    a.appendText(_label);
-    if (_rightIcon != null) {
-      a.append(_rightIcon.element);
-    }
+    super._rebuildLink();
   }
   LIcon _selectedIcon;
 

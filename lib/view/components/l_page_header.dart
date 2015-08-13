@@ -206,7 +206,7 @@ class LObjectHome extends LPageHeader {
       buttonClasses: [LButton.C_BUTTON, LButton.C_BUTTON__ICON_MORE, LGrid.C_SHRINK_NONE, LMargin.C_LEFT__LARGE]);
     headerLeftGrid.append(headerLeftGridMore.element);
 
-    LButton headerLeftGridSave = new LButton("save", "Save",
+    LButton headerLeftGridSave = new LButton("save", lObjectHomeSave(),
       buttonClasses: [LButton.C_BUTTON, LButton.C_BUTTON__BRAND, "slds-button-space-left", // TODO
         LMargin.C_RIGHT__MEDIUM, LGrid.C_SHRINK_NONE, LGrid.C_ALIGN_MIDDLE, "slds-hide"]);
     headerLeftGrid.append(headerLeftGridSave.element);
@@ -229,6 +229,10 @@ class LObjectHome extends LPageHeader {
   void set recordTitle(String newValue) {
     headerLeftGridFocusTitle.text = newValue;
   }
+
+
+  // Trl
+  static String lObjectHomeSave() => Intl.message("Save", name: "lObjectHomeSave", args: []);
 
 } // LObjectHome
 

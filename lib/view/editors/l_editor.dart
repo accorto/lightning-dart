@@ -13,9 +13,13 @@ abstract class LEditor {
 
   static const String C_INPUT = "slds-input";
 
+  static const String C_INPUT__BARE = "slds-input--bare";
+
   static const String C_INPUT__ICON = "slds-input__icon";
   static const String C_INPUT_HAS_ICON = "slds-input-has-icon";
   static const String C_INPUT_HAS_ICON__LEFT = "slds-input-has-icon--left";
+  static const String C_INPUT_HAS_ICON__RIGHT = "slds-input-has-icon--right";
+
 
   /// Get Form Element
   DivElement get formElement;

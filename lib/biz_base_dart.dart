@@ -17,14 +17,19 @@ import 'package:intl/intl_browser.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 // Protocol Buffers
-import 'model/protoc/rr.pb.dart';
 import 'model/protoc/structure.pb.dart';
 import 'model/protoc/data.pb.dart';
 import 'model/protoc/display.pb.dart';
+import 'model/protoc/rr.pb.dart';
 import 'dart:typed_data';
 import 'package:fixnum/fixnum.dart';
 import 'package:protobuf/protobuf.dart';
 
+
+export 'model/protoc/structure.pb.dart';
+export 'model/protoc/data.pb.dart';
+export 'model/protoc/display.pb.dart';
+export 'model/protoc/rr.pb.dart';
 
 
 part 'model/client_env.dart';
