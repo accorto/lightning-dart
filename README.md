@@ -1,9 +1,9 @@
 # lightning dart
 
-![Lightning Dart Logo](/LightningDartLogo.svg?raw=true =60x "LightningDart")
+![Lightning Dart](/LightningDartLogo.svg?raw=true =60x "LightningDart")
 
-A Dart library for developing web applications based on the Salesforce Lightning Design System CSS Framework.
-https://www.getslds.com/
+A Dart library for developing web applications based on the Salesforce Lightning Design System CSS Framework 
+[http://www.lightningdesignsystem.com](http://www.lightningdesignsystem.com "Lightning Design").
 
 The Framework is not dependent on salesforce.com functionality and can be used independently.
 
