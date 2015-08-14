@@ -117,7 +117,7 @@ class LDropdown extends LComponent {
       ..classes.add(LEditor.C_INPUT)
       ..id = idPrefix + "-search";
     LabelElement labelEle = new LabelElement()
-      ..classes.add(LButton.C_ASSISTIVE_TEXT)
+      ..classes.add(LText.C_ASSISTIVE_TEXT)
       ..htmlFor = input.id
       ..text = placeholder;
     searchDiv.append(labelEle);

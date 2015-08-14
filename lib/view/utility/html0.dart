@@ -84,7 +84,11 @@ class Html0 {
   /// Disabled attribute
   static const String DISABLED = "disabled";
 
-  /// Data Attribute - Value
+  /// Data Attribute - Data Column Name
+  static const String DATA_NAME = "data-name";
+  /// Data Attribute - Data Column Label
+  static const String DATA_LABEL = "data-label";
+  /// Data Attribute - Data Value
   static const String DATA_VALUE = "data-value";
 
 } // Html0

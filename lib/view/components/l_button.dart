@@ -16,11 +16,14 @@ class LButton extends LComponent {
   static const String C_BUTTON__BRAND = "slds-button--brand";
   static const String C_BUTTON__INVERSE = "slds-button--inverse";
 
+
   static const String C_BUTTON__SMALL = "slds-button--small";
 
   static const String C_BUTTON__ICON = "slds-button__icon";
   static const String C_BUTTON__ICON__LEFT = "slds-button__icon--left";
   static const String C_BUTTON__ICON__RIGHT = "slds-button__icon--right";
+
+  static const String C_BUTTON_SPACE_LEFT = "slds-button-space-left";
 
   /// Stateful Button
   static const String C_BUTTON__ICON__STATEFUL = "slds-button__icon--stateful";
@@ -37,6 +40,9 @@ class LButton extends LComponent {
   static const String C_BUTTON__ICON_CONTAINER = "slds-button--icon-container";
   static const String C_BUTTON__ICON_BORDER = "slds-button--icon-border";
   static const String C_BUTTON__ICON_BORDER_FILLED = "slds-button--icon-border-filled";
+  static const String C_BUTTON__ICON_BORDER_SMALL = "slds-button--icon-border-small";
+  static const String C_BUTTON__ICON__HINT = "slds-button__icon--hint";
+
   /// Icon Size
   static const String C_BUTTON__ICON__X_SMALL = "slds-button__icon--x-small";
   static const String C_BUTTON__ICON__SMALL = "slds-button__icon--small";
@@ -46,10 +52,10 @@ class LButton extends LComponent {
 
   static const String C_BUTTON__ICON__INVERSE = "slds-button__icon--inverse";
 
+  /// Hint
+  static const String C_BUTTON__HINT = "slds-button--hint";
   /// Hint Wrapper
   static const String C_HINT_PARENT = "slds-hint-parent";
-  /// Icon Text
-  static const String C_ASSISTIVE_TEXT = "slds-assistive-text";
 
 
   /// The Button
@@ -140,7 +146,7 @@ class LButton extends LComponent {
   void set assistiveText (String newValue) {
     if (assistive == null) {
       assistive = new SpanElement()
-        ..classes.add(C_ASSISTIVE_TEXT);
+        ..classes.add(LText.C_ASSISTIVE_TEXT);
       element.append(assistive);
     }
     assistive.text = newValue;

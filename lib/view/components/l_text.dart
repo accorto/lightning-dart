@@ -34,8 +34,14 @@ class LText {
   static const String C_SECTION_GROUP__IS_OPEN = "section-group--is-open";
   static const String C_SECTION_GROUP__IS_CLOSED = "slds-section-group--is-closed";
 
+  /// Icon Text
+  static const String C_ASSISTIVE_TEXT = "slds-assistive-text";
   /// Truncate Text
   static const String C_TRUNCATE = "slds-truncate";
+
+  static const String C_TEXT_CENTER = "slds-text-center";
+  static const String C_TEXT_RIGHT = "slds-text-right";
+
 
   /// Heading Sizes
   static final List<String> HEADING_SIZES = [C_TEXT_HEADING__LARGE, C_TEXT_HEADING__MEDIUM, C_TEXT_HEADING__SMALL];

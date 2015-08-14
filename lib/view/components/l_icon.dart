@@ -23,7 +23,6 @@ class LIcon {
   static const String C_ICON__LARGE = "slds-icon--large";
   static const String C_ICON_TEXT_DEFAULT = "slds-icon-text-default";
   static const String C_ICON_TEXT_WARNING = "slds-icon-text-warning";
-  static const String C_ASSISTIVE_TEXT = "slds-assistive-text";
 
   static const String C_ICON__CONTAINER = "slds-icon__container";
   static const String C_ICON__CONTAINER__CIRCLE =
@@ -466,7 +465,7 @@ class LIcon {
     element.setAttributeNS(null, Html0.ARIA_HIDDEN, "true");
     element.append(_use);
     _use.href.baseVal = "${HREF_PREFIX}${linkPrefix}${linkName}";
-  }
+  } // LIcon
 
   /// svg element classes
   CssClassSet get classes => element.classes;
@@ -480,6 +479,8 @@ class LIcon {
   }
 
 } // LIcon
+
+
 
 /**
  * Span with icon
@@ -524,7 +525,7 @@ class LIconSpan {
     //
     if (title != null && title.isNotEmpty) {
       SpanElement span = new SpanElement()
-        ..classes.add(LIcon.C_ASSISTIVE_TEXT)
+        ..classes.add(LText.C_ASSISTIVE_TEXT)
         ..text = title;
       element.append(span);
     }
