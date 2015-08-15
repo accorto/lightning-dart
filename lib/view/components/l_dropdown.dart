@@ -80,12 +80,12 @@ class LDropdown extends LComponent {
 
   /// Settings Button+Dropdown
   LDropdown.settings(String idPrefix) : this(new LButton("settings", null,
-      icon: new LIcon.utility("settings"),
+      icon: new LIconUtility("settings"),
       assistiveText: "Settings"), idPrefix);
 
   LDropdown.action(String idPrefix) : this(new LButton("more", null,
       buttonClasses: [LButton.C_BUTTON__ICON_BORDER_FILLED],
-      icon: new LIcon.utility("down"), // slds-dropdown--right slds-dropdown--actions
+      icon: new LIconUtility("down"), // slds-dropdown--right slds-dropdown--actions
       assistiveText: "More"), idPrefix);
 
 
@@ -109,7 +109,7 @@ class LDropdown extends LComponent {
       ..classes.addAll([
         LEditor.C_INPUT_HAS_ICON, LEditor.C_INPUT_HAS_ICON__LEFT, LMargin.C_BOTTOM__X_SMALL]);
     header.append(searchDiv);
-    LIcon searchIcon = new LIcon.utility("search", className: "slds-input__icon");
+    LIcon searchIcon = new LIconUtility("search", className: "slds-input__icon");
     searchDiv.append(searchIcon.element);
     input
       ..type = "search"
@@ -243,7 +243,7 @@ class LDropdownItem extends ListItem {
   void _rebuildLink() {
     if (_selected) {
       if (_selectedIcon == null) {
-        _selectedIcon = new LIcon.standard("task2", size: LIcon.C_ICON__SMALL)
+        _selectedIcon = new LIconStandard("task2", size: LIcon.C_ICON__SMALL)
           ..classes.add(LDropdown.C_ICON__LEFT);
       }
       _leftIcon = _selectedIcon;

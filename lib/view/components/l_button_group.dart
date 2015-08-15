@@ -24,7 +24,7 @@ class LButtonGroup {
   /// buttons in dropdown
   List<LButton> dropdownButtons = new List<LButton>();
   /// More Button
-  final LButton more = new LButton("more", null, icon: new LIcon.utility("down"), assistiveText: "More");
+  final LButton more = new LButton("more", null, icon: new LIconUtility("down"), assistiveText: "More");
 
   /// Inverse Button Bar
   final bool inverse;

@@ -26,7 +26,7 @@ void main() {
   LButtonGroup buttonGroup = new LButtonGroup()
     ..add(new LButton("a1","Action 1"))
     ..add(new LButton("a2", "Action 2"));
-  LRecordTitle recordTitle = new LRecordTitle(new LIcon.standard(LIcon.STD_USER),
+  LRecordTitle recordTitle = new LRecordTitle(new LIconStandard(LIconStandard.STD_USER),
     recordType: "Record Type", recordTitle: "Record Title", buttonGroup: buttonGroup);
   section.append(recordTitle);
 

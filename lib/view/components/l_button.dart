@@ -57,6 +57,8 @@ class LButton extends LComponent {
   /// Hint Wrapper
   static const String C_HINT_PARENT = "slds-hint-parent";
 
+  static const String C_CLOSE = "close";
+
 
   /// The Button
   final ButtonElement element = new ButtonElement()
@@ -182,7 +184,7 @@ class LButton extends LComponent {
   void addIconMore() {
     element.classes.add(C_BUTTON__ICON_MORE);
     element.setAttribute(Html0.ARIA_HASPOPUP, "true");
-    LIcon more = new LIcon.utility("down");
+    LIcon more = new LIconUtility("down");
     more.element.classes.addAll([C_BUTTON__ICON, C_BUTTON__ICON__X_SMALL]);
     element.append(more.element);
   }
@@ -255,9 +257,9 @@ class LButtonStateful {
     element.classes.add(LButton.C_NOT_SELECTED);
     element.setAttribute(Html0.ARIA_LIVE, Html0.ARIA_LIVE_ASSERTIVE);
     //
-    addState(new LButtonStatefulState(new LIcon.utility("add"), textNotSelected, LButton.C_TEXT_NOT_SELECTED));
-    addState(new LButtonStatefulState(new LIcon.utility("check"), textSelected, LButton.C_TEXT_SELECTED));
-    addState(new LButtonStatefulState(new LIcon.utility("close"), textSelectedFocus, LButton.C_TEXT_SELECTED_FOCUS));
+    addState(new LButtonStatefulState(new LIconUtility("add"), textNotSelected, LButton.C_TEXT_NOT_SELECTED));
+    addState(new LButtonStatefulState(new LIconUtility("check"), textSelected, LButton.C_TEXT_SELECTED));
+    addState(new LButtonStatefulState(new LIconUtility("close"), textSelectedFocus, LButton.C_TEXT_SELECTED_FOCUS));
 
     element.onClick.listen((MouseEvent evt){
       bool newState = toggle();

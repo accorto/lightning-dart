@@ -36,6 +36,8 @@ class Html0 {
   // http://www.w3.org/TR/wai-aria/roles
   // http://www.w3.org/TR/wai-aria/rdf_model.svg
   /// Aria Attribute role Value
+  static const String ROLE_ALERT = "alert";
+  /// Aria Attribute role Value
   static const String ROLE_PRESENTATION = "presentation";
   /// Aria Attribute role Value
   static const String ROLE_LISTBOX = "listbox";

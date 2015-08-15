@@ -39,20 +39,128 @@ class LIcon {
   static const String SPRITE_UTILITY =
       "/assets/icons/utility-sprite/svg/symbols.svg#"; // 3dots
 
+
+  /// SVG Element
+  final svg.SvgSvgElement element = new svg.SvgSvgElement();
+  /// Svg Use reference
+  final svg.UseElement _use = new svg.UseElement();
+  /// Link name
+  final String linkName;
+  /// Link Prefix
+  final String linkPrefix;
+
+  /**
+   * svg
+   * - use
+   * [linkName] for use href #name - e.g. add
+   * [linkPrefix] for use href - e.g. SPRITE_ACTION/CUSTOM/UTILITY/...
+   * [className] optional className, e.g. C_ICON
+   * [size] optional C_ICON__TYNY/SMALL/MEDIUM/LARGE
+   * [color] optional C_ICON_TEXT_DEFAULT/WARNING
+   */
+  LIcon(String this.linkName, String this.linkPrefix,
+        String className, String size, String color, List<String> addlCss) {
+    // css classes
+    if (className != null && className.isNotEmpty) {
+      element.classes.add(className);
+    }
+    if (size != null && size.isNotEmpty) {
+      element.classes.add(size);
+    }
+    if (color != null) {
+      element.classes.add(color);
+    }
+    if (addlCss != null) {
+      for (String css in addlCss)
+        element.classes.add(css);
+    }
+    element.setAttributeNS(null, Html0.ARIA_HIDDEN, "true");
+    element.append(_use);
+    _use.href.baseVal = "${HREF_PREFIX}${linkPrefix}${linkName}";
+  } // LIcon
+
+  /// svg element classes
+  CssClassSet get classes => element.classes;
+
+
+  /// set [cssSize] - C_ICON__LARGE, C_ICON__MEDIUM, C_ICON__SMALL, C_ICON__TINY
+  void set size (String cssSize) {
+    element.classes.removeAll([C_ICON__LARGE, C_ICON__MEDIUM, C_ICON__SMALL, C_ICON__TINY]);
+    if (cssSize != null && cssSize.isEmpty)
+      element.classes.add(cssSize);
+  }
+
+} // LIcon
+
+
+
+/**
+ * Span with icon
+ */
+class LIconSpan {
+
+  /// the span element
+  final SpanElement element = new SpanElement();
+
+  /**
+   * Standard Icon Span
+   * [name] standard icon name e.g. CIcon.STD_CASE
+   */
+  LIconSpan.standard(String name, {bool circle: false, String title}) : this(
+          new LIconStandard(name),
+          circle: circle,
+          title: title,
+          spanClass: "${LIconStandard.C_ICON_STD_}${name}");
+
+  /**
+   * Action Icon Span
+   * [name] action icon name e.g. CIcon.ACTION_DESCRIPTION
+   */
+  LIconSpan.action(String name, {bool circle: false, String title}) : this(
+          new LIconAction(name),
+          circle: circle,
+          title: title,
+          spanClass: "${LIconAction.C_ICON_ACTION_}${name}");
+
+  /**
+   * Create Span with Icon
+   */
+  LIconSpan(LIcon icon, {bool circle: false, String title, String spanClass}) {
+    element.classes.add(LIcon.C_ICON__CONTAINER);
+    if (spanClass != null && spanClass.isNotEmpty) {
+      element.classes.add(spanClass);
+    }
+    if (circle) {
+      element.classes.add(LIcon.C_ICON__CONTAINER__CIRCLE);
+    }
+    element.append(icon.element);
+    //
+    if (title != null && title.isNotEmpty) {
+      SpanElement span = new SpanElement()
+        ..classes.add(LText.C_ASSISTIVE_TEXT)
+        ..text = title;
+      element.append(span);
+    }
+  }
+
+} // LIconSpan
+
+
+/**
+ * Action Icon
+ */
+class LIconAction extends LIcon {
+
   /// Icon Prefix for ACTION_*
   static const String C_ICON_ACTION_ = "slds-icon-";
 
   static const String ACTION_APPROVAL = "action-approval";
   static const String ACTION_CANVASAPP = "action-canvasapp";
   static const String ACTION_GOAL = "action-goal";
-  static const String ACTION_OPPORTUNITY_COMPETITOR =
-      "action-opportunity-competitor";
-  static const String ACTION_OPPORTUNITY_LINE_ITEM =
-      "action-opportunity-line-item";
-  static const String ACTION_OPPORTUNITY_TEAM_MEMBER =
-      "action-opportunity-team-member";
-  static const String ACTION_QUESTION_POST_ACTION =
-      "action-question-post-action";
+  static const String ACTION_OPPORTUNITY_COMPETITOR = "action-opportunity-competitor";
+  static const String ACTION_OPPORTUNITY_LINE_ITEM = "action-opportunity-line-item";
+  static const String ACTION_OPPORTUNITY_TEAM_MEMBER = "action-opportunity-team-member";
+  static const String ACTION_QUESTION_POST_ACTION = "action-question-post-action";
   static const String ACTION_QUOTE = "action-quote";
   static const String ACTION_REJECT = "action-reject";
   static const String ACTION_SOCIAL_POST = "action-social-post";
@@ -105,8 +213,7 @@ class LIcon {
   static const String ACTION_NOTEBOOK = "action-notebook";
   static const String ACTION_PREVIEW = "action-preview";
   static const String ACTION_PRIORITY = "action-priority";
-  static const String ACTION_DEFAULT_CUSTOM_OBJECT =
-      "action-default-custom-object";
+  static const String ACTION_DEFAULT_CUSTOM_OBJECT = "action-default-custom-object";
   static const String ACTION_NEW_CUSTOM_OBJECT = "action-new-custom-object";
   static const String ACTION_LEAD_CONVERT = "action-lead-convert";
   static const String ACTION_NEW_ACCOUNT = "action-new-account";
@@ -218,6 +325,24 @@ class LIcon {
   static const String ACTION_ANNOUNCEMENT = "action-announcement";
   static const String ACTION_RECORD = "action-record";
 
+
+  /**
+   * Action Icon - [name] e.g. CIcon.ACTION_DESCRIPTION
+   */
+  LIconAction(String name, {String className: LIcon.C_ICON, String size: LIcon.C_ICON__LARGE,
+        String colorOverride, List<String> addlCss})
+    : super(name.replaceAll("action-", ""), LIcon.SPRITE_ACTION, className, size,
+        colorOverride == null ? "${C_ICON_ACTION_}${name}" : colorOverride, addlCss);
+
+
+} // LIconAction
+
+
+/**
+ * Standard Icon
+ */
+class LIconStandard extends LIcon {
+
   /// Icon Prefix for STD_*
   static const String C_ICON_STD_ = "slds-icon-standard-";
 
@@ -298,6 +423,37 @@ class LIcon {
   static const String STD_UNMATCHED = "unmatched";
   static const String STD_MARKETING_ACTIONS = "marketing-actions";
   static const String STD_MARKETING_RESOURCES = "marketing-resources";
+
+  /**
+   * Standard Icon [linkName] e.g. CIcon.STD_CASE
+   */
+  LIconStandard(String linkName, {String className: LIcon.C_ICON, String size: LIcon.C_ICON__LARGE,
+      String colorOverride, List<String> addlCss})
+    : super(linkName, LIcon.SPRITE_STANDARD, size, className,
+        colorOverride == null ? "${C_ICON_STD_}${linkName}" : colorOverride, addlCss);
+
+} // LIconStandard
+
+
+/**
+ * Utility Icon
+ */
+class LIconUtility extends LIcon {
+
+  /**
+   * Utility Icon
+   */
+  LIconUtility(String linkName, {String className, String size, String color, List<String> addlCss})
+      : super(linkName, LIcon.SPRITE_UTILITY, className, size, color, addlCss);
+
+
+} // LIconUtility
+
+
+/**
+ * Custom Icon
+ */
+class LIconCustom extends LIcon {
 
   /// Icon Prefix for CUSTOM_*
   static const String C_ICON_CUSTOM_ = "slds-icon-";
@@ -403,132 +559,13 @@ class LIcon {
   static const String CUSTOM_99 = "custom-99";
   static const String CUSTOM_100 = "custom-100";
 
-
-
-  /// SVG Element
-  final svg.SvgSvgElement element = new svg.SvgSvgElement();
-  /// Svg Use reference
-  final svg.UseElement _use = new svg.UseElement();
-  /// Link name
-  final String linkName;
-  /// Link Prefix
-  final String linkPrefix;
-
   /**
-   * Utility Icon
+   * Custom Icon - [name] e.g. LIconCustom.CUSTOM_1
    */
-  LIcon.utility(String linkName, {String className, String size, String color})
-      : this(linkName, SPRITE_UTILITY, className, size, color);
+  LIconCustom(String name, {String className: LIcon.C_ICON, String size: LIcon.C_ICON__LARGE,
+      String colorOverride, List<String> addlCss})
+    : super(name, LIcon.SPRITE_CUSTOM, className, size,
+        colorOverride == null ? "${C_ICON_CUSTOM_}${name}" : colorOverride, addlCss);
 
-  /**
-   * Standard Icon [linkName] e.g. CIcon.STD_CASE
-   */
-  LIcon.standard(String linkName, {String className: C_ICON, String size: C_ICON__LARGE, String colorOverride})
-      : this(linkName, SPRITE_STANDARD, size, className,
-          colorOverride == null ? "${C_ICON_STD_}${linkName}" : colorOverride);
+} // LIconCustom
 
-  /**
-   * Action Icon - [name] e.g. CIcon.ACTION_DESCRIPTION
-   */
-  LIcon.action(String name, {String className: C_ICON, String size: C_ICON__LARGE, String colorOverride})
-      : this(name.replaceAll("action-", ""), SPRITE_ACTION, className, size,
-          colorOverride == null ? "${C_ICON_ACTION_}${name}" : colorOverride);
-
-  /**
-   * Custom Icon - [name] e.g. CIcon.CUSTOM_1
-   */
-  LIcon.custom(String name, {String className: C_ICON, String size: C_ICON__LARGE, String colorOverride})
-      : this(name, SPRITE_CUSTOM, className, size,
-          colorOverride == null ? "${C_ICON_CUSTOM_}${name}" : colorOverride);
-
-  /**
-   * svg
-   * - use
-   * [linkName] for use href #name - e.g. add
-   * [linkPrefix] for use href - e.g. SPRITE_ACTION/CUSTOM/UTILITY/...
-   * [className] optional className, e.g. C_ICON
-   * [size] optional C_ICON__TYNY/SMALL/MEDIUM/LARGE
-   * [color] optional C_ICON_TEXT_DEFAULT/WARNING
-   */
-  LIcon(String this.linkName, String this.linkPrefix,
-        String className, String size, String color) {
-    // css classes
-    if (className != null && className.isNotEmpty) {
-      element.classes.add(className);
-    }
-    if (size != null && size.isNotEmpty) {
-      element.classes.add(size);
-    }
-    if (color != null) {
-      element.classes.add(color);
-    }
-    element.setAttributeNS(null, Html0.ARIA_HIDDEN, "true");
-    element.append(_use);
-    _use.href.baseVal = "${HREF_PREFIX}${linkPrefix}${linkName}";
-  } // LIcon
-
-  /// svg element classes
-  CssClassSet get classes => element.classes;
-
-
-  /// set [cssSize] - C_ICON__LARGE, C_ICON__MEDIUM, C_ICON__SMALL, C_ICON__TINY
-  void set size (String cssSize) {
-    element.classes.removeAll([C_ICON__LARGE, C_ICON__MEDIUM, C_ICON__SMALL, C_ICON__TINY]);
-    if (cssSize != null && cssSize.isEmpty)
-      element.classes.add(cssSize);
-  }
-
-} // LIcon
-
-
-
-/**
- * Span with icon
- */
-class LIconSpan {
-
-  /// the span element
-  final SpanElement element = new SpanElement();
-
-  /**
-   * Standard Icon Span
-   * [name] standard icon name e.g. CIcon.STD_CASE
-   */
-  LIconSpan.standard(String name, {bool circle: false, String title}) : this(
-          new LIcon.standard(name),
-          circle: circle,
-          title: title,
-          spanClass: "${LIcon.C_ICON_STD_}${name}");
-
-  /**
-   * Action Icon Span
-   * [name] action icon name e.g. CIcon.ACTION_DESCRIPTION
-   */
-  LIconSpan.action(String name, {bool circle: false, String title}) : this(
-          new LIcon.action(name),
-          circle: circle,
-          title: title,
-          spanClass: "${LIcon.C_ICON_ACTION_}${name}");
-
-  /**
-   * Create Span with Icon
-   */
-  LIconSpan(LIcon icon, {bool circle: false, String title, String spanClass}) {
-    element.classes.add(LIcon.C_ICON__CONTAINER);
-    if (spanClass != null && spanClass.isNotEmpty) {
-      element.classes.add(spanClass);
-    }
-    if (circle) {
-      element.classes.add(LIcon.C_ICON__CONTAINER__CIRCLE);
-    }
-    element.append(icon.element);
-    //
-    if (title != null && title.isNotEmpty) {
-      SpanElement span = new SpanElement()
-        ..classes.add(LText.C_ASSISTIVE_TEXT)
-        ..text = title;
-      element.append(span);
-    }
-  }
-
-} // LIconSpan
