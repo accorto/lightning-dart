@@ -44,8 +44,6 @@ class LIcon {
   final svg.SvgSvgElement element = new svg.SvgSvgElement();
   /// Svg Use reference
   final svg.UseElement _use = new svg.UseElement();
-  /// Link name
-  final String linkName;
   /// Link Prefix
   final String linkPrefix;
 
@@ -58,7 +56,7 @@ class LIcon {
    * [size] optional C_ICON__TYNY/SMALL/MEDIUM/LARGE
    * [color] optional C_ICON_TEXT_DEFAULT/WARNING
    */
-  LIcon(String this.linkName, String this.linkPrefix,
+  LIcon(String linkName, String this.linkPrefix,
         String className, String size, String color, List<String> addlCss) {
     // css classes
     if (className != null && className.isNotEmpty) {
@@ -76,7 +74,7 @@ class LIcon {
     }
     element.setAttributeNS(null, Html0.ARIA_HIDDEN, "true");
     element.append(_use);
-    _use.href.baseVal = "${HREF_PREFIX}${linkPrefix}${linkName}";
+    this.linkName = linkName;
   } // LIcon
 
   /// svg element classes
@@ -89,6 +87,17 @@ class LIcon {
     if (cssSize != null && cssSize.isEmpty)
       element.classes.add(cssSize);
   }
+
+  /// Link (Icon) Name
+  String get linkName => _linkName;
+  /// Set Link (Icon) Name and use reference
+  void set linkName (String newValue) {
+    _linkName = newValue;
+    _use.href.baseVal = "${HREF_PREFIX}${linkPrefix}${_linkName}";
+  }
+  /// Link name
+  String _linkName;
+
 
 } // LIcon
 

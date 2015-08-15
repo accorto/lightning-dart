@@ -35,7 +35,7 @@ class LTable {
   TableSectionElement _thead;
   TableSectionElement _tbody;
   TableSectionElement _tfoot;
-  final List<LTableRow> _theadRows = new List<LTableRow>();
+  final List<LTableHeaderRow> _theadRows = new List<LTableHeaderRow>();
   final List<LTableRow> _tbodyRows = new List<LTableRow>();
   final List<LTableRow> _tfootRows = new List<LTableRow>();
 
@@ -105,12 +105,12 @@ class LTable {
 
   /**
    * Add Table Head Row
-   * for responsive - use row.addHeader to add name-label info
+   * for responsive - use row.addHeaderCell to add name-label info
    */
   LTableRow addHeadRow() {
     if (_thead == null)
       _thead = element.createTHead();
-    LTableRow row = new LTableRow(_thead.addRow(), _theadRows.length, idPrefix, null,
+    LTableHeaderRow row = new LTableRow(_thead.addRow(), _theadRows.length, idPrefix, null,
         LText.C_TEXT_HEADING__LABEL, rowSelect, nameList, nameLabelMap, LTableRow.TYPE_HEAD);
     if (rowSelect && _theadRows.isEmpty) {
       row.selectCb.onClick.listen((MouseEvent evt) {
@@ -147,6 +147,14 @@ class LTable {
       row.selected = select;
     }
   }
+
+
+
+  static String lTableRowSelectAll() => Intl.message("Select All", name: "lTableRowSelectAll", args: []);
+  static String lTableRowSelectRow() => Intl.message("Select Row", name: "lTableRowSelectRow", args: []);
+
+  static String lTableColumnSortAsc() => Intl.message("Sort Ascending", name: "lTableColumnSortAsc", args: []);
+  static String lTableColumnSortDec() => Intl.message("Sort Decending", name: "lTableColumnSortDec", args: []);
 
 } // LTable
 
@@ -187,9 +195,10 @@ class LTableRow {
       element.id = "${idPrefix}-${type}-${rowNo}";
 
 
+    // Row Select nor created as LTableCell but maintained by row directly
     if (rowSelect) {
       selectCb = new InputElement(type: "checkbox");
-      String selectLabel = type == TYPE_HEAD ? lTableRowSelectAll() : "${lTableRowSelectRow()} ${rowNo + 1}";
+      String selectLabel = type == TYPE_HEAD ? LTable.lTableRowSelectAll() : "${LTable.lTableRowSelectRow()} ${rowNo + 1}";
       LabelElement label = new LabelElement()
         ..classes.add(LCheckbox.C_CHECKBOX);
       label.append(selectCb);
@@ -240,30 +249,10 @@ class LTableRow {
 
 
   /**
-   * Add Cell with Header Text
-   * with [label] of column [name] with optional [value]
-   * - name/label are used for responsive
-   */
-  TableCellElement addCellHeader(String label, String name, {String value, String align}) {
-    SpanElement span = new SpanElement()
-      ..classes.add(LText.C_TRUNCATE)
-      ..text = label == null ? "" : label;
-    if (type == TYPE_HEAD
-        && name != null && name.isNotEmpty && label != null && label.isNotEmpty) {
-      int index = element.children.length;
-      while (nameList.length < index)
-        nameList.add(null);
-      nameList.add(name);
-      nameLabelMap[name] = label;
-    }
-    return addCell(span, name, value, align);
-  } // addCellHeader
-
-  /**
    * Add Cell Text
    * with [display] of column [name] with [value]
    */
-  TableCellElement addCellText(String display, {String name, String value, String align}) {
+  LTableCell addCellText(String display, {String name, String value, String align}) {
     SpanElement span = new SpanElement()
       ..classes.add(LText.C_TRUNCATE)
       ..text = display == null ? "" : display;
@@ -274,7 +263,7 @@ class LTableRow {
    * Add Cell Link
    * of column [name] with [value]
    */
-  TableCellElement addCellLink(AnchorElement a, {String name, String value, String align}) {
+  LTableCell addCellLink(AnchorElement a, {String name, String value, String align}) {
     a.classes.add(LText.C_TRUNCATE);
     return addCell(a, name, value, align);
   }
@@ -282,12 +271,12 @@ class LTableRow {
   /**
    * Add Button - no need to set classes
    */
-  TableCellElement addCellButton(LButton button) {
+  LTableCell addCellButton(LButton button) {
     button.classes.addAll([LButton.C_BUTTON__ICON_BORDER_FILLED, LButton.C_BUTTON__ICON_BORDER_SMALL]);
     button.icon.classes.addAll([LButton.C_BUTTON__ICON, LButton.C_BUTTON__ICON__HINT, LButton.C_BUTTON__ICON__SMALL]);
 
-    TableCellElement tc = addCell(button.element, null, null, null);
-    tc.classes.add(LTable.C_ROW_ACTION);
+    LTableCell tc = addCell(button.element, null, null, null);
+    tc.element.classes.add(LTable.C_ROW_ACTION);
     return tc;
   }
 
@@ -296,7 +285,7 @@ class LTableRow {
    * if you not provide the data column [name], it is derived - if found the label is derived (required for responsive)
    * [align] LText.C_TEXT_CENTER LText.C_TEXT_RIGHT
    */
-  TableCellElement addCell(Element content, String name, String value, String align) {
+  LTableCell addCell(Element content, String name, String value, String align) {
     // find column Name
     String theName = name;
     if (theName == null) {
@@ -304,42 +293,142 @@ class LTableRow {
       if (nameList.length > index)
         theName = nameList[index];
     }
-
-    TableCellElement tc = null;
-    if (type == TYPE_HEAD) {
-      tc = document.createElement("th")
-        ..attributes["scope"] = "col";
-      element.append(tc);
-      tc.append(content);
-    } else {
-      tc = element.addCell();
-      tc.append(content);
-    }
-    if (align != null && align.isNotEmpty)
-      element.classes.add(align);
-
+    // find column label
     String label = null;
     if (theName != null) {
-      tc.attributes[Html0.DATA_NAME] = theName;
       label = nameLabelMap[theName];
     }
-    if (label != null)
-      tc.attributes[Html0.DATA_LABEL] = label;
-    if (value != null)
-      tc.attributes[Html0.DATA_VALUE] = value;
-    return tc;
+
+    LTableCell cell = null;
+    if (type == TYPE_HEAD) {
+      TableCellElement tc = document.createElement("th")
+        ..attributes["scope"] = "col";
+      element.append(tc);
+      cell = new LTableHeaderCell(tc, content, theName, label, value, align);
+    } else {
+      cell = new LTableCell(element.addCell(), content, theName, label, value, align);
+    }
+    return cell;
   } // addTableElement
-
-
-
-  static String lTableRowSelectAll() => Intl.message("Select All", name: "lTableRowSelectAll", args: []);
-  static String lTableRowSelectRow() => Intl.message("Select Row", name: "lTableRowSelectRow", args: []);
 
 } // LTableRow
 
+
+/**
+ * Table Header Row
+ */
+class LTableHeaderRow extends LTableRow {
+
+
+  /**
+   * Table Header Row
+   */
+  LTableHeaderRow(TableRowElement element, int rowNo, String idPrefix,
+        String cssClass, bool rowSelect,
+        List<String> nameList, Map<String,String> nameLabelMap)
+    : super (element, rowNo, idPrefix, null, cssClass, rowSelect, nameList, nameLabelMap, LTableRow.TYPE_HEAD);
+
+  /**
+   * Add Cell with Header Text
+   * with [label] of column [name] with optional [value]
+   * - name/label are used for responsive
+   */
+  LTableHeaderCell addHeaderCell(String label, String name, {String value, String align}) {
+    SpanElement span = new SpanElement()
+      ..classes.add(LText.C_TRUNCATE)
+      ..text = label == null ? "" : label;
+
+    if (name != null && name.isNotEmpty && label != null && label.isNotEmpty) {
+      int index = element.children.length;
+      while (nameList.length < index)
+        nameList.add(null);
+      nameList.add(name);
+      nameLabelMap[name] = label;
+    }
+
+    TableCellElement tc = document.createElement("th")
+        ..attributes["scope"] = "col";
+    element.append(tc);
+    return new LTableHeaderCell(tc, span, name, label, value, align);
+  } // addHeaderCell
+
+} // LTableHeaderRow
+
+
+/**
+ * Table Cell
+ */
 class LTableCell {
 
+  /// td/th
+  final TableCellElement element;
+
+  /**
+   * Table Cell
+   */
+  LTableCell(TableCellElement this.element, Element content, String name, String label, String value, String align) {
+    if (align != null && align.isNotEmpty)
+      element.classes.add(align);
+
+    if (name != null)
+      element.attributes[Html0.DATA_NAME] = name;
+    if (label != null)
+      element.attributes[Html0.DATA_LABEL] = label;
+    if (value != null)
+      element.attributes[Html0.DATA_VALUE] = value;
+  } // LTableCell
+
+} // TableCell
 
 
 
-} // LTableCell
+/**
+ * Table Header Cell
+ */
+class LTableHeaderCell extends LTableCell {
+
+  /**
+   * Table Header Cell
+   */
+  LTableHeaderCell(TableCellElement element, Element content, String name, String label, String value, String align)
+      : super(element, content, name, label, value, align) {
+  //  element.attributes["scope"] = "col";
+  }
+
+  /// Sortable
+  bool get sortable => element.classes.contains(LTable.C_IS_SORTABLE);
+  void set sortable (bool newValue) {
+    if (newValue) {
+      element.classes.add(LTable.C_IS_SORTABLE);
+      if (sortAsc == null)
+        sortAsc = true;
+    } else {
+      element.classes.remove(LTable.C_IS_SORTABLE);
+    }
+  }
+
+  /// Sort Direction
+  bool get sortAsc => _sortAsc != null && _sortAsc;
+  void set sortAsc (bool newValue) {
+    // ensure th class
+    if (!element.classes.contains(LTable.C_IS_SORTABLE))
+      element.classes.add(LTable.C_IS_SORTABLE);
+    _sortAsc = newValue;
+    if (_sortButton == null) {
+      _sortButton = new LButton.iconBare("sort-",
+        new LIconUtility("arrowdown", className: LButton.C_BUTTON__ICON, size: LIcon.C_ICON__SMALL),
+        LTable.lTableColumnSortDec());
+      element.append(_sortButton.element);
+    }
+    if (_sortAsc) {
+      _sortButton.icon.linkName = "arrowdown";
+      _sortButton.assistiveText = LTable.lTableColumnSortDec();
+    } else {
+      _sortButton.icon.linkName = "arrowup";
+      _sortButton.assistiveText = LTable.lTableColumnSortAsc();
+    }
+  }
+  bool _sortAsc;
+  LButton _sortButton;
+
+} // LTableHeaderCell
