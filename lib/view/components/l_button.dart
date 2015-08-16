@@ -72,7 +72,7 @@ class LButton extends LComponent {
    * Button with [name] and optional [label]
    * if [idPrefix] is provided, the id will be idPrefix-name, if empty - the name
    */
-  LButton(String name, String label, {String idPrefix,
+  LButton(String name, String label, {String idPrefix, Element labelElement,
       List<String> buttonClasses,
       LIcon this.icon, bool iconLeft: false, String assistiveText}) {
     element.name = name;
@@ -83,20 +83,28 @@ class LButton extends LComponent {
         element.id = "${idPrefix}-${name}";
     }
     if (icon == null) {
-      if (label != null)
+      if (labelElement != null)
+        element.append(labelElement);
+      else if (label != null)
         element.appendText(label);
     } else {
       icon.element.classes.add(C_BUTTON__ICON);
-      if (label == null) {
+      if (label == null && labelElement == null) {
         element.append(icon.element);
       } else {
         if (iconLeft) {
           icon.element.classes.add(C_BUTTON__ICON__LEFT);
           element.append(icon.element);
-          element.appendText(label);
+          if (labelElement != null)
+            element.append(labelElement);
+          else if (label != null)
+            element.appendText(label);
         } else {
           icon.element.classes.add(C_BUTTON__ICON__RIGHT);
-          element.appendText(label);
+          if (labelElement != null)
+            element.append(labelElement);
+          else if (label != null)
+            element.appendText(label);
           element.append(icon.element);
         }
       }

@@ -98,6 +98,4 @@ class LCheckbox extends LEditor {
   }
   bool _required = false;
 
-
-
-}
+} // LCheckbox

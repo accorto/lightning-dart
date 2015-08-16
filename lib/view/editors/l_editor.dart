@@ -47,8 +47,17 @@ abstract class LEditor {
   }
   String _labelText;
 
-
+  /// required
   bool get required;
+  /// required
   void set required (bool newValue);
 
-}
+  /// get Data List Id
+  String get listId => null;
+  /// get Data List Id
+  void set listId (String newValue){}
+  /// Set Data List
+  void set list (SelectDataList dl){}
+
+
+} // LEditor

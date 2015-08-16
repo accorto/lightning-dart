@@ -36,4 +36,7 @@ class LVisibility {
   /// hidden - for screen readers
   static const String C_ASSISTIVE_TEXT = "slds-assistive-text";
 
+
+  static const String C_ACTIVE = "slds-active";
+
 } // LVisibility

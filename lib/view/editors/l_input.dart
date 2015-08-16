@@ -38,4 +38,15 @@ class LInput extends LEditorStd {
     input.required = newValue;
   }
 
+  /// get Data List Id
+  String get listId => input.attributes["list"];
+  /// get Data List Id
+  void set listId (String newValue) {
+    input.attributes["list"] = newValue;
+  }
+  /// Set Data List
+  void set list (SelectDataList dl) {
+    input.attributes["list"] = dl.id;
+  }
+
 } // LInput

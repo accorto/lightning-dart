@@ -46,17 +46,11 @@ class LDropdown extends LComponent {
   final LButton button;
 
   /// Dropdown Panel
-  final DivElement dropdown = new DivElement()
-    ..classes.addAll([C_DROPDOWN, C_DROPDOWN__MENU]);
+  final LDropdownElement dropdown = new LDropdownElement(new DivElement()
+    ..classes.addAll([C_DROPDOWN, C_DROPDOWN__MENU]));
   /// Heading Label
   SpanElement dropdownHeadingLabel;
-  /// Dropdown List
-  final UListElement dropdownList = new UListElement()
-    ..classes.add(C_DROPDOWN__LIST)
-    ..setAttribute(Html0.ROLE, Html0.ROLE_MENU);
 
-  /// Dropdown Items
-  final List<LDropdownItem> items = new List<LDropdownItem>();
   /// Id Prefix
   final String idPrefix;
 
@@ -74,8 +68,7 @@ class LDropdown extends LComponent {
     button.icon.classes.add(LButton.C_BUTTON__ICON);
     append(button);
     //
-    element.append(dropdown);
-    dropdown.append(dropdownList);
+    element.append(dropdown.element);
   } // LDropdown
 
   /// Settings Button+Dropdown
@@ -99,8 +92,8 @@ class LDropdown extends LComponent {
     button.icon.classes.add(LButton.C_BUTTON__ICON);
     append(button);
     //
-    dropdown.classes.add(C_DROPDOWN__SMALL);
-    element.append(dropdown);
+    dropdown.element.classes.add(C_DROPDOWN__SMALL);
+    element.append(dropdown.element);
     //
     DivElement header = new DivElement()
       ..classes.add(C_DROPDOWN__HEADER);
@@ -127,8 +120,6 @@ class LDropdown extends LComponent {
       ..classes.add(LText.C_TEXT_HEADING__LABEL)
       ..text = placeholder;
     header.append(dropdownHeadingLabel);
-    //
-    dropdown.append(dropdownList);
   } // search
 
 
@@ -142,11 +133,83 @@ class LDropdown extends LComponent {
     dropdownHeadingLabel = new SpanElement()
       ..classes.add(LText.C_TEXT_HEADING__LABEL);
     dropdownHeading.append(dropdownHeadingLabel);
-    dropdown.insertBefore(dropdownHeading, dropdownList);
+    dropdown.element.insertBefore(dropdownHeading, dropdown.dropdownList);
     }
     dropdownHeadingLabel.text = newValue;
   }
 
+} // LDropdown
+
+
+/**
+ * Dropdown Element maintains list
+ */
+class LDropdownElement {
+
+  /// Dropdown Element
+  final DivElement element;
+  /// Dropdown Items
+  final List<LDropdownItem> items = new List<LDropdownItem>();
+
+
+  /// Dropdown List
+  final UListElement dropdownList = new UListElement()
+    ..classes.add(LDropdown.C_DROPDOWN__LIST)
+    ..setAttribute(Html0.ROLE, Html0.ROLE_MENU);
+
+  /// Dropdown Element
+  LDropdownElement(DivElement this.element) {
+    element.append(dropdownList);
+  }
+
+  /// Nub on top
+  bool get nubbinTop => element.classes.contains(LDropdown.C_DROPDOWN__NUBBIN_TOP);
+  void set nubbinTop (bool newValue) {
+    if (newValue)
+      element.classes.add(LDropdown.C_DROPDOWN__NUBBIN_TOP);
+    else
+      element.classes.remove(LDropdown.C_DROPDOWN__NUBBIN_TOP);
+  }
+
+  /// Center Position
+  bool get center => !element.classes.contains(LDropdown.C_DROPDOWN__LEFT)
+      && !element.classes.contains(LDropdown.C_DROPDOWN__RIGHT);
+  void set center (bool newValue) {
+    if (newValue)
+      element.classes.removeAll(LDropdown.POSITIONS);
+  }
+
+  /// Right Position (button is right)
+  bool get right => element.classes.contains(LDropdown.C_DROPDOWN__RIGHT);
+  void set right (bool newValue) {
+    if (newValue) {
+      element.classes.remove(LDropdown.C_DROPDOWN__LEFT);
+      element.classes.add(LDropdown.C_DROPDOWN__RIGHT);
+    } else {
+      element.classes.remove(LDropdown.C_DROPDOWN__RIGHT);
+    }
+  }
+
+  /// Left Position (button is left)
+  bool get left => element.classes.contains(LDropdown.C_DROPDOWN__LEFT);
+  void set left (bool newValue) {
+    if (newValue) {
+      element.classes.add(LDropdown.C_DROPDOWN__LEFT);
+      element.classes.remove(LDropdown.C_DROPDOWN__RIGHT);
+    } else {
+      element.classes.remove(LDropdown.C_DROPDOWN__LEFT);
+    }
+  }
+
+  /// Small
+  bool get small => element.classes.contains(LDropdown.C_DROPDOWN__SMALL);
+  void set small (bool newValue) {
+    if (newValue) {
+      element.classes.add(LDropdown.C_DROPDOWN__SMALL);
+    } else {
+      element.classes.remove(LDropdown.C_DROPDOWN__SMALL);
+    }
+  }
 
   /**
    * Add Menu Item
@@ -156,56 +219,9 @@ class LDropdown extends LComponent {
     dropdownList.append(item.element);
   }
 
-  /// Nub on top
-  bool get nubbinTop => dropdown.classes.contains(C_DROPDOWN__NUBBIN_TOP);
-  void set nubbinTop (bool newValue) {
-    if (newValue)
-      dropdown.classes.add(C_DROPDOWN__NUBBIN_TOP);
-    else
-      dropdown.classes.remove(C_DROPDOWN__NUBBIN_TOP);
-  }
 
-  /// Center Position
-  bool get center => !dropdown.classes.contains(C_DROPDOWN__LEFT) && !dropdown.classes.contains(C_DROPDOWN__RIGHT);
-  void set center (bool newValue) {
-    if (newValue)
-      dropdown.classes.removeAll(POSITIONS);
-  }
+} // LDropdownElement
 
-  /// Right Position (button is right)
-  bool get right => dropdown.classes.contains(C_DROPDOWN__RIGHT);
-  void set right (bool newValue) {
-    if (newValue) {
-      dropdown.classes.remove(C_DROPDOWN__LEFT);
-      dropdown.classes.add(C_DROPDOWN__RIGHT);
-    } else {
-      dropdown.classes.remove(C_DROPDOWN__RIGHT);
-    }
-  }
-
-  /// Left Position (button is left)
-  bool get left => dropdown.classes.contains(C_DROPDOWN__LEFT);
-  void set left (bool newValue) {
-    if (newValue) {
-      dropdown.classes.add(C_DROPDOWN__LEFT);
-      dropdown.classes.remove(C_DROPDOWN__RIGHT);
-    } else {
-      dropdown.classes.remove(C_DROPDOWN__LEFT);
-    }
-  }
-
-  /// Small
-  bool get small => dropdown.classes.contains(C_DROPDOWN__SMALL);
-  void set small (bool newValue) {
-    if (newValue) {
-      dropdown.classes.add(C_DROPDOWN__SMALL);
-    } else {
-      dropdown.classes.remove(C_DROPDOWN__SMALL);
-    }
-  }
-
-
-} // LDropdown
 
 
 /**

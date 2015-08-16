@@ -58,6 +58,16 @@ class Html0 {
 
   /// Aria Attribute role Value
   static const String ROLE_DIALOG = "dialog";
+  /// Aria Attribute role Value
+  static const String ROLE_DOCUMENT = "document";
+  /// Aria Attribute role Value
+  static const String ROLE_TOOLTIP = "tooltip";
+  /// Aria Attribute role Value
+  static const String ROLE_TAB = "tab";
+  /// Aria Attribute role Value
+  static const String ROLE_TABLIST = "tablist";
+  /// Aria Attribute role Value
+  static const String ROLE_TABPANEL = "tabpanel";
 
 
 
@@ -69,6 +79,9 @@ class Html0 {
   static const String ARIA_DISABLED = "aria-disabled";
   /// Attribute Aria
   static const String ARIA_HIDDEN = "aria-hidden";
+  /// Attribute Aria
+  static const String ARIA_SELECTED = "aria-selected";
+
   /// Attribute Aria auto complete e.g. list
   static const String ARIA_AUTOCOMPLETE = "aria-autocomplete";
   static const String ARIA_AUTOCOMPLETE_LIST = "list";
