@@ -6,7 +6,19 @@
 
 library lightning_dart.demo;
 
+import 'dart:html';
+
 import "package:lightning_dart/lightning_dart.dart";
+
+part 'demo/demo_feature.dart';
+part 'demo/activity_timeline.dart';
+part 'demo/badges.dart';
+part 'demo/breadcrumbs.dart';
+part 'demo/buttons.dart';
+part 'demo/button_groups.dart';
+
+
+part 'demo/tabs.dart';
 
 /**
  * Lightning Demo Example Page
@@ -14,8 +26,35 @@ import "package:lightning_dart/lightning_dart.dart";
 void main() {
 
   LContainer page = LContainer.init(id: "demo", containerSize: LContainer.C_CONTAINER__LARGE)
-    ..addHeader("Salesforce Design System Tutorial");
+    ..addHeader("Lightning Dart Tutorial");
 
+  CDiv main = page.appendDiv()
+    ..classes.add("main")
+    ..role = Html0.ROLE_MAIN;
+
+  DivElement tocDiv = new DivElement();
+  main.element.append(tocDiv);
+  UListElement toc = new UListElement();
+  tocDiv.append(toc);
+
+
+  //
+  page.add(new ActivityTimeline()..toc(toc));
+  page.add(new Badges()..toc(toc));
+  page.add(new Breadcrumbs()..toc(toc));
+  page.add(new Buttons()..toc(toc));
+  page.add(new ButtonGroups()..toc(toc));
+
+
+
+
+  page.add(new Tabs()..toc(toc));
+
+
+
+
+
+  /**
   CDiv main = page.appendDiv()
     ..classes.add("main")
     ..role = Html0.ROLE_MAIN;
@@ -41,6 +80,7 @@ void main() {
     ..appendParagraph("Footer Col 2: Salesforce Design System tutorial");
   footer.append(footerGrid);
 
+      */
 
 } // main
 
