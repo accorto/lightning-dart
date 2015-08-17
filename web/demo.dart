@@ -18,6 +18,8 @@ part 'demo/buttons.dart';
 part 'demo/button_groups.dart';
 
 
+part 'demo/icons.dart';
+
 part 'demo/tabs.dart';
 
 /**
@@ -28,7 +30,7 @@ void main() {
   LContainer page = LContainer.init(id: "demo", containerSize: LContainer.C_CONTAINER__LARGE)
     ..addHeader("Lightning Dart Tutorial");
 
-  CDiv main = page.appendDiv()
+  CDiv main = page.addDiv()
     ..classes.add("main")
     ..role = Html0.ROLE_MAIN;
 
@@ -38,14 +40,16 @@ void main() {
   tocDiv.append(toc);
 
 
-  //
+  /*
   page.add(new ActivityTimeline()..toc(toc));
   page.add(new Badges()..toc(toc));
   page.add(new Breadcrumbs()..toc(toc));
+  */
   page.add(new Buttons()..toc(toc));
   page.add(new ButtonGroups()..toc(toc));
 
 
+  page.add(new Icons()..toc(toc));
 
 
   page.add(new Tabs()..toc(toc));

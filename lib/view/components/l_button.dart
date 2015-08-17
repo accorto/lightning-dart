@@ -121,8 +121,15 @@ class LButton extends LComponent {
       }
     } // LButton
 
+    // classes + more
     if (buttonClasses != null) {
       element.classes.addAll(buttonClasses);
+      /// Add More (down) icon
+      if (buttonClasses.contains(C_BUTTON__ICON_MORE)) {
+        element.setAttribute(Html0.ARIA_HASPOPUP, "true");
+        LIcon more = new LIconUtility("down", className: C_BUTTON__ICON, size: C_BUTTON__ICON__X_SMALL);
+        element.append(more.element);
+      }
     }
 
     if (assistiveText != null) {
@@ -151,6 +158,11 @@ class LButton extends LComponent {
   LButton.neutralIcon(String name, String label, LIcon icon, {bool iconLeft: false})
       : this(new ButtonElement(), name, label,
         buttonClasses: [C_BUTTON__NEUTRAL], icon:icon, iconLeft:iconLeft);
+
+  /// (Neutral) Icon Button with More
+  LButton.more(String name, String label, LIcon icon, String assistiveText)
+      : this(new ButtonElement(), name, label,
+        buttonClasses: [C_BUTTON__ICON_MORE], icon:icon, assistiveText:assistiveText);
 
   /// Brand Button
   LButton.brand(String name, String label)
@@ -236,17 +248,6 @@ class LButton extends LComponent {
     if (icon != null)
       icon.element.classes.add(C_BUTTON__ICON__INVERSE);
   }
-
-  /// Add More (down) icon
-  void addIconMore() {
-    element.classes.clear();
-    element.classes.addAll([C_BUTTON, C_BUTTON__ICON_MORE]);
-    element.setAttribute(Html0.ARIA_HASPOPUP, "true");
-    LIcon more = new LIconUtility("down");
-    more.element.classes.addAll([C_BUTTON__ICON, C_BUTTON__ICON__X_SMALL]);
-    element.append(more.element);
-  }
-
 
   /// Set Selected State
   void set state (bool selected) {
@@ -344,9 +345,9 @@ class LButtonStateful extends LComponent {
     element.classes.add(LButton.C_NOT_SELECTED);
     element.setAttribute(Html0.ARIA_LIVE, Html0.ARIA_LIVE_ASSERTIVE);
     //
-    addState(new LButtonStatefulState(new LIconUtility("add"), textNotSelected, LButton.C_TEXT_NOT_SELECTED));
-    addState(new LButtonStatefulState(new LIconUtility("check"), textSelected, LButton.C_TEXT_SELECTED));
-    addState(new LButtonStatefulState(new LIconUtility("close"), textSelectedFocus, LButton.C_TEXT_SELECTED_FOCUS));
+    addState(new LButtonStatefulState(new LIconUtility(LIconUtility.ADD), textNotSelected, LButton.C_TEXT_NOT_SELECTED));
+    addState(new LButtonStatefulState(new LIconUtility(LIconUtility.CHECK), textSelected, LButton.C_TEXT_SELECTED));
+    addState(new LButtonStatefulState(new LIconUtility(LIconUtility.CLOSE), textSelectedFocus, LButton.C_TEXT_SELECTED_FOCUS));
 
     element.onClick.listen((MouseEvent evt){
       bool newState = toggle();

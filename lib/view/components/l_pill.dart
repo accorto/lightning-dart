@@ -66,7 +66,7 @@ class LPill {
     // - button -- Remove
     if (onRemoveClick != null) {
       LButton remove = new LButton.iconBare("remove",
-        new LIconUtility("close"),
+        new LIconUtility(LIconUtility.CLOSE),
         lPillRemove());
       if (value != null)
         remove.dataValue = value;

@@ -21,7 +21,7 @@ class Breadcrumbs extends DemoFeature {
     b1.setLinkText("Child Record B", null, 3);
     div.add(b1);
 
-    div.addHrSmall();
+    div.appendHrSmall();
     LBreadcrumb b2 = new LBreadcrumb();
     b2.setLinkText("Parent Entity A", null, 0);
     b2.setLinkText("Parent Record A", null, 1);

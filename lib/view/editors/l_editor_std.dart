@@ -81,7 +81,7 @@ abstract class LEditorStd extends LEditor {
       _formElementControl = new DivElement()
         ..classes.addAll([LLookup.C_LOOKUP__CONTROL, LEditor.C_INPUT_HAS_ICON, LEditor.C_INPUT_HAS_ICON__RIGHT]);
       _formElement.append(_formElementControl);
-      LIcon search = new LIconUtility("search",
+      LIcon search = new LIconUtility(LIconUtility.SEARCH,
         className: LEditor.C_INPUT__ICON);
       _formElementControl.append(search.element);
       input

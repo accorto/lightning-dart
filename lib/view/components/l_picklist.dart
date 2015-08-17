@@ -35,7 +35,7 @@ class LPicklist { // }implements LSelectI {
     _button = new LButton(new ButtonElement(), "select", null, idPrefix:idPrefix,
       buttonClasses: [LButton.C_BUTTON__NEUTRAL, C_PICKLIST__LABEL],
       labelElement: _label,
-      icon: new LIconUtility("down"));
+      icon: new LIconUtility(LIconUtility.DOWN));
     _button.element.attributes[Html0.ARIA_HASPOPUP] = "true";
     _pl.append(_button.element);
     //

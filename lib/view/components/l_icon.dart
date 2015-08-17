@@ -106,7 +106,7 @@ class LIcon {
 /**
  * Span with icon
  */
-class LIconSpan {
+class LIconSpan extends LComponent {
 
   /// the span element
   final SpanElement element = new SpanElement();
@@ -157,11 +157,9 @@ class LIconSpan {
 
 /**
  * Action Icon
+ * https://www.getslds.com/resources/icons#action&role=regular&status=all
  */
 class LIconAction extends LIcon {
-
-  /// Icon Prefix for ACTION_*
-  static const String C_ICON_ACTION_ = "slds-icon-";
 
   static const String ACTION_APPROVAL = "action-approval";
   static const String ACTION_CANVASAPP = "action-canvasapp";
@@ -334,6 +332,8 @@ class LIconAction extends LIcon {
   static const String ACTION_ANNOUNCEMENT = "action-announcement";
   static const String ACTION_RECORD = "action-record";
 
+  /// Icon Prefix for ACTION_*
+  static const String C_ICON_ACTION_ = "slds-icon-";
 
   /**
    * Action Icon - [name] e.g. CIcon.ACTION_DESCRIPTION
@@ -351,9 +351,6 @@ class LIconAction extends LIcon {
  * Standard Icon
  */
 class LIconStandard extends LIcon {
-
-  /// Icon Prefix for STD_*
-  static const String C_ICON_STD_ = "slds-icon-standard-";
 
   static const String STD_LOG_A_CALL = "log-a-call";
   static const String STD_ACCOUNT = "account";
@@ -433,8 +430,11 @@ class LIconStandard extends LIcon {
   static const String STD_MARKETING_ACTIONS = "marketing-actions";
   static const String STD_MARKETING_RESOURCES = "marketing-resources";
 
+  /// Icon Prefix for STD_*
+  static const String C_ICON_STD_ = "slds-icon-standard-";
+
   /**
-   * Standard Icon [linkName] e.g. CIcon.STD_CASE
+   * Standard Icon [linkName] e.g. STD_CASE
    */
   LIconStandard(String linkName, {String className: LIcon.C_ICON, String size: LIcon.C_ICON__LARGE,
       String colorOverride, List<String> addlCss})
@@ -446,11 +446,179 @@ class LIconStandard extends LIcon {
 
 /**
  * Utility Icon
+ * https://www.getslds.com/resources/icons#utility&role=regular&status=all
  */
 class LIconUtility extends LIcon {
 
+  static const String THREEDOTS = "3dots";
+  static const String ADD = "add";
+  static const String ADDUSER = "adduser";
+  static const String ANNOUNCEMENT = "announcement";
+  static const String APPS = "apps";
+  static const String ARROWDOWN = "arrowdown";
+  static const String ARROWUP = "arrowup";
+  static const String ATTACH = "attach";
+  static const String BACK = "back";
+  static const String BAN = "ban";
+  static const String BOLD = "bold";
+  static const String BOOKMARK = "bookmark";
+  static const String BRUSH = "brush";
+  static const String BUCKET = "bucket";
+  static const String BUILDER = "builder";
+  static const String CALL = "call";
+  static const String CAPSLOCK = "capslock";
+  static const String CASES = "cases";
+  static const String CENTER_ALIGN_TEXT = "center_align_text";
+  static const String CHART = "chart";
+  static const String CHAT = "chat";
+  static const String CHECK = "check";
+  static const String CHECKIN = "checkin";
+  static const String CHEVRONDOWN = "chevrondown";
+  static const String CHEVRONLEFT = "chevronleft";
+  static const String CHEVRONRIGHT = "chevronright";
+  static const String CHEVRONUP = "chevronup";
+  static const String CLEAR = "clear";
+  static const String CLOCK = "clock";
+  static const String CLOSE = "close";
+  static const String COMMENTS = "comments";
+  static const String COMPANY = "company";
+  static const String CONNECTED_APPS = "connected_apps";
+  static const String CONTRACT = "contract";
+  static const String COPY = "copy";
+  static const String CROSSFILTER = "crossfilter";
+  static const String CUSTOM_APPS = "custom_apps";
+  static const String CUT = "cut";
+  static const String DASH = "dash";
+  static const String DAYVIEW = "dayview";
+  static const String DELETE = "delete";
+  static const String DEPRECATE = "deprecate";
+  static const String DESKTOP = "desktop";
+  static const String DOWN = "down";
+  static const String DOWNLOAD = "download";
+  static const String EDIT = "edit";
+  static const String EMAIL = "email";
+  static const String ERROR = "error";
+  static const String EVENT = "event";
+  static const String EXPAND = "expand";
+  static const String FAVORITE = "favorite";
+  static const String FILTER = "filter";
+  static const String FILTERLIST = "filterList";
+  static const String FORWARD = "forward";
+  static const String FROZEN = "frozen";
+  static const String GROUPS = "groups";
+  static const String HELP = "help";
+  static const String HOME = "home";
+  static const String IDENTITY = "identity";
+  static const String IMAGE = "image";
+  static const String INBOX = "inbox";
+  static const String INFO = "info";
+  static const String INSERT_TAG_FIELD = "insert_tag_field";
+  static const String INSERT_TEMPLATE = "insert_template";
+  static const String ITALIC = "italic";
+  static const String JUSTIFY_TEXT = "justify_text";
+  static const String KANBAN = "kanban";
+  static const String KNOWLEDGE_BASE = "knowledge_base";
+  static const String LAYOUT = "layout";
+  static const String LEFT_ALIGN_TEXT = "left_align_text";
+  static const String LEFT = "left";
+  static const String LIKE = "like";
+  static const String LINK = "link";
+  static const String LIST = "list";
+  static const String LOCATION = "location";
+  static const String LOCK = "lock";
+  static const String LOGOUT = "logout";
+  static const String MAGICWAND = "magicwand";
+  static const String MATRIX = "matrix";
+  static const String MONTHLYVIEW = "monthlyview";
+  static const String MOVE = "move";
+  static const String NEW_WINDOW = "new_window";
+  static const String NEW = "new";
+  static const String NEWS = "news";
+  static const String NOTEBOOK = "notebook";
+  static const String NOTIFICATION = "notification";
+  static const String OFFICE365 = "office365";
+  static const String OFFLINE = "offline";
+  static const String OPEN_FOLDER = "open_folder";
+  static const String OPEN = "open";
+  static const String OPENED_FOLDER = "opened_folder";
+  static const String PACKAGE_ORG_BETA = "package_org_beta";
+  static const String PACKAGE_ORG = "package_org";
+  static const String PACKAGE = "package";
+  static const String PAGE = "page";
+  static const String PALETTE = "palette";
+  static const String PASTE = "paste";
+  static const String PEOPLE = "people";
+  static const String PHONE_LANDSCAPE = "phone_landscape";
+  static const String PHONE_PORTRAIT = "phone_portrait";
+  static const String PHOTO = "photo";
+  static const String POWER = "power";
+  static const String PREVIEW = "preview";
+  static const String PRIORITY = "priority";
+  static const String PROCESS = "process";
+  static const String PUSH = "push";
+  static const String PUZZLE = "puzzle";
+  static const String QUESTION = "question";
+  static const String QUESTIONS_AND_ANSWERS = "questions_and_answers";
+  static const String REDO = "redo";
+  static const String REFRESH = "refresh";
+  static const String RELATE = "relate";
+  static const String REMOVE_FORMATTING = "remove_formatting";
+  static const String REMOVE_LINK = "remove_link";
+  static const String REPLACE = "replace";
+  static const String REPLY = "reply";
+  static const String RETWEET = "retweet";
+  static const String RICHTEXTBULLETEDLIST = "richtextbulletedlist";
+  static const String RICHTEXTINDENT = "richtextindent";
+  static const String RICHTEXTNUMBEREDLIST = "richtextnumberedlist";
+  static const String RICHTEXTOUTDENT = "richtextoutdent";
+  static const String RIGHT_ALIGN_TEXT = "right_align_text";
+  static const String RIGHT = "right";
+  static const String ROTATE = "rotate";
+  static const String ROWS = "rows";
+  static const String SALESFORCE1 = "salesforce1";
+  static const String SEARCH = "search";
+  static const String SETTINGS = "settings";
+  static const String SETUP_ASSISTANT_GUIDE = "setup_assistant_guide";
+  static const String SETUP = "setup";
+  static const String SHARE = "share";
+  static const String SHIELD = "shield";
+  static const String SIDE_LIST = "side_list";
+  static const String SIGNPOST = "signpost";
+  static const String SMS = "sms";
+  static const String SNIPPET = "snippet";
+  static const String SOCIALSHARE = "socialshare";
+  static const String SORT = "sort";
+  static const String SPINNER = "spinner";
+  static const String STANDARD_OBJECTS = "standard_objects";
+  static const String STRIKETHROUGH = "strikethrough";
+  static const String SUCCESS = "success";
+  static const String SUMMARY = "summary";
+  static const String SUMMARYDETAIL = "summarydetail";
+  static const String SWITCH = "switch";
+  static const String TABLE = "table";
+  static const String TABLET_LANDSCAPE = "tablet_landscape";
+  static const String TABLET_PORTRAIT = "tablet_portrait";
+  static const String TEXT_BACKGROUND_COLOR = "text_background_color";
+  static const String TEXT_COLOR = "text_color";
+  static const String TILE_CARD_LIST = "tile_card_list";
+  static const String TOPIC = "topic";
+  static const String TRAIL = "trail";
+  static const String UNDELETE = "undelete";
+  static const String UNDEPRECATE = "undeprecate";
+  static const String UNDERLINE = "underline";
+  static const String UNDO = "undo";
+  static const String UNLOCK = "unlock";
+  static const String UP = "up";
+  static const String UPLOAD = "upload";
+  static const String USER = "user";
+  static const String WARNING = "warning";
+  static const String WEEKLYVIEW = "weeklyview";
+  static const String ZOOMIN = "zoomin";
+  static const String ZOOMOUT = "zoomout";
+
+
   /**
-   * Utility Icon
+   * Utility Icon with [linkName] like [ADD]
    */
   LIconUtility(String linkName, {String className, String size, String color, List<String> addlCss})
       : super(linkName, LIcon.SPRITE_UTILITY, className, size, color, addlCss);
@@ -463,9 +631,6 @@ class LIconUtility extends LIcon {
  * Custom Icon
  */
 class LIconCustom extends LIcon {
-
-  /// Icon Prefix for CUSTOM_*
-  static const String C_ICON_CUSTOM_ = "slds-icon-";
 
   static const String CUSTOM_1 = "custom-1";
   static const String CUSTOM_2 = "custom-2";
@@ -567,6 +732,9 @@ class LIconCustom extends LIcon {
   static const String CUSTOM_98 = "custom-98";
   static const String CUSTOM_99 = "custom-99";
   static const String CUSTOM_100 = "custom-100";
+
+  /// Icon Prefix for CUSTOM_*
+  static const String C_ICON_CUSTOM_ = "slds-icon-";
 
   /**
    * Custom Icon - [name] e.g. LIconCustom.CUSTOM_1

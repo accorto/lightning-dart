@@ -18,7 +18,7 @@ class LPage {
 /**
  * Lightning Container
  */
-class LContainer extends LComponent {
+class LContainer extends CDiv {
 
   /// slds-container - Adds horizontal padding to primary content container | Optional
   static const String C_CONTAINER = "slds-container";
@@ -83,8 +83,6 @@ class LContainer extends LComponent {
   } // init
 
 
-  /// The Element
-  final Element element;
   /// The Header
   LHeader header;
   /// The Footer
@@ -94,7 +92,7 @@ class LContainer extends LComponent {
   /**
    * Container with [id]
    */
-  LContainer(Element this.element, String id) {
+  LContainer(Element element, String id) : super._(element) {
     element.id = id;
     element.classes.add(C_CONTAINER);
   }

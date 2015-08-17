@@ -71,7 +71,7 @@ class LSectionTitle {
     AnchorElement a = new AnchorElement(href: "#");
     element.append(a);
     //
-    LIcon icon = new LIconUtility("switch");
+    LIcon icon = new LIconUtility(LIconUtility.SWITCH);
     a.append(icon.element);
     a.append(_labelElement);
     //

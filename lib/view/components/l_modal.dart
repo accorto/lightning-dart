@@ -36,7 +36,7 @@ class LModal extends LComponent {
     ..classes.add(C_MODAL__CONTAINER);
   final DivElement header = new DivElement()
     ..classes.add(C_MODAL__CONTAINER);
-  final DivElement content = new DivElement()
+  final CDiv content = new CDiv()
     ..classes.add(C_MODAL__CONTAINER);
   final DivElement footer = new DivElement()
     ..classes.add(C_MODAL__CONTAINER);
@@ -55,7 +55,7 @@ class LModal extends LComponent {
     element.append(dialog);
     dialog.append(container);
     container.append(header);
-    container.append(content);
+    container.append(content.element);
     container.append(footer);
     element.append(backdrop);
   } // LModal
@@ -107,17 +107,17 @@ class LModal extends LComponent {
     content.append(contentElement);
   }
 
-  /// Append Div
-  CDiv appendDiv() {
+  /// Add Div to content
+  CDiv addDiv() {
     CDiv div = new CDiv();
-    content.append(div.element);
+    content.add(div);
     return div;
   }
 
-  /// Append Section
-  CSection appendSection() {
-    CSection div = new CSection();
-    content.append(div.element);
+  /// Add Section to content
+  CDiv addSection() {
+    CDiv div = new CDiv.section();
+    content.add(div);
     return div;
   }
 

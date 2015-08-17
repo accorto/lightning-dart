@@ -416,15 +416,15 @@ class LTableHeaderCell extends LTableCell {
     _sortAsc = newValue;
     if (_sortButton == null) {
       _sortButton = new LButton.iconBare("sort-",
-        new LIconUtility("arrowdown", className: LButton.C_BUTTON__ICON, size: LIcon.C_ICON__SMALL),
+        new LIconUtility(LIconUtility.ARROWDOWN, className: LButton.C_BUTTON__ICON, size: LIcon.C_ICON__SMALL),
         LTable.lTableColumnSortDec());
       element.append(_sortButton.element);
     }
     if (_sortAsc) {
-      _sortButton.icon.linkName = "arrowdown";
+      _sortButton.icon.linkName = LIconUtility.ARROWDOWN;
       _sortButton.assistiveText = LTable.lTableColumnSortDec();
     } else {
-      _sortButton.icon.linkName = "arrowup";
+      _sortButton.icon.linkName = LIconUtility.ARROWUP;
       _sortButton.assistiveText = LTable.lTableColumnSortAsc();
     }
   }

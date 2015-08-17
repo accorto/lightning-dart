@@ -29,16 +29,6 @@ abstract class LComponent {
     element.append(component.element);
   }
 
-  /// add horizontal rule [margin] top/bottom - default 2rem
-  void addHR({String margin}) {
-    HRElement hr = new HRElement();
-    hr.style.margin = "${margin} 0 ";
-    element.append(hr);
-  }
-  /// add horizontal rule with .5rem top/bottom margin
-  void addHrSmall() {
-    addHR(margin: ".5rem");
-  }
   /**
    * Set [roleAttribute] e.g. Html0.V_ROLE_MAIN
    */
@@ -51,20 +41,6 @@ abstract class LComponent {
   /// element data-value
   void set dataValue (String newValue) {
     element.attributes[Html0.DATA_VALUE] = newValue;
-  }
-
-  /// Append Div
-  CDiv appendDiv() {
-    CDiv div = new CDiv();
-    element.append(div.element);
-    return div;
-  }
-
-  /// Append Section
-  CSection appendSection() {
-    CSection div = new CSection();
-    element.append(div.element);
-    return div;
   }
 
   /// element css classes
@@ -92,14 +68,53 @@ abstract class LComponent {
     return "${theId}-${autoPrefixName}-${_autoId++}";
   }
 
+} // LComponent
+
+
+/**
+ * Simple Div Element Component
+ */
+class CDiv extends LComponent {
+
+  /// Div Element
+  final Element element;
+
+  /// Div Element
+  CDiv() : this._(new DivElement());
+  /// Section Element
+  CDiv.section() : this._(new Element.section());
+  /// Article Element
+  CDiv.article() : this._(new Element.article());
+
+  /// Component
+  CDiv._(Element this.element);
+
+  /// Text
+  String get text => element.text;
+  /// Text
+  void set text (String newValue) {
+    element.text = newValue;
+  }
+
+  /// add horizontal rule [margin] top/bottom - default 2rem
+  void appendHR({String margin}) {
+    HRElement hr = new HRElement();
+    hr.style.margin = "${margin} 0 ";
+    element.append(hr);
+  }
+  /// add horizontal rule with .5rem top/bottom margin
+  void appendHrSmall() {
+    appendHR(margin: ".5rem");
+  }
+
   /**
    * Add Heading + handle aria
    */
-  HeadingElement addHeading(HeadingElement h, String text, {String headingClass, List<String> headingClasses}) {
+  HeadingElement appendHeading(HeadingElement h, String text, {String headingClass, List<String> headingClasses}) {
     h.text = text;
     // labelled by
     if (element.id == null || element.id.isEmpty) {
-      element.id = "lc-${_autoId++}";
+      element.id = "lc-${LComponent._autoId++}";
     }
     h.id = createId(element.id, "heading");
     element.setAttribute(Html0.ARIA_LABELLEDBY, h.id);
@@ -118,54 +133,41 @@ abstract class LComponent {
   } // addHeading
 
   /// add h1
-  HeadingElement addHeading1(String text, {String id, String headingClass, List<String> headingClasses}) {
-    return addHeading(new HeadingElement.h1(), text, headingClass:headingClass, headingClasses:headingClasses);
+  HeadingElement appendHeading1(String text, {String id, String headingClass, List<String> headingClasses}) {
+    return appendHeading(new HeadingElement.h1(), text, headingClass:headingClass, headingClasses:headingClasses);
   }
   /// add h2
-  HeadingElement addHeading2(String text, {String id, String headingClass, List<String> headingClasses}) {
-    return addHeading(new HeadingElement.h2(), text, headingClass:headingClass, headingClasses:headingClasses);
+  HeadingElement appendHeading2(String text, {String id, String headingClass, List<String> headingClasses}) {
+    return appendHeading(new HeadingElement.h2(), text, headingClass:headingClass, headingClasses:headingClasses);
   }
   /// add h3
-  HeadingElement addHeading3(String text, {String id, String headingClass, List<String> headingClasses}) {
-    return addHeading(new HeadingElement.h3(), text, headingClass:headingClass, headingClasses:headingClasses);
+  HeadingElement appendHeading3(String text, {String id, String headingClass, List<String> headingClasses}) {
+    return appendHeading(new HeadingElement.h3(), text, headingClass:headingClass, headingClasses:headingClasses);
   }
   /// add h3
-  HeadingElement addHeading4(String text, {String id, String headingClass, List<String> headingClasses}) {
-    return addHeading(new HeadingElement.h4(), text, headingClass:headingClass, headingClasses:headingClasses);
+  HeadingElement appendHeading4(String text, {String id, String headingClass, List<String> headingClasses}) {
+    return appendHeading(new HeadingElement.h4(), text, headingClass:headingClass, headingClasses:headingClasses);
   }
 
-} // LComponent
-
-
-/**
- * Simple Div Element Component
- */
-class CDiv extends LComponent {
-
-  /// Div Element
-  final DivElement element = new DivElement();
-
-  String get text => element.text;
-  void set text (String newValue) {
-    element.text = newValue;
+  /// create and add Div
+  CDiv addDiv() {
+    CDiv div = new CDiv();
+    add(div);
+    return div;
   }
 
-}
+  /// create and add Section
+  CDiv addSection() {
+    CDiv div = new CDiv.section();
+    add(div);
+    return div;
+  }
 
-/**
- * Simple Section Element Component
- */
-class CSection extends LComponent {
+  /// create and add Article
+  CDiv addArticle() {
+    CDiv div = new CDiv.article();
+    add(div);
+    return div;
+  }
 
-  /// Section Element
-  final Element element = new Element.section();
-}
-
-/**
- * Simple Section Element Component
- */
-class CArticle extends LComponent {
-
-  /// Article Element
-  final Element element = new Element.article();
-}
+} // CDiv
