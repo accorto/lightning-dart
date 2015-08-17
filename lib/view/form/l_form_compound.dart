@@ -32,7 +32,7 @@ class LFormCompound extends LComponent {
 
   /// add field set
   void addFieldSet(LFormCompoundFieldSet fieldSet) {
-    append(fieldSet);
+    add(fieldSet);
     fieldSets.add(fieldSet);
   }
 

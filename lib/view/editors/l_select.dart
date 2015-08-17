@@ -14,15 +14,16 @@ class LSelect extends LEditorStd implements LSelectI {
   /// Select Element
   final SelectElement input = new SelectElement();
 
-  LSelect(String name) {
+  LSelect(String name, {String idPrefix}) {
     input.name = name;
+    input.id = createId(idPrefix, name);
   }
 
   String get id => input.id;
   void set id (String newValue) {
     input.id = newValue;
     if (_label != null)
-      _label.htmlFor = newValue;
+      _labelElement.htmlFor = newValue;
   }
 
   String get name => input.name;

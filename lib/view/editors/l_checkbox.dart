@@ -6,6 +6,9 @@
 
 part of lightning_dart;
 
+/**
+ * Checkbox
+ */
 class LCheckbox extends LEditor {
 
   static const String C_CHECKBOX = "slds-checkbox";
@@ -16,16 +19,20 @@ class LCheckbox extends LEditor {
   final InputElement input = new InputElement()
     ..type = "checkbox";
 
-
-  LCheckbox(String name) {
+  /**
+   * Checkbox
+   * (note that if id is not unique, it does not work!)
+   */
+  LCheckbox(String name, {String idPrefix}) {
     input.name = name;
+    input.id = createId(idPrefix, name);
   }
 
   String get id => input.id;
   void set id (String newValue) {
     input.id = newValue;
-    if (_label != null)
-      _label.htmlFor = newValue;
+    if (_labelElement != null)
+      _labelElement.htmlFor = newValue;
   }
 
   String get name => input.name;
@@ -33,24 +40,25 @@ class LCheckbox extends LEditor {
 
 
   @override
-  LabelElement get label {
-    if (_label == null) {
-      _label = new LabelElement()
+  LabelElement get labelElement {
+    if (_labelElement == null) {
+      _labelElement = new LabelElement()
         ..classes.add(C_CHECKBOX);
-      _label.append(input);
-      _label.append(new SpanElement()
+      _labelElement.append(input);
+      _labelElement.append(new SpanElement()
           ..classes.add(C_CHECKBOX__FAUX));
       _labelSpan = new SpanElement()
         ..classes.add(C_FORM_ELEMENT__LABEL);
+      _labelElement.append(_labelSpan);
       //
       if (id != null || id.isNotEmpty)
-        _label.htmlFor = id;
-      if (labelText != null)
-        _labelSpan.text = labelText;
+        _labelElement.htmlFor = id;
+      if (label != null)
+        _labelSpan.text = label;
     }
-    return _label;
+    return _labelElement;
   }
-  LabelElement _label;
+  LabelElement _labelElement;
   SpanElement _labelSpan;
 
   /// Get Editor Form Element
@@ -59,7 +67,7 @@ class LCheckbox extends LEditor {
     if (_formElement == null) {
       _formElement = new DivElement()
         ..classes.add(LForm.C_FORM_ELEMENT);
-      _formElement.append(label);
+      _formElement.append(labelElement);
     }
     return _formElement;
   }
@@ -70,8 +78,8 @@ class LCheckbox extends LEditor {
   Element get labelSmall {
     if (_labelSmall == null) {
       _labelSmall = new Element.tag("small");
-      if (labelText != null)
-        _labelSmall.text = labelText;
+      if (label != null)
+        _labelSmall.text = label;
     }
     return _labelSmall;
   }
@@ -79,8 +87,8 @@ class LCheckbox extends LEditor {
 
 
   /// Set Label Text
-  void set labelText (String newValue) {
-    super.labelText = newValue;
+  void set label (String newValue) {
+    super.label = newValue;
     if (_labelSpan != null)
       _labelSpan.text = newValue;
     if (_labelSmall != null)

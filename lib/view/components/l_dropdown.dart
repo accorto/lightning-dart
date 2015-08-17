@@ -66,17 +66,17 @@ class LDropdown extends LComponent {
   LDropdown(LButton this.button, String this.idPrefix) {
     button.classes.addAll([LButton.C_BUTTON, LButton.C_BUTTON__ICON_CONTAINER]);
     button.icon.classes.add(LButton.C_BUTTON__ICON);
-    append(button);
+    add(button);
     //
     element.append(dropdown.element);
   } // LDropdown
 
   /// Settings Button+Dropdown
-  LDropdown.settings(String idPrefix) : this(new LButton("settings", null,
+  LDropdown.settings(String idPrefix) : this(new LButton(new ButtonElement(), "settings", null,
       icon: new LIconUtility("settings"),
       assistiveText: "Settings"), idPrefix);
 
-  LDropdown.action(String idPrefix) : this(new LButton("more", null,
+  LDropdown.action(String idPrefix) : this(new LButton(new ButtonElement(), "more", null,
       buttonClasses: [LButton.C_BUTTON__ICON_BORDER_FILLED],
       icon: new LIconUtility("down"), // slds-dropdown--right slds-dropdown--actions
       assistiveText: "More"), idPrefix);
@@ -90,7 +90,7 @@ class LDropdown extends LComponent {
       String headingLabel: "List"}) {
     button.classes.addAll([LButton.C_BUTTON, LButton.C_BUTTON__ICON_CONTAINER]);
     button.icon.classes.add(LButton.C_BUTTON__ICON);
-    append(button);
+    add(button);
     //
     dropdown.element.classes.add(C_DROPDOWN__SMALL);
     element.append(dropdown.element);

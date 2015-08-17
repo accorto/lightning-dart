@@ -151,7 +151,7 @@ class LContainer extends LComponent {
       ..text = text
       ..size = size;
     //
-    append(header);
+    add(header);
     return header;
   }
 
@@ -160,7 +160,7 @@ class LContainer extends LComponent {
     footer = new LFooter()
       ..text = text;
     //
-    append(footer);
+    add(footer);
     return footer;
   }
 

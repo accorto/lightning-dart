@@ -81,7 +81,7 @@ class LModal extends LComponent {
     if (tagLine != null)
       header.append(tagLine);
     // Close
-    LButton buttonClose = new LButton("close", null, idPrefix: id,
+    LButton buttonClose = new LButton(new ButtonElement(), "close", null, idPrefix: id,
         buttonClasses: [C_MODAL__CLOSE],
         icon: new LIconAction("close", className: LButton.C_BUTTON__ICON,
           colorOverride: LButton.C_BUTTON__ICON__INVERSE, size: LButton.C_BUTTON__ICON__LARGE),
@@ -148,13 +148,13 @@ class LModal extends LComponent {
     String saveLabel = saveNameOverride;
     if (saveLabel == null || saveLabel.isEmpty)
       saveLabel = lModalSave();
-    buttonSave = new LButton("save", saveLabel, idPrefix: id,
+    buttonSave = new LButton(new ButtonElement(), "save", saveLabel, idPrefix: id,
       buttonClasses: [LButton.C_BUTTON__NEUTRAL, LButton.C_BUTTON__BRAND]);
     if (hideOnSave)
       buttonSave.onClick.listen(onClickHide);
 
     if (addCancel) {
-      buttonCancel = new LButton("cancel", lModalCancel(), idPrefix: id,
+      buttonCancel = new LButton(new ButtonElement(), "cancel", lModalCancel(), idPrefix: id,
         buttonClasses: [LButton.C_BUTTON__NEUTRAL]);
       buttonCancel.onClick.listen(onClickHide);
       setFooter([buttonSave, buttonCancel], false);

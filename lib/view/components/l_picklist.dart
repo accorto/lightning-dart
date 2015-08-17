@@ -32,7 +32,7 @@ class LPicklist { // }implements LSelectI {
    */
   LPicklist(String idPrefix) {
     element.append(_pl);
-    _button = new LButton("select", null, idPrefix:idPrefix,
+    _button = new LButton(new ButtonElement(), "select", null, idPrefix:idPrefix,
       buttonClasses: [LButton.C_BUTTON__NEUTRAL, C_PICKLIST__LABEL],
       labelElement: _label,
       icon: new LIconUtility("down"));

@@ -21,13 +21,16 @@ abstract class LEditor {
   static const String C_INPUT_HAS_ICON__RIGHT = "slds-input-has-icon--right";
 
 
+  /// Auto Id Numbering
+  static int _autoId = 1;
+
   /// Get Form Element
   DivElement get formElement;
 
   /// Get Label as small element
   Element get labelSmall;
   /// Get Label as label element
-  LabelElement get label;
+  LabelElement get labelElement;
   /// Get Input Element
   Element get input;
 
@@ -36,16 +39,27 @@ abstract class LEditor {
   String get id;
   /// get Name
   String get name;
+  /// called by sub class
+  String createId(String idPrefix, String name) {
+    String theId = idPrefix;
+    if (idPrefix == null || idPrefix.isEmpty) {
+      theId = "ed-${_autoId++}";
+    }
+    if (name != null && name.isNotEmpty)
+      theId = "${theId}-${name}";
+    return theId;
+  }
+
   /// get Type
   String get type;
 
   /// Label Text
-  String get labelText => _labelText;
+  String get label => _label;
   /// Label Text
-  void set labelText (String newValue) {
-    _labelText = newValue;
+  void set label (String newValue) {
+    _label = newValue;
   }
-  String _labelText;
+  String _label;
 
   /// required
   bool get required;

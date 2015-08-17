@@ -12,28 +12,29 @@ part of lightning_dart;
  */
 abstract class LEditorStd extends LEditor {
 
+
   /// Get Editor Label
   @override
-  LabelElement get label {
+  LabelElement get labelElement {
     if (_label == null) {
-      _label = new LabelElement()
+      _labelElement = new LabelElement()
         ..classes.add(LForm.C_FORM_ELEMENT__LABEL);
       if (id != null || id.isNotEmpty)
-        _label.htmlFor = id;
-      if (labelText != null)
-        _label.text = labelText;
+        _labelElement.htmlFor = id;
+      if (label != null)
+        _labelElement.text = label;
     }
-    return _label;
+    return _labelElement;
   }
-  LabelElement _label;
+  LabelElement _labelElement;
 
   /// Get Editor Label
   @override
   Element get labelSmall {
     if (_labelSmall == null) {
       _labelSmall = new Element.tag("small");
-      if (labelText != null)
-        _labelSmall.text = labelText;
+      if (label != null)
+        _labelSmall.text = label;
     }
     return _labelSmall;
   }
@@ -51,7 +52,7 @@ abstract class LEditorStd extends LEditor {
     if (_formElement == null) {
       _formElement = new DivElement()
         ..classes.add(LForm.C_FORM_ELEMENT);
-      _formElement.append(label);
+      _formElement.append(labelElement);
       //
       _formElementControl = new DivElement()
         ..classes.add(LForm.C_FORM_ELEMENT__CONTROL);
@@ -75,7 +76,7 @@ abstract class LEditorStd extends LEditor {
     if (_formElement == null) {
       _formElement = new DivElement()
         ..classes.add(LForm.C_FORM_ELEMENT);
-      _formElement.append(label);
+      _formElement.append(labelElement);
       //
       _formElementControl = new DivElement()
         ..classes.addAll([LLookup.C_LOOKUP__CONTROL, LEditor.C_INPUT_HAS_ICON, LEditor.C_INPUT_HAS_ICON__RIGHT]);
@@ -96,10 +97,10 @@ abstract class LEditorStd extends LEditor {
 
 
   /// Set Label Text
-  void set labelText (String newValue) {
-    super.labelText = newValue;
-    if (_label != null)
-      _label.text = newValue;
+  void set label (String newValue) {
+    super.label = newValue;
+    if (_labelElement != null)
+      _labelElement.text = newValue;
     if (_labelSmall != null) {
       _labelSmall.text = newValue;
     }

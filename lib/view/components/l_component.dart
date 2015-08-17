@@ -11,8 +11,6 @@ part of lightning_dart;
  */
 abstract class LComponent {
 
-  /// Aria Labelled By Auto Numbering
-  static int _autoAriaLabel = 1;
   /// Auto Id Numbering
   static int _autoId = 1;
 
@@ -23,10 +21,24 @@ abstract class LComponent {
   String get id => element.id;
 
   /// append component
-  void append(LComponent component) {
+  void append(Element newValue) {
+    element.append(newValue);
+  }
+  /// append component
+  void add(LComponent component) {
     element.append(component.element);
   }
 
+  /// add horizontal rule [margin] top/bottom - default 2rem
+  void addHR({String margin}) {
+    HRElement hr = new HRElement();
+    hr.style.margin = "${margin} 0 ";
+    element.append(hr);
+  }
+  /// add horizontal rule with .5rem top/bottom margin
+  void addHrSmall() {
+    addHR(margin: ".5rem");
+  }
   /**
    * Set [roleAttribute] e.g. Html0.V_ROLE_MAIN
    */
@@ -58,16 +70,39 @@ abstract class LComponent {
   /// element css classes
   CssClassSet get classes => element.classes;
 
+  /// called by sub class (does not change Id of element)
+  String createId(String idPrefix, String name, {String autoPrefixId: "lc"}) {
+    String theId = idPrefix;
+    if (theId == null || theId.isEmpty) {
+      theId = "${autoPrefixId}-${_autoId++}";
+    }
+    if (name != null && name.isNotEmpty)
+      theId = "${theId}-${name}";
+    return theId;
+  }
+  /// called by sub class based on current id of element
+  String setAndCreateId(String name, {String autoPrefixId: "lc", String autoPrefixName: "c"}) {
+    String theId = element.id;
+    if (theId == null || theId.isEmpty) {
+      theId = "${autoPrefixId}-${_autoId++}";
+      element.id = theId;
+    }
+    if (name != null && name.isNotEmpty)
+      return "${theId}-${name}";
+    return "${theId}-${autoPrefixName}-${_autoId++}";
+  }
+
   /**
-   * Add Heading
-   * if no [id] is provided the element.id is suffixed with -heading, if element has no id, it it auto numbered
+   * Add Heading + handle aria
    */
-  HeadingElement addHeading(HeadingElement h, String text, {String id, String headingClass, List<String> headingClasses}) {
+  HeadingElement addHeading(HeadingElement h, String text, {String headingClass, List<String> headingClasses}) {
     h.text = text;
     // labelled by
-    String theId = _subId("heading", autoAriaLabel: true);
-    h.id = theId;
-    element.setAttribute(Html0.ARIA_LABELLEDBY, theId);
+    if (element.id == null || element.id.isEmpty) {
+      element.id = "lc-${_autoId++}";
+    }
+    h.id = createId(element.id, "heading");
+    element.setAttribute(Html0.ARIA_LABELLEDBY, h.id);
 
     // Classes
     if (headingClass != null && headingClass.isNotEmpty)
@@ -84,31 +119,20 @@ abstract class LComponent {
 
   /// add h1
   HeadingElement addHeading1(String text, {String id, String headingClass, List<String> headingClasses}) {
-    return addHeading(new HeadingElement.h1(), text, id:id, headingClass:headingClass, headingClasses:headingClasses);
+    return addHeading(new HeadingElement.h1(), text, headingClass:headingClass, headingClasses:headingClasses);
   }
   /// add h2
   HeadingElement addHeading2(String text, {String id, String headingClass, List<String> headingClasses}) {
-    return addHeading(new HeadingElement.h2(), text, id:id, headingClass:headingClass, headingClasses:headingClasses);
+    return addHeading(new HeadingElement.h2(), text, headingClass:headingClass, headingClasses:headingClasses);
   }
   /// add h3
   HeadingElement addHeading3(String text, {String id, String headingClass, List<String> headingClasses}) {
-    return addHeading(new HeadingElement.h3(), text, id:id, headingClass:headingClass, headingClasses:headingClasses);
+    return addHeading(new HeadingElement.h3(), text, headingClass:headingClass, headingClasses:headingClasses);
   }
   /// add h3
   HeadingElement addHeading4(String text, {String id, String headingClass, List<String> headingClasses}) {
-    return addHeading(new HeadingElement.h4(), text, id:id, headingClass:headingClass, headingClasses:headingClasses);
+    return addHeading(new HeadingElement.h4(), text, headingClass:headingClass, headingClasses:headingClasses);
   }
-
-  /// create sub element id with [suffix] if id exists, otherwise auto id
-  String _subId(String suffix, {bool autoAriaLabel: false}) {
-    String theId = id;
-    if (theId != null && theId.isNotEmpty) {
-      return "${theId}-${suffix}";
-    }
-    if (autoAriaLabel)
-      return "autoAria${_autoAriaLabel++}";
-    return "autoId${_autoId++}";
-  } // subId
 
 } // LComponent
 
@@ -120,6 +144,12 @@ class CDiv extends LComponent {
 
   /// Div Element
   final DivElement element = new DivElement();
+
+  String get text => element.text;
+  void set text (String newValue) {
+    element.text = newValue;
+  }
+
 }
 
 /**

@@ -17,16 +17,17 @@ class LInput extends LEditorStd {
   /**
    * Input Editor
    */
-  LInput(String name, String type) {
+  LInput(String name, String type, {String idPrefix}) {
     input.name = name;
+    input.id = createId(idPrefix, name);
     input.type = type;
   }
 
   String get id => input.id;
   void set id (String newValue) {
     input.id = newValue;
-    if (_label != null)
-      _label.htmlFor = newValue;
+    if (_labelElement != null)
+      _labelElement.htmlFor = newValue;
   }
 
   String get name => input.name;

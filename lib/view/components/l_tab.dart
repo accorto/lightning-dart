@@ -8,8 +8,9 @@ part of lightning_dart;
 
 /**
  * Tab Set
+ * (maintains set of Element == may be changed to LComponent)
  */
-class LTab {
+class LTab extends LComponent {
 
   static const String C_TABS__DEFAULT = "slds-tabs--default";
   static const String C_TABS__DEFAULT__NAV = "slds-tabs--default__nav";
@@ -56,7 +57,8 @@ class LTab {
       ..attributes[Html0.ROLE] = Html0.ROLE_TAB
       ..tabIndex = -1
       ..attributes[Html0.ARIA_SELECTED] = "false"
-      ..attributes[Html0.DATA_VALUE] = _tablist.children.length.toString();
+      ..attributes[Html0.DATA_VALUE] = _tablist.children.length.toString()
+      ..text = label;
     a.onClick.listen(onTabClick);
     LIElement entry = new LIElement()
       ..classes.addAll([C_TABS__ITEM, LText.C_TEXT_HEADING__LABEL])
@@ -75,13 +77,22 @@ class LTab {
         theContent.id = "${idPrefix}-${name}-content";
       }
     }
+    selectTabByPos(currentPos);
     return theContent;
   } // addTab
+
+  /// Current position
+  int get currentPos => _currentPos;
+  int _currentPos = 0;
+
+  /// Current Content
+  Element get currentContent => _currentContent;
+  Element _currentContent;
 
   /**
    * Select Tab By Position [pos] 0..x returns false if not found
    */
-  bool selectByPos(int pos) {
+  bool selectTabByPos(int pos) {
     if (pos < 0 || pos >= _tablist.children.length)
       return false;
     //
@@ -95,6 +106,7 @@ class LTab {
         a.attributes[Html0.ARIA_SELECTED] = "true";
         content.classes.remove(LVisibility.C_HIDE);
         content.classes.add(LVisibility.C_SHOW);
+        _currentContent = content;
       } else {
         li.classes.remove(LVisibility.C_ACTIVE);
         a.tabIndex = -1;
@@ -103,13 +115,16 @@ class LTab {
         content.classes.add(LVisibility.C_HIDE);
       }
     }
+    _currentPos = pos;
+    if (_sc != null)
+      _sc.add(this); // notify
     return true;
-  }
+  } // selectByPos
 
   /**
    * Select Tab By name - returns false if not found
    */
-  bool selectByName(String name) {
+  bool selectTabByName(String name) {
     if (name == null || name.isEmpty)
       return false;
 
@@ -117,7 +132,7 @@ class LTab {
       LIElement li = _tablist.children[i];
       String ref = li.attributes[Html0.DATA_NAME];
       if (ref == name) {
-        return selectByPos(i);
+        return selectTabByPos(i);
       }
     }
     return false;
@@ -132,11 +147,11 @@ class LTab {
       String index = a.attributes[Html0.DATA_VALUE];
       if (index != null && index.isNotEmpty) {
         int ii = int.parse(index, onError: (source){return -1;});
-        found= selectByPos(ii);
+        found= selectTabByPos(ii);
       }
       if (!found) {
         String name = a.attributes[Html0.DATA_NAME];
-        found = selectByName(name);
+        found = selectTabByName(name);
       }
       if (found && href == "#") {
         evt.stopPropagation();
@@ -144,5 +159,16 @@ class LTab {
       }
     }
   } // onTabClick
+
+
+  /// Tab Changed - use [currentContent] or [currentPos]
+  Stream<LTab> get onTabChanged {
+    if (_sc == null) {
+      _sc = new StreamController();
+    }
+    return _sc.stream;
+  }
+  StreamController _sc;
+
 
 } // LTab

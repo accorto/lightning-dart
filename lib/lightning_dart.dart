@@ -7,6 +7,7 @@
 library lightning_dart;
 
 // Dart Core
+import 'dart:async';
 import 'dart:html';
 import 'dart:svg' as svg;
 
@@ -22,6 +23,8 @@ import 'biz_base_dart.dart';
 //
 export 'src/lightning_dart_base.dart';
 
+part 'view/components/l_badge.dart';
+part 'view/components/l_breadcrumb.dart';
 part 'view/components/l_button.dart';
 part 'view/components/l_button_group.dart';
 part 'view/components/l_card.dart';

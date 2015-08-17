@@ -71,7 +71,7 @@ abstract class LNotification {
     }
 
     // close
-    close = new LButton("close", null, idPrefix:idPrefix,
+    close = new LButton(new ButtonElement(), "close", null, idPrefix:idPrefix,
       // button: slds-button slds-notify__close
       buttonClasses:[LButton.C_CLOSE, LButton.C_BUTTON__ICON__SMALL],
       icon: new LIconAction("close", size: LIcon.C_ICON__SMALL,

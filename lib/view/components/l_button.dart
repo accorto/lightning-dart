@@ -61,8 +61,7 @@ class LButton extends LComponent {
 
 
   /// The Button
-  final ButtonElement element = new ButtonElement()
-    ..classes.add(C_BUTTON);
+  final Element element;
   /// Optional Button Icon
   final LIcon icon;
   /// Optional Assistive Text
@@ -70,12 +69,24 @@ class LButton extends LComponent {
 
   /**
    * Button with [name] and optional [label]
+   * [element] can be a button, anchor, or input
    * if [idPrefix] is provided, the id will be idPrefix-name, if empty - the name
    */
-  LButton(String name, String label, {String idPrefix, Element labelElement,
-      List<String> buttonClasses,
+  LButton(Element this.element, String name, String label, {String idPrefix, Element labelElement,
+      List<String> buttonClasses, String href,
       LIcon this.icon, bool iconLeft: false, String assistiveText}) {
-    element.name = name;
+    element.classes.add(C_BUTTON);
+    if (element is ButtonElement) {
+      (element as ButtonElement).name = name;
+    } else if (element is InputElement) {
+        (element as InputElement).name = name;
+        (element as InputElement).value = label;
+    } else {
+      element.attributes[Html0.DATA_NAME] = name;
+      if (href != null && href.isNotEmpty && element is AnchorElement) {
+        (element as AnchorElement).href = href;
+      }
+    }
     if (idPrefix != null) {
       if (idPrefix.isEmpty)
         element.id = name;
@@ -119,36 +130,67 @@ class LButton extends LComponent {
     }
   } // LButton
 
+  /// Default Button
+  LButton.base(String name, String label)
+    : this(new ButtonElement(), name, label);
+
   /// Neutral Button
   LButton.neutral(String name, String label)
-      : this(name, label, buttonClasses: [C_BUTTON__NEUTRAL]);
+    : this(new ButtonElement(), name, label,
+        buttonClasses: [C_BUTTON__NEUTRAL]);
+  /// Neutral Anchor
+  LButton.neutralAnchor(String name, String label, {String href})
+    : this(new AnchorElement(href: "#"), name, label, href:href,
+        buttonClasses: [C_BUTTON__NEUTRAL]);
+  /// Neutral Input Button
+  LButton.neutralInput(String name, String label)
+    : this(new InputElement(type: "button"), name, label,
+        buttonClasses: [C_BUTTON__NEUTRAL]);
 
   /// Neutral Button with Icon
   LButton.neutralIcon(String name, String label, LIcon icon, {bool iconLeft: false})
-      : this(name, label, icon:icon, iconLeft:iconLeft );
+      : this(new ButtonElement(), name, label,
+        buttonClasses: [C_BUTTON__NEUTRAL], icon:icon, iconLeft:iconLeft);
+
   /// Brand Button
   LButton.brand(String name, String label)
-      : this(name, label, buttonClasses: [C_BUTTON__BRAND]);
+      : this(new ButtonElement(), name, label,
+        buttonClasses: [C_BUTTON__BRAND]);
+  /// Brand Button
+  LButton.brandAnchor(String name, String label, {String href})
+      : this(new AnchorElement(href: "#"), name, label, href:href,
+        buttonClasses: [C_BUTTON__BRAND]);
+
   /// Inverse Button
   LButton.inverse(String name, String label)
-      : this(name, label, buttonClasses: [C_BUTTON__INVERSE]);
+      : this(new ButtonElement(), name, label,
+        buttonClasses: [C_BUTTON__INVERSE]);
 
 
   /// Icon Only - bare
   LButton.iconBare(String name, LIcon icon, String assistiveText)
-      : this(name, null, buttonClasses: [C_BUTTON__ICON_BARE], assistiveText:assistiveText);
+      : this(new ButtonElement(), name, null, icon:icon,
+        buttonClasses: [C_BUTTON__ICON_BARE], assistiveText:assistiveText);
   /// Icon Only - container
   LButton.iconContainer(String name, LIcon icon, String assistiveText)
-      : this(name, null, buttonClasses: [C_BUTTON__ICON_CONTAINER], assistiveText:assistiveText);
+      : this(new ButtonElement(), name, null, icon:icon,
+        buttonClasses: [C_BUTTON__ICON_CONTAINER], assistiveText:assistiveText);
   /// Icon Only - border
   LButton.iconBorder(String name, LIcon icon, String assistiveText)
-      : this(name, null, buttonClasses: [C_BUTTON__ICON_BORDER], assistiveText:assistiveText);
+      : this(new ButtonElement(), name, null, icon:icon,
+        buttonClasses: [C_BUTTON__ICON_BORDER], assistiveText:assistiveText);
   /// Icon Only - border filled
   LButton.iconBorderFilled(String name, LIcon icon, String assistiveText)
-      : this(name, null, buttonClasses: [C_BUTTON__ICON_BORDER_FILLED], assistiveText:assistiveText);
+      : this(new ButtonElement(), name, null, icon:icon,
+        buttonClasses: [C_BUTTON__ICON_BORDER_FILLED], assistiveText:assistiveText);
 
   /// Button name
-  String get name => element.name;
+  String get name {
+    if (element is ButtonElement)
+      return (element as ButtonElement).name;
+
+    return element.attributes[Html0.DATA_NAME];
+  }
   /// Button id
   String get id => element.id;
 
@@ -162,9 +204,16 @@ class LButton extends LComponent {
     assistive.text = newValue;
   }
 
+
   /// Button Size
-  void setButtonSizeSmall() {
+  bool get small => element.classes.contains(C_BUTTON__SMALL);
+  /// Button Size
+  void set small (bool newValue) {
+    if (newValue) {
       element.classes.add(C_BUTTON__SMALL);
+    } else {
+      element.classes.remove(C_BUTTON__SMALL);
+    }
   }
 
   /// Icon Size
@@ -190,7 +239,8 @@ class LButton extends LComponent {
 
   /// Add More (down) icon
   void addIconMore() {
-    element.classes.add(C_BUTTON__ICON_MORE);
+    element.classes.clear();
+    element.classes.addAll([C_BUTTON, C_BUTTON__ICON_MORE]);
     element.setAttribute(Html0.ARIA_HASPOPUP, "true");
     LIcon more = new LIconUtility("down");
     more.element.classes.addAll([C_BUTTON__ICON, C_BUTTON__ICON__X_SMALL]);
@@ -220,11 +270,39 @@ class LButton extends LComponent {
     return div;
   }
 
-
-  bool get disabled => element.disabled;
-  void set disabled(bool newValue) {
-    element.disabled = newValue;
+  /// disabled
+  bool get disabled {
+    if (element is ButtonElement)
+      return (element as ButtonElement).disabled;
+    if (element is InputElement)
+      return (element as InputElement).disabled;
+    return Html0.DISABLED == element.attributes[Html0.DISABLED];
   }
+  /// disabled
+  void set disabled(bool newValue) {
+    if (element is ButtonElement) {
+      (element as ButtonElement).disabled = newValue;
+    }
+    else if (element is InputElement) {
+      (element as InputElement).disabled = newValue;
+    }
+    else if (newValue) {
+      element.attributes[Html0.DISABLED] = Html0.DISABLED;
+      if (_disabledClick == null) {
+        _disabledClick = element.onClick.listen((MouseEvent evt) {
+          evt.preventDefault();
+          evt.stopImmediatePropagation();
+        });
+      }
+    } else {
+      element.attributes.remove(Html0.DISABLED);
+      if (_disabledClick != null) {
+        _disabledClick.cancel();
+      }
+      _disabledClick = null;
+    }
+  }
+  StreamSubscription<MouseEvent> _disabledClick;
 
   /// Button Click
   ElementStream<MouseEvent> get onClick => element.onClick;
@@ -234,8 +312,9 @@ class LButton extends LComponent {
 
 /**
  * (Toggle) Button with multiple states
+ * TODO: same API as Checkbox
  */
-class LButtonStateful {
+class LButtonStateful extends LComponent {
 
   static final Logger _log = new Logger("LButtonStateful");
 
@@ -333,3 +412,64 @@ class LButtonStatefulState {
 
 } // LButtonStatefulState
 
+
+/**
+ * Stateful Button Icon
+ * TODO: Same API as Checkbox
+ */
+class LButtonIconStateful extends LComponent {
+
+  final ButtonElement element = new ButtonElement()
+    ..classes.addAll([LButton.C_BUTTON, LButton.C_BUTTON__ICON_BORDER]);
+
+  final SpanElement _span = new SpanElement()
+    ..classes.add(LText.C_ASSISTIVE_TEXT);
+
+  /**
+   * Stateful Icon
+   */
+  LButtonIconStateful(String name, String assistiveText, LIcon icon, {String idPrefix,
+      void onButtonClick(MouseEvent evt)}) {
+    icon.classes.add(LButton.C_BUTTON__ICON);
+    element.append(icon.element);
+    //
+    if (assistiveText != null)
+      _span.text = assistiveText;
+    element.append(_span);
+    //
+    element.onClick.listen((MouseEvent evt){
+      bool newState = toggle();
+    //  _log.fine("${name} selected=${newState}");
+      if (onButtonClick != null)
+        onButtonClick(evt);
+    });
+    selected = false;
+  } // LButtonIconStateful
+
+
+  bool get selected => element.classes.contains(LButton.C_IS_SELECTED);
+  /// Selected
+  void set selected(bool newValue) {
+    if (newValue) {
+      element.classes.remove(LButton.C_NOT_SELECTED);
+      element.classes.add(LButton.C_IS_SELECTED);
+    } else {
+      element.classes.add(LButton.C_NOT_SELECTED);
+      element.classes.remove(LButton.C_IS_SELECTED);
+    }
+  } // set selected
+  /// toggle state - return new state
+  bool toggle() {
+    bool newState = !selected;
+    selected = newState;
+    return newState;
+  }
+
+
+  bool get disabled => element.disabled;
+  void set disabled(bool newValue) {
+    element.disabled = newValue;
+  }
+
+
+} // LButtonIconStateful

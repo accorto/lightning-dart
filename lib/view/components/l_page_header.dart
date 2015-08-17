@@ -198,15 +198,15 @@ class LObjectHome extends LPageHeader {
       ..classes.addAll([LGrid.C_GRID, "slds-type-focus","slds-no-space", LGrid.C_ALIGN_MIDDLE]); // TODO
     headerLeftGrid.append(headerLeftGridFocus);
     headerLeftGridFocus.append(headerLeftGridFocusTitle);
-    LButton headerLeftGridFocusFind = new LButton("find", null,
+    LButton headerLeftGridFocusFind = new LButton(new ButtonElement(), "find", null,
       buttonClasses: [LButton.C_BUTTON__ICON_BARE, LGrid.C_SHRINK_NONE, LGrid.C_ALIGN_MIDDLE, LMargin.C_LEFT__X_SMALL]);
     headerLeftGridFocus.append(headerLeftGridFocusFind.element);
 
-    LButton headerLeftGridMore = new LButton("more", null,
+    LButton headerLeftGridMore = new LButton(new ButtonElement(), "more", null,
       buttonClasses: [LButton.C_BUTTON, LButton.C_BUTTON__ICON_MORE, LGrid.C_SHRINK_NONE, LMargin.C_LEFT__LARGE]);
     headerLeftGrid.append(headerLeftGridMore.element);
 
-    LButton headerLeftGridSave = new LButton("save", lObjectHomeSave(),
+    LButton headerLeftGridSave = new LButton(new ButtonElement(), "save", lObjectHomeSave(),
       buttonClasses: [LButton.C_BUTTON, LButton.C_BUTTON__BRAND, "slds-button-space-left", // TODO
         LMargin.C_RIGHT__MEDIUM, LGrid.C_SHRINK_NONE, LGrid.C_ALIGN_MIDDLE, "slds-hide"]);
     headerLeftGrid.append(headerLeftGridSave.element);

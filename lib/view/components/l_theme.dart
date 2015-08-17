@@ -16,6 +16,7 @@ class LTheme {
   /// gray background
   static const String C_THEME__SHADE = "slds-theme--shade";
   /// dark blue background
+  static const String C_THEME__INVERSE = "slds-theme--inverse";
   static const String C_THEME__ALT_INVERSE = "slds-theme--alt-inverse";
   /// stripes
   static const String C_THEME__ALERT_TEXTURE = "slds-theme--alert-texture";
