@@ -109,33 +109,60 @@ class LIcon {
 class LIconSpan extends LComponent {
 
   /// the span element
-  final SpanElement element = new SpanElement();
+  final SpanElement element = new SpanElement()
+    ..classes.add(LIcon.C_ICON__CONTAINER);
 
   /**
    * Standard Icon Span
-   * [name] standard icon name e.g. CIcon.STD_CASE
+   * [name] standard icon name e.g. LIconStandard.ACCOUNT
    */
-  LIconSpan.standard(String name, {bool circle: false, String title}) : this(
-          new LIconStandard(name),
-          circle: circle,
-          title: title,
-          spanClass: "${LIconStandard.C_ICON_STD_}${name}");
+  LIconSpan.standard(String name, {bool circle: false, String assistiveText,
+      String size})
+    : this(new LIconStandard(name, size:size),
+        circle:circle, assistiveText:assistiveText,
+        spanClass: "${LIconStandard.C_ICON_STANDARD_}${name}");
 
   /**
    * Action Icon Span
-   * [name] action icon name e.g. CIcon.ACTION_DESCRIPTION
+   * [name] action icon name e.g. LIconAction.DESCRIPTION
    */
-  LIconSpan.action(String name, {bool circle: false, String title}) : this(
-          new LIconAction(name),
-          circle: circle,
-          title: title,
-          spanClass: "${LIconAction.C_ICON_ACTION_}${name}");
+  LIconSpan.action(String name, {bool circle: false, String assistiveText,
+        String size})
+    : this(new LIconAction(name, size:size),
+        circle:circle, assistiveText:assistiveText,
+        spanClass: "${LIconAction.C_ICON_ACTION_}${name}");
+
+  /**
+   * Utility Icon Span
+   * [name] utility icon name e.g. LIconUtility.ANNOUNCEMENT
+   */
+  LIconSpan.utility(String name, {bool circle: false, String assistiveText,
+        String size:LIcon.C_ICON__MEDIUM, String color:LIcon.C_ICON_TEXT_DEFAULT})
+    : this(new LIconUtility(name, size:size, color:color),
+        circle:circle, assistiveText:assistiveText);
+
+  /**
+   * DocType Icon Span
+   * [name] doctype icon name e.g. LIconDoctype.XML
+   */
+  LIconSpan.doctype(String name, {bool circle: false, String assistiveText,
+        String size})
+    : this(new LIconDoctype(name, size:size),
+        circle:circle, assistiveText:assistiveText);
+
+  /**
+   * DocType Icon Span
+   * [name] doctype icon name e.g. LIconDoctype.XML
+   */
+  LIconSpan.custom(String name, {bool circle: false, String assistiveText,
+      String size})
+  : this(new LIconCustom(name, size:size),
+      circle:circle, assistiveText:assistiveText);
 
   /**
    * Create Span with Icon
    */
-  LIconSpan(LIcon icon, {bool circle: false, String title, String spanClass}) {
-    element.classes.add(LIcon.C_ICON__CONTAINER);
+  LIconSpan(LIcon icon, {bool circle: false, String assistiveText, String spanClass}) {
     if (spanClass != null && spanClass.isNotEmpty) {
       element.classes.add(spanClass);
     }
@@ -144,10 +171,10 @@ class LIconSpan extends LComponent {
     }
     element.append(icon.element);
     //
-    if (title != null && title.isNotEmpty) {
+    if (assistiveText != null && assistiveText.isNotEmpty) {
       SpanElement span = new SpanElement()
         ..classes.add(LText.C_ASSISTIVE_TEXT)
-        ..text = title;
+        ..text = assistiveText;
       element.append(span);
     }
   }
@@ -161,186 +188,182 @@ class LIconSpan extends LComponent {
  */
 class LIconAction extends LIcon {
 
-  static const String ACTION_APPROVAL = "action-approval";
-  static const String ACTION_CANVASAPP = "action-canvasapp";
-  static const String ACTION_GOAL = "action-goal";
-  static const String ACTION_OPPORTUNITY_COMPETITOR = "action-opportunity-competitor";
-  static const String ACTION_OPPORTUNITY_LINE_ITEM = "action-opportunity-line-item";
-  static const String ACTION_OPPORTUNITY_TEAM_MEMBER = "action-opportunity-team-member";
-  static const String ACTION_QUESTION_POST_ACTION = "action-question-post-action";
-  static const String ACTION_QUOTE = "action-quote";
-  static const String ACTION_REJECT = "action-reject";
-  static const String ACTION_SOCIAL_POST = "action-social-post";
-  static const String ACTION_FALLBACK = "action-fallback";
-  static const String ACTION_EDIT = "action-edit";
-  static const String ACTION_DELETE = "action-delete";
-  static const String ACTION_CLONE = "action-clone";
-  static const String ACTION_FOLLOW = "action-follow";
-  static const String ACTION_FOLLOWING = "action-following";
-  static const String ACTION_JOIN_GROUP = "action-join-group";
-  static const String ACTION_LEAVE_GROUP = "action-leave-group";
-  static const String ACTION_EDIT_GROUP = "action-edit-group";
-  static const String ACTION_SHARE_POST = "action-share-post";
-  static const String ACTION_SHARE_FILE = "action-share-file";
-  static const String ACTION_NEW_TASK = "action-new-task";
-  static const String ACTION_NEW_CONTACT = "action-new-contact";
-  static const String ACTION_NEW_OPPORTUNITY = "action-new-opportunity";
-  static const String ACTION_NEW_CASE = "action-new-case";
-  static const String ACTION_NEW_LEAD = "action-new-lead";
-  static const String ACTION_SHARE_THANKS = "action-share-thanks";
-  static const String ACTION_SHARE_LINK = "action-share-link";
-  static const String ACTION_SHARE_POLL = "action-share-poll";
-  static const String ACTION_NEW_EVENT = "action-new-event";
-  static const String ACTION_NEW_CHILD_CASE = "action-new-child-case";
-  static const String ACTION_LOG_A_CALL = "action-log-a-call";
-  static const String ACTION_NEW_NOTE = "action-new-note";
-  static const String ACTION_NEW = "action-new";
-  static const String ACTION_FILTER = "action-filter";
-  static const String ACTION_SORT = "action-sort";
-  static const String ACTION_DESCRIPTION = "action-description";
-  static const String ACTION_DEFER = "action-defer";
-  static const String ACTION_UPDATE = "action-update";
-  static const String ACTION_LOG_THIS_EVENT = "action-log-this-event";
-  static const String ACTION_EMAIL = "action-email";
-  static const String ACTION_DIAL_IN = "action-dial-in";
-  static const String ACTION_MAP = "action-map";
-  static const String ACTION_CALL = "action-call";
-  static const String ACTION_GOOGLE_NEWS = "action-google-news";
-  static const String ACTION_WEB_LINK = "action-web-link";
-  static const String ACTION_SUBMIT_FOR_APPROVAL = "action-submit-for-approval";
-  static const String ACTION_SEARCH = "action-search";
-  static const String ACTION_CLOSE = "action-close";
-  static const String ACTION_BACK = "action-back";
-  static const String ACTION_OFFICE_365 = "action-office-365";
-  static const String ACTION_CONCUR = "action-concur";
-  static const String ACTION_DROPBOX = "action-dropbox";
-  static const String ACTION_EVERNOTE = "action-evernote";
-  static const String ACTION_DOCUSIGN = "action-docusign";
-  static const String ACTION_MORE = "action-more";
-  static const String ACTION_NOTEBOOK = "action-notebook";
-  static const String ACTION_PREVIEW = "action-preview";
-  static const String ACTION_PRIORITY = "action-priority";
-  static const String ACTION_DEFAULT_CUSTOM_OBJECT = "action-default-custom-object";
-  static const String ACTION_NEW_CUSTOM_OBJECT = "action-new-custom-object";
-  static const String ACTION_LEAD_CONVERT = "action-lead-convert";
-  static const String ACTION_NEW_ACCOUNT = "action-new-account";
-  static const String ACTION_NEW_CAMPAIGN = "action-new-campaign";
-  static const String ACTION_NEW_GROUP = "action-new-group";
-  static const String ACTION_UPDATE_STATUS = "action-update-status";
-  static const String ACTION_NEW_CUSTOM_1 = "action-new-custom-1";
-  static const String ACTION_NEW_CUSTOM_2 = "action-new-custom-2";
-  static const String ACTION_NEW_CUSTOM_3 = "action-new-custom-3";
-  static const String ACTION_NEW_CUSTOM_4 = "action-new-custom-4";
-  static const String ACTION_NEW_CUSTOM_5 = "action-new-custom-5";
-  static const String ACTION_NEW_CUSTOM_6 = "action-new-custom-6";
-  static const String ACTION_NEW_CUSTOM_7 = "action-new-custom-7";
-  static const String ACTION_NEW_CUSTOM_8 = "action-new-custom-8";
-  static const String ACTION_NEW_CUSTOM_9 = "action-new-custom-9";
-  static const String ACTION_NEW_CUSTOM_10 = "action-new-custom-10";
-  static const String ACTION_NEW_CUSTOM_11 = "action-new-custom-11";
-  static const String ACTION_NEW_CUSTOM_12 = "action-new-custom-12";
-  static const String ACTION_NEW_CUSTOM_13 = "action-new-custom-13";
-  static const String ACTION_NEW_CUSTOM_14 = "action-new-custom-14";
-  static const String ACTION_NEW_CUSTOM_15 = "action-new-custom-15";
-  static const String ACTION_NEW_CUSTOM_16 = "action-new-custom-16";
-  static const String ACTION_NEW_CUSTOM_17 = "action-new-custom-17";
-  static const String ACTION_NEW_CUSTOM_18 = "action-new-custom-18";
-  static const String ACTION_NEW_CUSTOM_19 = "action-new-custom-19";
-  static const String ACTION_NEW_CUSTOM_20 = "action-new-custom-20";
-  static const String ACTION_NEW_CUSTOM_21 = "action-new-custom-21";
-  static const String ACTION_NEW_CUSTOM_22 = "action-new-custom-22";
-  static const String ACTION_NEW_CUSTOM_23 = "action-new-custom-23";
-  static const String ACTION_NEW_CUSTOM_24 = "action-new-custom-24";
-  static const String ACTION_NEW_CUSTOM_25 = "action-new-custom-25";
-  static const String ACTION_NEW_CUSTOM_26 = "action-new-custom-26";
-  static const String ACTION_NEW_CUSTOM_27 = "action-new-custom-27";
-  static const String ACTION_NEW_CUSTOM_28 = "action-new-custom-28";
-  static const String ACTION_NEW_CUSTOM_29 = "action-new-custom-29";
-  static const String ACTION_NEW_CUSTOM_30 = "action-new-custom-30";
-  static const String ACTION_NEW_CUSTOM_31 = "action-new-custom-31";
-  static const String ACTION_NEW_CUSTOM_32 = "action-new-custom-32";
-  static const String ACTION_NEW_CUSTOM_33 = "action-new-custom-33";
-  static const String ACTION_NEW_CUSTOM_34 = "action-new-custom-34";
-  static const String ACTION_NEW_CUSTOM_35 = "action-new-custom-35";
-  static const String ACTION_NEW_CUSTOM_36 = "action-new-custom-36";
-  static const String ACTION_NEW_CUSTOM_37 = "action-new-custom-37";
-  static const String ACTION_NEW_CUSTOM_38 = "action-new-custom-38";
-  static const String ACTION_NEW_CUSTOM_39 = "action-new-custom-39";
-  static const String ACTION_NEW_CUSTOM_40 = "action-new-custom-40";
-  static const String ACTION_NEW_CUSTOM_41 = "action-new-custom-41";
-  static const String ACTION_NEW_CUSTOM_42 = "action-new-custom-42";
-  static const String ACTION_NEW_CUSTOM_43 = "action-new-custom-43";
-  static const String ACTION_NEW_CUSTOM_44 = "action-new-custom-44";
-  static const String ACTION_NEW_CUSTOM_45 = "action-new-custom-45";
-  static const String ACTION_NEW_CUSTOM_46 = "action-new-custom-46";
-  static const String ACTION_NEW_CUSTOM_47 = "action-new-custom-47";
-  static const String ACTION_NEW_CUSTOM_48 = "action-new-custom-48";
-  static const String ACTION_NEW_CUSTOM_49 = "action-new-custom-49";
-  static const String ACTION_NEW_CUSTOM_50 = "action-new-custom-50";
-  static const String ACTION_NEW_CUSTOM_51 = "action-new-custom-51";
-  static const String ACTION_NEW_CUSTOM_52 = "action-new-custom-52";
-  static const String ACTION_NEW_CUSTOM_53 = "action-new-custom-53";
-  static const String ACTION_NEW_CUSTOM_54 = "action-new-custom-54";
-  static const String ACTION_NEW_CUSTOM_55 = "action-new-custom-55";
-  static const String ACTION_NEW_CUSTOM_56 = "action-new-custom-56";
-  static const String ACTION_NEW_CUSTOM_57 = "action-new-custom-57";
-  static const String ACTION_NEW_CUSTOM_58 = "action-new-custom-58";
-  static const String ACTION_NEW_CUSTOM_59 = "action-new-custom-59";
-  static const String ACTION_NEW_CUSTOM_60 = "action-new-custom-60";
-  static const String ACTION_NEW_CUSTOM_61 = "action-new-custom-61";
-  static const String ACTION_NEW_CUSTOM_62 = "action-new-custom-62";
-  static const String ACTION_NEW_CUSTOM_63 = "action-new-custom-63";
-  static const String ACTION_NEW_CUSTOM_64 = "action-new-custom-64";
-  static const String ACTION_NEW_CUSTOM_65 = "action-new-custom-65";
-  static const String ACTION_NEW_CUSTOM_66 = "action-new-custom-66";
-  static const String ACTION_NEW_CUSTOM_67 = "action-new-custom-67";
-  static const String ACTION_NEW_CUSTOM_68 = "action-new-custom-68";
-  static const String ACTION_NEW_CUSTOM_69 = "action-new-custom-69";
-  static const String ACTION_NEW_CUSTOM_70 = "action-new-custom-70";
-  static const String ACTION_NEW_CUSTOM_71 = "action-new-custom-71";
-  static const String ACTION_NEW_CUSTOM_72 = "action-new-custom-72";
-  static const String ACTION_NEW_CUSTOM_73 = "action-new-custom-73";
-  static const String ACTION_NEW_CUSTOM_74 = "action-new-custom-74";
-  static const String ACTION_NEW_CUSTOM_75 = "action-new-custom-75";
-  static const String ACTION_NEW_CUSTOM_76 = "action-new-custom-76";
-  static const String ACTION_NEW_CUSTOM_77 = "action-new-custom-77";
-  static const String ACTION_NEW_CUSTOM_78 = "action-new-custom-78";
-  static const String ACTION_NEW_CUSTOM_79 = "action-new-custom-79";
-  static const String ACTION_NEW_CUSTOM_80 = "action-new-custom-80";
-  static const String ACTION_NEW_CUSTOM_81 = "action-new-custom-81";
-  static const String ACTION_NEW_CUSTOM_82 = "action-new-custom-82";
-  static const String ACTION_NEW_CUSTOM_83 = "action-new-custom-83";
-  static const String ACTION_NEW_CUSTOM_84 = "action-new-custom-84";
-  static const String ACTION_NEW_CUSTOM_85 = "action-new-custom-85";
-  static const String ACTION_NEW_CUSTOM_86 = "action-new-custom-86";
-  static const String ACTION_NEW_CUSTOM_87 = "action-new-custom-87";
-  static const String ACTION_NEW_CUSTOM_88 = "action-new-custom-88";
-  static const String ACTION_NEW_CUSTOM_89 = "action-new-custom-89";
-  static const String ACTION_NEW_CUSTOM_90 = "action-new-custom-90";
-  static const String ACTION_NEW_CUSTOM_91 = "action-new-custom-91";
-  static const String ACTION_NEW_CUSTOM_92 = "action-new-custom-92";
-  static const String ACTION_NEW_CUSTOM_93 = "action-new-custom-93";
-  static const String ACTION_NEW_CUSTOM_94 = "action-new-custom-94";
-  static const String ACTION_NEW_CUSTOM_95 = "action-new-custom-95";
-  static const String ACTION_NEW_CUSTOM_96 = "action-new-custom-96";
-  static const String ACTION_NEW_CUSTOM_97 = "action-new-custom-97";
-  static const String ACTION_NEW_CUSTOM_98 = "action-new-custom-98";
-  static const String ACTION_NEW_CUSTOM_99 = "action-new-custom-99";
-  static const String ACTION_NEW_CUSTOM_100 = "action-new-custom-100";
-  static const String ACTION_APEX = "action-apex";
-  static const String ACTION_FLOW = "action-flow";
-  static const String ACTION_ANNOUNCEMENT = "action-announcement";
-  static const String ACTION_RECORD = "action-record";
+  static const String ANNOUNCEMENT = "announcement";
+  static const String APEX = "apex";
+  static const String APPROVAL = "approval";
+  static const String BACK = "back";
+  static const String CALL = "call";
+  static const String CANVAS = "canvas";
+  static const String CHECK = "check";
+  static const String CLONE = "clone";
+  static const String CLOSE = "close";
+  static const String DEFER = "defer";
+  static const String DELETE = "delete";
+  static const String DESCRIPTION = "description";
+  static const String DIAL_IN = "dial_in";
+  static const String DOWNLOAD = "download";
+  static const String EDIT_GROUPS = "edit_groups";
+  static const String EDIT = "edit";
+  static const String EMAIL = "email";
+  static const String FALLBACK = "fallback";
+  static const String FILTER = "filter";
+  static const String FLOW = "flow";
+  static const String FOLLOW = "follow";
+  static const String FOLLOWING = "following";
+  static const String FREEZE_USER = "freeze_user";
+  static const String GOAL = "goal";
+  static const String GOOGLE_NEWS = "google_news";
+  static const String JOIN_GROUP = "join_group";
+  static const String LEAD_CONVERT = "lead_convert";
+  static const String LEAVE_GROUP = "leave_group";
+  static const String LOG_A_CALL = "log_a_call";
+  static const String LOG_EVENT = "log_event";
+  static const String MANAGE_PERM_SETS = "manage_perm_sets";
+  static const String MAP = "map";
+  static const String MORE = "more";
+  static const String NEW_ACCOUNT = "new_account";
+  static const String NEW_CAMPAIGN = "new_campaign";
+  static const String NEW_CASE = "new_case";
+  static const String NEW_CHILD_CASE = "new_child_case";
+  static const String NEW_CONTACT = "new_contact";
+  static const String NEW_EVENT = "new_event";
+  static const String NEW_GROUP = "new_group";
+  static const String NEW_LEAD = "new_lead";
+  static const String NEW_NOTE = "new_note";
+  static const String NEW_NOTEBOOK = "new_notebook";
+  static const String NEW_OPPORTUNITY = "new_opportunity";
+  static const String NEW_TASK = "new_task";
+  static const String NEW = "new";
+  static const String PASSWORD_UNLOCK = "password_unlock";
+  static const String PREVIEW = "preview";
+  static const String PRIORITY = "priority";
+  static const String QUESTION_POST_ACTION = "question_post_action";
+  static const String QUOTE = "quote";
+  static const String RECORD = "record";
+  static const String REJECT = "reject";
+  static const String RESET_PASSWORD = "reset_password";
+  static const String SHARE_FILE = "share_file";
+  static const String SHARE_LINK = "share_link";
+  static const String SHARE_POLL = "share_poll";
+  static const String SHARE_POST = "share_post";
+  static const String SHARE_THANKS = "share_thanks";
+  static const String SORT = "sort";
+  static const String SUBMIT_FOR_APPROVAL = "submit_for_approval";
+  static const String UPDATE_STATUS = "update_status";
+  static const String UPDATE = "update";
+  static const String USER_ACTIVATION = "user_activation";
+  static const String WEB_LINK = "web_link";
+  static const String NEW_CUSTOM1 = "new_custom1";
+  static const String NEW_CUSTOM2 = "new_custom2";
+  static const String NEW_CUSTOM3 = "new_custom3";
+  static const String NEW_CUSTOM4 = "new_custom4";
+  static const String NEW_CUSTOM5 = "new_custom5";
+  static const String NEW_CUSTOM6 = "new_custom6";
+  static const String NEW_CUSTOM7 = "new_custom7";
+  static const String NEW_CUSTOM8 = "new_custom8";
+  static const String NEW_CUSTOM9 = "new_custom9";
+  static const String NEW_CUSTOM10 = "new_custom10";
+  static const String NEW_CUSTOM11 = "new_custom11";
+  static const String NEW_CUSTOM12 = "new_custom12";
+  static const String NEW_CUSTOM13 = "new_custom13";
+  static const String NEW_CUSTOM14 = "new_custom14";
+  static const String NEW_CUSTOM15 = "new_custom15";
+  static const String NEW_CUSTOM16 = "new_custom16";
+  static const String NEW_CUSTOM17 = "new_custom17";
+  static const String NEW_CUSTOM18 = "new_custom18";
+  static const String NEW_CUSTOM19 = "new_custom19";
+  static const String NEW_CUSTOM20 = "new_custom20";
+  static const String NEW_CUSTOM21 = "new_custom21";
+  static const String NEW_CUSTOM22 = "new_custom22";
+  static const String NEW_CUSTOM23 = "new_custom23";
+  static const String NEW_CUSTOM24 = "new_custom24";
+  static const String NEW_CUSTOM25 = "new_custom25";
+  static const String NEW_CUSTOM26 = "new_custom26";
+  static const String NEW_CUSTOM27 = "new_custom27";
+  static const String NEW_CUSTOM28 = "new_custom28";
+  static const String NEW_CUSTOM29 = "new_custom29";
+  static const String NEW_CUSTOM30 = "new_custom30";
+  static const String NEW_CUSTOM31 = "new_custom31";
+  static const String NEW_CUSTOM32 = "new_custom32";
+  static const String NEW_CUSTOM33 = "new_custom33";
+  static const String NEW_CUSTOM34 = "new_custom34";
+  static const String NEW_CUSTOM35 = "new_custom35";
+  static const String NEW_CUSTOM36 = "new_custom36";
+  static const String NEW_CUSTOM37 = "new_custom37";
+  static const String NEW_CUSTOM38 = "new_custom38";
+  static const String NEW_CUSTOM39 = "new_custom39";
+  static const String NEW_CUSTOM40 = "new_custom40";
+  static const String NEW_CUSTOM41 = "new_custom41";
+  static const String NEW_CUSTOM42 = "new_custom42";
+  static const String NEW_CUSTOM43 = "new_custom43";
+  static const String NEW_CUSTOM44 = "new_custom44";
+  static const String NEW_CUSTOM45 = "new_custom45";
+  static const String NEW_CUSTOM46 = "new_custom46";
+  static const String NEW_CUSTOM47 = "new_custom47";
+  static const String NEW_CUSTOM48 = "new_custom48";
+  static const String NEW_CUSTOM49 = "new_custom49";
+  static const String NEW_CUSTOM50 = "new_custom50";
+  static const String NEW_CUSTOM51 = "new_custom51";
+  static const String NEW_CUSTOM52 = "new_custom52";
+  static const String NEW_CUSTOM53 = "new_custom53";
+  static const String NEW_CUSTOM54 = "new_custom54";
+  static const String NEW_CUSTOM55 = "new_custom55";
+  static const String NEW_CUSTOM56 = "new_custom56";
+  static const String NEW_CUSTOM57 = "new_custom57";
+  static const String NEW_CUSTOM58 = "new_custom58";
+  static const String NEW_CUSTOM59 = "new_custom59";
+  static const String NEW_CUSTOM60 = "new_custom60";
+  static const String NEW_CUSTOM61 = "new_custom61";
+  static const String NEW_CUSTOM62 = "new_custom62";
+  static const String NEW_CUSTOM63 = "new_custom63";
+  static const String NEW_CUSTOM64 = "new_custom64";
+  static const String NEW_CUSTOM65 = "new_custom65";
+  static const String NEW_CUSTOM66 = "new_custom66";
+  static const String NEW_CUSTOM67 = "new_custom67";
+  static const String NEW_CUSTOM68 = "new_custom68";
+  static const String NEW_CUSTOM69 = "new_custom69";
+  static const String NEW_CUSTOM70 = "new_custom70";
+  static const String NEW_CUSTOM71 = "new_custom71";
+  static const String NEW_CUSTOM72 = "new_custom72";
+  static const String NEW_CUSTOM73 = "new_custom73";
+  static const String NEW_CUSTOM74 = "new_custom74";
+  static const String NEW_CUSTOM75 = "new_custom75";
+  static const String NEW_CUSTOM76 = "new_custom76";
+  static const String NEW_CUSTOM77 = "new_custom77";
+  static const String NEW_CUSTOM78 = "new_custom78";
+  static const String NEW_CUSTOM79 = "new_custom79";
+  static const String NEW_CUSTOM80 = "new_custom80";
+  static const String NEW_CUSTOM81 = "new_custom81";
+  static const String NEW_CUSTOM82 = "new_custom82";
+  static const String NEW_CUSTOM83 = "new_custom83";
+  static const String NEW_CUSTOM84 = "new_custom84";
+  static const String NEW_CUSTOM85 = "new_custom85";
+  static const String NEW_CUSTOM86 = "new_custom86";
+  static const String NEW_CUSTOM87 = "new_custom87";
+  static const String NEW_CUSTOM88 = "new_custom88";
+  static const String NEW_CUSTOM89 = "new_custom89";
+  static const String NEW_CUSTOM90 = "new_custom90";
+  static const String NEW_CUSTOM91 = "new_custom91";
+  static const String NEW_CUSTOM92 = "new_custom92";
+  static const String NEW_CUSTOM93 = "new_custom93";
+  static const String NEW_CUSTOM94 = "new_custom94";
+  static const String NEW_CUSTOM95 = "new_custom95";
+  static const String NEW_CUSTOM96 = "new_custom96";
+  static const String NEW_CUSTOM97 = "new_custom97";
+  static const String NEW_CUSTOM98 = "new_custom98";
+  static const String NEW_CUSTOM99 = "new_custom99";
+  static const String NEW_CUSTOM100 = "new_custom100";
 
-  /// Icon Prefix for ACTION_*
-  static const String C_ICON_ACTION_ = "slds-icon-";
+
+  /// Icon Prefix for  *
+  static const String C_ICON_ACTION_ = "slds-icon-action-";
 
   /**
    * Action Icon - [name] e.g. CIcon.ACTION_DESCRIPTION
    */
-  LIconAction(String name, {String className: LIcon.C_ICON, String size: LIcon.C_ICON__LARGE,
+  LIconAction(String name, {String className: LIcon.C_ICON, String size,
         String colorOverride, List<String> addlCss})
-    : super(name.replaceAll("action-", ""), LIcon.SPRITE_ACTION, className, size,
+    : super(name, LIcon.SPRITE_ACTION, className, size,
         colorOverride == null ? "${C_ICON_ACTION_}${name}" : colorOverride, addlCss);
 
 
@@ -352,94 +375,105 @@ class LIconAction extends LIcon {
  */
 class LIconStandard extends LIcon {
 
-  static const String STD_LOG_A_CALL = "log-a-call";
-  static const String STD_ACCOUNT = "account";
-  static const String STD_SOCIAL_POST = "social-post";
-  static const String STD_CAMPAIGN_MEMBERS = "campaign-members";
-  static const String STD_ARTICLE = "article";
-  static const String STD_ANSWER_PUBLIC = "answer-public";
-  static const String STD_ANSWER_PRIVATE = "answer-private";
-  static const String STD_ANSWER_BEST = "answer-best";
-  static const String STD_AVATAR_LOADING = "avatar-loading";
-  static const String STD_CAMPAIGN = "campaign";
-  static const String STD_CALIBRATION = "calibration";
-  static const String STD_AVATAR = "avatar";
-  static const String STD_APPROVAL = "approval";
-  static const String STD_APPS = "apps";
-  static const String STD_USER = "user";
-  static const String STD_EVERNOTE = "evernote";
-  static const String STD_COACHING = "coaching";
-  static const String STD_CONNECTED_APPS_ADMINS = "connected-apps-admins";
-  static const String STD_DRAFTS = "drafts";
-  static const String STD_EMAIL = "email";
-  static const String STD_ENDORSEMENT = "endorsement";
-  static const String STD_EVENT = "event";
-  static const String STD_DROPBOX = "dropbox";
-  static const String STD_CONCUR = "concur";
-  static const String STD_EMAIL_CHATTER = "email-chatter";
-  static const String STD_CASE_TRANSCRIPT = "case-transcript";
-  static const String STD_CASE_COMMENT = "case-comment";
-  static const String STD_CASE_CHANGE_STATUS = "case-change-status";
-  static const String STD_CONTRACT = "contract";
-  static const String STD_DASHBOARD = "dashboard";
-  static const String STD_CASE = "case";
-  static const String STD_EMPTY = "empty";
-  static const String STD_DEFAULT = "default";
-  static const String STD_CUSTOM = "custom";
-  static const String STD_CANVAS = "canvas";
-  static const String STD_CONTACT = "contact";
-  static const String STD_PORTAL = "portal";
-  static const String STD_PRODUCT = "product";
-  static const String STD_FEED = "feed";
-  static const String STD_FEEDBACK = "feedback";
-  static const String STD_FILE = "file";
-  static const String STD_GOALS = "goals";
-  static const String STD_GROUPS = "groups";
-  static const String STD_INSIGHTS = "insights";
-  static const String STD_PERFORMANCE = "performance";
-  static const String STD_LINK = "link";
-  static const String STD_METRICS = "metrics";
-  static const String STD_NOTE = "note";
-  static const String STD_LEAD = "lead";
-  static const String STD_OPPORTUNITY = "opportunity";
-  static const String STD_LOG_A_CALL_CHATTER = "log-a-call-chatter";
-  static const String STD_ORDERS = "orders";
-  static const String STD_POST = "post";
-  static const String STD_POLL = "poll";
-  static const String STD_PHOTO = "photo";
-  static const String STD_PEOPLE = "people";
-  static const String STD_GENERIC_LOADING = "generic-loading";
-  static const String STD_GROUP_LOADING = "group-loading";
-  static const String STD_RECENT = "recent";
-  static const String STD_SOLUTION = "solution";
-  static const String STD_RECORD = "record";
-  static const String STD_QUESTION_BEST = "question-best";
-  static const String STD_QUESTION_FEED = "question-feed";
-  static const String STD_RELATED_LIST = "related-list";
-  static const String STD_SKILL_ENTITY = "skill-entity";
-  static const String STD_SCAN_CARD = "scan-card";
-  static const String STD_REPORT = "report";
-  static const String STD_QUOTES = "quotes";
-  static const String STD_TASK = "task";
-  static const String STD_TEAM_MEMBER = "team-member";
-  static const String STD_THANKS = "thanks";
-  static const String STD_THANKS_LOADING = "thanks-loading";
-  static const String STD_TODAY = "today";
-  static const String STD_TOPIC = "topic";
-  static const String STD_UNMATCHED = "unmatched";
-  static const String STD_MARKETING_ACTIONS = "marketing-actions";
-  static const String STD_MARKETING_RESOURCES = "marketing-resources";
+  static const String ACCOUNT = "account";
+  static const String ANNOUNCEMENT = "announcement";
+  static const String ANSWER_BEST = "answer_best";
+  static const String ANSWER_PRIVATE = "answer_private";
+  static const String ANSWER_PUBLIC = "answer_public";
+  static const String APPROVAL = "approval";
+  static const String APPS_ADMIN = "apps_admin";
+  static const String APPS = "apps";
+  static const String ARTICLE = "article";
+  static const String AVATAR_LOADING = "avatar_loading";
+  static const String AVATAR = "avatar";
+  static const String CALIBRATION = "calibration";
+  static const String CALL_HISTORY = "call_history";
+  static const String CALL = "call";
+  static const String CAMPAIGN_MEMBERS = "campaign_members";
+  static const String CAMPAIGN = "campaign";
+  static const String CANVAS = "canvas";
+  static const String CASE_CHANGE_STATUS = "case_change_status";
+  static const String CASE_COMMENT = "case_comment";
+  static const String CASE_EMAIL = "case_email";
+  static const String CASE_LOG_A_CALL = "case_log_a_call";
+  static const String CASE_TRANSCRIPT = "case_transcript";
+  static const String CASE = "case";
+  static const String COACHING = "coaching";
+  static const String CONNECTED_APPS = "connected_apps";
+  static const String CONTACT = "contact";
+  static const String CONTRACT = "contract";
+  static const String CUSTOM = "custom";
+  static const String DASHBOARD = "dashboard";
+  static const String DEFAULT = "default";
+  static const String DOCUMENT = "document";
+  static const String DRAFTS = "drafts";
+  static const String EMAIL_CHATTER = "email_chatter";
+  static const String EMAIL = "email";
+  static const String EMPTY = "empty";
+  static const String ENDORSEMENT = "endorsement";
+  static const String EVENT = "event";
+  static const String FEED = "feed";
+  static const String FEEDBACK = "feedback";
+  static const String FILE = "file";
+  static const String FLOW = "flow";
+  static const String GENERILOADING = "generiloading";
+  static const String GOALS = "goals";
+  static const String GROUP_LOADING = "group_loading";
+  static const String GROUPS = "groups";
+  static const String HOME = "home";
+  static const String INSIGHTS = "insights";
+  static const String LEAD = "lead";
+  static const String LINK = "link";
+  static const String LOG_A_CALL = "log_a_call";
+  static const String MARKETING_ACTIONS = "marketing_actions";
+  static const String MARKETING_RESOURCES = "marketing_resources";
+  static const String METRICS = "metrics";
+  static const String NEWS = "news";
+  static const String NOTE = "note";
+  static const String OPPORTUNITY = "opportunity";
+  static const String ORDERS = "orders";
+  static const String PEOPLE = "people";
+  static const String PERFORMANCE = "performance";
+  static const String PHOTO = "photo";
+  static const String POLL = "poll";
+  static const String PORTAL = "portal";
+  static const String POST = "post";
+  static const String PRICEBOOK = "pricebook";
+  static const String PROCESS = "process";
+  static const String PRODUCT = "product";
+  static const String QUESTION_BEST = "question_best";
+  static const String QUESTION_FEED = "question_feed";
+  static const String QUOTES = "quotes";
+  static const String RECENT = "recent";
+  static const String RECORD = "record";
+  static const String RELATED_LIST = "related_list";
+  static const String REPORT = "report";
+  static const String REWARD = "reward";
+  static const String SCAN_CARD = "scan_card";
+  static const String SKILL_ENTITY = "skill_entity";
+  static const String SOCIAL = "social";
+  static const String SOLUTION = "solution";
+  static const String SOSSESSION = "sossession";
+  static const String TASK = "task";
+  static const String TASK2 = "task2";
+  static const String TEAM_MEMBER = "team_member";
+  static const String THANKS_LOADING = "thanks_loading";
+  static const String THANKS = "thanks";
+  static const String TODAY = "today";
+  static const String TOPIC = "topic";
+  static const String UNMATCHED = "unmatched";
+  static const String USER = "user";
 
-  /// Icon Prefix for STD_*
-  static const String C_ICON_STD_ = "slds-icon-standard-";
+  /// Icon Prefix for Standard
+  static const String C_ICON_STANDARD_ = "slds-icon-standard-";
 
   /**
-   * Standard Icon [linkName] e.g. STD_CASE
+   * Standard Icon [linkName] e.g. CASE
    */
-  LIconStandard(String linkName, {String className: LIcon.C_ICON, String size: LIcon.C_ICON__LARGE,
+  LIconStandard(String linkName, {String className: LIcon.C_ICON, String size,
       String colorOverride, List<String> addlCss})
     : super(linkName, LIcon.SPRITE_STANDARD, size, className,
-        colorOverride == null ? "${C_ICON_STD_}${linkName}" : colorOverride, addlCss);
+        colorOverride == null ? "${C_ICON_STANDARD_}${linkName}" : colorOverride, addlCss);
 
 } // LIconStandard
 
@@ -620,8 +654,9 @@ class LIconUtility extends LIcon {
   /**
    * Utility Icon with [linkName] like [ADD]
    */
-  LIconUtility(String linkName, {String className, String size, String color, List<String> addlCss})
-      : super(linkName, LIcon.SPRITE_UTILITY, className, size, color, addlCss);
+  LIconUtility(String linkName, {String className, String size: LIcon.C_ICON__MEDIUM,
+      String color, List<String> addlCss})
+    : super(linkName, LIcon.SPRITE_UTILITY, className, size, color, addlCss);
 
 
 } // LIconUtility
@@ -737,12 +772,63 @@ class LIconCustom extends LIcon {
   static const String C_ICON_CUSTOM_ = "slds-icon-";
 
   /**
-   * Custom Icon - [name] e.g. LIconCustom.CUSTOM_1
+   * Custom Icon - [colorName] e.g. LIconCustom.CUSTOM_1
+   * - color names are custom-1
+   * - svg names are custom1
    */
-  LIconCustom(String name, {String className: LIcon.C_ICON, String size: LIcon.C_ICON__LARGE,
+  LIconCustom(String colorName, {String className: LIcon.C_ICON, String size,
       String colorOverride, List<String> addlCss})
-    : super(name, LIcon.SPRITE_CUSTOM, className, size,
-        colorOverride == null ? "${C_ICON_CUSTOM_}${name}" : colorOverride, addlCss);
+    : super(colorName.replaceAll("-", ""), LIcon.SPRITE_CUSTOM, className, size,
+        colorOverride == null ? "${C_ICON_CUSTOM_}${colorName}" : colorOverride, addlCss);
 
 } // LIconCustom
 
+
+/**
+ * Document Type Icon
+ */
+class LIconDoctype extends LIcon {
+
+  static const String ATTACHMENT = "attachment";
+  static const String AUDIO = "audio";
+  static const String CSV = "csv";
+  static const String EPS = "eps";
+  static const String EXCEL = "excel";
+  static const String EXE = "exe";
+  static const String FLASH = "flash";
+  static const String GDOC = "gdoc";
+  static const String GDOCS = "gdocs";
+  static const String GPRES = "gpres";
+  static const String GSHEET = "gsheet";
+  static const String HTML = "html";
+  static const String IMAGE = "image";
+  static const String KEYNOTE = "keynote";
+  static const String LINK = "link";
+  static const String MP4 = "mp4";
+  static const String OVERLAY = "overlay";
+  static const String PACK = "pack";
+  static const String PAGES = "pages";
+  static const String PDF = "pdf";
+  static const String PPT = "ppt";
+  static const String PSD = "psd";
+  static const String RTF = "rtf";
+  static const String SLIDE = "slide";
+  static const String STYPI = "stypi";
+  static const String TXT = "txt";
+  static const String UNKNOWN = "unknown";
+  static const String VIDEO = "video";
+  static const String VISIO = "visio";
+  static const String WEBEX = "webex";
+  static const String WORD = "word";
+  static const String XML = "xml";
+
+
+  /**
+   * Custom Icon - [name] e.g. LIconCustom.CUSTOM_1
+   */
+  LIconDoctype(String name, {String className: LIcon.C_ICON, String size,
+      String colorOverride, List<String> addlCss})
+    : super(name, LIcon.SPRITE_DOCTYPE, className, size,
+      colorOverride, addlCss);
+
+}
