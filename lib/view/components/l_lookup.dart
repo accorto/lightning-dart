@@ -35,7 +35,7 @@ class LLookup extends LComponent {
     ..attributes[Html0.ROLE] = Html0.ROLE_PRESENTATION;
 
   /// Lookup Items
-  final List<LLookupItem> items = new List<LLookupItem>();
+  final List<LLookupItem> _items = new List<LLookupItem>();
 
   /**
    * Lookup
@@ -80,14 +80,14 @@ class LLookup extends LComponent {
 
   /// add Lookup Item
   void addItem(LLookupItem item) {
-    items.add(item);
+    _items.add(item);
     _menuList.append(item.element);
   }
 
   /// Set Lookup Items
-  void set items (List<LLookupItem> items) {
+  void set items (List<LLookupItem> itemList) {
     clear();
-    items.addAll(items);
+    _items.addAll(itemList);
     for (LLookupItem item in items) {
       _menuList.append(item.element);
     }
@@ -104,7 +104,7 @@ class LLookup extends LComponent {
 
   /// Clear Items
   void clear() {
-    items.clear();
+    _items.clear();
     _menuList.children.clear();
   }
 
