@@ -1,9 +1,9 @@
 name: lightning_dart
-description: Lightning CSS Components.
-version: 0.5.1
+description: Lightning Dart Components based on SLDS CSS - https://github.com/accorto/lightning-dart/wiki
+version: 0.5.2
 author: Accorto <support@accorto.com>
-homepage: http://www.lightningdart.com
-documentation: https://github.com/accorto/lightning-dart/wiki
+homepage: http://lightningdart.com
+documentation:
 
 environment:
   sdk: '>=1.0.0 <2.0.0'

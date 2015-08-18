@@ -31,7 +31,7 @@ part 'demo/tabs.dart';
 void main() {
 
   LContainer page = LContainer.init(id: "demo", containerSize: LContainer.C_CONTAINER__LARGE)
-    ..addHeader("Lightning Dart Tutorial");
+    ..addHeader("Lightning Dart Tutorial (alpha)");
 
   CDiv main = page.addDiv()
     ..classes.add("main")
@@ -43,11 +43,11 @@ void main() {
   tocDiv.append(toc);
 
 
-  /*
+  /* Individual parts */
   page.add(new ActivityTimeline()..toc(toc));
   page.add(new Badges()..toc(toc));
   page.add(new Breadcrumbs()..toc(toc));
-  page.add(new Buttons()..toc(toc));      */
+  page.add(new Buttons()..toc(toc));
   page.add(new ButtonGroups()..toc(toc));
 
   page.add(new Dropdowns()..toc(toc));

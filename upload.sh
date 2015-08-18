@@ -3,13 +3,15 @@
 
 # build and upload to lightningdart.com
 set -e
+# https://www.dartlang.org/tools/dart2js/
 pub  --version
 
 dartanalyzer lib/lightning_dart.dart
 dartanalyzer lib/biz_base_dart.dart
 dartanalyzer web/demo.dart
 
-# https://www.dartlang.org/tools/dart2js/
+dartdocgen .
+
 pub deps > dependencies.txt
 
 # dart build
