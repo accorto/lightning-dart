@@ -69,13 +69,18 @@ class LIcon {
       element.classes.add(color);
     }
     if (addlCss != null) {
-      for (String css in addlCss)
-        element.classes.add(css);
+      element.classes.addAll(addlCss);
     }
     element.setAttributeNS(null, Html0.ARIA_HIDDEN, "true");
     element.append(_use);
     this.linkName = linkName;
   } // LIcon
+
+  /// Copy Icon
+  LIcon copy() {
+    return new LIcon(linkName, linkPrefix, null, null, null,
+        new List<String>.from(element.classes));
+  }
 
   /// svg element classes
   CssClassSet get classes => element.classes;

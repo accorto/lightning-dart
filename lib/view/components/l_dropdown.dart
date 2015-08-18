@@ -12,8 +12,10 @@ part of lightning_dart;
 class LDropdown extends LComponent {
 
   static const String C_DROPDOWN = "slds-dropdown";
-  static const String C_DROPDOWN_TRIGGER = "slds-dropdown-trigger";
   static const String C_DROPDOWN__HEADER = "slds-dropdown__header";
+
+  static const String C_DROPDOWN_TRIGGER = "slds-dropdown-trigger";
+  static const String C_CLICK_TO_SHOW = "slds-click-to-show";
 
   static const String C_DROPDOWN__MENU = "slds-dropdown--menu";
   static const String C_DROPDOWN__NUBBIN_TOP = "slds-dropdown--nubbin-top";
@@ -33,9 +35,7 @@ class LDropdown extends LComponent {
   static const String C_ICON__LEFT = "slds-icon--left";
   static const String C_ICON__RIGHT = "slds-icon--right";
 
-
   static List<String> POSITIONS = [C_DROPDOWN__LEFT, C_DROPDOWN__RIGHT];
-
 
   /// Dropdown with Button
   final DivElement element = new DivElement()
@@ -49,10 +49,12 @@ class LDropdown extends LComponent {
   final LDropdownElement dropdown = new LDropdownElement(new DivElement()
     ..classes.addAll([C_DROPDOWN, C_DROPDOWN__MENU]));
   /// Heading Label
-  SpanElement dropdownHeadingLabel;
+  SpanElement _dropdownHeading;
 
   /// Id Prefix
   final String idPrefix;
+  /// Show Label for selected value
+  bool showValueLabel = false;
 
 
   /**
@@ -63,29 +65,50 @@ class LDropdown extends LComponent {
    * -- div .header
    * -- ul .dropdown__list
    */
-  LDropdown(LButton this.button, String this.idPrefix) {
-    button.classes.addAll([LButton.C_BUTTON, LButton.C_BUTTON__ICON_CONTAINER]);
-    button.icon.classes.add(LButton.C_BUTTON__ICON);
+  LDropdown(LButton this.button, String this.idPrefix, {List<String> dropdownClasses}) {
+    button.classes.addAll([LButton.C_BUTTON]);
+    if (button.icon != null)
+      button.icon.classes.add(LButton.C_BUTTON__ICON);
     add(button);
     //
+    if (dropdownClasses != null) {
+      dropdown.element.classes.addAll(dropdownClasses);
+    }
     element.append(dropdown.element);
   } // LDropdown
 
   /// Settings Button+Dropdown
-  LDropdown.settings(String idPrefix) : this(new LButton(new ButtonElement(), "settings", null,
-      icon: new LIconUtility(LIconUtility.SETTINGS),
-      assistiveText: "Settings"), idPrefix);
+  LDropdown.settings(String idPrefix)
+    : this(new LButton(new ButtonElement(), "settings", null,
+        icon: new LIconUtility(LIconUtility.SETTINGS),
+        buttonClasses: [LButton.C_BUTTON__ICON_CONTAINER],
+        assistiveText: "Settings",
+        idPrefix:idPrefix),
+    idPrefix);
 
-  LDropdown.action(String idPrefix) : this(new LButton(new ButtonElement(), "more", null,
-      buttonClasses: [LButton.C_BUTTON__ICON_BORDER_FILLED],
-      icon: new LIconUtility(LIconUtility.DOWN), // slds-dropdown--right slds-dropdown--actions
-      assistiveText: "More"), idPrefix);
+  LDropdown.action(String idPrefix)
+    : this(new LButton(new ButtonElement(), "more", null,
+        buttonClasses: [LButton.C_BUTTON__ICON_BORDER_FILLED],
+        icon: new LIconUtility(LIconUtility.DOWN),
+        assistiveText: "More",
+        idPrefix:idPrefix),
+      idPrefix,
+      dropdownClasses: [LDropdown.C_DROPDOWN__RIGHT, LDropdown.C_DROPDOWN__ACTIONS]);
+
+  /**
+   * Select Dropdown
+   */
+  LDropdown.selectIcon(String idPrefix)
+    : this(new LButton(new ButtonElement(), "select", null,
+        buttonClasses: [LButton.C_BUTTON__ICON_MORE], idPrefix:idPrefix),
+      idPrefix,
+      dropdownClasses: [LDropdown.C_DROPDOWN__SMALL]);
 
 
   /**
    * Search Drop Down
    */
-  LDropdown.search(LButton this.button, InputElement input, String this.idPrefix, {
+  LDropdown.search(String this.idPrefix, LButton this.button, InputElement input, {
       String placeholder: "Find in list...",
       String headingLabel: "List"}) {
     button.classes.addAll([LButton.C_BUTTON, LButton.C_BUTTON__ICON_CONTAINER]);
@@ -116,33 +139,121 @@ class LDropdown extends LComponent {
     searchDiv.append(labelEle);
     searchDiv.append(input);
     //
-    dropdownHeadingLabel = new SpanElement()
+    _dropdownHeading = new SpanElement()
       ..classes.add(LText.C_TEXT_HEADING__LABEL)
       ..text = placeholder;
-    header.append(dropdownHeadingLabel);
+    header.append(_dropdownHeading);
   } // search
 
 
   /// Heading Label
-  String get headingLabel => dropdownHeadingLabel == null ? null : dropdownHeadingLabel.text;
+  String get headingLabel => _dropdownHeading == null ? null : _dropdownHeading.text;
   /// Heading Label
   void set headingLabel (String newValue) {
-    if (dropdownHeadingLabel == null) {
-    DivElement dropdownHeading = new DivElement()
-      ..classes.add(C_DROPDOWN__HEADER);
-    dropdownHeadingLabel = new SpanElement()
-      ..classes.add(LText.C_TEXT_HEADING__LABEL);
-    dropdownHeading.append(dropdownHeadingLabel);
-    dropdown.element.insertBefore(dropdownHeading, dropdown.dropdownList);
+    if (_dropdownHeading == null) {
+      DivElement dropdownHeading = new DivElement()
+        ..classes.add(C_DROPDOWN__HEADER);
+      _dropdownHeading = new SpanElement()
+        ..classes.add(LText.C_TEXT_HEADING__LABEL);
+      dropdownHeading.append(_dropdownHeading);
+      dropdown.element.insertBefore(dropdownHeading, dropdown.dropdownList);
     }
-    dropdownHeadingLabel.text = newValue;
+    _dropdownHeading.text = newValue;
   }
+
+  /// Click to Show (vs. hover)
+  bool get clickToShow => element.classes.contains(C_CLICK_TO_SHOW);
+  /// Click to Show (vs. hover)
+  void set clickToShow (bool newValue) {
+    if (newValue) {
+      element.classes.add(C_CLICK_TO_SHOW);
+      if (_clickToShow == null) {
+        _clickToShow = element.onClick.listen((MouseEvent evt) {
+          element.classes.toggle(LVisibility.C_ACTIVE);
+        });
+      }
+    } else {
+      element.classes.remove(C_CLICK_TO_SHOW);
+      element.classes.remove(LVisibility.C_ACTIVE);
+      if (_clickToShow != null) {
+        _clickToShow.cancel();
+        _clickToShow = null;
+      }
+    }
+  }
+  StreamSubscription<MouseEvent> _clickToShow;
+
+
+  /// Get Value
+  String get value => dropdown.value;
+  /// Set Value
+  void set value (String newValue) {
+    selectMode = true;
+    for (LDropdownItem item in dropdown.items) {
+      if (item.value == newValue) {
+        item.selected = true;
+        _setValue(item);
+      } else {
+        item.selected = false;
+      }
+      item._itemClicked = false;
+    }
+  } // value
+
+  /// Set Button - label
+  void _setValue(LDropdownItem item) {
+    if (showValueLabel && item.label != null && item.label.isNotEmpty) {
+      button.label = item.label;
+    } else {
+      button.label = null;
+    }
+    // button icon
+    if (item.icon != null) {
+      button.icon = item.icon.copy();
+    }
+  }
+
+  /// Selection mode - update value
+  bool get selectMode => _selectMode != null && _selectMode;
+  void set selectMode (bool newValue) {
+    for (LDropdownItem item in dropdown.items) {
+      item.hasIconLeft = true;
+      if (newValue && _selectMode == null) { // only once
+        item.a.onClick.listen(item.onItemClick); // toggle value
+        item.a.onClick.listen(onItemClick); // update value
+      }
+    }
+    if (newValue)
+      _selectMode = true;
+    else if (_selectMode != null)
+      _selectMode = false;
+  }
+  bool _selectMode;
+
+  /// get value and set new value
+  void onItemClick(MouseEvent evt) {
+    if (_selectMode != null && _selectMode) {
+      evt.preventDefault();
+      for (LDropdownItem item in dropdown.items) {
+        if (item._itemClicked && item.selected) {
+          print("dropdown ${item.value}");
+          _setValue(item);
+        } else {
+          item.selected = false;
+        }
+        item._itemClicked = false;
+      }
+    }
+  } // onItemClick (dropdown)
+
+
 
 } // LDropdown
 
 
 /**
  * Dropdown Element maintains list
+ * TODO Same API as Select
  */
 class LDropdownElement {
 
@@ -212,13 +323,28 @@ class LDropdownElement {
   }
 
   /**
-   * Add Menu Item
+   * Add Dropdown Item
    */
-  void addMenuItem(LDropdownItem item) {
+  void addItem(LDropdownItem item) {
     items.add(item);
     dropdownList.append(item.element);
   }
 
+
+  /// Get Selected Value
+  String get value {
+    for (LDropdownItem item in items) {
+      if (item.selected)
+        return item.value;
+    }
+    return null;
+  }
+  /// Set Selected Value
+  void set value (String newValue) {
+    for (LDropdownItem item in items) {
+      item.selected = (item.value == newValue);
+    }
+  }
 
 } // LDropdownElement
 
@@ -229,12 +355,11 @@ class LDropdownElement {
  */
 class LDropdownItem extends ListItem {
 
-
   /**
    * Dropdown item
    */
-  LDropdownItem({String id, String label, String href, LIcon leftIcon, LIcon rightIcon})
-      : super(id:id, label:label, href:href, leftIcon:leftIcon, rightIcon:rightIcon) {
+  LDropdownItem({String id, String label, String value, String href, LIcon leftIcon, LIcon icon})
+      : super(id:id, label:label, value:value, href:href, leftIcon:leftIcon, rightIcon:icon) {
     element
       ..classes.add(LDropdown.C_DROPDOWN__ITEM)
       ..tabIndex = -1
@@ -243,6 +368,12 @@ class LDropdownItem extends ListItem {
       ..classes.add(LText.C_TRUNCATE)
       ..tabIndex = -1;
   } // LDropdownItem
+
+  /// create drop-down from button - with left icon!
+  LDropdownItem.fromButton(LButton button) : this(id:button.id,
+    label:button.label,
+    leftIcon:button.icon == null ? null : button.icon.copy());
+
 
   /// Divider
   bool get divider => element.classes.contains(LDropdown.C_HAS_DIVIDER);
@@ -257,17 +388,33 @@ class LDropdownItem extends ListItem {
    * Create Link
    */
   void _rebuildLink() {
-    if (_selected) {
-      if (_selectedIcon == null) {
-        _selectedIcon = new LIconStandard("task2", size: LIcon.C_ICON__SMALL)
-          ..classes.add(LDropdown.C_ICON__LEFT);
+    if (_selected != null) {
+      if (_selected) {
+        if (_selectedIcon == null) {
+          _selectedIcon = new LIconStandard(LIconStandard.TASK2, size: LIcon.C_ICON__SMALL)
+            ..classes.add(LDropdown.C_ICON__LEFT);
+        }
+        _leftIcon = _selectedIcon;
+      } else {
+        _leftIcon = null; // overwrite in selection mode
       }
-      _leftIcon = _selectedIcon;
-    } else {
-      _leftIcon = null;
     }
     super._rebuildLink();
   }
   LIcon _selectedIcon;
+
+  /// Right Icon (left icon used for select)
+  LIcon get icon => _rightIcon;
+
+  /// on item click - prevent default + toggle selection
+  void onItemClick(MouseEvent evt) {
+    evt.preventDefault();
+    if (!disabled) {
+      if (!selected)
+        selected = true; // do not de-select
+      _itemClicked = true;
+    }
+  }
+  bool _itemClicked = false;
 
 } // LDropdownItem

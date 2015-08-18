@@ -9,7 +9,7 @@ part of lightning_dart;
 /**
  * Select Option for Select/Picklist/...
  */
-class SelectOption {
+class SelectOption implements SelectOptionI {
 
   /// create Option
   static SelectOption createOption(String value, String label) {
@@ -38,7 +38,7 @@ class SelectOption {
 
   String get value => option.value;
   String get label => option.display;
-
+  LIcon get icon => null;
 
   /// create Option Element
   OptionElement asOptionElement() {
@@ -87,3 +87,21 @@ class SelectOption {
   } // disabled
 
 } // SelectOption
+
+
+/**
+ * Select Option Interface
+ */
+abstract class SelectOptionI {
+
+  String get value;
+  String get label;
+
+  bool get selected;
+  void set selected (bool newValue);
+
+  bool get disabled;
+  void set disabled (bool newValue);
+
+  LIcon get icon;
+}

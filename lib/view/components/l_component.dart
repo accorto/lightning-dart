@@ -107,6 +107,14 @@ class CDiv extends LComponent {
     appendHR(margin: ".5rem");
   }
 
+  /// create and add span with text
+  SpanElement appendText(String text) {
+    SpanElement span = new SpanElement()
+      ..text = text;
+    element.append(span);
+    return span;
+  }
+
   /**
    * Add Heading + handle aria
    */

@@ -62,19 +62,25 @@ class LButton extends LComponent {
 
   /// The Button
   final Element element;
+  Element _labelElement;
+  /// The Label
+  String _label;
   /// Optional Button Icon
-  final LIcon icon;
+  LIcon _icon;
+  bool _iconLeft;
   /// Optional Assistive Text
-  SpanElement assistive;
+  SpanElement _assistive;
+  String _assistiveText;
 
   /**
    * Button with [name] and optional [label]
    * [element] can be a button, anchor, or input
    * if [idPrefix] is provided, the id will be idPrefix-name, if empty - the name
    */
-  LButton(Element this.element, String name, String label, {String idPrefix, Element labelElement,
+  LButton(Element this.element, String name, String label, {String idPrefix,
+      Element labelElement,
       List<String> buttonClasses, String href,
-      LIcon this.icon, bool iconLeft: false, String assistiveText}) {
+      LIcon icon, bool iconLeft: false, String assistiveText}) {
     element.classes.add(C_BUTTON);
     if (element is ButtonElement) {
       (element as ButtonElement).name = name;
@@ -93,49 +99,63 @@ class LButton extends LComponent {
       else
         element.id = "${idPrefix}-${name}";
     }
-    if (icon == null) {
-      if (labelElement != null)
-        element.append(labelElement);
-      else if (label != null)
-        element.appendText(label);
-    } else {
-      icon.element.classes.add(C_BUTTON__ICON);
-      if (label == null && labelElement == null) {
-        element.append(icon.element);
-      } else {
-        if (iconLeft) {
-          icon.element.classes.add(C_BUTTON__ICON__LEFT);
-          element.append(icon.element);
-          if (labelElement != null)
-            element.append(labelElement);
-          else if (label != null)
-            element.appendText(label);
-        } else {
-          icon.element.classes.add(C_BUTTON__ICON__RIGHT);
-          if (labelElement != null)
-            element.append(labelElement);
-          else if (label != null)
-            element.appendText(label);
-          element.append(icon.element);
-        }
-      }
-    } // LButton
-
-    // classes + more
+    // classes
     if (buttonClasses != null) {
       element.classes.addAll(buttonClasses);
-      /// Add More (down) icon
-      if (buttonClasses.contains(C_BUTTON__ICON_MORE)) {
-        element.setAttribute(Html0.ARIA_HASPOPUP, "true");
-        LIcon more = new LIconUtility("down", className: C_BUTTON__ICON, size: C_BUTTON__ICON__X_SMALL);
-        element.append(more.element);
+    }
+    _label = label;
+    _labelElement = labelElement;
+    _icon = icon;
+    _iconLeft = iconLeft;
+    _assistiveText = assistiveText;
+    _rebuild();
+  } // LButton
+
+  void _rebuild() {
+    element.children.clear();
+    if (_icon == null) {
+      if (_labelElement != null)
+        element.append(_labelElement);
+      else if (_label != null)
+        element.appendText(_label);
+    } else {
+      _icon.classes.clear();
+      _icon.classes.add(C_BUTTON__ICON);
+      if (_label == null && _labelElement == null) {
+        element.append(_icon.element);
+      } else {
+        if (_iconLeft) {
+          _icon.element.classes.add(C_BUTTON__ICON__LEFT);
+          element.append(_icon.element);
+          if (_labelElement != null)
+            element.append(_labelElement);
+          else if (_label != null)
+            element.appendText(_label);
+        } else {
+          _icon.element.classes.add(C_BUTTON__ICON__RIGHT);
+          if (_labelElement != null)
+            element.append(_labelElement);
+          else if (_label != null)
+            element.appendText(_label);
+          element.append(_icon.element);
+        }
       }
     }
-
-    if (assistiveText != null) {
-      this.assistiveText = assistiveText;
+    if (_assistiveText != null) {
+      if (_assistive == null) {
+        _assistive = new SpanElement()
+          ..classes.add(LText.C_ASSISTIVE_TEXT);
+        element.append(_assistive);
+      }
+      _assistive.text = _assistiveText;
     }
-  } // LButton
+    /// Add More (down) icon
+    if (element.classes.contains(C_BUTTON__ICON_MORE)) {
+      element.setAttribute(Html0.ARIA_HASPOPUP, "true");
+      LIcon more = new LIconUtility("down", className: C_BUTTON__ICON, size: C_BUTTON__ICON__X_SMALL);
+      element.append(more.element);
+    }
+  } // rebuild
 
   /// Default Button
   LButton.base(String name, String label)
@@ -196,24 +216,47 @@ class LButton extends LComponent {
       : this(new ButtonElement(), name, null, icon:icon,
         buttonClasses: [C_BUTTON__ICON_BORDER_FILLED], assistiveText:assistiveText);
 
+
+  /// Button id
+  String get id => element.id;
   /// Button name
   String get name {
     if (element is ButtonElement)
       return (element as ButtonElement).name;
-
+    else if (element is InputElement)
+      return (element as InputElement).name;
     return element.attributes[Html0.DATA_NAME];
   }
-  /// Button id
-  String get id => element.id;
-
-  /// Set Assistive Text
-  void set assistiveText (String newValue) {
-    if (assistive == null) {
-      assistive = new SpanElement()
-        ..classes.add(LText.C_ASSISTIVE_TEXT);
-      element.append(assistive);
+  /// Button Label
+  String get label {
+    if (_labelElement != null) {
+      return _labelElement.text;
     }
-    assistive.text = newValue;
+    return _label;
+  }
+  /// Button Label
+  void set label (String newValue) {
+    if (_labelElement != null) {
+      _labelElement.text = newValue;
+    } else {
+      _label = newValue;
+    }
+    _rebuild();
+  }
+  /// Button icon
+  LIcon get icon => _icon;
+  /// Button icon
+  void set icon (LIcon newValue) {
+    _icon = newValue;
+    _rebuild();
+  }
+
+  /// Assistive Text
+  String get assistiveText => _assistiveText;
+  /// Add/Set Assistive Text
+  void set assistiveText (String newValue) {
+    _assistiveText = newValue;
+    _rebuild();
   }
 
 
@@ -228,25 +271,26 @@ class LButton extends LComponent {
     }
   }
 
+  /// Set Icon Size e.g. C_BUTTON__ICON__X_SMALL
+  void set iconSize(String newValue) {
+    if (_icon != null)
+      _icon.element.classes.add(newValue);
+  }
   /// Icon Size
   void setIconSizeXSmall() {
-    if (icon != null)
-      icon.element.classes.add(C_BUTTON__ICON__X_SMALL);
+    iconSize = C_BUTTON__ICON__X_SMALL;
   }
   /// Icon Size
   void setIconSizeSmall() {
-    if (icon != null)
-      icon.element.classes.add(C_BUTTON__ICON__SMALL);
+    iconSize = C_BUTTON__ICON__SMALL;
   }
   /// Icon Size
   void setIconSizeLarge() {
-    if (icon != null)
-      icon.element.classes.add(C_BUTTON__ICON__LARGE);
+    iconSize = C_BUTTON__ICON__LARGE;
   }
   /// Icon Inverse
   void setIconInverse() {
-    if (icon != null)
-      icon.element.classes.add(C_BUTTON__ICON__INVERSE);
+      _icon.element.classes.add(C_BUTTON__ICON__INVERSE);
   }
 
   /// Set Selected State
@@ -288,6 +332,7 @@ class LButton extends LComponent {
       (element as InputElement).disabled = newValue;
     }
     else if (newValue) {
+      element.attributes[Html0.ARIA_DISABLED] = "true";
       element.attributes[Html0.DISABLED] = Html0.DISABLED;
       if (_disabledClick == null) {
         _disabledClick = element.onClick.listen((MouseEvent evt) {
@@ -364,7 +409,8 @@ class LButtonStateful extends LComponent {
 
   /// add State
   void addState(LButtonStatefulState state) {
-    state.icon.element.classes.addAll([LButton.C_BUTTON__ICON__STATEFUL, LButton.C_BUTTON__ICON__LEFT]);
+    state.icon.classes.clear();
+    state.icon.classes.addAll([LButton.C_BUTTON__ICON__STATEFUL, LButton.C_BUTTON__ICON__LEFT]);
     states.add(state);
     element.append(state.element);
   }
@@ -431,6 +477,7 @@ class LButtonIconStateful extends LComponent {
    */
   LButtonIconStateful(String name, String assistiveText, LIcon icon, {String idPrefix,
       void onButtonClick(MouseEvent evt)}) {
+    icon.classes.clear();
     icon.classes.add(LButton.C_BUTTON__ICON);
     element.append(icon.element);
     //

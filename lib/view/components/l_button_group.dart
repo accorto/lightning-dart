@@ -9,7 +9,7 @@ part of lightning_dart;
 /**
  * Button Group
  */
-class LButtonGroup {
+class LButtonGroup extends LComponent {
 
   static const String C_BUTTON_GROUP = "slds-button-group";
   static const String C_BUTTON__LAST = "slds-button--last";
@@ -20,12 +20,11 @@ class LButtonGroup {
     ..setAttribute(Html0.ROLE, Html0.ROLE_GROUP);
 
   /// all buttons in group
-  List<LButton> buttons = new List<LButton>();
-  /// buttons in dropdown
-  List<LButton> dropdownButtons = new List<LButton>();
+  List<LButton> _buttons = new List<LButton>();
   /// More Button
-  final LButton more = new LButton(new ButtonElement(), "more", null, icon: new LIconUtility(LIconUtility.DOWN), assistiveText: "More");
-
+  final LButton _more = new LButton(new ButtonElement(), "more", null,
+      icon: new LIconUtility(LIconUtility.DOWN),
+      assistiveText: lButtonGroupMore());
   /// Inverse Button Bar
   final bool inverse;
 
@@ -33,43 +32,66 @@ class LButtonGroup {
    * Button Group
    */
   LButtonGroup({bool this.inverse: false}) {
-    more.element.classes.add(inverse ? LButton.C_BUTTON__ICON_BORDER : LButton.C_BUTTON__ICON_BORDER_FILLED);
+    _more.classes.add(inverse ? LButton.C_BUTTON__ICON_BORDER : LButton.C_BUTTON__ICON_BORDER_FILLED);
     if (inverse) {
-      more.icon.element.classes.add(LButton.C_BUTTON__ICON__INVERSE);
+      _more.icon.classes.add(LButton.C_BUTTON__ICON__INVERSE);
     }
+    _more.onClick.listen((MouseEvent evt) {
+      _more.element.classes.toggle(LVisibility.C_ACTIVE);
+    });
   } // LButton
 
   /// add and attach button
   void add(LButton button, {bool append: true}) {
-    button.element.classes.add(inverse ? LButton.C_BUTTON__INVERSE : LButton.C_BUTTON__NEUTRAL);
-    buttons.add(button);
+    button.classes.add(inverse ? LButton.C_BUTTON__INVERSE : LButton.C_BUTTON__NEUTRAL);
+    _buttons.add(button);
     if (append)
       element.append(button.element);
   }
 
-  /// layout
+  /// layout with [showCount] 0 for all
   void layout(int showCount) {
     element.children.clear();
-    dropdownButtons.clear();
-    for (int i = 0; i < buttons.length; i++) {
-      LButton button = buttons[i];
-      button.element.classes.remove(C_BUTTON__LAST);
-      if (i < showCount) {
+    List<LDropdownItem> dropdownItems = new List<LDropdownItem>();
+    for (int i = 0; i < _buttons.length; i++) {
+      LButton button = _buttons[i];
+      button.classes.remove(C_BUTTON__LAST);
+      if (showCount == 0 || i < showCount) {
         element.append(button.element);
         if (i+1 == showCount) {
-          button.element.classes.add(C_BUTTON__LAST);
+        //  button.element.classes.add(C_BUTTON__LAST);
         }
       } else {
-        dropdownButtons.add(button);
+        LDropdownItem ddi = new LDropdownItem.fromButton(button);
+        dropdownItems.add(ddi);
       }
     }
-    element.append(more.element);
-    if (dropdownButtons.isEmpty) {
-      more.disabled = true;
+    if (dropdownItems.isEmpty) {
+      _more.disabled = true;
+      element.classes.remove(LDropdown.C_DROPDOWN_TRIGGER);
+      element.classes.remove(LDropdown.C_CLICK_TO_SHOW);
+      element.attributes.remove(Html0.ARIA_HASPOPUP);
     } else {
-      more.disabled = false;
-      // TODO Dropdown
+      element.append(_more.element);
+      _more.disabled = false;
+      _more.classes.add(C_BUTTON__LAST);
+      //
+      element.classes.add(LDropdown.C_DROPDOWN_TRIGGER);
+    //  element.classes.add(LDropdown.C_CLICK_TO_SHOW);
+      element.attributes[Html0.ARIA_HASPOPUP] = "true";
+
+      DivElement dd = new DivElement()
+        ..classes.addAll([LDropdown.C_DROPDOWN, LDropdown.C_DROPDOWN__RIGHT, LDropdown.C_DROPDOWN__ACTIONS, LDropdown.C_DROPDOWN__MENU]);
+      LDropdownElement dde = new LDropdownElement(dd);
+      element.append(dde.element);
+      for (LDropdownItem ddi in dropdownItems) {
+        dde.addItem(ddi);
+      }
     }
   } // layout
+
+
+  /// Trl
+  static String lButtonGroupMore() => Intl.message("More", name: "lButtonGroupMore", args: []);
 
 } // LButtonGroup

@@ -8,7 +8,6 @@ part of lightning_dart.demo;
 
 class Buttons extends DemoFeature {
 
-
   Buttons() : super("buttons", "Buttons", "");
 
   LComponent get content {
