@@ -369,6 +369,9 @@ class LDropdownItem extends ListItem {
       ..tabIndex = -1;
   } // LDropdownItem
 
+  LDropdownItem.from(ListItem item) // not copied: selected/disabled
+  : this(id:item.id, label:item.label, value:item.value, href:item.href, leftIcon:item.leftIcon, rightIcon:item.rightIcon);
+
   /// create drop-down from button - with left icon!
   LDropdownItem.fromButton(LButton button) : this(id:button.id,
     label:button.label,

@@ -39,4 +39,7 @@ class LVisibility {
 
   static const String C_ACTIVE = "slds-active";
 
+  /// visible on hover/focus (extension)
+  static const String C_AUTO_VISIBLE = "auto-visible";
+
 } // LVisibility

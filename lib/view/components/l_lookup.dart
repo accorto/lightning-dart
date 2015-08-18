@@ -10,7 +10,7 @@ part of lightning_dart;
  * Lookup
  * https://www.getslds.com/components/lookups#role=regular&status=all
  */
-class LLookup {
+class LLookup extends LComponent {
 
   static const String C_LOOKUP = "slds-lookup";
   static const String C_LOOKUP__CONTROL = "slds-lookup__control";
@@ -30,7 +30,7 @@ class LLookup {
     ..classes.add(C_LOOKUP__MENU)
     ..attributes[Html0.ROLE] = Html0.ROLE_LISTBOX;
 
-  final UListElement menuList = new UListElement()
+  final UListElement _menuList = new UListElement()
     ..classes.add(C_LOOKUP__LIST)
     ..attributes[Html0.ROLE] = Html0.ROLE_PRESENTATION;
 
@@ -61,8 +61,15 @@ class LLookup {
     // -- ul
     element.append(input.formElementLookup); // adds search icon
     element.append(menu);
-    menu.append(menuList);
+    menu.append(_menuList);
+    //
+    menu.classes.add(LVisibility.C_AUTO_VISIBLE);
   } // LLookup
+
+
+  LLookup.base(String name, {String idPrefix})
+    : this(new LInput(name, "text", idPrefix:idPrefix));
+
 
   /// Set Lookup Attributes
   void _setAttributes(String select, String scope, bool typeahead) {
@@ -74,7 +81,31 @@ class LLookup {
   /// add Lookup Item
   void addItem(LLookupItem item) {
     items.add(item);
-    menuList.append(item.element);
+    _menuList.append(item.element);
+  }
+
+  /// Set Lookup Items
+  void set items (List<LLookupItem> items) {
+    clear();
+    items.addAll(items);
+    for (LLookupItem item in items) {
+      _menuList.append(item.element);
+    }
+  }
+
+  /// Set List Items
+  void set listItems (List<ListItem> listItems) {
+    clear();
+    for (ListItem li in listItems) {
+      LLookupItem lookup = new LLookupItem.from(li);
+      addItem(lookup);
+    }
+  }
+
+  /// Clear Items
+  void clear() {
+    items.clear();
+    _menuList.children.clear();
   }
 
   /// Show Popup
@@ -90,19 +121,25 @@ class LLookup {
 
 /**
  * Lookup Item
+ * - li > a|span
  */
 class LLookupItem extends ListItem {
 
   /**
    * Lookup Option
    */
-  LLookupItem({String id, String label, String href, LIcon leftIcon, LIcon rightIcon})
-      : super(id:id, label:label, href:href, leftIcon:leftIcon, rightIcon:rightIcon) {
+  LLookupItem({String id, String label, String value, String href, LIcon leftIcon, LIcon rightIcon})
+      : super(id:id, label:label, value:value, href:href, leftIcon:leftIcon, rightIcon:rightIcon) {
     element
       ..classes.add(LLookup.C_LOOKUP__ITEM)
       ..attributes[Html0.ROLE] = Html0.ROLE_PRESENTATION;
     a
       ..attributes[Html0.ROLE] = Html0.ROLE_OPTION;
   } // LLookupItem
+
+
+  LLookupItem.from(ListItem item) // not copied: selected/disabled
+    : this(id:item.id, label:item.label, value:item.value, href:item.href, leftIcon:item.leftIcon, rightIcon:item.rightIcon);
+
 
 } // LLookupItem

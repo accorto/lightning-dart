@@ -3303,6 +3303,17 @@ a.slds-button--inverse:focus {
     .slds-max-medium-table--stacked-horizontal td:before {
       float: left;
       margin-top: 0.125rem; } }
+.slds-lookup .slds-lookup__menu.auto-visible {
+  visibility: hidden;
+  opacity: 0;
+  -webkit-transition: opacity 0.1s linear, visibility 0.1s linear;
+          transition: opacity 0.1s linear, visibility 0.1s linear; }
+.slds-lookup:hover .slds-lookup__menu.auto-visible,
+.slds-lookup:focus .slds-lookup__menu.auto-visible {
+  visibility: visible;
+  opacity: 1;
+  -webkit-transition: opacity 0.1s linear, visibility 0.1s linear;
+          transition: opacity 0.1s linear, visibility 0.1s linear; }
 .slds-m-top--xxx-small {
   margin-top: 0.125rem; }
 .slds-m-right--xxx-small {

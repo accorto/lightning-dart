@@ -124,4 +124,19 @@ abstract class DemoFeature extends LComponent {
     return "Not Implemented Yet";
   }
 
+  /// Generate List items
+  List<ListItem> generateListItems(int count,
+      {String prefix: "Item", int increment: 4}) {
+    List<ListItem> list = new List<ListItem>();
+    int no = 1;
+    for (int i = 0; i < count; i++) {
+      String label = "${prefix} ${no}";
+      String value = "${prefix.toLowerCase()}${no}";
+      ListItem li = new ListItem(id:i.toString(), label:label, value:value);
+      list.add(li);
+      no += increment;
+    }
+    return list;
+  }
+
 } // DemoFeature

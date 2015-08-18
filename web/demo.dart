@@ -21,6 +21,8 @@ part 'demo/dropdowns.dart';
 
 part 'demo/icons.dart';
 
+part 'demo/lookups.dart';
+
 part 'demo/tabs.dart';
 
 /**
@@ -44,11 +46,14 @@ void main() {
   /*
   page.add(new ActivityTimeline()..toc(toc));
   page.add(new Badges()..toc(toc));
-  page.add(new Breadcrumbs()..toc(toc));      */
-  page.add(new Buttons()..toc(toc));
+  page.add(new Breadcrumbs()..toc(toc));
+  page.add(new Buttons()..toc(toc));      */
   page.add(new ButtonGroups()..toc(toc));
 
   page.add(new Dropdowns()..toc(toc));
+
+  page.add(new Lookups()..toc(toc));
+
 
   page.add(new Icons()..toc(toc));
 

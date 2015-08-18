@@ -11,6 +11,7 @@ part of lightning_dart;
  * li
  * - a
  * -- icon / text / icon
+ * (see LLookupItem, LDropdownItem)
  */
 class ListItem implements SelectOptionI {
 
