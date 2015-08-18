@@ -3,8 +3,11 @@
 .idea
 .packages
 .pub/
+
 build/
 packages
+docs
+
 pubspec.lock
 
 bin/trl_arb.dart
