@@ -11,14 +11,14 @@ import 'package:test/test.dart';
 
 void main() {
   group('A group of tests', () {
-    Awesome awesome;
+    Object awesome;
 
     setUp(() {
-      awesome = new Awesome();
+      awesome = new Object();
     });
 
     test('First Test', () {
-      expect(awesome.isAwesome, isTrue);
+      expect(awesome.toString(), isNotEmpty);
     });
   });
 }
