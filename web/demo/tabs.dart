@@ -45,7 +45,7 @@ class Tabs extends DemoFeature {
       option1 = cb.input.checked;
       optionChanged();
     });
-    return cb.formElement;
+    return cb.element;
   }
 
   List<DivElement> get options {

@@ -59,7 +59,7 @@ class LLookup extends LComponent {
     // - div .form-element ... label...
     // - div .menu
     // -- ul
-    element.append(input.formElementLookup); // adds search icon
+    element.append(input.elementLookup); // adds search icon
     element.append(menu);
     menu.append(_menuList);
     //
@@ -88,7 +88,7 @@ class LLookup extends LComponent {
   void set items (List<LLookupItem> itemList) {
     clear();
     _items.addAll(itemList);
-    for (LLookupItem item in items) {
+    for (LLookupItem item in itemList) {
       _menuList.append(item.element);
     }
   }

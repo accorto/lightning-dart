@@ -21,9 +21,9 @@ import 'protoc/structure.pb.dart';
 import 'protoc/data.pb.dart';
 import 'protoc/display.pb.dart';
 import 'protoc/rr.pb.dart';
-import 'dart:typed_data';
+//import 'dart:typed_data';
 import 'package:fixnum/fixnum.dart';
-import 'package:protobuf/protobuf.dart';
+//import 'package:protobuf/protobuf.dart';
 
 
 export 'protoc/structure.pb.dart';

@@ -390,7 +390,8 @@ class LDropdownItem extends ListItem {
   /**
    * Create Link
    */
-  void _rebuildLink() {
+  @override
+  void _rebuild() {
     if (_selected != null) {
       if (_selected) {
         if (_selectedIcon == null) {
@@ -402,7 +403,7 @@ class LDropdownItem extends ListItem {
         _leftIcon = null; // overwrite in selection mode
       }
     }
-    super._rebuildLink();
+    super._rebuild();
   }
   LIcon _selectedIcon;
 

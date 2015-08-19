@@ -14,7 +14,7 @@ class LForm {
   static const String C_FORM__HORIZONTAL = "slds-form--horizontal";
   static const String C_FORM__STACKED = "slds-form--stacked";
   static const String C_FORM__INLINE = "slds-form--inline";
-  
+
   static const String C_FORM_ELEMENT = "slds-form-element";
   static const String C_FORM_ELEMENT__LABEL = "slds-form-element__label";
   static const String C_FORM_ELEMENT__CONTROL = "slds-form-element__control";
@@ -42,7 +42,7 @@ class LForm {
 
   void add (LEditor editor) {
     editors.add(editor);
-    element.append(editor.formElement);
+    element.append(editor.element);
   }
 
 }

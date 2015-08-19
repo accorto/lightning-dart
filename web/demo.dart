@@ -30,38 +30,38 @@ part 'demo/tabs.dart';
  */
 void main() {
 
-  LContainer page = LContainer.init(id: "demo", containerSize: LContainer.C_CONTAINER__LARGE)
-    ..addHeader("Lightning Dart Tutorial (alpha)");
+  LightningDart.init() // client env
+  .then((_){
+    LContainer page = LContainer.init(id: "demo", containerSize: LContainer.C_CONTAINER__LARGE)
+      ..addHeader("Lightning Dart Tutorial (alpha)");
 
-  CDiv main = page.addDiv()
-    ..classes.add("main")
-    ..role = Html0.ROLE_MAIN;
+    CDiv main = page.addDiv()
+      ..classes.add("main")
+      ..role = Html0.ROLE_MAIN;
 
-  DivElement tocDiv = new DivElement();
-  main.element.append(tocDiv);
-  UListElement toc = new UListElement();
-  tocDiv.append(toc);
+    DivElement tocDiv = new DivElement();
+    main.element.append(tocDiv);
+    UListElement toc = new UListElement();
+    tocDiv.append(toc);
 
+    /* Individual parts */
+    page.add(new ActivityTimeline()..toc(toc));
+    page.add(new Badges()..toc(toc));
+    page.add(new Breadcrumbs()..toc(toc));
+    page.add(new Buttons()..toc(toc));
+    page.add(new ButtonGroups()..toc(toc));
 
-  /* Individual parts */
-  page.add(new ActivityTimeline()..toc(toc));
-  page.add(new Badges()..toc(toc));
-  page.add(new Breadcrumbs()..toc(toc));
-  page.add(new Buttons()..toc(toc));
-  page.add(new ButtonGroups()..toc(toc));
+    page.add(new Dropdowns()..toc(toc));
 
-  page.add(new Dropdowns()..toc(toc));
-
-  page.add(new Lookups()..toc(toc));
-
-
-  page.add(new Icons()..toc(toc));
+    page.add(new Lookups()..toc(toc));
 
 
-  page.add(new Tabs()..toc(toc));
+    page.add(new Icons()..toc(toc));
 
 
+    page.add(new Tabs()..toc(toc));
 
+  });
 
 
   /**
@@ -89,8 +89,7 @@ void main() {
     ..appendParagraph("Footer Col 1: Salesforce Design System tutorial")
     ..appendParagraph("Footer Col 2: Salesforce Design System tutorial");
   footer.append(footerGrid);
-
-      */
+  */
 
 } // main
 

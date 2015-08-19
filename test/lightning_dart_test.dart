@@ -6,7 +6,7 @@
 
 library lightning_dart.test;
 
-import 'package:lightning_dart/lightning_dart.dart';
+//import 'package:lightning_dart/lightning_dart.dart';
 import 'package:test/test.dart';
 
 void main() {

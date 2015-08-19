@@ -18,34 +18,36 @@ class ListItem implements SelectOptionI {
   /// The List Item
   final LIElement element = new LIElement();
   /// The Link
-  final AnchorElement a = new AnchorElement();
+  final AnchorElement a = new AnchorElement(href: "#");
 
   /**
-   * Create List Item
+   * Create List Item - if [href] is null, a span element is used
    */
   ListItem({String id, String label, String value, String href, LIcon leftIcon, LIcon rightIcon}) {
     element.append(a);
-    if (id != null)
-      this.id = id;
+    this.id = id;
     _label = label;
     this.value = value;
     this.href = href;
-    this.leftIcon = leftIcon;
-    this.rightIcon = rightIcon;
+    _leftIcon = leftIcon;
+    _rightIcon = rightIcon;
+    _rebuild();
   }
 
   /// Id
   String get id => a.id;
   void set id(String newValue) {
-    a.id = newValue;
-    element.id = newValue + "-item";
+    if (newValue != null) {
+      a.id = newValue;
+      element.id = newValue + "-item";
+    }
   }
 
   /// Label
   String get label => _label;
   void set label(String newValue) {
     _label = newValue;
-    _rebuildLink();
+    _rebuild();
   }
   String _label;
 
@@ -57,9 +59,10 @@ class ListItem implements SelectOptionI {
 
   /// Href
   String get href => a.href;
+  /// Href only valid if link
   void set href (String newValue) {
     if (newValue == null || newValue.isEmpty) {
-      element.attributes["href"] = "#";
+      element.attributes["href"] = "";
       a.href = "#";
     } else {
       element.attributes["href"] = newValue;
@@ -110,14 +113,14 @@ class ListItem implements SelectOptionI {
     if (newValue) {
       element.classes.add(LDropdown.C_IS_SELECTED);
       element.tabIndex = 0;
-    //  a.tabIndex = 0;
+      a.tabIndex = 0;
     } else {
       element.classes.remove(LDropdown.C_IS_SELECTED);
       element.tabIndex = -1;
       a.tabIndex = -1;
     }
     element.attributes[Html0.ARIA_SELECTED] = newValue.toString();
-    _rebuildLink();
+    _rebuild(); // selected icon
   }
   bool _selected;
 
@@ -130,7 +133,7 @@ class ListItem implements SelectOptionI {
       _rightIcon.classes.addAll([LIcon.C_ICON, LIcon.C_ICON__SMALL, LDropdown.C_ICON__RIGHT]);
     }
     // hasIconRight = rightIcon != null;
-    _rebuildLink();
+    _rebuild();
   }
   LIcon _rightIcon;
 
@@ -144,7 +147,7 @@ class ListItem implements SelectOptionI {
       _leftIcon.classes.add(LDropdown.C_ICON__LEFT);
     }
     hasIconLeft = leftIcon != null;
-    _rebuildLink();
+    _rebuild();
   }
   LIcon _leftIcon;
 
@@ -158,7 +161,7 @@ class ListItem implements SelectOptionI {
   }
 
   /// Rebuild Link
-  void _rebuildLink() {
+  void _rebuild() {
     a.children.clear();
     if (_leftIcon != null) {
       a.append(_leftIcon.element);
@@ -167,6 +170,6 @@ class ListItem implements SelectOptionI {
     if (_rightIcon != null) {
       a.append(_rightIcon.element);
     }
-  } // rebuildLink
+  } // rebuild
 
 } // ListItem

@@ -111,6 +111,15 @@ abstract class EditorI {
   static const C_LABEL_MANDATORY = "label-mandatory";
 
 
+  /// The Editor Id
+  String get id;
+  /// update Id (with row number)
+  void updateId(String idPrefix);
+  /// The Editor (Column) Name
+  String get name;
+  /// Input Type or select, textarea
+  String get type;
+
   /**
    * String Value
    */
@@ -142,7 +151,6 @@ abstract class EditorI {
     }
     return newValue;
   }
-
 
   /**
    * Original Value (creates als default value)
@@ -208,18 +216,8 @@ abstract class EditorI {
     return contextReplace(newValue);
   }
 
-  /// The Editor (Column) Name
-  String get name;
-  /// The Editor Id
-  String get id;
-  /// Input Type or select, textarea
-  String get type;
 
-  /// update Id (with row number)
-  void updateId(String idPrefix);
-
-  /// editor is in cell editor mode
-  bool inGrid = false;
+  /// base editor methods
 
   bool get readOnly;
   void set readOnly (bool newValue);
@@ -230,14 +228,43 @@ abstract class EditorI {
   bool get required;
   void set required (bool newValue);
 
-  bool get displayed;
-  void set displayed (bool newValue);
-
   bool get autofocus;
   void set autofocus (bool newValue);
 
+
+  bool get spellcheck;
+  void set spellcheck (bool newValue);
+
+  /// Validation
+
   int get maxlength => 60;
   void set maxlength (int newValue) {}
+
+  String get pattern => "";
+  void set pattern (String newValue) {}
+  String get patternText => pattern;
+  void set patternText (String newValue) {}
+
+  /// Validation state from Input
+  ValidityState get validationState;
+  /// Validation Message from Input
+  String get validationMsg;
+
+
+  /// Display
+
+  /// get Label
+  String get label {
+    if (column != null)
+      return column.label;
+    return null;
+  }
+  /// set label
+  void set label(String newValue) {
+    if (column != null)
+      column = new DColumn();
+    column.label = newValue;
+  }
 
   String get placeholder => "";
   void set placeholder (String newValue) {}
@@ -245,16 +272,8 @@ abstract class EditorI {
   String get title;
   void set title (String newValue);
 
-  bool get spellcheck;
-  void set spellcheck (bool newValue);
-
-  String get pattern => "";
-  void set pattern (String newValue) {}
-  String get patternText => pattern;
-  void set patternText (String newValue) {}
-
-  /// The actual Element
-  Element get element;
+  bool get displayed;
+  void set displayed (bool newValue);
 
   /**
    * Set Column (info for specific editors)
@@ -367,28 +386,10 @@ abstract class EditorI {
   /// onKeyUp Callback
   EditorChange editorKeyUp;
 
-  /// show entry success icon
-  bool showSuccess = true;
-  /// show entry change highlight
-  bool showChange = true;
 
-  /// show feedback icons
-  bool get showIcons => _showIcons;
-  /// show feedback icons
-  void set showIcons(bool newValue) {
-    _showIcons = newValue;
-  }
-  bool _showIcons = true;
 
-  /// get Label
-  String get label;
-  /// set label
-  void set label(String newValue);
 
-  /// Validation state from Input
-  ValidityState get validationState;
-  /// Validation Message from Input
-  String get validationMsg;
+
   /// Validation Status text (displayed)
   String statusText;
   /// Validation Status (icon)

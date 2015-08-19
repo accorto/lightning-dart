@@ -9,7 +9,7 @@ part of lightning_dart;
 /**
  * Form Editor
  */
-abstract class LEditor {
+abstract class LEditor extends EditorI {
 
   static const String C_INPUT = "slds-input";
 
@@ -25,20 +25,25 @@ abstract class LEditor {
   static int _autoId = 1;
 
   /// Get Form Element
-  DivElement get formElement;
+  DivElement get element;
 
   /// Get Label as small element
   Element get labelSmall;
   /// Get Label as label element
   LabelElement get labelElement;
-  /// Get Input Element
+  /// Get Input/Select/.. Element
   Element get input;
 
 
-  /// get Id
-  String get id;
-  /// get Name
-  String get name;
+  bool get displayed => !element.classes.contains(LVisibility.C_HIDE);
+  void set displayed (bool newValue) {
+    if (newValue)
+      element.classes.remove(LVisibility.C_HIDE);
+    else
+      element.classes.add(LVisibility.C_HIDE);
+  }
+
+
   /// called by sub class
   String createId(String idPrefix, String name) {
     String theId = idPrefix;
@@ -50,21 +55,6 @@ abstract class LEditor {
     return theId;
   }
 
-  /// get Type
-  String get type;
-
-  /// Label Text
-  String get label => _label;
-  /// Label Text
-  void set label (String newValue) {
-    _label = newValue;
-  }
-  String _label;
-
-  /// required
-  bool get required;
-  /// required
-  void set required (bool newValue);
 
   /// get Data List Id
   String get listId => null;

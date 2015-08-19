@@ -70,3 +70,52 @@ part 'src/view/form/l_form_compound.dart';
 
 part 'src/view/utility/html0.dart';
 
+/**
+ * Lightning Dart
+ */
+class LightningDart {
+
+  /** Locale Name */
+  static String localeName = "en_US";
+  /** Locale Name */
+  static String language = "en";
+
+  /// Logger
+  static final Logger _log = new Logger("LightningDart");
+
+  /**
+   * Initialize
+   */
+  static Future<bool> init() {
+    localeName = window.navigator.language;
+    Completer<bool> completer = new Completer<bool>();
+    findSystemLocale()
+    .then((String locale) {
+      localeName = locale;
+      // localeName = "fr_BE";
+      // Intl.systemLocale = localeName;
+      Intl.defaultLocale = localeName;
+      //
+      language = locale;
+      int index = language.indexOf("_");
+      if (index > 0)
+        language = language.substring(0, index);
+      //
+      return initializeDateFormatting(locale, null);
+    })
+    .then((_) {
+      return initializeMessages(language); // BaseMessages
+    })
+    .then((_) {
+    //  initializeFormats();
+      _log.info("locale=${localeName} language=${language}");
+      //  " ${dateFormat_ymd.pattern} ${dateFormat_hms.pattern} - ${dateFormat_ymd_hm.pattern}");
+      completer.complete(true);
+    })
+    .catchError((error, stackTrace) {
+      _log.warning("locale=${localeName} language=${language}", error, stackTrace);
+      completer.completeError(error, stackTrace);
+    });
+    return completer.future;
+  } // init
+}
