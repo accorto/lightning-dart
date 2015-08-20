@@ -14,10 +14,31 @@ class LSelect extends LEditorStd implements LSelectI {
   /// Select Element
   final SelectElement input = new SelectElement();
 
-  LSelect(String name, {String idPrefix}) {
+  /**
+   * Select Editor
+   */
+  LSelect(String name, {String idPrefix, bool multiple:false}) {
     input.name = name;
     input.id = createId(idPrefix, name);
+    input.multiple = multiple;
   }
+
+  /// Select Editor
+  LSelect.from(DColumn column, {String idPrefix, bool multiple}) {
+    input.name = column.name;
+    input.id = createId(idPrefix, name);
+    if (multiple != null)
+      input.multiple = multiple;
+    else
+      input.multiple = column.dataType == DataType.PICKMULTI || column.dataType == DataType.PICKMULTICHOICE;
+
+    //
+    if (column.pickValueList.isNotEmpty) {
+      addDOptions(column.pickValueList);
+    }
+    this.column = column;
+  } // LSelect
+
 
   String get id => input.id;
   void set id (String newValue) {
@@ -32,6 +53,7 @@ class LSelect extends LEditorStd implements LSelectI {
   String get name => input.name;
   String get type => input.type;
 
+  bool get multiple => input.multiple;
 
   /// String Value
 
@@ -67,15 +89,19 @@ class LSelect extends LEditorStd implements LSelectI {
     if (listId.isNotEmpty)
       return; // don't change data list
 
-    // Add/Remove Optional element
-    if (input.options.isNotEmpty) {
-      OptionElement oe = input.options.first;
-      if (oe.value.isEmpty) {
-        if (newValue) {
-          input.options.removeAt(0); // required
+    // Add/Remove Optional element for single selection
+    if (!multiple) {
+      if (input.options.isNotEmpty) {
+        OptionElement oe = input.options.first;
+        if (oe.value.isEmpty) {
+          if (newValue) {
+            input.options.removeAt(0);
+            // required
+          }
+        } else if (!newValue) {
+          input.options.insert(0, new OptionElement());
+          // optional
         }
-      } else if (!newValue) {
-        input.options.insert(0, new OptionElement()); // optional
       }
     }
   } // required
@@ -117,11 +143,6 @@ class LSelect extends LEditorStd implements LSelectI {
   }
 
 
-
-
-
-
-
   /// get Data List Id
   String get listId => input.attributes["list"];
   /// get Data List Id
@@ -133,28 +154,35 @@ class LSelect extends LEditorStd implements LSelectI {
     input.attributes["list"] = dl.id;
   }
 
-  /// Add Option
-  void add(SelectOption op) {
-    input.append(op.asOptionElement());
-  }
   /// Add Option List
-  void addList(List<SelectOption> list) {
+  void addSelectOptions(List<SelectOption> list) {
     for (SelectOption op in list) {
       input.append(op.asOptionElement());
     }
   }
   /// Get options
   List<OptionElement> get options => input.options;
-
-
+  /// Add Option List
+  void set options (List<OptionElement> list) {
+    for (OptionElement oe in list) {
+      input.append(oe);
+    }
+  }
   /// Add Option
   void addOption(OptionElement oe) {
     input.append(oe);
   }
-  /// Add Option List
-  void addOptionList(List<OptionElement> list) {
-    for (OptionElement oe in list) {
-      input.append(oe);
+
+  /// Add Option
+  void addSelectOption(SelectOption op) {
+    input.append(op.asOptionElement());
+  }
+
+  /// Add DOption List
+  void addDOptions(List<DOption> options) {
+    for (DOption option in options) {
+      SelectOption so = new SelectOption(option);
+      addSelectOption(so);
     }
   }
 
@@ -167,21 +195,28 @@ class LSelect extends LEditorStd implements LSelectI {
  */
 abstract class LSelectI {
 
+  /// Multi
+  bool get multiple;
+
   /// required
   bool get required;
   /// required - add/remove optional element
   void set required(bool newValue);
 
-  /// Add Option
-  void add(SelectOption op);
 
-  /// Add Option List
-  void addList(List<SelectOption> list);
-
+  /// Get options
+  List<OptionElement> get options;
+  /// Set options
+  void set options (List<OptionElement> list);
   /// Add Option
   void addOption(OptionElement oe);
 
+
+  /// Add Option
+  void addSelectOption(SelectOption op);
   /// Add Option List
-  void addOptionList(List<OptionElement> list);
+  void addSelectOptions(List<SelectOption> list);
+  /// Add Option List
+  void addDOptions(List<DOption> options);
 
 } // LSelectI

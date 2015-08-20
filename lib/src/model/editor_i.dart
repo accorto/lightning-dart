@@ -10,7 +10,7 @@ part of biz_base_dart;
  * Callback of [editor] with [newValue] - might be [temporary] (keyUp)
  * (usually DataRecord.onEditorChange)
  */
-typedef void EditorChange(EditorI editor, String newValue, bool temporary);
+typedef void EditorChange(String name, String newValue, bool temporary, var details);
 
 /**
  * Editor Interface
@@ -261,7 +261,7 @@ abstract class EditorI {
   }
   /// set label
   void set label(String newValue) {
-    if (column != null)
+    if (column == null)
       column = new DColumn();
     column.label = newValue;
   }
@@ -280,6 +280,25 @@ abstract class EditorI {
    */
   void set column (DColumn newValue){
     _column = newValue;
+    // name = column.name; -- in editor constructor
+    // type -- in editor constructor
+
+    if (column.hasIsMandatory())
+      required = column.isMandatory;
+    if (column.hasIsReadOnly())
+      readOnly = column.isReadOnly;
+
+    if (column.hasColumnSize())
+      maxlength = column.columnSize;
+    if (column.hasDefaultValue())
+      defaultValue = column.defaultValue;
+
+    if (column.hasFormatMask())
+      pattern = column.formatMask;
+
+    // input: min = column.valFrom; max = column.valTo;
+    // selects column.pickValueList
+
     if (newValue.hasParentReference()) {
       _addDependentOn(EditorIDependent.getParentColumnName(newValue.parentReference));
     }
@@ -291,7 +310,7 @@ abstract class EditorI {
         _addDependentOn(varName);
       }
     }
-  }
+  } // column
   DColumn get column => _column;
   DColumn _column;
 

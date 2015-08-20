@@ -168,7 +168,7 @@ class LTab extends LComponent {
         String name = a.attributes[Html0.DATA_NAME];
         found = selectTabByName(name);
       }
-      if (found && href == "#") {
+      if (found && href.endsWith("#")) {
         evt.stopPropagation();
         evt.preventDefault();
       }

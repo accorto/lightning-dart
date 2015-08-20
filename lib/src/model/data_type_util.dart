@@ -101,6 +101,11 @@ class DataTypeUtil {
     return null;
   } // getDataType
 
+  static String getInputType (DataType dataType) {
+    // TODO
+    return EditorI.TYPE_TEXT;
+  }
+
 
   /**
    * Create Editor for [tableColumn] - fallback string/text

@@ -665,7 +665,7 @@ class LIconUtility extends LIcon {
   /**
    * Utility Icon with [linkName] like [ADD]
    */
-  LIconUtility(String linkName, {String className, String size,
+  LIconUtility(String linkName, {String className:LIcon.C_ICON, String size,
       String color, List<String> addlCss})
     : super(linkName, LIcon.SPRITE_UTILITY, className, size, color, addlCss);
 

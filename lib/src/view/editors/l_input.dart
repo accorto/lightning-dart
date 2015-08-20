@@ -23,6 +23,24 @@ class LInput extends LEditorStd {
     input.type = type;
   }
 
+  /**
+   * Input Editor
+   */
+  LInput.from(DColumn column, {String idPrefix, String type}) {
+    input.name = column.name;
+    input.id = createId(idPrefix, name);
+    if (type != null && type.isEmpty) // override
+      input.type = type;
+    else
+      input.type = DataTypeUtil.getInputType(column.dataType);
+    //
+    this.column = column;
+    if (column.hasValFrom())
+      min = column.valFrom;
+    if (column.hasValTo())
+      max = column.valTo;
+  } // LInput
+
   /// Editor Id
   String get id => input.id;
   void set id (String newValue) {
@@ -88,6 +106,15 @@ class LInput extends LEditorStd {
   String get pattern => input.pattern;
   void set pattern (String newValue) {
     input.pattern = newValue;
+  }
+
+  String get min => input.min;
+  void set min (String newValue) {
+    input.min = newValue;
+  }
+  String get max => input.max;
+  void set max (String newValue) {
+    input.max = newValue;
   }
 
   /// Validation state from Input

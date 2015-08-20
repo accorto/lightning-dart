@@ -14,7 +14,8 @@ class Dropdowns extends DemoFeature {
     CDiv div = new CDiv();
 
     div.appendText("Hover:");
-    LDropdown dd = new LDropdown.settings("dd1");
+    LDropdown dd = new LDropdown.settings("dd1")
+      ..left = true;
     dd.dropdown.addItem(new LDropdownItem(label: "Menu Item One"));
     dd.dropdown.addItem(new LDropdownItem(label: "Menu Item Two"));
     dd.dropdown.addItem(new LDropdownItem(label: "Menu Item Three"));
@@ -42,7 +43,8 @@ class Dropdowns extends DemoFeature {
     div.add(dd);
 
     // TODO Search after Lookup!
-
+    // Action Overflow - see ButtonGroup
+    // Search Overflow
 
     return div;
   }

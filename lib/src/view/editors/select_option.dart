@@ -36,6 +36,7 @@ class SelectOption implements SelectOptionI {
   SelectOption(DOption this.option) {
   }
 
+  String get id => option.id;
   String get value => option.value;
   String get label => option.display;
   LIcon get icon => null;
@@ -60,6 +61,7 @@ class SelectOption implements SelectOptionI {
       li = new LIElement();
       li.attributes[Html0.DATA_VALUE] = option.value;
       li.text = option.display;
+      // selected/disabled
     }
     return li;
   }
@@ -70,8 +72,7 @@ class SelectOption implements SelectOptionI {
     if (oe != null) {
       oe.selected = newValue;
     }
-    if (li != null) {
-
+    if (li != null) { // ?
     }
   } // selected
 
@@ -81,8 +82,7 @@ class SelectOption implements SelectOptionI {
     if (oe != null) {
       oe.disabled = newValue;
     }
-    if (li != null) {
-
+    if (li != null) { // ?
     }
   } // disabled
 

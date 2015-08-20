@@ -15,6 +15,9 @@ part of lightning_dart;
  */
 class ListItem implements SelectOptionI {
 
+  /// A Href No Op
+  static const String VOID = "javascript:void(0)";
+
   /// The List Item
   final LIElement element = new LIElement();
   /// The Link
@@ -23,15 +26,19 @@ class ListItem implements SelectOptionI {
   /**
    * Create List Item - if [href] is null, a span element is used
    */
-  ListItem({String id, String label, String value, String href, LIcon leftIcon, LIcon rightIcon}) {
+  ListItem({String id, String label, String value, String href,
+      LIcon leftIcon, LIcon rightIcon, bool selected, bool disabled}) {
     element.append(a);
     this.id = id;
     _label = label;
     this.value = value;
     this.href = href;
-    _leftIcon = leftIcon;
-    _rightIcon = rightIcon;
-    _rebuild();
+    this.leftIcon = leftIcon;
+    this.rightIcon = rightIcon; // rebuilds
+    if (selected != null)
+      this.selected = selected;
+    if (disabled != null)
+      this.disabled = disabled;
   }
 
   /// Id
@@ -58,17 +65,19 @@ class ListItem implements SelectOptionI {
   }
 
   /// Href
-  String get href => a.href;
+  String get href => _href;
   /// Href only valid if link
   void set href (String newValue) {
+    _href = newValue;
     if (newValue == null || newValue.isEmpty) {
       element.attributes["href"] = "";
-      a.href = "#";
+      a.href = VOID;
     } else {
       element.attributes["href"] = newValue;
       a.href = newValue;
     }
   }
+  String _href = null;
 
   /// Disabled
   bool get disabled => _disabled;
@@ -130,7 +139,8 @@ class ListItem implements SelectOptionI {
   void set rightIcon (LIcon rightIcon) {
     _rightIcon = rightIcon;
     if (rightIcon != null) {
-      _rightIcon.classes.addAll([LIcon.C_ICON, LIcon.C_ICON__SMALL, LDropdown.C_ICON__RIGHT]);
+      _rightIcon.size = LIcon.C_ICON__SMALL;
+      _rightIcon.classes.addAll([LIcon.C_ICON, LDropdown.C_ICON__RIGHT]);
     }
     // hasIconRight = rightIcon != null;
     _rebuild();
@@ -144,7 +154,7 @@ class ListItem implements SelectOptionI {
     _leftIcon = leftIcon;
     if (leftIcon != null) {
       _leftIcon.size = LIcon.C_ICON__SMALL;
-      _leftIcon.classes.add(LDropdown.C_ICON__LEFT);
+      _leftIcon.classes.addAll([LIcon.C_ICON, LDropdown.C_ICON__LEFT]);
     }
     hasIconLeft = leftIcon != null;
     _rebuild();
@@ -171,5 +181,68 @@ class ListItem implements SelectOptionI {
       a.append(_rightIcon.element);
     }
   } // rebuild
+
+
+  bool get hide => element.classes.contains(LVisibility.C_HIDE);
+  void set hide (bool newValue) {
+    if (newValue)
+      element.classes.add(LVisibility.C_HIDE);
+    else
+      element.classes.remove(LVisibility.C_HIDE);
+  }
+
+  /// return true if [exp] matches [label]
+  bool labelHighlight(RegExp exp) {
+    if (_label.contains(exp)) {
+    /*  if (_heading != null) {
+        String html = _labelText.splitMapJoin((exp),
+        onMatch:    (m) => "<ins>${m.group(0)}</ins>",
+        onNonMatch: (n) => n);
+        _heading.innerHtml = html;
+      } else {
+        String html = _labelText.splitMapJoin((exp),
+        onMatch:    (m) => "<b>${m.group(0)}</b>",
+        onNonMatch: (n) => n);
+        if (_label != null)
+          _label.innerHtml = html;
+        else
+          li.innerHtml = html;
+      }
+      _highlighted = true; */
+      return true;
+    } else { // no match
+    /*  if (_heading != null)
+        _heading.text = _labelText;
+      else if (_label != null)
+        _label.text = _labelText;
+      else
+        li.text = _labelText; */
+      return false;
+    }
+  } // labelHighlight
+
+  /// return true if [exp] matches [descriptionl]
+  bool descriptionHighlight(RegExp exp) {
+  //  if (_description == null)
+      return false;
+  /*  if (_descriptionText.contains(exp)) {
+      String html = _descriptionText.splitMapJoin((exp),
+      onMatch:    (m) => "<b>${m.group(0)}</b>",
+      onNonMatch: (n) => n);
+      _description.innerHtml = html;
+      _highlighted = true;
+      return true;
+    } else {
+      _description.text = _descriptionText;
+      return false;
+    } */
+  } // descriptionHighlight
+
+  /// Conversion to Option
+  OptionElement toOption() {
+    return new OptionElement(data:label, value:value, selected:selected)
+      ..disabled = disabled
+      ..selected = selected;
+  }
 
 } // ListItem
