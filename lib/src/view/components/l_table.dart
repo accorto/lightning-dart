@@ -11,22 +11,32 @@ part of lightning_dart;
  */
 class LTable {
 
-
+  /// slds-table - Initializes data table | Required
   static const String C_TABLE = "slds-table";
+  /// slds-table--bordered - Adds borders to the table |
   static const String C_TABLE__BORDERED = "slds-table--bordered";
+  /// slds-table--striped - Adds stripes to alternating rows |
   static const String C_TABLE__STRIPED = "slds-table--striped";
-
+  /// slds-is-selected - Changes row to selected state |
+  static const String C_IS_SELECTED = "slds-is-selected";
+  /// slds-is-sortable - Enables user interactions for sorting a column |
+  static const String C_IS_SORTABLE = "slds-is-sortable";
+  /// slds-cell-wrap - Forces text to wrap in a cell |
+  static const String C_CELL_WRAP = "slds-cell-wrap";
+  /// slds-cell-shrink - Shrinks cell to width of content |
+  static const String C_CELL_SHRINK = "slds-cell-shrink";
+  /// slds-no-row-hover - Removes hover state on row |
+  static const String C_NO_ROW_HOVER = "slds-no-row-hover";
+  /// slds-max-medium-table--stacked - Modifies table layout to accommodate smaller viewports |
   static const String C_MAX_MEDIUM_TABLE__STACKED = "slds-max-medium-table--stacked";
+  /// slds-max-medium-table--stacked-horizontal - Modifies table layout to accommodate smaller viewports |
   static const String C_MAX_MEDIUM_TABLE__STACKED_HORIZONTAL = "slds-max-medium-table--stacked-horizontal";
+  /// slds-hint-parent - Highlights action overflow ribbons on row hover |
+  static const String C_HINT_PARENT = "slds-hint-parent";
 
   static const String C_ROW_SELECT = "slds-row-select";
-  static const String C_IS_SELECTED = "slds-is-selected";
-
-  static const String C_IS_SORTABLE = "slds-is-sortable";
   static const String C_ROW_ACTION = "slds-row-action";
-  static const String C_CELL_WRAP = "slds-cell-wrap";
 
-  static const String C_NO_ROW_HOVER = "slds-no-row-hover";
 
   /// Table Element
   final TableElement element = new TableElement()

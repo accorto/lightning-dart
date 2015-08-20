@@ -11,14 +11,21 @@ part of lightning_dart;
  */
 class LImage {
 
+  /// slds-avatar - Defines an image as an avatar | Required
   static const String C_AVATAR = "slds-avatar";
 
+  /// slds-avatar--circle - Creates a circular avatar shape
+  static const String C_AVATAR__CIRCLE = "slds-avatar--circle";
+  /// slds-avatar--x-small - Creates a 1.5r em by 1.5 rem icon
+
   static const String C_AVATAR__X_SMALL = "slds-avatar--x-small";
+  /// slds-avatar--small - Creates a 2.25 rem by 2.25 rem icon
   static const String C_AVATAR__SMALL = "slds-avatar--small";
+  /// slds-avatar--medium - Creates a 3 rem by 3 rem icon
   static const String C_AVATAR__MEDIUM = "slds-avatar--medium";
+  /// slds-avatar--large - Creates a 5 rem by 5 rem icon
   static const String C_AVATAR__LARGE = "slds-avatar--large";
 
-  static const String C_AVATAR__CIRCLE = "slds-avatar--circle";
 
   /// Image Sizes
   static final List<String> SIZES = [C_AVATAR__X_SMALL, C_AVATAR__SMALL, C_AVATAR__MEDIUM, C_AVATAR__LARGE];

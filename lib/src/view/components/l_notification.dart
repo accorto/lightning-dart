@@ -11,18 +11,19 @@ part of lightning_dart;
  */
 abstract class LNotification {
 
-
+  /// slds-notify - Initializes notification | Required
   static const String C_NOTIFY = "slds-notify";
-  static const String C_NOTIFY__ALERT = "slds-notify--alert";
-  static const String C_NOTIFY__CLOSE = "slds-notify__close";
+  /// slds-notify-container - Initializes notification container | Required
   static const String C_NOTIFY_CONTAINER = "slds-notify-container";
-  static const String C_NOTIFY__CONTENT = "notify__content";
+  /// slds-notify--toast - Initializes toast notification | Required
   static const String C_NOTIFY__TOAST = "slds-notify--toast";
+  /// slds-notify--alert - Initializes alert notification | Required
+  static const String C_NOTIFY__ALERT = "slds-notify--alert";
+  /// slds-notify__close - Positions close icon | Required
+  static const String C_NOTIFY__CLOSE = "slds-notify__close";
 
-  static const String C_NOTIFY__SUCCESS = "slds-notify--success";
-  static const String C_NOTIFY__WARNING = "slds-notify--warning";
-  static const String C_NOTIFY__ERROR = "slds-notify--error";
-  static const String C_NOTIFY__OFFLINE = "slds-notify--offline";
+  static const String C_NOTIFY__CONTENT = "notify__content";
+
 
 
   static String lNotificationClose() => Intl.message("Close", name: "lNotificationClose", args: []);
@@ -54,11 +55,11 @@ abstract class LNotification {
 
     // assistive
     if (assistiveText == null) {
-      if (color == LNotification.C_NOTIFY__SUCCESS)
+      if (color == LTheme.C_THEME__SUCCESS)
         assistiveText = LNotification.lNotificationSuccess();
-      else if (color == LNotification.C_NOTIFY__WARNING)
+      else if (color == LTheme.C_THEME__WARNING)
         assistiveText = LNotification.lNotificationWarning();
-      else if (color == LNotification.C_NOTIFY__ERROR)
+      else if (color == LTheme.C_THEME__ERROR)
         assistiveText = LNotification.lNotificationError();
       else
         assistiveText = LNotification.lNotificationAlert();
@@ -129,16 +130,16 @@ class LAlert extends LNotification {
       : super(label, icon, idPrefix, null, assistiveText);
   /// green background
   LAlert.success(String label, {LIcon icon, String idPrefix, String assistiveText})
-      : super(label, icon, idPrefix, LNotification.C_NOTIFY__SUCCESS, assistiveText);
+      : super(label, icon, idPrefix, LTheme.C_THEME__SUCCESS, assistiveText);
   /// yellow background
   LAlert.warning(String label, {LIcon icon, String idPrefix, String assistiveText})
-      : super(label, icon, idPrefix, LNotification.C_NOTIFY__WARNING, assistiveText);
+      : super(label, icon, idPrefix, LTheme.C_THEME__WARNING, assistiveText);
   /// red background
   LAlert.error(String label, {LIcon icon, String idPrefix, String assistiveText})
-      : super(label, icon, idPrefix, LNotification.C_NOTIFY__ERROR, assistiveText);
+      : super(label, icon, idPrefix, LTheme.C_THEME__ERROR, assistiveText);
   /// grayblack background
   LAlert.offline(String label, {LIcon icon, String idPrefix, String assistiveText})
-      : super(label, icon, idPrefix, LNotification.C_NOTIFY__OFFLINE, assistiveText);
+      : super(label, icon, idPrefix, LTheme.C_THEME__OFFLINE, assistiveText);
 
 
 } // LAlert

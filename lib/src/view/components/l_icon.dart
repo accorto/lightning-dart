@@ -13,20 +13,26 @@ part of lightning_dart;
  */
 class LIcon {
 
+
+  /// slds-icon - Defines an svg as an icon | Required
+  static const String C_ICON = "slds-icon";
+  /// slds-icon-text-default - Creates a text-colored fill color for utility icons |
+  static const String C_ICON_TEXT_DEFAULT = "slds-icon-text-default";
+  /// slds-icon-text-warning - Creates a warning colored fill color |
+  static const String C_ICON_TEXT_WARNING = "slds-icon-text-warning";
+  /// slds-icon--x-small - Creates a 1rem by 1rem icon |
+  static const String C_ICON__X_SMALL = "slds-icon--x-small";
+  /// slds-icon--small - Creates a 1.5rem by 1.5rem icon |
+  static const String C_ICON__SMALL = "slds-icon--small";
+  /// slds-icon--large - Creates a 3rem by 3rem icon |
+  static const String C_ICON__LARGE = "slds-icon--large";
+  /// slds-icon__container - Creates the rounded square background |
+  static const String C_ICON__CONTAINER = "slds-icon__container";
+  /// slds-icon__container--circle - Creates a circular icon shape |
+  static const String C_ICON__CONTAINER__CIRCLE = "slds-icon__container--circle";
+
   /// Prefix for asset references
   static const String HREF_PREFIX = "packages/lightning_dart";
-
-  static const String C_ICON = "slds-icon";
-  static const String C_ICON__TINY = "slds-icon--tiny";
-  static const String C_ICON__SMALL = "slds-icon--small";
-  static const String C_ICON__MEDIUM = "slds-icon--medium";
-  static const String C_ICON__LARGE = "slds-icon--large";
-  static const String C_ICON_TEXT_DEFAULT = "slds-icon-text-default";
-  static const String C_ICON_TEXT_WARNING = "slds-icon-text-warning";
-
-  static const String C_ICON__CONTAINER = "slds-icon__container";
-  static const String C_ICON__CONTAINER__CIRCLE =
-      "slds-icon__container--circle";
 
   static const String SPRITE_ACTION =
       "/assets/icons/action-sprite/svg/symbols.svg#"; // announcement
@@ -86,9 +92,9 @@ class LIcon {
   CssClassSet get classes => element.classes;
 
 
-  /// set [cssSize] - C_ICON__LARGE, C_ICON__MEDIUM, C_ICON__SMALL, C_ICON__TINY
+  /// set [cssSize] - C_ICON__LARGE, C_ICON__SMALL, C_ICON__X_SMALL
   void set size (String cssSize) {
-    element.classes.removeAll([C_ICON__LARGE, C_ICON__MEDIUM, C_ICON__SMALL, C_ICON__TINY]);
+    element.classes.removeAll([C_ICON__LARGE, C_ICON__SMALL, C_ICON__X_SMALL]);
     if (cssSize != null && cssSize.isEmpty)
       element.classes.add(cssSize);
   }
@@ -142,7 +148,7 @@ class LIconSpan extends LComponent {
    * [name] utility icon name e.g. LIconUtility.ANNOUNCEMENT
    */
   LIconSpan.utility(String name, {bool circle: false, String assistiveText,
-        String size:LIcon.C_ICON__MEDIUM, String color:LIcon.C_ICON_TEXT_DEFAULT})
+        String size, String color:LIcon.C_ICON_TEXT_DEFAULT})
     : this(new LIconUtility(name, size:size, color:color),
         circle:circle, assistiveText:assistiveText);
 
@@ -659,7 +665,7 @@ class LIconUtility extends LIcon {
   /**
    * Utility Icon with [linkName] like [ADD]
    */
-  LIconUtility(String linkName, {String className, String size: LIcon.C_ICON__MEDIUM,
+  LIconUtility(String linkName, {String className, String size,
       String color, List<String> addlCss})
     : super(linkName, LIcon.SPRITE_UTILITY, className, size, color, addlCss);
 

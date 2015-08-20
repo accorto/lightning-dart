@@ -10,6 +10,10 @@ class LPageHeader extends LComponent {
 
   static const String C_PAGE_HEADER = "slds-page-header";
 
+  /// slds-page-header__detail-row - Creates margins around the detail section of record home
+  static const String C_PAGE_HEADER__DETAIL_ROW = "slds-page-header__detail-row";
+
+  // TODO changed
   static const String C_MEDIA__REC_HOME = "slds-media--rec-home";
   static const String C_MEDIA__REC_HOME__TITLE = "slds-media--rec-home__title";
   static const String C_MEDIA__REC_HOME__BUTTON = "slds-media--rec-home__button";

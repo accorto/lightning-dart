@@ -45,7 +45,6 @@ part 'src/view/components/l_picklist.dart';
 part 'src/view/components/l_pill.dart';
 part 'src/view/components/l_popover.dart';
 part 'src/view/components/l_scrollable.dart';
-part 'src/view/components/l_spacing.dart';
 part 'src/view/components/l_spinner.dart';
 part 'src/view/components/l_tab.dart';
 part 'src/view/components/l_table.dart';
@@ -53,6 +52,7 @@ part 'src/view/components/l_text.dart';
 part 'src/view/components/l_theme.dart';
 part 'src/view/components/l_tile.dart';
 part 'src/view/components/l_tooltip.dart';
+part 'src/view/components/l_utilities.dart';
 part 'src/view/components/l_visibility.dart';
 part 'src/view/components/list_item.dart';
 

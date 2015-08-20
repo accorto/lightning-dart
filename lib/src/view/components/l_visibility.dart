@@ -11,30 +11,31 @@ part of lightning_dart;
  */
 class LVisibility {
 
-  /// remove space
+  /// slds-hide - Hides an element from the page by setting display propery to none
   static const String C_HIDE = "slds-hide";
-  /// remove space
+  /// slds-show - Shows the element by setting display property to block
   static const String C_SHOW = "slds-show";
-  /// remove space
+  /// slds-show--inline-block - Shows the element by setting display to inline-block
   static const String C_SHOW__INLINE_BLOCK = "slds-show--inline-block";
+  /// slds-hidden - Hides an element from the page by setting the visibility property to hidden
+  static const String C_HIDDEN = "slds-hidden";
+  /// slds-visible - Shows the element by setting the visibility property to visible
+  static const String C_VISIBLE = "slds-visible";
 
-  /// reserve space
-  static const String C_IS_HIDDEN = "slds-is-hidden";
-  /// reserve space
-  static const String C_IS_VISIBLE = "slds-is-visible";
-
-  /// reserve space
+  /// slds-transition-hide - Hides an element from the page by setting the opacity property set to 0
   static const String C_TRANSITION_HIDE = "slds-transition-hide";
-  /// reserve space
+  /// slds-transition-show - Shows the element using the opacity property set to 1
   static const String C_TRANSITION_SHOW = "slds-transition-show";
 
-  /// children
-  static const String C_IS_COLLAPSED = "slds-is-collapsed";
-  /// children
-  static const String C_IS_EXPANDED = "slds-is-expanded";
+  /// slds-collapsed - Hides elements inside a parent
+  static const String C_COLLAPSED = "slds-collapsed";
+  /// slds-expanded - Shows the elements inside the parent
+  static const String C_EXPANDED = "slds-expanded";
 
-  /// hidden - for screen readers
+  /// slds-assistive-text - Hides an element yet enables a screen reader to read the element that is hidden
   static const String C_ASSISTIVE_TEXT = "slds-assistive-text";
+
+
 
   /// active selection
   static const String C_ACTIVE = "slds-active";

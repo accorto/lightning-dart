@@ -11,51 +11,61 @@ part of lightning_dart;
  */
 class LButton extends LComponent {
 
+
+
+  /// slds-button - Initializes a 2.25 rem (36px) height button | Required
   static const String C_BUTTON = "slds-button";
-  static const String C_BUTTON__NEUTRAL = "slds-button--neutral";
-  static const String C_BUTTON__BRAND = "slds-button--brand";
-  static const String C_BUTTON__INVERSE = "slds-button--inverse";
-
-
+  /// slds-button--small - Creates a smaller 2 rem (32px) button |
   static const String C_BUTTON__SMALL = "slds-button--small";
-
+  /// slds-button--neutral - Creates the gray border with white background default style |
+  static const String C_BUTTON__NEUTRAL = "slds-button--neutral";
+  /// slds-button--brand - Creates the brand blue Salesforce style |
+  static const String C_BUTTON__BRAND = "slds-button--brand";
+  /// slds-button--inverse - Creates the inverse style for dark backgrounds |
+  static const String C_BUTTON__INVERSE = "slds-button--inverse";
+  /// slds-button--icon-bare - Creates a button that looks like a plain icon |
+  static const String C_BUTTON__ICON_BARE = "slds-button--icon-bare";
+  /// slds-button--icon-container - Creates a button that looks like a plain icon |
+  static const String C_BUTTON__ICON_CONTAINER = "slds-button--icon-container";
+  /// slds-button--icon-border - Creates an icon button with a border |
+  static const String C_BUTTON__ICON_BORDER = "slds-button--icon-border";
+  /// slds-button--icon-border-filled - Creates an icon button with a border |
+  static const String C_BUTTON__ICON_BORDER_FILLED = "slds-button--icon-border-filled";
+  /// slds-button--icon-small - Creates an icon button at the smaller 2 rem (32px) size |
+  static const String C_BUTTON__ICON_SMALL = "slds-button--icon-small";
+  /// slds-button--icon-more - Used for the style where only two icons are in a button |
+  static const String C_BUTTON__ICON_MORE = "slds-button--icon-more";
+  /// slds-button__icon - Sets the size and color of the icon inside a button |
   static const String C_BUTTON__ICON = "slds-button__icon";
+  /// slds-button__icon--stateful - This makes the icon the same color as the text in the button |
+  static const String C_BUTTON__ICON__STATEFUL = "slds-button__icon--stateful";
+  /// slds-button__icon--left - Puts the icon on the left side of the button |
   static const String C_BUTTON__ICON__LEFT = "slds-button__icon--left";
+  /// slds-button__icon--right - Puts the icon on the right side of the button |
   static const String C_BUTTON__ICON__RIGHT = "slds-button__icon--right";
-
+  /// slds-button__icon--inverse - Gives a white icon color on a dark background |
+  static const String C_BUTTON__ICON__INVERSE = "slds-button__icon--inverse";
+  /// slds-button__icon--x-small - Creates a .5rem (8px) size icon |
+  static const String C_BUTTON__ICON__X_SMALL = "slds-button__icon--x-small";
+  /// slds-button__icon--small - Creates a .75rem (12px) size icon |
+  static const String C_BUTTON__ICON__SMALL = "slds-button__icon--small";
+  /// slds-button__icon--large - Creates a 1.5rem (24px) size icon |
+  static const String C_BUTTON__ICON__LARGE = "slds-button__icon--large";
+  /// slds-button__icon--hint - Creates a grayed out icon until the parent is hovered |
+  static const String C_BUTTON__ICON__HINT = "slds-button__icon--hint";
+  /// slds-button-space-left - adds space on the left of a button wrapped in a parent |
   static const String C_BUTTON_SPACE_LEFT = "slds-button-space-left";
 
-  /// Stateful Button
-  static const String C_BUTTON__ICON__STATEFUL = "slds-button__icon--stateful";
-
-  static const String C_NOT_SELECTED = "slds-not-selected";
-  static const String C_IS_SELECTED = "slds-is-selected";
-
-  static const String C_TEXT_NOT_SELECTED = "slds-text-not-selected";
-  static const String C_TEXT_SELECTED = "slds-text-selected";
-  static const String C_TEXT_SELECTED_FOCUS = "slds-text-selected-focus";
-
-
-  static const String C_BUTTON__ICON_BARE = "slds-button--icon-bare";
-  static const String C_BUTTON__ICON_CONTAINER = "slds-button--icon-container";
-  static const String C_BUTTON__ICON_BORDER = "slds-button--icon-border";
-  static const String C_BUTTON__ICON_BORDER_FILLED = "slds-button--icon-border-filled";
   static const String C_BUTTON__ICON_BORDER_SMALL = "slds-button--icon-border-small";
-  static const String C_BUTTON__ICON__HINT = "slds-button__icon--hint";
 
-  /// Icon Size
-  static const String C_BUTTON__ICON__X_SMALL = "slds-button__icon--x-small";
-  static const String C_BUTTON__ICON__SMALL = "slds-button__icon--small";
-  static const String C_BUTTON__ICON__LARGE = "slds-button__icon--large";
-  /// More Icon
-  static const String C_BUTTON__ICON_MORE = "slds-button--icon-more";
-
-  static const String C_BUTTON__ICON__INVERSE = "slds-button__icon--inverse";
 
   /// Hint
   static const String C_BUTTON__HINT = "slds-button--hint";
   /// Hint Wrapper
   static const String C_HINT_PARENT = "slds-hint-parent";
+
+  static const String C_NOT_SELECTED = "slds-not-selected";
+  static const String C_IS_SELECTED = "slds-is-selected";
 
   static const String C_CLOSE = "close";
 
@@ -390,9 +400,9 @@ class LButtonStateful extends LComponent {
     element.classes.add(LButton.C_NOT_SELECTED);
     element.setAttribute(Html0.ARIA_LIVE, Html0.ARIA_LIVE_ASSERTIVE);
     //
-    addState(new LButtonStatefulState(new LIconUtility(LIconUtility.ADD), textNotSelected, LButton.C_TEXT_NOT_SELECTED));
-    addState(new LButtonStatefulState(new LIconUtility(LIconUtility.CHECK), textSelected, LButton.C_TEXT_SELECTED));
-    addState(new LButtonStatefulState(new LIconUtility(LIconUtility.CLOSE), textSelectedFocus, LButton.C_TEXT_SELECTED_FOCUS));
+    addState(new LButtonStatefulState(new LIconUtility(LIconUtility.ADD), textNotSelected, LText.C_TEXT_NOT_SELECTED));
+    addState(new LButtonStatefulState(new LIconUtility(LIconUtility.CHECK), textSelected, LText.C_TEXT_SELECTED));
+    addState(new LButtonStatefulState(new LIconUtility(LIconUtility.CLOSE), textSelectedFocus, LText.C_TEXT_SELECTED_FOCUS));
 
     element.onClick.listen((MouseEvent evt){
       bool newState = toggle();

@@ -12,13 +12,28 @@ part of lightning_dart;
  */
 class LTab extends LComponent {
 
+  /// slds-tabs--default - Initializes default tabset | Required
   static const String C_TABS__DEFAULT = "slds-tabs--default";
-  static const String C_TABS__DEFAULT__NAV = "slds-tabs--default__nav";
+  /// slds-tabs--scoped - Initializes scoped tabset | Required
   static const String C_TABS__SCOPED = "slds-tabs--scoped";
+  /// slds-tabs--default__nav - Initializes default tablist | Required
+  static const String C_TABS__DEFAULT__NAV = "slds-tabs--default__nav";
+  /// slds-tabs--scoped__nav - Initializes scoped tablist | Required
   static const String C_TABS__SCOPED__NAV = "slds-tabs--scoped__nav";
-
-  static const String C_TABS__ITEM = "slds-tabs__iteml";
+  /// slds-tabs__item - Styles tab items in tablist | Required
+  static const String C_TABS__ITEM = "slds-tabs__item";
+  /// slds-tabs__content - Styles tab content wrapper in tabset | Required
   static const String C_TABS__CONTENT = "slds-tabs__content";
+  /// is-active - Applies the active state to a tab list item | Required
+  static const String C_IS_ACTIVE = "is-active";
+  /// slds-text-heading--label - Applies text styling to a tab list item | Required
+  static const String C_TEXT_HEADING__LABEL = "slds-text-heading--label";
+
+  /// slds-show - Shows the tab panel | Required
+  static const String C_SHOW = "slds-show";
+  /// slds-hide - Hide the tab panel | Required
+  static const String C_HIDE = "slds-hide";
+
 
   /// Tab element
   final DivElement element = new DivElement();

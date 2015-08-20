@@ -7,10 +7,11 @@
 part of lightning_dart;
 
 /**
- * Breadcrumb (list of anchors
+ * Breadcrumb (list of anchors) based on ol
  */
 class LBreadcrumb extends LComponent {
 
+  /// This class allows the .slds-list__item to display in the breadcrumb style
   static const String C_BREADCRUMB  = "slds-breadcrumb";
 
   /// Auto Id Numbering

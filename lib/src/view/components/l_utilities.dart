@@ -1,15 +1,70 @@
 /*
  * Copyright (c) 2015 Accorto, Inc. All Rights Reserved
- * License: GPLv3   http://www.gnu.org/licenses/gpl-3.0.txt
- * License options+support:  https://www.lightningdart.com
+ * License: GPLv3  http://www.gnu.org/licenses/gpl-3.0.txt
+ * License options+support:  https://lightningdart.com
  */
 
 part of lightning_dart;
+
+
+/// Floats
+class LFloat {
+
+  /// slds-float--left - Pulls element from document flow and floats left
+  static const String C_FLOAT__LEFT = "slds-float--left";
+  /// slds-float--right - Pulls element from document flow and floats right
+  static const String C_FLOAT__RIGHT = "slds-float--right";
+  /// slds-clearfix - Contains floats
+  static const String C_CLEARFIX = "slds-clearfix";
+
+} // LFloat
+
+
+/// Sizing
+class LSizing {
+
+  static const String C_SIZE__1_OF_1 = "slds-size--1-of-1";
+
+  static const String C_SIZE__1_OF_2 = "slds-size--1-of-2";
+
+  static const String C_SIZE__1_OF_3 = "slds-size--1-of-3";
+  static const String C_SIZE__2_OF_3 = "slds-size--2-of-3";
+
+  static const String C_SIZE__1_OF_4 = "slds-size--1-of-4";
+  static const String C_SIZE__2_OF_4 = "slds-size--2-of-4";
+  static const String C_SIZE__3_OF_4 = "slds-size--3-of-4";
+
+  static const String C_SIZE__1_OF_5 = "slds-size--1-of-5";
+  static const String C_SIZE__2_OF_5 = "slds-size--2-of-5";
+  static const String C_SIZE__3_OF_5 = "slds-size--3-of-5";
+  static const String C_SIZE__4_OF_5 = "slds-size--4-of-5";
+
+  static const String C_SIZE__1_OF_6 = "slds-size--1-of-6";
+  static const String C_SIZE__2_OF_6 = "slds-size--2-of-6";
+  static const String C_SIZE__3_OF_6 = "slds-size--3-of-6";
+  static const String C_SIZE__4_OF_6 = "slds-size--4-of-6";
+  static const String C_SIZE__5_OF_6 = "slds-size--5-of-6";
+
+  static const String C_SIZE__1_OF_12 = "slds-size--1-of-12";
+  static const String C_SIZE__2_OF_12 = "slds-size--2-of-12";
+  static const String C_SIZE__3_OF_12 = "slds-size--3-of-12";
+  static const String C_SIZE__4_OF_12 = "slds-size--4-of-12";
+  static const String C_SIZE__5_OF_12 = "slds-size--5-of-12";
+  static const String C_SIZE__6_OF_12 = "slds-size--6-of-12";
+  static const String C_SIZE__7_OF_12 = "slds-size--7-of-12";
+  static const String C_SIZE__8_OF_12 = "slds-size--8-of-12";
+  static const String C_SIZE__9_OF_12 = "slds-size--9-of-12";
+  static const String C_SIZE__10_OF_12 = "slds-size--10-of-12";
+  static const String C_SIZE__11_OF_12 = "slds-size--11-of-12";
+
+} // LSizing
+
 
 /**
  * Margin
  */
 class LMargin {
+
   static const String C_TOP__XXX_SMALL = "slds-m-top--xxx-small";
   static const String C_TOP__XX_SMALL = "slds-m-top--xx-small";
   static const String C_TOP__X_SMALL = "slds-m-top--x-small";
@@ -60,12 +115,14 @@ class LMargin {
   static const String C_AROUND__LARGE = "slds-m-around--large";
   static const String C_AROUND__X_LARGE = "slds-m-around--x-large";
 
-}
+} // LMargin
+
 
 /**
  * Padding
  */
 class LPadding {
+
   static const String C_TOP__XXX_SMALL = "slds-p-top--xxx-small";
   static const String C_TOP__XX_SMALL = "slds-p-top--xx-small";
   static const String C_TOP__X_SMALL = "slds-p-top--x-small";
@@ -115,46 +172,20 @@ class LPadding {
   static const String C_AROUND__MEDIUM = "slds-p-around--medium";
   static const String C_AROUND__LARGE = "slds-p-around--large";
   static const String C_AROUND__X_LARGE = "slds-p-around--x-large";
-}
+
+} // LPadding
 
 
-/**
- * Lightning Size
- */
-class LSize {
 
-  static const String C_SIZE__1_OF_1 = "slds-size--1-of-1";
+class LTruncate {
 
-  static const String C_SIZE__1_OF_2 = "slds-size--1-of-2";
+  /// slds-truncate - Creates truncated text
+  static const String C_TRUNCATE = "slds-truncate";
+  /// slds-has-flexi-truncate - Allows truncation in nested flexbox containers
+  static const String C_HAS_FLEXI_TRUNCATE = "slds-has-flexi-truncate";
 
-  static const String C_SIZE__1_OF_3 = "slds-size--1-of-3";
-  static const String C_SIZE__2_OF_3 = "slds-size--2-of-3";
 
-  static const String C_SIZE__1_OF_4 = "slds-size--1-of-4";
-  static const String C_SIZE__2_OF_4 = "slds-size--2-of-4";
-  static const String C_SIZE__3_OF_4 = "slds-size--3-of-4";
-
-  static const String C_SIZE__1_OF_5 = "slds-size--1-of-5";
-  static const String C_SIZE__2_OF_5 = "slds-size--2-of-5";
-  static const String C_SIZE__3_OF_5 = "slds-size--3-of-5";
-  static const String C_SIZE__4_OF_5 = "slds-size--4-of-5";
-
-  static const String C_SIZE__1_OF_6 = "slds-size--1-of-6";
-  static const String C_SIZE__2_OF_6 = "slds-size--2-of-6";
-  static const String C_SIZE__3_OF_6 = "slds-size--3-of-6";
-  static const String C_SIZE__4_OF_6 = "slds-size--4-of-6";
-  static const String C_SIZE__5_OF_6 = "slds-size--5-of-6";
-
-  static const String C_SIZE__1_OF_12 = "slds-size--1-of-12";
-  static const String C_SIZE__2_OF_12 = "slds-size--2-of-12";
-  static const String C_SIZE__3_OF_12 = "slds-size--3-of-12";
-  static const String C_SIZE__4_OF_12 = "slds-size--4-of-12";
-  static const String C_SIZE__5_OF_12 = "slds-size--5-of-12";
-  static const String C_SIZE__6_OF_12 = "slds-size--6-of-12";
-  static const String C_SIZE__7_OF_12 = "slds-size--7-of-12";
-  static const String C_SIZE__8_OF_12 = "slds-size--8-of-12";
-  static const String C_SIZE__9_OF_12 = "slds-size--9-of-12";
-  static const String C_SIZE__10_OF_12 = "slds-size--10-of-12";
-  static const String C_SIZE__11_OF_12 = "slds-size--11-of-12";
+  static const String C_COL = "slds-col";
+  static const String C_COL__PADDED = "slds-col--padded";
 
 }

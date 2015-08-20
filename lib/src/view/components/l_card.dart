@@ -166,7 +166,7 @@ class LCardCompactEntry {
     div.append(labelPara);
     //
     if (button != null) {
-      button.classes.addAll([LButton.C_BUTTON__ICON_BORDER_FILLED, LButton.C_BUTTON__ICON_BORDER_SMALL, LGrid.C_SHRINK_NONE]);
+      button.classes.addAll([LButton.C_BUTTON__ICON_BORDER_FILLED, LButton.C_BUTTON__ICON__SMALL, LGrid.C_SHRINK_NONE]);
       button.icon.size = LIcon.C_ICON__SMALL;
       button.icon.classes.addAll([LButton.C_BUTTON__ICON, LButton.C_BUTTON__ICON__HINT, LButton.C_BUTTON__ICON__SMALL]);
       div.append(button.element);
