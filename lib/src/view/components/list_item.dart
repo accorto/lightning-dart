@@ -13,7 +13,7 @@ part of lightning_dart;
  * -- icon / text / icon
  * (see LLookupItem, LDropdownItem)
  */
-class ListItem implements SelectOptionI {
+class ListItem extends SelectOption {
 
   /// A Href No Op
   static const String VOID = "javascript:void(0)";
@@ -23,13 +23,11 @@ class ListItem implements SelectOptionI {
   /// The Link
   final AnchorElement a = new AnchorElement(href: "#");
 
-  /// The Option
-  final DOption option;
-
   /**
    * List Item from Option (referenceId == href)
    */
-  ListItem(DOption this.option, {LIcon leftIcon, LIcon, rightIcon}) {
+  ListItem(DOption option, {LIcon leftIcon, LIcon, rightIcon})
+      : super(option) {
     element.append(a);
     this.id = option.id;
     if (option.hasValue())
@@ -46,7 +44,6 @@ class ListItem implements SelectOptionI {
   }
 
   /// Id
-  String get id => option.id;
   void set id(String newValue) {
     if (newValue != null && newValue.isNotEmpty) {
       option.id = newValue;
@@ -56,14 +53,12 @@ class ListItem implements SelectOptionI {
   }
 
   /// Label
-  String get label => option.label;
   void set label(String newValue) {
     option.label = newValue;
     _rebuild(null);
   }
 
   /// Value
-  String get value => option.value;
   void set value (String newValue) {
     option.value = newValue == null ? "" : newValue;
     a.attributes[Html0.DATA_VALUE] = newValue == null ? "" : newValue;
