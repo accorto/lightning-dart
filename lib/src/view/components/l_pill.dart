@@ -15,67 +15,121 @@ class LPill extends LComponent {
   static const String C_PILL = "slds-pill";
   /// initializes pill label
   static const String C_PILL__LABEL = "slds-pill__label";
+  /// Used in Lookup
+  static const String C_PILL__BARE = "slds-pill--bare";
 
   /// Pill Element
   final SpanElement element = new SpanElement()
     ..classes.add(C_PILL);
 
+  // Content (a|span)
+  Element _content;
+  /// Remove button
+  LButton _remove;
+
   /**
    * Pill
    * [value] optional data-value on elements
    * if [onRemoveClick] is provided a remove button is created
+   * if a [href] is provided, a link is created, otherwise a span
    */
   LPill(String label, String value,
       String href, void onLinkClick(MouseEvent evt),
       LIcon icon, LImage img,
       void onRemoveClick(MouseEvent evt)) {
     // span .pill
-
-    Element content;
     if (href == null) {
       // - span .pill__label
-      content = new SpanElement()
+      _content = new SpanElement()
         ..classes.add(C_PILL__LABEL);
     } else {
       // - a .pill__label
       String hrefValue = href;
       if (hrefValue == null || hrefValue.isEmpty)
         hrefValue = "#";
-      content = new AnchorElement()
+      _content = new AnchorElement()
         ..classes.add(C_PILL__LABEL)
         ..href = hrefValue;
     }
     if (onLinkClick != null) {
-      content.onClick.listen(onLinkClick);
+      _content.onClick.listen(onLinkClick);
     }
-    element.append(content);
-    if (icon != null) {
-      icon.size = LIcon.C_ICON__SMALL;
-      content.append(icon.element);
-      content.appendText(label);
-    } else if (img != null) {
-      img.size = LImage.C_AVATAR__X_SMALL;
-      content.append(img.element);
-      content.appendText(label);
-    } else {
-      content.text = label;
-    }
-    if (value != null) {
-      element.attributes[Html0.DATA_VALUE] = value;
-      content.attributes[Html0.DATA_VALUE] = value;
-    }
+    element.append(_content);
+    _icon = icon;
+    _image = img;
 
     // - button -- Remove
     if (onRemoveClick != null) {
-      LButton remove = new LButton.iconBare("remove",
-        new LIconUtility(LIconUtility.CLOSE),
-        lPillRemove());
-      if (value != null)
-        remove.dataValue = value;
-      remove.onClick.listen(onRemoveClick);
-      element.append(remove.element);
+      _remove = new LButton.iconBare("remove",
+        new LIconUtility(LIconUtility.CLOSE), lPillRemove());
+      _remove.onClick.listen(onRemoveClick);
+      element.append(_remove.element);
     }
+    this.label = label; // rebuilds
+    this.value = value;
   } // LPill
+
+
+  String get label => _label;
+  void set label (String newValue) {
+    _label = newValue;
+    _rebuild();
+  }
+  String _label;
+
+
+  /// get value
+  String get value => element.attributes[Html0.DATA_VALUE];
+  void set value (String newValue) {
+    if (newValue != null) {
+      element.attributes[Html0.DATA_VALUE] = newValue;
+      _content.attributes[Html0.DATA_VALUE] = newValue;
+      if (_remove != null)
+        _remove.dataValue = newValue;
+    }
+  } // setValue
+
+
+  LIcon get icon => _icon;
+  void set icon (LIcon newValue) {
+    _icon = newValue;
+    _rebuild();
+  }
+  LIcon _icon;
+
+  LImage get image => _image;
+  void set img (LImage newValue) {
+    _image = newValue;
+    _rebuild();
+  }
+  LImage _image;
+
+  /// href if link
+  String get href => _content is AnchorElement ? (_content as AnchorElement).href : null;
+  /// update href - ignored if not a link
+  void set href (String newValue) {
+    if (_content is AnchorElement) {
+      String theHref = newValue;
+      if (theHref == null || theHref.isEmpty)
+        theHref = "#";
+      (_content as AnchorElement).href = theHref;
+    }
+  }
+
+  /// rebuild content
+  void _rebuild() {
+    if (_icon != null) {
+      _icon.size = LIcon.C_ICON__SMALL;
+      _content.append(_icon.element);
+      _content.appendText(_label);
+    } else if (_image != null) {
+      _image.size = LImage.C_AVATAR__X_SMALL;
+      _content.append(_image.element);
+      _content.appendText(_label);
+    } else {
+      _content.text = _label;
+    }
+  } // rebuild
 
   /// Base Pill
   LPill.base(String label, String value,
@@ -86,12 +140,12 @@ class LPill extends LComponent {
   LPill.unlink(String label, String value)
       : this(label, value, null, null, null, null, null);
   /// Icon Pill
-  LPill.icon(String label, String value,
+  LPill.iconPill(String label, String value,
       String href, void onLinkClick(MouseEvent evt),
       LIcon icon, void onRemoveClick(MouseEvent evt))
       : this(label, value, href, onLinkClick, icon, null, onRemoveClick);
   /// Image Pill
-  LPill.image(String label, String value,
+  LPill.imagePill(String label, String value,
       String href, void onLinkClick(MouseEvent evt),
       LImage img, void onRemoveClick(MouseEvent evt))
       : this(label, value, href, onLinkClick, null, img, onRemoveClick);

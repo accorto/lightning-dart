@@ -17,11 +17,11 @@ class Pills extends DemoFeature {
         (MouseEvent e){print("Pill Base clicked");},
         (MouseEvent e){print("Pill Base Remove clicked");}));
     div.add(new LPill.unlink("Pill Unlink", "pu"));
-    div.add(new LPill.icon("Pill Icon", "pi", null,
+    div.add(new LPill.iconPill("Pill Icon", "pi", null,
         (MouseEvent e){print("Pill Icon clicked");},
         new LIconStandard(LIconStandard.ACCOUNT),
         (MouseEvent e){print("Pill Icon Renove clicked");}));
-    div.add(new LPill.image("Pill Image", "pic", null,
+    div.add(new LPill.imagePill("Pill Image", "pic", null,
         (MouseEvent e){print("Pill Image clicked");},
         new LImage.srcXSmall("avatar1.jpg", "pic"),
         (MouseEvent e){print("Pill Image Remove clicked");}));
@@ -37,11 +37,11 @@ class Pills extends DemoFeature {
         (MouseEvent e){print("Pill Base clicked");},
         (MouseEvent e){print("Pill Base Remove clicked");}));
     div.add(new LPill.unlink("Pill Unlink", "pu"));
-    div.add(new LPill.icon("Pill Icon", "pi", null,
+    div.add(new LPill.iconPill("Pill Icon", "pi", null,
         (MouseEvent e){print("Pill Icon clicked");},
         new LIconStandard(LIconStandard.ACCOUNT),
         (MouseEvent e){print("Pill Icon Renove clicked");}));
-    div.add(new LPill.image("Pill Image", "pic", null,
+    div.add(new LPill.imagePill("Pill Image", "pic", null,
         (MouseEvent e){print("Pill Image clicked");},
         new LImage.srcXSmall("avatar1.jpg", "pic"),
         (MouseEvent e){print("Pill Image Remove clicked");}));
