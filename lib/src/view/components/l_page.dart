@@ -20,50 +20,37 @@ class LPage {
  */
 class LContainer extends CDiv {
 
-  /// slds-container - Adds horizontal padding to primary content container | Optional
-  static const String C_CONTAINER = "slds-container";
-  /// slds-container--small - Restrict width of .container to not exceed 36rem | Optional
-  static const String C_CONTAINER__SMALL = "slds-container--small";
-  /// slds-container--medium - Restrict width of .container to not exceed 60rem | Optional
-  static const String C_CONTAINER__MEDIUM = "slds-container--medium";
-  /// slds-container--large - Restrict width of .container to not exceed 80rem | Optional
-  static const String C_CONTAINER__LARGE = "slds-container--large";
-  /// slds-container--center - Horizontally positions .container in center of viewport | Optional
-  static const String C_CONTAINER__CENTER = "slds-container--center";
-  /// slds-container--left - Horizontally positions .container to the left of viewport | Optional
-  static const String C_CONTAINER__LEFT = "slds-container--left";
-  /// slds-container--right - Horizontally positions .container to the right of viewport | Optional
-  static const String C_CONTAINER__RIGHT = "slds-container--right";
-
-  /// Container Sizes
-  static final List<String> CONTAINER_SIZES = [C_CONTAINER__LARGE, C_CONTAINER__MEDIUM, C_CONTAINER__SMALL];
-  /// Container HAlign
-  static final List<String> CONTAINER_HALIGN = [C_CONTAINER__LEFT, C_CONTAINER__CENTER, C_CONTAINER__RIGHT];
 
   /**
-   * Main Page Entry Point
+   * Main Page Entry Point (returns the last created container)
    */
   static LContainer get container {
     if (_container == null)
-      init();
+      create();
     return _container;
   }
   static LContainer _container;
 
   /**
-   * Initialize Page
+   * Create Page
    * [id] id of the application
    * [containerId] element id of the container, if not found looks for slds-container, if not found adds section to the body.
    * [clearContainer] clears all content from container
    */
-  static LContainer init({String id: "wrap",
+  static LContainer create({String id: "wrap",
       bool clearContainer: true,
-      String containerSize : C_CONTAINER__MEDIUM,
-      String containerHAlign: C_CONTAINER__CENTER}) {
+      String containerSize,
+      String containerHAlign}) {
     // Top Level Main
     Element e = querySelector("#${id}");
     if (e == null) {
-      e = querySelector(".${C_CONTAINER}");
+      e = querySelector(".${LGrid.C_CONTAINER__SMALL}");
+      if (e == null) {
+        e = querySelector(".${LGrid.C_CONTAINER__MEDIUM}");
+        if (e == null) {
+          e = querySelector(".${LGrid.C_CONTAINER__LARGE}");
+        }
+      }
     }
     if (e == null) {
       Element body = querySelector("body");
@@ -77,8 +64,10 @@ class LContainer extends CDiv {
     if (clearContainer) {
       _container.clear();
     }
-    _container.size = containerSize;
-    _container.hAlign = containerHAlign;
+    if (containerSize != null)
+      _container.size = containerSize;
+    if (containerHAlign != null)
+      _container.hAlign = containerHAlign;
     return _container;
   } // init
 
@@ -93,8 +82,7 @@ class LContainer extends CDiv {
    * Container with [id]
    */
   LContainer(Element element, String id) : super._(element) {
-    element.id = id;
-    element.classes.add(C_CONTAINER);
+    element.id = id == null || id.isEmpty ? LComponent.createId("c", null) : id;
   }
   /// Create new div Container
   LContainer.div(String id) : this(new DivElement(), id);
@@ -113,14 +101,14 @@ class LContainer extends CDiv {
    * Set Container [size] LGrid.C_CONTAINER__SMALL/MEDIUM/LARGE
    */
   void set size(String size) {
-    element.classes.removeAll(CONTAINER_SIZES);
+    element.classes.removeAll(LGrid.CONTAINER_SIZES);
     if (size != null && size.isNotEmpty)
       element.classes.add(size);
   }
   /// first size found or null
   String get size {
     for (String cls in element.classes) {
-      if (CONTAINER_SIZES.contains(cls))
+      if (LGrid.CONTAINER_SIZES.contains(cls))
         return cls;
     }
     return null;
@@ -130,21 +118,21 @@ class LContainer extends CDiv {
    * Set Container horizontal [alignment] LGrid.C_CONTAINER__CENTER/RIGHT/LEFT
    */
   void set hAlign(String alignment) {
-    element.classes.removeAll(CONTAINER_HALIGN);
+    element.classes.removeAll(LGrid.CONTAINER_HALIGN);
     if (alignment != null && alignment.isNotEmpty)
-      element.classes.add(size);
+      element.classes.add(alignment);
   }
   /// first alignment or null
   String get hAlign {
     for (String cls in element.classes) {
-      if (CONTAINER_HALIGN.contains(cls))
+      if (LGrid.CONTAINER_HALIGN.contains(cls))
         return cls;
     }
     return null;
   }
 
   /// add header
-  LHeader addHeader(String text, {String size: LText.C_TEXT_HEADING__SMALL}) {
+  LHeader addHeader(String text, {String size: LText.C_TEXT_HEADING__LARGE}) {
     header = new LHeader()
       ..text = text
       ..size = size;
@@ -154,9 +142,10 @@ class LContainer extends CDiv {
   }
 
   /// add footer
-  LFooter addFooter(String text) {
+  LFooter addFooter(String text, {String size: LText.C_TEXT_HEADING__SMALL}) {
     footer = new LFooter()
-      ..text = text;
+      ..text = text
+      ..size = size;
     //
     add(footer);
     return footer;
@@ -178,8 +167,9 @@ class LHeader extends LComponent {
     ..classes.add(LText.C_TEXT_HEADING__LABEL);
 
   /// Header
-  LHeader() {
+  LHeader({String margin: LMargin.C_TOP__MEDIUM}) {
     element.append(h1);
+    element.classes.add(margin);
   }
 
   /// Text
@@ -219,8 +209,9 @@ class LFooter extends LComponent {
   final HeadingElement h2 = new HeadingElement.h2();
 
   /// Page Footer
-  LFooter() {
+  LFooter({String margin: LMargin.C_VERTICAL__MEDIUM}) {
     element.append(h2);
+    element.classes.add(margin);
   }
 
   /// Text
@@ -229,6 +220,20 @@ class LFooter extends LComponent {
   }
   /// Text
   String get text => h2.text;
+
+  /// Size
+  void set size (String newValue) {
+    h2.classes.removeAll(LText.HEADING_SIZES);
+    if (newValue != null && newValue.isNotEmpty)
+      h2.classes.add(newValue);
+  }
+  String get size {
+    for (String cls in element.classes) {
+      if (LText.HEADING_SIZES.contains(cls))
+        return cls;
+    }
+    return null;
+  }
 
   /// Add Footer Class
   void addFooterClass(String footerClass) {

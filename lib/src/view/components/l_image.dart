@@ -9,7 +9,7 @@ part of lightning_dart;
 /**
  * Image Avatars
  */
-class LImage {
+class LImage extends LComponent {
 
   /// slds-avatar - Defines an image as an avatar | Required
   static const String C_AVATAR = "slds-avatar";
@@ -26,9 +26,15 @@ class LImage {
   /// slds-avatar--large - Creates a 5 rem by 5 rem icon
   static const String C_AVATAR__LARGE = "slds-avatar--large";
 
-
   /// Image Sizes
   static final List<String> SIZES = [C_AVATAR__X_SMALL, C_AVATAR__SMALL, C_AVATAR__MEDIUM, C_AVATAR__LARGE];
+
+  /// prepend assets [src]
+  static String assetsSrc(String src) {
+    if (src == null || src.contains("/"))
+      return src;
+    return "packages/lightning_dart/assets/images/" + src;
+  }
 
   /// Image Element
   final SpanElement element = new SpanElement()
@@ -46,13 +52,13 @@ class LImage {
   }
 
   LImage.srcXSmall(String src, String alt, {bool circle:true})
-    : this (new ImageElement(src:src)..alt=alt, C_AVATAR__X_SMALL, circle);
+    : this (new ImageElement(src:assetsSrc(src))..alt=alt, C_AVATAR__X_SMALL, circle);
   LImage.srcSmall(String src, String alt, {bool circle:true})
-    : this (new ImageElement(src:src)..alt=alt, C_AVATAR__SMALL, circle);
+    : this (new ImageElement(src:assetsSrc(src))..alt=alt, C_AVATAR__SMALL, circle);
   LImage.srcMedium(String src, String alt, {bool circle:true})
-    : this (new ImageElement(src:src)..alt=alt, C_AVATAR__MEDIUM, circle);
+    : this (new ImageElement(src:assetsSrc(src))..alt=alt, C_AVATAR__MEDIUM, circle);
   LImage.srcLarge(String src, String alt, {bool circle:true})
-    : this (new ImageElement(src:src)..alt=alt, C_AVATAR__LARGE, circle);
+    : this (new ImageElement(src:assetsSrc(src))..alt=alt, C_AVATAR__LARGE, circle);
 
   LImage.imgXSmall(ImageElement img, {bool circle:true})
     : this (img, C_AVATAR__X_SMALL, circle);

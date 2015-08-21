@@ -9,7 +9,7 @@ part of lightning_dart;
 /**
  * Table
  */
-class LTable {
+class LTable extends LComponent {
 
   /// slds-table - Initializes data table | Required
   static const String C_TABLE = "slds-table";
@@ -49,7 +49,6 @@ class LTable {
   final List<LTableRow> _tbodyRows = new List<LTableRow>();
   final List<LTableRow> _tfootRows = new List<LTableRow>();
 
-  final String idPrefix;
   final bool rowSelect;
 
   /// Column Name-Label Map - required for responsive
@@ -60,7 +59,8 @@ class LTable {
   /**
    * Table
    */
-  LTable(String this.idPrefix, bool this.rowSelect) {
+  LTable(String idPrefix, bool this.rowSelect) {
+    element.id = idPrefix == null || idPrefix.isEmpty ? LComponent.createId("table", null) : idPrefix;
   }
 
   /// scrollable-x wrapper with table
@@ -120,7 +120,7 @@ class LTable {
   LTableRow addHeadRow() {
     if (_thead == null)
       _thead = element.createTHead();
-    LTableHeaderRow row = new LTableRow(_thead.addRow(), _theadRows.length, idPrefix, null,
+    LTableHeaderRow row = new LTableRow(_thead.addRow(), _theadRows.length, id, null,
         LText.C_TEXT_HEADING__LABEL, rowSelect, nameList, nameLabelMap, LTableRow.TYPE_HEAD);
     if (rowSelect && _theadRows.isEmpty) {
       row.selectCb.onClick.listen((MouseEvent evt) {
@@ -135,7 +135,7 @@ class LTable {
   LTableRow addBodyRow({String rowValue}) {
     if (_tbody == null)
       _tbody = element.createTBody();
-    LTableRow row = new LTableRow(_thead.addRow(), _tbodyRows.length, idPrefix, rowValue,
+    LTableRow row = new LTableRow(_thead.addRow(), _tbodyRows.length, id, rowValue,
         LButton.C_HINT_PARENT, rowSelect, nameList, nameLabelMap, LTableRow.TYPE_BODY);
     _tbodyRows.add(row);
     return row;
@@ -145,7 +145,7 @@ class LTable {
   LTableRow addFootRow() {
     if (_tfoot == null)
       _tfoot = element.createTFoot();
-    LTableRow row = new LTableRow(_thead.addRow(), _tfootRows.length, idPrefix, null,
+    LTableRow row = new LTableRow(_thead.addRow(), _tfootRows.length, id, null,
         LButton.C_HINT_PARENT, rowSelect, nameList, nameLabelMap, LTableRow.TYPE_FOOT);
     _tbodyRows.add(row);
     return row;

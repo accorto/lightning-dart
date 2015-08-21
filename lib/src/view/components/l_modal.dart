@@ -51,7 +51,7 @@ class LModal extends LComponent {
    * Modal Dialog
    */
   LModal(String idPrefix) {
-    element.id = idPrefix;
+    element.id = idPrefix == null || idPrefix.isEmpty ? LComponent.createId("modal", null) : idPrefix;
     element.append(dialog);
     dialog.append(container);
     container.append(header);

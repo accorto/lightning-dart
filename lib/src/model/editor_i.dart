@@ -4,7 +4,7 @@
  * License options+support:  https://www.lightningdart.com
  */
 
-part of biz_base_dart;
+part of biz_fabrik_base;
 
 /**
  * Callback of [editor] with [newValue] - might be [temporary] (keyUp)
@@ -42,13 +42,13 @@ abstract class EditorI {
   static const String TYPE_DECIMAL = "decimal";
   /// Select Editor Type
   static const String TYPE_SELECT = "select";
-  /// Select Auto Editor Type
+  /// Select Auto Editor Type (ext)
   static const String TYPE_SELECTAUTO = "selectauto";
-  /// Select List Editor Type
+  /// Select List Editor Type (ext)
   static const String TYPE_SELECTCHOICE = "selectchoice";
   /// Text Area
   static const String TYPE_TEXTAREA = "textarea";
-  /// Select timezone Editor Type
+  /// Select timezone Editor Type (ext)
   static const String TYPE_TIMEZONE = "timezone";
   /// Input type button
   static const String TYPE_TEL = "tel";
@@ -119,7 +119,6 @@ abstract class EditorI {
   String get name;
   /// Input Type or select, textarea
   String get type;
-
   /**
    * String Value
    */
@@ -272,8 +271,8 @@ abstract class EditorI {
   String get title;
   void set title (String newValue);
 
-  bool get displayed;
-  void set displayed (bool newValue);
+  bool get show;
+  void set show (bool newValue);
 
   /**
    * Set Column (info for specific editors)

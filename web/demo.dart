@@ -9,6 +9,7 @@ library lightning_dart.demo;
 import 'dart:html';
 
 import "package:lightning_dart/lightning_dart.dart";
+import "package:logging/logging.dart";
 
 part 'demo/demo_feature.dart';
 part 'demo/activity_timeline.dart';
@@ -20,8 +21,11 @@ part 'demo/button_groups.dart';
 part 'demo/dropdowns.dart';
 
 part 'demo/icons.dart';
-
+part 'demo/images.dart';
 part 'demo/lookups.dart';
+
+part 'demo/picklists.dart';
+part 'demo/pills.dart';
 
 part 'demo/tabs.dart';
 
@@ -32,7 +36,10 @@ void main() {
 
   LightningDart.init() // client env
   .then((_){
-    LContainer page = LContainer.init(id: "demo", containerSize: LContainer.C_CONTAINER__LARGE)
+    //
+    LContainer page = LContainer.create(id: "demo",
+        containerSize: LGrid.C_CONTAINER__LARGE,
+        containerHAlign: LGrid.C_CONTAINER__CENTER)
       ..addHeader("Lightning Dart Tutorial (alpha)");
 
     CDiv main = page.addDiv()
@@ -41,7 +48,8 @@ void main() {
 
     DivElement tocDiv = new DivElement();
     main.element.append(tocDiv);
-    UListElement toc = new UListElement();
+    UListElement toc = new UListElement()
+      ..classes.addAll([LMargin.C_TOP__MEDIUM, LList.C_LIST__VERTICAL, LList.C_HAS_BLOCK_LINKS]);
     tocDiv.append(toc);
 
     /* Individual parts */
@@ -50,17 +58,28 @@ void main() {
     page.add(new Breadcrumbs()..toc(toc));
     page.add(new Buttons()..toc(toc));
     page.add(new ButtonGroups()..toc(toc));
-
+    // Card
+    // data tables
+    // datepickers
     page.add(new Dropdowns()..toc(toc));
-
-    page.add(new Lookups()..toc(toc));
-
-
+    // forms
     page.add(new Icons()..toc(toc));
-
-
+    page.add(new Images()..toc(toc));
+    page.add(new Lookups()..toc(toc));
+    // media
+    // modal
+    // notification
+    // page headers
+    page.add(new Picklists()..toc(toc));
+    page.add(new Pills()..toc(toc));
+    // popover
+    // spinner
     page.add(new Tabs()..toc(toc));
+    // tiles
+    // tooltips
+    // trees
 
+    page.addFooter("Lightning Dart");
   });
 
 

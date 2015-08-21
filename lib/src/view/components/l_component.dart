@@ -47,13 +47,15 @@ abstract class LComponent {
   CssClassSet get classes => element.classes;
 
   /// called by sub class (does not change Id of element)
-  String createId(String idPrefix, String name, {String autoPrefixId: "lc"}) {
+  static String createId(String idPrefix, String name, {String autoPrefixId: "lc"}) {
     String theId = idPrefix;
     if (theId == null || theId.isEmpty) {
       theId = "${autoPrefixId}-${_autoId++}";
     }
     if (name != null && name.isNotEmpty)
       theId = "${theId}-${name}";
+    else if (idPrefix != null && idPrefix.isNotEmpty)
+      theId = "${theId}-${_autoId++}";
     return theId;
   }
   /// called by sub class based on current id of element
@@ -124,7 +126,7 @@ class CDiv extends LComponent {
     if (element.id == null || element.id.isEmpty) {
       element.id = "lc-${LComponent._autoId++}";
     }
-    h.id = createId(element.id, "heading");
+    h.id = LComponent.createId(element.id, "heading");
     element.setAttribute(Html0.ARIA_LABELLEDBY, h.id);
 
     // Classes

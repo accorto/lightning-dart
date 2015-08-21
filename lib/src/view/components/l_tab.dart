@@ -41,18 +41,16 @@ class LTab extends LComponent {
   final UListElement _tablist = new UListElement()
     ..attributes[Html0.ROLE] = Html0.ROLE_TABLIST;
 
-  final String idPrefix;
   final bool scoped;
 
   /**
    * Tab
    */
-  LTab({String this.idPrefix, bool this.scoped: false}) {
+  LTab({String idPrefix, bool this.scoped: false}) {
     element.classes.add(scoped ? C_TABS__SCOPED : C_TABS__DEFAULT);
     _tablist.classes.add(scoped ? C_TABS__SCOPED__NAV : C_TABS__DEFAULT__NAV);
     element.append(_tablist);
-    if (idPrefix != null && idPrefix.isNotEmpty)
-      element.id = idPrefix;
+    element.id = idPrefix == null || idPrefix.isEmpty ? LComponent.createId("tab", null) : idPrefix;
   } // LTab
 
   /**
@@ -87,11 +85,10 @@ class LTab extends LComponent {
       entry.attributes[Html0.DATA_NAME] = name;
       a.attributes[Html0.DATA_NAME] = name;
       theContent.attributes[Html0.DATA_NAME] = name;
-      if (idPrefix != null && idPrefix.isNotEmpty) {
-        a.id = "${idPrefix}-${name}";
-        theContent.id = "${idPrefix}-${name}-content";
-      }
     }
+    a.id = LComponent.createId(id, name);
+    theContent.id = a.id + "-content";
+
     selectTabByPos(currentPos);
     return theContent;
   } // addTab

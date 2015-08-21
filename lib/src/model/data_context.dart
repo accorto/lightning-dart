@@ -4,7 +4,7 @@
  * License options+support:  https://www.lightningdart.com
  */
 
-part of biz_base_dart;
+part of biz_fabrik_base;
 
 /**
  * Context

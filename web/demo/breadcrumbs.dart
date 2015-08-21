@@ -8,7 +8,6 @@ part of lightning_dart.demo;
 
 class Breadcrumbs extends DemoFeature {
 
-
   Breadcrumbs() : super ("breadcrumbs", "Breadcrumbs", "Hierarchical Links, label converted to upper case");
 
   LComponent get content {

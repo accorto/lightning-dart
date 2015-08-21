@@ -12,13 +12,21 @@ class Lookups extends DemoFeature {
 
 
   LComponent get content {
-    CDiv div = new CDiv();
+    LForm form = new LForm.stacked();
 
     LLookup l1 = new LLookup.base("l1");
-    l1.listItems = generateListItems(10);
-    div.add(l1);
+    l1.listItems = generateListItems(10, iconLeft: true);
+    form.add(l1.formElement);
 
-    return div;
+    LLookup l2 = new LLookup.single("l2");
+    l2.listItems = generateListItems(10, iconLeft: true);
+    form.add(l2.formElement);
+
+    LLookup l3 = new LLookup.multi("l3");
+    l3.listItems = generateListItems(10, iconLeft: true);
+    form.add(l3.formElement);
+
+    return form;
   }
 
   String get source {

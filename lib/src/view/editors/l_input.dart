@@ -44,9 +44,11 @@ class LInput extends LEditorStd {
   /// Editor Id
   String get id => input.id;
   void set id (String newValue) {
-    input.id = newValue;
-    if (_labelElement != null)
-      _labelElement.htmlFor = newValue;
+    if (newValue != null && newValue.isNotEmpty) {
+      input.id = newValue;
+      if (_labelElement != null)
+        _labelElement.htmlFor = newValue;
+    }
   }
   void updateId(String idPrefix) {
     id = createId(idPrefix, name);

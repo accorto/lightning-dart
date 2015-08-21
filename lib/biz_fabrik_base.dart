@@ -4,7 +4,11 @@
  * License options+support:  https://www.lightningdart.com
  */
 
-library biz_base_dart;
+library biz_fabrik_base;
+
+/**
+ * BizFabrik Base Classes
+ */
 
 import 'dart:async';
 import 'dart:html';

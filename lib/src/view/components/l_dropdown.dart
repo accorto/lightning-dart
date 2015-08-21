@@ -150,7 +150,7 @@ class LDropdown extends LComponent {
       ..type = "search"
       ..placeholder = placeholder
       ..classes.add(LEditor.C_INPUT)
-      ..id = idPrefix + "-search";
+      ..id = LComponent.createId(idPrefix, "-search");
     LabelElement labelEle = new LabelElement()
       ..classes.add(LText.C_ASSISTIVE_TEXT)
       ..htmlFor = input.id
@@ -256,6 +256,8 @@ class LDropdown extends LComponent {
  */
 class LDropdownElement implements LSelectI {
 
+  static final Logger _log = new Logger("LDropdownElement");
+
   /// Dropdown Element
   final DivElement element;
   /// Dropdown Items
@@ -269,10 +271,15 @@ class LDropdownElement implements LSelectI {
   /// Callback on Change
   EditorChange editorChange;
 
+  /// Dropdown name
+  final String name;
+
   /// Dropdown Element
-  LDropdownElement(DivElement this.element) {
+  LDropdownElement(DivElement this.element, {String this.name: "dd", String idPrefix}) {
     element.append(_dropdownList);
+    element.id = LComponent.createId(idPrefix, name);
   }
+
 
   /// Nub on top
   bool get nubbinTop => element.classes.contains(LDropdown.C_DROPDOWN__NUBBIN_TOP);
@@ -323,6 +330,14 @@ class LDropdownElement implements LSelectI {
     }
   }
 
+  bool get show => !element.classes.contains(LVisibility.C_HIDE);
+  void set show (bool newValue) {
+    if (newValue)
+      element.classes.remove(LVisibility.C_HIDE);
+    else
+      element.classes.add(LVisibility.C_HIDE);
+  }
+
 
   bool get required => false;
   void set required (bool newValue) {
@@ -335,7 +350,7 @@ class LDropdownElement implements LSelectI {
   List<OptionElement> get options {
     List<OptionElement> list = new List<OptionElement>();
     for (LDropdownItem item in _items) {
-      list.add(item.toOption());
+      list.add(item.asOption());
     }
     return list;
   }
@@ -351,21 +366,30 @@ class LDropdownElement implements LSelectI {
     addItem(new LDropdownItem.fromOption(oe));
   }
 
+  /// Add Option List
+  void set selectOptions(List<SelectOption> list) {
+    for (SelectOption so in list)
+      addSelectOption(so);
+  }
   /// Add Option
   void addSelectOption(SelectOption op) {
     LDropdownItem item = new LDropdownItem.fromSelectOption(op);
     addItem(item);
   }
+
   /// Add Option List
-  void addSelectOptions(List<SelectOption> list) {
-    for (SelectOption so in list)
-      addSelectOption(so);
-  }
-  /// Add Option List
-  void addDOptions(List<DOption> options) {
+  void set dOptions(List<DOption> options) {
     for (DOption op in options) {
       SelectOption so = new SelectOption(op);
       addSelectOption(so);
+    }
+  }
+  /// Set List Items
+  void set listItems (List<ListItem> listItems) {
+    clear();
+    for (ListItem li in listItems) {
+      LDropdownItem item = new LDropdownItem.from(li);
+      addItem(item);
     }
   }
 
@@ -408,6 +432,7 @@ class LDropdownElement implements LSelectI {
         item.selected = false;
       }
     }
+    _log.fine("${name} = ${selectedItem == null ? "null" : selectedItem.value}");
     if (editorChange != null) {
       if (selectedItem == null)
         editorChange("", null, false, null);
@@ -453,13 +478,18 @@ class LDropdownElement implements LSelectI {
  */
 class LDropdownItem extends ListItem {
 
+  /// Dropdown
+  static LDropdownItem create({String value, String label, LIcon icon}) {
+    DOption option = OptionUtil.option(value, label);
+    return new LDropdownItem(option, rightIcon:icon);
+  }
+
+
   /**
-   * Dropdown item
+   * Dropdown item [leftIcon] is used for selection
    */
-  LDropdownItem({String id, String label, String value, String href,
-        LIcon leftIcon, LIcon icon, bool selected, bool disabled})
-    : super(id:id, label:label, value:value, href:href,
-          leftIcon:leftIcon, rightIcon:icon, selected:selected, disabled:disabled) {
+  LDropdownItem(DOption option, {LIcon leftIcon, LIcon rightIcon})
+    : super(option, leftIcon:leftIcon, rightIcon:rightIcon) {
     element
       ..classes.add(LDropdown.C_DROPDOWN__ITEM)
       ..tabIndex = -1
@@ -471,21 +501,19 @@ class LDropdownItem extends ListItem {
 
   /// Dropdown Item from List
   LDropdownItem.from(ListItem item)
-      : this(id:item.id, label:item.label, value:item.value, href:item.href,
-          leftIcon:item.leftIcon, icon:item.rightIcon, selected:item.selected, disabled:item.disabled);
+      : this(item.option, leftIcon:item.leftIcon, rightIcon:item.rightIcon);
 
   /// create drop-down from button - with left icon!
-  LDropdownItem.fromButton(LButton button) : this(id:button.id,
-    label:button.label,
+  LDropdownItem.fromButton(LButton button) : this(button.asDOption(),
     leftIcon:button.icon == null ? null : button.icon.copy());
 
   /// Lookup Item from Option
   LDropdownItem.fromOption(OptionElement option)
-      : this(id:option.id, label:option.label, value:option.value, selected:option.selected, disabled:option.disabled);
+      : this(OptionUtil.optionFromElement(option));
 
   /// Lookup Item from SelectOption
   LDropdownItem.fromSelectOption(SelectOption option)
-      : this(id:option.id, label:option.label, value:option.value, selected:option.selected, disabled:option.disabled);
+      : this(option.option);
 
   /// On Click
   ElementStream<MouseEvent> get onClick => a.onClick;
@@ -503,19 +531,17 @@ class LDropdownItem extends ListItem {
    * Create Link
    */
   @override
-  void _rebuild() {
-    if (_selected != null) {
-      if (_selected) {
-        if (_selectedIcon == null) {
-          _selectedIcon = new LIconStandard(LIconStandard.TASK2, size: LIcon.C_ICON__SMALL)
-            ..classes.add(LDropdown.C_ICON__LEFT);
-        }
-        _leftIcon = _selectedIcon;
-      } else {
-        _leftIcon = null; // overwrite in selection mode
+  void _rebuild(RegExp exp) {
+    if (option.hasIsSelected() && option.isSelected) {
+      if (_selectedIcon == null) {
+        _selectedIcon = new LIconStandard(LIconStandard.TASK2, size: LIcon.C_ICON__SMALL)
+          ..classes.add(LDropdown.C_ICON__LEFT);
       }
+      _leftIcon = _selectedIcon;
+    } else {
+       _leftIcon = null; // overwrite in selection mode
     }
-    super._rebuild();
+    super._rebuild(exp);
   }
   LIcon _selectedIcon;
 

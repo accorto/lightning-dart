@@ -8,9 +8,7 @@ part of lightning_dart.demo;
 
 class ButtonGroups extends DemoFeature {
 
-
   ButtonGroups() : super("button-groups", "Button Groups", "");
-
 
   LComponent get content {
     CDiv div = new CDiv();

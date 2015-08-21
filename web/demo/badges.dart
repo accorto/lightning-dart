@@ -8,7 +8,6 @@ part of lightning_dart.demo;
 
 class Badges extends DemoFeature {
 
-
   Badges() : super("badges", "Badges", "Labels (converted to upper case)");
 
   LComponent get content {

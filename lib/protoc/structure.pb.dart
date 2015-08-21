@@ -453,7 +453,7 @@ class DOption extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('DOption')
     ..a(1, 'id', GeneratedMessage.OS)
     ..a(2, 'value', GeneratedMessage.QS)
-    ..a(3, 'display', GeneratedMessage.QS)
+    ..a(3, 'label', GeneratedMessage.QS)
     ..a(4, 'description', GeneratedMessage.OS)
     ..a(5, 'iconImage', GeneratedMessage.OS)
     ..a(6, 'isSelected', GeneratedMessage.OB)
@@ -486,10 +486,10 @@ class DOption extends GeneratedMessage {
   bool hasValue() => hasField(2);
   void clearValue() => clearField(2);
 
-  String get display => getField(3);
-  void set display(String v) { setField(3, v); }
-  bool hasDisplay() => hasField(3);
-  void clearDisplay() => clearField(3);
+  String get label => getField(3);
+  void set label(String v) { setField(3, v); }
+  bool hasLabel() => hasField(3);
+  void clearLabel() => clearField(3);
 
   String get description => getField(4);
   void set description(String v) { setField(4, v); }
@@ -780,7 +780,7 @@ class DTrxStatus extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('DTrxStatus')
     ..a(1, 'id', GeneratedMessage.OS)
     ..a(2, 'value', GeneratedMessage.QS)
-    ..a(3, 'display', GeneratedMessage.QS)
+    ..a(3, 'label', GeneratedMessage.QS)
     ..a(4, 'seqNo', GeneratedMessage.O3)
     ..a(5, 'isInitialState', GeneratedMessage.OB)
     ..a(6, 'isFinalState', GeneratedMessage.OB)
@@ -808,10 +808,10 @@ class DTrxStatus extends GeneratedMessage {
   bool hasValue() => hasField(2);
   void clearValue() => clearField(2);
 
-  String get display => getField(3);
-  void set display(String v) { setField(3, v); }
-  bool hasDisplay() => hasField(3);
-  void clearDisplay() => clearField(3);
+  String get label => getField(3);
+  void set label(String v) { setField(3, v); }
+  bool hasLabel() => hasField(3);
+  void clearLabel() => clearField(3);
 
   int get seqNo => getField(4);
   void set seqNo(int v) { setField(4, v); }
@@ -847,7 +847,7 @@ class DTrxAction extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('DTrxAction')
     ..a(1, 'id', GeneratedMessage.OS)
     ..a(2, 'value', GeneratedMessage.QS)
-    ..a(3, 'display', GeneratedMessage.QS)
+    ..a(3, 'label', GeneratedMessage.QS)
     ..a(4, 'seqNo', GeneratedMessage.O3)
     ..a(5, 'statusId', GeneratedMessage.OS)
   ;
@@ -870,10 +870,10 @@ class DTrxAction extends GeneratedMessage {
   bool hasValue() => hasField(2);
   void clearValue() => clearField(2);
 
-  String get display => getField(3);
-  void set display(String v) { setField(3, v); }
-  bool hasDisplay() => hasField(3);
-  void clearDisplay() => clearField(3);
+  String get label => getField(3);
+  void set label(String v) { setField(3, v); }
+  bool hasLabel() => hasField(3);
+  void clearLabel() => clearField(3);
 
   int get seqNo => getField(4);
   void set seqNo(int v) { setField(4, v); }

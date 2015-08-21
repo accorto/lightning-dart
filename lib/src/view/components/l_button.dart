@@ -11,8 +11,6 @@ part of lightning_dart;
  */
 class LButton extends LComponent {
 
-
-
   /// slds-button - Initializes a 2.25 rem (36px) height button | Required
   static const String C_BUTTON = "slds-button";
   /// slds-button--small - Creates a smaller 2 rem (32px) button |
@@ -70,8 +68,9 @@ class LButton extends LComponent {
   static const String C_CLOSE = "close";
 
 
-  /// The Button
+  /// The Button / Link
   final Element element;
+  /// Label
   Element _labelElement;
   /// The Label
   String _label;
@@ -103,12 +102,7 @@ class LButton extends LComponent {
         (element as AnchorElement).href = href;
       }
     }
-    if (idPrefix != null) {
-      if (idPrefix.isEmpty)
-        element.id = name;
-      else
-        element.id = "${idPrefix}-${name}";
-    }
+    element.id = LComponent.createId(idPrefix, name);
     // classes
     if (buttonClasses != null) {
       element.classes.addAll(buttonClasses);
@@ -269,6 +263,12 @@ class LButton extends LComponent {
     _rebuild();
   }
 
+  /// title
+  String get title => element.title;
+  /// title
+  void set title (String newValue) {
+    element.title = newValue;
+  }
 
   /// Button Size
   bool get small => element.classes.contains(C_BUTTON__SMALL);
@@ -363,6 +363,35 @@ class LButton extends LComponent {
   /// Button Click
   ElementStream<MouseEvent> get onClick => element.onClick;
 
+
+  /// As List Item
+  DOption asDOption() {
+    DOption option = new DOption();
+    String theId = id;
+    if (theId != null && theId.isNotEmpty)
+      option.id = theId;
+    String theName = name;
+    if (theName != null && theName.isNotEmpty)
+      option.value = name;
+    String theLabel = label;
+    if (theLabel != null && theLabel.isNotEmpty)
+      option.label = theLabel;
+    if (disabled)
+      option.isActive = false;
+    return option;
+  } // asListItem
+
+  /// As List Item
+  ListItem asListItem({bool iconLeft:true}) {
+    DOption option = asDOption();
+    if (icon != null) {
+      if (iconLeft)
+        return new ListItem(option, leftIcon: icon.copy());
+      return new ListItem(option, rightIcon: icon.copy());
+    }
+    return new ListItem(option);
+  } // asListItem
+
 } // LButton
 
 
@@ -390,12 +419,8 @@ class LButtonStateful extends LComponent {
       String textSelectedFocus: "Unfollow",
       void onButtonClick(MouseEvent evt)}) {
     element.name = name;
-    if (idPrefix != null) {
-      if (idPrefix.isEmpty)
-        element.id = name;
-      else
-        element.id = "${idPrefix}-${name}";
-    }
+    element.id = LComponent.createId(idPrefix, name);
+
     element.classes.add(LButton.C_BUTTON__NEUTRAL);
     element.classes.add(LButton.C_NOT_SELECTED);
     element.setAttribute(Html0.ARIA_LIVE, Html0.ARIA_LIVE_ASSERTIVE);
@@ -476,6 +501,9 @@ class LButtonStatefulState {
  */
 class LButtonIconStateful extends LComponent {
 
+  static final Logger _log = new Logger("LButtonIconStateful");
+
+
   final ButtonElement element = new ButtonElement()
     ..classes.addAll([LButton.C_BUTTON, LButton.C_BUTTON__ICON_BORDER]);
 
@@ -497,7 +525,7 @@ class LButtonIconStateful extends LComponent {
     //
     element.onClick.listen((MouseEvent evt){
       bool newState = toggle();
-    //  _log.fine("${name} selected=${newState}");
+      _log.fine("${name} selected=${newState}");
       if (onButtonClick != null)
         onButtonClick(evt);
     });

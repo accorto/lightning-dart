@@ -15,10 +15,14 @@ Dart is a Google programming language compiling into Javascript ("Dart - the bet
 
 A simple usage example:
 
-    import 'package:lightning_dart/lightning_dart.dart';
+    import "package:lightning_dart/lightning_dart.dart";
 
     main() {
-      var awesome = new Awesome();
+        LightningDart.init() // client env
+        .then((_) {
+            LContainer page = LContainer.create(); // find/add to body
+            ...
+        }
     }
     
 See [documentation](wiki) 

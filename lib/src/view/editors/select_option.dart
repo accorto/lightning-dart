@@ -11,19 +11,6 @@ part of lightning_dart;
  */
 class SelectOption implements SelectOptionI {
 
-  /// create Option
-  static SelectOption createOption(String value, String label) {
-    return new SelectOption(createDOption(value, label));
-  }
-
-  /// create DOption
-  static DOption createDOption(String value, String label) {
-    DOption option = new DOption()
-      ..value = value
-      ..display = label;
-    return option;
-  }
-
   /// The Option
   final DOption option;
 
@@ -38,7 +25,7 @@ class SelectOption implements SelectOptionI {
 
   String get id => option.id;
   String get value => option.value;
-  String get label => option.display;
+  String get label => option.label;
   LIcon get icon => null;
 
   /// create Option Element
@@ -46,7 +33,7 @@ class SelectOption implements SelectOptionI {
     if (oe == null) {
       oe = new OptionElement();
       oe.value = option.value;
-      oe.text = option.display;
+      oe.text = option.label;
       if (option.isSelected)
         oe.selected = true;
       if (!option.isActive)
@@ -60,7 +47,7 @@ class SelectOption implements SelectOptionI {
     if (li == null) {
       li = new LIElement();
       li.attributes[Html0.DATA_VALUE] = option.value;
-      li.text = option.display;
+      li.text = option.label;
       // selected/disabled
     }
     return li;

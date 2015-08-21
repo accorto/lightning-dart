@@ -24,24 +24,34 @@ abstract class DemoFeature extends LComponent {
    */
   DemoFeature(String this.id, String this.label, String description) {
     element.id = id;
+    DivElement hdr = new DivElement()
+      ..classes.addAll([LMargin.C_TOP__X_LARGE, LTheme.C_BOX, LTheme.C_THEME__SHADE]);
     HeadingElement h2 = new HeadingElement.h2()
+      ..classes.add(LText.C_TEXT_HEADING__MEDIUM)
       ..text = label;
+    hdr.append(h2);
+
     ParagraphElement descr = new ParagraphElement()
       ..text = description;
+    hdr.append(descr);
+
     ParagraphElement ref = new ParagraphElement()
+      ..classes.add(LText.C_TEXT_BODY__SMALL)
       ..text = "See: "
       ..append(createSldsLink());
-    UListElement ul = new UListElement();
+    hdr.append(ref);
+
+    UListElement ul = new UListElement()
+      ..classes.add(LList.C_LIST__VERTICAL)
+      ..classes.add(LList.C_HAS_CARDS);
     for (DivElement option in options) {
-      LIElement li = new LIElement();
+      LIElement li = new LIElement()
+        ..classes.add(LList.C_LIST__ITEM);
       li.append(option);
       ul.append(li);
     }
-    //
-    element.append(new HRElement());
-    element.append(h2);
-    element.append(descr);
-    element.append(ref);
+    // element.append(new HRElement());
+    element.append(hdr);
     element.append(ul);
 
 
@@ -73,7 +83,8 @@ abstract class DemoFeature extends LComponent {
 
   /// Link to Feature
   void toc(Element toc) {
-    LIElement li = new LIElement();
+    LIElement li = new LIElement()
+      ..classes.add(LList.C_LIST__ITEM);
     toc.append(li);
     li.append(new AnchorElement(href: "#${id}")
       ..text = label);
@@ -126,13 +137,22 @@ abstract class DemoFeature extends LComponent {
 
   /// Generate List items
   List<ListItem> generateListItems(int count,
-      {String prefix: "Item", int increment: 4}) {
+      {String prefix: "Item", int increment: 4, bool iconLeft: false}) {
     List<ListItem> list = new List<ListItem>();
     int no = 1;
     for (int i = 0; i < count; i++) {
       String label = "${prefix} ${no}";
       String value = "${prefix.toLowerCase()}${no}";
-      ListItem li = new ListItem(id:i.toString(), label:label, value:value);
+
+      LIcon leftIcon = null;
+      if (iconLeft) {
+        leftIcon = new LIconCustom("custom-${no}");
+      }
+      DOption option = new DOption()
+        ..id = i.toString()
+        ..value = value
+        ..label = label;
+      ListItem li = new ListItem(option, leftIcon:leftIcon);
       list.add(li);
       no += increment;
     }

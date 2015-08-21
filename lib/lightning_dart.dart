@@ -10,6 +10,7 @@ library lightning_dart;
 import 'dart:async';
 import 'dart:html';
 import 'dart:svg' as svg;
+import 'dart:convert';
 
 // Packages
 import 'package:logging/logging.dart';
@@ -19,7 +20,8 @@ import 'package:intl/intl.dart';
 import 'package:intl/intl_browser.dart';
 import 'package:intl/date_symbol_data_local.dart';
 //
-import 'biz_base_dart.dart';
+import 'biz_fabrik_base.dart';
+export 'biz_fabrik_base.dart';
 
 //
 
@@ -67,8 +69,10 @@ part 'src/view/editors/select_option.dart';
 
 part 'src/view/form/l_form.dart';
 part 'src/view/form/l_form_compound.dart';
+part 'src/view/form/l_form_element.dart';
 
 part 'src/view/utility/html0.dart';
+part 'src/view/utility/option_util.dart';
 
 /**
  * Lightning Dart
@@ -84,9 +88,25 @@ class LightningDart {
   static final Logger _log = new Logger("LightningDart");
 
   /**
-   * Initialize
+   * Initialize Logging, Locale, Intl, Date
    */
   static Future<bool> init() {
+    // Initialize
+    Logger.root.level = Level.ALL;
+    // local Logger
+    Logger.root.onRecord.listen((LogRecord rec) {
+      print(formatLog(rec));
+      if (rec.error != null) {
+        print(rec.error);
+      }
+      if (rec.stackTrace != null) {
+        // Trace t = new Trace.from(rec.stackTrace);
+        // print("_ ${t.toString()}");
+        print(rec.stackTrace);
+      }
+    });
+
+    //
     localeName = window.navigator.language;
     Completer<bool> completer = new Completer<bool>();
     findSystemLocale()
@@ -118,4 +138,52 @@ class LightningDart {
     });
     return completer.future;
   } // init
-}
+
+  // Format Log Record
+  static String formatLog(LogRecord rec) {
+    StringBuffer sb = new StringBuffer();
+    // time
+    int ii = rec.time.minute;
+    if (ii < 10)
+      sb.write("0");
+    sb.write(ii);
+    sb.write(":");
+    ii = rec.time.second;
+    if (ii < 10)
+      sb.write("0");
+    sb.write(ii);
+    sb.write(".");
+    ii = rec.time.millisecond;
+    if (ii < 10)
+      sb.write("00");
+    else if (ii < 100)
+      sb.write("0");
+    sb.write(ii);
+    // Level
+    Level ll = rec.level;
+    if (ll == Level.SHOUT)
+      sb.write(">>");
+    else if (ll == Level.SEVERE)
+      sb.write("~~");
+    else if (ll == Level.WARNING)
+      sb.write("~ ");
+    else if (ll == Level.INFO)
+      sb.write("  ");
+    else if (ll == Level.CONFIG)
+      sb.write("   ");
+    else if (ll == Level.FINE)
+      sb.write("    ");
+    else if (ll == Level.FINER)
+      sb.write("     ");
+    else if (ll == Level.FINEST)
+      sb.write("      ");
+    else {
+      sb.write(" ");
+      sb.write(ll.name);
+    }
+    //
+    sb.write("${rec.loggerName}: ${rec.message}");
+    return sb.toString();
+  } // format
+
+} // LightningDart

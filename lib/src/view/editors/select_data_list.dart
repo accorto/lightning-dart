@@ -16,7 +16,7 @@ class SelectDataList {
 
   /// Data list
   SelectDataList(String id) {
-    element.id = id;
+    element.id = id == null || id.isEmpty ? LComponent.createId("data", null) : id;
   }
 
   /// Data List Id

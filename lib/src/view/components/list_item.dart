@@ -23,66 +23,80 @@ class ListItem implements SelectOptionI {
   /// The Link
   final AnchorElement a = new AnchorElement(href: "#");
 
+  /// The Option
+  final DOption option;
+
   /**
-   * Create List Item - if [href] is null, a span element is used
+   * List Item from Option (referenceId == href)
    */
-  ListItem({String id, String label, String value, String href,
-      LIcon leftIcon, LIcon rightIcon, bool selected, bool disabled}) {
+  ListItem(DOption this.option, {LIcon leftIcon, LIcon, rightIcon}) {
     element.append(a);
-    this.id = id;
-    _label = label;
-    this.value = value;
-    this.href = href;
+    this.id = option.id;
+    if (option.hasValue())
+      this.value = option.value;
+    if (option.hasReferenceId())
+      this.href = option.referenceId;
+    if (option.isSelected)
+      this.selected = true;
+    if (!option.isActive)
+      this.disabled = true;
+    //
     this.leftIcon = leftIcon;
     this.rightIcon = rightIcon; // rebuilds
-    if (selected != null)
-      this.selected = selected;
-    if (disabled != null)
-      this.disabled = disabled;
   }
 
   /// Id
-  String get id => a.id;
+  String get id => option.id;
   void set id(String newValue) {
-    if (newValue != null) {
+    if (newValue != null && newValue.isNotEmpty) {
+      option.id = newValue;
       a.id = newValue;
       element.id = newValue + "-item";
     }
   }
 
   /// Label
-  String get label => _label;
+  String get label => option.label;
   void set label(String newValue) {
-    _label = newValue;
-    _rebuild();
+    option.label = newValue;
+    _rebuild(null);
   }
-  String _label;
 
   /// Value
-  String get value => a.attributes[Html0.DATA_VALUE];
+  String get value => option.value;
   void set value (String newValue) {
+    option.value = newValue == null ? "" : newValue;
     a.attributes[Html0.DATA_VALUE] = newValue == null ? "" : newValue;
   }
 
   /// Href
-  String get href => _href;
+  String get href => option.referenceId;
   /// Href only valid if link
   void set href (String newValue) {
-    _href = newValue;
     if (newValue == null || newValue.isEmpty) {
+      option.clearReferenceId();
       element.attributes["href"] = "";
       a.href = VOID;
     } else {
+      option.referenceId = newValue;
       element.attributes["href"] = newValue;
       a.href = newValue;
     }
   }
-  String _href = null;
+
+  /// Hide option
+  bool get show => !element.classes.contains(LVisibility.C_HIDE);
+  void set show (bool newValue) {
+    if (newValue)
+      element.classes.remove(LVisibility.C_HIDE);
+    else
+      element.classes.add(LVisibility.C_HIDE);
+  }
 
   /// Disabled
-  bool get disabled => _disabled;
+  bool get disabled => !option.isActive;
   void set disabled (bool newValue) {
-    _disabled = newValue;
+    option.isActive = !newValue;
     if (newValue) {
       element.attributes[Html0.DISABLED] = Html0.DISABLED;
       a.attributes[Html0.ARIA_DISABLED] = "true";
@@ -103,7 +117,6 @@ class ListItem implements SelectOptionI {
       _disabledClick = null;
     }
   }
-  bool _disabled = false;
   StreamSubscription<MouseEvent> _disabledClick;
 
   /// Left icon (e.g. for selection)
@@ -116,9 +129,9 @@ class ListItem implements SelectOptionI {
   }
 
   /// Selected
-  bool get selected => _selected;
+  bool get selected => option.isSelected;
   void set selected(bool newValue) {
-    _selected = newValue;
+    option.isSelected = newValue;
     if (newValue) {
       element.classes.add(LDropdown.C_IS_SELECTED);
       element.tabIndex = 0;
@@ -129,9 +142,8 @@ class ListItem implements SelectOptionI {
       a.tabIndex = -1;
     }
     element.attributes[Html0.ARIA_SELECTED] = newValue.toString();
-    _rebuild(); // selected icon
+    _rebuild(null); // selected icon
   }
-  bool _selected;
 
   /// Right Icon (usually selected check)
   LIcon get rightIcon => _rightIcon;
@@ -143,7 +155,7 @@ class ListItem implements SelectOptionI {
       _rightIcon.classes.addAll([LIcon.C_ICON, LDropdown.C_ICON__RIGHT]);
     }
     // hasIconRight = rightIcon != null;
-    _rebuild();
+    _rebuild(null);
   }
   LIcon _rightIcon;
 
@@ -157,7 +169,7 @@ class ListItem implements SelectOptionI {
       _leftIcon.classes.addAll([LIcon.C_ICON, LDropdown.C_ICON__LEFT]);
     }
     hasIconLeft = leftIcon != null;
-    _rebuild();
+    _rebuild(null);
   }
   LIcon _leftIcon;
 
@@ -171,55 +183,43 @@ class ListItem implements SelectOptionI {
   }
 
   /// Rebuild Link
-  void _rebuild() {
+  void _rebuild(RegExp exp) {
     a.children.clear();
+    // Icon l
     if (_leftIcon != null) {
       a.append(_leftIcon.element);
     }
-    a.appendText(_label);
+    // Label
+    if (exp == null) {
+      a.appendText(option.label);
+    } else {
+      HtmlEscape esc = new HtmlEscape();
+      String html = option.label.splitMapJoin(exp,
+        onMatch:    (m) => "<b>${m.group(0)}</b>",
+        onNonMatch: (n) => esc.convert(n));
+      a.appendHtml(html);
+    }
+    // Icon r
     if (_rightIcon != null) {
       a.append(_rightIcon.element);
     }
   } // rebuild
 
-
-  bool get hide => element.classes.contains(LVisibility.C_HIDE);
-  void set hide (bool newValue) {
-    if (newValue)
-      element.classes.add(LVisibility.C_HIDE);
-    else
-      element.classes.remove(LVisibility.C_HIDE);
-  }
-
   /// return true if [exp] matches [label]
   bool labelHighlight(RegExp exp) {
-    if (_label.contains(exp)) {
-    /*  if (_heading != null) {
-        String html = _labelText.splitMapJoin((exp),
-        onMatch:    (m) => "<ins>${m.group(0)}</ins>",
-        onNonMatch: (n) => n);
-        _heading.innerHtml = html;
-      } else {
-        String html = _labelText.splitMapJoin((exp),
-        onMatch:    (m) => "<b>${m.group(0)}</b>",
-        onNonMatch: (n) => n);
-        if (_label != null)
-          _label.innerHtml = html;
-        else
-          li.innerHtml = html;
-      }
-      _highlighted = true; */
+    if (option.label.contains(exp)) {
+      _rebuild(exp);
       return true;
     } else { // no match
-    /*  if (_heading != null)
-        _heading.text = _labelText;
-      else if (_label != null)
-        _label.text = _labelText;
-      else
-        li.text = _labelText; */
+      _rebuild(null);
       return false;
     }
   } // labelHighlight
+
+  /// clear highlight
+  void labelHighlightClear() {
+    _rebuild(null);
+  }
 
   /// return true if [exp] matches [descriptionl]
   bool descriptionHighlight(RegExp exp) {
@@ -239,10 +239,16 @@ class ListItem implements SelectOptionI {
   } // descriptionHighlight
 
   /// Conversion to Option
-  OptionElement toOption() {
+  OptionElement asOption() {
     return new OptionElement(data:label, value:value, selected:selected)
       ..disabled = disabled
       ..selected = selected;
+  }
+
+  /// Conversion to Option
+  DOption asDOption() {
+    return OptionUtil.option(value, label,
+      id:id, selected:selected, disabled:disabled);
   }
 
 } // ListItem

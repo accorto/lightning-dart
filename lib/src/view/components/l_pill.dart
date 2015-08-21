@@ -9,12 +9,14 @@ part of lightning_dart;
 /**
  * Pill
  */
-class LPill {
+class LPill extends LComponent {
 
+  /// initializes pill - span
   static const String C_PILL = "slds-pill";
+  /// initializes pill label
   static const String C_PILL__LABEL = "slds-pill__label";
 
-
+  /// Pill Element
   final SpanElement element = new SpanElement()
     ..classes.add(C_PILL);
 
@@ -42,9 +44,9 @@ class LPill {
       content = new AnchorElement()
         ..classes.add(C_PILL__LABEL)
         ..href = hrefValue;
-      if (onLinkClick != null) {
-        content.onClick.listen(onLinkClick);
-      }
+    }
+    if (onLinkClick != null) {
+      content.onClick.listen(onLinkClick);
     }
     element.append(content);
     if (icon != null) {

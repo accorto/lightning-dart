@@ -9,7 +9,7 @@ part of lightning_dart;
 /**
  * Form with FormElements
  */
-class LForm {
+class LForm extends LComponent {
 
   static const String C_FORM__HORIZONTAL = "slds-form--horizontal";
   static const String C_FORM__STACKED = "slds-form--stacked";
@@ -39,8 +39,8 @@ class LForm {
   LForm.stacked() : this(new FormElement(), C_FORM__STACKED);
   LForm.inline() : this(new FormElement(), C_FORM__INLINE);
 
-
-  void add (LEditor editor) {
+  /// Add Editor
+  void addEditor (LEditor editor) {
     editors.add(editor);
     element.append(editor.element);
   }

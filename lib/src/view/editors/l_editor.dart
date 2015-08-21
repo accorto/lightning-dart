@@ -35,8 +35,8 @@ abstract class LEditor extends EditorI {
   Element get input;
 
 
-  bool get displayed => !element.classes.contains(LVisibility.C_HIDE);
-  void set displayed (bool newValue) {
+  bool get show => !element.classes.contains(LVisibility.C_HIDE);
+  void set show (bool newValue) {
     if (newValue)
       element.classes.remove(LVisibility.C_HIDE);
     else

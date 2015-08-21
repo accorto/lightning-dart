@@ -34,7 +34,7 @@ class LSelect extends LEditorStd implements LSelectI {
 
     //
     if (column.pickValueList.isNotEmpty) {
-      addDOptions(column.pickValueList);
+      dOptions = column.pickValueList;
     }
     this.column = column;
   } // LSelect
@@ -42,9 +42,11 @@ class LSelect extends LEditorStd implements LSelectI {
 
   String get id => input.id;
   void set id (String newValue) {
-    input.id = newValue;
-    if (_labelElement != null)
-      _labelElement.htmlFor = newValue;
+    if (newValue != null && newValue.isNotEmpty) {
+      input.id = newValue;
+      if (_labelElement != null)
+        _labelElement.htmlFor = newValue;
+    }
   }
   void updateId(String idPrefix) {
     id = createId(idPrefix, name);
@@ -155,7 +157,7 @@ class LSelect extends LEditorStd implements LSelectI {
   }
 
   /// Add Option List
-  void addSelectOptions(List<SelectOption> list) {
+  void set selectOptions(List<SelectOption> list) {
     for (SelectOption op in list) {
       input.append(op.asOptionElement());
     }
@@ -177,11 +179,17 @@ class LSelect extends LEditorStd implements LSelectI {
   void addSelectOption(SelectOption op) {
     input.append(op.asOptionElement());
   }
-
   /// Add DOption List
-  void addDOptions(List<DOption> options) {
+  void set dOptions(List<DOption> options) {
     for (DOption option in options) {
       SelectOption so = new SelectOption(option);
+      addSelectOption(so);
+    }
+  }
+  /// Set List Items
+  void set listItems (List<ListItem> listItems) {
+    for (ListItem li in listItems) {
+      SelectOption so = new SelectOption(li.asDOption());
       addSelectOption(so);
     }
   }
@@ -194,6 +202,11 @@ class LSelect extends LEditorStd implements LSelectI {
  * Select Interface
  */
 abstract class LSelectI {
+
+  String get name;
+
+  String get value;
+  void set value (String newValue);
 
   /// Multi
   bool get multiple;
@@ -212,11 +225,14 @@ abstract class LSelectI {
   void addOption(OptionElement oe);
 
 
+  /// Set List Items
+  void set listItems (List<ListItem> listItems);
+  /// Add Option List
+  void set selectOptions(List<SelectOption> list);
   /// Add Option
   void addSelectOption(SelectOption op);
+
   /// Add Option List
-  void addSelectOptions(List<SelectOption> list);
-  /// Add Option List
-  void addDOptions(List<DOption> options);
+  void set dOptions(List<DOption> options);
 
 } // LSelectI
