@@ -14,7 +14,7 @@ abstract class LEditor extends EditorI {
   /// Auto Id Numbering
   static int _autoId = 1;
 
-  /// Get Form Element
+  /// Get Form Element -- via with LFormElement or own
   DivElement get element;
 
   /// Showing

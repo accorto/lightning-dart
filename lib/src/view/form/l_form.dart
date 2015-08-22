@@ -136,14 +136,14 @@ class LForm extends LComponent {
   } // display
 
   LButton addResetButton() {
-    LButton btn = new LButton.neutralIcon("reset", "Reset",
+    LButton btn = new LButton.neutralIcon("reset", lFormReset(),
       new LIconUtility(LIconUtility.UNDO), iconLeft:true)
       ..typeReset = true;
     element.append(btn.element);
     return btn;
   }
   LButton addSaveButton() {
-    LButton btn = new LButton.brandIcon("save", "Save",
+    LButton btn = new LButton.brandIcon("save", lFormSave(),
       new LIconUtility(LIconAction.CHECK), iconLeft:true)
       ..typeSubmit = true;
     element.append(btn.element);
@@ -177,5 +177,10 @@ class LForm extends LComponent {
     if (newValue != null && newValue.isNotEmpty)
       element.classes.add(newValue);
   }
+
+
+  // Trl
+  static String lFormSave() => Intl.message("Save", name: "lFormSave");
+  static String lFormReset() => Intl.message("Reset", name: "lFormReset");
 
 } // LForm

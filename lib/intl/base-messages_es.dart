@@ -22,6 +22,10 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static lButtonGroupMore() => "Más";
 
+  static lFormReset() => "Restablecer";
+
+  static lFormSave() => "Guardar";
+
   static lLookupLabel() => "Buscar";
 
   static lModalCancel() => "Cancelar";
@@ -42,6 +46,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static lObjectHomeSave() => "Guardar";
 
+  static lPicklistSelectOption() => "Seleccione una opcion";
+
   static lPillRemove() => "Eliminar";
 
   static lTableColumnSortAsc() => "Orden ascendente";
@@ -58,6 +64,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "editorValidateTooLong" : editorValidateTooLong,
     "lBreadcrumbText" : lBreadcrumbText,
     "lButtonGroupMore" : lButtonGroupMore,
+    "lFormReset" : lFormReset,
+    "lFormSave" : lFormSave,
     "lLookupLabel" : lLookupLabel,
     "lModalCancel" : lModalCancel,
     "lModalClose" : lModalClose,
@@ -68,6 +76,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "lNotificationSuccess" : lNotificationSuccess,
     "lNotificationWarning" : lNotificationWarning,
     "lObjectHomeSave" : lObjectHomeSave,
+    "lPicklistSelectOption" : lPicklistSelectOption,
     "lPillRemove" : lPillRemove,
     "lTableColumnSortAsc" : lTableColumnSortAsc,
     "lTableColumnSortDec" : lTableColumnSortDec,
