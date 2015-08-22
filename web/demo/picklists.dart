@@ -14,6 +14,7 @@ class Picklists extends DemoFeature {
     LForm form = new LForm.stacked();
 
     LPicklist pl1 = new LPicklist("pl1");
+    pl1.label = "Picklist 1"; // TODO
     pl1.listItems = generateListItems(10, iconLeft: true);
     pl1.value = "item5";
     form.addEditor(pl1);

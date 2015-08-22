@@ -180,44 +180,48 @@ class LButton extends LComponent {
 
   /// Neutral Button with Icon
   LButton.neutralIcon(String name, String label, LIcon icon, {bool iconLeft: false})
-      : this(new ButtonElement(), name, label,
+    : this(new ButtonElement(), name, label,
         buttonClasses: [C_BUTTON__NEUTRAL], icon:icon, iconLeft:iconLeft);
 
   /// (Neutral) Icon Button with More
   LButton.more(String name, String label, LIcon icon, String assistiveText)
-      : this(new ButtonElement(), name, label,
+    : this(new ButtonElement(), name, label,
         buttonClasses: [C_BUTTON__ICON_MORE], icon:icon, assistiveText:assistiveText);
 
   /// Brand Button
   LButton.brand(String name, String label)
-      : this(new ButtonElement(), name, label,
+    : this(new ButtonElement(), name, label,
         buttonClasses: [C_BUTTON__BRAND]);
+  /// Neutral Button with Icon
+  LButton.brandIcon(String name, String label, LIcon icon, {bool iconLeft: false})
+    : this(new ButtonElement(), name, label,
+        buttonClasses: [C_BUTTON__BRAND], icon:icon, iconLeft:iconLeft);
   /// Brand Button
   LButton.brandAnchor(String name, String label, {String href})
-      : this(new AnchorElement(href: "#"), name, label, href:href,
+    : this(new AnchorElement(href: "#"), name, label, href:href,
         buttonClasses: [C_BUTTON__BRAND]);
 
   /// Inverse Button
   LButton.inverse(String name, String label)
-      : this(new ButtonElement(), name, label,
+    : this(new ButtonElement(), name, label,
         buttonClasses: [C_BUTTON__INVERSE]);
 
 
   /// Icon Only - bare
   LButton.iconBare(String name, LIcon icon, String assistiveText)
-      : this(new ButtonElement(), name, null, icon:icon,
+    : this(new ButtonElement(), name, null, icon:icon,
         buttonClasses: [C_BUTTON__ICON_BARE], assistiveText:assistiveText);
   /// Icon Only - container
   LButton.iconContainer(String name, LIcon icon, String assistiveText)
-      : this(new ButtonElement(), name, null, icon:icon,
+    : this(new ButtonElement(), name, null, icon:icon,
         buttonClasses: [C_BUTTON__ICON_CONTAINER], assistiveText:assistiveText);
   /// Icon Only - border
   LButton.iconBorder(String name, LIcon icon, String assistiveText)
-      : this(new ButtonElement(), name, null, icon:icon,
+    : this(new ButtonElement(), name, null, icon:icon,
         buttonClasses: [C_BUTTON__ICON_BORDER], assistiveText:assistiveText);
   /// Icon Only - border filled
   LButton.iconBorderFilled(String name, LIcon icon, String assistiveText)
-      : this(new ButtonElement(), name, null, icon:icon,
+    : this(new ButtonElement(), name, null, icon:icon,
         buttonClasses: [C_BUTTON__ICON_BORDER_FILLED], assistiveText:assistiveText);
 
 
@@ -231,6 +235,37 @@ class LButton extends LComponent {
       return (element as InputElement).name;
     return element.attributes[Html0.DATA_NAME];
   }
+
+  /// Button Type (null for link)
+  String get type {
+    if (element is ButtonElement)
+      return (element as ButtonElement).type;
+    else if (element is InputElement)
+      return (element as InputElement).type;
+    return null;
+  }
+  /// Button Type (button|submit|reset) - ignored if link
+  void set type (String type) {
+    if (element is ButtonElement)
+      (element as ButtonElement).type = type;
+    else if (element is InputElement)
+      (element as InputElement).type = type;
+  }
+  bool get typeButton => type == "button";
+  void set typeButton (bool newValue) {
+    type = "button"; // regardless
+  }
+  bool get typeSubmit => type == "submit";
+  void set typeSubmit (bool newValue) {
+    type = newValue ? "submit" : "button";
+  }
+  bool get typeReset => type == "reset";
+  void set typeReset (bool newValue) {
+    type = newValue ? "reset" : "button";
+  }
+
+
+
   /// Button Label
   String get label {
     if (_labelElement != null) {
@@ -378,6 +413,7 @@ class LButton extends LComponent {
       option.label = theLabel;
     if (disabled)
       option.isActive = false;
+    // no selected (otherwise button group overflow will not work)
     return option;
   } // asListItem
 

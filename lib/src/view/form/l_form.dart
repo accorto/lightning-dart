@@ -62,15 +62,23 @@ class LForm extends LComponent {
 
   static const String C_FORM_ELEMENT__HELP = "slds-form-element__help";
 
+  static final List<String> FORMTYPES = [C_FORM__HORIZONTAL, C_FORM__STACKED, C_FORM__INLINE];
+
+
+  static final Logger _log = new Logger("LForm");
 
   /// Form Element
   final Element element;
   /// List of Editors
   final List<LEditor> editors = new List<LEditor>();
 
-  /// Form
+  /// Form - type = C_FORM__HORIZONTAL, C_FORM__STACKED, C_FORM__INLINE
   LForm(Element this.element, String type) {
     element.classes.add(type);
+    if (element is FormElement) {
+      (element as FormElement).onSubmit.listen(onFormSubmit);
+      (element as FormElement).onReset.listen(onFormReset);
+    }
   }
 
   LForm.horizontal() : this(new FormElement(), C_FORM__HORIZONTAL);
@@ -83,4 +91,91 @@ class LForm extends LComponent {
     element.append(editor.element);
   }
 
-}
+  /// Data Container
+  DataRecord get data => _data;
+  /// Data Container
+  void set data (DataRecord data) {
+    _data = data;
+    display();
+  }
+  DataRecord _data = new DataRecord(null);
+
+  /// Data Record
+  DRecord get record => _data.record;
+  /// Data Record/Row No
+  void setRecord (DRecord record, int rowNo) {
+    _data.setRecord(record, rowNo);
+    display();
+  }
+
+  /// Display Data in Editors
+  void display() {
+    for (LEditor editor in editors) {
+      editor.data = _data;
+      DEntry entry = _data.getEntry(editor.id, editor.name, false);
+      if (entry == null) {
+        editor.value = "";
+      } else {
+        String value = null;
+        if (entry.hasValueOriginal()) {
+          value = entry.valueOriginal;
+          if (value == DataRecord.NULLVALUE)
+            value = "";
+          editor.valueOriginal = value;
+        }
+        if (entry.hasValue()) {
+          value = entry.value;
+          if (value == DataRecord.NULLVALUE)
+            value = null;
+        }
+        if (value == null)
+          value = "";
+        editor.value = value;
+      }
+    }
+  } // display
+
+  LButton addResetButton() {
+    LButton btn = new LButton.neutralIcon("reset", "Reset",
+      new LIconUtility(LIconUtility.UNDO), iconLeft:true)
+      ..typeReset = true;
+    element.append(btn.element);
+    return btn;
+  }
+  LButton addSaveButton() {
+    LButton btn = new LButton.brandIcon("save", "Save",
+      new LIconUtility(LIconAction.CHECK), iconLeft:true)
+      ..typeSubmit = true;
+    element.append(btn.element);
+    return btn;
+  }
+
+  /// On Form Reset
+  void onFormReset(Event evt) {
+    _log.info("onFormReset - ${record}");
+    evt.preventDefault();
+  }
+  /// On Form Submit
+  void onFormSubmit(Event evt) {
+    _log.info("onFormSubmit - ${record}");
+    evt.preventDefault();
+  }
+
+  /// Layout
+
+  /// Form Type
+  String get formType {
+    for (String cls in element.classes) {
+      if (FORMTYPES.contains(cls))
+        return cls;
+    }
+    return null;
+  }
+  /// Set Form Type, e.g. C_FORM__HORIZONTAL, C_FORM__STACKED, C_FORM__INLINE
+  void set formType (String newValue) {
+    element.classes.removeAll(FORMTYPES);
+    if (newValue != null && newValue.isNotEmpty)
+      element.classes.add(newValue);
+  }
+
+} // LForm

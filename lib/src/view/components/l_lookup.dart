@@ -63,7 +63,7 @@ class LLookup extends LEditor implements LSelectI {
    * [select] single|multi
    * [scope] single|multi
    */
-  LLookup(String name, { String idPrefix,
+  LLookup(String name, {String idPrefix,
       String select: DATA_SELECT_SINGLE,
       String scope: "single",
       bool typeahead: false}) {

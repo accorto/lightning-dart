@@ -66,15 +66,19 @@ class LSelect extends LEditor with LFormElement implements LSelectI {
 
   /// base editor methods
 
-  bool get readOnly => input.disabled;
+  bool get readOnly => _readOnly;
   void set readOnly (bool newValue) {
-    input.disabled = newValue;
+    _readOnly = newValue;
+    input.disabled = _readOnly || _disabled;
   }
+  bool _readOnly = false;
 
-  bool get disabled => input.disabled;
+  bool get disabled => _disabled;
   void set disabled (bool newValue) {
-    input.disabled = newValue;
+    _disabled = newValue;
+    input.disabled = _readOnly || _disabled;
   }
+  bool _disabled = false;
 
   /// required
   bool get required => input.required;
@@ -82,7 +86,7 @@ class LSelect extends LEditor with LFormElement implements LSelectI {
   void set required (bool newValue) {
     super.required = newValue; // ui
     input.required = newValue;
-    if (listId.isNotEmpty)
+    if (listId != null && listId.isNotEmpty)
       return; // don't change data list
 
     // Add/Remove Optional element for single selection
@@ -91,11 +95,11 @@ class LSelect extends LEditor with LFormElement implements LSelectI {
         OptionElement oe = input.options.first;
         if (oe.value.isEmpty) {
           if (newValue) {
-            input.options.removeAt(0);
+            input.children.removeAt(0);
             // required
           }
         } else if (!newValue) {
-          input.options.insert(0, new OptionElement());
+          input.children.insert(0, new OptionElement());
           // optional
         }
       }

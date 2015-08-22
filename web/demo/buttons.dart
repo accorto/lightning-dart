@@ -42,6 +42,7 @@ class Buttons extends DemoFeature {
       new LIconUtility(LIconUtility.DOWNLOAD)));
     div.add(new LButton.neutralIcon("b52", "icon neutral",
       new LIconUtility(LIconUtility.DOWNLOAD), iconLeft: true));
+    div.appendText(" Toggle Buttons: ");
     div.add(new LButtonStateful("b53"));
     div.add(new LButtonIconStateful("b53", "stateful icon",
       new LIconUtility(LIconUtility.LIKE)));

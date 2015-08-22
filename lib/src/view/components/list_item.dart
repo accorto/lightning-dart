@@ -132,7 +132,7 @@ class ListItem extends SelectOption {
   /// Left icon (e.g. for selection)
   bool get hasIconLeft => element.classes.contains(LDropdown.C_HAS_ICON__LEFT);
   void set hasIconLeft (bool newValue) {
-    if (newValue)
+    if (newValue || _leftIcon != null)
       element.classes.add(LDropdown.C_HAS_ICON__LEFT);
     else
       element.classes.remove(LDropdown.C_HAS_ICON__LEFT);

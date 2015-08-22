@@ -537,14 +537,16 @@ class LDropdownItem extends ListItem {
    */
   @override
   void _rebuild(RegExp exp) {
-    if (option.hasIsSelected() && option.isSelected) {
-      if (_selectedIcon == null) {
-        _selectedIcon = new LIconStandard(LIconStandard.TASK2, size: LIcon.C_ICON__SMALL)
-          ..classes.add(LDropdown.C_ICON__LEFT);
+    if (option.hasIsSelected()) {
+      if (option.isSelected) {
+        if (_selectedIcon == null) {
+          _selectedIcon = new LIconStandard(LIconStandard.TASK2, size: LIcon.C_ICON__SMALL)
+            ..classes.add(LDropdown.C_ICON__LEFT);
+        }
+        _leftIcon = _selectedIcon;
+      } else {
+        _leftIcon = null; // overwrite in selection mode
       }
-      _leftIcon = _selectedIcon;
-    } else {
-       _leftIcon = null; // overwrite in selection mode
     }
     super._rebuild(exp);
   }

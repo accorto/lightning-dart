@@ -40,7 +40,7 @@ class Tabs extends DemoFeature {
 
   DivElement option1Cb() {
     LCheckbox cb = new LCheckbox("option1", idPrefix: id)
-      ..label = "Option 1: Scoped";
+      ..label = "Option: Scoped";
     cb.input.onClick.listen((MouseEvent evt){
       option1 = cb.input.checked;
       optionChanged();

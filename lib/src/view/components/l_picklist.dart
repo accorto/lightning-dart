@@ -91,6 +91,11 @@ class LPicklist extends LEditor implements LSelectI {
     _button.title = newValue;
   }
 
+  void set label (String newValue) {
+    super.label = newValue;
+    // TODO
+  }
+
   /// String Value
 
   String get value => dropdown.value;

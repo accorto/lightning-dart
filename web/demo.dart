@@ -19,7 +19,7 @@ part 'demo/buttons.dart';
 part 'demo/button_groups.dart';
 
 part 'demo/dropdowns.dart';
-
+part 'demo/forms.dart';
 part 'demo/icons.dart';
 part 'demo/images.dart';
 part 'demo/lookups.dart';
@@ -39,8 +39,37 @@ void main() {
     //
     LContainer page = LContainer.create(id: "demo",
         containerSize: LGrid.C_CONTAINER__LARGE,
-        containerHAlign: LGrid.C_CONTAINER__CENTER)
-      ..addHeader("Lightning Dart Tutorial (alpha)");
+        containerHAlign: LGrid.C_CONTAINER__CENTER);
+    LHeader hdr = page.addHeader("Lightning Dart Demo (alpha)");
+    ParagraphElement p = new ParagraphElement()
+      ..text = "Please check out the different component implementations of the Salesforce Lightning Design System ";
+    p.append(new AnchorElement(href: "https://www.lightningdesignsystem.com")
+      ..text = "(SLDS)"
+      ..target = "_blank");
+    hdr.append(p);
+    //
+    p = new ParagraphElement()
+      ..classes.add(LText.C_TEXT_BODY__SMALL)
+      ..text = "The current status is Alpha, so there might be a few things not working as expected. "
+      "If you identified a bug, please report it via ";
+    p.append(new AnchorElement(href: "https://github.com/accorto/lightning-dart/issues")
+      ..text = "Github Isssues for Lightning Dart"
+      ..target = "_blank");
+    p.appendText(" and provide the following info:");
+    hdr.append(p);
+    UListElement ul = new UListElement()
+      ..classes.add(LText.C_TEXT_BODY__SMALL);
+    hdr.append(ul);
+    ul.append(new LIElement()..text = "* Browser+Platform (e.g. Sarari on iPod)");
+    ul.append(new LIElement()..text = "* Type: Rendering off | Html elements/attributes wrong | Functianality bug");
+    p = new ParagraphElement()
+      ..classes.add(LText.C_TEXT_BODY__SMALL)
+      ..text = "We appreciate also suggestions and questions :-)";
+    hdr.append(p);
+    p = new ParagraphElement()
+      ..text = "Thanks.";
+    hdr.append(p);
+
 
     CDiv main = page.addDiv()
       ..classes.add("main")
@@ -53,7 +82,7 @@ void main() {
     tocDiv.append(toc);
 
     /* Individual parts */
-    page.add(new ActivityTimeline()..toc(toc));
+    //page.add(new ActivityTimeline()..toc(toc));
     page.add(new Badges()..toc(toc));
     page.add(new Breadcrumbs()..toc(toc));
     page.add(new Buttons()..toc(toc));
@@ -62,7 +91,7 @@ void main() {
     // data tables
     // datepickers
     page.add(new Dropdowns()..toc(toc));
-    // forms
+    page.add(new Forms()..toc(toc));
     page.add(new Icons()..toc(toc));
     page.add(new Images()..toc(toc));
     page.add(new Lookups()..toc(toc));

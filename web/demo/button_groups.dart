@@ -8,7 +8,7 @@ part of lightning_dart.demo;
 
 class ButtonGroups extends DemoFeature {
 
-  ButtonGroups() : super("button-groups", "Button Groups", "");
+  ButtonGroups() : super("button-groups", "Button Groups", "You define the size, the remainder goes into a dropdown list");
 
   LComponent get content {
     CDiv div = new CDiv();
