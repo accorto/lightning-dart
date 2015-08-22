@@ -8,9 +8,12 @@ part of lightning_dart;
 
 /**
  * Lookup
+ * - div .form-element
+ * - div .lookup__menu
+ *
  * https://www.getslds.com/components/lookups#role=regular&status=all
  */
-class LLookup extends LComponent implements LSelectI {
+class LLookup extends LEditor implements LSelectI {
 
   /// slds-lookup - Initializes lookup | Required
   static const String C_LOOKUP = "slds-lookup";
@@ -35,11 +38,13 @@ class LLookup extends LComponent implements LSelectI {
   /// Lookup form + menu
   final DivElement element = new DivElement()
     ..classes.add(C_LOOKUP);
-  /// Lookup Input
-  final LInput input;
 
+  /// Form Element - lookup needs to be top element
+  final LFormElement _formElement = new LFormElement();
+  /// Form Element Input
+  final InputElement input = new InputElement(type: EditorI.TYPE_TEXT);
   /// Lookup form + menu
-  final DivElement _menu = new DivElement()
+  final DivElement _lookupMenu = new DivElement()
     ..classes.add(C_LOOKUP__MENU)
     ..attributes[Html0.ROLE] = Html0.ROLE_LISTBOX;
 
@@ -49,6 +54,8 @@ class LLookup extends LComponent implements LSelectI {
 
   /// Lookup Items
   final List<LLookupItem> _items = new List<LLookupItem>();
+  /// Display for Single Select
+  LPill _singlePill;
 
   /**
    * Lookup
@@ -56,50 +63,59 @@ class LLookup extends LComponent implements LSelectI {
    * [select] single|multi
    * [scope] single|multi
    */
-  LLookup(LInput this.input, {
+  LLookup(String name, { String idPrefix,
       String select: DATA_SELECT_SINGLE,
       String scope: "single",
       bool typeahead: false}) {
     _setAttributes(select, scope, typeahead);
-    //
-    input.input
-      ..classes.add(LEditor.C_INPUT__BARE)
+    _formElement.createStandard(input);
+    input
+      ..classes.clear()
+      ..classes.add(LForm.C_INPUT__BARE);
+    input
       ..attributes[Html0.ROLE] = Html0.ROLE_COMBOBOX
       ..attributes[Html0.ARIA_AUTOCOMPLETE] = Html0.ARIA_AUTOCOMPLETE_LIST
       ..attributes[Html0.ARIA_HASPOPUP] = "true";
-    input.labelInputText = lLookupLabel();
+    _formElement.labelInputText = lLookupLabel();
+
+    input.name = name;
+    _formElement.id = createId(idPrefix, name);
+    element.id = "${_formElement.id}-lookup";
+
+    if (typeahead) { // show input with search icon
+      input.onKeyUp.listen(onInputKeyUp);
+      input.onFocus.listen((Event e) {
+        _lookupMenu.classes.remove(LVisibility.C_HIDE);
+      });
+    } else if (select == DATA_SELECT_SINGLE) { // show pill - hide input
+      input.classes.add(LVisibility.C_HIDE);
+      _singlePill = new LPill("", "", null, null, null, null, null);
+      _singlePill.element.classes.add(LPill.C_PILL__BARE);
+      _formElement._elementControl.insertBefore(_singlePill.element, input);
+    } else {
+      /// Multi
+    }
     // div .lookup
     // - div .form-element ... label...
     // - div .menu
     // -- ul
-    if (typeahead) { // show input with search icon
-      element.append(input.elementLookup);
-      input.input.onKeyUp.listen(onInputKeyUp);
-      input.input.onFocus.listen((Event e) {
-        _menu.classes.remove(LVisibility.C_HIDE);
-      });
-    } else { // hide input
-      element.append(input.elementLookup);
-      input.input.classes.add(LVisibility.C_HIDE);
-      // span
-    }
-    // Menu
-    element.append(_menu);
-    _menu.append(_lookupList);
+    element.append(_formElement.element);
+    element.append(_lookupMenu);
+    _lookupMenu.append(_lookupList);
     //
-    _menu.classes.add(LVisibility.C_AUTO_VISIBLE);
-    _menu.onKeyDown.listen(onMenuKeyDown);
+    _lookupMenu.classes.add(LVisibility.C_AUTO_VISIBLE);
+    _lookupMenu.onKeyDown.listen(onMenuKeyDown);
   } // LLookup
 
 
   LLookup.base(String name, {String idPrefix})
-    : this(new LInput(name, "text", idPrefix:idPrefix), typeahead: true);
+    : this(name, idPrefix:idPrefix, typeahead: true);
 
   LLookup.single(String name, {String idPrefix})
-    : this(new LInput(name, "text", idPrefix:idPrefix), typeahead: false);
+    : this(name, idPrefix:idPrefix, typeahead: false);
 
   LLookup.multi(String name, {String idPrefix})
-    : this(new LInput(name, "text", idPrefix:idPrefix), select:DATA_SELECT_MULTI, typeahead: false);
+    : this(name, idPrefix:idPrefix, select:DATA_SELECT_MULTI, typeahead: false);
 
 
   /// Set Lookup Attributes
@@ -115,26 +131,63 @@ class LLookup extends LComponent implements LSelectI {
   // data-scope single
   bool get singleScope => element.attributes["data-scope"] == "single";
 
-
-  /// Lookup wrapped in form element
-  LComponent get formElement {
-    LFormElement fe = new LFormElement();
-    fe.append(element);
-    return fe;
+  /// Editor Id
+  String get id => input.id;
+  void set id (String newValue) {
+    _formElement.id = newValue;
+    element.id = "${_formElement.id}-lookup";
+  }
+  void updateId(String idPrefix) {
+    id = createId(idPrefix, name);
   }
 
   String get name => input.name;
+  String get type => input.type;
 
   String get value => input.value;
   void set value (String newValue) {
+    input.value = newValue;
     // TODO
   }
 
-
-  bool get required => false;
-  void set required (bool newValue) {
-    // TOOD
+  String get defaultValue => null; // ignore
+  void set defaultValue (String newValue) {
   }
+
+  bool get required => input.required;
+  void set required (bool newValue) {
+    input.required = newValue;
+  }
+
+  bool get readOnly => input.readOnly;
+  void set readOnly (bool newValue) {
+    input.readOnly = newValue;
+  }
+
+  bool get disabled => input.disabled;
+  void set disabled (bool newValue) {
+    input.disabled = newValue;
+  }
+
+  bool get spellcheck => input.spellcheck;
+  void set spellcheck (bool newValue) {
+    input.spellcheck = newValue;
+  }
+
+  bool get autofocus => input.autofocus;
+  void set autofocus (bool newValue) {
+    input.autofocus = newValue;
+  }
+
+  String get title => _formElement.title;
+  void set title (String newValue) {
+    _formElement.title = title;
+  }
+
+  /// Validation state from Input
+  ValidityState get validationState => input.validity;
+  /// Validation Message from Input
+  String get validationMsg => input.validationMessage;
 
 
   /// Get options
@@ -247,12 +300,12 @@ class LLookup extends LComponent implements LSelectI {
       }
     }
     if (count == 0 && _items.isNotEmpty) {
-      input.input.setCustomValidity("No matching options");
+      input.setCustomValidity("No matching options"); // TODO Trl
     } else {
-      input.input.setCustomValidity("");
+      input.setCustomValidity("");
     }
     //doValidate();
-    _log.fine("popupUpdateList ${input.name} '${restriction}' ${count} of ${_items.length}");
+    _log.fine("lookupUpdateList ${name} '${restriction}' ${count} of ${_items.length}");
     showResults = true;
   } // lookupUpdateList
 
@@ -273,17 +326,17 @@ class LLookup extends LComponent implements LSelectI {
     // Input has aria-activedescendant attribute whose value is the id of the highlighted results list option, no value if nothing's highlighted in the list
     if (selectedItem == null) {
       input.value = "";
-      input.input.attributes[Html0.DATA_VALUE] = "";
-      input.input.attributes[Html0.ARIA_ACTIVEDECENDNT] = "";
-      if (input.editorChange != null)
-        input.editorChange(input.name, null, false, null);
+      input.attributes[Html0.DATA_VALUE] = "";
+      input.attributes[Html0.ARIA_ACTIVEDECENDNT] = "";
+      if (editorChange != null)
+        editorChange(name, null, false, null);
     } else {
       input.value = selectedItem.label;
-      input.input.attributes[Html0.DATA_VALUE] = selectedItem.value;
-      input.input.attributes[Html0.ARIA_ACTIVEDECENDNT] = selectedItem.value;
+      input.attributes[Html0.DATA_VALUE] = selectedItem.value;
+      input.attributes[Html0.ARIA_ACTIVEDECENDNT] = selectedItem.value;
 
-      if (input.editorChange != null)
-        input.editorChange(input.name, selectedItem.value, false, selectedItem);
+      if (editorChange != null)
+        editorChange(name, selectedItem.value, false, selectedItem);
     }
     showResults = false;
     for (LLookupItem item in _items) { // remove restrictions
@@ -296,13 +349,13 @@ class LLookup extends LComponent implements LSelectI {
 
   /// Show Popup
   void set showResults (bool newValue) {
-    input.input.attributes[Html0.ARIA_EXPANED] = newValue.toString();
+    input.attributes[Html0.ARIA_EXPANED] = newValue.toString();
     if (newValue) {
-      _menu.classes.remove(LVisibility.C_HIDE);
+      _lookupMenu.classes.remove(LVisibility.C_HIDE);
     } else {
-      _menu.classes.add(LVisibility.C_HIDE);
+      _lookupMenu.classes.add(LVisibility.C_HIDE);
       new Timer(new Duration(seconds: 5), () { // focus somewhere else
-        _menu.classes.remove(LVisibility.C_HIDE);
+        _lookupMenu.classes.remove(LVisibility.C_HIDE);
       });
     }
   }

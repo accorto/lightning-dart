@@ -11,7 +11,7 @@ part of lightning_dart;
  * li
  * - a
  * -- icon / text / icon
- * (see LLookupItem, LDropdownItem)
+ * Used in [LLookup], [LDropdown], [LPicklist] via [LLookupItem], [LDropdownItem]
  */
 class ListItem extends SelectOption {
 
@@ -45,8 +45,8 @@ class ListItem extends SelectOption {
 
   /// Id
   void set id(String newValue) {
+    super.id = newValue;
     if (newValue != null && newValue.isNotEmpty) {
-      option.id = newValue;
       a.id = newValue;
       element.id = newValue + "-item";
     }
@@ -54,13 +54,13 @@ class ListItem extends SelectOption {
 
   /// Label
   void set label(String newValue) {
-    option.label = newValue;
+    super.label = newValue;
     _rebuild(null);
   }
 
   /// Value
   void set value (String newValue) {
-    option.value = newValue == null ? "" : newValue;
+    super.value = newValue;
     a.attributes[Html0.DATA_VALUE] = newValue == null ? "" : newValue;
   }
 
@@ -79,7 +79,7 @@ class ListItem extends SelectOption {
     }
   }
 
-  /// Hide option
+  /// Show/Hide option
   bool get show => !element.classes.contains(LVisibility.C_HIDE);
   void set show (bool newValue) {
     if (newValue)
@@ -89,9 +89,8 @@ class ListItem extends SelectOption {
   }
 
   /// Disabled
-  bool get disabled => !option.isActive;
   void set disabled (bool newValue) {
-    option.isActive = !newValue;
+    super.disabled = newValue;
     if (newValue) {
       element.attributes[Html0.DISABLED] = Html0.DISABLED;
       a.attributes[Html0.ARIA_DISABLED] = "true";
@@ -114,19 +113,9 @@ class ListItem extends SelectOption {
   }
   StreamSubscription<MouseEvent> _disabledClick;
 
-  /// Left icon (e.g. for selection)
-  bool get hasIconLeft => element.classes.contains(LDropdown.C_HAS_ICON__LEFT);
-  void set hasIconLeft (bool newValue) {
-    if (newValue)
-      element.classes.add(LDropdown.C_HAS_ICON__LEFT);
-    else
-      element.classes.remove(LDropdown.C_HAS_ICON__LEFT);
-  }
-
   /// Selected
-  bool get selected => option.isSelected;
   void set selected(bool newValue) {
-    option.isSelected = newValue;
+    super.selected = newValue;
     if (newValue) {
       element.classes.add(LDropdown.C_IS_SELECTED);
       element.tabIndex = 0;
@@ -138,6 +127,15 @@ class ListItem extends SelectOption {
     }
     element.attributes[Html0.ARIA_SELECTED] = newValue.toString();
     _rebuild(null); // selected icon
+  }
+
+  /// Left icon (e.g. for selection)
+  bool get hasIconLeft => element.classes.contains(LDropdown.C_HAS_ICON__LEFT);
+  void set hasIconLeft (bool newValue) {
+    if (newValue)
+      element.classes.add(LDropdown.C_HAS_ICON__LEFT);
+    else
+      element.classes.remove(LDropdown.C_HAS_ICON__LEFT);
   }
 
   /// Right Icon (usually selected check)

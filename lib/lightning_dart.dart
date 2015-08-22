@@ -60,7 +60,6 @@ part 'src/view/components/list_item.dart';
 
 part 'src/view/editors/l_checkbox.dart';
 part 'src/view/editors/l_editor.dart';
-part 'src/view/editors/l_editor_std.dart';
 part 'src/view/editors/l_input.dart';
 part 'src/view/editors/l_radio.dart';
 part 'src/view/editors/l_select.dart';

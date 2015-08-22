@@ -35,7 +35,9 @@ class LPicklist extends LEditor implements LSelectI {
   final SpanElement _buttonLabel = new SpanElement()
     ..classes.add(LText.C_TRUNCATE);
   LButton _button;
+  /// The Dropdown
   LDropdownElement dropdown;
+
 
   /**
    * Picklist
@@ -53,7 +55,7 @@ class LPicklist extends LEditor implements LSelectI {
     _button.element.attributes[Html0.ARIA_HASPOPUP] = "true";
     _button.onClick.listen(onButtonClick);
     _pl.append(_button.element);
-    _buttonLabel.text = "Select an option";
+    _buttonLabel.text = lPicklistSelectOption();
     //
     dropdown = new LDropdownElement(
         new DivElement()
@@ -61,7 +63,10 @@ class LPicklist extends LEditor implements LSelectI {
               LDropdown.C_DROPDOWN__SMALL, LDropdown.C_DROPDOWN__MENU]),
         name:name, idPrefix:id);
     _pl.append(dropdown.element);
+    //
     expanded = false;
+    dropdown.selectMode = true;
+    dropdown.editorChange = onEditorChange;
   } // LPicklist
 
   String get id => _button.id;
@@ -86,42 +91,31 @@ class LPicklist extends LEditor implements LSelectI {
     _button.title = newValue;
   }
 
-  /// Get Editor Label
-  @override
-  LabelElement get labelElement { // TODO
-    if (_labelElement == null) {
-      _labelElement = new LabelElement()
-        ..classes.add(LForm.C_FORM_ELEMENT__LABEL);
-      if (id != null || id.isNotEmpty)
-        _labelElement.htmlFor = id;
-      if (label != null)
-        _labelElement.text = label;
-    }
-    return _labelElement;
-  }
-  LabelElement _labelElement;
-
-  /// Get Editor Label
-  @override
-  Element get labelSmall { // TODO
-    if (_labelSmall == null) {
-      _labelSmall = new Element.tag("small");
-      if (label != null)
-        _labelSmall.text = label;
-    }
-    return _labelSmall;
-  }
-  Element _labelSmall;
-
-
   /// String Value
 
-  String get value => _value;
+  String get value => dropdown.value;
   void set value (String newValue) {
-    _value = newValue;
-    // TODO
+    dropdown.value = newValue;
   }
-  String _value;
+
+  /// Set Button - label
+  void _setValue(ListItem item) {
+    if (item != null && item.label != null && item.label.isNotEmpty) {
+      _buttonLabel.text = item.label;
+    } else {
+      _buttonLabel.text = lPicklistSelectOption();
+    }
+  }
+
+  /// Editor Change callback
+  void onEditorChange(String name, String newValue, bool temporary, var details) {
+    if (details is ListItem) {
+      _setValue(details as ListItem);
+    }
+    if (editorChange != null) // this is the actual editor
+      editorChange(name, newValue, temporary, details);
+  }
+
 
   String get defaultValue => null; // not supported
   void set defaultValue (String newValue) {
@@ -194,7 +188,7 @@ class LPicklist extends LEditor implements LSelectI {
 
   /// Button clicked
   void onButtonClick(MouseEvent evt) {
-    expanded = !expanded; // toggle
+    expanded = !expanded; // toggle dropdown
   }
 
 
@@ -205,6 +199,9 @@ class LPicklist extends LEditor implements LSelectI {
     _pl.attributes[Html0.ARIA_EXPANED] = newValue.toString();
     dropdown.show = newValue;
   }
+
+  // Trl
+  static String lPicklistSelectOption() => Intl.message("Select an Option", name: "lPicklistSelectOption");
 
 } // LPicklist
 

@@ -85,8 +85,8 @@ class LFormCompoundFieldSet extends LComponent {
         ..classes.add(LForm.C_FORM_ELEMENT__CONTROL)
         ..classes.add(size);
       row.append(label);
-      label.append(editor.labelSmall);
-      label.append(editor.input);
+      // TODO label.append(editor.labelSmall);
+      // TODO label.append(editor.input);
     }
   } // addRow
 

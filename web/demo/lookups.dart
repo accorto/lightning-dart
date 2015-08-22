@@ -16,15 +16,16 @@ class Lookups extends DemoFeature {
 
     LLookup l1 = new LLookup.base("l1");
     l1.listItems = generateListItems(10, iconLeft: true);
-    form.add(l1.formElement);
+    l1.value = "item5";
+    form.addEditor(l1);
 
     LLookup l2 = new LLookup.single("l2");
     l2.listItems = generateListItems(10, iconLeft: true);
-    form.add(l2.formElement);
+    form.addEditor(l2);
 
     LLookup l3 = new LLookup.multi("l3");
     l3.listItems = generateListItems(10, iconLeft: true);
-    form.add(l3.formElement);
+    form.addEditor(l3);
 
     return form;
   }

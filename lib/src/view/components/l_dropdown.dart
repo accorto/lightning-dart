@@ -142,14 +142,14 @@ class LDropdown extends LComponent {
     element.append(header);
     DivElement searchDiv = new DivElement()
       ..classes.addAll([
-        LEditor.C_INPUT_HAS_ICON, LEditor.C_INPUT_HAS_ICON__LEFT, LMargin.C_BOTTOM__X_SMALL]);
+        LForm.C_INPUT_HAS_ICON, LForm.C_INPUT_HAS_ICON__LEFT, LMargin.C_BOTTOM__X_SMALL]);
     header.append(searchDiv);
     LIcon searchIcon = new LIconUtility(LIconUtility.SEARCH, className: "slds-input__icon");
     searchDiv.append(searchIcon.element);
     input
       ..type = "search"
       ..placeholder = placeholder
-      ..classes.add(LEditor.C_INPUT)
+      ..classes.add(LForm.C_INPUT)
       ..id = LComponent.createId(idPrefix, "-search");
     LabelElement labelEle = new LabelElement()
       ..classes.add(LText.C_ASSISTIVE_TEXT)
@@ -220,16 +220,18 @@ class LDropdown extends LComponent {
     dropdown.value = newValue;
   } // value
 
-  /// Set Button - label
-  void _setValue(LDropdownItem item) {
-    if (showValueLabel && item.label != null && item.label.isNotEmpty) {
+  /// Set Button - Label/Icon
+  void _setValue(ListItem item) {
+    if (showValueLabel && item != null && item.label != null && item.label.isNotEmpty) {
       button.label = item.label;
     } else {
-      button.label = null;
+      button.label = "";
     }
     // button icon
-    if (item.icon != null) {
+    if (item != null && item.icon != null) {
       button.icon = item.icon.copy();
+    } else {
+      button.icon = null;
     }
   }
 
@@ -243,9 +245,11 @@ class LDropdown extends LComponent {
 
   /// Editor Change callback
   void onEditorChange(String name, String newValue, bool temporary, var details) {
-    if (details is LDropdownItem) {
-      _setValue(details as LDropdownItem);
+    if (details is ListItem) {
+      _setValue(details as ListItem);
     }
+    // if (editorChange != null) // if this were an EditorI
+    //  editorChange(name, newValue, temporary, details);
   }
 
 } // LDropdown
@@ -400,12 +404,13 @@ class LDropdownElement implements LSelectI {
   }
 
   /**
-   * Add Dropdown Item
+   * Add actual Dropdown Item
    */
   void addItem(LDropdownItem item) {
     _items.add(item);
     _dropdownList.append(item.element);
     item.onClick.listen(onItemClick);
+    item.hasIconLeft = _selectMode;
   }
 
   /// Selection (toggle) mode - update value

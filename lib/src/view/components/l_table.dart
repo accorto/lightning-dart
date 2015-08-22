@@ -210,10 +210,10 @@ class LTableRow {
       selectCb = new InputElement(type: "checkbox");
       String selectLabel = type == TYPE_HEAD ? LTable.lTableRowSelectAll() : "${LTable.lTableRowSelectRow()} ${rowNo + 1}";
       LabelElement label = new LabelElement()
-        ..classes.add(LCheckbox.C_CHECKBOX);
+        ..classes.add(LForm.C_CHECKBOX);
       label.append(selectCb);
       label.append(new SpanElement()
-        ..classes.add(LCheckbox.C_CHECKBOX__FAUX)
+        ..classes.add(LForm.C_CHECKBOX__FAUX)
       );
       label.append(new SpanElement()
         ..classes.add(LForm.C_FORM_ELEMENT__LABEL)

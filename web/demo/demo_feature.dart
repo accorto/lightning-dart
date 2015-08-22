@@ -149,7 +149,7 @@ abstract class DemoFeature extends LComponent {
         leftIcon = new LIconCustom("custom-${no}");
       }
       DOption option = new DOption()
-        ..id = i.toString()
+        ..id = value
         ..value = value
         ..label = label;
       ListItem li = new ListItem(option, leftIcon:leftIcon);

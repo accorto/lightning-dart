@@ -7,7 +7,7 @@
 part of lightning_dart;
 
 /**
- * DataList
+ * DataList Element
  */
 class SelectDataList {
 

@@ -9,7 +9,7 @@ part of lightning_dart;
 /**
  * Select Editor
  */
-class LSelect extends LEditorStd implements LSelectI {
+class LSelect extends LEditor with LFormElement implements LSelectI {
 
   /// Select Element
   final SelectElement input = new SelectElement();
@@ -18,6 +18,7 @@ class LSelect extends LEditorStd implements LSelectI {
    * Select Editor
    */
   LSelect(String name, {String idPrefix, bool multiple:false}) {
+    createStandard(input);
     input.name = name;
     input.id = createId(idPrefix, name);
     input.multiple = multiple;
@@ -25,6 +26,7 @@ class LSelect extends LEditorStd implements LSelectI {
 
   /// Select Editor
   LSelect.from(DColumn column, {String idPrefix, bool multiple}) {
+    createStandard(input);
     input.name = column.name;
     input.id = createId(idPrefix, name);
     if (multiple != null)
@@ -40,14 +42,6 @@ class LSelect extends LEditorStd implements LSelectI {
   } // LSelect
 
 
-  String get id => input.id;
-  void set id (String newValue) {
-    if (newValue != null && newValue.isNotEmpty) {
-      input.id = newValue;
-      if (_labelElement != null)
-        _labelElement.htmlFor = newValue;
-    }
-  }
   void updateId(String idPrefix) {
     id = createId(idPrefix, name);
   }
@@ -137,11 +131,6 @@ class LSelect extends LEditorStd implements LSelectI {
 
   String get placeholder => null;
   void set placeholder (String newValue) {
-  }
-
-  String get title => input.title;
-  void set title (String newValue) {
-    input.title = newValue;
   }
 
 

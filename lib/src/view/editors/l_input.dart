@@ -9,7 +9,7 @@ part of lightning_dart;
 /**
  * Input Editor
  */
-class LInput extends LEditorStd {
+class LInput extends LEditor with LFormElement {
 
   /// Input Element
   final InputElement input = new InputElement();
@@ -18,6 +18,7 @@ class LInput extends LEditorStd {
    * Input Editor
    */
   LInput(String name, String type, {String idPrefix}) {
+    createStandard(input);
     input.name = name;
     input.id = createId(idPrefix, name);
     input.type = type;
@@ -27,6 +28,7 @@ class LInput extends LEditorStd {
    * Input Editor
    */
   LInput.from(DColumn column, {String idPrefix, String type}) {
+    createStandard(input);
     input.name = column.name;
     input.id = createId(idPrefix, name);
     if (type != null && type.isEmpty) // override
@@ -42,14 +44,6 @@ class LInput extends LEditorStd {
   } // LInput
 
   /// Editor Id
-  String get id => input.id;
-  void set id (String newValue) {
-    if (newValue != null && newValue.isNotEmpty) {
-      input.id = newValue;
-      if (_labelElement != null)
-        _labelElement.htmlFor = newValue;
-    }
-  }
   void updateId(String idPrefix) {
     id = createId(idPrefix, name);
   }
@@ -80,12 +74,6 @@ class LInput extends LEditorStd {
   bool get disabled => input.disabled;
   void set disabled (bool newValue) {
     input.disabled = newValue;
-  }
-
-  bool get required => input.required;
-  void set required (bool newValue) {
-    super.required = newValue; // ui
-    input.required = newValue;
   }
 
   bool get spellcheck => input.spellcheck;
@@ -132,11 +120,6 @@ class LInput extends LEditorStd {
     input.placeholder = newValue;
   }
 
-  String get title => input.title;
-  void set title (String newValue) {
-    input.title = newValue;
-  }
-
   /// Data Lists
 
   /// get Data List Id
@@ -149,8 +132,5 @@ class LInput extends LEditorStd {
   void set list (SelectDataList dl) {
     input.attributes["list"] = dl.id;
   }
-
-
-
 
 } // LInput
