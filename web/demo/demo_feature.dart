@@ -59,20 +59,26 @@ abstract class DemoFeature extends LComponent {
     LTab tab = new LTab(idPrefix: id);
     tab.element.style.marginTop = "20px";
     element.append(tab.element);
-    Element sc = tab.addTab("Small", name: "s");
+    Element sc = tab.addTab("Small", name: "s")
+      ..classes.add(LGrid.C_CONTAINER__SMALL);
     sc.style.width = "480px";
     sc.style.border = "1px solid lightgray";
-    Element mc = tab.addTab("Medium", name: "m");
+    Element mc = tab.addTab("Medium", name: "m")
+      ..classes.add(LGrid.C_CONTAINER__MEDIUM);
     mc.style.width = "768px";
     mc.style.border = "1px solid gray";
-    Element lc = tab.addTab("Large", name: "l");
+    Element lc = tab.addTab("Large", name: "l")
+      ..classes.add(LGrid.C_CONTAINER__LARGE);
     lc.style.width = "1024px";
     lc.style.border = "1px solid black";
-    Element xc = tab.addTab("Flex", name: "x");
+    Element xc = tab.addTab("Fluid", name: "x")
+      ..classes.add(LGrid.C_CONTAINER__FLUID);
+    xc.style.width = "100%";
     xc.style.border = "1px solid black";
 
     Element dc = tab.addTab("Source", name: "d");
     ParagraphElement src = new ParagraphElement()
+      ..classes.add(LText.C_TEXT_BODY__SMALL)
       ..style.whiteSpace = "pre"
       ..text = source;
     dc.append(src);

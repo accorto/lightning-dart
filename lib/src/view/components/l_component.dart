@@ -98,6 +98,41 @@ class CDiv extends LComponent {
     element.text = newValue;
   }
 
+  /**
+   * Set Container [size] LGrid.C_CONTAINER__SMALL/MEDIUM/LARGE
+   */
+  void set size(String size) {
+    element.classes.removeAll(LGrid.CONTAINER_SIZES);
+    if (size != null && size.isNotEmpty)
+      element.classes.add(size);
+  }
+  /// first size found or null
+  String get size {
+    for (String cls in element.classes) {
+      if (LGrid.CONTAINER_SIZES.contains(cls))
+        return cls;
+    }
+    return null;
+  }
+
+  /**
+   * Set Container horizontal [alignment] LGrid.C_CONTAINER__CENTER/RIGHT/LEFT
+   */
+  void set hAlign(String alignment) {
+    element.classes.removeAll(LGrid.CONTAINER_HALIGN);
+    if (alignment != null && alignment.isNotEmpty)
+      element.classes.add(alignment);
+  }
+  /// first alignment or null
+  String get hAlign {
+    for (String cls in element.classes) {
+      if (LGrid.CONTAINER_HALIGN.contains(cls))
+        return cls;
+    }
+    return null;
+  }
+
+
   /// add horizontal rule [margin] top/bottom - default 2rem
   void appendHR({String margin}) {
     HRElement hr = new HRElement();

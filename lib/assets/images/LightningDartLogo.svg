@@ -1,19 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Copyright (c) 2015 Accorto, Inc. All Rights Reserved
-  ~ License: GPLv3   http://www.gnu.org/licenses/gpl-3.0.txt
-  ~ License options+support:  https://www.lightningdart.com
+  ~ License: GPLv3  http://www.gnu.org/licenses/gpl-3.0.txt
+  ~ License options+support:  https://lightningdart.com
   -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg
 		xmlns="http://www.w3.org/2000/svg"
+		xmlns:xlink="http://www.w3.org/1999/xlink"
 		width="1024"
 		height="1024"
 		viewBox="0 0 1024 1024"
 		preserveAspectRatio="xMidYMid meet"
 		>
+	<defs>
+		<path id="ld" d="M256,0 L0,512 L384,512 L128,1024 L1024,384 L640,384 L896,0 L256,0 Z"/>
+		<clipPath id="clip">
+			<use xlink:href="#ld"/>
+		</clipPath>
+		<linearGradient id="gradStroke"  x1="100%" y1="0%" x2="0%" y2="100%">
+			<stop offset="20%" stop-color="#0081C6" stop-opacity="10%"/>
+			<stop offset="80%" stop-color="#0081C6" />
+		</linearGradient>
+		<linearGradient id="gradFill"  x1="100%" y1="0%" x2="0%" y2="100%">
+			<stop offset="20%" stop-color="#00D2B8" stop-opacity="10%"/>
+			<stop offset="80%" stop-color="#00D2B8" />
+		</linearGradient>
+	</defs>
 	<g>
-		<path fill="#0081C6" d="M 0 576 L 768 0 L 554 448 L 469 576 Z"/>
-		<path fill="#00D2B8" d="M 554 447 L 1024 448 L 256 1025 L 469 576 Z"/>
+		<use xlink:href="#ld" stroke="url(#gradStroke)" stroke-width="170" fill="url(#gradFill)" clip-path="url(#clip)"/>
 	</g>
 </svg>

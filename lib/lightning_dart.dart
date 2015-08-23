@@ -79,6 +79,8 @@ part 'src/view/utility/option_util.dart';
  */
 class LightningDart {
 
+  static const VERSION = "v0.7.0";
+
   /** Locale Name */
   static String localeName = "en_US";
   /** Locale Name */

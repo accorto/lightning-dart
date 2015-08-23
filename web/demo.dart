@@ -37,46 +37,54 @@ void main() {
   LightningDart.init() // client env
   .then((_){
     //
-    LContainer page = LContainer.create(id: "demo",
-        containerSize: LGrid.C_CONTAINER__LARGE,
-        containerHAlign: LGrid.C_CONTAINER__CENTER);
-    LHeader hdr = page.addHeader("Lightning Dart Demo (alpha)");
+    LPage page = LPage.create();
+    page.header
+      ..classes.add(LGrid.C_CONTAINER__MEDIUM);
+    page.header.h1
+      ..text = "Lightning Dart Demo (alpha)"
+      ..classes.add(LText.C_TEXT_HEADING__LARGE);
     ParagraphElement p = new ParagraphElement()
+      ..classes.add(LMargin.C_VERTICAL__MEDIUM)
       ..text = "Please check out the different component implementations of the Salesforce Lightning Design System ";
     p.append(new AnchorElement(href: "https://www.lightningdesignsystem.com")
       ..text = "(SLDS)"
       ..target = "_blank");
-    hdr.append(p);
+    page.header.append(p);
     //
     p = new ParagraphElement()
       ..classes.add(LText.C_TEXT_BODY__SMALL)
       ..text = "The current status is Alpha, so there might be a few things not working as expected. "
-      "If you identified a bug, please report it via ";
+      "If you identified a bug, please help and report it via ";
     p.append(new AnchorElement(href: "https://github.com/accorto/lightning-dart/issues")
-      ..text = "Github Isssues for Lightning Dart"
+      ..text = "Github Isssues"
       ..target = "_blank");
-    p.appendText(" and provide the following info:");
-    hdr.append(p);
+    p.appendText(" with the following info:");
+    page.header.append(p);
     UListElement ul = new UListElement()
       ..classes.add(LText.C_TEXT_BODY__SMALL);
-    hdr.append(ul);
+    page.header.append(ul);
     ul.append(new LIElement()..text = "* Browser+Platform (e.g. Sarari on iPod)");
     ul.append(new LIElement()..text = "* Type: Rendering off | Html elements/attributes wrong | Functianality bug");
     p = new ParagraphElement()
       ..classes.add(LText.C_TEXT_BODY__SMALL)
       ..text = "We appreciate also suggestions and questions :-)";
-    hdr.append(p);
+    page.header.append(p);
     p = new ParagraphElement()
+      ..classes.add(LMargin.C_TOP__MEDIUM)
       ..text = "Thanks.";
-    hdr.append(p);
+    page.header.append(p);
+    //
+    page.footer
+      ..classes.add(LGrid.C_CONTAINER__MEDIUM);
+    page.footer.h2
+      ..text = "Lightning Dart version ${LightningDart.VERSION}";
 
 
-    CDiv main = page.addDiv()
-      ..classes.add("main")
-      ..role = Html0.ROLE_MAIN;
-
-    DivElement tocDiv = new DivElement();
-    main.element.append(tocDiv);
+    Element tocDiv = new Element.nav();
+    page.append(tocDiv);
+    tocDiv.append(new HeadingElement.h2()
+      ..classes.add(LText.C_TEXT_HEADING__SMALL)
+      ..text = "Components:");
     UListElement toc = new UListElement()
       ..classes.addAll([LMargin.C_TOP__MEDIUM, LList.C_LIST__VERTICAL, LList.C_HAS_BLOCK_LINKS]);
     tocDiv.append(toc);
@@ -108,9 +116,7 @@ void main() {
     // tooltips
     // trees
 
-    page.addFooter("Lightning Dart");
   });
-
 
   /**
   CDiv main = page.appendDiv()

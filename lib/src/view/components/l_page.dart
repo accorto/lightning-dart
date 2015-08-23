@@ -9,153 +9,129 @@ part of lightning_dart;
 /**
  * Html Page with [container]
  */
-class LPage {
-
-
-
-} // LPage
-
-/**
- * Lightning Container
- */
-class LContainer extends CDiv {
-
+class LPage extends CDiv {
 
   /**
    * Main Page Entry Point (returns the last created container)
    */
-  static LContainer get container {
-    if (_container == null)
+  static LPage get page {
+    if (_page == null)
       create();
-    return _container;
+    return _page;
   }
-  static LContainer _container;
+  static LPage _page;
 
   /**
-   * Create Page
+   * Create Page (slds-grid)
    * [id] id of the application
-   * [containerId] element id of the container, if not found looks for slds-container, if not found adds section to the body.
    * [clearContainer] clears all content from container
    */
-  static LContainer create({String id: "wrap",
-      bool clearContainer: true,
-      String containerSize,
-      String containerHAlign}) {
+  static LPage create({String id: "wrap",
+    bool clearContainer: true}) {
     // Top Level Main
     Element e = querySelector("#${id}");
     if (e == null) {
-      e = querySelector(".${LGrid.C_CONTAINER__SMALL}");
+      e = querySelector(".container");
       if (e == null) {
-        e = querySelector(".${LGrid.C_CONTAINER__MEDIUM}");
-        if (e == null) {
-          e = querySelector(".${LGrid.C_CONTAINER__LARGE}");
-        }
+        e = querySelector(".${LGrid.C_GRID}");
       }
     }
     if (e == null) {
-      Element body = querySelector("body");
-      _container = new LContainer.section(id);
-      body.append(_container.element);
+      Element body = document.body; // querySelector("body");
+      _page = new LPage(new DivElement(), id);
+      body.append(_page.element);
     } else {
-      _container = new LContainer(e, id);
+      if (clearContainer) {
+        e.children.clear();
+      }
+      _page = new LPage(e, id);
     }
-
-    // remove children
-    if (clearContainer) {
-      _container.clear();
-    }
-    if (containerSize != null)
-      _container.size = containerSize;
-    if (containerHAlign != null)
-      _container.hAlign = containerHAlign;
-    return _container;
+    return _page;
   } // init
-
 
   /// The Header
   LHeader header;
+  /// Main Content
+  CDiv main;
   /// The Footer
   LFooter footer;
-
 
   /**
    * Container with [id]
    */
-  LContainer(Element element, String id) : super._(element) {
+  LPage(Element element, String id,
+      {String baseClass: LGrid.C_GRID,
+        String wrap: LGrid.C_WRAP,
+        String margin: LMargin.C_AROUND__LARGE,
+        List<String> addlClasses,
+        bool createHeaderMainFooter: true,
+        CDiv mainSection
+      })
+      : super._(element) {
     element.id = id == null || id.isEmpty ? LComponent.createId("c", null) : id;
-  }
-  /// Create new div Container
-  LContainer.div(String id) : this(new DivElement(), id);
-  /// Create new section Container
-  LContainer.section(String id) : this(new Element.section(), id);
-  /// Create new article Container
-  LContainer.article(String id) : this(new Element.article(), id);
+    if (baseClass.isNotEmpty)
+      element.classes.add(baseClass);
+    if (wrap.isNotEmpty)
+      element.classes.add(wrap);
+    if (margin.isNotEmpty)
+      element.classes.add(margin);
+    if (addlClasses != null) {
+      element.classes.addAll(addlClasses);
+    }
+    main = mainSection;
+    if (main == null) {
+      main = new CDiv.section()
+        ..role = Html0.ROLE_MAIN;
+    }
+    if (createHeaderMainFooter) {
+      header = new LHeader();
+
+      element.append(header.element);
+      element.append(main.element);
+      footer = new LFooter();
+      element.append(footer.element);
+    } else {
+      super.add(main);
+    }
+  } // LPage
+
 
   /// element id
   String get id => element.id;
-
   /// clear children
   void clear() => element.children.clear();
 
-  /**
-   * Set Container [size] LGrid.C_CONTAINER__SMALL/MEDIUM/LARGE
-   */
-  void set size(String size) {
-    element.classes.removeAll(LGrid.CONTAINER_SIZES);
-    if (size != null && size.isNotEmpty)
-      element.classes.add(size);
+  /// append component to page
+  void append(Element newValue,
+      {String colClass: LGrid.C_COL,
+      String size: LSizing.C_SIZE__1_OF_1,
+      String margin: LMargin.C_VERTICAL__SMALL}) {
+    main.element.append(newValue);
+    if (colClass.isNotEmpty)
+      newValue.classes.add(colClass);
+    if (size.isNotEmpty)
+      newValue.classes.add(size);
+    if (margin.isNotEmpty)
+      newValue.classes.add(margin);
   }
-  /// first size found or null
-  String get size {
-    for (String cls in element.classes) {
-      if (LGrid.CONTAINER_SIZES.contains(cls))
-        return cls;
-    }
-    return null;
-  }
-
-  /**
-   * Set Container horizontal [alignment] LGrid.C_CONTAINER__CENTER/RIGHT/LEFT
-   */
-  void set hAlign(String alignment) {
-    element.classes.removeAll(LGrid.CONTAINER_HALIGN);
-    if (alignment != null && alignment.isNotEmpty)
-      element.classes.add(alignment);
-  }
-  /// first alignment or null
-  String get hAlign {
-    for (String cls in element.classes) {
-      if (LGrid.CONTAINER_HALIGN.contains(cls))
-        return cls;
-    }
-    return null;
+  /// append component to page
+  void add(LComponent component,
+      {String colClass: LGrid.C_COL,
+      String size: LSizing.C_SIZE__1_OF_1,
+      String margin: LMargin.C_VERTICAL__SMALL}) {
+    main.element.append(component.element);
+    if (colClass.isNotEmpty)
+      component.element.classes.add(colClass);
+    if (size.isNotEmpty)
+      component.element.classes.add(size);
+    if (margin.isNotEmpty)
+      component.element.classes.add(margin);
   }
 
-  /// add header
-  LHeader addHeader(String text, {String size: LText.C_TEXT_HEADING__LARGE}) {
-    header = new LHeader()
-      ..text = text
-      ..size = size;
-    //
-    add(header);
-    return header;
-  }
-
-  /// add footer
-  LFooter addFooter(String text, {String size: LText.C_TEXT_HEADING__SMALL}) {
-    footer = new LFooter()
-      ..text = text
-      ..size = size;
-    //
-    add(footer);
-    return footer;
-  }
-
-} // LContainer
-
+} // LPage
 
 /**
- * Page Header
+ * Page Header with h1
  */
 class LHeader extends LComponent {
 
@@ -163,13 +139,19 @@ class LHeader extends LComponent {
   final Element element = new Element.header()
     ..setAttribute(Html0.ROLE, Html0.ROLE_BANNER);
   /// h1
-  final HeadingElement h1 = new HeadingElement.h1()
-    ..classes.add(LText.C_TEXT_HEADING__LABEL);
+  final HeadingElement h1 = new HeadingElement.h1();
 
   /// Header
-  LHeader({String margin: LMargin.C_TOP__MEDIUM}) {
+  LHeader({String colClass: LGrid.C_COL,
+      String size: LSizing.C_SIZE__1_OF_1,
+      String margin: LMargin.C_VERTICAL__SMALL}) {
     element.append(h1);
-    element.classes.add(margin);
+    if (colClass.isNotEmpty)
+      element.classes.add(colClass);
+    if (size.isNotEmpty)
+      element.classes.add(size);
+    if (margin.isNotEmpty)
+      element.classes.add(margin);
   }
 
   /// Text
@@ -179,26 +161,11 @@ class LHeader extends LComponent {
   /// Text
   String get text => h1.text;
 
-
-  /// Size
-  void set size (String newValue) {
-    h1.classes.removeAll(LText.HEADING_SIZES);
-    if (newValue != null && newValue.isNotEmpty)
-      h1.classes.add(newValue);
-  }
-  String get size {
-    for (String cls in element.classes) {
-      if (LText.HEADING_SIZES.contains(cls))
-        return cls;
-    }
-    return null;
-  }
-
 } // LHeader
 
 
 /**
- * Page Footer
+ * Page Footer with h2
  */
 class LFooter extends LComponent {
 
@@ -209,9 +176,16 @@ class LFooter extends LComponent {
   final HeadingElement h2 = new HeadingElement.h2();
 
   /// Page Footer
-  LFooter({String margin: LMargin.C_VERTICAL__MEDIUM}) {
+  LFooter({String colClass: LGrid.C_COL,
+      String size: LSizing.C_SIZE__1_OF_1,
+      String margin: LMargin.C_VERTICAL__SMALL}) {
     element.append(h2);
-    element.classes.add(margin);
+    if (colClass.isNotEmpty)
+      element.classes.add(colClass);
+    if (size.isNotEmpty)
+      element.classes.add(size);
+    if (margin.isNotEmpty)
+      element.classes.add(margin);
   }
 
   /// Text
@@ -220,42 +194,5 @@ class LFooter extends LComponent {
   }
   /// Text
   String get text => h2.text;
-
-  /// Size
-  void set size (String newValue) {
-    h2.classes.removeAll(LText.HEADING_SIZES);
-    if (newValue != null && newValue.isNotEmpty)
-      h2.classes.add(newValue);
-  }
-  String get size {
-    for (String cls in element.classes) {
-      if (LText.HEADING_SIZES.contains(cls))
-        return cls;
-    }
-    return null;
-  }
-
-  /// Add Footer Class
-  void addFooterClass(String footerClass) {
-    if (footerClass != null && footerClass.isNotEmpty)
-      element.classes.add(footerClass);
-  }
-  /// Add Footer Classes, e.g. LPadding.C_TOP__X_LARGE, LPadding.C_BOTTOM__X_LARGE
-  void addFooterClasses(List<String> footerClasses) {
-    for (String cls in footerClasses)
-      addFooterClass(cls);
-  }
-
-
-  /// Add Footer Heading Class
-  void addHeadingClass(String headingClass) {
-    if (headingClass != null && headingClass.isNotEmpty)
-      h2.classes.add(headingClass);
-  }
-  /// Add Footer Heading Classes e.g. LText.C_TEXT_HEADING__LARGE, LPadding.C_TOP__X_LARGE
-  void addHeadingClasses(List<String> headingClasses) {
-    for (String cls in headingClasses)
-      addHeadingClass(cls);
-  }
 
 } // LFooter
