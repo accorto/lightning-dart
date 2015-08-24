@@ -78,6 +78,66 @@ class Forms extends DemoFeature {
     return form;
   } // content
 
+  String get source {
+    return '''
+    LForm form = new LForm.stacked("tf")
+      ..formType = formType; // demo toggle
+
+    LInput textInput = new LInput("text1", EditorI.TYPE_TEXT)
+      ..label = "Text Input"
+      ..placeholder = "Text Placeholder"
+      ..readOnly = fieldReadOnly // demo toggle
+      ..disabled = fieldDisabled // demo toggle
+      ..required = fieldRequired; // demo toggle
+    form.addEditor(textInput);
+
+    LInput pwInput = new LInput("email1", EditorI.TYPE_PASSWORD)
+      ..label = "Password Input"
+      ..placeholder = "Password Placeholder"
+      ..help = "Well, we are not picky - anything goes"
+      ..readOnly = fieldReadOnly // demo toggle
+      ..disabled = fieldDisabled // demo toggle
+      ..required = fieldRequired; // demo toggle
+    form.addEditor(pwInput);
+
+    LCheckbox check = new LCheckbox("check1")
+      ..label = "Checkbox Example"
+      ..readOnly = fieldReadOnly // demo toggle
+      ..disabled = fieldDisabled // demo toggle
+      ..required = fieldRequired; // demo toggle
+    form.addEditor(check);
+
+    LInput emailInput = new LInput("email1", EditorI.TYPE_EMAIL)
+      ..label = "Email Input"
+      ..hint = "With basic email type validation"
+      ..placeholder = "Email Placeholder"
+      ..readOnly = fieldReadOnly // demo toggle
+      ..disabled = fieldDisabled // demo toggle
+      ..required = fieldRequired; // demo toggle
+    form.addEditor(emailInput);
+
+    LSelect sel = new LSelect("sel1")
+      ..label = "Select Example"
+      ..listItems = generateListItems(5)
+      ..readOnly = fieldReadOnly // demo toggle
+      ..disabled = fieldDisabled // demo toggle
+      ..required = fieldRequired; // demo toggle
+    form.addEditor(sel);
+
+    LTextArea ta = new LTextArea("ta1")
+      ..label = "Text Area"
+      ..readOnly = fieldReadOnly // demo toggle
+      ..disabled = fieldDisabled // demo toggle
+      ..required = fieldRequired; // demo toggle
+    form.addEditor(ta);
+    //
+    form.addResetButton();
+    form.addSaveButton();
+    form.small = formSmall; // demo toggle
+    //
+    form.setRecord(record, 0);
+    ''';
+  }
 
 
   DivElement optionTypeCb() {

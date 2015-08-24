@@ -31,6 +31,20 @@ class Tooltips extends DemoFeature {
 
   String get source {
     return '''
+    CDiv div = new CDiv();
+    LTooltip pop = new LTooltip("Tooltip Content Test lines come here")
+      ..nubbinRight = true;
+    div.add(pop);
+
+    div.appendHR();
+    pop = new LTooltip(null)
+      ..nubbinTop = true;
+    pop.body
+      ..appendText("Another Tooltip Some text comes here ")
+      ..append(new AnchorElement(href: "#")..text = "Some Link")
+      ..appendText(" Additional Text");
+    div.add(pop);
     ''';
   }
+
 }

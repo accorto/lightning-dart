@@ -35,7 +35,6 @@ class Breadcrumbs extends DemoFeature {
   String get source {
     return '''
     CDiv div = new CDiv();
-
     LBreadcrumb b1 = new LBreadcrumb();
     b1.setLinkText("Parent Entity A", null, 0);
     b1.setLinkText("Parent Record A", null, 1);

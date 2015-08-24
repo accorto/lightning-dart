@@ -67,7 +67,6 @@ class Icons extends DemoFeature {
   String get source {
     return '''
     CDiv div = new CDiv();
-
     div.add(new LIconSpan.utility(LIconUtility.ANNOUNCEMENT, size:LIcon.C_ICON__X_SMALL));
     div.add(new LIconSpan.action(LIconAction.DESCRIPTION, size:LIcon.C_ICON__X_SMALL));
     div.add(new LIconSpan.standard(LIconStandard.ACCOUNT, size:LIcon.C_ICON__X_SMALL));

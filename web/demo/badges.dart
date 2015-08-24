@@ -24,7 +24,6 @@ class Badges extends DemoFeature {
   String get source {
     return '''
     CDiv div = new CDiv();
-
     div.add(new LBadge("base badge"));
     div.add(new LBadge.def("default badge"));
     div.add(new LBadge.shade("shade badge"));
