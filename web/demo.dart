@@ -26,6 +26,7 @@ part 'demo/lookups.dart';
 
 part 'demo/picklists.dart';
 part 'demo/pills.dart';
+part 'demo/popovers.dart';
 
 part 'demo/tabs.dart';
 
@@ -109,7 +110,7 @@ void main() {
     // page headers
     page.add(new Picklists()..toc(toc));
     page.add(new Pills()..toc(toc));
-    // popover
+    page.add(new Popovers()..toc(toc));
     // spinner
     page.add(new Tabs()..toc(toc));
     // tiles

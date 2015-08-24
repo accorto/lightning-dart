@@ -9,54 +9,85 @@ part of lightning_dart;
 /**
  * Popover
  */
-class LPopover {
+class LPopover extends LComponent {
 
-  static const String C_DIALOG = "slds-dialog";
-  static const String C_DIALOG__CONTENT = "slds-dialog__content";
-  static const String C_DIALOG__HEAD = "slds-dialog__head";
-  static const String C_DIALOG__BODY = "slds-dialog__body";
-
+  /// slds-popover - Initializes popover | Required
+  static const String C_POPOVER = "slds-popover";
+  /// slds-popover__content - Hook for nubbin positioning | Required
+  static const String C_POPOVER__CONTENT = "slds-popover__content";
+  /// slds-popover__header - Applys styles for top area of popover
+  static const String C_POPOVER__HEADER = "slds-popover__header";
+  /// slds-popover__body - Applys syles for primary content area of popover
+  static const String C_POPOVER__BODY = "slds-popover__body";
+  /// slds-nubbin--top - Triangle that points upwards
   static const String C_NUBBIN__TOP = "slds-nubbin--top";
+  /// slds-nubbin--bottom - Triangle that points downwards
   static const String C_NUBBIN__BOTTOM = "slds-nubbin--bottom";
+  /// slds-nubbin--left - Triangle that points to the left
   static const String C_NUBBIN__LEFT = "slds-nubbin--left";
+  /// slds-nubbin--right - Triangle that points to the right
   static const String C_NUBBIN__RIGHT = "slds-nubbin--right";
 
+  /// Nubbin Positions
+  static final List<String> NUBBINS = [C_NUBBIN__TOP, C_NUBBIN__RIGHT, C_NUBBIN__BOTTOM, C_NUBBIN__LEFT];
 
   /// Popover element
   final DivElement element = new DivElement()
-    ..classes.add(C_DIALOG)
+    ..classes.add(C_POPOVER)
     ..attributes[Html0.ROLE] = Html0.ROLE_DIALOG;
 
-  final DivElement content = new DivElement()
-    ..classes.add(C_DIALOG__CONTENT)
+  final DivElement _content = new DivElement()
+    ..classes.add(C_POPOVER__CONTENT)
     ..attributes[Html0.ROLE] = Html0.ROLE_DOCUMENT;
+  final DivElement _head = new DivElement()
+    ..classes.add(C_POPOVER__HEADER);
 
-  final DivElement head = new DivElement()
-    ..classes.add(C_DIALOG__HEAD);
   final DivElement body = new DivElement()
-    ..classes.add(C_DIALOG__BODY);
+    ..classes.add(C_POPOVER__BODY);
 
 
   /**
-   * Popover
-   * optional [nubbin] e.g. C_NUBBIN__TOP
+   * Popover with text
    */
-  LPopover(String headText, String bodyText, {String nubbin}) {
-    element.append(content);
-    if (nubbin != null && nubbin.isNotEmpty)
-      element.classes.add(nubbin);
-
-    content.append(head);
+  LPopover(String headText, String bodyText) {
+    element.append(_content);
+    _content.append(_head);
     if (headText != null) {
       ParagraphElement p = new ParagraphElement()
         ..classes.add(LText.C_TEXT_HEADING__SMALL)
         ..text = headText;
-      head.append(p);
+      _head.append(p);
     }
-    content.append(body);
+    _content.append(body);
     if (bodyText != null)
       body.text = bodyText;
   } // LPopover
+
+
+  void set nubbinTop (bool newValue) {
+    element.classes.removeAll(NUBBINS);
+    if (newValue) {
+      element.classes.add(C_NUBBIN__TOP);
+    }
+  }
+  void set nubbinRight (bool newValue) {
+    element.classes.removeAll(NUBBINS);
+    if (newValue) {
+      element.classes.add(C_NUBBIN__RIGHT);
+    }
+  }
+  void set nubbinLeft (bool newValue) {
+    element.classes.removeAll(NUBBINS);
+    if (newValue) {
+      element.classes.add(C_NUBBIN__LEFT);
+    }
+  }
+  void set nubbinBottom (bool newValue) {
+    element.classes.removeAll(NUBBINS);
+    if (newValue) {
+      element.classes.add(C_NUBBIN__BOTTOM);
+    }
+  }
 
 
 } // LPopover
