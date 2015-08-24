@@ -29,6 +29,7 @@ part 'demo/pills.dart';
 part 'demo/popovers.dart';
 
 part 'demo/tabs.dart';
+part 'demo/tooltips.dart';
 
 /**
  * Lightning Demo Example Page
@@ -114,7 +115,7 @@ void main() {
     // spinner
     page.add(new Tabs()..toc(toc));
     // tiles
-    // tooltips
+    page.add(new Tooltips()..toc(toc));
     // trees
 
   });

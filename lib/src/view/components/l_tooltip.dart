@@ -9,10 +9,14 @@ part of lightning_dart;
 /**
  * Tooltip
  */
-class LTooltip {
+class LTooltip extends LPopbase {
 
+
+  /// slds-tooltip - Initializes tooltip | Required
   static const String C_TOOLTIP = "slds-tooltip";
+  /// slds-tooltip__content - Hook for nubbin positioning | Required
   static const String C_TOOLTIP__CONTENT = "slds-tooltip__content";
+  /// slds-tooltip__body - Applies styles for primary content area of tooltip | Required
   static const String C_TOOLTIP__BODY = "slds-tooltip__body";
 
 
@@ -21,24 +25,20 @@ class LTooltip {
     ..classes.add(C_TOOLTIP)
     ..attributes[Html0.ROLE] = Html0.ROLE_TOOLTIP;
 
-  final DivElement content = new DivElement()
+  final DivElement _content = new DivElement()
     ..classes.add(C_TOOLTIP__CONTENT)
     ..attributes[Html0.ROLE] = Html0.ROLE_DOCUMENT;
 
   final DivElement body = new DivElement()
-    ..classes.add(C_TOOLTIP__CONTENT);
+    ..classes.add(C_TOOLTIP__BODY);
 
 
   /**
    * Tooltip
-   * [nubbin] e.g. LTooltip.C_NUBBIN__TOP
    */
-  LTooltip(String bodyText, {String nubbin}) {
-    element.append(content);
-    if (nubbin != null && nubbin.isNotEmpty)
-      element.classes.add(nubbin);
-
-    content.append(body);
+  LTooltip(String bodyText) {
+    element.append(_content);
+    _content.append(body);
     if (bodyText != null)
       body.text = bodyText;
   }

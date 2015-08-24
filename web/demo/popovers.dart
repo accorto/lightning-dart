@@ -16,6 +16,7 @@ class Popovers extends DemoFeature {
       ..nubbinRight = true;
     div.add(pop);
 
+    div.appendHR();
     pop = new LPopover("Another Popover", null)
       ..nubbinTop = true;
     pop.body

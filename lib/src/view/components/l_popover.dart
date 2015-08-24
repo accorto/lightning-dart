@@ -9,7 +9,7 @@ part of lightning_dart;
 /**
  * Popover
  */
-class LPopover extends LComponent {
+class LPopover extends LPopbase {
 
   /// slds-popover - Initializes popover | Required
   static const String C_POPOVER = "slds-popover";
@@ -19,6 +19,7 @@ class LPopover extends LComponent {
   static const String C_POPOVER__HEADER = "slds-popover__header";
   /// slds-popover__body - Applys syles for primary content area of popover
   static const String C_POPOVER__BODY = "slds-popover__body";
+
   /// slds-nubbin--top - Triangle that points upwards
   static const String C_NUBBIN__TOP = "slds-nubbin--top";
   /// slds-nubbin--bottom - Triangle that points downwards
@@ -64,30 +65,55 @@ class LPopover extends LComponent {
   } // LPopover
 
 
+} // LPopover
+
+
+/**
+ * Popover/Tooltip management
+ */
+abstract class LPopbase extends LComponent {
+
+  /// Pop Element
+  Element get element;
+
+
   void set nubbinTop (bool newValue) {
-    element.classes.removeAll(NUBBINS);
+    element.classes.removeAll(LPopover.NUBBINS);
     if (newValue) {
-      element.classes.add(C_NUBBIN__TOP);
+      element.classes.add(LPopover.C_NUBBIN__TOP);
     }
   }
   void set nubbinRight (bool newValue) {
-    element.classes.removeAll(NUBBINS);
+    element.classes.removeAll(LPopover.NUBBINS);
     if (newValue) {
-      element.classes.add(C_NUBBIN__RIGHT);
+      element.classes.add(LPopover.C_NUBBIN__RIGHT);
     }
   }
   void set nubbinLeft (bool newValue) {
-    element.classes.removeAll(NUBBINS);
+    element.classes.removeAll(LPopover.NUBBINS);
     if (newValue) {
-      element.classes.add(C_NUBBIN__LEFT);
+      element.classes.add(LPopover.C_NUBBIN__LEFT);
     }
   }
   void set nubbinBottom (bool newValue) {
-    element.classes.removeAll(NUBBINS);
+    element.classes.removeAll(LPopover.NUBBINS);
     if (newValue) {
-      element.classes.add(C_NUBBIN__BOTTOM);
+      element.classes.add(LPopover.C_NUBBIN__BOTTOM);
     }
   }
 
 
-} // LPopover
+  /// Show pop above [target] and add it to [parent]
+  void showAbove(Element target, {Element parent,
+      bool showOnHover: true, bool showOnClick: true}) {
+    nubbinBottom = true;
+    // TODO
+  }
+
+
+  /// remove from parent
+  void hide() {
+    element.remove();
+  }
+
+} // LPopbase
