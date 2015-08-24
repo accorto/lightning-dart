@@ -11,6 +11,9 @@ part of lightning_dart;
  */
 class LInput extends LEditor with LFormElement {
 
+  /// Logger
+  static final Logger _log = new Logger("LInput");
+
   /// Input Element
   final InputElement input = new InputElement();
 
@@ -18,17 +21,19 @@ class LInput extends LEditor with LFormElement {
    * Input Editor
    */
   LInput(String name, String type, {String idPrefix}) {
-    createStandard(input);
+    createStandard(this);
     input.name = name;
     input.id = createId(idPrefix, name);
     input.type = type;
+    //
+    _initEditor();
   }
 
   /**
    * Input Editor
    */
   LInput.from(DColumn column, {String idPrefix, String type}) {
-    createStandard(input);
+    createStandard(this);
     input.name = column.name;
     input.id = createId(idPrefix, name);
     if (type != null && type.isEmpty) // override
@@ -36,12 +41,33 @@ class LInput extends LEditor with LFormElement {
     else
       input.type = DataTypeUtil.getInputType(column.dataType);
     //
-    this.column = column;
+    this.column = column; // base values
     if (column.hasValFrom())
       min = column.valFrom;
     if (column.hasValTo())
       max = column.valTo;
+    _initEditor();
   } // LInput
+
+  /// initialize listeners
+  void _initEditor() {
+    if (type == EditorI.TYPE_PASSWORD) {
+      input.autocomplete = "off";
+      input.attributes["autocapitalize"] = "off";
+      input.attributes["autocorrect"] = "off";
+    }
+    /// Changes
+    input.onChange.listen(onInputChange);
+    /// not a button, checkbox, ..
+    if (!EditorI.TYPES_NOLABEL.contains(type)) {
+      input.onKeyUp.listen(onInputKeyUp);
+    }
+    // stepper
+    // if (EditorI.isDate(type) || type == EditorI.TYPE_NUMBER)
+    if (type == EditorI.TYPE_NUMBER) {
+      input.onClick.listen(onInputChange);
+    }
+  } // initializeEditor
 
   /// Editor Id
   void updateId(String idPrefix) {
@@ -108,9 +134,9 @@ class LInput extends LEditor with LFormElement {
   }
 
   /// Validation state from Input
-  ValidityState get validationState => input.validity;
+  ValidityState get inputValidationState => input.validity;
   /// Validation Message from Input
-  String get validationMsg => input.validationMessage;
+  String get inputValidationMsg => input.validationMessage;
 
 
   /// Display

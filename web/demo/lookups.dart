@@ -12,7 +12,7 @@ class Lookups extends DemoFeature {
 
 
   LComponent get content {
-    LForm form = new LForm.stacked();
+    LForm form = new LForm.stacked("tf");
 
     LLookup l1 = new LLookup.base("l1");
     l1.label = "Base Lookup";

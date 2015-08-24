@@ -11,7 +11,7 @@ class Picklists extends DemoFeature {
   Picklists() : super("picklists", "Picklists", "");
 
   LComponent get content {
-    LForm form = new LForm.stacked();
+    LForm form = new LForm.stacked("tf");
 
     LPicklist pl1 = new LPicklist("pl1");
     pl1.label = "Picklist 1"; // TODO

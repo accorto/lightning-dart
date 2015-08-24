@@ -20,9 +20,27 @@ class LCheckbox extends LEditor with LFormElement {
    * (note that if id is not unique, it does not work!)
    */
   LCheckbox(String name, {String idPrefix}) {
-    createCheckbox(input);
+    createCheckbox(this);
     input.name = name;
     input.id = createId(idPrefix, name);
+    _initEditor();
+  }
+
+  /**
+   * Checkbox Editor
+   */
+  LCheckbox.from(DColumn column, {String idPrefix, String type}) {
+    createCheckbox(this);
+    input.name = column.name;
+    input.id = createId(idPrefix, name);
+    //
+    this.column = column; // base values
+    _initEditor();
+  } // LInput
+
+  /// Initialize Editor
+  void _initEditor() {
+    input.onClick.listen(onInputChange);
   }
 
   void updateId(String idPrefix) {
@@ -35,9 +53,11 @@ class LCheckbox extends LEditor with LFormElement {
 
   /// String Value
 
-  String get value => input.value;
+  String get value {
+    return input.checked.toString();
+  }
   void set value (String newValue) {
-    input.value = newValue;
+    input.checked = newValue == "true";
   }
 
   String get defaultValue => input.defaultValue;
@@ -60,12 +80,8 @@ class LCheckbox extends LEditor with LFormElement {
 
   @override
   void set required (bool newValue) {
+    // super.required = newValue; // UI - LFormElement
     _required = newValue; // don't make input required (= checked)
-    if (newValue) {
-      element.classes.add(LForm.C_IS_REQUIRED);
-    } else {
-      element.classes.remove(LForm.C_IS_REQUIRED);
-    }
   }
 
   bool get spellcheck => input.spellcheck;
@@ -88,9 +104,9 @@ class LCheckbox extends LEditor with LFormElement {
   }
 
   /// Validation state from Input
-  ValidityState get validationState => input.validity;
+  ValidityState get inputValidationState => input.validity;
   /// Validation Message from Input
-  String get validationMsg => input.validationMessage;
+  String get inputValidationMsg => input.validationMessage;
 
   /// Display
 

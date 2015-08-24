@@ -15,6 +15,8 @@ class LForm extends LComponent {
   static const String C_FORM_ELEMENT = "slds-form-element";
   /// slds-form-element__label - Initializes form element label | Required
   static const String C_FORM_ELEMENT__LABEL = "slds-form-element__label";
+  /// small label
+  static const String C_FORM_ELEMENT__LABEL__SMALL = "slds-form-element__label--small";
   /// slds-form-element__control - Initializes form element control | Required
   static const String C_FORM_ELEMENT__CONTROL = "slds-form-element__control";
   /// slds-input - Initializes text input | Required
@@ -73,20 +75,28 @@ class LForm extends LComponent {
   final List<LEditor> editors = new List<LEditor>();
 
   /// Form - type = C_FORM__HORIZONTAL, C_FORM__STACKED, C_FORM__INLINE
-  LForm(Element this.element, String type) {
+  LForm(Element this.element, String name, String type, {String idPrefix}) {
     element.classes.add(type);
     if (element is FormElement) {
-      (element as FormElement).onSubmit.listen(onFormSubmit);
-      (element as FormElement).onReset.listen(onFormReset);
+      FormElement form = (element as FormElement);
+      form.noValidate = true; // otherwise stops at first invalid field
+      form.name = name;
+      form.onSubmit.listen(onFormSubmit);
+      form.onReset.listen(onFormReset);
     }
+    element.id = LComponent.createId(idPrefix, name);
   }
 
-  LForm.horizontal() : this(new FormElement(), C_FORM__HORIZONTAL);
-  LForm.stacked() : this(new FormElement(), C_FORM__STACKED);
-  LForm.inline() : this(new FormElement(), C_FORM__INLINE);
+  LForm.horizontal(String name, {String idPrefix})
+    : this(new FormElement(), name, C_FORM__HORIZONTAL, idPrefix:idPrefix);
+  LForm.stacked(String name, {String idPrefix})
+    : this(new FormElement(), name, C_FORM__STACKED, idPrefix:idPrefix);
+  LForm.inline(String name, {String idPrefix})
+    : this(new FormElement(), name, C_FORM__INLINE, idPrefix:idPrefix);
 
   /// Add Editor
   void addEditor (LEditor editor) {
+    editor.editorChange = onEditorChange;
     editors.add(editor);
     element.append(editor.element);
   }
@@ -94,11 +104,11 @@ class LForm extends LComponent {
   /// Data Container
   DataRecord get data => _data;
   /// Data Container
-  void set data (DataRecord data) {
-    _data = data;
+  void set data (DataRecord newValue) {
+    _data.set(newValue);
     display();
   }
-  DataRecord _data = new DataRecord(null);
+  final DataRecord _data = new DataRecord(null);
 
   /// Data Record
   DRecord get record => _data.record;
@@ -110,55 +120,83 @@ class LForm extends LComponent {
 
   /// Display Data in Editors
   void display() {
+    if (_buttonSave != null) {
+      _buttonSave.disabled = !data.changed;
+    }
     for (LEditor editor in editors) {
       editor.data = _data;
-      DEntry entry = _data.getEntry(editor.id, editor.name, false);
-      if (entry == null) {
-        editor.value = "";
-      } else {
-        String value = null;
-        if (entry.hasValueOriginal()) {
-          value = entry.valueOriginal;
-          if (value == DataRecord.NULLVALUE)
-            value = "";
-          editor.valueOriginal = value;
-        }
-        if (entry.hasValue()) {
-          value = entry.value;
-          if (value == DataRecord.NULLVALUE)
-            value = null;
-        }
-        if (value == null)
-          value = "";
-        editor.value = value;
-      }
+      editor.entry = _data.getEntry(editor.id, editor.name, true);
     }
   } // display
 
+
+  void onEditorChange(String name, String newValue, DEntry entry, var details) {
+    bool changed = _data.checkChanged();
+    _log.config("onEditorChange - changed=${changed}");
+    if (_buttonSave != null) {
+      _buttonSave.disabled = !changed;
+    }
+  }
+
+
+  /// Add Reset Button
   LButton addResetButton() {
-    LButton btn = new LButton.neutralIcon("reset", lFormReset(),
+    _buttonReset = new LButton.neutralIcon("reset", lFormReset(),
       new LIconUtility(LIconUtility.UNDO), iconLeft:true)
       ..typeReset = true;
-    element.append(btn.element);
-    return btn;
+    element.append(_buttonReset.element);
+    if (element is! FormElement) {
+      _buttonReset.onClick.listen(onFormReset);
+    }
+    return _buttonReset;
   }
+  LButton _buttonReset;
+
+  /// Add Save Button
   LButton addSaveButton() {
-    LButton btn = new LButton.brandIcon("save", lFormSave(),
+    _buttonSave = new LButton.brandIcon("save", lFormSave(),
       new LIconUtility(LIconAction.CHECK), iconLeft:true)
       ..typeSubmit = true;
-    element.append(btn.element);
-    return btn;
+    element.append(_buttonSave.element);
+    if (element is! FormElement) {
+      _buttonSave.onClick.listen(onFormSubmit);
+    }
+    _buttonSave.disabled = !_data.changed;
+    return _buttonSave;
   }
+  LButton _buttonSave;
+
+
+  /// Small Editor/Label
+  void set small (bool newValue) {
+    for (LEditor editor in editors) {
+      editor.small = newValue;
+    }
+    if (_buttonReset != null)
+      _buttonReset.small = newValue;
+    if (_buttonSave != null)
+      _buttonSave.small = newValue;
+  } // small
 
   /// On Form Reset
   void onFormReset(Event evt) {
-    _log.info("onFormReset - ${record}");
-    evt.preventDefault();
+    _log.info("onFormReset");
+    evt.preventDefault(); // resets to default
+    data.resetRecord(); // resets to original/default
+    display();
   }
+
   /// On Form Submit
   void onFormSubmit(Event evt) {
     _log.info("onFormSubmit - ${record}");
     evt.preventDefault();
+    bool valid = true;
+    for (LEditor editor in editors) {
+      if (!editor.doValidate()) {
+        valid = false;
+      }
+    }
+
   }
 
   /// Layout

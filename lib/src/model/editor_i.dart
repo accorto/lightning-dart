@@ -7,10 +7,10 @@
 part of biz_fabrik_base;
 
 /**
- * Callback of [editor] with [newValue] - might be [temporary] (keyUp)
- * (usually DataRecord.onEditorChange)
+ * Callback of editor with valid [newValue] and optional updated [entry]
+ * and optional [details]
  */
-typedef void EditorChange(String name, String newValue, bool temporary, var details);
+typedef void EditorChange(String name, String newValue, DEntry entry, var details);
 
 /**
  * Editor Interface
@@ -110,7 +110,8 @@ abstract class EditorI {
   /// class label mandatory
   static const C_LABEL_MANDATORY = "label-mandatory";
 
-
+  /// Editor Input Element
+  Element get input;
   /// The Editor Id
   String get id;
   /// update Id (with row number)
@@ -244,12 +245,6 @@ abstract class EditorI {
   String get patternText => pattern;
   void set patternText (String newValue) {}
 
-  /// Validation state from Input
-  ValidityState get validationState;
-  /// Validation Message from Input
-  String get validationMsg;
-
-
   /// Display
 
   /// get Label
@@ -312,6 +307,8 @@ abstract class EditorI {
   } // column
   DColumn get column => _column;
   DColumn _column;
+  /// Automatically submit on enter
+  bool autoSubmit = false;
 
   /// Editor has columns it is dependent on
   bool get hasDependentOn => _dependentOns != null;
@@ -367,22 +364,31 @@ abstract class EditorI {
    */
   DataRecord data;
   /// Get/Create Data Entry (might be null)
-  DEntry get entry {
-    if (data != null) {
-      if (_column == null) {
-        return data.getEntry(null, name, true);
-      } else {
-        return data.getEntry(column.columnId, column.name, true);
-      }
+  DEntry get entry => _entry;
+  /// Set Entry value
+  void set entry (DEntry newValue) {
+    _entry = newValue;
+    if (_entry == null)
+      value = "";
+    else {
+      String theValue = null;
+      if (_entry.hasValueOriginal())
+        theValue = _entry.valueOriginal;
+      if (_entry.hasValue())
+        theValue = _entry.value;
+      if (value == DataRecord.NULLVALUE)
+        theValue = null;
+      value = theValue == null ? "" : theValue;
     }
-    return null;
-  }
+  } // setEntry
+  DEntry _entry;
+
   // update data record value - does not trigger changes
   void updateData(String newValue) {
     DEntry theEntry = entry;
     if (theEntry != null) {
       if (theEntry.value != newValue) {
-        data.setEntryValue(theEntry, newValue); // updates changed, etc.
+        data.updateEntry(theEntry, newValue); // updates changed, etc.
         if (valueRendered)
           theEntry.valueDisplay = render(newValue, false);
         //_log.fine("updateData ${name}=${theEntry.value} - ${theEntry.valueDisplay}");
@@ -401,17 +407,47 @@ abstract class EditorI {
    *    -> display -> editor data/value required/readOnly/displayed
    */
   EditorChange editorChange;
-  /// onKeyUp Callback
-  EditorChange editorKeyUp;
 
+  /// Input changed
+  void onInputChange(Event evt){
+    String theValue = value;
+    _log.config("onInputChange ${name}=${theValue}");
+    doValidate();
+    if (data != null && _entry != null) {
+      data.updateEntry(_entry, theValue);
+      if (valueRendered)
+        _entry.valueDisplay = valueDisplay;
+    }
+    if (editorChange != null) {
+      editorChange(name, theValue, _entry, null);
+    }
+  } // onInputChange
 
-
-
-
-  /// Validation Status text (displayed)
-  String statusText;
-  /// Validation Status (icon)
-  String statusType;
+  /// Input Key Up
+  void onInputKeyUp(KeyboardEvent evt) {
+    int kc = evt.keyCode;
+    if (kc == KeyCode.ESC) {
+      String newValue = null;
+      if (data != null) {
+        data.resetEntry(entry);
+        newValue = data.getEntryValue(entry);
+      }
+      if (newValue == null || newValue.isEmpty) {
+        newValue = defaultValue;
+      }
+      _log.config("onInputKeyPress ${name}=${value} - ESC newValue=${newValue}");
+      onInputChange(evt);
+      value = newValue == null ? "" : newValue;
+    } else if (kc == KeyCode.ENTER) {
+      _log.config("onInputKeyPress ${name}=${value} - autoSubmit=${autoSubmit}");
+      if (!autoSubmit) {
+        evt.preventDefault();
+        // TODO move focus to next
+      }
+    } else {
+      onInputChange(evt);
+    }
+  } // onInputKeyPress
 
   /**
    * Reset
@@ -428,12 +464,24 @@ abstract class EditorI {
     doValidate();
   } // doReset
 
+
+  /// Input Validation state
+  ValidityState get inputValidationState;
+  /// Input Validation Message
+  String get inputValidationMsg;
+
+  /// Validation Status
+  bool statusValid;
+  /// Validation Status Error text
+  String statusText;
+
+
   /**
    * Validate Status
    */
   bool doValidate() {
+    statusValid = true;
     statusText = "";
-    //statusType = Icon0.C_STATUS_NONE;
     if (readOnly || disabled) {
       updateStatus();
       return true;
@@ -444,71 +492,48 @@ abstract class EditorI {
     String v = value;
     if (v == null)
       v = "";
-    bool valid = true;
     //
-    ValidityState state = validationState;
+    ValidityState state = inputValidationState;
     if (state == null) {
       if (required && (v == null || v.isEmpty)) {
-        valid = false;
+        statusValid = false;
         statusText = editorValidateRequired();
       }
     } else {
-      valid = state.valid;
-      statusText = validationMsg;
+      statusValid = state.valid;
+      statusText = inputValidationMsg;
       if (state.patternMismatch) {
         statusText += " ${patternText}";
       }
     }
 
-    //statusType = Icon0.C_STATUS_SUCCESS;
-
     // MaxLength
     int m = maxlength;
     if (maxlength > 0 && v.length > m) {
-      valid = false;
+      statusValid = false;
       statusText = "${editorValidateTooLong()}: ${v.length} > ${m}";
     }
 
-    // set status type
-    //if (valid) {
-    //  if (isEmpty) // no checkmark on empty
-    //     statusType = Icon0.C_STATUS_NONE;
-    //} else {
-    //  statusType = Icon0.C_STATUS_WARNING;
-    //}
-
     doValidateCustom();
     updateStatus();
-    return valid;
+    return statusValid;
   } // doValidate
 
-  /// For subclasses to overwrite [statusType] (Icon) and [statusText]
+  /// For subclasses to overwrite [statusValid] and [statusText]
   void doValidateCustom() {
   }
 
+
   /**
-   * Display Form Group Status [statusType]  Icon0.C_STATUS_OK, C_STATUS_WARNING, C_STATUS_ERROR,
-   *   C_STATUS_REQUIRED, C_STATUS_NONE
-   * returns true if status displayed
+   *
    */
-  bool updateStatus() {
-//    String statusType0 = statusType;
-//    if (!showSuccess && statusType == Icon0.C_STATUS_SUCCESS)
-//      statusType0 = Icon0.C_STATUS_NONE;
-    bool statusDisplayed = false;
-//    if (formGroup != null) {
-//      formGroup.statusType = statusType0; // color + icon
-//      formGroup.statusText = statusText;
-//      statusDisplayed = true;
-//    }
-//    if (gridCell is GridCellData) {
-//      gridCell.statusType = statusType0; // color + icon
-//      gridCell.statusText = statusText;
-//      statusDisplayed = true;
-//    }
+  void updateStatus() {
+    updateStatusValidationState();
     changedSync();
-    return statusDisplayed;
   } // updateStatus
+
+  /// Display Validation State
+  void updateStatusValidationState();
 
   /// set debugging info in title
   void debugTitle() {

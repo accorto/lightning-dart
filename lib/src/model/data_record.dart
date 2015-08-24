@@ -177,13 +177,27 @@ class DataRecord {
   /// callback to data list
   RecordChange onRecordChange;
   /// AutoSubmit
-  AutoSubmit onAutoSubmit;
+  //AutoSubmit onAutoSubmit;
 
   /**
    * Data Record with [value] and optional [onRecordChange] callback to data list
    */
   DataRecord(RecordChange this.onRecordChange, {DRecord value}) {
     setRecord(value, 0);
+  }
+
+  void reset() {
+    setRecord(null, -1);
+    onRecordChange = null;
+  }
+
+  void set(DataRecord other) {
+    if (other == null) {
+      reset();
+    } else {
+      setRecord(other.record, other.rowNo);
+      onRecordChange = other.onRecordChange;
+    }
   }
 
   /// Set current record
@@ -251,6 +265,18 @@ class DataRecord {
 
   /// Changed
   bool get changed => _record.hasIsChanged() && _record.isChanged;
+  /// Check if record is changed
+  bool checkChanged() {
+    bool changed = false;
+    for (DEntry entry in _record.entryList) {
+      if (entry.isChanged) {
+        changed = true;
+        break;
+      }
+    }
+    _record.isChanged = changed;
+    return changed;
+  } // checkChanged
 
   /// URV (rest)
   String get urv => _record.urvRest;
@@ -432,7 +458,8 @@ class DataRecord {
    */
   DEntry setValue (String id, String name, String value) {
     DEntry dataEntry = getEntry(id, name, true);
-    return setEntryValue(dataEntry, value);
+    updateEntry(dataEntry, value);
+    return dataEntry;
   } // setValue
 
   /**
@@ -452,14 +479,16 @@ class DataRecord {
       else
         stringValue = value.toString();
     }
-    return setEntryValue(dataEntry, stringValue);
+    updateEntry(dataEntry, stringValue);
+    return dataEntry;
   } // setValueName
 
   /**
    * Set Entry [dataEntry] to new string [value].
    * Update changed + original
+   * return true if changed
    */
-  DEntry setEntryValue (DEntry dataEntry, final String value) {
+  bool updateEntry (DEntry dataEntry, final String newValue) {
     // set original if not set before
     if (!dataEntry.hasValueOriginal()) {
       if (dataEntry.hasValue())
@@ -468,7 +497,7 @@ class DataRecord {
         dataEntry.valueOriginal = NULLVALUE;
     }
     // set input
-    String deValue = value;
+    String deValue = newValue;
     if (deValue == null || deValue.isEmpty)
       deValue = NULLVALUE;
     dataEntry.value = deValue;
@@ -476,8 +505,8 @@ class DataRecord {
     dataEntry.isChanged = dataEntry.value != dataEntry.valueOriginal;
     if (dataEntry.isChanged)
       _record.isChanged = true;
-    return dataEntry;
-  } // setValue
+    return dataEntry.isChanged;
+  } // updateEntry
 
   /**
    * Set all Values as Original
@@ -529,7 +558,7 @@ class DataRecord {
 
   /**
    * Data Record Value Changed - called from EditorI
-   */
+   *
   void onEditorChange(EditorI editor, String newValue, bool temporary) {
     DEntry dataEntry = getEntry(null, editor.name, true);
     String valueOriginal = dataEntry.valueOriginal;
@@ -550,9 +579,9 @@ class DataRecord {
     if (!temporary && onAutoSubmit != null) {
       onAutoSubmit(editor.name, newValue);
     }
-  } // onEditorChanged
+  } // onEditorChanged */
 
-  /// Value Changed - direct call
+  /* Value Changed - direct call
   void onValueChange(String columnName, String newValue, bool temporary, String newValueDisplay) {
     DEntry dataEntry = getEntry(null, columnName, true);
     String valueOriginal = dataEntry.valueOriginal;
@@ -573,7 +602,7 @@ class DataRecord {
     if (!temporary && onAutoSubmit != null) {
       onAutoSubmit(columnName, newValue);
     }
-  } // onValueChanged
+  } // onValueChanged */
 
 
   /// Table for Record ... or null

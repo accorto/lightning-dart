@@ -68,7 +68,7 @@ class LLookup extends LEditor implements LSelectI {
       String scope: "single",
       bool typeahead: false}) {
     _setAttributes(select, scope, typeahead);
-    _formElement.createStandard(input);
+    _formElement.createStandard(this);
     input
       ..classes.clear()
       ..classes.add(LForm.C_INPUT__BARE);
@@ -144,6 +144,14 @@ class LLookup extends LEditor implements LSelectI {
   String get name => input.name;
   String get type => input.type;
 
+  void set label (String newValue) {
+    super.label = newValue;
+    // TODO
+  }
+  /// Small Editor/Label
+  void set small (bool newValue){}
+
+
   String get value => input.value;
   void set value (String newValue) {
     input.value = newValue;
@@ -185,9 +193,10 @@ class LLookup extends LEditor implements LSelectI {
   }
 
   /// Validation state from Input
-  ValidityState get validationState => input.validity;
+  ValidityState get inputValidationState => input.validity;
   /// Validation Message from Input
-  String get validationMsg => input.validationMessage;
+  String get inputValidationMsg => input.validationMessage;
+
 
 
   /// Get options
@@ -329,14 +338,14 @@ class LLookup extends LEditor implements LSelectI {
       input.attributes[Html0.DATA_VALUE] = "";
       input.attributes[Html0.ARIA_ACTIVEDECENDNT] = "";
       if (editorChange != null)
-        editorChange(name, null, false, null);
+        editorChange(name, null, null, null);
     } else {
       input.value = selectedItem.label;
       input.attributes[Html0.DATA_VALUE] = selectedItem.value;
       input.attributes[Html0.ARIA_ACTIVEDECENDNT] = selectedItem.value;
 
       if (editorChange != null)
-        editorChange(name, selectedItem.value, false, selectedItem);
+        editorChange(name, selectedItem.value, null, selectedItem);
     }
     showResults = false;
     for (LLookupItem item in _items) { // remove restrictions
@@ -375,6 +384,9 @@ class LLookup extends LEditor implements LSelectI {
       _log.info("createRegExp search=${search} restriction=${restriction}) error=${ex}");
     }
     return null;
+  }
+
+  void updateStatusValidationState() {
   }
 
 

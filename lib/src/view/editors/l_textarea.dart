@@ -6,24 +6,38 @@
 
 part of lightning_dart;
 
+/**
+ * Text Area Input
+ */
 class LTextArea extends LEditor with LFormElement {
 
   /// Input Element
   final TextAreaElement input = new TextAreaElement();
 
+  /**
+   * Text Area Input
+   */
   LTextArea(String name, {String idPrefix}) {
-    createStandard(input);
+    createStandard(this);
     input.name = name;
     input.id = createId(idPrefix, name);
+    _initEditor();
   }
 
   LTextArea.from(DColumn column, {String idPrefix}) {
-    createStandard(input);
+    createStandard(this);
     input.name = column.name;
     input.id = createId(idPrefix, name);
     //
     this.column = column;
+    _initEditor();
   }
+
+  void _initEditor() {
+    /// Changes
+    input.onChange.listen(onInputChange);
+    input.onKeyUp.listen(onInputKeyUp);
+  } // initializeEditor
 
   /// Editor Id
   void updateId(String idPrefix) {
@@ -87,9 +101,9 @@ class LTextArea extends LEditor with LFormElement {
   }
 
   /// Validation state from Input
-  ValidityState get validationState => input.validity;
+  ValidityState get inputValidationState => input.validity;
   /// Validation Message from Input
-  String get validationMsg => input.validationMessage;
+  String get inputValidationMsg => input.validationMessage;
 
 } // LTextArea
 

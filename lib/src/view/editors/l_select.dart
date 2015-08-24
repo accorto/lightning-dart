@@ -18,15 +18,16 @@ class LSelect extends LEditor with LFormElement implements LSelectI {
    * Select Editor
    */
   LSelect(String name, {String idPrefix, bool multiple:false}) {
-    createStandard(input);
+    createStandard(this);
     input.name = name;
     input.id = createId(idPrefix, name);
     input.multiple = multiple;
+    _initEditor();
   }
 
   /// Select Editor
   LSelect.from(DColumn column, {String idPrefix, bool multiple}) {
-    createStandard(input);
+    createStandard(this);
     input.name = column.name;
     input.id = createId(idPrefix, name);
     if (multiple != null)
@@ -39,8 +40,13 @@ class LSelect extends LEditor with LFormElement implements LSelectI {
       dOptions = column.pickValueList;
     }
     this.column = column;
+    _initEditor();
   } // LSelect
 
+  /// Init Editor
+  void _initEditor() {
+    input.onChange.listen(onInputChange);
+  }
 
   void updateId(String idPrefix) {
     id = createId(idPrefix, name);
@@ -80,12 +86,9 @@ class LSelect extends LEditor with LFormElement implements LSelectI {
   }
   bool _disabled = false;
 
-  /// required
-  bool get required => input.required;
   /// required - add/remove optional element
   void set required (bool newValue) {
-    super.required = newValue; // ui
-    input.required = newValue;
+    super.required = newValue; // UI - LFormElement
     if (listId != null && listId.isNotEmpty)
       return; // don't change data list
 
@@ -127,9 +130,9 @@ class LSelect extends LEditor with LFormElement implements LSelectI {
   }
 
   /// Validation state from Input
-  ValidityState get validationState => input.validity;
+  ValidityState get inputValidationState => input.validity;
   /// Validation Message from Input
-  String get validationMsg => input.validationMessage;
+  String get inputValidationMsg => input.validationMessage;
 
   /// Display
 

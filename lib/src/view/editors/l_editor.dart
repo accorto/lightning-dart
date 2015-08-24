@@ -8,6 +8,7 @@ part of lightning_dart;
 
 /**
  * Form Editor
+ * (LLookup extends LEditor but not with LFormElement)
  */
 abstract class LEditor extends EditorI {
 
@@ -38,6 +39,8 @@ abstract class LEditor extends EditorI {
     return theId;
   }
 
+  /// Small Editor/Label
+  void set small (bool newValue);
 
   /// get Data List Id
   String get listId => null;

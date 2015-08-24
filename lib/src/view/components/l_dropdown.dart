@@ -244,7 +244,7 @@ class LDropdown extends LComponent {
   }
 
   /// Editor Change callback
-  void onEditorChange(String name, String newValue, bool temporary, var details) {
+  void onEditorChange(String name, String newValue, DEntry ignored, var details) {
     if (details is ListItem) {
       _setValue(details as ListItem);
     }
@@ -440,9 +440,9 @@ class LDropdownElement implements LSelectI {
     _log.fine("${name} = ${selectedItem == null ? "null" : selectedItem.value}");
     if (editorChange != null) {
       if (selectedItem == null)
-        editorChange("", null, false, null);
+        editorChange("", null, null, null);
       else
-        editorChange("", selectedItem.value, false, selectedItem);
+        editorChange("", selectedItem.value, null, selectedItem);
     }
   } // onItemClick (dropdown)
 
@@ -468,9 +468,9 @@ class LDropdownElement implements LSelectI {
     }
     if (editorChange != null) {
       if (selectedItem == null)
-        editorChange("", null, false, null);
+        editorChange("", null, null, null);
       else
-        editorChange("", selectedItem.value, false, selectedItem);
+        editorChange("", selectedItem.value, null, selectedItem);
     }
   } // setValue
 

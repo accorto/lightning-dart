@@ -95,6 +95,8 @@ class LPicklist extends LEditor implements LSelectI {
     super.label = newValue;
     // TODO
   }
+  /// Small Editor/Label
+  void set small (bool newValue) {}
 
   /// String Value
 
@@ -113,12 +115,12 @@ class LPicklist extends LEditor implements LSelectI {
   }
 
   /// Editor Change callback
-  void onEditorChange(String name, String newValue, bool temporary, var details) {
+  void onEditorChange(String name, String newValue, DEntry ignored, var details) {
     if (details is ListItem) {
       _setValue(details as ListItem);
     }
     if (editorChange != null) // this is the actual editor
-      editorChange(name, newValue, temporary, details);
+      editorChange(name, newValue, entry, details);
   }
 
 
@@ -141,12 +143,8 @@ class LPicklist extends LEditor implements LSelectI {
 
   bool get required => _required;
   void set required (bool newValue) {
-    _required = newValue; // don't male inut required (= checked)
-    if (newValue) {
-      element.classes.add(LForm.C_IS_REQUIRED);
-    } else {
-      element.classes.remove(LForm.C_IS_REQUIRED);
-    }
+    super.required = newValue; // ui
+    _required = newValue; // don't make input required
   }
   bool _required = false;
 
@@ -159,10 +157,13 @@ class LPicklist extends LEditor implements LSelectI {
   }
 
   /// Validation state from Input
-  ValidityState get validationState => null;
+  ValidityState get inputValidationState => null;
   /// Validation Message from Input
-  String get validationMsg => null;
+  String get inputValidationMsg => null;
 
+  void updateStatusValidationState() {
+
+  }
 
   /// Get options
   List<OptionElement> get options => dropdown.options;
