@@ -20,8 +20,13 @@ class LTooltip extends LPopbase {
   static const String C_TOOLTIP__BODY = "slds-tooltip__body";
 
 
+  /// Popover element
+  final DivElement pop = new DivElement()
+    ..classes.add(LPopover.C_POPOVER)
+    ..attributes[Html0.ROLE] = Html0.ROLE_DIALOG;
+
   /// Tooltip element
-  final DivElement element = new DivElement()
+  final DivElement _tooltip = new DivElement()
     ..classes.add(C_TOOLTIP)
     ..attributes[Html0.ROLE] = Html0.ROLE_TOOLTIP;
 
@@ -36,11 +41,13 @@ class LTooltip extends LPopbase {
   /**
    * Tooltip
    */
-  LTooltip(String bodyText) {
-    element.append(_content);
+  LTooltip() {
+    pop.append(_tooltip);
+    _tooltip.append(_content);
     _content.append(body);
-    if (bodyText != null)
-      body.text = bodyText;
+  }
+  void set bodyText (String text) {
+    body.text = text;
   }
 
 } // LTooltip

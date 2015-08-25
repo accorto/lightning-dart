@@ -8,21 +8,41 @@ part of lightning_dart.demo;
 
 class Tooltips extends DemoFeature {
 
-  Tooltips() : super ("tooltips", "Tooltips", "");
+  Tooltips() : super ("tooltips", "Tooltips", "By default will show/hide when hover or when clicked");
 
   LComponent get content {
     CDiv div = new CDiv();
-    LTooltip pop = new LTooltip("Tooltip Content Test lines come here")
+    LTooltip pop = new LTooltip()
+      ..bodyText = "Tooltip Content Test lines come here"
       ..nubbinRight = true;
     div.add(pop);
 
     div.appendHR();
-    pop = new LTooltip(null)
-      ..nubbinTop = true;
+    pop = new LTooltip();
     pop.body
       ..appendText("Another Tooltip Some text comes here ")
       ..append(new AnchorElement(href: "#")..text = "Some Link")
       ..appendText(" Additional Text");
+    LButton button = new LButton.neutral("btnA", "See Above");
+    pop.showAbove(button); // shows button
+    div.add(pop);
+
+    pop = new LTooltip()
+      ..bodyText = "Another Below Tooltip with some info";
+    button = new LButton.neutral("btnB", "See Below");
+    pop.showBelow(button); // shows button
+    div.add(pop);
+
+    pop = new LTooltip()
+      ..bodyText = "Another Below Tooltip with some info";
+    button = new LButton.neutral("btnR", "See Right");
+    pop.showRight(button); // shows button
+    div.add(pop);
+
+    pop = new LTooltip()
+      ..bodyText = "Another Below Tooltip with some info";
+    button = new LButton.neutral("btnL", "See Left");
+    pop.showLeft(button); // shows button
     div.add(pop);
 
     return div;

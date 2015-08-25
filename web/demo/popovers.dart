@@ -12,17 +12,42 @@ class Popovers extends DemoFeature {
 
   LComponent get content {
     CDiv div = new CDiv();
-    LPopover pop = new LPopover("Popover Heading", "Popover Content Test lines come here")
+    LPopover pop = new LPopover()
+      ..headText = "Popover Heading"
+      ..bodyText = "Popover Content Test lines come here"
       ..nubbinRight = true;
     div.add(pop);
 
     div.appendHR();
-    pop = new LPopover("Another Popover", null)
-      ..nubbinTop = true;
+    pop = new LPopover()
+      ..headText = "Another Popover";
     pop.body
       ..appendText("Some text comes here ")
       ..append(new AnchorElement(href: "#")..text = "Some Link")
       ..appendText(" Additional Text");
+    LButton button = new LButton.neutral("btnA", "See Above");
+    pop.showAbove(button);
+    div.add(pop);
+
+    pop = new LPopover()
+      ..headText = "A Popbelow"
+      ..bodyText = "Some Text, tell me what to show here, so that it is not that boring";
+    button = new LButton.neutral("btnB", "See Below");
+    pop.showBelow(button);
+    div.add(pop);
+
+    pop = new LPopover()
+      ..headText = "Right Popover"
+      ..bodyText = "Some Text, tell me what to show here, so that it is not that boring";
+    button = new LButton.neutral("btnR", "See Right");
+    pop.showRight(button);
+    div.add(pop);
+
+    pop = new LPopover()
+      ..headText = "Left Popover"
+      ..bodyText = "Some Text, tell me what to show here, so that it is not that boring";
+    button = new LButton.neutral("btnL", "See Left");
+    pop.showLeft(button);
     div.add(pop);
 
     return div;
