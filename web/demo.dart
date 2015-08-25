@@ -32,6 +32,8 @@ part 'demo/popovers.dart';
 part 'demo/tabs.dart';
 part 'demo/tooltips.dart';
 
+part 'demo/themes.dart';
+
 /**
  * Lightning Demo Example Page
  */
@@ -118,6 +120,8 @@ void main() {
     // tiles
     page.add(new Tooltips()..toc(toc));
     // trees
+
+    page.add(new Themes()..toc(toc));
 
   });
 

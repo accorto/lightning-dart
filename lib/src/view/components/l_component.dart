@@ -77,7 +77,7 @@ abstract class LComponent {
     LTheme.themeShade(element);
   }
   void themeInverse () {
-    LTheme.themeAltInverse(element);
+    LTheme.themeInverse(element);
   }
   void themeAltInverse () {
     LTheme.themeAltInverse(element);

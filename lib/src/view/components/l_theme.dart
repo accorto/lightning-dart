@@ -71,7 +71,7 @@ class LTheme {
     element.classes.add(C_THEME__INVERSE_TEXT);
   }
   static void themeOffline (Element element) {
-    element.classes.add(C_THEME__ERROR);
+    element.classes.add(C_THEME__OFFLINE);
     element.classes.add(C_THEME__INVERSE_TEXT);
   }
   /// add alert texture (striped)
@@ -91,6 +91,10 @@ class LBox extends LComponent {
   final DivElement element = new DivElement()
     ..classes.add(LTheme.C_BOX);
 
+
+  void set text (String newValue) {
+    element.text = newValue;
+  }
 
   void set small (bool newValue) {
     element.classes.removeAll(LTheme.SIZES);

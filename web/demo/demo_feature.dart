@@ -18,11 +18,12 @@ abstract class DemoFeature extends LComponent {
 
   final String id;
   final String label;
+  final String sldsPath;
 
   /**
    * Feature
    */
-  DemoFeature(String this.id, String this.label, String description) {
+  DemoFeature(String this.id, String this.label, String description, {String this.sldsPath}) {
     element.id = id;
     DivElement hdr = new DivElement()
       ..classes.addAll([LMargin.C_TOP__X_LARGE, LTheme.C_BOX, LTheme.C_THEME__SHADE]);
@@ -97,7 +98,10 @@ abstract class DemoFeature extends LComponent {
   }
 
   AnchorElement createSldsLink() {
-    return new AnchorElement(href: "${SLDS_URL}/$id")
+    String path = sldsPath;
+    if (path == null)
+      path = id;
+    return new AnchorElement(href: "${SLDS_URL}/$path")
       ..target = "slds"
       ..text = SLDS_TXT;
   }
