@@ -123,6 +123,16 @@ abstract class DemoFeature extends LComponent {
   LComponent _theContent;
   Element _theCurrentElement;
 
+  /*
+  LComponent get content {
+    CDiv div = new CDiv();
+    return div;
+  }
+  String get source {
+    return '''
+    ''';
+  }
+  */
 
   //option changed
   void optionChanged() {

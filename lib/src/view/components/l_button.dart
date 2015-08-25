@@ -76,9 +76,13 @@ class LButton extends LComponent {
   String _label;
   /// Optional Button Icon
   LIcon _icon;
+  /// Icon left
   bool _iconLeft;
-  /// Optional Assistive Text
+  /// true = button icon is 1rem gray - false = icon is 2rem white
+  bool _iconButton = true;
+  /// Optional Assistive Text Element
   SpanElement _assistive;
+  /// Optional Assistive Text
   String _assistiveText;
 
   /**
@@ -123,20 +127,27 @@ class LButton extends LComponent {
       else if (_label != null)
         element.appendText(_label);
     } else {
-      _icon.classes.clear();
-      _icon.classes.add(C_BUTTON__ICON);
+      if (_iconButton) {
+        _icon.classes.add(C_BUTTON__ICON); // 1rem gray
+        _icon.classes.remove(LIcon.C_ICON); // 2rem white
+      } else {
+        _icon.classes.remove(C_BUTTON__ICON); // 1rem gray
+        _icon.classes.add(LIcon.C_ICON); // 2rem white
+      }
+      _icon.classes.remove(C_BUTTON__ICON__LEFT);
+      _icon.classes.remove(C_BUTTON__ICON__RIGHT);
       if (_label == null && _labelElement == null) {
         element.append(_icon.element);
       } else {
         if (_iconLeft) {
-          _icon.element.classes.add(C_BUTTON__ICON__LEFT);
+          _icon.classes.add(C_BUTTON__ICON__LEFT);
           element.append(_icon.element);
           if (_labelElement != null)
             element.append(_labelElement);
           else if (_label != null)
             element.appendText(_label);
         } else {
-          _icon.element.classes.add(C_BUTTON__ICON__RIGHT);
+          _icon.classes.add(C_BUTTON__ICON__RIGHT);
           if (_labelElement != null)
             element.append(_labelElement);
           else if (_label != null)
@@ -316,26 +327,32 @@ class LButton extends LComponent {
     }
   }
 
+  /// button icon is 1rem gray - icon is 2rem white
+  void set iconButton (bool newValue) {
+    _iconButton = newValue;
+    _rebuild();
+  }
+
   /// Set Icon Size e.g. C_BUTTON__ICON__X_SMALL
   void set iconSize(String newValue) {
     if (_icon != null)
-      _icon.element.classes.add(newValue);
+      _icon.classes.add(newValue);
   }
   /// Icon Size
-  void setIconSizeXSmall() {
+  void iconSizeXSmall() {
     iconSize = C_BUTTON__ICON__X_SMALL;
   }
   /// Icon Size
-  void setIconSizeSmall() {
+  void iconSizeSmall() {
     iconSize = C_BUTTON__ICON__SMALL;
   }
   /// Icon Size
-  void setIconSizeLarge() {
+  void iconSizeLarge() {
     iconSize = C_BUTTON__ICON__LARGE;
   }
   /// Icon Inverse
-  void setIconInverse() {
-      _icon.element.classes.add(C_BUTTON__ICON__INVERSE);
+  void iconInverse() {
+    _icon.classes.add(C_BUTTON__ICON__INVERSE);
   }
 
   /// Set Selected State

@@ -23,6 +23,7 @@ part 'demo/forms.dart';
 part 'demo/icons.dart';
 part 'demo/images.dart';
 part 'demo/lookups.dart';
+part 'demo/notifications.dart';
 
 part 'demo/picklists.dart';
 part 'demo/pills.dart';
@@ -107,7 +108,7 @@ void main() {
     page.add(new Lookups()..toc(toc));
     // media
     // modal
-    // notification
+    page.add(new Notifications()..toc(toc));
     // page headers
     page.add(new Picklists()..toc(toc));
     page.add(new Pills()..toc(toc));

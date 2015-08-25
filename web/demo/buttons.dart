@@ -32,10 +32,14 @@ class Buttons extends DemoFeature {
     div.add(new LButton.brand("b33", "brand small")..small = true);
     div.add(new LButton.brandAnchor("b21", "brand link"));
 
-    div.appendHrSmall(); // TODO Inverse Background
-    div.add(new LButton.inverse("b41", "inverse button"));
-    div.add(new LButton.inverse("b42", "inverse disabled")..disabled = true);
-    div.add(new LButton.inverse("b43", "inverse small")..small = true);
+    div.appendHrSmall();
+    LBox box = new LBox()
+      ..small = true
+      ..themeAltInverse();
+    div.add(box);
+    box.add(new LButton.inverse("b41", "inverse button"));
+    box.add(new LButton.inverse("b42", "inverse disabled")..disabled = true);
+    box.add(new LButton.inverse("b43", "inverse small")..small = true);
 
     div.appendHrSmall();
     div.add(new LButton.neutralIcon("b51", "neutral icon",

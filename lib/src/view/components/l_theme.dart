@@ -43,5 +43,65 @@ class LTheme {
   static const String C_PAGE_HEADER = "slds-page-header";
 
 
+  static final List<String> SIZES = [C_BOX__SMALL, C_BOX__X_SMALL];
+
+
+  static void themeDefault (Element element) {
+    element.classes.add(C_THEME__DEFAULT);
+  }
+  static void themeShade (Element element) {
+    element.classes.add(C_THEME__SHADE);
+  }
+  static void themeInverse (Element element) {
+    element.classes.add(C_THEME__INVERSE);
+  }
+  static void themeAltInverse (Element element) {
+    element.classes.add(C_THEME__ALT_INVERSE);
+  }
+  static void themeSuccess (Element element) {
+    element.classes.add(C_THEME__SUCCESS);
+    element.classes.add(C_THEME__INVERSE_TEXT);
+  }
+  static void themeWarning (Element element) {
+    element.classes.add(C_THEME__WARNING);
+    element.classes.add(C_THEME__INVERSE_TEXT);
+  }
+  static void themeError (Element element) {
+    element.classes.add(C_THEME__ERROR);
+    element.classes.add(C_THEME__INVERSE_TEXT);
+  }
+  static void themeOffline (Element element) {
+    element.classes.add(C_THEME__ERROR);
+    element.classes.add(C_THEME__INVERSE_TEXT);
+  }
+  /// add alert texture (striped)
+  static void themeTexture (Element element) {
+    element.classes.add(C_THEME__ALERT_TEXTURE);
+  }
+
+
 } // LTheme
 
+
+/**
+ * Box
+ */
+class LBox extends LComponent {
+
+  final DivElement element = new DivElement()
+    ..classes.add(LTheme.C_BOX);
+
+
+  void set small (bool newValue) {
+    element.classes.removeAll(LTheme.SIZES);
+    if (newValue)
+      element.classes.add(LTheme.C_BOX__SMALL);
+  }
+
+  void set xsmall (bool newValue) {
+    element.classes.removeAll(LTheme.SIZES);
+    if (newValue)
+      element.classes.add(LTheme.C_BOX__X_SMALL);
+  }
+
+} // LBox

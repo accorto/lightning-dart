@@ -70,6 +70,35 @@ abstract class LComponent {
     return "${theId}-${autoPrefixName}-${_autoId++}";
   }
 
+  void themeDefault () {
+    LTheme.themeDefault(element);
+  }
+  void themeShade () {
+    LTheme.themeShade(element);
+  }
+  void themeInverse () {
+    LTheme.themeAltInverse(element);
+  }
+  void themeAltInverse () {
+    LTheme.themeAltInverse(element);
+  }
+  void themeSuccess () {
+    LTheme.themeSuccess(element);
+  }
+  void themeWarning () {
+    LTheme.themeWarning(element);
+  }
+  void themeError () {
+    LTheme.themeError(element);
+  }
+  void themeOffline () {
+    LTheme.themeOffline(element);
+  }
+  /// add alert texture (striped)
+  void themeTexture () {
+    LTheme.themeTexture(element);
+  }
+
 } // LComponent
 
 

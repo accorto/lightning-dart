@@ -9,7 +9,7 @@ part of lightning_dart;
 /**
  * Notification
  */
-abstract class LNotification {
+abstract class LNotification extends LComponent {
 
   /// slds-notify - Initializes notification | Required
   static const String C_NOTIFY = "slds-notify";
@@ -25,6 +25,25 @@ abstract class LNotification {
   static const String C_NOTIFY__CONTENT = "notify__content";
 
 
+  /**
+   * Create Default Icon for color/theme
+   */
+  static LIcon createDefaultIcon(String color) {
+    if (color == LTheme.C_THEME__SUCCESS) {
+      return new LIconUtility(LIconUtility.SUCCESS);
+    }
+    else if (color == LTheme.C_THEME__WARNING) {
+      return new LIconUtility(LIconUtility.WARNING);
+    }
+    else if (color == LTheme.C_THEME__ERROR) {
+      return new LIconUtility(LIconUtility.ERROR);
+    }
+    else if (color == LTheme.C_THEME__OFFLINE) {
+      return new LIconUtility(LIconUtility.OFFLINE);
+    }
+    return new LIconUtility(LIconUtility.NOTIFICATION);
+  }
+
 
   static String lNotificationClose() => Intl.message("Close", name: "lNotificationClose", args: []);
   static String lNotificationAlert() => Intl.message("Alert (Info)", name: "lNotificationAlert", args: []);
@@ -34,78 +53,84 @@ abstract class LNotification {
   static String lNotificationError() => Intl.message("Error", name: "lNotificationError", args: []);
 
   /// Notification Element
-  DivElement get element;
-  /// Notify - might be point to element
+  DivElement get element {
+    if (container == null)
+      return notify;
+    return container;
+  }
+  /// Notify - alert/toast element
   DivElement get notify;
+  /// Container Element
+  DivElement get container;
 
+  /// Theme
+  String _color;
   /// Close button
   LButton close;
-  ///content
-  final DivElement content = new DivElement()
-    ..classes.add(C_NOTIFY__CONTENT);
-  /// Heading Element
-  final HeadingElement h2 = new HeadingElement.h2();
 
   /**
    * Notification
    */
-  LNotification(String label, LIcon icon, String idPrefix, String color, String assistiveText) {
-    if (color != null && color.isNotEmpty)
+  LNotification(String idPrefix, String color) {
+    _color = color;
+    if (_color != null && _color.isNotEmpty)
       notify.classes.add(color);
-
-    // assistive
-    if (assistiveText == null) {
-      if (color == LTheme.C_THEME__SUCCESS)
-        assistiveText = LNotification.lNotificationSuccess();
-      else if (color == LTheme.C_THEME__WARNING)
-        assistiveText = LNotification.lNotificationWarning();
-      else if (color == LTheme.C_THEME__ERROR)
-        assistiveText = LNotification.lNotificationError();
-      else
-        assistiveText = LNotification.lNotificationAlert();
-    }
-    if (assistiveText != null) {
-      SpanElement span = new SpanElement()
-        ..classes.add(LVisibility.C_ASSISTIVE_TEXT)
-        ..text = assistiveText;
-      notify.append(span);
-    }
 
     // close
     close = new LButton(new ButtonElement(), "close", null, idPrefix:idPrefix,
       // button: slds-button slds-notify__close
-      buttonClasses:[LButton.C_CLOSE, LButton.C_BUTTON__ICON__SMALL],
-      icon: new LIconAction("close", size: LIcon.C_ICON__SMALL,
-        // icon: slds-button__icon slds-button__icon--inverse "icon-text-email"
-        addlCss: [LMargin.C_RIGHT__X_SMALL]),
+      buttonClasses:[C_NOTIFY__CLOSE],
+      icon: new LIconAction("close", colorOverride: LButton.C_BUTTON__ICON__INVERSE),
         assistiveText: LNotification.lNotificationClose());
-    close.onClick.listen((MouseEvent evt) {
-      remove();
-    });
-    notify.append(close.element);
-    // Heading
-    if (icon != null) { // slds-icon icon-text-email slds-icon--small slds-m-right--x-small
-      icon.classes.addAll([LIcon.C_ICON, LIcon.C_ICON__SMALL, LMargin.C_RIGHT__X_SMALL]);
-    }
-    notify.append(content);
-    if (label != null)
-      h2.appendText(label);
-    content.append(h2); // in design: Alerts element.append(h2)
+    close.iconButton = false;
+    close.onClick.listen(onCloseClick);
   } // LNotification
 
+  /// Assistive Text
+  String get assistiveText {
+    if (_assistiveText == null) {
+      if (_color == LTheme.C_THEME__SUCCESS)
+        return LNotification.lNotificationSuccess();
+      else if (_color == LTheme.C_THEME__WARNING)
+        return LNotification.lNotificationWarning();
+      else if (_color == LTheme.C_THEME__ERROR)
+        return LNotification.lNotificationError();
+      else
+        return LNotification.lNotificationAlert();
+    }
+    return _assistiveText;
+  }
+  void set assistiveText (String newValue) {
+    _assistiveText = newValue;
+    build();
+  }
+  String _assistiveText;
 
-  /// Append Notification
-  void add(Element e) {
-    content.append(e);
+  List<Element> _headingElements;
+  String _headingText = "";
+  LIcon _icon;
+
+
+  /**
+   * span .assistiveText
+   * button
+   * - svg close
+   * - .assistiveText
+   */
+  void build() {
+    notify.children.clear();
+    String at = assistiveText;
+    if (at != null && at.isNotEmpty) {
+      SpanElement span = new SpanElement()
+        ..classes.add(LVisibility.C_ASSISTIVE_TEXT)
+        ..text = at;
+      notify.append(span);
+    }
+    notify.append(close.element);
   }
 
-
-  void hide() {
-
-  }
-
-  /// Remove Alert
-  void remove() {
+  /// Close clicked - Remove Alert
+  void onCloseClick(MouseEvent evt) {
     element.remove();
   }
 
@@ -118,31 +143,81 @@ abstract class LNotification {
  */
 class LAlert extends LNotification {
 
-  final DivElement element = new DivElement()
+  /// Container Element
+  DivElement container;
+
+  /// Alert Element
+  final DivElement notify = new DivElement()
     ..classes.addAll([LNotification.C_NOTIFY, LNotification.C_NOTIFY__ALERT,
-      LTheme.C_THEME__INVERSE_TEXT, LTheme.C_THEME__ALERT_TEXTURE])
+        LTheme.C_THEME__INVERSE_TEXT, LTheme.C_THEME__ALERT_TEXTURE])
     ..attributes[Html0.ROLE] = Html0.ROLE_ALERT;
-  DivElement get notify => element;
 
 
   /// blue background
-  LAlert.base(String label, {LIcon icon, String idPrefix, String assistiveText})
-      : super(label, icon, idPrefix, null, assistiveText);
+  LAlert({String label, List<Element> headingElements, String idPrefix, LIcon icon,
+      String assistiveText, bool addDefaultIcon: false, bool inContainer: false, String color})
+    : super(idPrefix, color) {
+    if (inContainer) {
+      container = new DivElement();
+      container.append(notify);
+    }
+    close.icon.classes.add(LIcon.C_ICON__X_SMALL);
+
+    _assistiveText = assistiveText;
+    _headingText = label;
+    _headingElements = headingElements;
+
+    // Icon
+    _icon = icon;
+    if (_icon == null && addDefaultIcon) {
+      _icon = LNotification.createDefaultIcon(color);
+    }
+    if (_icon != null) {
+      _icon.classes.addAll([LIcon.C_ICON, LIcon.C_ICON__SMALL, LMargin.C_RIGHT__X_SMALL]);
+    }
+    build();
+  }
   /// green background
-  LAlert.success(String label, {LIcon icon, String idPrefix, String assistiveText})
-      : super(label, icon, idPrefix, LTheme.C_THEME__SUCCESS, assistiveText);
+  LAlert.success({String label, List<Element> headingElements, String idPrefix,
+        LIcon icon,  String assistiveText, bool addDefaultIcon: false})
+    : this(label:label, headingElements:headingElements, idPrefix:idPrefix, icon:icon,
+        assistiveText:assistiveText, addDefaultIcon:addDefaultIcon, color:LTheme.C_THEME__SUCCESS);
   /// yellow background
-  LAlert.warning(String label, {LIcon icon, String idPrefix, String assistiveText})
-      : super(label, icon, idPrefix, LTheme.C_THEME__WARNING, assistiveText);
+  LAlert.warning({String label, List<Element> headingElements, String idPrefix,
+        LIcon icon,  String assistiveText, bool addDefaultIcon: false})
+    : this(label:label, headingElements:headingElements, idPrefix:idPrefix, icon:icon,
+        assistiveText:assistiveText, addDefaultIcon:addDefaultIcon, color:LTheme.C_THEME__WARNING);
   /// red background
-  LAlert.error(String label, {LIcon icon, String idPrefix, String assistiveText})
-      : super(label, icon, idPrefix, LTheme.C_THEME__ERROR, assistiveText);
+  LAlert.error({String label, List<Element> headingElements, String idPrefix,
+        LIcon icon,  String assistiveText, bool addDefaultIcon: false})
+    : this(label:label, headingElements:headingElements, idPrefix:idPrefix, icon:icon,
+        assistiveText:assistiveText, addDefaultIcon:addDefaultIcon, color:LTheme.C_THEME__ERROR);
   /// grayblack background
-  LAlert.offline(String label, {LIcon icon, String idPrefix, String assistiveText})
-      : super(label, icon, idPrefix, LTheme.C_THEME__OFFLINE, assistiveText);
+  LAlert.offline({String label, List<Element> headingElements, String idPrefix,
+      LIcon icon,  String assistiveText, bool addDefaultIcon: false})
+  : this(label:label, headingElements:headingElements, idPrefix:idPrefix, icon:icon,
+      assistiveText:assistiveText, addDefaultIcon:addDefaultIcon, color:LTheme.C_THEME__OFFLINE);
+
+  /// build
+  void build() {
+    super.build();
+    // Simple text heading content
+    HeadingElement h2 = new HeadingElement.h2();
+    if (_icon != null) {
+      h2.append(_icon.element);
+    }
+    if (_headingElements != null && _headingElements.isNotEmpty) {
+      for (Element ele in _headingElements)
+        h2.append(ele);
+    } else if (_headingText != null){
+      h2.appendText(_headingText);
+    }
+    notify.append(h2);
+  } // build
 
 
 } // LAlert
+
 
 
 /**
@@ -150,19 +225,142 @@ class LAlert extends LNotification {
  */
 class LToast extends LNotification {
 
-  /// Toast Element
-  final DivElement element = new DivElement()
-    ..classes.add(LNotification.C_NOTIFY_CONTAINER);
+  /// Container Element
+  DivElement container;
 
+  /// Toast Element
   final DivElement notify = new DivElement()
     ..classes.addAll([LNotification.C_NOTIFY, LNotification.C_NOTIFY__TOAST, LTheme.C_THEME__INVERSE_TEXT])
     ..attributes[Html0.ROLE] = Html0.ROLE_ALERT;
 
+  final DivElement _content = new DivElement()
+    ..classes.add(LNotification.C_NOTIFY__CONTENT);
 
   /// blue background
-  LToast.base(String label, {LIcon icon, String idPrefix, String assistiveText})
-    : super(label, icon, idPrefix, null, assistiveText) {
-    element.append(notify);
+  LToast({String label, List<Element> headingElements, String idPrefix, LIcon icon,
+      String text, List<Element> contentElements,
+      String assistiveText, bool addDefaultIcon: false,
+      bool inContainer: false, String color})
+    : super(idPrefix, color) {
+    if (inContainer) {
+      container = new DivElement()
+        ..classes.add(LNotification.C_NOTIFY_CONTAINER);
+      container.append(notify);
+    }
+    _assistiveText = assistiveText;
+    _headingText = label;
+    _headingElements = headingElements;
+    _contentText = text;
+    _contentElements = contentElements;
+    // Icon
+    _icon = icon;
+    if (_icon == null && addDefaultIcon) {
+      _icon = LNotification.createDefaultIcon(color);
+    }
+    if (_icon != null) {
+      _icon.classes.addAll([LIcon.C_ICON, LIcon.C_ICON__SMALL, LMargin.C_RIGHT__X_SMALL]);
+    }
+    build();
+  }
+
+
+
+  /// green background
+  LToast.success({String label, List<Element> headingElements, String idPrefix, LIcon icon,
+      String text, List<Element> contentElements, String assistiveText, bool addDefaultIcon: false,
+      bool inContainer: false})
+    : this(label:label, headingElements:headingElements, idPrefix:idPrefix, icon:icon,
+      text:text, contentElements:contentElements, assistiveText:assistiveText, addDefaultIcon:addDefaultIcon,
+      inContainer:inContainer, color:LTheme.C_THEME__SUCCESS);
+  /// yellow background
+  LToast.warning({String label, List<Element> headingElements, String idPrefix, LIcon icon,
+      String text, List<Element> contentElements, String assistiveText, bool addDefaultIcon: false,
+      bool inContainer: false})
+    : this(label:label, headingElements:headingElements, idPrefix:idPrefix, icon:icon,
+      text:text, contentElements:contentElements, assistiveText:assistiveText, addDefaultIcon:addDefaultIcon,
+      inContainer:inContainer, color:LTheme.C_THEME__WARNING);
+
+  LToast.error({String label, List<Element> headingElements, String idPrefix, LIcon icon,
+      String text, List<Element> contentElements, String assistiveText, bool addDefaultIcon: false,
+      bool inContainer: false})
+    : this(label:label, headingElements:headingElements, idPrefix:idPrefix, icon:icon,
+      text:text, contentElements:contentElements, assistiveText:assistiveText, addDefaultIcon:addDefaultIcon,
+      inContainer:inContainer, color:LTheme.C_THEME__ERROR);
+
+  LToast.offline({String label, List<Element> headingElements, String idPrefix, LIcon icon,
+      String text, List<Element> contentElements, String assistiveText, bool addDefaultIcon: false,
+      bool inContainer: false})
+  : this(label:label, headingElements:headingElements, idPrefix:idPrefix, icon:icon,
+      text:text, contentElements:contentElements, assistiveText:assistiveText, addDefaultIcon:addDefaultIcon,
+      inContainer:inContainer, color:LTheme.C_THEME__OFFLINE);
+
+
+  List<Element> _contentElements;
+  String _contentText;
+
+  /// Build Toast
+  void build() {
+    super.build();
+    notify.append(_content);
+    if (_icon == null
+        && (_contentElements == null || _contentElements.isEmpty)
+        && (_contentText == null || _contentText.isEmpty)) {
+      HeadingElement h2 = new HeadingElement.h2()
+        ..classes.add(LText.C_TEXT_HEADING__SMALL);
+      if (_headingElements != null && _headingElements.isNotEmpty) {
+        for (Element ele in _headingElements)
+          h2.append(ele);
+      } else if (_headingText != null){
+        h2.appendText(_headingText);
+      }
+      _content.append(h2);
+    } else {
+      _content.classes.add(LGrid.C_GRID);
+      if (_icon != null) {
+        _icon.classes.addAll([LIcon.C_ICON, LIcon.C_ICON__SMALL, LMargin.C_RIGHT__SMALL, LGrid.C_COL]);
+        _content.append(_icon.element);
+      }
+      DivElement rightSide = new DivElement()
+        ..classes.addAll([LGrid.C_COL, LGrid.C_ALIGN_MIDDLE]);
+      _content.append(rightSide);
+      //
+      HeadingElement h2 = new HeadingElement.h2()
+        ..classes.add(LText.C_TEXT_HEADING__SMALL);
+      if (_headingElements != null && _headingElements.isNotEmpty) {
+        for (Element ele in _headingElements)
+          h2.append(ele);
+      } else if (_headingText != null){
+        h2.appendText(_headingText);
+      }
+      rightSide.append(h2);
+      // Content
+      if (_contentText != null && _contentText.isNotEmpty) {
+        ParagraphElement p = new ParagraphElement()
+          ..text = _contentText;
+        rightSide.append(p);
+      }
+      if (_contentElements != null) {
+        for (Element ele in _contentElements) {
+          rightSide.append(ele);
+        }
+      }
+    }
+  }
+
+
+  /// Append Toast
+  void add(LComponent component) {
+    if (_contentElements == null)
+      _contentElements = new List<Element>();
+    _contentElements.add(component.element);
+    build();
+  }
+  /// Append Toast
+  void append(Element e) {
+    if (_contentElements == null)
+      _contentElements = new List<Element>();
+    _contentElements.add(e);
+    build();
   }
 
 
