@@ -12,7 +12,6 @@ class Themes extends DemoFeature {
 
   LComponent get content {
     CDiv div = new CDiv();
-
     div.add(new LBox()..text = "Regular Box");
     div.add(new LBox()..small = true ..text = "Small Box");
     div.add(new LBox()..xsmall = true ..text = "X Small Box");
@@ -32,6 +31,21 @@ class Themes extends DemoFeature {
   }
   String get source {
     return '''
+    CDiv div = new CDiv();
+    div.add(new LBox()..text = "Regular Box");
+    div.add(new LBox()..small = true ..text = "Small Box");
+    div.add(new LBox()..xsmall = true ..text = "X Small Box");
+
+    div.add(new LBox()..text = "Default Theme" ..themeDefault());
+    div.add(new LBox()..text = "Shade Theme" ..themeShade());
+    div.add(new LBox()..text = "Inverse Theme" ..themeInverse());
+    div.add(new LBox()..text = "Alt Inverse Theme" ..themeAltInverse());
+    div.add(new LBox()..text = "Success Theme" ..themeSuccess());
+    div.add(new LBox()..text = "Warning Theme" ..themeWarning());
+    div.add(new LBox()..text = "Error Theme" ..themeError());
+    div.add(new LBox()..text = "Offline Theme" ..themeOffline());
+    div.add(new LBox()..text = "Default Theme with Texture" ..themeDefault() ..themeTexture());
+    div.add(new LBox()..text = "Shade Theme with Texture" ..themeShade() ..themeTexture());
     ''';
   }
 

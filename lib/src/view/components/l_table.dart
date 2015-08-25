@@ -120,8 +120,8 @@ class LTable extends LComponent {
   LTableRow addHeadRow() {
     if (_thead == null)
       _thead = element.createTHead();
-    LTableHeaderRow row = new LTableRow(_thead.addRow(), _theadRows.length, id, null,
-        LText.C_TEXT_HEADING__LABEL, rowSelect, nameList, nameLabelMap, LTableRow.TYPE_HEAD);
+    LTableHeaderRow row = new LTableHeaderRow(_thead.addRow(), _theadRows.length, id,
+        LText.C_TEXT_HEADING__LABEL, rowSelect, nameList, nameLabelMap);
     if (rowSelect && _theadRows.isEmpty) {
       row.selectCb.onClick.listen((MouseEvent evt) {
         selectAll(row.selectCb.checked);
@@ -329,7 +329,6 @@ class LTableRow {
  */
 class LTableHeaderRow extends LTableRow {
 
-
   /**
    * Table Header Row
    */
@@ -357,7 +356,7 @@ class LTableHeaderRow extends LTableRow {
     }
 
     TableCellElement tc = document.createElement("th")
-        ..attributes["scope"] = "col";
+      ..attributes["scope"] = "col";
     element.append(tc);
     return new LTableHeaderCell(tc, span, name, label, value, align);
   } // addHeaderCell
@@ -386,6 +385,7 @@ class LTableCell {
       element.attributes[Html0.DATA_LABEL] = label;
     if (value != null)
       element.attributes[Html0.DATA_VALUE] = value;
+    element.append(content);
   } // LTableCell
 
 } // TableCell

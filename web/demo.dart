@@ -17,6 +17,7 @@ part 'demo/badges.dart';
 part 'demo/breadcrumbs.dart';
 part 'demo/buttons.dart';
 part 'demo/button_groups.dart';
+part 'demo/cards.dart';
 
 part 'demo/dropdowns.dart';
 part 'demo/forms.dart';
@@ -100,7 +101,7 @@ void main() {
     page.add(new Breadcrumbs()..toc(toc));
     page.add(new Buttons()..toc(toc));
     page.add(new ButtonGroups()..toc(toc));
-    // Card
+    page.add(new Cards()..toc(toc));
     // data tables
     // datepickers
     page.add(new Dropdowns()..toc(toc));

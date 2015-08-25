@@ -9,13 +9,17 @@ part of lightning_dart;
 /**
  * Card
  */
-class LCard {
+class LCard extends LComponent {
 
+  /// slds-card - Initializes card | Required
   static const String C_CARD = "slds-card";
-
+  /// slds-card__header - Initializes card header | Required
   static const String C_CARD__HEADER = "slds-card__header";
+  /// slds-card__body - Initializes card body | Required
   static const String C_CARD__BODY = "slds-card__body";
+  /// slds-card__footer - Initializes card footer | Required
   static const String C_CARD__FOOTER = "slds-card__footer";
+
   static const String C_TILE = "slds-tile";
 
   static const String C_CARD__COMPACT = "slds-card--compact";
@@ -96,7 +100,10 @@ class LCard {
   /**
    * Add to Footer
    */
-  void addFooter(Element fe) {
+  void addFooter(LComponent fe) {
+    _footer.append(fe.element);
+  }
+  void appendFooter(Element fe) {
     _footer.append(fe);
   }
 
