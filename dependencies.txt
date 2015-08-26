@@ -1,4 +1,4 @@
-lightning_dart 0.5.2
+lightning 0.8.0
 |-- browser 0.10.0+2
 |-- fixnum 0.9.1+2
 |-- intl 0.12.4+1

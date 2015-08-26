@@ -6,7 +6,7 @@ set -e
 # https://www.dartlang.org/tools/dart2js/
 pub  --version
 
-dartanalyzer lib/lightning_dart.dart
+dartanalyzer lib/lightning.dart
 dartanalyzer lib/biz_fabrik_base.dart
 dartanalyzer web/demo.dart
 
@@ -28,5 +28,5 @@ sed -i '' -E 's/name="etag" content="(.*)"/name="etag" content="'$TS'"/g'  build
 sed -i '' 's/\${timestamp}/'$TS'/g' build/web/*.html
 cat build/web/demo.html | grep $TS
 
-TARGET=/Users/jorg/Documents/Accorto/gh-pages/lightning-dart/demo
+TARGET=/Users/jorg/Documents/Accorto/gh-pages/lightning-dart/
 cp -R build/web/* ${TARGET}

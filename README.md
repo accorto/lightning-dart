@@ -1,21 +1,22 @@
 # lightning dart
 
-![Lightning Dart](/LightningDartLogo.svg?raw=true =60x "LightningDart")
+![Lightning Dart](http://lightningdart.com/LightningDartLogo.svg =60x "LightningDart")
 
-A Dart library for developing web applications based on the Salesforce Lightning Design System CSS Framework 
+Lightning Dart is a library for developing web applications based on the CSS framework
 [http://www.lightningdesignsystem.com](http://www.lightningdesignsystem.com "Lightning Design").
 
+Written in [Dart](https://www.dartlang.org "Dart Language") it compiles into Javascript ("Dart - the better Javascript"), so the delivery is a "one page apps".
+ 
 The Framework is not dependent on salesforce.com functionality and can be used independently.
 
 The Salesforce Lightning CSS framework is similar to Bootstrap but uses more recent CSS technology and concentrates on building Web Applications, not Web Sites. 
 
-Dart is a Google programming language compiling into Javascript ("Dart - the better Javascript"). 
 
 ## Usage
 
 A simple usage example:
 
-    import "package:lightning_dart/lightning_dart.dart";
+    import "package:lightning/lightning.dart";
 
     main() {
         LightningDart.init() // client env
@@ -40,6 +41,6 @@ So it is best to contact us first (support at accorto.com) to coordinate efforts
 We require the usual contributor license agreement.
 
 
-<img src="/LightningDartLogo.svg?raw=true" width="60"/>
+<img src="http://lightningdart.com/LightningDartLogo.svg" width="60"/>
 
 [![Analytics](https://ga-beacon.appspot.com/UA-32129178-8/lightningdart/readme?pixel)](https://github.com/igrigorik/ga-beacon)
