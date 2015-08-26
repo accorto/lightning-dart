@@ -11,9 +11,9 @@ import 'package:intl/message_lookup_by_library.dart';
 import 'package:intl/src/intl_helpers.dart';
 import 'package:intl/intl.dart';
 
-import 'base-messages_de.dart' deferred as messages_de;
-import 'base-messages_es.dart' deferred as messages_es;
-import 'base-messages_fr.dart' deferred as messages_fr;
+import 'ldart_messages_de.dart' deferred as messages_de;
+import 'ldart_messages_es.dart' deferred as messages_es;
+import 'ldart_messages_fr.dart' deferred as messages_fr;
 
 
 Map<String, Function> _deferredLibraries = {

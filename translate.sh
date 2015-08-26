@@ -35,10 +35,10 @@ ls -lsa tool/translation/*.arb
 
 
 ## (2) -- translate arb files
-# dart-bizbase/bin/trl_arb.dart
-pub run lightning_dart:trl_arb $DIR de
-pub run lightning_dart:trl_arb $DIR fr
-pub run lightning_dart:trl_arb $DIR es
+# in ../bin/trl_arb.dart
+pub run lightning:trl_arb $DIR de
+pub run lightning:trl_arb $DIR fr
+pub run lightning:trl_arb $DIR es
 
 echo "(2) ---- arb translated"
 ls -lsa tool/translation
@@ -46,7 +46,7 @@ ls -lsa tool/translation
 
 ## (3a) -- create cmd file
 #echo "pub run intl:generate_from_arb --output-dir=lib/intl " > yy
-echo "pub run intl:generate_from_arb --output-dir=lib/intl --generated-file-prefix=base- " > yy
+echo "pub run intl:generate_from_arb --output-dir=lib/intl --generated-file-prefix=ldart_ " > yy
 find lib -type f -name *.dart -exec echo "{}" >> yy  \;
 # translated arb file names can only have _locale (no other _)
 # echo " tool/translation/messages_de.arb tool/translation/messages_fr.arb" >> yy
