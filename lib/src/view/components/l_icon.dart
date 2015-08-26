@@ -32,7 +32,7 @@ class LIcon {
   static const String C_ICON__CONTAINER__CIRCLE = "slds-icon__container--circle";
 
   /// Prefix for asset references
-  static const String HREF_PREFIX = "packages/lightning_dart";
+  static const String HREF_PREFIX = "packages/lightning";
 
   static const String SPRITE_ACTION =
       "/assets/icons/action-sprite/svg/symbols.svg#"; // announcement

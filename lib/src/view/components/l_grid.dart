@@ -69,6 +69,9 @@ class LGrid extends LComponent {
   /// slds-align-bottom - Vertically aligns element to bottom of .slds-grid
   static const String C_ALIGN_BOTTOM = "slds-align-bottom";
 
+  /// slds-container Marker Class
+  static const String C_CONTAINER = "slds-container";
+
   /// slds-container--small - Restrict width of containers to not exceed 36rem
   static const String C_CONTAINER__SMALL = "slds-container--small";
   /// slds-container--medium - Restrict width of containers to not exceed 60rem

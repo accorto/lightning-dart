@@ -77,6 +77,7 @@ class LFormCompoundFieldSet extends LComponent {
     DivElement group = new DivElement()
       ..classes.add(LFormCompound.C_FORM_ELEMENT__GROUP);
     element.append(group);
+    /*
     DivElement row = new DivElement()
       ..classes.add(LFormCompound.C_FORM_ELEMENT__ROW);
     String size = "slds-size--1-of-${editors.length}";
@@ -87,7 +88,7 @@ class LFormCompoundFieldSet extends LComponent {
       row.append(label);
       // TODO label.append(editor.labelSmall);
       // TODO label.append(editor.input);
-    }
+    } */
   } // addRow
 
 } // LFormCompoundFieldSet

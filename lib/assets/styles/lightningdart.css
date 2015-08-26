@@ -4498,5 +4498,29 @@ a.slds-button--inverse:focus {
   h2,
   h3 {
     page-break-after: avoid; } }
+.menu-main {
+  max-width: 3.5rem; }
+  .menu-main .menu-main-show,
+  .menu-main .menu-main-entry {
+    display: block;
+    height: 3.5rem;
+    padding: 1rem;
+    text-decoration: none !important;
+    white-space: nowrap;
+    overflow-x: hidden; }
+    .menu-main .menu-main-show span,
+    .menu-main .menu-main-entry span {
+      margin-left: 1rem; }
+    .menu-main .menu-main-show:hover,
+    .menu-main .menu-main-show:focus,
+    .menu-main .menu-main-entry:hover,
+    .menu-main .menu-main-entry:focus {
+      background-color: lightgreen; }
+    .menu-main .menu-main-show .slds-is-selected,
+    .menu-main .menu-main-entry .slds-is-selected {
+      background-color: green !important; }
+  .menu-main:hover,
+  .menu-main:focus {
+    max-width: 12rem; }
 
 /*# sourceMappingURL=lightningdart.css.map */

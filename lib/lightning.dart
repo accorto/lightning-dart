@@ -15,7 +15,7 @@ import 'dart:convert';
 // Packages
 import 'package:logging/logging.dart';
 
-import 'intl/base-messages_all.dart';
+import 'intl/ldart_messages_all.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/intl_browser.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -70,6 +70,10 @@ part 'src/view/editors/select_option.dart';
 part 'src/view/form/l_form.dart';
 part 'src/view/form/l_form_compound.dart';
 part 'src/view/form/l_form_element.dart';
+
+part 'src/view/menu/page_main.dart';
+part 'src/view/menu/page_entry.dart';
+part 'src/view/menu/page_simple.dart';
 
 part 'src/view/utility/html0.dart';
 part 'src/view/utility/option_util.dart';

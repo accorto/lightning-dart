@@ -116,6 +116,10 @@ class CDiv extends LComponent {
   CDiv.section() : this._(new Element.section());
   /// Article Element
   CDiv.article() : this._(new Element.article());
+  /// Header Element
+  CDiv.header() : this._(new Element.header());
+  /// Footer Element
+  CDiv.footer() : this._(new Element.footer());
 
   /// Component
   CDiv._(Element this.element);
@@ -128,7 +132,7 @@ class CDiv extends LComponent {
   }
 
   /**
-   * Set Container [size] LGrid.C_CONTAINER__SMALL/MEDIUM/LARGE
+   * Set Container [size] LGrid.C_CONTAINER__SMALL/MEDIUM/LARGE/FLUID
    */
   void set size(String size) {
     element.classes.removeAll(LGrid.CONTAINER_SIZES);

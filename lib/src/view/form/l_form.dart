@@ -196,8 +196,10 @@ class LForm extends LComponent {
         valid = false;
       }
     }
+    if (valid) {
 
-  }
+    }
+  } // onFormSubmit
 
   /// Layout
 

@@ -22,9 +22,6 @@ class LFormElement {
   DivElement _elementControl;
   /// Label Span (cb)
   SpanElement _labelSpan;
-  /// Help
-  final SpanElement _help1Span = new SpanElement()
-    ..classes.add(LForm.C_FORM_ELEMENT__HELP);
   /// Hint
   final SpanElement _hintSpan = new SpanElement()
     ..classes.add(LForm.C_FORM_ELEMENT__HELP);

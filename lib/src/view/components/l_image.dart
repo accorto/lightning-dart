@@ -33,7 +33,7 @@ class LImage extends LComponent {
   static String assetsSrc(String src) {
     if (src == null || src.contains("/"))
       return src;
-    return "packages/lightning_dart/assets/images/" + src;
+    return "packages/lightning/assets/images/" + src;
   }
 
   /// Image Element
