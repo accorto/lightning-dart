@@ -11,7 +11,7 @@ part of lightning_dart.demo;
  */
 abstract class DemoFeature extends LComponent {
 
-  static const String SLDS_URL = "https://www.getslds.com/components";
+  static const String SLDS_URL = "https://www.lightningdesignsystem.com/components";
   static const String SLDS_TXT = "SLDS reference";
 
   final DivElement element = new DivElement();
@@ -43,8 +43,7 @@ abstract class DemoFeature extends LComponent {
     hdr.append(ref);
 
     UListElement ul = new UListElement()
-      ..classes.add(LList.C_LIST__VERTICAL)
-      ..classes.add(LList.C_HAS_CARDS);
+      ..classes.addAll([LList.C_LIST__VERTICAL, LMargin.C_TOP__SMALL]);
     for (DivElement option in options) {
       LIElement li = new LIElement()
         ..classes.add(LList.C_LIST__ITEM);
@@ -52,28 +51,28 @@ abstract class DemoFeature extends LComponent {
       ul.append(li);
     }
     // element.append(new HRElement());
+    hdr.append(ul);
     element.append(hdr);
-    element.append(ul);
 
 
     //
     LTab tab = new LTab(idPrefix: id);
-    tab.element.style.marginTop = "20px";
-    element.append(tab.element);
-    Element sc = tab.addTab("Small", name: "s")
-      ..classes.add(LGrid.C_CONTAINER__SMALL);
+    DivElement wrapper = new DivElement()
+      ..classes.add(LMargin.C_LEFT__SMALL);
+    wrapper.append(tab.element);
+    element.append(wrapper);
+
+    //
+    Element sc = tab.addTab("Small", name: "s");
     sc.style.width = "480px";
     sc.style.border = "1px solid lightgray";
-    Element mc = tab.addTab("Medium", name: "m")
-      ..classes.add(LGrid.C_CONTAINER__MEDIUM);
+    Element mc = tab.addTab("Medium", name: "m");
     mc.style.width = "768px";
     mc.style.border = "1px solid gray";
-    Element lc = tab.addTab("Large", name: "l")
-      ..classes.add(LGrid.C_CONTAINER__LARGE);
+    Element lc = tab.addTab("Large", name: "l");
     lc.style.width = "1024px";
     lc.style.border = "1px solid black";
-    Element xc = tab.addTab("Fluid", name: "x")
-      ..classes.add(LGrid.C_CONTAINER__FLUID);
+    Element xc = tab.addTab("Fluid", name: "x");
     xc.style.width = "100%";
     xc.style.border = "1px solid black";
 
@@ -85,15 +84,16 @@ abstract class DemoFeature extends LComponent {
     dc.append(src);
 
     tab.onTabChanged.listen(onTabChanged); // init display on tab add
-    tab.selectTabByPos(3); // tab
+    tab.selectTabByPos(3); // fluid
   } // DemoFeature
 
   /// Link to Feature
   void toc(Element toc) {
-    LIElement li = new LIElement()
-      ..classes.add(LList.C_LIST__ITEM);
-    toc.append(li);
-    li.append(new AnchorElement(href: "#${id}")
+    DivElement col = new DivElement()
+      ..classes.addAll([LGrid.C_COL, LMargin.C_AROUND__SMALL])
+      ..style.minWidth = "10rem";
+    toc.append(col);
+    col.append(new AnchorElement(href: "#${id}")
       ..text = label);
   }
 

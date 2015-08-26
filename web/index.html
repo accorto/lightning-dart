@@ -1,0 +1,128 @@
+<!doctype html>
+<!--
+  ~ Copyright (c) 2015 Accorto, Inc. All Rights Reserved
+  ~ License: GPLv3  http://www.gnu.org/licenses/gpl-3.0.txt
+  ~ License options+support:  https://lightningdart.com
+  -->
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Lightning Dart</title>
+
+  <link rel="stylesheet" type="text/css" href="packages/lightning/assets/styles/lightningdart.css" />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-32129178-8', 'auto');
+    ga('send', 'pageview');
+  </script>
+</head>
+
+<body>
+<div class="slds-container slds-container--fluid" data-timestamp="${timestamp}">
+  <div class="slds-grid">
+    <nav class="slds-col slds-theme--alt-inverse menu-main">
+      <a href="#" class="menu-main-show">
+        <svg class="slds-icon slds-icon--small">
+          <use xlink:href="packages/lightning/assets/icons/utility-sprite/svg/symbols.svg#rows"/>
+        </svg>
+      </a>
+      <a href="#" class="menu-main-entry">
+        <svg class="slds-icon slds-icon--small">
+          <use xlink:href="packages/lightning/assets/icons/utility-sprite/svg/symbols.svg#home"/>
+        </svg>
+        <span>Home</span>
+      </a>
+      <a href="#" class="menu-main-entry">
+        <svg class="slds-icon slds-icon--small">
+          <use xlink:href="packages/lightning/assets/icons/utility-sprite/svg/symbols.svg#desktop"/>
+        </svg>
+        <span>Desktop</span>
+      </a>
+      <a href="#" class="menu-main-entry">
+        <svg class="slds-icon slds-icon--small">
+          <use xlink:href="packages/lightning/assets/icons/utility-sprite/svg/symbols.svg#tablet_portrait"/>
+        </svg>
+        <span>Tablet</span>
+      </a>
+      <a href="#" class="menu-main-entry">
+        <svg class="slds-icon slds-icon--small">
+          <use xlink:href="packages/lightning/assets/icons/utility-sprite/svg/symbols.svg#phone_portrait"/>
+        </svg>
+        <span>Phone</span>
+      </a>
+    </nav>
+
+
+    <div class="slds-col">
+      <header class="slds-m-around--small">
+        <img src="packages/lightning/assets/images/LightningDartLogo.svg" height="44" width="44" alt="Lightning Dart"/>
+      </header>
+      <section id="ld">
+        <header class="slds-page-header">
+          <h1 class="slds-text-heading--large">Lightning Dart</h1>
+          <p>Lightning User Unterface in Dart</p>
+        </header>
+        <div id="ld-main" class="slds-grid  slds-wrap slds-m-around--large">
+          <article id="ld-text" class="slds-col slds-size--1-of-1 slds-medium-size--2-of-3 slds-p-bottom--medium slds-p-right--medium">
+            <div class="slds-text-longform">
+            <p>Lightning Dart is a library for developing web applications based on the CSS framework
+              <a href="http://www.lightningdesignsystem.com" target="_blank">Salesforce Lightning Design System</a>.
+            </p>
+           <p>
+              Written in <a href="https://www.dartlang.org" title="Dart Language">Dart</a> ("Dart - the better Javascript"),
+              it compiles into Javascript, so the delivery is a "one page apps".
+            </p>
+            <p>
+              The Framework is not dependent on salesforce.com functionality and can be used independently.
+            </p>
+            <p>
+              The Salesforce Lightning CSS framework is similar to Bootstrap but uses more recent CSS technology and concentrates on building Web Applications, not Web Sites.
+            </p>
+            </div>
+          </article>
+          <article id="ld-links" class="slds-col slds-size-1-of-1 slds-medium-size--1-of-3">
+            <div class="slds-media slds-tile">
+              <div class="slds-media__figure">
+                <span class="slds-avatar slds-avatar--medium">
+                  <img src="packages/lightning/assets/images/DartLogo.png" alt="Lightning Dart on Pub" width="42" height="42"/>
+                </span>
+              </div>
+              <div class="slds-media__body">
+                <p>Dart Pub Project Page</p>
+                <div class="slds-tile__detail slds-text-body--small">
+                  <a href="https://pub.dartlang.org/packages/lightning" target="_blank">packages/lightning</a>
+                </div>
+             </div>
+            </div>
+            <div class="slds-media slds-tile">
+              <div class="slds-media__figure">
+                <span class="slds-avatar slds-avatar--medium">
+                  <img src="packages/lightning/assets/images/GitHubLogo.jpg" alt="Lightning Dart on GitHub"/>
+                </span>
+              </div>
+              <div class="slds-media__body">
+                <p>GitHub Project Page</p>
+                <div class="slds-tile__detail slds-text-body--small">
+                  <a href="https://github.com/accorto/lightning-dart" target="_blank">accorto/lightning-dart</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="slds-button-group slds-m-vertical--medium" role="group">
+              <a href="https://github.com/accorto/lightning-dart/zipball/master" class="slds-button slds-button--neutral" target="_blank">Download<br/><strong>ZIP File</strong></a>
+              <a href="https://github.com/accorto/lightning-dart/tarball/master" class="slds-button slds-button--neutral" target="_blank">Download<br/><strong>TAR Ball</strong></a>
+              <a href="https://github.com/accorto/lightning-dart" class="slds-button slds-button--neutral" target="_blank">View On<br/><strong>GitHub</strong></a>
+            </div>
+          </article><!-- ld-links -->
+        </div> <!-- ld-main -->
+      </section> <!-- ld -->
+    </div> <!-- right side -->
+  </div> <!-- grid -->
+</div> <!-- container -->
+<script type="application/dart" src="indexPage.dart"></script>
+<script src="packages/browser/dart.js"></script>
+</body>
+</html>
