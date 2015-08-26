@@ -1,4 +1,4 @@
-# lightning dart
+# Lightning Dart
 
 Lightning Dart is a library for developing web applications based on the css framework
 [http://www.lightningDesignSystem.com](http://www.lightningdesignsystem.com "SLDS").
@@ -43,4 +43,5 @@ So it is best to contact us first (support at accorto.com) to coordinate efforts
 We require the usual contributor license agreement.
 
 <img src="http://lightningdart.com/LightningDartLogo.svg" width="60"/>
+
 [![Analytics](https://ga-beacon.appspot.com/UA-32129178-8/lightningdart/readme?pixel)](https://github.com/igrigorik/ga-beacon)
