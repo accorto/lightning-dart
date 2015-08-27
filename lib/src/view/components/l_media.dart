@@ -11,13 +11,20 @@ part of lightning_dart;
  */
 class LMedia extends LComponent {
 
+  /// slds-media - Defines the overall media object | Required
   static const String C_MEDIA = "slds-media";
+  /// slds-media__figure - Defines the figure area | Required
   static const String C_MEDIA__FIGURE = "slds-media__figure";
+  static const String C_MEDIA__FIGURE__REVERSE = "slds-media__figure--reverse";
+  /// slds-media__body - Defines the body area | Required
   static const String C_MEDIA__BODY = "slds-media__body";
-
+  /// slds-media--center - Aligns the content in the .slds-media__body to the middle of the .slds-media__figure
   static const String C_MEDIA__CENTER = "slds-media--center";
+  /// slds-media--reverse - Reverses the media object so that the figure is on the right
   static const String C_MEDIA__REVERSE = "slds-media--reverse";
+  /// slds-media--double - Allows you to add a figure on both the right and left sides
   static const String C_MEDIA__DOUBLE = "slds-media--double";
+  /// slds-media--responsive - .slds-media__figure and .slds-media__body stack on smaller screens
   static const String C_MEDIA__RESPONSIVE = "slds-media--responsive";
 
   /// Alternative Media Styles
@@ -28,17 +35,13 @@ class LMedia extends LComponent {
     ..classes.add(C_MEDIA);
 
   /// Figure Image Div
-  final DivElement figure = new DivElement()
+  final DivElement _figure = new DivElement()
     ..classes.add(C_MEDIA__FIGURE);
-  /// Figure Image
-  final ImageElement figureImg = new ImageElement();
-  /// Figure Image Right
-  ImageElement figureImgRight;
+  /// Figure Image Div
+  DivElement _figureRight;
   /// Body Text Div
   final DivElement body = new DivElement()
     ..classes.add(C_MEDIA__BODY);
-  /// Body Text
-  final ParagraphElement bodyText = new ParagraphElement();
 
 
   /**
@@ -48,66 +51,100 @@ class LMedia extends LComponent {
    * - div .slds-media__body
    * -- p
    */
-  LMedia() {
-    element.append(figure);
-    figure.append(figureImg);
-    //
+  LMedia()  {
+    element.append(_figure);
     element.append(body);
-    body.append(bodyText);
   }
 
-  /// Body Text
-  String get text => bodyText.text;
-  /// Body Text
-  void set text (String newValue) {
-    bodyText.text = newValue;
+  /// append body component
+  void append(Element newValue) {
+    body.append(newValue);
+  }
+  /// append body component
+  void add(LComponent component) {
+    body.append(component.element);
   }
 
+  // Set Image
+  void setImage(ImageElement img) {
+    _figure.children.clear();
+    _figure.append(img);
+  }
   /// Set Image
-  void setImage(String src, {int height, String alt}) {
-    figureImg.src = src;
+  void setImageSrc(String src, {int height:100, int width:100, String alt}) {
+    ImageElement img = new ImageElement(src: LImage.assetsSrc(src));
     if (height != null && height != 0) {
-      figureImg.height = height;
+      img.height = height;
+    }
+    if (width != null && width != 0) {
+      img.width = width;
     }
     if (alt != null) {
-      figureImg.alt = alt;
+      img.alt = alt;
     }
+    setImage(img);
   } // setImage
 
-  /// Set Image Right (Double)
-  void setImageDouble(String src, {int height, String alt}) {
-    if (figureImgRight == null) {
-      element.classes.removeAll(MEDIA_STYLE);
-      element.classes.add(C_MEDIA__DOUBLE);
-      //
-      final DivElement figureRight = new DivElement()
-        ..classes.addAll([C_MEDIA__FIGURE, C_MEDIA__REVERSE]);
-      element.insertBefore(body,figureRight);
-      figureImgRight = new ImageElement();
-      figureRight.append(figureImgRight);
+  // Set Icon
+  void setIcon(LIcon icon) {
+    _figure.children.clear();
+    _figure.append(icon.element);
+  }
+
+  // Set Right Double Image
+  void setImageRight(ImageElement img) {
+    if (_figureRight == null) {
+      _figureRight = new DivElement()
+        ..classes.addAll([C_MEDIA__FIGURE, C_MEDIA__FIGURE__REVERSE]);
+      element.insertBefore(_figureRight, body);
+    } else {
+      _figureRight.children.clear();
     }
-    figureImgRight.src = src;
+    element.classes.add(C_MEDIA__DOUBLE);
+    _figureRight.append(img);
+  }
+  /// Set Right Double Image
+  void setImageRightSrc(String src, {int height:100, int width:100, String alt}) {
+    ImageElement img = new ImageElement(src: LImage.assetsSrc(src));
     if (height != null && height != 0) {
-      figureImgRight.height = height;
+      img.height = height;
+    }
+    if (width != null && width != 0) {
+      img.width = width;
     }
     if (alt != null) {
-      figureImgRight.alt = alt;
+      img.alt = alt;
     }
-  } // setImageDouble
+    setImageRight(img);
+  } // setImage
+  // Set Right Double Icon
+  void setIconRight(LIcon icon) {
+    if (_figureRight == null) {
+      _figureRight = new DivElement()
+        ..classes.addAll([C_MEDIA__FIGURE, C_MEDIA__FIGURE__REVERSE]);
+      element.insertBefore(_figureRight, body);
+    } else {
+      _figureRight.children.clear();
+    }
+    element.classes.add(C_MEDIA__DOUBLE);
+    _figureRight.append(icon.element);
+  }
 
-
+  /// Center Style
   void set center (bool newValue) {
     element.classes.removeAll(MEDIA_STYLE);
     if (newValue) {
       element.classes.add(C_MEDIA__CENTER);
     }
   }
+  /// Reverse Style
   void set reverse (bool newValue) {
     element.classes.removeAll(MEDIA_STYLE);
     if (newValue) {
       element.classes.add(C_MEDIA__REVERSE);
     }
   }
+  /// Responsive
   void set responsive (bool newValue) {
     element.classes.removeAll(MEDIA_STYLE);
     if (newValue) {
