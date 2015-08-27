@@ -128,7 +128,7 @@ class DemoFrame extends PageEntry {
  */
 class ExampleForm extends PageEntry {
 
-  static LIcon formIcon = new LIconAction(LIconAction.RECORD);
+  static final LIcon formIcon = new LIconAction(LIconAction.RECORD);
 
   final IFrameElement element = new IFrameElement();
 
@@ -139,5 +139,20 @@ class ExampleForm extends PageEntry {
       ..width = "100%"
       ..height = "1000px";
   }
+
+}
+
+
+/**
+ * Support Link
+ */
+class SupportLink extends PageEntry {
+
+  static final LIcon supportIcon = new LIconAction(LIconAction.NEW_CUSTOM86);
+
+  final DivElement element = new DivElement();
+
+  SupportLink() : super("support", supportIcon, "Doc + Support",
+    externalHref: "http://lightning.accorto.com", target: "_blank");
 
 }

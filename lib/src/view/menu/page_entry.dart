@@ -19,14 +19,23 @@ abstract class PageEntry extends LComponent {
 
   final String label;
   final LIcon icon;
+  final String externalHref;
 
   /**
    * Page element with Menu
+   * the [icon] is best an action or utility icon - standard and custom items have a different size
+   * if [externalHref] is provided, the user is redirected with the optional [target]
    */
-  PageEntry(String id, LIcon this.icon, String this.label) {
+  PageEntry(String id, LIcon this.icon, String this.label, {String this.externalHref, String target}) {
     element.id = id;
     menuEntry.id = id + MENU_SUFFIX;
-    menuEntry.href = "#" + id;
+    if (externalHref != null && externalHref.isNotEmpty) {
+      menuEntry.href = externalHref;
+      if (target != null && target.isNotEmpty)
+        menuEntry.target = target;
+    } else { // internal
+      menuEntry.href = "#" + id;
+    }
     // Icon
     icon.removeColor();
     icon.classes.addAll([LIcon.C_ICON, LIcon.C_ICON__SMALL]);
@@ -48,6 +57,10 @@ abstract class PageEntry extends LComponent {
     }
   }
 
+  /// External Reference
+  bool get external => externalHref != null && externalHref.isNotEmpty;
+  /// Internal Reference
+  bool get internal => externalHref == null || externalHref.isEmpty;
 
 } // PageEntry
 
@@ -70,11 +83,11 @@ class PageApplication {
    */
   PageApplication(String this.name, String this.label,
       {LIcon this.icon, String this.imageSrc}) {
-
   }
 
+  /// Add Page to Application
   void add(PageEntry entry) {
     entries.add(entry);
   }
 
-}
+} // PageApplication

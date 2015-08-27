@@ -114,7 +114,7 @@ class LIcon {
     for (String cls in element.classes) {
       if (cls.startsWith(LIconAction.C_ICON_ACTION_)
           || cls.startsWith(LIconStandard.C_ICON_STANDARD_)
-          || cls.startsWith("custom-")) {
+          || cls.startsWith(LIconCustom.C_ICON_CUSTOM_)) {
         element.classes.remove(cls);
       }
     }
@@ -789,8 +789,10 @@ class LIconCustom extends LIcon {
   static const String CUSTOM_99 = "custom-99";
   static const String CUSTOM_100 = "custom-100";
 
-  /// Icon Prefix for CUSTOM_*
-  static const String C_ICON_CUSTOM_ = "slds-icon-";
+  /// Icon Prefix for CUSTOM_* - custom-# added
+  static const String C_ICON_ = "slds-icon-";
+  /// Icon Prefix for Custom - just number added
+  static const String C_ICON_CUSTOM_ = "slds-icon-custom-";
 
   /**
    * Custom Icon - [colorName] e.g. LIconCustom.CUSTOM_1
@@ -800,7 +802,7 @@ class LIconCustom extends LIcon {
   LIconCustom(String colorName, {String className: LIcon.C_ICON, String size,
       String colorOverride, List<String> addlCss})
     : super(colorName.replaceAll("-", ""), LIcon.SPRITE_CUSTOM, className, size,
-        colorOverride == null ? "${C_ICON_CUSTOM_}${colorName}" : colorOverride, addlCss);
+        colorOverride == null ? "${C_ICON_}${colorName}" : colorOverride, addlCss);
 
 } // LIconCustom
 

@@ -126,14 +126,16 @@ class PageMain extends LComponent {
     PageEntry entry = null;
     for (PageEntry pe in apps.entries) {
       if (pe.id == theId) {
-        evt.preventDefault();
         entry = pe;
       } else {
         pe.active = false;
       }
     }
     if (entry != null) {
-      _setPageEntry(entry);
+      if (entry.internal) {
+        evt.preventDefault();
+        _setPageEntry(entry);
+      }
     } else {
       _log.fine("onMenuClick - not found: ${theId}");
     }
