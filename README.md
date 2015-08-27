@@ -27,21 +27,21 @@ A simple usage example:
         }
     }
     
-For more details, see [documentation](https://github.com/accorto/lightning-dart/wiki) 
+For more details, see [documentation](http://lightning.accorto.com) 
 - for component code, check the Source tabs in [http://lightningdart.com](http://lightningdart.com)
 - for form with code, check [subscribe form example](http://lightningdart.com/exampleForm.html) 
 
 
 ## Features and bugs
 
-Please file feature requests and bugs at the [issue tracker][tracker].
+Please file feature requests and bugs at the [issue tracker](http://lightning.accorto.com) or send an email to lightning@accorto.com.
 
-[tracker]: https://github.com/accorto/lightning-dart/issues
+
 
 ## Colaboration
 
 We welcome help and contributions.  The current status of the underlying design system (css) is in flux and can change quickly. 
-So it is best to contact us first (support at accorto.com) to coordinate efforts. 
+So it is best to contact us first (lightning@accorto.com) to coordinate efforts. 
 We require the usual contributor license agreement.
 
 <img src="http://lightningdart.com/LightningDartLogo.svg" width="60"/>
