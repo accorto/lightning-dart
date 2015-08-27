@@ -21,13 +21,15 @@ A simple usage example:
     main() {
         LightningDart.init() // client env
         .then((_) {
-            LContainer page = LContainer.create(); // find/add to body
-            ...
+            PageSimple page = PageSimple.create();
+            // check example: http://lightningdart.com/exampleForm.html
+            page.add(...content...);
         }
     }
     
 For more details, see [documentation](https://github.com/accorto/lightning-dart/wiki) 
-- for code examples, check the Source tabs in the [demo](http://lightningdart.com)
+- for component code, check the Source tabs in [http://lightningdart.com](http://lightningdart.com)
+- for form with code, check [subscribe form example](http://lightningdart.com/exampleForm.html) 
 
 
 ## Features and bugs

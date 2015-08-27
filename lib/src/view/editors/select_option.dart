@@ -12,6 +12,22 @@ part of lightning_dart;
  */
 class SelectOption {
 
+  /**
+   * Create List of Select Options From simple text list
+   */
+  static List<SelectOption> createListFromText(List<String> textList) {
+    List<SelectOption> list = new List<SelectOption>();
+    for (String text in textList) {
+      DOption option = new DOption()
+        ..label = text;
+      String value = text.replaceAll(new RegExp(r'[^A-Za-z0-9]'), "_");
+      option.value = value;
+      list.add(new SelectOption(option));
+    }
+    return list;
+  } // createListFromText
+
+
   /// The Option Source
   final DOption option;
   /// Select Option

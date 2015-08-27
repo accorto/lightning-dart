@@ -157,6 +157,7 @@ class LSelect extends LEditor with LFormElement implements LSelectI {
     for (SelectOption op in list) {
       input.append(op.asOptionElement());
     }
+    required = required; // optional
   }
   /// Get options
   List<OptionElement> get options => input.options;
@@ -165,6 +166,7 @@ class LSelect extends LEditor with LFormElement implements LSelectI {
     for (OptionElement oe in list) {
       input.append(oe);
     }
+    required = required; // optional
   }
   /// Add Option
   void addOption(OptionElement oe) {
@@ -181,6 +183,7 @@ class LSelect extends LEditor with LFormElement implements LSelectI {
       SelectOption so = new SelectOption(option);
       addSelectOption(so);
     }
+    required = required; // optional
   }
   /// Set List Items
   void set listItems (List<ListItem> listItems) {
@@ -188,6 +191,10 @@ class LSelect extends LEditor with LFormElement implements LSelectI {
       SelectOption so = new SelectOption(li.asDOption());
       addSelectOption(so);
     }
+    required = required; // optional
+  }
+  void set listText (List<String> textList) {
+    selectOptions = SelectOption.createListFromText(textList);
   }
 
 } // LSelect
@@ -230,5 +237,8 @@ abstract class LSelectI {
 
   /// Add Option List
   void set dOptions(List<DOption> options);
+
+  /// Set Options from text list
+  void set listText (List<String> textList);
 
 } // LSelectI

@@ -191,6 +191,9 @@ class LPicklist extends LEditor implements LSelectI {
   void set listItems (List<ListItem> listItems) {
     dropdown.listItems = listItems;
   }
+  void set listText (List<String> textList) {
+    selectOptions = SelectOption.createListFromText(textList);
+  }
 
   /// Button clicked
   void onButtonClick(MouseEvent evt) {

@@ -1,6 +1,6 @@
 name: lightning
 description: Lightning Dart UI Components based on Salesforce Lightning Design System
-version: 0.8.1
+version: 0.8.1+1
 author: Accorto <support@accorto.com>
 homepage: http://lightningdart.com
 documentation:
@@ -9,11 +9,11 @@ environment:
   sdk: '>=1.0.0 <2.0.0'
 
 dependencies:
-  browser: ">=0.10.0+2"
+  browser: ">=0.10.0"
   logging: ">=0.11.1"
   fixnum: ">=0.9.1+2"
-  intl:  ">=0.12.4+1"
-  protobuf: ">=0.4.0"
+  intl:  ">=0.12.4"
+  protobuf: ">=0.4.2"
 
 dev_dependencies:
-  test: '>=0.12.0'
+  test: '>=0.12.4'

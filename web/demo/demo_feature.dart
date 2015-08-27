@@ -78,7 +78,8 @@ abstract class DemoFeature extends LComponent {
 
     Element dc = tab.addTab("Source", name: "d");
     ParagraphElement src = new ParagraphElement()
-      ..classes.add(LText.C_TEXT_BODY__SMALL)
+    //  ..classes.add(LText.C_TEXT_BODY__SMALL)
+      ..style.fontFamily = "monospace"
       ..style.whiteSpace = "pre"
       ..text = source;
     dc.append(src);

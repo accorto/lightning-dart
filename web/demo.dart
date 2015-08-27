@@ -100,12 +100,13 @@ class DemoPage extends PageEntry {
     // trees
 
     add(new Themes()..toc(toc));
-
   }
-
 } // Demo Page
 
 
+/**
+ * Demo Frame ... includes demo page
+ */
 class DemoFrame extends PageEntry {
 
   final IFrameElement element = new IFrameElement();
@@ -122,3 +123,21 @@ class DemoFrame extends PageEntry {
 } // DemoFrame
 
 
+/**
+ * Example Signup Form Frame
+ */
+class ExampleForm extends PageEntry {
+
+  static LIcon formIcon = new LIconAction(LIconAction.RECORD);
+
+  final IFrameElement element = new IFrameElement();
+
+  ExampleForm() : super ("form", formIcon, "Form") {
+    element
+      ..name = id
+      ..src = "exampleForm.html"
+      ..width = "100%"
+      ..height = "1000px";
+  }
+
+}

@@ -56,7 +56,7 @@ class LCard extends LComponent {
   /**
    * set Header with [label] and optional [icon] and button [group]
    */
-  void setHeader(LIcon icon, String label, LButtonGroup group) {
+  void setHeader(LIcon icon, String label, {LButtonGroup group}) {
     _header.children.clear();
     DivElement headerDiv = new DivElement()
       ..classes.addAll([LMedia.C_MEDIA, LMedia.C_MEDIA__CENTER, LGrid.C_HAS_FLEXI_TRUNCATE]);
@@ -96,6 +96,11 @@ class LCard extends LComponent {
     //
     _body.append(table.element);
   } // setBody
+
+  void setBodyForm(LForm form) {
+    form.classes.add(LMargin.C_HORIZONTAL__SMALL);
+    _body.append(form.element);
+  }
 
   /**
    * Add to Footer

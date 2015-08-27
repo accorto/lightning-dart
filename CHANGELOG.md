@@ -2,6 +2,10 @@
 
 Version numbers are based on the Salesforce Lightning css Framework version numbers
 
+## trunk
+
+- signup form example
+
 ## 0.8.1
 
 - Fixed links, descriptions

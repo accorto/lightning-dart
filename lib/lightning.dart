@@ -89,14 +89,19 @@ class LightningDart {
   static String localeName = "en_US";
   /** Locale Name */
   static String language = "en";
+  /** Production Mode */
+  static bool productionMode = true;
+  /** Server Url */
+  static String serverUrl = "/";
 
   /// Logger
   static final Logger _log = new Logger("LightningDart");
 
   /**
    * Initialize Logging, Locale, Intl, Date
+   * optional [serverUri] to overwrite target
    */
-  static Future<bool> init() {
+  static Future<bool> init({String serverUri}) {
     // Initialize
     Logger.root.level = Level.ALL;
     // local Logger
@@ -111,7 +116,14 @@ class LightningDart {
         print(rec.stackTrace);
       }
     });
-
+    // Server / Production
+    if (serverUri != null && serverUri.isNotEmpty) {
+      serverUrl = serverUri;
+    }
+    String url = window.location.href;
+    if (url.contains("localhost") || url.contains("test=true")) {
+      productionMode = false;
+    }
     //
     localeName = window.navigator.language;
     Completer<bool> completer = new Completer<bool>();

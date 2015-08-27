@@ -236,6 +236,9 @@ class LLookup extends LEditor implements LSelectI {
       addSelectOption(so);
     }
   }
+  void set listText (List<String> textList) {
+    selectOptions = SelectOption.createListFromText(textList);
+  }
 
   /// Set List Items
   void set listItems (List<ListItem> listItems) {

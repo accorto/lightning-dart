@@ -396,6 +396,9 @@ class LDropdownElement implements LSelectI {
       addItem(item);
     }
   }
+  void set listText (List<String> textList) {
+    selectOptions = SelectOption.createListFromText(textList);
+  }
 
   /// Clear Items
   void clear() {

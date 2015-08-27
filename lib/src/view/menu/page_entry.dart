@@ -27,8 +27,10 @@ abstract class PageEntry extends LComponent {
     element.id = id;
     menuEntry.id = id + MENU_SUFFIX;
     menuEntry.href = "#" + id;
-    // Menu
+    // Icon
+    icon.removeColor();
     icon.classes.addAll([LIcon.C_ICON, LIcon.C_ICON__SMALL]);
+    // Menu
     menuEntry.append(icon.element);
     if (label != null && label.isNotEmpty) {
       menuEntry.append(new SpanElement()..text = label);

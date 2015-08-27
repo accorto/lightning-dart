@@ -109,6 +109,16 @@ class LIcon {
   /// Link name
   String _linkName;
 
+  /// remove color classes
+  void removeColor() {
+    for (String cls in element.classes) {
+      if (cls.startsWith(LIconAction.C_ICON_ACTION_)
+          || cls.startsWith(LIconStandard.C_ICON_STANDARD_)
+          || cls.startsWith("custom-")) {
+        element.classes.remove(cls);
+      }
+    }
+  }
 
 } // LIcon
 

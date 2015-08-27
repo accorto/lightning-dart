@@ -17,7 +17,7 @@ class Cards extends DemoFeature {
     bg.add(new LButton.neutral("btn", "Button"));
     bg.add(new LButton.neutral("add", "Action"));
     bg.layout(1);
-    card.setHeader(new LIconStandard(LIconStandard.CONTACT), "Card Header", bg);
+    card.setHeader(new LIconStandard(LIconStandard.CONTACT), "Card Header", group:bg);
 
     LTable table = new LTable("t1", true);
     LTableHeaderRow thead = table.addHeadRow();
@@ -45,7 +45,7 @@ class Cards extends DemoFeature {
     bg.add(new LButton.neutral("btn", "Button"));
     bg.add(new LButton.neutral("add", "Action"));
     bg.layout(1);
-    card.setHeader(new LIconStandard(LIconStandard.CONTACT), "Card Header", bg);
+    card.setHeader(new LIconStandard(LIconStandard.CONTACT), "Card Header", group:bg);
 
     LTable table = new LTable("t1", true);
     LTableHeaderRow thead = table.addHeadRow();

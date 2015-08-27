@@ -1,0 +1,100 @@
+<!doctype html>
+<!--
+  ~ Copyright (c) 2015 Accorto, Inc. All Rights Reserved
+  ~ License: GPLv3  http://www.gnu.org/licenses/gpl-3.0.txt
+  ~ License options+support:  https://lightningdart.com
+  -->
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="copyright" content="(c) 2015 Accorto Inc. All rights reserved. Accorto, Lightning Dart are a registered trademark of Accorto, Inc."/>
+
+  <title>Lightning Dart Form Exmaple</title>
+  <meta name="description" content="Lightning Dart is a library for developing web applications based on the css framework SLDS">
+  <meta name="keywords" content="dart, dart css, slds, salesforce lightning design system, bootstrap">
+  <link rel="canonical" href="http://lightningdart.com/exampleForm.html"/>
+
+  <link rel="stylesheet" type="text/css" href="packages/lightning/assets/styles/lightningdart.css" />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-32129178-8', 'auto');
+    ga('send', 'pageview');
+  </script>
+</head>
+
+<body>
+<div class="slds-container--fluid" data-timestamp="${timestamp}">
+  <div class="slds-grid slds-wrap">
+    <section class="slds-col--padded slds-size--1-of-1 slds-medium-size--1-of-2 slds-m-vertical--small">
+      <div id="wrap" class="slds-grid slds-grid--align-center" style="height: 600px;">
+      <div class="slds-col--padded slds-align-middle">
+        <h2>Loading ...</h2>
+        <img src="packages/lightning/assets/images/LightningDartLogo.svg" width="60" height="60" alt="Lightning Dart"/>
+        <div class="slds-spinner--large">
+          <img src="packages/lightning/assets/images/spinners/slds_spinner_brand.gif" alt="Loading..." />
+        </div>
+      </div>
+      </div>
+    </section>
+    <section id="description" class="slds-col--padded slds-size--1-of-1 slds-medium-size--1-of-2 slds-m-vertical--small">
+      <header class="slds-page-header">
+        <div class="slds-grid">
+          <div class="slds-col slds-media">
+            <div class="slds-media__figure">
+              <svg class="slds-icon slds-icon--large">
+                <use xlink:href="packages/lightning/assets/icons/doctype-sprite/svg/symbols.svg#overlay"/>
+              </svg>
+            </div>
+            <div class="slds-media__body">
+              <p class="slds-text-heading--label">Lightning Dart</p>
+              <h1 class="slds-text-heading--medium">Signup Form Code</h1>
+            </div>
+          </div> <!-- media -->
+        </div>
+      </header>
+      <article id="code" class="slds-box slds-box--x-small slds-m-top--x-small slds-scrollable--x" style="font-family: monospace; white-space: pre">
+LightningDart.init() // client env
+.then((_) {
+// The Form
+LForm form = new LForm.stacked("mc-embedded-subscribe-form")
+  ..addEditor(new LInput("FNAME", EditorI.TYPE_TEXT)
+    ..label = "First Name
+    ..placeholder = "Your First Name")
+  ..addEditor(new LInput("LNAME", EditorI.TYPE_TEXT)
+    ..label = "Last Name"
+    ..placeholder = "Your Last Name")
+  ..addEditor(new LInput("EMAIL", EditorI.TYPE_EMAIL)
+    ..label = "Email"
+    ..placeholder = "Your Email"
+    ..required = true)
+  ..addEditor(new LCheckbox("cool")
+    ..label = "Lightning Dart is Cool!")
+    ..addEditor(new LSelect("interest")
+    ..label = "Interest Area"
+    ..listText = ["Lightning Dart", "Accorto", "Time+Expense", "Gantt"])
+  ..addEditor(new LTextArea("comments")
+    ..label = "Comments")
+  ..addResetButton()
+  ..addSaveButton(label: "Subscribe", icon: new LIconUtility(LIconUtility.EMAIL));
+form.showDebug(); // adds+shows detail debug info
+// The Card
+LCard card = new LCard("exCard")
+  ..setHeader(new LIconAction(LIconAction.RECORD), "Sign up for Lightning Dart Updates")
+  ..setBodyForm(form);
+// The Page
+PageSimple page = PageSimple.create();
+page.add(card);
+});
+      </article>
+    </section>
+  </div> <!-- grid -->
+</div> <!-- container -->
+
+<script type="application/dart" src="exampleForm.dart"></script>
+<script src="packages/browser/dart.js"></script>
+</body>
+</html>

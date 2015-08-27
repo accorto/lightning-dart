@@ -71,6 +71,12 @@ class LForm extends LComponent {
 
   /// Form Element
   final Element element;
+  /// Form element might be null if initiated with div
+  FormElement get form {
+    if (element is FormElement)
+      return element as FormElement;
+    return null;
+  }
   /// List of Editors
   final List<LEditor> editors = new List<LEditor>();
 
@@ -94,11 +100,37 @@ class LForm extends LComponent {
   LForm.inline(String name, {String idPrefix})
     : this(new FormElement(), name, C_FORM__INLINE, idPrefix:idPrefix);
 
+
   /// Add Editor
   void addEditor (LEditor editor) {
     editor.editorChange = onEditorChange;
     editors.add(editor);
     element.append(editor.element);
+    editor.data = _data;
+    editor.entry = _data.getEntry(editor.id, editor.name, true);
+  }
+
+  /// Get Action or null
+  String get action {
+    if (element is FormElement)
+      return (element as FormElement).action;
+    return null;
+  }
+  /// Set action (if form)
+  void set action (String newValue) {
+    if (element is FormElement)
+      (element as FormElement).action = newValue;
+  }
+  /// Get Method or null
+  String get method {
+    if (element is FormElement)
+      return (element as FormElement).method;
+    return null;
+  }
+  /// Set Method (if form)
+  void set method (String newValue) {
+    if (element is FormElement)
+      (element as FormElement).method = newValue;
   }
 
   /// Data Container
@@ -129,13 +161,14 @@ class LForm extends LComponent {
     }
   } // display
 
-
+  /// editor changed
   void onEditorChange(String name, String newValue, DEntry entry, var details) {
     bool changed = _data.checkChanged();
     _log.config("onEditorChange - changed=${changed}");
     if (_buttonSave != null) {
       _buttonSave.disabled = !changed;
     }
+    _debug("change ${name}:");
   }
 
 
@@ -153,9 +186,17 @@ class LForm extends LComponent {
   LButton _buttonReset;
 
   /// Add Save Button
-  LButton addSaveButton() {
-    _buttonSave = new LButton.brandIcon("save", lFormSave(),
-      new LIconUtility(LIconAction.CHECK), iconLeft:true)
+  LButton addSaveButton({String label, String name:"save", LIcon icon}) {
+    String theLabel = label;
+    if (theLabel == null)
+      theLabel = lFormSave();
+    LIcon theIcon = icon;
+    if (theIcon == null)
+      theIcon = new LIconUtility(LIconAction.CHECK);
+    theIcon.element.style.setProperty("fill", "white"); // TODO add style
+    //
+    _buttonSave = new LButton.brandIcon(name, theLabel,
+      theIcon, iconLeft:true)
       ..typeSubmit = true;
     element.append(_buttonSave.element);
     if (element is! FormElement) {
@@ -180,30 +221,35 @@ class LForm extends LComponent {
 
   /// On Form Reset
   void onFormReset(Event evt) {
-    _log.info("onFormReset");
+    //_log.info("onFormReset");
     evt.preventDefault(); // resets to default
     data.resetRecord(); // resets to original/default
     display();
+    _debug("reset:");
   }
 
   /// On Form Submit
   void onFormSubmit(Event evt) {
-    _log.info("onFormSubmit - ${record}");
-    evt.preventDefault();
+    //_log.info("onFormSubmit - ${record}");
     bool valid = true;
     for (LEditor editor in editors) {
       if (!editor.doValidate()) {
         valid = false;
       }
     }
-    if (valid) {
-
+    _debug("submit valid=${valid}:");
+    if (valid && LightningDart.productionMode) {
+      String a = action;
+      if (a != null && a.isNotEmpty) {
+        return;  // don't prevent default
+      }
     }
+    evt.preventDefault();
   } // onFormSubmit
 
   /// Layout
 
-  /// Form Type
+  /// Form Type (horizontal/stacked/inline)
   String get formType {
     for (String cls in element.classes) {
       if (FORMTYPES.contains(cls))
@@ -218,6 +264,27 @@ class LForm extends LComponent {
       element.classes.add(newValue);
   }
 
+  // add debug field/info
+  void showDebug() {
+    if (_debugElement == null) {
+      _debugElement = new DivElement()
+        ..classes.addAll([LTheme.C_BOX, LMargin.C_TOP__SMALL, LTheme.C_THEME__ALERT_TEXTURE]);
+      form.append(_debugElement);
+      _debugElement.text = "Debug Info: Enter your email and press Subscribe to test :-)";
+    }
+  }
+  void _debug(String info) {
+    if (_debugElement != null) {
+      for (DEntry entity in data.record.entryList) {
+        if (entity.hasValue()) {
+          info += " ${entity.columnName}=${entity.value}";
+        }
+      }
+      _debugElement.text = info;
+    }
+
+  }
+  DivElement _debugElement;
 
   // Trl
   static String lFormSave() => Intl.message("Save", name: "lFormSave");

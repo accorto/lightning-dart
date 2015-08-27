@@ -29,7 +29,7 @@ class Forms extends DemoFeature {
       ..required = fieldRequired; // demo toggle
     form.addEditor(textInput);
 
-    LInput pwInput = new LInput("email1", EditorI.TYPE_PASSWORD)
+    LInput pwInput = new LInput("password1", EditorI.TYPE_PASSWORD)
       ..label = "Password Input"
       ..placeholder = "Password Placeholder"
       ..help = "Well, we are not picky - anything goes"
