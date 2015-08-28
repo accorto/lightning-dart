@@ -74,6 +74,7 @@ part 'src/view/editors/select_option.dart';
 part 'src/view/form/l_form.dart';
 part 'src/view/form/l_form_compound.dart';
 part 'src/view/form/l_form_element.dart';
+part 'src/view/form/l_form_field_set.dart';
 
 part 'src/view/menu/page_main.dart';
 part 'src/view/menu/page_entry.dart';
