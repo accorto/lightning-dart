@@ -8,7 +8,13 @@ part of lightning_dart.demo;
 
 class Icons extends DemoFeature {
 
-  Icons() : super("icons", "Icons", "Usually used in buttons");
+  Icons() : super("icons", "Icons",
+  sldsStatus: DemoFeature.SLDS_PROTOTYPE,
+  devStatus: DemoFeature.STATUS_COMPLETE,
+  hints: ["different sizes of utility/action and standard (assume border)"],
+  issues: [],
+  plans: []);
+
 
   LComponent get content {
     CDiv div = new CDiv();

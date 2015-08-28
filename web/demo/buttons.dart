@@ -8,7 +8,13 @@ part of lightning_dart.demo;
 
 class Buttons extends DemoFeature {
 
-  Buttons() : super("buttons", "Buttons", "");
+  Buttons() : super("buttons", "Buttons",
+  sldsStatus: DemoFeature.SLDS_DEV_READY,
+  devStatus: DemoFeature.STATUS_COMPLETE,
+  hints: [],
+  issues: ["hint not implemented yet"],
+  plans: []);
+
 
   LComponent get content {
     CDiv div = new CDiv();

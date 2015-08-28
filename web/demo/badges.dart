@@ -8,7 +8,12 @@ part of lightning_dart.demo;
 
 class Badges extends DemoFeature {
 
-  Badges() : super("badges", "Badges", "Labels (converted to upper case)");
+  Badges() : super("badges", "Badges",
+    sldsStatus: DemoFeature.SLDS_DEV_READY,
+    devStatus: DemoFeature.STATUS_COMPLETE,
+    hints: ["converted to upper case"],
+    issues: [],
+    plans: []);
 
   LComponent get content {
     CDiv div = new CDiv();

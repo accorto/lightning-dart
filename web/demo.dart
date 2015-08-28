@@ -18,18 +18,21 @@ part 'demo/breadcrumbs.dart';
 part 'demo/buttons.dart';
 part 'demo/button_groups.dart';
 part 'demo/cards.dart';
-
+part 'demo/datepickers.dart';
 part 'demo/dropdowns.dart';
 part 'demo/forms.dart';
+part 'demo/gridsystem.dart';
 part 'demo/icons.dart';
 part 'demo/images.dart';
 part 'demo/lookups.dart';
+part 'demo/media.dart';
+part 'demo/modals.dart';
 part 'demo/notifications.dart';
-
+part 'demo/pageheaders.dart';
 part 'demo/picklists.dart';
 part 'demo/pills.dart';
 part 'demo/popovers.dart';
-
+part 'demo/tables.dart';
 part 'demo/tabs.dart';
 part 'demo/tooltips.dart';
 
@@ -64,32 +67,37 @@ class DemoPage extends PageEntry {
       ..classes.addAll([LTheme.C_BOX, LTheme.C_THEME__SHADE]);
     element.append(hdr);
     HeadingElement h2 = new HeadingElement.h2()
-      ..classes.add(LText.C_TEXT_HEADING__MEDIUM)
+      ..classes.add(LText.C_TEXT_HEADING__LARGE)
       ..text = "Component Demo";
     hdr.append(h2);
+    ParagraphElement p = new ParagraphElement()
+      ..classes.add(LText.C_TEXT_BODY__REGULAR)
+      ..text = "Check out the individual UI Components with their SLDS (Salesforce Lightning Design System) status and the Lightning Dart implementation status";
+    hdr.append(p);
 
     Element toc = new Element.nav()
       ..classes.addAll([LGrid.C_GRID, LGrid.C_WRAP]);
     element.append(toc);
 
     /* Individual parts */
-    //page.add(new ActivityTimeline()..toc(toc));
+    add(new ActivityTimeline()..toc(toc));
     add(new Badges()..toc(toc));
     add(new Breadcrumbs()..toc(toc));
     add(new Buttons()..toc(toc));
     add(new ButtonGroups()..toc(toc));
     add(new Cards()..toc(toc));
-    // data tables
-    // datepickers
+    add(new Tables()..toc(toc));
+    add(new Datepickers()..toc(toc));
     add(new Dropdowns()..toc(toc));
     add(new Forms()..toc(toc));
+    add(new GridSystem()..toc(toc));
     add(new Icons()..toc(toc));
     add(new Images()..toc(toc));
     add(new Lookups()..toc(toc));
-    // media
-    // modal
+    add(new Media()..toc(toc));
+    add(new Modals()..toc(toc));
     add(new Notifications()..toc(toc));
-    // page headers
+    add(new PageHeaders()..toc(toc));
     add(new Picklists()..toc(toc));
     add(new Pills()..toc(toc));
     add(new Popovers()..toc(toc));

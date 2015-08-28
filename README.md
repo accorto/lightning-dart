@@ -32,7 +32,9 @@ For more details, see [documentation](http://lightning.accorto.com)
 - for form with code, check [subscribe form example](http://lightningdart.com/exampleForm.html) 
 
 
-## Features and bugs
+## Status, features and bugs
+
+The Component Demo http://lightningdart.com provides the implementation status per component. 
 
 Please file feature requests and bugs at the [issue tracker](http://lightning.accorto.com) or send an email to lightning@accorto.com.
 

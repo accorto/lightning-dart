@@ -8,7 +8,13 @@ part of lightning_dart.demo;
 
 class Picklists extends DemoFeature {
 
-  Picklists() : super("picklists", "Picklists", "");
+  Picklists() : super("picklists", "Picklists",
+  sldsStatus: DemoFeature.SLDS_PROTOTYPE,
+  devStatus: DemoFeature.STATUS_INITIAL,
+  hints: ["same api as select, lookup and dropdown"],
+  issues: ["instable"],
+  plans: []);
+
 
   LComponent get content {
     LForm form = new LForm.stacked("tf");

@@ -8,7 +8,12 @@ part of lightning_dart.demo;
 
 class Tooltips extends DemoFeature {
 
-  Tooltips() : super ("tooltips", "Tooltips", "By default will show/hide when hover or when clicked");
+  Tooltips() : super ("tooltips", "Tooltips",
+  sldsStatus: DemoFeature.SLDS_PROTOTYPE,
+  devStatus: DemoFeature.STATUS_COMPLETE,
+  hints: ["shows on hover or stays when trigger clicked"],
+  issues: [],
+  plans: ["move if it does not fit on screen"]);
 
   LComponent get content {
     CDiv div = new CDiv();

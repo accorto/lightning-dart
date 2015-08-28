@@ -8,7 +8,14 @@ part of lightning_dart.demo;
 
 class Cards extends DemoFeature {
 
-  Cards() : super("cards", "Cards", "");
+  Cards() : super("cards", "Cards",
+  sldsStatus: DemoFeature.SLDS_DEV_READY,
+  devStatus: DemoFeature.STATUS_PARTIAL,
+  hints: [],
+  issues: [],
+  plans: ["compact, empty"]);
+
+
 
   LComponent get content {
 

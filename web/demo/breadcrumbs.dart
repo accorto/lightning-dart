@@ -8,7 +8,12 @@ part of lightning_dart.demo;
 
 class Breadcrumbs extends DemoFeature {
 
-  Breadcrumbs() : super ("breadcrumbs", "Breadcrumbs", "Hierarchical Links, label converted to upper case");
+  Breadcrumbs() : super ("breadcrumbs", "Breadcrumbs",
+    sldsStatus: DemoFeature.SLDS_DEV_READY,
+    devStatus: DemoFeature.STATUS_COMPLETE,
+    hints: ["converted to upper case"],
+    issues: ["css: some scaling/line break issues"],
+    plans: []);
 
   LComponent get content {
     CDiv div = new CDiv();

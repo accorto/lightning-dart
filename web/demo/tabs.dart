@@ -8,7 +8,12 @@ part of lightning_dart.demo;
 
 class Tabs extends DemoFeature {
 
-  Tabs() : super ("tabs", "Tabs", "Tab Panel Navigation, Labels are convered to upper case");
+  Tabs() : super ("tabs", "Tabs",
+  sldsStatus: DemoFeature.SLDS_PROTOTYPE,
+  devStatus: DemoFeature.STATUS_COMPLETE,
+  hints: [],
+  issues: [],
+  plans: []);
 
   LComponent get content {
 

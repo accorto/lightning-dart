@@ -9,7 +9,12 @@ part of lightning_dart.demo;
 
 class Images extends DemoFeature {
 
-  Images() : super("images", "Images", "");
+  Images() : super("images", "Images",
+  sldsStatus: DemoFeature.SLDS_DEV_READY,
+  devStatus: DemoFeature.STATUS_COMPLETE,
+  hints: [],
+  issues: [],
+  plans: []);
 
   LComponent get content {
     CDiv div = new CDiv();

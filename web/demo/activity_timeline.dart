@@ -6,14 +6,22 @@
 
 part of lightning_dart.demo;
 
-
 class ActivityTimeline extends DemoFeature {
 
   ActivityTimeline()
-    : super("activity-timeline", "Activity Timeline", "List of activities") {
+    : super("activity-timeline", "Activity Timeline",
+      sldsStatus: DemoFeature.SLDS_PROTOTYPE,
+      devStatus: DemoFeature.STATUS_NIY,
+      hints: [],
+      issues: [],
+      plans: []);
+
+  LComponent get content {
+    return null;
   }
-
-
-
+  String get source {
+    return '''
+    ''';
+  }
 
 }

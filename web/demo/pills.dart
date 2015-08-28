@@ -8,7 +8,13 @@ part of lightning_dart.demo;
 
 class Pills extends DemoFeature {
 
-  Pills() : super ("pills", "Pills", "");
+  Pills() : super ("pills", "Pills",
+  sldsStatus: DemoFeature.SLDS_DEV_READY,
+  devStatus: DemoFeature.STATUS_COMPLETE,
+  hints: [],
+  issues: [],
+  plans: []);
+
 
   LComponent get content {
     CDiv div = new CDiv();

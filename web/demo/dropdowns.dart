@@ -8,7 +8,12 @@ part of lightning_dart.demo;
 
 class Dropdowns extends DemoFeature {
 
-  Dropdowns() : super("dropdowns", "Dropdowns", null);
+  Dropdowns() : super("dropdowns", "Dropdowns",
+  sldsStatus: DemoFeature.SLDS_PROTOTYPE,
+  devStatus: DemoFeature.STATUS_COMPLETE,
+  hints: [],
+  issues: [],
+  plans: []);
 
   LComponent get content {
     CDiv div = new CDiv();

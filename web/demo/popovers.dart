@@ -8,7 +8,12 @@ part of lightning_dart.demo;
 
 class Popovers extends DemoFeature {
 
-  Popovers() : super ("popovers", "Popovers", "");
+  Popovers() : super ("popovers", "Popovers",
+  sldsStatus: DemoFeature.SLDS_PROTOTYPE,
+  devStatus: DemoFeature.STATUS_COMPLETE,
+  hints: ["shows on hover and stays if trigger clicked"],
+  issues: [],
+  plans: ["move if it does not fit on screen"]);
 
   LComponent get content {
     CDiv div = new CDiv();

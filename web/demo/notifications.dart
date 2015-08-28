@@ -8,7 +8,12 @@ part of lightning_dart.demo;
 
 class Notifications extends DemoFeature {
 
-  Notifications() : super ("notifications", "Notifications", "Click to dismiss");
+  Notifications() : super ("notifications", "Notifications",
+  sldsStatus: DemoFeature.SLDS_PROTOTYPE,
+  devStatus: DemoFeature.STATUS_COMPLETE,
+  hints: ["click x to dismiss"],
+  issues: [],
+  plans: ["callback that user dismissed"]);
 
   LComponent get content {
     CDiv div = new CDiv();

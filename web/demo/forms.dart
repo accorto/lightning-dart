@@ -8,7 +8,13 @@ part of lightning_dart.demo;
 
 class Forms extends DemoFeature {
 
-  Forms() : super ("forms", "Forms", "Known Issue: Required Rendering is off");
+  Forms() : super ("forms", "Forms",
+  sldsStatus: DemoFeature.SLDS_DEV_READY,
+  devStatus: DemoFeature.STATUS_COMPLETE,
+  hints: [],
+  issues: ["css: required rendering is off"],
+  plans: ["help icon"]);
+
 
   String formType = LForm.C_FORM__STACKED;
   bool formSmall = false;
