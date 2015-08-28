@@ -17,6 +17,7 @@ class LForm extends LComponent {
   static const String C_FORM_ELEMENT__LABEL = "slds-form-element__label";
   /// small label
   static const String C_FORM_ELEMENT__LABEL__SMALL = "slds-form-element__label--small";
+  static const String C_FORM_ELEMENT__LABEL__TOP = "slds-form-element__label--top";
   /// slds-form-element__control - Initializes form element control | Required
   static const String C_FORM_ELEMENT__CONTROL = "slds-form-element__control";
   /// slds-input - Initializes text input | Required

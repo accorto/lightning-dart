@@ -16,7 +16,7 @@ abstract class LEditor extends EditorI {
   static int _autoId = 1;
 
   /// Get Form Element -- via with LFormElement or own
-  DivElement get element;
+  Element get element;
 
   /// Showing
   bool get show => !element.classes.contains(LVisibility.C_HIDE);
