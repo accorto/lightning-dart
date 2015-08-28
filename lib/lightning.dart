@@ -75,6 +75,10 @@ part 'src/view/menu/page_main.dart';
 part 'src/view/menu/page_entry.dart';
 part 'src/view/menu/page_simple.dart';
 
+part 'src/view/home/l_object_home.dart';
+part 'src/view/home/l_record_home.dart';
+part 'src/view/home/l_related_list.dart';
+
 part 'src/view/utility/html0.dart';
 part 'src/view/utility/option_util.dart';
 

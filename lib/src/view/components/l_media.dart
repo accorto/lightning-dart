@@ -68,7 +68,8 @@ class LMedia extends LComponent {
   // Set Image
   void setImage(ImageElement img) {
     _figure.children.clear();
-    _figure.append(img);
+    if (img != null)
+      _figure.append(img);
   }
   /// Set Image
   void setImageSrc(String src, {int height:100, int width:100, String alt}) {
@@ -88,7 +89,8 @@ class LMedia extends LComponent {
   // Set Icon
   void setIcon(LIcon icon) {
     _figure.children.clear();
-    _figure.append(icon.element);
+    if (icon != null)
+      _figure.append(icon.element);
   }
 
   // Set Right Double Image
@@ -100,8 +102,10 @@ class LMedia extends LComponent {
     } else {
       _figureRight.children.clear();
     }
-    element.classes.add(C_MEDIA__DOUBLE);
-    _figureRight.append(img);
+    if (img != null) {
+      element.classes.add(C_MEDIA__DOUBLE);
+      _figureRight.append(img);
+    }
   }
   /// Set Right Double Image
   void setImageRightSrc(String src, {int height:100, int width:100, String alt}) {
@@ -126,8 +130,10 @@ class LMedia extends LComponent {
     } else {
       _figureRight.children.clear();
     }
-    element.classes.add(C_MEDIA__DOUBLE);
-    _figureRight.append(icon.element);
+    if (icon != null) {
+      element.classes.add(C_MEDIA__DOUBLE);
+      _figureRight.append(icon.element);
+    }
   }
 
   /// Center Style

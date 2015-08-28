@@ -17,8 +17,7 @@ class Datepickers extends DemoFeature {
   plans: []);
 
   LComponent get content {
-    CDiv div = new CDiv();
-    return div;
+    return null;
   }
   String get source {
     return '''

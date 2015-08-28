@@ -373,7 +373,7 @@ class LLookup extends LEditor implements LSelectI {
   }
 
   /// Create regex for [search] returns null if empty or error
-  RegExp _createRegExp(String search) {
+  static RegExp _createRegExp(String search) {
     if (search == null || search.isEmpty)
       return null;
     // fix spaces (spaces to match also _-)
