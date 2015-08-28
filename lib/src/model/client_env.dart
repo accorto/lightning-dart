@@ -4,7 +4,7 @@
  * License options+support:  https://www.lightningdart.com
  */
 
-part of biz_fabrik_base;
+part of lightning_model;
 
 /// Client Context (Session)
 Map<String, dynamic> clientContext = new Map<String, dynamic>();

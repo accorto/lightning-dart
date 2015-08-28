@@ -4,10 +4,10 @@
  * License options+support:  https://www.lightningdart.com
  */
 
-library biz_fabrik_base;
+library lightning_model;
 
 /**
- * BizFabrik Base Classes
+ * Lightning Model Functionality
  */
 
 import 'dart:async';
@@ -21,21 +21,22 @@ import 'package:intl/intl_browser.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 // Protocol Buffers
+//import 'package:protobuf/protobuf.dart';
+//import 'dart:typed_data';
+import 'package:fixnum/fixnum.dart';
+
+//Protocol Buffers - Generated
 import 'protoc/structure.pb.dart';
 import 'protoc/data.pb.dart';
 import 'protoc/display.pb.dart';
 import 'protoc/rr.pb.dart';
-//import 'dart:typed_data';
-import 'package:fixnum/fixnum.dart';
-//import 'package:protobuf/protobuf.dart';
-
 
 export 'protoc/structure.pb.dart';
 export 'protoc/data.pb.dart';
 export 'protoc/display.pb.dart';
 export 'protoc/rr.pb.dart';
 
-
+// Model Functionality
 part 'src/model/client_env.dart';
 part 'src/model/data_context.dart';
 part 'src/model/data_record.dart';

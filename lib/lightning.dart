@@ -6,6 +6,10 @@
 
 library lightning_dart;
 
+/**
+ * Lightning UI View Functionality
+ */
+
 // Dart Core
 import 'dart:async';
 import 'dart:html';
@@ -20,8 +24,8 @@ import 'package:intl/intl.dart';
 import 'package:intl/intl_browser.dart';
 import 'package:intl/date_symbol_data_local.dart';
 //
-import 'biz_fabrik_base.dart';
-export 'biz_fabrik_base.dart';
+import 'lightning_model.dart';
+export 'lightning_model.dart';
 
 //
 
@@ -87,7 +91,8 @@ part 'src/view/utility/option_util.dart';
  */
 class LightningDart {
 
-  static const VERSION = "v0.8.0";
+  /// SLDS Version + rel
+  static const VERSION = "v0.8.0+2";
 
   /** Locale Name */
   static String localeName = "en_US";

@@ -4,7 +4,7 @@
  * License options+support:  https://www.lightningdart.com
  */
 
-part of biz_fabrik_base;
+part of lightning_model;
 
 /**
  * onRecordChanged Callback when [columnChanged] in [record] at [rowNo] was changed [temporary]
