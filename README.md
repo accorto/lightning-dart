@@ -30,6 +30,7 @@ A simple usage example:
 For more details, see [documentation](http://lightning.accorto.com) 
 - for component code, check the Source tabs in [http://lightningdart.com](http://lightningdart.com)
 - for form with code, check [subscribe form example](http://lightningdart.com/exampleForm.html) 
+- our blog of our [Lightning Experience](http://lightning.accorto.com/support/discussions/forums/1000228577) journey
 
 
 ## Status, features and bugs

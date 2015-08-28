@@ -7,7 +7,7 @@ set -e
 pub  --version
 
 dartanalyzer lib/lightning.dart
-dartanalyzer lib/biz_fabrik_base.dart
+dartanalyzer lib/lightning_ctrl.dart
 dartanalyzer web/demo.dart
 
 dartdocgen .
