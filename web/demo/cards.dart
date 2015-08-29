@@ -27,7 +27,7 @@ class Cards extends DemoFeature {
     card.setHeader(new LIconStandard(LIconStandard.CONTACT), "Card Header", group:bg);
 
     LTable table = new LTable("t1", true);
-    LTableHeaderRow thead = table.addHeadRow();
+    LTableHeaderRow thead = table.addHeadRow(false);
     thead.addHeaderCell("First Column", "c1");
     thead.addHeaderCell("Second Column", "c2");
     thead.addHeaderCell("Third Column", "c3");

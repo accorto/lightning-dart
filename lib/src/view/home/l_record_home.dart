@@ -82,9 +82,6 @@ class LRecordHome extends LPageHeader {
     // right - actions
     _header.append(_headerRight);
     _headerRight.append(_actionButtonGroup.element);
-    // Actions
-    LButton editButton = new LButton.base("edit", "Edit");
-    _actionButtonGroup.add(editButton);
   } // initComponent
 
   /// Set Icon
@@ -105,6 +102,18 @@ class LRecordHome extends LPageHeader {
     _headerLeftRecordTitle.text = newValue;
   }
 
+  /// insert before Actions
+  void insertElement(Element div) {
+    _header.insertBefore(div, _headerRight);
+  }
+
+
+  /**
+   * Add Actions
+   */
+  void addAction(LButton action) {
+    _actionButtonGroup.add(action);
+  }
 
   void set record (DRecord newValue) {
     recordTitle = newValue.drv;

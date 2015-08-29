@@ -53,7 +53,6 @@ part 'src/view/components/l_popover.dart';
 part 'src/view/components/l_scrollable.dart';
 part 'src/view/components/l_spinner.dart';
 part 'src/view/components/l_tab.dart';
-part 'src/view/components/l_table.dart';
 part 'src/view/components/l_text.dart';
 part 'src/view/components/l_theme.dart';
 part 'src/view/components/l_tile.dart';
@@ -79,6 +78,10 @@ part 'src/view/form/l_form_field_set.dart';
 part 'src/view/menu/page_main.dart';
 part 'src/view/menu/page_entry.dart';
 part 'src/view/menu/page_simple.dart';
+
+part 'src/view/table/l_table.dart';
+part 'src/view/table/l_table_cell.dart';
+part 'src/view/table/l_table_row.dart';
 
 part 'src/view/home/l_object_home.dart';
 part 'src/view/home/l_record_home.dart';

@@ -204,4 +204,9 @@ class LFormElement {
   } // updateStatusValidationState
 
 
+  /// hack
+  void setMarginTopSmall() {
+    element.style.marginTop = ".5rem"; // from 1
+  }
+
 } // LFormElement

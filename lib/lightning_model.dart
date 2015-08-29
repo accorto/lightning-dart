@@ -43,6 +43,4 @@ part 'src/model/data_record.dart';
 part 'src/model/data_type_util.dart';
 part 'src/model/data_util.dart';
 part 'src/model/editor_i.dart';
-
-
-part 'src/util/string_tokenizer.dart';
+part 'src/model/string_tokenizer.dart';

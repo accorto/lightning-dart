@@ -60,6 +60,9 @@ class LForm extends LComponent {
   static const String C_FORM__COMPOUND__HORIZONTAL = "slds-form--compound--horizontal";
 
 
+  static const String C_FORM_ELEMENT__GROUP = "slds-form-element--group";
+  static const String C_FORM_ELEMENT__HELPER = "slds-form-element--helper";
+
   static const String C_HAS_ERROR = "slds-has-error";
   static const String C_IS_REQUIRED = "slds-is-required";
 

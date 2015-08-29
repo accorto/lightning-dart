@@ -15,8 +15,7 @@ void main() {
   .then((_) {
 
     PageSimple page = PageSimple.create();
-    DemoPage demo = new DemoPage("demo", new LIconUtility(LIconUtility.DESKTOP), "Demo");
-    page.append(demo.element);
+    page.add(new DemoPage("demo", new LIconUtility(LIconUtility.DESKTOP), "Demo"));
 
   });
 

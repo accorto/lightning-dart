@@ -28,7 +28,7 @@ class LPageHeader extends LComponent {
 
 
   /// Page Header
-  final DivElement element = new DivElement()
+  final Element element = new Element.header()
     ..classes.add(C_PAGE_HEADER);
 
 }
