@@ -75,6 +75,8 @@ class LDropdown extends LComponent {
   /// Show Label for selected value
   bool showValueLabel = false;
 
+  /// Callback on Change
+  EditorChange editorChange;
 
   /**
    * Dropdown for [button] (classes are set here)
@@ -104,6 +106,7 @@ class LDropdown extends LComponent {
         assistiveText: "Settings",
         idPrefix:idPrefix),
     idPrefix);
+
 
   LDropdown.action(String idPrefix)
     : this(new LButton(new ButtonElement(), "more", null,
@@ -233,7 +236,7 @@ class LDropdown extends LComponent {
     } else {
       button.icon = null;
     }
-  }
+  } // _setValue
 
   /// Selection (toggle) mode - update value
   bool get selectMode => dropdown.selectMode;
@@ -248,8 +251,8 @@ class LDropdown extends LComponent {
     if (details is ListItem) {
       _setValue(details as ListItem);
     }
-    // if (editorChange != null) // if this were an EditorI
-    //  editorChange(name, newValue, temporary, details);
+    if (editorChange != null) // if this were an EditorI
+      editorChange(name, newValue, ignored, details);
   }
 
 } // LDropdown

@@ -8,7 +8,8 @@ library lightning.example;
 
 import "dart:html";
 
-import "package:lightning/lightning.dart";
+//import "package:lightning/lightning.dart";
+import "package:lightning/lightning_ctrl.dart";
 
 /**
  * Workbench Example
@@ -20,11 +21,11 @@ void main() {
   .then((_) {
     WorbenchData wbData = new WorbenchData();
 
-    LObjectHome objectHome = new LObjectHome.ui(wbData.ui)
-      ..recordList = wbData.recordList;
+    ObjectCtrl ctrl = new ObjectCtrl(wbData.ui);
+
 
     PageSimple page = PageSimple.create();
-    page.add(objectHome);
+    page.add(ctrl);
 
     /// Record
     page.append(new HRElement());

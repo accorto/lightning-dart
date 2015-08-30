@@ -165,6 +165,10 @@ class CDiv extends LComponent {
     return null;
   }
 
+  /// clear all content
+  void clear() {
+    element.children.clear();
+  }
 
   /// add horizontal rule [margin] top/bottom - default 2rem
   void appendHR({String margin}) {

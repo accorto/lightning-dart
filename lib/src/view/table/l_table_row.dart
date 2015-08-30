@@ -34,7 +34,7 @@ class LTableRow {
   LTableRow(TableRowElement this.element, int this.rowNo, String idPrefix, String rowValue,
       String cssClass, bool rowSelect,
       List<String> this.nameList, Map<String,String> this.nameLabelMap, String this.type,
-      List<LTableAction> rowActions) {
+      List<AppsAction> rowActions) {
     element.classes.add(cssClass);
     if (rowValue != null)
       element.attributes[Html0.DATA_VALUE] = rowValue;
@@ -164,7 +164,7 @@ class LTableRow {
   /**
    * Add Actions
    */
-  void addActions(List<LTableAction> actions) {
+  void addActions(List<AppsAction> actions) {
     if (type == TYPE_HEAD) {
       _actionCell = document.createElement("th")
         ..attributes["scope"] = "col";
@@ -173,14 +173,12 @@ class LTableRow {
       _actionCell = element.addCell();
     }
     _actionCell.classes.add(LTable.C_ROW_ACTION);
-    LButton btn = new LButton.iconBorderFilled("action", new LIconUtility(LIconUtility.DOWN), "Actions");
+    LButton btn = new LButton.iconBorderFilled("action", new LIconUtility(LIconUtility.DOWN), AppsAction.appsActions());
     LDropdown dropdown = new LDropdown(btn, "xx", dropdownClasses: [LDropdown.C_DROPDOWN__RIGHT, LDropdown.C_DROPDOWN__ACTIONS]);
     _actionCell.append(dropdown.element);
-    for (LTableAction action in actions) {
-      LDropdownItem item = new LDropdownItem(action.option);
-      dropdown.dropdown.addItem(item);
+    for (AppsAction action in actions) {
+      dropdown.dropdown.addItem(action.asDropdown());
     }
-
   }
   TableCellElement _actionCell;
 
@@ -201,7 +199,7 @@ class LTableHeaderRow extends LTableRow {
   LTableHeaderRow(TableRowElement element, int rowNo, String idPrefix,
       String cssClass, bool rowSelect,
       List<String> nameList, Map<String,String> nameLabelMap,
-      this.tableSortClicked, List<LTableAction> tableActions)
+      this.tableSortClicked, List<AppsAction> tableActions)
     : super (element, rowNo, idPrefix, null, cssClass, rowSelect, nameList, nameLabelMap,
         LTableRow.TYPE_HEAD, tableActions);
 

@@ -83,6 +83,7 @@ part 'src/view/table/l_table.dart';
 part 'src/view/table/l_table_cell.dart';
 part 'src/view/table/l_table_row.dart';
 
+part 'src/view/home/apps_action.dart';
 part 'src/view/home/l_object_home.dart';
 part 'src/view/home/l_record_home.dart';
 part 'src/view/home/l_related_list.dart';

@@ -12,6 +12,11 @@ part of lightning_dart;
  */
 class LObjectHome extends LPageHeader {
 
+  static const String VIEW_LAYOUT_TABLE = "table";
+  static const String VIEW_LAYOUT_CARDS = "cards";
+  static const String VIEW_LAYOUT_COMPACT = "compact";
+
+
   /// Top Row - Icon - Title - Label - Follow - Actions
   final DivElement _header = new DivElement()
     ..classes.add(LGrid.C_GRID);
@@ -21,11 +26,13 @@ class LObjectHome extends LPageHeader {
   final ParagraphElement _headerLeftRecordType = new ParagraphElement()
     ..classes.add(LText.C_TEXT_HEADING__LABEL);
 
-  LObjectHomeLookup _lookup;
+  /// Filter List
+  final LObjectHomeFilterList filterList = new LObjectHomeFilterList();
 
-  /// Top row left
+  /// Top row right
   final DivElement _headerRight = new DivElement()
     ..classes.addAll([LGrid.C_COL, LGrid.C_NO_FLEX, LGrid.C_ALIGN_BOTTOM]);
+  final LDropdown _viewLayout = new LDropdown.selectIcon("vs");
   final LButtonGroup _actionButtonGroup = new LButtonGroup();
 
   final ParagraphElement _summary = new ParagraphElement()
@@ -35,18 +42,6 @@ class LObjectHome extends LPageHeader {
    * Object Home
    */
   LObjectHome() {
-    _initComponent();
-  }
-
-  /// Object Home from UI
-  LObjectHome.ui(UI ui) {
-    _initComponent();
-    recordType = ui.table.label + "s"; // TODO plural
-
-  } // LObjectHome.ui
-
-  /// Initialize Component Structure
-  void _initComponent() {
     // Header Row
     element.append(_header);
     // div .slds-col
@@ -54,42 +49,63 @@ class LObjectHome extends LPageHeader {
     _header.append(_headerLeft);
     _headerLeft.append(_headerLeftRecordType);
     // - div .slds-grid
-    // -- div .slds-grid focus
-    // --- h1
-    // --- button
-    // -- button more
-    // -- button save
     DivElement headerLeftGrid = new DivElement()
       ..classes.add(LGrid.C_GRID);
     _headerLeft.append(headerLeftGrid);
-    // options
-    List<DOption> options = new List<DOption>();
-    options.add(new DOption()
-      ..value = "recent"
-      ..label = "Recently Viewed");
-    options.add(new DOption()
-      ..value = "all"
-      ..label = "All Records");
-    _lookup = new LObjectHomeLookup(options, onSavedQueryChange);
-    headerLeftGrid.append(_lookup.element);
-
-    LButton headerLeftGridMore = new LButton(new ButtonElement(), "more", null,
-    buttonClasses: [LButton.C_BUTTON, LButton.C_BUTTON__ICON_MORE, LGrid.C_SHRINK_NONE, LMargin.C_LEFT__LARGE]);
-    headerLeftGrid.append(headerLeftGridMore.element);
-
-    LButton headerLeftGridSave = new LButton(new ButtonElement(), "save", lObjectHomeSave(),
-    buttonClasses: [LButton.C_BUTTON, LButton.C_BUTTON__BRAND, "slds-button-space-left", // TODO
-    LMargin.C_RIGHT__MEDIUM, LGrid.C_SHRINK_NONE, LGrid.C_ALIGN_MIDDLE, "slds-hide"]);
-    headerLeftGrid.append(headerLeftGridSave.element);
+    // query options/settings
+    headerLeftGrid.append(filterList.lookup.element);
+    headerLeftGrid.append(filterList.settings.element);
 
     _header.append(_headerRight);
-    _headerRight.append(_actionButtonGroup.element);
+    DivElement _headerRightGrid = new DivElement()
+      ..classes.add(LGrid.C_GRID);
+    _headerRight.append(_headerRightGrid);
+    //
+    _viewLayout.headingLabel = "Display As";
+    _viewLayout.dropdown.addItem(LDropdownItem.create(label: lObjectHomeLayoutTable(), value: VIEW_LAYOUT_TABLE,
+    icon: new LIconUtility(LIconUtility.TABLE)));
+    _viewLayout.dropdown.addItem(LDropdownItem.create(label: lObjectHomeLayoutCards(), value: VIEW_LAYOUT_CARDS,
+    icon: new LIconUtility(LIconUtility.KANBAN)));
+    _viewLayout.dropdown.addItem(LDropdownItem.create(label: lObjectHomeLayoutCompact(), value: VIEW_LAYOUT_COMPACT,
+    icon: new LIconUtility(LIconUtility.SIDE_LIST)));
+    _viewLayout.value = VIEW_LAYOUT_TABLE; // toggles also selectMode
+    DivElement _viewWrapper = new DivElement()
+      ..classes.add(LButton.C_BUTTON_SPACE_LEFT)
+      ..append(_viewLayout.element);
+    _headerRightGrid.append(_viewWrapper);
+
     // Actions
-    LButton newButton = new LButton.base("new", "New");
-    _actionButtonGroup.add(newButton);
+    _actionButtonGroup.classes.add(LButton.C_BUTTON_SPACE_LEFT);
+    _headerRightGrid.append(_actionButtonGroup.element);
 
     element.append(_summary);
   } // LObjectHome
+
+  /// Object Home from UI
+  void setUi(UI ui) {
+    recordType = ui.table.label + "s"; // TODO plural
+
+  } // setUi
+
+  /**
+   * Add Action
+   */
+  void addAction(AppsAction action) {
+    _actionButtonGroup.add(action.asButton(true));
+  }
+
+
+  /// View Layout get e.g. VIEW_LAYOUT_TABLE
+  String get viewLayout => _viewLayout.value;
+  /// View Layout set e.g. VIEW_LAYOUT_TABLE
+  void set viewLayout (String newValue) {
+    _viewLayout.value = newValue;
+  }
+  /// View Change callback
+  void set viewLayoutChange (EditorChange newValue) {
+    _viewLayout.editorChange = newValue;
+  }
+
 
   /// Record Type Text
   String get recordType => _headerLeftRecordType.text;
@@ -103,35 +119,148 @@ class LObjectHome extends LPageHeader {
     print("saved query ${option.value}");
   }
 
-  void set recordList (List<DRecord> records) {
-    _recordList = records;
-    display();
+
+  void set summary (String newValue) {
+    _summary.text = newValue;
   }
-  List<DRecord> _recordList;
-
-
-  void display() {
-    if (_recordList == null || _recordList.isEmpty) {
-      _summary.text = "0 items";
-    } else {
-      _summary.text = "${_recordList.length} items * Sorted by x";
-    }
-  } // display
-
 
   // Trl
+
+  static String lObjectHomeLayoutTable() => Intl.message("Table", name: "lObjectHomeLayoutTable");
+  static String lObjectHomeLayoutCards() => Intl.message("Cards", name: "lObjectHomeLayoutCards");
+  static String lObjectHomeLayoutCompact() => Intl.message("Compact List", name: "lObjectHomeLayoutCompact");
+
+
+
   static String lObjectHomeSave() => Intl.message("Save", name: "lObjectHomeSave", args: []);
 
 } // LObjectHome
 
 
+
+/// Execute Filter / Saved Query
+typedef void FilterSelectionChange(String name, SavedQuery savedQuery);
+
+
+
+/**
+ * Maintains Dropdown, Selection and List Maintenance
+ */
+class LObjectHomeFilterList {
+
+  static final Logger _log = new Logger("LObjectHomeFilterList");
+
+  /// Recent Query List
+  static const String RECENT = "recent";
+  /// All Query List
+  static const String ALL = "all";
+
+
+  /// Callback on Change
+  FilterSelectionChange filterSelectionChange;
+  /// Saved Queries
+  final List<SavedQuery> _savedQueries = new List<SavedQuery>();
+
+  /// Lookup
+  final LObjectHomeFilterLookup lookup = new LObjectHomeFilterLookup();
+  /// Filter Maintenance
+  final LDropdown settings = new LDropdown(new LButton(new ButtonElement(), "filterList", null,
+    icon: new LIconUtility(LIconUtility.FILTERLIST),
+    buttonClasses: [LButton.C_BUTTON__ICON_CONTAINER],
+    assistiveText: lObjectHomeFilterList()), "idPrefix");
+
+
+  /**
+   * Filter Maintenance
+   */
+  LObjectHomeFilterList() {
+    lookup.editorChange = onEditorChange;
+    addFilter(null); // init list
+    filterValue = RECENT;
+
+    /// Settings
+    settings.classes.add(LMargin.C_LEFT__LARGE);
+    settings.headingLabel = lObjectHomeFilterList();
+    settings.dropdown.nubbinTop = true;
+    settings.dropdown.addItem(LDropdownItem.create(label: "Edit"));
+    settings.dropdown.addItem(LDropdownItem.create(label: "New"));
+    // TODO _queryViewSettings.editorChange =
+
+  }
+
+  /// Filter Value/Name
+  String get filterValue => lookup.value;
+  /// Filter Value/Name
+  void set filterValue (String newValue) {
+    lookup.value = newValue;
+  }
+
+
+  /// Get saved query
+  SavedQuery get savedQuery {
+    String value = filterValue;
+    for (SavedQuery query in _savedQueries) {
+      if (query.savedQueryId == value) {
+        return query;
+      }
+    }
+    return null;
+  } // getSavedQuery
+
+  /// Add new Filter
+  void addFilter(SavedQuery savedQuery) {
+    if (savedQuery != null) {
+      _savedQueries.add(savedQuery);
+    }
+    List<DOption> options = new List<DOption>();
+    options.add(new DOption()
+      ..value = RECENT
+      ..label = lObjectHomeFilterListRecent());
+    for (SavedQuery query in _savedQueries) {
+      options.add(new DOption()
+        ..value = query.savedQueryId
+        ..label = query.name);
+    }
+    options.add(new DOption()
+      ..value = ALL
+      ..label = lObjectHomeFilterListAll());
+    lookup.options = options;
+  }
+
+  /// Lookup changed
+  void onEditorChange(String name, String newValue, DEntry entry, var details) {
+    if (filterSelectionChange != null) {
+      if (newValue == RECENT || newValue == ALL) {
+        filterSelectionChange(newValue, null);
+      } else {
+        for (SavedQuery query in _savedQueries) {
+          if (query.savedQueryId == newValue) {
+            filterSelectionChange(newValue, query);
+            break;
+          }
+        }
+        _log.info("onEditorChange - not found ${newValue}");
+      }
+    }
+  } // onEditorChange
+
+
+  static String lObjectHomeFilterList() => Intl.message("Filter List", name: "lObjectHomeFilterList");
+  static String lObjectHomeFilterListRecent() => Intl.message("Recently viewed", name: "lObjectHomeFilterListRecent");
+  static String lObjectHomeFilterListAll() => Intl.message("All", name: "lObjectHomeFilterListAll");
+
+} // LObjectHomeQueryList
+
+
 /**
  * Search List Lookup
  */
-class LObjectHomeLookup {
+class LObjectHomeFilterLookup {
 
-  static final Logger _log = new Logger("LObjectHomeLookup");
+  static final Logger _log = new Logger("LObjectHomeQueryList");
 
+  /// Callback
+  EditorChange editorChange;
 
   final DivElement element = new DivElement()
     ..classes.addAll([LDropdown.C_DROPDOWN_TRIGGER]);
@@ -163,13 +292,10 @@ class LObjectHomeLookup {
 
   LDropdownElement _dropdownElement;
 
-  /// Callback
-  var optionSelected;
-
   /**
    * Lookup
    */
-  LObjectHomeLookup(List<DOption> options, void this.optionSelected(DOption option)) {
+  LObjectHomeFilterLookup() {
     element.append(label);
     label.append(_h1);
     label.append(_button.element);
@@ -184,16 +310,19 @@ class LObjectHomeLookup {
     _dropdownElement = new LDropdownElement(_dropdown); // adds List
     _dropdownElement.selectMode = true;
     _dropdownElement.editorChange = onEditorChange;
-    //
-    LDropdownItem first = null;
-    for (DOption option in options) {
-      LDropdownItem item = new LDropdownItem(option);
-      _dropdownElement.addItem(item);
-      if (first == null)
-        first = item;
-    }
-    onEditorChange(null, null, null, first);
   } // LObjectHomeLookup
+
+
+  String get value => _dropdownElement.value;
+  void set value (String newValue) {
+    _dropdownElement.value = newValue;
+  }
+
+  /// Set Options
+  void set options (List<DOption> options) {
+    _dropdownElement.dOptions = options;
+  } // setOptions
+
 
 
   void onSearchKeyUp(KeyboardEvent evt) {
@@ -243,13 +372,14 @@ class LObjectHomeLookup {
     if (details is ListItem) {
       ListItem value = (details as ListItem);
       _h1.text = value.label;
-      optionSelected(value.option); // callback
+      if (editorChange != null)
+        editorChange("", newValue, null, null); // callback
     }
   }
 
   // Trl
   static String lObjectHomeLookupMore() => Intl.message("More", name: "lObjectHomeLookupMore");
-  static String lObjectHomeLookupFindInList() => Intl.message("Find in List", name: "lObjectHomeLookupFindInList");
+  static String lObjectHomeLookupFindInList() => Intl.message("Find in Query List", name: "lObjectHomeLookupFindInList");
   static String lObjectHomeLookupList() => Intl.message("List", name: "lObjectHomeLookupList");
 
 } // LObjectHomeLookup

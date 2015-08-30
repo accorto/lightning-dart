@@ -6,10 +6,6 @@
 
 part of lightning_dart;
 
-/**
- * Action was Triggered [name] action name providing [record] and/or [entry] context
- */
-typedef void ActionTriggered(String name, DRecord record, DEntry entry);
 
 typedef void TableSortClicked(String name, bool asc);
 
@@ -66,8 +62,8 @@ class LTable extends LComponent {
   /// Name list by column #
   final List<String> nameList = new List<String>();
 
-  List<LTableAction> _tableActions = new List<LTableAction>();
-  List<LTableAction> _rowActions = new List<LTableAction>();
+  List<AppsAction> _tableActions = new List<AppsAction>();
+  List<AppsAction> _rowActions = new List<AppsAction>();
 
   /**
    * Table
@@ -160,14 +156,14 @@ class LTable extends LComponent {
   /**
    * Add Table Action - needs to be called before creating header
    */
-  void addTableAction(String name, String label, ActionTriggered callback) {
-    _tableActions.add(new LTableAction(name, label, callback));
+  void addTableAction(AppsAction action) {
+    _tableActions.add(action);
   }
   /**
    * Add Row Action - needs to be called before creating header
    */
-  void addRowAction(String name, String label, ActionTriggered callback) {
-    _rowActions.add(new LTableAction(name, label, callback));
+  void addRowAction(AppsAction action) {
+    _rowActions.add(action);
   }
 
   /// Add Table Body Row
@@ -208,17 +204,3 @@ class LTable extends LComponent {
 } // LTable
 
 
-class LTableAction {
-
-  ActionTriggered callback;
-  DOption option;
-
-  LTableAction.doption(DOption this.option, ActionTriggered this.callback);
-
-  LTableAction(String name, String label, ActionTriggered this.callback) {
-    option = new DOption()
-      ..value = name
-      ..label = label;
-  }
-
-}
