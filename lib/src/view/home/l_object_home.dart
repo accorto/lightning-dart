@@ -61,7 +61,7 @@ class LObjectHome extends LPageHeader {
       ..classes.add(LGrid.C_GRID);
     _headerRight.append(_headerRightGrid);
     //
-    _viewLayout.headingLabel = "Display As";
+    _viewLayout.headingLabel = lObjectHomeLayoutDisplay();
     _viewLayout.dropdown.addItem(LDropdownItem.create(label: lObjectHomeLayoutTable(), value: VIEW_LAYOUT_TABLE,
     icon: new LIconUtility(LIconUtility.TABLE)));
     _viewLayout.dropdown.addItem(LDropdownItem.create(label: lObjectHomeLayoutCards(), value: VIEW_LAYOUT_CARDS,
@@ -114,18 +114,14 @@ class LObjectHome extends LPageHeader {
     _headerLeftRecordType.text = newValue;
   }
 
-
-  void onSavedQueryChange(DOption option) {
-    print("saved query ${option.value}");
-  }
-
-
+  /// Summary Info
   void set summary (String newValue) {
     _summary.text = newValue;
   }
 
   // Trl
 
+  static String lObjectHomeLayoutDisplay() => Intl.message("Display as", name: "lObjectHomeLayoutDisplay");
   static String lObjectHomeLayoutTable() => Intl.message("Table", name: "lObjectHomeLayoutTable");
   static String lObjectHomeLayoutCards() => Intl.message("Cards", name: "lObjectHomeLayoutCards");
   static String lObjectHomeLayoutCompact() => Intl.message("Compact List", name: "lObjectHomeLayoutCompact");
@@ -247,7 +243,7 @@ class LObjectHomeFilterList {
 
   static String lObjectHomeFilterList() => Intl.message("Filter List", name: "lObjectHomeFilterList");
   static String lObjectHomeFilterListRecent() => Intl.message("Recently viewed", name: "lObjectHomeFilterListRecent");
-  static String lObjectHomeFilterListAll() => Intl.message("All", name: "lObjectHomeFilterListAll");
+  static String lObjectHomeFilterListAll() => Intl.message("All records", name: "lObjectHomeFilterListAll");
 
 } // LObjectHomeQueryList
 
@@ -379,7 +375,7 @@ class LObjectHomeFilterLookup {
 
   // Trl
   static String lObjectHomeLookupMore() => Intl.message("More", name: "lObjectHomeLookupMore");
-  static String lObjectHomeLookupFindInList() => Intl.message("Find in Query List", name: "lObjectHomeLookupFindInList");
+  static String lObjectHomeLookupFindInList() => Intl.message("Find in Filter List", name: "lObjectHomeLookupFindInList");
   static String lObjectHomeLookupList() => Intl.message("List", name: "lObjectHomeLookupList");
 
 } // LObjectHomeLookup

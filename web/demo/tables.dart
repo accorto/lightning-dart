@@ -37,9 +37,9 @@ class Tables extends DemoFeature {
 
 
     LTableHeaderRow thead = table.addHeadRow(sortOption);
-    thead.addHeaderCell("First Name", "c1");
-    thead.addHeaderCell("Last Name", "c2");
-    thead.addHeaderCell("City", "c3");
+    thead.addHeaderCell("fn", "First Name");
+    thead.addHeaderCell("ln", "Last Name");
+    thead.addHeaderCell("city", "City");
     LTableRow tbody = table.addBodyRow();
     tbody.addCellText("Joe");
     tbody.addCellText("Block");

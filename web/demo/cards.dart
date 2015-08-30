@@ -28,9 +28,9 @@ class Cards extends DemoFeature {
 
     LTable table = new LTable("t1", true);
     LTableHeaderRow thead = table.addHeadRow(false);
-    thead.addHeaderCell("First Column", "c1");
-    thead.addHeaderCell("Second Column", "c2");
-    thead.addHeaderCell("Third Column", "c3");
+    thead.addHeaderCell("c1", "First Column");
+    thead.addHeaderCell("c2", "Second Column");
+    thead.addHeaderCell("c3", "Third Column");
     LTableRow tbody = table.addBodyRow();
     tbody.addCellText("First Col #1");
     tbody.addCellText("Second Col #1");

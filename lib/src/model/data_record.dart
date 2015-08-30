@@ -444,11 +444,19 @@ class DataRecord {
   }
 
   /**
-   * Get value of entry
+   * Get value (original) of entry
    */
   String getEntryValue(DEntry dataEntry) {
-    if (dataEntry != null && dataEntry.value != NULLVALUE)
-      return dataEntry.value;
+    if (dataEntry != null) {
+      String value = null;
+      if (dataEntry.hasValue())
+        value = dataEntry.value;
+      else if (dataEntry.hasValueOriginal()) {
+        value = dataEntry.valueOriginal;
+      }
+      if (value != NULLVALUE)
+        return value;
+    }
     return null;
   }
 

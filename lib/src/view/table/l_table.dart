@@ -193,6 +193,25 @@ class LTable extends LComponent {
     }
   }
 
+  /// Set Header
+  void setUi(UI ui) {
+    LTableHeaderRow hdr = addHeadRow(true);
+    for (UIGridColumn gc in ui.gridColumnList) {
+      hdr.addGridColumn(gc);
+    }
+  } // setUi
+
+  /// Set Records
+  void display(List<DRecord> records) {
+    if (_tbody != null) {
+      _tbody.children.clear();
+    }
+    int i = 0;
+    for (DRecord record in records) {
+      LTableRow row = addBodyRow(rowValue: record.recordId);
+      row.setRecord(record, i++);
+    }
+  } // display
 
 
   static String lTableRowSelectAll() => Intl.message("Select All", name: "lTableRowSelectAll", args: []);

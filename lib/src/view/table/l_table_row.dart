@@ -161,6 +161,20 @@ class LTableRow {
     return cell;
   } // addTableElement
 
+
+  /// Set Record
+  void setRecord(DRecord record, int rowNo) {
+    data.setRecord(record, rowNo);
+    for (String name in nameList) {
+      if (name == null)
+        continue;
+      String value = data.getValue(name:name);
+      String display = value;
+      addCellText(display, name:name, value:value);
+    }
+  }
+  DataRecord data = new DataRecord(null);
+
   /**
    * Add Actions
    */
@@ -208,7 +222,7 @@ class LTableHeaderRow extends LTableRow {
    * with [label] of column [name] with optional [value]
    * - name/label are used for responsive
    */
-  LTableHeaderCell addHeaderCell(String label, String name, {String value, String align}) {
+  LTableHeaderCell addHeaderCell(String name, String label, {String value, String align}) {
     SpanElement span = new SpanElement()
       ..classes.add(LText.C_TRUNCATE)
       ..text = label == null ? "" : label;
@@ -226,6 +240,17 @@ class LTableHeaderRow extends LTableRow {
     element.append(tc);
     return new LTableHeaderCell(tc, span, name, label, value, align, tableSortClicked);
   } // addHeaderCell
+
+
+  /**
+   * Add Grid Column
+   */
+  void addGridColumn(UIGridColumn gc) {
+    addHeaderCell(gc.column.name, gc.column.label);
+  }
+
+
+
 
 } // LTableHeaderRow
 

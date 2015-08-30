@@ -22,6 +22,7 @@ void main() {
     WorbenchData wbData = new WorbenchData();
 
     ObjectCtrl ctrl = new ObjectCtrl(wbData.ui);
+    ctrl.display(wbData.exampleList);
 
 
     PageSimple page = PageSimple.create();
@@ -50,8 +51,9 @@ class WorbenchData {
 
 
   WorbenchData() {
+    ui.uiId = _nextId();
     DTable table = new DTable()
-      ..tableId = "99"
+      ..tableId = _nextId()
       ..name = "MyContact"
       ..label = "My Contact"
       ..description = "My brief Object description"
@@ -65,24 +67,32 @@ class WorbenchData {
     ui.tableName = table.name;
     ui.label = table.label;
 
+    UIPanel panel = new UIPanel()
+      ..uiPanelId = _nextId()
+      ..name = "Panel";
+    ui.panelList.add(panel);
+
+
     // Columns
     DColumn col = new DColumn()
+      ..columnId = _nextId()
       ..name = "FName"
       ..label = "First Name"
       ..dataType = DataType.STRING
       ..uniqueSeqNo = 2
       ..displaySeqNo = 1
       ..isMandatory = true;
-    addColumn(col, ["Joe", "Peter", "Marie"]);
+    addColumn(col, panel, ["Joe", "Peter", "Marie"]);
 
     col = new DColumn()
+      ..columnId = _nextId()
       ..name = "LName"
       ..label = "Last Name"
       ..dataType = DataType.STRING
       ..uniqueSeqNo = 1
       ..displaySeqNo = 2
       ..isMandatory = true;
-    addColumn(col, ["Black", "Smith", "Johnson"]);
+    addColumn(col, panel, ["Black", "Smith", "Johnson"]);
 
     // update DRecord Header
     for (DRecord record in exampleList) {
@@ -91,13 +101,29 @@ class WorbenchData {
   } // WorkbenchData
 
   /// add column
-  void addColumn(DColumn col, List<String> exampleData) {
+  void addColumn(DColumn col, UIPanel panel, List<String> exampleData) {
     ui.table.columnList.add(col);
+
+    UIPanelColumn pc = new UIPanelColumn()
+      ..uiPanelColumnId = _nextId()
+      ..column = col
+      ..columnId = col.columnId
+      ..columnName = col.name;
+    panel.panelColumnList.add(pc);
+
+    UIGridColumn gc = new UIGridColumn()
+      ..uiGridColumnId = _nextId()
+      ..column = col
+      ..columnId = col.columnId
+      ..columnName = col.name
+      ..panelColumn = pc;
+    ui.gridColumnList.add(gc);
 
     // Data
     for (int i = 0; i < exampleData.length; i++) {
       String value = exampleData[i];
       DEntry entry = new DEntry()
+        ..columnId = col.columnId
         ..columnName = col.name
         ..valueOriginal = value;
       DRecord record = getExample(i);
@@ -109,7 +135,7 @@ class WorbenchData {
   DRecord getExample(int i) {
     while (exampleList.length <= i) {
       DRecord r = new DRecord()
-        ..recordId = "9" + i.toString()
+        ..recordId = "99" + i.toString()
         ..tableId = ui.tableId
         ..tableName = ui.tableName;
       exampleList.add(r);
@@ -160,5 +186,11 @@ class WorbenchData {
       }
     }
   } // updateHeader
+
+  /// next id
+  String _nextId() {
+    return "${_nid++}";
+  }
+  int _nid = 1;
 
 } // WorkbenchData
