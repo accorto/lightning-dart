@@ -40,6 +40,8 @@ class Html0 {
   /// Aria Attribute role Value
   static const String ROLE_PRESENTATION = "presentation";
   /// Aria Attribute role Value
+  static const String ROLE_BUTTON = "button";
+  /// Aria Attribute role Value
   static const String ROLE_LISTBOX = "listbox";
   /// Aria Attribute role Value
   static const String ROLE_COMBOBOX = "combobox";
@@ -68,7 +70,12 @@ class Html0 {
   static const String ROLE_TABLIST = "tablist";
   /// Aria Attribute role Value
   static const String ROLE_TABPANEL = "tabpanel";
-
+  /// Aria Attribute role Value
+  static const String ROLE_HEADING = "heading";
+  /// Aria Attribute role Value
+  static const String ROLE_GRID = "grid";
+  /// Aria Attribute role Value
+  static const String ROLE_GRIDCELL = "gridcell";
 
 
   /// Attribute Aria Labelled By
@@ -90,6 +97,8 @@ class Html0 {
   /// Attribute Aria live assertive
   static const String ARIA_LIVE = "aria-live";
   static const String ARIA_LIVE_ASSERTIVE = "assertive";
+
+  static const String ARIA_ATOMIC = "aria-atomic";
 
   /// Attribute Aria
   static const String ARIA_EXPANED = "aria-expanded";

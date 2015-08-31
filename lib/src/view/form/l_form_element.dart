@@ -33,7 +33,7 @@ class LFormElement {
 
 
   /**
-   * Default Layout
+   * Default Layout:
    * label
    * div control
    * - input
@@ -47,6 +47,7 @@ class LFormElement {
     _elementControl = new DivElement()
       ..classes.add(LForm.C_FORM_ELEMENT__CONTROL);
     element.append(_elementControl);
+
     // input
     if (_input is InputElement)
       _input.classes.add(LForm.C_INPUT);
@@ -54,8 +55,35 @@ class LFormElement {
       _input.classes.add(LForm.C_TEXTAREA);
     if (_input is SelectElement)
       _input.classes.add(LForm.C_SELECT);
-    _elementControl.append(_input);
-    _elementControl.append(_hintSpan);
+
+    DivElement inputWrapper = null;
+    LIcon iconRight = getIconRight();
+    if (iconRight != null) {
+      inputWrapper = new DivElement()
+        ..classes.add(LForm.C_INPUT_HAS_ICON)
+        ..classes.add(LForm.C_INPUT_HAS_ICON__RIGHT);
+      _elementControl.append(inputWrapper);
+      iconRight.classes.clear();
+      iconRight.classes.addAll([LForm.C_INPUT__ICON, LIcon.C_ICON_TEXT_DEFAULT]);
+      inputWrapper.append(iconRight.element);
+    }
+    LIcon iconLeft = getIconLeft();
+    if (iconLeft != null) {
+      if (inputWrapper == null) {
+        inputWrapper = new DivElement()
+          ..classes.add(LForm.C_INPUT_HAS_ICON);
+        _elementControl.append(inputWrapper);
+      }
+      inputWrapper.classes.add(LForm.C_INPUT_HAS_ICON__LEFT);
+      iconLeft.classes.clear();
+      iconLeft.classes.addAll([LForm.C_INPUT__ICON, LIcon.C_ICON_TEXT_DEFAULT]);
+      inputWrapper.append(iconLeft.element);
+    }
+    //
+    if (inputWrapper == null)
+      inputWrapper = _elementControl;
+    inputWrapper.append(_input);
+    inputWrapper.append(_hintSpan);
   }
 
   /**
@@ -208,5 +236,8 @@ class LFormElement {
   void setMarginTopSmall() {
     element.style.marginTop = ".5rem"; // from 1
   }
+
+  LIcon getIconRight() => null;
+  LIcon getIconLeft() => null;
 
 } // LFormElement

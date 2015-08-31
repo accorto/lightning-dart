@@ -62,6 +62,7 @@ part 'src/view/components/l_visibility.dart';
 part 'src/view/components/list_item.dart';
 
 part 'src/view/editors/l_checkbox.dart';
+part 'src/view/editors/l_datepicker.dart';
 part 'src/view/editors/l_editor.dart';
 part 'src/view/editors/l_input.dart';
 part 'src/view/editors/l_radio.dart';

@@ -12,7 +12,7 @@ class Forms extends DemoFeature {
   sldsStatus: DemoFeature.SLDS_DEV_READY,
   devStatus: DemoFeature.STATUS_COMPLETE,
   hints: [],
-  issues: ["css: required rendering is off"],
+  issues: ["css: required rendering is off", "horizontal checkbox right aligned"],
   plans: ["help icon"]);
 
 
