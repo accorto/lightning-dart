@@ -214,7 +214,7 @@ class DataRecord {
   /**
    * Record is read only (static + last calc) | !active
    */
-  bool isReadOnly() {
+  bool get isReadOnly {
     if (_record != null) {
       if (_record.hasIsGroupBy() && _record.isGroupBy)
         return true;
@@ -223,11 +223,11 @@ class DataRecord {
       if (_record.hasIsReadOnlyCalc() && _record.isReadOnlyCalc)
         return true;
     }
-    return !isActive() || isProcessed();
+    return !isActive || isProcessed;
   } // isReadOnly
 
   /// Record active (default: true)
-  bool isActive() {
+  bool get isActive {
     DEntry entry = getEntry(null, C_ISACTIVE, false);
     if (entry != null) {
       if (entry.hasValue())
@@ -237,7 +237,7 @@ class DataRecord {
   } // isActive
 
   /// Record active (default: false)
-  bool isProcessed() {
+  bool get isProcessed {
     DEntry entry = getEntry(null, C_PROCESSED, false);
     if (entry != null) {
       if (entry.hasValue())

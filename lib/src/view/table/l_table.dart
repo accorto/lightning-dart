@@ -158,7 +158,11 @@ class LTable extends LComponent {
    */
   void addTableAction(AppsAction action) {
     _tableActions.add(action);
-  }
+    if (_theadRows.isNotEmpty) {
+      _theadRows.first.addActions([action]);
+    }
+  } // addTableAction
+
   /**
    * Add Row Action - needs to be called before creating header
    */

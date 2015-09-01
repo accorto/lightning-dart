@@ -13,7 +13,7 @@ class Tables extends DemoFeature {
   sldsStatus: DemoFeature.SLDS_PROTOTYPE,
   devStatus: DemoFeature.STATUS_INITIAL,
   hints: [],
-  issues: ["stacked not working", "fix action size/position", "action"],
+  issues: ["stacked not working"],
   plans: ["client side sort"]);
 
   LComponent get content {

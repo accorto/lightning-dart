@@ -303,7 +303,7 @@ class LObjectHomeFilterLookup {
     _dropdownHeaderFindInput.onKeyUp.listen(onSearchKeyUp);
     _dropdownHeaderFind.append(_dropdownHeaderFindInput);
     _dropdownHeader.append(_dropdownHeaderLabel);
-    _dropdownElement = new LDropdownElement(_dropdown); // adds List
+    _dropdownElement = new LDropdownElement(_dropdown, name: "filter"); // adds List
     _dropdownElement.selectMode = true;
     _dropdownElement.editorChange = onEditorChange;
   } // LObjectHomeLookup

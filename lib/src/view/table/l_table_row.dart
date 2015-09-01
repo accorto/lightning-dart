@@ -16,7 +16,7 @@ class LTableRow {
   static const String TYPE_FOOT = "F";
 
   /// Table Row
-  final TableRowElement element;
+  final TableRowElement rowElement;
   /// Row Type
   final String type;
   /// Row Number
@@ -31,15 +31,15 @@ class LTableRow {
   /**
    * [rowNo] absolute row number 0..x (in type)
    */
-  LTableRow(TableRowElement this.element, int this.rowNo, String idPrefix, String rowValue,
+  LTableRow(TableRowElement this.rowElement, int this.rowNo, String idPrefix, String rowValue,
       String cssClass, bool rowSelect,
       List<String> this.nameList, Map<String,String> this.nameLabelMap, String this.type,
       List<AppsAction> rowActions) {
-    element.classes.add(cssClass);
+    rowElement.classes.add(cssClass);
     if (rowValue != null)
-      element.attributes[Html0.DATA_VALUE] = rowValue;
+      rowElement.attributes[Html0.DATA_VALUE] = rowValue;
     if (idPrefix != null)
-      element.id = "${idPrefix}-${type}-${rowNo}";
+      rowElement.id = "${idPrefix}-${type}-${rowNo}";
 
 
     // Row Select nor created as LTableCell but maintained by row directly
@@ -70,10 +70,10 @@ class LTableRow {
         TableCellElement tc = document.createElement("th")
           ..classes.add(LTable.C_ROW_SELECT)
           ..attributes["scope"] = "col";
-        element.append(tc);
+        rowElement.append(tc);
         tc.append(label);
       } else {
-        TableCellElement tc = element.addCell()
+        TableCellElement tc = rowElement.addCell()
           ..classes.add(LTable.C_ROW_SELECT);
         tc.append(label);
       }
@@ -85,13 +85,13 @@ class LTableRow {
 
 
   /// Row Selected
-  bool get selected => element.classes.contains(LTable.C_IS_SELECTED);
+  bool get selected => rowElement.classes.contains(LTable.C_IS_SELECTED);
   /// Row Selected
   void set selected (bool newValue) {
     if (newValue) {
-      element.classes.add(LTable.C_IS_SELECTED);
+      rowElement.classes.add(LTable.C_IS_SELECTED);
     } else {
-      element.classes.remove(LTable.C_IS_SELECTED);
+      rowElement.classes.remove(LTable.C_IS_SELECTED);
     }
     if (selectCb != null)
       selectCb.checked = newValue;
@@ -126,7 +126,7 @@ class LTableRow {
     button.icon.classes.addAll([LButton.C_BUTTON__ICON, LButton.C_BUTTON__ICON__HINT, LButton.C_BUTTON__ICON__SMALL]);
 
     LTableCell tc = addCell(button.element, null, null, null);
-    tc.element.classes.add(LTable.C_ROW_ACTION);
+    tc.cellElement.classes.add(LTable.C_ROW_ACTION);
     return tc;
   }
 
@@ -139,7 +139,7 @@ class LTableRow {
     // find column Name
     String theName = name;
     if (theName == null) {
-      int index = element.children.length;
+      int index = rowElement.children.length;
       if (nameList.length > index)
         theName = nameList[index];
     }
@@ -149,17 +149,41 @@ class LTableRow {
       label = nameLabelMap[theName];
     }
 
-    LTableCell cell = null;
+    TableCellElement tc = null;
     if (type == TYPE_HEAD) {
-      TableCellElement tc = document.createElement("th")
+      tc = new Element.th()
         ..attributes["scope"] = "col";
-      element.append(tc);
-      cell = new LTableCell(tc, content, theName, label, value, align);
     } else {
-      cell = new LTableCell(element.addCell(), content, theName, label, value, align);
+      tc = new Element.td();
     }
-    return cell;
+    if (_actionCell == null) {
+      rowElement.append(tc);
+    } else {
+      rowElement.insertBefore(tc, _actionCell.cellElement);
+    }
+    return new LTableCell(tc, content, theName, label, value, align);
   } // addTableElement
+
+  /**
+   * Add Actions
+   */
+  void addActions(List<AppsAction> actions) {
+    if (_actionCell == null) {
+      if (type == TYPE_HEAD) {
+        TableCellElement tc = document.createElement("th")
+          ..attributes["scope"] = "col";
+        rowElement.append(tc);
+        _actionCell = new LTableActionCell(tc, LTableActionCell.createButton("hdr"));
+      } else {
+        _actionCell = new LTableActionCell(rowElement.addCell(), LTableActionCell.createButton("row"));
+      }
+      _actionCell.row = this;
+    }
+    for (AppsAction action in actions) {
+      _actionCell.addAction(action);
+    }
+  }
+  LTableActionCell _actionCell;
 
 
   /// Set Record
@@ -173,28 +197,14 @@ class LTableRow {
       addCellText(display, name:name, value:value);
     }
   }
-  DataRecord data = new DataRecord(null);
-
-  /**
-   * Add Actions
-   */
-  void addActions(List<AppsAction> actions) {
-    if (type == TYPE_HEAD) {
-      _actionCell = document.createElement("th")
-        ..attributes["scope"] = "col";
-      element.append(_actionCell);
-    } else {
-      _actionCell = element.addCell();
+  final DataRecord data = new DataRecord(null);
+  /// get record or null if empty
+  DRecord get record {
+    if (data.isEmpty) {
+      return null;
     }
-    _actionCell.classes.add(LTable.C_ROW_ACTION);
-    LButton btn = new LButton.iconBorderFilled("action", new LIconUtility(LIconUtility.DOWN), AppsAction.appsActions());
-    LDropdown dropdown = new LDropdown(btn, "xx", dropdownClasses: [LDropdown.C_DROPDOWN__RIGHT, LDropdown.C_DROPDOWN__ACTIONS]);
-    _actionCell.append(dropdown.element);
-    for (AppsAction action in actions) {
-      dropdown.dropdown.addItem(action.asDropdown());
-    }
+    return data.record;
   }
-  TableCellElement _actionCell;
 
 } // LTableRow
 
@@ -228,7 +238,7 @@ class LTableHeaderRow extends LTableRow {
       ..text = label == null ? "" : label;
 
     if (name != null && name.isNotEmpty && label != null && label.isNotEmpty) {
-      int index = element.children.length;
+      int index = rowElement.children.length;
       while (nameList.length < index)
         nameList.add(null);
       nameList.add(name);
@@ -237,7 +247,11 @@ class LTableHeaderRow extends LTableRow {
 
     TableCellElement tc = document.createElement("th")
       ..attributes["scope"] = "col";
-    element.append(tc);
+    if (_actionCell == null) {
+      rowElement.append(tc);
+    } else {
+      rowElement.insertBefore(tc, _actionCell.cellElement);
+    }
     return new LTableHeaderCell(tc, span, name, label, value, align, tableSortClicked);
   } // addHeaderCell
 

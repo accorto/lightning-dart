@@ -48,7 +48,7 @@ class ObjectCtrl extends LComponent {
     _header.viewLayoutChange = onViewLayoutChange;
 
     // Actions
-    _header.addAction(AppsAction.createNew(onAppsActionTriggered));
+    _header.addAction(AppsAction.createNew(onAppsActionNew));
 
     //_header.filterList.addFilter()
     _header.filterList.filterSelectionChange = onFilterSelectionChange;
@@ -99,11 +99,7 @@ class ObjectCtrl extends LComponent {
     } else {
       String viewLayout = _header.viewLayout;
       if (viewLayout == LObjectHome.VIEW_LAYOUT_TABLE) {
-        LTable table = new LTable("id", true)
-          ..bordered = true;
-        table.setUi(ui); // header
-        table.display(_records);
-        _content.add(table);
+        _displayTable();
       }
 
 
@@ -115,9 +111,33 @@ class ObjectCtrl extends LComponent {
 
   } // display
 
+  void _displayTable() {
+    LTable table = new LTable("id", true)
+      ..bordered = true;
+    table.setUi(ui); // header
+    table.addTableAction(AppsAction.createNew(onAppsActionNew));
+    table.addTableAction(AppsAction.createDeleteSelected(onAppsActionDeleteSelected));
+    table.addRowAction(AppsAction.createEdit(onAppsActionEdit));
+    table.addRowAction(AppsAction.createDelete(onAppsActionDelete));
+    table.display(_records);
+    _content.add(table);
 
-  void onAppsActionTriggered(String value, DRecord record, DEntry entry) {
-    _log.config("onAppsActionTriggered ${tableName} ${value}");
+  } // displayTable
+
+
+  void onAppsActionNew(String value, DRecord record, DEntry entry) {
+    _log.config("onAppsActionNew ${tableName} ${value}");
+  }
+
+  void onAppsActionDelete(String value, DRecord record, DEntry entry) {
+    _log.config("onAppsActionDelete ${tableName} ${value}");
+  }
+  void onAppsActionDeleteSelected(String value, DRecord record, DEntry entry) {
+    _log.config("onAppsActionDeleteSelected ${tableName} ${value}");
+  }
+
+  void onAppsActionEdit(String value, DRecord record, DEntry entry) {
+    _log.config("onAppsActionEdit ${tableName} ${value}");
   }
 
 

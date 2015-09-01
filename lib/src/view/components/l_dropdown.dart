@@ -65,8 +65,7 @@ class LDropdown extends LComponent {
   final LButton button;
 
   /// Dropdown Panel
-  final LDropdownElement dropdown = new LDropdownElement(new DivElement()
-    ..classes.addAll([C_DROPDOWN, C_DROPDOWN__MENU]));
+  LDropdownElement dropdown;
   /// Heading Label
   SpanElement _dropdownHeading;
 
@@ -91,6 +90,9 @@ class LDropdown extends LComponent {
     if (button.icon != null)
       button.icon.classes.add(LButton.C_BUTTON__ICON);
     add(button);
+    dropdown = new LDropdownElement(new DivElement()
+        ..classes.addAll([C_DROPDOWN, C_DROPDOWN__MENU]),
+      name:idPrefix);
     //
     if (dropdownClasses != null) {
       dropdown.element.classes.addAll(dropdownClasses);
@@ -443,7 +445,7 @@ class LDropdownElement implements LSelectI {
         item.selected = false;
       }
     }
-    _log.fine("${name} = ${selectedItem == null ? "null" : selectedItem.value}");
+    _log.finer("${name} = ${selectedItem == null ? "null" : selectedItem.value}");
     if (editorChange != null) {
       if (selectedItem == null)
         editorChange("", null, null, null);

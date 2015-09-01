@@ -80,9 +80,12 @@ class LButtonGroup extends LComponent {
     //  element.classes.add(LDropdown.C_CLICK_TO_SHOW);
       element.attributes[Html0.ARIA_HASPOPUP] = "true";
 
+      String name = element.id;
+      if (name == null || name.isEmpty)
+        name = "button-group";
       DivElement dd = new DivElement()
         ..classes.addAll([LDropdown.C_DROPDOWN, LDropdown.C_DROPDOWN__RIGHT, LDropdown.C_DROPDOWN__ACTIONS, LDropdown.C_DROPDOWN__MENU]);
-      LDropdownElement dde = new LDropdownElement(dd);
+      LDropdownElement dde = new LDropdownElement(dd, name:name);
       element.append(dde.element);
       for (LDropdownItem ddi in dropdownItems) {
         dde.addItem(ddi);

@@ -21,10 +21,23 @@ class AppsAction {
   static const String EDIT = "edit";
   static const String SAVE = "save";
   static const String DELETE = "delete";
+  static const String DELETE_SELECTED = "deleteSelected";
 
   /// Standard New Action
   static AppsAction createNew(AppsActionTriggered callback) {
     return new AppsAction(NEW, appsActionNew(), callback);
+  }
+  /// Standard Delete Action
+  static AppsAction createDelete(AppsActionTriggered callback) {
+    return new AppsAction(DELETE, appsActionDelete(), callback);
+  }
+  /// Standard Delete Selected Action
+  static AppsAction createDeleteSelected(AppsActionTriggered callback) {
+    return new AppsAction(DELETE_SELECTED, appsActionDeleteSelected(), callback);
+  }
+  /// Standard Edit Action
+  static AppsAction createEdit(AppsActionTriggered callback) {
+    return new AppsAction(EDIT, appsActionEdit(), callback);
   }
 
 
@@ -76,5 +89,6 @@ class AppsAction {
   static String appsActionEdit() => Intl.message("Edit", name: "appsActionEdit");
   static String appsActionSave() => Intl.message("Save", name: "appsSave");
   static String appsActionDelete() => Intl.message("Delete", name: "appsDelete");
+  static String appsActionDeleteSelected() => Intl.message("Delete Selected", name: "appsDeleteSelected");
 
 } // AppsAction
