@@ -12,9 +12,25 @@ part of lightning_dart;
  */
 class LFormElement {
 
+  /// Form Element or Wrapper
+  DivElement get element {
+    if (_wrapper != null)
+      return _wrapper;
+    return _element;
+  }
   /// Form Element
-  final DivElement element = new DivElement()
+  final DivElement _element = new DivElement()
     ..classes.add(LForm.C_FORM_ELEMENT);
+
+  /// Optional Wrapper
+  Element get wrapper => _wrapper;
+  /// Optional Wrapper
+  void set wrapper (Element newValue) {
+    _wrapper = newValue;
+    if (_wrapper != null)
+      _wrapper.append(_element);
+  }
+  Element _wrapper;
 
   /// Label Element
   final LabelElement _labelElement = new LabelElement();
@@ -42,11 +58,11 @@ class LFormElement {
     this.editor = editor;
     _input = editor.input;
     _labelElement.classes.add(LForm.C_FORM_ELEMENT__LABEL);
-    element.append(_labelElement);
+    _element.append(_labelElement);
     //
     _elementControl = new DivElement()
       ..classes.add(LForm.C_FORM_ELEMENT__CONTROL);
-    element.append(_elementControl);
+    _element.append(_elementControl);
 
     // input
     if (_input is InputElement)
@@ -97,7 +113,7 @@ class LFormElement {
     this.editor = editor;
     _input = editor.input;
     _labelElement.classes.add(LForm.C_CHECKBOX);
-    element.append(_labelElement);
+    _element.append(_labelElement);
     //
     _labelElement.append(_input);
     SpanElement faux = new SpanElement()
@@ -159,9 +175,9 @@ class LFormElement {
   void set required (bool newValue) {
     _required = newValue;
     if (newValue) {
-      element.classes.add(LForm.C_IS_REQUIRED);
+      _element.classes.add(LForm.C_IS_REQUIRED);
     } else {
-      element.classes.remove(LForm.C_IS_REQUIRED);
+      _element.classes.remove(LForm.C_IS_REQUIRED);
     }
     if (_input is InputElement)
       (_input as InputElement).required = newValue;
@@ -215,9 +231,9 @@ class LFormElement {
   void updateStatusValidationState() {
     bool valid = editor.statusValid;
     if (valid) {
-      element.classes.remove(LForm.C_HAS_ERROR);
+      _element.classes.remove(LForm.C_HAS_ERROR);
     } else {
-      element.classes.add(LForm.C_HAS_ERROR);
+      _element.classes.add(LForm.C_HAS_ERROR);
 
     }
     String error = editor.statusText;
@@ -234,7 +250,7 @@ class LFormElement {
 
   /// hack
   void setMarginTopSmall() {
-    element.style.marginTop = ".5rem"; // from 1
+    _element.style.marginTop = ".5rem"; // from 1
   }
 
   LIcon getIconRight() => null;

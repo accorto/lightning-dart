@@ -42,6 +42,45 @@ abstract class LEditor extends EditorI {
   /// Small Editor/Label
   void set small (bool newValue);
 
+
+  /// return true if [newValue] is null, empty or nullValue
+  bool _isEmpty(String newValue) => DataUtil.isEmpty(newValue);
+  /// return true if [newValue] is null, empty or nullValue
+  bool _isNotEmpty(String newValue) => DataUtil.isNotEmpty(newValue);
+
+  /**
+   * Original Value (creates als default value)
+   */
+  String get valueOriginal => _valueOriginal;
+  /// Set Original value
+  void set valueOriginal (String newValue) {
+    if (_isEmpty(newValue)) {
+      _valueOriginal = "";
+      defaultValue = "";
+    } else {
+      _valueOriginal = newValue;
+      defaultValue = render(newValue, true); // variables;
+    }
+  }
+  String _valueOriginal;
+
+  /// Is the value changed from original
+  bool get changed {
+    String v = value;
+    if (v == null)
+      v = "";
+    String o = _valueOriginal == null ? "" : _valueOriginal;
+    if (v != o) {
+      if (type == EditorI.TYPE_COLOR) {
+        return o.isNotEmpty; // defaults to #000000
+      }
+      // if (v != o)
+      //  print("EditorI ${name} changed original=${o} value=${v}");
+    }
+    return v != o;
+  } // isChanged
+
+
   /// get Data List Id
   String get listId => null;
   /// get Data List Id

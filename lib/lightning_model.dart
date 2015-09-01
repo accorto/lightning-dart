@@ -42,5 +42,6 @@ part 'src/model/data_context.dart';
 part 'src/model/data_record.dart';
 part 'src/model/data_type_util.dart';
 part 'src/model/data_util.dart';
+part 'src/model/duration_util.dart';
 part 'src/model/editor_i.dart';
 part 'src/model/string_tokenizer.dart';

@@ -242,7 +242,7 @@ class LForm extends LComponent {
       }
     }
     _debug("submit valid=${valid}:");
-    if (valid && LightningDart.productionMode) {
+    if (valid && ClientEnv.productionMode) {
       String a = action;
       if (a != null && a.isNotEmpty) {
         return;  // don't prevent default

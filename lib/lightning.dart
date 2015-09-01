@@ -65,6 +65,8 @@ part 'src/view/editors/l_checkbox.dart';
 part 'src/view/editors/l_datepicker.dart';
 part 'src/view/editors/l_editor.dart';
 part 'src/view/editors/l_input.dart';
+part 'src/view/editors/l_input_date.dart';
+part 'src/view/editors/l_input_duration.dart';
 part 'src/view/editors/l_radio.dart';
 part 'src/view/editors/l_select.dart';
 part 'src/view/editors/l_textarea.dart';
@@ -100,15 +102,6 @@ class LightningDart {
   /// SLDS Version + rel
   static const VERSION = "v0.8.0+2";
 
-  /** Locale Name */
-  static String localeName = "en_US";
-  /** Locale Name */
-  static String language = "en";
-  /** Production Mode */
-  static bool productionMode = true;
-  /** Server Url */
-  static String serverUrl = "/";
-
   /// Logger
   static final Logger _log = new Logger("LightningDart");
 
@@ -131,45 +124,8 @@ class LightningDart {
         print(rec.stackTrace);
       }
     });
-    // Server / Production
-    if (serverUri != null && serverUri.isNotEmpty) {
-      serverUrl = serverUri;
-    }
-    String url = window.location.href;
-    if (url.contains("localhost") || url.contains("test=true")) {
-      productionMode = false;
-    }
     //
-    localeName = window.navigator.language;
-    Completer<bool> completer = new Completer<bool>();
-    findSystemLocale()
-    .then((String locale) {
-      localeName = locale;
-      // localeName = "fr_BE";
-      // Intl.systemLocale = localeName;
-      Intl.defaultLocale = localeName;
-      //
-      language = locale;
-      int index = language.indexOf("_");
-      if (index > 0)
-        language = language.substring(0, index);
-      //
-      return initializeDateFormatting(locale, null);
-    })
-    .then((_) {
-      return initializeMessages(language); // BaseMessages
-    })
-    .then((_) {
-    //  initializeFormats();
-      _log.info("locale=${localeName} language=${language}");
-      //  " ${dateFormat_ymd.pattern} ${dateFormat_hms.pattern} - ${dateFormat_ymd_hm.pattern}");
-      completer.complete(true);
-    })
-    .catchError((error, stackTrace) {
-      _log.warning("locale=${localeName} language=${language}", error, stackTrace);
-      completer.completeError(error, stackTrace);
-    });
-    return completer.future;
+    return ClientEnv.init(serverUri);
   } // init
 
   // Format Log Record

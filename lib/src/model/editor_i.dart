@@ -138,14 +138,10 @@ abstract class EditorI {
     return v != null && v.isNotEmpty;
   }
 
-  /// return true if [newValue] is null, empty or nullValue
-  bool _isEmpty(String newValue) => DataUtil.isEmpty(newValue);
-  /// return true if [newValue] is null, empty or nullValue
-  bool _isNotEmpty(String newValue) => DataUtil.isNotEmpty(newValue);
 
   /// Replace context in value
   String contextReplace(String newValue) {
-    if (_isNotEmpty(newValue)) {
+    if (DataUtil.isNotEmpty(newValue)) {
       return DataContext.contextReplace(data, newValue,
         nullResultOk: true, emptyResultOk: true, columnName: name);
     }
@@ -155,18 +151,9 @@ abstract class EditorI {
   /**
    * Original Value (creates als default value)
    */
-  String get valueOriginal => _valueOriginal;
+  String get valueOriginal;
   /// Set Original value
-  void set valueOriginal (String newValue) {
-    if (_isEmpty(newValue)) {
-      _valueOriginal = "";
-      defaultValue = "";
-    } else {
-      _valueOriginal = newValue;
-      defaultValue = render(newValue, true); // variables;
-    }
-  }
-  String _valueOriginal;
+  void set valueOriginal (String newValue);
 
   /**
    * Default Value (set also by [valueOriginal]
@@ -176,30 +163,8 @@ abstract class EditorI {
   void set defaultValue (String newValue);
 
   /// Is the value changed from original
-  bool get changed {
-    String v = value;
-    if (v == null)
-      v = "";
-    String o = _valueOriginal == null ? "" : _valueOriginal;
-    if (v != o) {
-      if (type == TYPE_COLOR) {
-        return o.isNotEmpty; // defaults to #000000
-      }
-      // if (v != o)
-      //  print("EditorI ${name} changed original=${o} value=${v}");
-    }
-    return v != o;
-  } // isChanged
+  bool get changed;
 
-  /// Sync changed indicator
-  void changedSync() {
-    // Change (form-control background)
-    //if (showChange && changed)
-    //  element.classes.add(Bootstrap.C_CHANGED); // on form-control
-    //else
-    //  element.classes.remove(Bootstrap.C_CHANGED);
-    debugTitle();
-  }
   /**
    * Rendered Value (different from value)
    */
@@ -211,7 +176,7 @@ abstract class EditorI {
    * Render [newValue] for display
    */
   String render(String newValue, bool setValidity) {
-    if (_isEmpty(newValue))
+    if (DataUtil.isEmpty(newValue))
       return "";
     return contextReplace(newValue);
   }
@@ -454,8 +419,8 @@ abstract class EditorI {
    */
   void doReset() {
     // form reset sets default value
-    if (_valueOriginal != null && _valueOriginal.isNotEmpty) {
-      value = _valueOriginal;
+    if (valueOriginal != null && valueOriginal.isNotEmpty) {
+      value = valueOriginal;
     } else if (defaultValue.isNotEmpty) {
         value = defaultValue;
     } else {
@@ -534,6 +499,16 @@ abstract class EditorI {
 
   /// Display Validation State
   void updateStatusValidationState();
+
+  /// Sync changed indicator
+  void changedSync() {
+    // Change (form-control background)
+    //if (showChange && changed)
+    //  element.classes.add(Bootstrap.C_CHANGED); // on form-control
+    //else
+    //  element.classes.remove(Bootstrap.C_CHANGED);
+    debugTitle();
+  }
 
   /// set debugging info in title
   void debugTitle() {

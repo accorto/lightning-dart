@@ -26,6 +26,11 @@ class ClientEnv {
   /** Time Zone */
 //  static TZ timeZone;
 
+  /** Production Mode */
+  static bool productionMode = true;
+  /** Server Url */
+  static String serverUrl = "/";
+
   /// Client Context (Session)
   static final Map<String, dynamic> ctx = new Map<String, dynamic>();
   /** System Session */
@@ -58,7 +63,17 @@ class ClientEnv {
   /**
    * Initialize
    */
-  static Future<bool> init() {
+  static Future<bool> init(String serverUri) {
+
+    // Server / Production
+    if (serverUri != null && serverUri.isNotEmpty) {
+      serverUrl = serverUri;
+    }
+    String url = window.location.href;
+    if (url.contains("localhost") || url.contains("test=true")) {
+      productionMode = false;
+    }
+    //
     localeName = window.navigator.language;
     Completer<bool> completer = new Completer<bool>();
     findSystemLocale()
@@ -75,9 +90,9 @@ class ClientEnv {
       //
       return initializeDateFormatting(locale, null);
     })
-//    .then((_){
-//      return initializeMessages(language); // BaseMessages
-//    })
+    //.then((_){
+    //  return initializeMessages(language); // BaseMessages
+    //})
     .then((_){
       initializeFormats();
       _log.info("locale=${localeName} language=${language} ${dateFormat_ymd.pattern} ${dateFormat_hms.pattern} - ${dateFormat_ymd_hm.pattern}");

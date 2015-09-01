@@ -46,7 +46,7 @@ void main() {
     page.add(card);
 
     // MailChimp
-    LightningDart.productionMode = true;
+    ClientEnv.productionMode = true;
     form.method = "post";
     form.action = "//accorto.us1.list-manage.com/subscribe/post?u=60bc6eb9647e94e9c50548ce7&amp;id=243863cca2";
   });
