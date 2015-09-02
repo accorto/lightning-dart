@@ -4,7 +4,6 @@
  * License options+support:  https://lightningdart.com
  */
 
-library lightning.example;
 
 import "dart:html";
 
