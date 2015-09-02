@@ -4,23 +4,23 @@
  * License options+support:  https://lightningdart.com
  */
 
-part of lightning_dart;
+part of lightning_ctrl;
 
 /**
- * Object Related List
+ * Collection of Related Lists
  */
-class LRelatedList extends LPageHeader {
+class RecordCtrlRelated extends LComponent {
 
-  UI ui;
-  DataRecord data;
+  final DivElement element = new DivElement();
 
-  LRelatedList(UI this.ui, DataRecord this.data) {
-    // nav Breadcrumb
-    // div Grid
-    // - div left
-    // - div right
-    // p detail
+  final UI ui;
+  final DataRecord data;
+
+
+  RecordCtrlRelated(UI this.ui, DataRecord this.data) {
+
   }
+
 
   DRecord get record => data.record;
   void set record (DRecord newValue) {
@@ -31,4 +31,4 @@ class LRelatedList extends LPageHeader {
   void display() {
   }
 
-} // LRelatedList
+}

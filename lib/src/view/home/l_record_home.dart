@@ -37,6 +37,9 @@ class LRecordHome extends LPageHeader {
   /// Detail row
   DivElement detail;
 
+  UI ui;
+  DataRecord data;
+
   /**
    * Record Home
    */
@@ -45,7 +48,7 @@ class LRecordHome extends LPageHeader {
   } // LRecordHome
 
   /// Record Home from UI
-  LRecordHome.ui(UI ui) {
+  LRecordHome.from(UI this.ui, DataRecord this.data) {
     _initComponent();
     DTable table = ui.table;
     // image
@@ -115,12 +118,17 @@ class LRecordHome extends LPageHeader {
     _actionButtonGroup.add(action);
   }
 
+  DRecord get record => data.record;
   void set record (DRecord newValue) {
-    recordTitle = newValue.drv;
-    // set Details
-
-
+    data.setRecord(newValue, 0);
+    display();
   } // setData
+
+
+  /// Display data
+  void display() {
+    recordTitle = data.record.drv;
+  }
 
 
 

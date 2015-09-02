@@ -85,7 +85,7 @@ class LForm extends LComponent {
   final List<LEditor> editors = new List<LEditor>();
 
   /// Form - type = C_FORM__HORIZONTAL, C_FORM__STACKED, C_FORM__INLINE
-  LForm(Element this.element, String name, String type, {String idPrefix}) {
+  LForm(Element this.element, String name, String type, {String idPrefix, DataRecord data}) {
     element.classes.add(type);
     if (element is FormElement) {
       FormElement form = (element as FormElement);
@@ -95,6 +95,8 @@ class LForm extends LComponent {
       form.onReset.listen(onFormReset);
     }
     element.id = LComponent.createId(idPrefix, name);
+    if (data != null)
+      _data = data;
   }
 
   LForm.horizontal(String name, {String idPrefix})
@@ -104,6 +106,10 @@ class LForm extends LComponent {
   LForm.inline(String name, {String idPrefix})
     : this(new FormElement(), name, C_FORM__INLINE, idPrefix:idPrefix);
 
+  /// Set Id
+  void set id (String newValue) {
+    element.id = newValue;
+  }
 
   /// Add Editor
   void addEditor (LEditor editor) {
@@ -139,12 +145,7 @@ class LForm extends LComponent {
 
   /// Data Container
   DataRecord get data => _data;
-  /// Data Container
-  void set data (DataRecord newValue) {
-    _data.set(newValue);
-    display();
-  }
-  final DataRecord _data = new DataRecord(null);
+  DataRecord _data = new DataRecord(null);
 
   /// Data Record
   DRecord get record => _data.record;

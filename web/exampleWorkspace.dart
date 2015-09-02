@@ -30,10 +30,10 @@ void main() {
 
     /// Record
     page.append(new HRElement());
-    LRecordHome recordHome = new LRecordHome.ui(wbData.ui)
+    RecordCtrl recordCtrl = new RecordCtrl(wbData.ui)
       ..record = wbData.exampleList.first;
 
-    page.add(recordHome);
+    page.add(recordCtrl);
 
   });
 

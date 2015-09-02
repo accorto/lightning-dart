@@ -40,6 +40,7 @@ class LTable extends LComponent {
   static const String C_ROW_SELECT = "slds-row-select";
   static const String C_ROW_ACTION = "slds-row-action";
 
+  static const String URV = "urv";
 
   static final Logger _log = new Logger("LTable");
 
@@ -64,6 +65,9 @@ class LTable extends LComponent {
 
   List<AppsAction> _tableActions = new List<AppsAction>();
   List<AppsAction> _rowActions = new List<AppsAction>();
+
+  /// UI Meta Data
+  UI _ui;
 
   /**
    * Table
@@ -144,8 +148,12 @@ class LTable extends LComponent {
         LText.C_TEXT_HEADING__LABEL, rowSelect, nameList, nameLabelMap, LTableRow.TYPE_HEAD, null);
     }
     _theadRows.add(row);
+    // add urv
+    if (_ui != null) {
+      row.addHeaderCell(URV, _ui.table.label);
+    }
     return row;
-  }
+  } // addHeadRow
 
   /// Table Sort
   void onTableSortClicked(String name, bool asc) {
@@ -199,6 +207,7 @@ class LTable extends LComponent {
 
   /// Set Header
   void setUi(UI ui) {
+    _ui = ui;
     LTableHeaderRow hdr = addHeadRow(true);
     for (UIGridColumn gc in ui.gridColumnList) {
       hdr.addGridColumn(gc);
@@ -206,14 +215,14 @@ class LTable extends LComponent {
   } // setUi
 
   /// Set Records
-  void display(List<DRecord> records) {
+  void display(List<DRecord> records, {AppsActionTriggered viewAction}) {
     if (_tbody != null) {
       _tbody.children.clear();
     }
     int i = 0;
     for (DRecord record in records) {
       LTableRow row = addBodyRow(rowValue: record.recordId);
-      row.setRecord(record, i++);
+      row.setRecord(record, i++, viewAction:viewAction);
     }
   } // display
 

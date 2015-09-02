@@ -4,23 +4,20 @@
  * License options+support:  https://lightningdart.com
  */
 
-part of lightning_dart;
+part of lightning_ctrl;
 
 /**
- * Object Related List
+ * Detail View
  */
-class LRelatedList extends LPageHeader {
+class RecordCtrlDetails extends LForm {
 
-  UI ui;
-  DataRecord data;
 
-  LRelatedList(UI this.ui, DataRecord this.data) {
-    // nav Breadcrumb
-    // div Grid
-    // - div left
-    // - div right
-    // p detail
-  }
+  RecordCtrlDetails(UI ui, DataRecord data)
+      : super(new FormElement(), ui.tableName, LForm.C_FORM__STACKED,
+        idPrefix:"details", data:data) {
+
+  } // RecordCtrlDetails
+
 
   DRecord get record => data.record;
   void set record (DRecord newValue) {
@@ -28,7 +25,10 @@ class LRelatedList extends LPageHeader {
     display();
   } // setData
 
+
+  /// Display data
   void display() {
+    super.display();
   }
 
-} // LRelatedList
+} // RecordCtrlDetails

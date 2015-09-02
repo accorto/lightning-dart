@@ -68,7 +68,7 @@ class LDatepicker extends LInputDate {
     element.onClick.listen(onInputClick); // w/o wrapper
     wrapper = new DivElement();
     //  ..classes.add(LDropdown.C_DROPDOWN_TRIGGER);
-    _dropdown = new LDatePickerDropdown();
+    _dropdown = new LDatePickerDropdown(id);
     _dropdown.mode = _mode;
     _dropdown.editorChange = onDropdownChange;
     _dropdown.show = false;
@@ -183,12 +183,12 @@ class LDatePickerDropdown {
   /**
    * Date Picker Dropdown
    */
-  LDatePickerDropdown() {
+  LDatePickerDropdown(String idPrefix) {
     element.append(_grid);
     _grid.append(_month);
     _month.append(_monthPrev);
     _monthPrev.append(_monthPrevButton.element);
-    _monthLabel.id = "month"; // TODO
+    _monthLabel.id = LComponent.createId(idPrefix, "month");
     _month.append(_monthLabel);
     _month.append(_monthNext);
     _monthNext.append(_monthNextButton.element);
@@ -198,10 +198,10 @@ class LDatePickerDropdown {
     // Table
     element.append(_cal);
     //
-    _prev_label.id = "prev"; // TODO
+    _prev_label.id = LComponent.createId(idPrefix, "prev");
     _monthPrev.attributes[Html0.ARIA_LABELLEDBY] = _prev_label.id;
     element.append(_prev_label);
-    _next_label.id = "next"; // TODO
+    _next_label.id = LComponent.createId(idPrefix, "next");
     _monthNext.attributes[Html0.ARIA_LABELLEDBY] = _next_label.id;
     element.append(_next_label);
 

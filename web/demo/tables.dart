@@ -11,7 +11,7 @@ class Tables extends DemoFeature {
   Tables()
   : super("data-tables", "Data Tables",
   sldsStatus: DemoFeature.SLDS_PROTOTYPE,
-  devStatus: DemoFeature.STATUS_INITIAL,
+  devStatus: DemoFeature.STATUS_PARTIAL,
   hints: [],
   issues: ["stacked not working"],
   plans: ["client side sort"]);

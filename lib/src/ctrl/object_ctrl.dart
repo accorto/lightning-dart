@@ -121,7 +121,7 @@ class ObjectCtrl extends LComponent {
     _table.addTableAction(AppsAction.createDeleteSelected(onAppsActionDeleteSelected));
     _table.addRowAction(AppsAction.createEdit(onAppsActionEdit));
     _table.addRowAction(AppsAction.createDelete(onAppsActionDelete));
-    _table.display(_records);
+    _table.display(_records, viewAction:onAppsActionView);
     _content.add(_table);
   } // displayTable
 
@@ -140,11 +140,17 @@ class ObjectCtrl extends LComponent {
   }
 
 
+  /// Application Action New
+  void onAppsActionView(String value, DRecord record, DEntry entry, var actionVar) {
+    _log.config("onAppsActionView ${tableName} ${value} ${record.recordId}");
+  }
+
+  /// Application Action New
   void onAppsActionNew(String value, DRecord record, DEntry entry, var actionVar) {
     _log.config("onAppsActionNew ${tableName} ${value}");
   }
 
-  /// Application Actions
+  /// Application Action Delete
   void onAppsActionDelete(String value, DRecord record, DEntry entry, var actionVar) {
     if (record == null) {
 
@@ -163,16 +169,18 @@ class ObjectCtrl extends LComponent {
       conf.showInElement(element);
     }
   } // onAppsActionDelete
+  /// Application Action Delete Confirmed
   void onAppsActionDeleteConfirmed(String value, DRecord record, DEntry entry, var actionVar) {
-    if (actionVar is DRecord) {
+    if (actionVar is DRecord && value == AppsAction.YES) {
       DRecord record = actionVar;
-      _log.info("onAppsActionDeleteConfirmed ${tableName} ${value} ${record.recordId}");
+      _log.info("onAppsActionDeleteConfirmed ${tableName} ${value} id=${record.recordId}");
+      // TODO delete
     } else {
       _log.info("onAppsActionDeleteConfirmed ${tableName} ${value} - ${actionVar}");
     }
-  }
+  } // onAppsActionDeleteConfirmed
 
-
+  /// Application Action Delete Selected Records
   void onAppsActionDeleteSelected(String value, DRecord record, DEntry entry, var actionVar) {
     _log.config("onAppsActionDeleteSelected ${tableName} ${value}");
     List<DRecord> records = selectedRecords;
@@ -195,17 +203,21 @@ class ObjectCtrl extends LComponent {
       conf.showInElement(element);
     }
   }
+  /// Application Action Delete Selected Record Confirmed
   void onAppsActionDeleteSelectedConfirmed(String value, DRecord record, DEntry entry, var actionVar) {
-    if (actionVar is List<DRecord>) {
+    if (actionVar is List<DRecord> && value == AppsAction.YES) {
       List<DRecord> records = actionVar;
       _log.info("onAppsActionDeleteSelectedConfirmed ${tableName} ${value} #${records.length}");
+      // TODO delete
     } else {
       _log.info("onAppsActionDeleteSelectedConfirmed ${tableName} ${value} - ${actionVar}");
     }
   }
 
+
+  /// Application Action Edit
   void onAppsActionEdit(String value, DRecord record, DEntry entry, var actionVar) {
-    _log.config("onAppsActionEdit ${tableName} ${value}");
+    _log.config("onAppsActionEdit ${tableName} ${value} id=${record.recordId}");
   }
 
 
