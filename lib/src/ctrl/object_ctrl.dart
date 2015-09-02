@@ -98,6 +98,7 @@ class ObjectCtrl extends LComponent {
       _content.append(div);
     } else {
       String viewLayout = _header.viewLayout;
+      _table = null; // reset
       if (viewLayout == LObjectHome.VIEW_LAYOUT_TABLE) {
         _displayTable();
       }
@@ -111,42 +112,115 @@ class ObjectCtrl extends LComponent {
 
   } // display
 
+  LTable _table;
   void _displayTable() {
-    LTable table = new LTable("id", true)
+    _table = new LTable("id", true)
       ..bordered = true;
-    table.setUi(ui); // header
-    table.addTableAction(AppsAction.createNew(onAppsActionNew));
-    table.addTableAction(AppsAction.createDeleteSelected(onAppsActionDeleteSelected));
-    table.addRowAction(AppsAction.createEdit(onAppsActionEdit));
-    table.addRowAction(AppsAction.createDelete(onAppsActionDelete));
-    table.display(_records);
-    _content.add(table);
-
+    _table.setUi(ui); // header
+    _table.addTableAction(AppsAction.createNew(onAppsActionNew));
+    _table.addTableAction(AppsAction.createDeleteSelected(onAppsActionDeleteSelected));
+    _table.addRowAction(AppsAction.createEdit(onAppsActionEdit));
+    _table.addRowAction(AppsAction.createDelete(onAppsActionDelete));
+    _table.display(_records);
+    _content.add(_table);
   } // displayTable
 
+  /// Table selected row count
+  int get selectedRowCount {
+    if (_table != null) {
+      return _table.selectedRowCount;
+    }
+    return 0;
+  }
+  /// Get Selected Records or null
+  List<DRecord> get selectedRecords {
+    if (_table != null)
+      return _table.selectedRecords;
+    return null;
+  }
 
-  void onAppsActionNew(String value, DRecord record, DEntry entry) {
+
+  void onAppsActionNew(String value, DRecord record, DEntry entry, var actionVar) {
     _log.config("onAppsActionNew ${tableName} ${value}");
   }
 
-  void onAppsActionDelete(String value, DRecord record, DEntry entry) {
-    _log.config("onAppsActionDelete ${tableName} ${value}");
-  }
-  void onAppsActionDeleteSelected(String value, DRecord record, DEntry entry) {
-    _log.config("onAppsActionDeleteSelected ${tableName} ${value}");
+  /// Application Actions
+  void onAppsActionDelete(String value, DRecord record, DEntry entry, var actionVar) {
+    if (record == null) {
+
+    } else {
+      _log.config("onAppsActionDelete ${tableName} ${value}");
+        LIElement li = new LIElement()
+          ..text = record.drv;
+      UListElement ul = new UListElement()
+        ..classes.add(LList.C_LIST__DOTTED)
+        ..append(li);
+      AppsAction deleteYes = AppsAction.createYes(onAppsActionDeleteConfirmed)
+        ..actionVar = record;
+      LConfirmation conf = new LConfirmation("ds", label: lObjectCtrlDelete1Record(),
+        text:lObjectCtrlDelete1Record(), contentElements:[ul],
+        actions:[deleteYes], addCancel: true);
+      conf.showInElement(element);
+    }
+  } // onAppsActionDelete
+  void onAppsActionDeleteConfirmed(String value, DRecord record, DEntry entry, var actionVar) {
+    if (actionVar is DRecord) {
+      DRecord record = actionVar;
+      _log.info("onAppsActionDeleteConfirmed ${tableName} ${value} ${record.recordId}");
+    } else {
+      _log.info("onAppsActionDeleteConfirmed ${tableName} ${value} - ${actionVar}");
+    }
   }
 
-  void onAppsActionEdit(String value, DRecord record, DEntry entry) {
+
+  void onAppsActionDeleteSelected(String value, DRecord record, DEntry entry, var actionVar) {
+    _log.config("onAppsActionDeleteSelected ${tableName} ${value}");
+    List<DRecord> records = selectedRecords;
+    if (records == null || records.isEmpty) {
+      LToast toast = new LToast(label: "No rows selected");
+      toast.showBottomRight(element, autohideSeconds: 15);
+    } else {
+      UListElement ul = new UListElement()
+        ..classes.add(LList.C_LIST__DOTTED);
+      for (DRecord record in records) {
+        LIElement li = new LIElement()
+          ..text = record.drv;
+        ul.append(li);
+      }
+      AppsAction deleteYes = AppsAction.createYes(onAppsActionDeleteSelectedConfirmed)
+        ..actionVar = records;
+      LConfirmation conf = new LConfirmation("ds", label: lObjectCtrlDeleteRecords(),
+        text:lObjectCtrlDeleteRecordsText(), contentElements:[ul],
+        actions:[deleteYes], addCancel: true);
+      conf.showInElement(element);
+    }
+  }
+  void onAppsActionDeleteSelectedConfirmed(String value, DRecord record, DEntry entry, var actionVar) {
+    if (actionVar is List<DRecord>) {
+      List<DRecord> records = actionVar;
+      _log.info("onAppsActionDeleteSelectedConfirmed ${tableName} ${value} #${records.length}");
+    } else {
+      _log.info("onAppsActionDeleteSelectedConfirmed ${tableName} ${value} - ${actionVar}");
+    }
+  }
+
+  void onAppsActionEdit(String value, DRecord record, DEntry entry, var actionVar) {
     _log.config("onAppsActionEdit ${tableName} ${value}");
   }
 
 
   static String lObjectCtrlNoRecords() => Intl.message("No records", name: "lObjectCtrlNoRecords");
   static String lObjectCtrlNoRecordInfo() => Intl.message("No records to display - change Filter or create New", name: "lObjectCtrlNoRecordInfo");
-
+  // query
   static String lObjectCtrl1Record() => Intl.message("One record", name: "lObjectCtrl1Record");
   static String lObjectCtrlRecords() => Intl.message("records", name: "lObjectCtrlRecords");
   static String lObjectCtrlSortedBy() => Intl.message("Sorted by", name: "lObjectCtrlSortedBy");
+
+  // delete confirmation
+  static String lObjectCtrlDelete1Record() => Intl.message("Delete current record", name: "lObjectCtrlDelete1Record");
+  static String lObjectCtrlDeleteRecords() => Intl.message("Delete selected Records?", name: "lObjectCtrlDeleteRecords");
+  static String lObjectCtrlDelete1RecordText() => Intl.message("Do you want to delete the current record?", name: "lObjectCtrlDelete1RecordText");
+  static String lObjectCtrlDeleteRecordsText() => Intl.message("Do you want to delete the selected records?", name: "lObjectCtrlDeleteRecordsText");
 
 
 } // ObjectCtrl

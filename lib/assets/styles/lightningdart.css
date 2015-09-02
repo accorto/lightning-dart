@@ -4522,5 +4522,21 @@ a.slds-button--inverse:focus {
   .menu-main:hover,
   .menu-main:focus {
     max-width: 12rem; }
+.grab {
+  cursor: -moz-grab;
+  cursor: url(https://www.google.com/intl/en_ALL/mapfiles/openhand.cur), move; }
+  .grab * {
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none; }
+.grabbing {
+  cursor: -moz-grabbing;
+  cursor: url(https://www.google.com/intl/en_ALL/mapfiles/closedhand.cur), move; }
+  .grabbing * {
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none; }
 
 /*# sourceMappingURL=lightningdart.css.map */

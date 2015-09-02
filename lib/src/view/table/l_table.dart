@@ -217,6 +217,28 @@ class LTable extends LComponent {
     }
   } // display
 
+  /// Table selected row count
+  int get selectedRowCount {
+    int count = 0;
+    for (LTableRow row in _tbodyRows) {
+      if (row.selected)
+        count++;
+    }
+    return count;
+  }
+
+  /// Table selected row records
+  List<DRecord> get selectedRecords {
+    List<DRecord> records = new List<DRecord>();
+    for (LTableRow row in _tbodyRows) {
+      if (row.selected && row.record != null) {
+        records.add(row.record);
+      }
+    }
+    return records;
+  }
+
+
 
   static String lTableRowSelectAll() => Intl.message("Select All", name: "lTableRowSelectAll", args: []);
   static String lTableRowSelectRow() => Intl.message("Select Row", name: "lTableRowSelectRow", args: []);

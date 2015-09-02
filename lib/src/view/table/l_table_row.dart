@@ -76,6 +76,13 @@ class LTableRow {
         TableCellElement tc = rowElement.addCell()
           ..classes.add(LTable.C_ROW_SELECT);
         tc.append(label);
+        selectCb.onClick.listen((MouseEvent evt){
+          if (selectCb.checked) {
+            rowElement.classes.add(LTable.C_IS_SELECTED);
+          } else {
+            rowElement.classes.remove(LTable.C_IS_SELECTED);
+          }
+        });
       }
     }
     if (rowActions != null && rowActions.isNotEmpty) {

@@ -20,11 +20,11 @@ abstract class LComponent {
   /// Get Element Id
   String get id => element.id;
 
-  /// append component
+  /// append element
   void append(Element newValue) {
     element.append(newValue);
   }
-  /// append component
+  /// add component
   void add(LComponent component) {
     element.append(component.element);
   }

@@ -134,6 +134,45 @@ abstract class LNotification extends LComponent {
     element.remove();
   }
 
+  /// show
+  void show (Element parent, {int autohideSeconds}) {
+    parent.append(element);
+    if (autohideSeconds != null && autohideSeconds > 0) {
+      new Timer(new Duration(seconds: autohideSeconds), (){
+        element.remove();
+      });
+    }
+  } // show
+
+  /// show
+  void showCenter (Element parent, {int autohideSeconds}) {
+    Rectangle rectParent = parent.getBoundingClientRect();
+    parent.append(element); // to calc position
+    Rectangle rectElement = element.getBoundingClientRect();
+    double top = (rectParent.height/2) - (rectElement.height/2);
+    double left = (rectParent.width/2) - (rectElement.width/2);
+    element.style
+      ..position = "absolute"
+      ..top = "${top}px"
+      ..left = "${left}px"
+      ..removeProperty("right")
+      ..removeProperty("bottom");
+    show(parent, autohideSeconds:autohideSeconds);
+  } // show
+
+  /**
+   * Show Bottom Right
+   */
+  void showBottomRight (Element parent, {int autohideSeconds}) {
+    element.style
+      ..position = "absolute"
+      ..bottom = "0"
+      ..right = "0"
+      ..removeProperty("top")
+      ..removeProperty("left");
+    show(parent, autohideSeconds:autohideSeconds);
+  } // show
+
 } // LNotification
 
 
@@ -261,7 +300,7 @@ class LToast extends LNotification {
       _icon.classes.addAll([LIcon.C_ICON, LIcon.C_ICON__SMALL, LMargin.C_RIGHT__X_SMALL]);
     }
     build();
-  }
+  } // LToast
 
 
 
@@ -347,7 +386,6 @@ class LToast extends LNotification {
     }
   }
 
-
   /// Append Toast
   void add(LComponent component) {
     if (_contentElements == null)
@@ -362,6 +400,5 @@ class LToast extends LNotification {
     _contentElements.add(e);
     build();
   }
-
 
 } // LToast

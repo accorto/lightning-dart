@@ -25,11 +25,11 @@ class Tables extends DemoFeature {
     if (responsiveStackedHorizontalOption) // overwrites stacked
       table.responsiveStackedHorizontal = responsiveStackedHorizontalOption;
     if (actionOption) {
-      table.addTableAction(new AppsAction("ta", "Table Action", (String value, DRecord record, DEntry entry){
+      table.addTableAction(new AppsAction("ta", "Table Action", (String value, DRecord record, DEntry entry, var actionVar){
           print("Table Action ${value}");
         })
       );
-      table.addRowAction(new AppsAction("ra", "Row Action", (String value, DRecord record, DEntry entry){
+      table.addRowAction(new AppsAction("ra", "Row Action", (String value, DRecord record, DEntry entry, var actionVar){
           print("Row Action ${value}");
         })
       );

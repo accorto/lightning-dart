@@ -9,7 +9,7 @@ part of lightning_dart;
 /**
  * Action was Triggered with action [value] (name) - potentially providing [record] and/or [entry] context
  */
-typedef void AppsActionTriggered(String value, DRecord record, DEntry entry);
+typedef void AppsActionTriggered(String value, DRecord record, DEntry entry, var actionVar);
 
 
 /**
@@ -22,6 +22,10 @@ class AppsAction {
   static const String SAVE = "save";
   static const String DELETE = "delete";
   static const String DELETE_SELECTED = "deleteSelected";
+
+  static const String YES = "yes";
+  static const String NO = "no";
+
 
   /// Standard New Action
   static AppsAction createNew(AppsActionTriggered callback) {
@@ -40,11 +44,22 @@ class AppsAction {
     return new AppsAction(EDIT, appsActionEdit(), callback);
   }
 
+  /// Standard Yes Action
+  static AppsAction createYes(AppsActionTriggered callback) {
+    return new AppsAction(YES, appsActionYes(), callback);
+  }
+  /// Standard Yes Action
+  static AppsAction createNo(AppsActionTriggered callback) {
+    return new AppsAction(NO, appsActionNo(), callback);
+  }
+
 
   /// Callback
   AppsActionTriggered callback;
   /// Option Info
   DOption option;
+  /// Action Specific Variable
+  var actionVar;
 
   /// Apps Action from option
   AppsAction.from(DOption this.option, AppsActionTriggered this.callback);
@@ -60,15 +75,18 @@ class AppsAction {
   String get label => option.label;
 
 
-  /// as Button
-  LButton asButton(bool createOnClick, {DataRecord data}) {
+  /// as Button - [createClick] to call [callback]
+  LButton asButton(bool createOnClick, {DataRecord data, List<String> buttonClasses}) {
     LButton btn = new LButton(new ButtonElement(), value, label);
+    if (buttonClasses != null) {
+      btn.classes.addAll(buttonClasses);
+    }
     if (createOnClick && callback != null) {
       btn.onClick.listen((MouseEvent evt){
         if (data != null)
-          callback(value, data.record, null);
+          callback(value, data.record, null, actionVar);
         else
-          callback(value, null, null);
+          callback(value, null, null, actionVar);
       });
     }
     return btn;
@@ -90,5 +108,9 @@ class AppsAction {
   static String appsActionSave() => Intl.message("Save", name: "appsSave");
   static String appsActionDelete() => Intl.message("Delete", name: "appsDelete");
   static String appsActionDeleteSelected() => Intl.message("Delete Selected", name: "appsDeleteSelected");
+
+  static String appsActionYes() => Intl.message("Yes", name: "appsActionYes");
+  static String appsActionNo() => Intl.message("No", name: "appsActionNo");
+
 
 } // AppsAction

@@ -97,7 +97,7 @@ class LTableActionCell extends LTableCell {
       } else {
         _log.fine("onActionChange ${action.value}");
       }
-      action.callback(action.value, record, null);
+      action.callback(action.value, record, null, action.actionVar);
     }
   } // onActionChange
 
