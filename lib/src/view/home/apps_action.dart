@@ -105,9 +105,9 @@ class AppsAction {
 
   static String appsActionNew() => Intl.message("New", name: "appsActionNew");
   static String appsActionEdit() => Intl.message("Edit", name: "appsActionEdit");
-  static String appsActionSave() => Intl.message("Save", name: "appsSave");
-  static String appsActionDelete() => Intl.message("Delete", name: "appsDelete");
-  static String appsActionDeleteSelected() => Intl.message("Delete Selected", name: "appsDeleteSelected");
+  static String appsActionSave() => Intl.message("Save", name: "appsActionSave");
+  static String appsActionDelete() => Intl.message("Delete", name: "appsActionDelete");
+  static String appsActionDeleteSelected() => Intl.message("Delete Selected", name: "appsActionDeleteSelected");
 
   static String appsActionYes() => Intl.message("Yes", name: "appsActionYes");
   static String appsActionNo() => Intl.message("No", name: "appsActionNo");
