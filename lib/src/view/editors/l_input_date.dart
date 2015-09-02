@@ -11,6 +11,9 @@ part of lightning_dart;
  */
 class LInputDate extends LInput {
 
+  static final Logger _log = new Logger("LInputDate");
+
+
   /// The Icon
   final LIcon _iconRight = new LIconUtility(LIconUtility.EVENT);
 
