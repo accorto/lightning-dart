@@ -36,6 +36,10 @@ export 'protoc/data.pb.dart';
 export 'protoc/display.pb.dart';
 export 'protoc/rr.pb.dart';
 
+
+import 'dart:indexed_db';
+import 'dart:web_sql';
+
 // Model Functionality
 part 'src/model/client_env.dart';
 part 'src/model/data_context.dart';
@@ -44,4 +48,7 @@ part 'src/model/data_type_util.dart';
 part 'src/model/data_util.dart';
 part 'src/model/duration_util.dart';
 part 'src/model/editor_i.dart';
+part 'src/model/preference.dart';
+part 'src/model/preference_storage.dart';
 part 'src/model/string_tokenizer.dart';
+part 'src/model/tz.dart';

@@ -283,24 +283,40 @@ class DataUtil {
 
 
   /// Duration
-//  static BizDuration asDuration(String value) {
-//    if (isNotEmpty(value)) {
-//      if (value.contains("P")) // xml
-//        return new BizDuration.xml(value);
-//      int seconds = int.parse(value, onError: (String v) {
-//        _log.warning("asDuration ${value}");
-//        return 0;
-//      });
-//      return new BizDuration.seconds(seconds);
-//    }
-//    return new BizDuration.seconds(0);
-//  }
+  static DurationUtil asDuration(String value) {
+    if (isNotEmpty(value)) {
+      if (value.contains("P")) // xml
+        return new DurationUtil.xml(value);
+      int seconds = int.parse(value, onError: (String v) {
+        _log.warning("asDuration ${value}");
+        return 0;
+      });
+      return new DurationUtil.seconds(seconds);
+    }
+    return new DurationUtil.seconds(0);
+  }
 
   /// Boolean
   static bool asBool(String value) {
     return value != null && value == "true";
   }
 
+  /**
+   * Mon, 03 Jul 2006 21:44:38 GMT
+   */
+  static String dateGmtString(DateTime dateTime) {
+    DateTime dt = dateTime.toUtc();
+    // leading 0
+    String dd (int no) {
+      if (no < 10)
+        return "0${no}";
+      return no.toString();
+    }
+    return "${_DAYS[dt.weekday-1]}, ${dd(dt.day)} ${_MONTHS[dt.month-1]} ${dt.year} "
+    "${dd(dt.hour)}:${dd(dt.minute)}:${dd(dt.second)} GMT";
+  }
+  static final List<String> _DAYS = ['Mon', 'Tue', 'Wed', 'Thi', 'Fri', 'Sat', 'Sun'];
+  static final List<String> _MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
   /**
    * Load UI from response, set table and columns

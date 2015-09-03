@@ -14,6 +14,8 @@ dependencies:
   fixnum: ">=0.9.1+2"
   intl:  ">=0.12.4"
   protobuf: ">=0.4.2"
+  stack_trace: any
+  uuid: any
 
 dev_dependencies:
   test: '>=0.12.4'

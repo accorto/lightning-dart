@@ -243,7 +243,7 @@ class LForm extends LComponent {
       }
     }
     _debug("submit valid=${valid}:");
-    if (valid && ClientEnv.productionMode) {
+    if (valid) {
       String a = action;
       if (a != null && a.isNotEmpty) {
         return;  // don't prevent default

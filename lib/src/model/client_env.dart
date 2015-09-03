@@ -24,12 +24,7 @@ class ClientEnv {
   /** Locale Name */
   static String language = "en";
   /** Time Zone */
-//  static TZ timeZone;
-
-  /** Production Mode */
-  static bool productionMode = true;
-  /** Server Url */
-  static String serverUrl = "/";
+  static TZ timeZone;
 
   /// Client Context (Session)
   static final Map<String, dynamic> ctx = new Map<String, dynamic>();
@@ -61,19 +56,9 @@ class ClientEnv {
   static NumberFormat numberFormat_2;
 
   /**
-   * Initialize
+   * Initialize locale, Intl, Date
    */
-  static Future<bool> init(String serverUri) {
-
-    // Server / Production
-    if (serverUri != null && serverUri.isNotEmpty) {
-      serverUrl = serverUri;
-    }
-    String url = window.location.href;
-    if (url.contains("localhost") || url.contains("test=true")) {
-      productionMode = false;
-    }
-    //
+  static Future<bool> init() {
     localeName = window.navigator.language;
     Completer<bool> completer = new Completer<bool>();
     findSystemLocale()

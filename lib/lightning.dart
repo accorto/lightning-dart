@@ -109,7 +109,7 @@ class LightningDart {
    * Initialize Logging, Locale, Intl, Date
    * optional [serverUri] to overwrite target
    */
-  static Future<bool> init({String serverUri}) {
+  static Future<bool> init() {
     // Initialize
     Logger.root.level = Level.ALL;
     // local Logger
@@ -125,7 +125,7 @@ class LightningDart {
       }
     });
     //
-    return ClientEnv.init(serverUri);
+    return ClientEnv.init();
   } // init
 
   // Format Log Record
@@ -174,5 +174,65 @@ class LightningDart {
     sb.write("${rec.loggerName}: ${rec.message}");
     return sb.toString();
   } // format
+
+
+
+  /**
+   * convert to variable/id name containing a..z A..Z 0..9
+   * as well as - _ .
+   * by ignoring non compliant characters
+   * must start with letter (html5 id)
+   */
+  static String toVariableName(String text) {
+    if (text == null || text.isEmpty)
+      return text;
+    StringBuffer sb = new StringBuffer();
+    bool first = true;
+    List chars = "azAZ09_-.".codeUnits;
+    text.codeUnits.forEach((code) {
+      if ((code >= chars[0] && code <= chars[1]) // a_z
+      || (code >= chars[2] && code <= chars[3])) // A_Z
+        sb.write(new String.fromCharCode(code));
+      else if (!first
+      && ((code >= chars[4] && code <= chars[5]) // 0_9
+      || code == chars[6] || code == chars[7] || code == chars[8])) // _-.
+        sb.write(new String.fromCharCode(code));
+      first = false;
+    });
+    String retValue = sb.toString();
+    // if (text.length != retValue.length)
+    //  _log.warning("Invalid VariableName=${text} -> ${retValue}");
+    return retValue;
+  } // toVariableName
+
+
+  /// dump element dimensions (l,t)w*h
+  static String dumpElement(Element e) =>
+    " bound${dumpRectangle(e.getBoundingClientRect())}"
+    " offset${dumpRectangle(e.offset)}"
+    " client${dumpRectangle(e.client)}"
+    " style(${e.style.left},${e.style.top})${e.style.width}*${e.style.height}"
+    " scroll(${e.scrollLeft},${e.scrollTop})${e.scrollWidth}*${e.scrollHeight}"
+    " content${dumpRectangle(e.contentEdge)}"
+    " border${dumpRectangle(e.borderEdge)}"
+    ;
+  /// dump mouse event position (x,y)
+  static String dumpMouse (MouseEvent e) => "(${e.which})"
+    " offset(${e.offset.x},${e.offset.y})"
+    " client(${e.client.x},${e.client.y})"
+    " screen(${e.screen.x},${e.screen.y})"
+    ;
+  /// dump window sizes
+  static String dumpWindow() =>
+    " inner(${window.innerWidth}*${window.innerHeight})"
+    " screen(${window.screenX},${window.screenY})"
+    " scroll(${window.scrollX},${window.scrollY})" // offset
+    ;
+  // dump rectangle(l,t)wxh
+  static String dumpRectangle(Rectangle r) =>
+    "(${r.left},${r.top})${r.width}*${r.height}";
+  // dump point (x,y)=(l,t)
+  static String dumpPoint(Point p) => "(${p.x},${p.y})";
+
 
 } // LightningDart
