@@ -12,7 +12,7 @@ part of lightning_dart;
  * - header with
  * - content on right
  */
-class PageMain extends LComponent {
+class PageMain extends PageSimple {
 
   static final Logger _log = new Logger("PageMain");
 
@@ -20,40 +20,6 @@ class PageMain extends LComponent {
   static final List<String> MAIN_CLASSES = [LGrid.C_CONTAINER, LGrid.C_CONTAINER__FLUID,
     LGrid.C_CONTAINER__LARGE, LGrid.C_CONTAINER__MEDIUM, LGrid.C_CONTAINER__SMALL, LGrid.C_GRID];
 
-  /**
-   * Create Page (slds-grid)
-   * [id] id of the application
-   * [clearContainer] clears all content from container
-   * optional [classList] (if mot defined, container/fluid)
-   */
-  static PageMain create({String id: "wrap",
-      bool clearContainer: true, List<String> classList}) {
-    // Top Level Main
-    Element e = querySelector("#${id}");
-    if (e == null) {
-      for (String cls in MAIN_CLASSES) {
-        e = querySelector(".${cls}");
-        if (e != null) {
-          break;
-        }
-      }
-    }
-    PageMain main = null;
-    if (e == null) {
-      Element body = document.body; // querySelector("body");
-      main = new PageMain(new DivElement(), id, classList);
-      body.append(main.element);
-    } else {
-      if (clearContainer) {
-        e.children.clear();
-      }
-      main = new PageMain(e, id, classList);
-    }
-    return main;
-  } // init
-
-  /// Main Element
-  final DivElement element;
   /// Menu
   PageMainMenu _menu;
   /// Current Apps
@@ -69,14 +35,9 @@ class PageMain extends LComponent {
    * Main Page
    * optional [classList] (if mot defined, container/fluid)
    */
-  PageMain(DivElement this.element, String id, List<String> classList) {
-    element.classes.clear();
-    if (classList != null && classList.isNotEmpty) {
-      element.classes.addAll(classList);
-    } else {
-      element.classes.addAll([LGrid.C_CONTAINER, LGrid.C_CONTAINER__FLUID]);
-    }
-    element.id = id;
+  PageMain(DivElement element, String id, List<String> classList)
+      : super(element, id, classList) {
+
     DivElement mainGrid = new DivElement()
       ..classes.add(LGrid.C_GRID);
     element.append(mainGrid);

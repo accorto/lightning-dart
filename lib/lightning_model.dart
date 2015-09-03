@@ -16,6 +16,9 @@ import 'dart:js';
 
 // Packages
 import 'package:logging/logging.dart';
+
+// International
+import 'intl/ldart_messages_all.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/intl_browser.dart';
 import 'package:intl/date_symbol_data_local.dart';

@@ -15,7 +15,7 @@ void main() {
   .then((_) {
     IntroPage intro = new IntroPage();
     //
-    PageMain page = PageMain.create();
+    PageMain page = LightningDart.createPageMain();
     PageApplication apps = new PageApplication("ldart", "Lightning Dart Demo",
     imageSrc: "packages/lightning/assets/images/LightningDartLogo.svg");
     apps.add(intro);

@@ -22,7 +22,7 @@ class Router {
   static const String P_CNAME = "cname";
   static const String P_LOADDIV = "loadDiv";
   static const String P_FLUID = "fluid";
-  static const String P_CLEARWRAP = "clearWrap";
+  static const String P_CLEARCONTAINER = "clearContainer";
   static const String P_ADDHEADER = "addHeader";
   static const String P_ADDNAV = "addNav";
   static const String P_THEME = "theme";
@@ -135,8 +135,8 @@ class Router {
       if (!queryParams.containsKey(P_FLUID) && config.hasProperty(P_FLUID)) {
         queryParams[P_FLUID] = config[P_FLUID];
       }
-      if (!queryParams.containsKey(P_CLEARWRAP) && config.hasProperty(P_CLEARWRAP)) {
-        queryParams[P_CLEARWRAP] = config[P_CLEARWRAP];
+      if (!queryParams.containsKey(P_CLEARCONTAINER) && config.hasProperty(P_CLEARCONTAINER)) {
+        queryParams[P_CLEARCONTAINER] = config[P_CLEARCONTAINER];
       }
       if (!queryParams.containsKey(P_ADDHEADER) && config.hasProperty(P_ADDHEADER)) {
         queryParams[P_ADDHEADER] = config[P_ADDHEADER];

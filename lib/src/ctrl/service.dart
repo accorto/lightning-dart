@@ -46,8 +46,6 @@ class Service {
   static bool devMode = false;
   /** Protocol Buffers Header */
   static Map<String, String> requestHeaders = new Map<String, String>();
-  /** Timestamp */
-  static String devTimestamp = "-";
   /** Add Geo Location automatically */
   static bool addGeo = false;
 
@@ -105,7 +103,7 @@ class Service {
     }
     //
     //devTimestamp = BizPage.wrap.attributes["data-timestamp"];
-    _log.info("href=${window.location.href} (${document.referrer}) serverUrl=${serverUrl} client=${clientUrl} query=${LightningCtrl.router.queryParams} version=${devTimestamp}");
+    _log.info("href=${window.location.href} (${document.referrer}) serverUrl=${serverUrl} client=${clientUrl} query=${LightningCtrl.router.queryParams}");
   } // init
 
 

@@ -41,7 +41,7 @@ void main() {
       ..setHeader(new LIconAction(LIconAction.RECORD), "Sign up for Lightning Dart Updates")
       ..setBodyForm(form);
     // The Page
-    PageSimple page = PageSimple.create();
+    PageSimple page = LightningDart.createPageSimple();
     page.add(card);
 
     // MailChimp

@@ -24,7 +24,7 @@ void main() {
     ctrl.display(wbData.exampleList);
 
 
-    PageSimple page = PageSimple.create();
+    PageSimple page = LightningDart.createPageSimple();
     page.add(ctrl);
 
     /// Record

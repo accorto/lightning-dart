@@ -7,43 +7,13 @@
 part of lightning_dart;
 
 /**
- * Simple Page
+ * Simple Page with Status Toast
  */
 class PageSimple extends LComponent {
 
-  /**
-   * Create Page (slds-grid)
-   * [id] id of the application
-   * [clearContainer] clears all content from container
-   * optional [classList] (if mot defined, container/fluid)
-   */
-  static PageSimple create({String id: "wrap",
-      bool clearContainer: true, List<String> classList}) {
-    // Top Level Main
-    Element e = querySelector("#${id}");
-    if (e == null) {
-      for (String cls in PageMain.MAIN_CLASSES) {
-        e = querySelector(".${cls}");
-        if (e != null) {
-          break;
-        }
-      }
-    }
-    PageSimple main = null;
-    if (e == null) {
-      Element body = document.body; // querySelector("body");
-      main = new PageSimple(new DivElement(), id, classList);
-      body.append(main.element);
-    } else {
-      if (clearContainer) {
-        e.children.clear();
-      }
-      main = new PageSimple(e, id, classList);
-    }
-    return main;
-  } // init
-
+  /// Page Element
   final Element element;
+
 
   /**
    * Simple Page
@@ -57,6 +27,87 @@ class PageSimple extends LComponent {
       element.classes.addAll([LGrid.C_CONTAINER, LGrid.C_CONTAINER__FLUID]);
     }
     element.id = id;
+  } // PageSimple
+
+
+  /// Server Start (busy)
+  void onServerStart(String trxName, String info) {
+    setStatus(LTheme.C_THEME__ALT_INVERSE, new LIconUtility(LIconUtility.SPINNER), "... ${LSpinner.lSpinnerWorking()} ...", null, "busy", "");
+    busy = true;
+  }
+  /// Info Server Communication Success (busy/msg)
+  void onServerSuccess(SResponse response) {
+    busy = false;
+    if (response.isSuccess)
+      setStatusSuccess(response.msg);
+    else
+      setStatusWarning(response.msg);
+  }
+  /// Info Server Communication Error
+  void onServerError(var error) {
+    busy = false;
+    setStatusError("${error}");
+    if (error is Event && error.target is HttpRequest) {
+      HttpRequest request = error.target;
+      String msg = null;
+      try {
+        msg = request.responseText;
+      } catch (ex) {}
+      try {
+        if (msg == null || msg.isEmpty)
+          msg = request.statusText;
+        else if (request.statusText.isNotEmpty)
+          msg += " " + request.statusText;
+      } catch (ex) {}
+      if (msg != null && msg.isNotEmpty)
+        setStatusError(msg);
+    }
+  } // onServerError
+
+  /// Info Status with (i)
+  void setStatusInfo(String message, {String detail, String dataSuccess, String dataDetail}) {
+    setStatus(LTheme.C_THEME__SHADE, new LIconUtility(LIconUtility.INFO), message, detail, dataSuccess, dataDetail);
+  }
+  /// Success Status with check
+  void setStatusSuccess(String message, {String detail, String dataSuccess: "true", String dataDetail}) {
+    setStatus(LTheme.C_THEME__SUCCESS, null, message, detail, dataSuccess, dataDetail);
+  }
+  /// Warning Status with triange
+  void setStatusWarning(String message, {String detail, String dataSuccess: "false", String dataDetail}) {
+    setStatus(LTheme.C_THEME__WARNING, null, message, detail,  dataSuccess, dataDetail);
+  }
+  /// Error Status with fire
+  void setStatusError(String message, {String detail, String dataSuccess: "error", String dataDetail}) {
+    setStatus(LTheme.C_THEME__ERROR, null, message, detail, dataSuccess, dataDetail);
+  }
+  /// Default Status
+  void setStatusDefault(String message, {String detail, String dataSuccess, String dataDetail}) {
+    setStatus(LTheme.C_THEME__SHADE, new LIconUtility(LIconUtility.ANNOUNCEMENT), message, detail, dataSuccess, dataDetail);
   }
 
-}
+  /**
+   * Clear/Empty Status
+   */
+  void setStatusClear() {
+    setStatus(null, null, null, null, null, null);
+  }
+
+  /**
+   * [color] theme color
+   * [dataSuccess] e.g. busy, true, false, error
+   */
+  void setStatus(String color, LIcon icon, String message, String detail,
+      String dataSuccess, String dataDetail) {
+
+    if (detail != null && detail.isNotEmpty) {
+      LToast toast = new LToast(label:message, idPrefix:"status", icon:icon,
+        text:detail, addDefaultIcon: true,
+        color:color);
+      toast.showBottomRight(element, autohideSeconds:10);
+    }
+    //
+    element.attributes["data-success"] = dataSuccess == null ? "" : dataSuccess;
+    element.attributes["data-detail"] = dataDetail == null ? "" : dataDetail;
+  } // setStatus
+
+} // PageSimple

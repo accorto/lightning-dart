@@ -66,7 +66,7 @@ class LightningCtrl {
     }
     //
     new RemoteLogger();
-    futures.add(LightningDart.init()); // ClientEnv
+    futures.add(LightningDart.init()); // ClientEnv, Locale Intl, Date
     futures.add(Preference.init());
     futures.add(Timezone.init(false));
 
@@ -76,23 +76,6 @@ class LightningCtrl {
       serverUri = router.param(Router.P_SERVERURI);
       embedded = true;
     }
-    /*
-    if (router.hasParam(Router.P_LOADDIV)) {
-      loadDiv = router.param(Router.P_LOADDIV);
-    }
-    if (router.hasParam(Router.P_FLUID)) {
-      fluid = "true" == router.param(Router.P_FLUID);
-    }
-    if (router.hasParam(Router.P_CLEARWRAP)) {
-      clearWrap = "true" == router.param(Router.P_CLEARWRAP);
-    }
-    if (router.hasParam(Router.P_ADDHEADER)) {
-      addHeader = "true" == router.param(Router.P_ADDHEADER);
-    }
-    if (router.hasParam(Router.P_ADDNAV)) {
-      addNav = "true" == router.param(Router.P_ADDNAV);
-    }
-    */
     if (router.hasParam(Router.P_TEST)) {
       test = ("true" == router.param(Router.P_TEST));
     }
@@ -102,6 +85,63 @@ class LightningCtrl {
     completer.complete(Future.wait(futures));
     return completer.future;
   } // init
+
+
+  /**
+   * Create Page (slds-grid)
+   * [id] id of the application
+   * [clearContainer] clears all content from container
+   * optional [classList] (if mot defined, container/fluid)
+   */
+  static PageSimple createPageSimple({String id: "wrap",
+      bool clearContainer: true, List<String> classList}) {
+    if (router.hasParam(Router.P_LOADDIV)) {
+      id = router.param(Router.P_LOADDIV);
+    }
+    if (router.hasParam(Router.P_CLEARCONTAINER)) {
+      clearContainer = "true" == router.param(Router.P_CLEARCONTAINER);
+    }
+    /*
+    if (router.hasParam(Router.P_FLUID)) {
+      fluid = "true" == router.param(Router.P_FLUID);
+    }
+    if (router.hasParam(Router.P_ADDHEADER)) {
+      addHeader = "true" == router.param(Router.P_ADDHEADER);
+    }
+    if (router.hasParam(Router.P_ADDNAV)) {
+      addNav = "true" == router.param(Router.P_ADDNAV);
+    }
+    */
+
+    PageSimple page = LightningDart.createPageSimple(id:id, clearContainer:clearContainer, classList:classList);
+    Service.onServerStart = page.onServerStart;
+    Service.onServerSuccess = page.onServerSuccess;
+    Service.onServerError = page.onServerError;
+    return page;
+  } // createPageSimple
+
+
+  /**
+   * Create Page (slds-grid)
+   * [id] id of the application
+   * [clearContainer] clears all content from container
+   * optional [classList] (if mot defined, container/fluid)
+   */
+  static PageMain createPageMain({String id: "wrap",
+      bool clearContainer: true, List<String> classList}) {
+    if (router.hasParam(Router.P_LOADDIV)) {
+      id = router.param(Router.P_LOADDIV);
+    }
+    if (router.hasParam(Router.P_CLEARCONTAINER)) {
+      clearContainer = "true" == router.param(Router.P_CLEARCONTAINER);
+    }
+
+    PageMain page = LightningDart.createPageMain(id:id, clearContainer:clearContainer, classList:classList);
+    Service.onServerStart = page.onServerStart;
+    Service.onServerSuccess = page.onServerSuccess;
+    Service.onServerError = page.onServerError;
+    return page;
+  } // createPageMain
 
 } // LightningCtrl
 

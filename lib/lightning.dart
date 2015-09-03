@@ -19,10 +19,9 @@ import 'dart:convert';
 // Packages
 import 'package:logging/logging.dart';
 
-import 'intl/ldart_messages_all.dart';
 import 'package:intl/intl.dart';
-import 'package:intl/intl_browser.dart';
-import 'package:intl/date_symbol_data_local.dart';
+//import 'package:intl/intl_browser.dart';
+//import 'package:intl/date_symbol_data_local.dart';
 //
 import 'lightning_model.dart';
 export 'lightning_model.dart';
@@ -101,6 +100,8 @@ class LightningDart {
 
   /// SLDS Version + rel
   static const VERSION = "v0.8.0+2";
+  /** Timestamp */
+  static String devTimestamp = "-";
 
   /// Logger
   static final Logger _log = new Logger("LightningDart");
@@ -125,7 +126,7 @@ class LightningDart {
       }
     });
     //
-    return ClientEnv.init();
+    return ClientEnv.init(); // Locale, Intl, Date
   } // init
 
   // Format Log Record
@@ -174,6 +175,76 @@ class LightningDart {
     sb.write("${rec.loggerName}: ${rec.message}");
     return sb.toString();
   } // format
+
+
+  /**
+   * Create Page (slds-grid)
+   * [id] id of the application
+   * [clearContainer] clears all content from container
+   * optional [classList] (if mot defined, container/fluid)
+   */
+  static PageSimple createPageSimple({String id: "wrap",
+    bool clearContainer: true, List<String> classList}) {
+    // Top Level Main
+    Element e = querySelector("#${id}");
+    if (e == null) {
+      for (String cls in PageMain.MAIN_CLASSES) {
+        e = querySelector(".${cls}");
+        if (e != null) {
+          break;
+        }
+      }
+    }
+    PageSimple main = null;
+    if (e == null) {
+      Element body = document.body; // querySelector("body");
+      main = new PageSimple(new DivElement(), id, classList);
+      body.append(main.element);
+    } else {
+      devTimestamp = e.attributes["data-timestamp"];
+      if (clearContainer) {
+        e.children.clear();
+      }
+      main = new PageSimple(e, id, classList);
+    }
+    _log.info("createPageSimple ${id} version=${VERSION} timestamp=${devTimestamp}");
+    return main;
+  } // createPageSimple
+
+
+  /**
+   * Create Page (slds-grid)
+   * [id] id of the application
+   * [clearContainer] clears all content from container
+   * optional [classList] (if mot defined, container/fluid)
+   */
+  static PageMain createPageMain({String id: "wrap",
+    bool clearContainer: true, List<String> classList}) {
+    // Top Level Main
+    Element e = querySelector("#${id}");
+    if (e == null) {
+      for (String cls in PageMain.MAIN_CLASSES) {
+        e = querySelector(".${cls}");
+        if (e != null) {
+          break;
+        }
+      }
+    }
+    PageMain main = null;
+    if (e == null) {
+      Element body = document.body; // querySelector("body");
+      main = new PageMain(new DivElement(), id, classList);
+      body.append(main.element);
+    } else {
+      devTimestamp = e.attributes["data-timestamp"];
+      if (clearContainer) {
+        e.children.clear();
+      }
+      main = new PageMain(e, id, classList);
+    }
+    _log.info("createPageMain ${id} version=${VERSION} timestamp=${devTimestamp}");
+    return main;
+  } // createPageMain
 
 
 
@@ -233,6 +304,5 @@ class LightningDart {
     "(${r.left},${r.top})${r.width}*${r.height}";
   // dump point (x,y)=(l,t)
   static String dumpPoint(Point p) => "(${p.x},${p.y})";
-
 
 } // LightningDart

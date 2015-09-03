@@ -75,9 +75,9 @@ class ClientEnv {
       //
       return initializeDateFormatting(locale, null);
     })
-    //.then((_){
-    //  return initializeMessages(language); // BaseMessages
-    //})
+    .then((_){
+      return initializeMessages(language); // BaseMessages
+    })
     .then((_){
       initializeFormats();
       _log.info("locale=${localeName} language=${language} ${dateFormat_ymd.pattern} ${dateFormat_hms.pattern} - ${dateFormat_ymd_hm.pattern}");
