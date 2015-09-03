@@ -4522,6 +4522,58 @@ a.slds-button--inverse:focus {
   .menu-main:hover,
   .menu-main:focus {
     max-width: 12rem; }
+.busy-backdrop {
+  -webkit-transition-duration: 0.4s;
+          transition-duration: 0.4s;
+  opacity: 0;
+  visibility: hidden;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.75);
+  z-index: 9200; }
+  .busy-backdrop--open {
+    visibility: visible;
+    opacity: 1;
+    -webkit-transition: opacity 0.4s linear;
+            transition: opacity 0.4s linear; }
+.loading-backdrop {
+  -webkit-transition-duration: 0.4s;
+          transition-duration: 0.4s;
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.75);
+  z-index: 9100; }
+  .loading-backdrop--open {
+    visibility: visible;
+    opacity: 1;
+    -webkit-transition: opacity 0.4s linear;
+            transition: opacity 0.4s linear; }
+.center-center {
+  height: 100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center; }
 .grab {
   cursor: -moz-grab;
   cursor: url(https://www.google.com/intl/en_ALL/mapfiles/openhand.cur), move; }

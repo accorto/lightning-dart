@@ -11,6 +11,11 @@ part of lightning_dart;
  */
 abstract class LComponent {
 
+  /// busy indicator class
+  static const String _C_BUSY = "busy";
+  /// loading indicator class
+  static const String _C_LOADING = "loading";
+
   /// Auto Id Numbering
   static int _autoId = 1;
 
@@ -98,6 +103,61 @@ abstract class LComponent {
   void themeTexture () {
     LTheme.themeTexture(element);
   }
+
+
+  /**
+   * Busy (entire screen) - modal
+   */
+  bool get busy => element.classes.contains(_C_BUSY);
+  /// set the page busy
+  void set busy(bool newValue) {
+    if (newValue) {
+      element.classes.add(_C_BUSY);
+      LSpinner spinner = new LSpinner.brand(size: LSpinner.C_SPINNER__LARGE);
+      DivElement div = new DivElement()
+        ..classes.add("center-center")
+        ..append(spinner.element);
+      _busy = new DivElement()
+        ..classes.add("busy-backdrop")
+        ..classes.add("busy-backdrop--open")
+        ..append(div);
+      element.append(_busy);
+    }
+    else {
+      element.classes.remove(_C_BUSY);
+      if (_busy != null) {
+        _busy.remove();
+      }
+      _busy = null;
+    }
+  } // busy
+  DivElement _busy;
+
+  /**
+   * Loading - container only
+   */
+  bool get loading => element.classes.contains(_C_LOADING);
+  void set loading (bool newValue) {
+    if (newValue) {
+      element.classes.add(_C_LOADING);
+      LSpinner spinner = new LSpinner.base(size: LSpinner.C_SPINNER__SMALL);
+      DivElement div = new DivElement()
+        ..classes.add("center-center")
+        ..append(spinner.element);
+      _loading = new DivElement()
+        ..classes.add("loading-backdrop")
+        ..classes.add("loading-backdrop--open")
+        ..append(div);
+      element.append(_loading);
+    } else {
+      element.classes.remove(_C_LOADING);
+      if (_loading != null) {
+        _loading.remove();
+      }
+      _loading = null;
+    }
+  }
+  DivElement _loading;
 
 } // LComponent
 

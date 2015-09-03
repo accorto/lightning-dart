@@ -329,7 +329,7 @@ class LToast extends LNotification {
   LToast.offline({String label, List<Element> headingElements, String idPrefix, LIcon icon,
       String text, List<Element> contentElements, String assistiveText, bool addDefaultIcon: false,
       bool inContainer: false})
-  : this(label:label, headingElements:headingElements, idPrefix:idPrefix, icon:icon,
+    : this(label:label, headingElements:headingElements, idPrefix:idPrefix, icon:icon,
       text:text, contentElements:contentElements, assistiveText:assistiveText, addDefaultIcon:addDefaultIcon,
       inContainer:inContainer, color:LTheme.C_THEME__OFFLINE);
 
