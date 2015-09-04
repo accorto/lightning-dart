@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2015 Accorto, Inc. All Rights Reserved
+  ~ License: GPLv3  http://www.gnu.org/licenses/gpl-3.0.txt
+  ~ License options+support:  https://lightningdart.com
+  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg
+		xmlns="http://www.w3.org/2000/svg"
+		xmlns:xlink="http://www.w3.org/1999/xlink"
+		width="1024" height="1024"
+		viewBox="0 0 1024 1024"
+		preserveAspectRatio="xMidYMid meet">
+	<g transform="rotation">
+		<g id="D">
+			<path fill="#00A4E4" d="M777 779l-467 -468c-26,28 -46,61 -45,79l62 289 64 296c17,37 131,53 161,29l225 -225z"/>
+			<path fill="#55DDCA" d="M679 328l-295 -64c-21,0 -50,22 -75,48l468 467 231 -231c26,-38 -6,-146 -39,-158l-290 -62z"/>
+		</g>
+		<g id="L">
+			<polygon fill="#0081C6" points="693,395 610,9 420,199 494,497 776,778 "/>
+			<polygon fill="#00D2B8" points="495,496 180,439 7,612 393,695 776,778 "/>
+		</g>
+		<animateTransform attributeName="transform" begin="0s" dur="10s" type="rotate"
+			from="0 512 512" to="360 512 512" repeatCount="indefinite"/>
+	</g>
+</svg>
