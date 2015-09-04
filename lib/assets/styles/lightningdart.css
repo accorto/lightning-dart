@@ -4511,16 +4511,11 @@ a.slds-button--inverse:focus {
     .menu-main .menu-main-show span,
     .menu-main .menu-main-entry span {
       margin-left: 1rem; }
-    .menu-main .menu-main-show:hover,
-    .menu-main .menu-main-show:focus,
-    .menu-main .menu-main-entry:hover,
-    .menu-main .menu-main-entry:focus {
-      background-color: lightgreen; }
-    .menu-main .menu-main-show .slds-is-selected,
-    .menu-main .menu-main-entry .slds-is-selected {
-      background-color: green !important; }
+    .menu-main .menu-main-show.slds-is-selected,
+    .menu-main .menu-main-entry.slds-is-selected {
+      background-color: #1589ee; }
   .menu-main:hover,
-  .menu-main:focus {
+  .menu-main.expaned {
     max-width: 12rem; }
 .busy-backdrop {
   -webkit-transition-duration: 0.4s;

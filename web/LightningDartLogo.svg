@@ -8,26 +8,17 @@
 <svg
 		xmlns="http://www.w3.org/2000/svg"
 		xmlns:xlink="http://www.w3.org/1999/xlink"
-		width="1024"
-		height="1024"
+		width="1024" height="1024"
 		viewBox="0 0 1024 1024"
-		preserveAspectRatio="xMidYMid meet"
-		>
-	<defs>
-		<path id="ld" d="M256,0 L0,512 L384,512 L128,1024 L1024,384 L640,384 L896,0 L256,0 Z"/>
-		<clipPath id="clip">
-			<use xlink:href="#ld"/>
-		</clipPath>
-		<linearGradient id="gradStroke"  x1="100%" y1="0%" x2="0%" y2="100%">
-			<stop offset="20%" stop-color="#0081C6" stop-opacity="10%"/>
-			<stop offset="80%" stop-color="#0081C6" />
-		</linearGradient>
-		<linearGradient id="gradFill"  x1="100%" y1="0%" x2="0%" y2="100%">
-			<stop offset="20%" stop-color="#00D2B8" stop-opacity="10%"/>
-			<stop offset="80%" stop-color="#00D2B8" />
-		</linearGradient>
-	</defs>
+		preserveAspectRatio="xMidYMid meet">
 	<g>
-		<use xlink:href="#ld" stroke="url(#gradStroke)" stroke-width="170" fill="url(#gradFill)" clip-path="url(#clip)"/>
+		<g id="D">
+			<path fill="#00A4E4" d="M777 779l-467 -468c-26,28 -46,61 -45,79l62 289 64 296c17,37 131,53 161,29l225 -225z"/>
+			<path fill="#55DDCA" d="M679 328l-295 -64c-21,0 -50,22 -75,48l468 467 231 -231c26,-38 -6,-146 -39,-158l-290 -62z"/>
+		</g>
+		<g id="L">
+			<polygon fill="#0081C6" points="693,395 610,9 420,199 494,497 776,778 "/>
+			<polygon fill="#00D2B8" points="495,496 180,439 7,612 393,695 776,778 "/>
+		</g>
 	</g>
 </svg>
