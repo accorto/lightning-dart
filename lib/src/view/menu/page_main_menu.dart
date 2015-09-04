@@ -18,7 +18,7 @@ class PageMainMenu extends LComponent {
   static const String _C_EXPANDED = "expaned";
 
   final Element element = new Element.nav()
-    ..classes.addAll([LGrid.C_COL, LTheme.C_THEME__ALT_INVERSE, C_MENU_MAIN]);
+    ..classes.addAll([LGrid.C_COL, LGrid.C_SHRINK_NONE, LTheme.C_THEME__ALT_INVERSE, C_MENU_MAIN]);
 
   AnchorElement _menuShow = new AnchorElement(href: "#")
     ..classes.add(PageMainMenu.C_MENU_MAIN_SHOW);
