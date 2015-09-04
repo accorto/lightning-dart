@@ -24,7 +24,7 @@ class LInputDate extends LInput {
   String _type = EditorI.TYPE_DATE;
 
   /**
-   *
+   * Date Editor
    */
   LInputDate(String name, String type, {String idPrefix}) : super(name, type, idPrefix:idPrefix) {
     _initDate(type);
@@ -41,7 +41,9 @@ class LInputDate extends LInput {
   }
 
   void _initDate(String type) {
-    if (!_html5) {
+    if (html5) {
+      input.type = type;
+    } else {
       input.type = EditorI.TYPE_TEXT;
     }
     if (type == EditorI.TYPE_DATETIME) {
@@ -58,6 +60,11 @@ class LInputDate extends LInput {
       _type = EditorI.TYPE_DATE;
     }
   } // initDate
+
+  void set html5 (bool newValue) {
+    super.html5 = newValue;
+    _initDate(_type);
+  }
 
   @override
   LIcon getIconRight() => _iconRight;
@@ -80,11 +87,11 @@ class LInputDate extends LInput {
     String x = value; // read back
     if (newValue != null && newValue != x) {
       if (type == EditorI.TYPE_DATE) {
-        _log.config("setValue ${name}=${newValue} <> ${x} -- ${DataUtil.asDateString(newValue, _html5)} display=${display}");
+        _log.config("setValue ${name}=${newValue} <> ${x} -- ${DataUtil.asDateString(newValue, html5)} display=${display}");
       } else if (type == EditorI.TYPE_DATETIME) {
-        _log.config("setValue ${name}=${newValue} <> ${x} -- ${DataUtil.asDateTimeString(newValue, _html5)} display=${display}");
+        _log.config("setValue ${name}=${newValue} <> ${x} -- ${DataUtil.asDateTimeString(newValue, html5)} display=${display}");
       } else if (type == EditorI.TYPE_TIME) {
-        _log.config("setValue ${name}=${newValue} <> ${x} -- ${DataUtil.asTimeString(newValue, data, _html5)} display=${display}");
+        _log.config("setValue ${name}=${newValue} <> ${x} -- ${DataUtil.asTimeString(newValue, data, html5)} display=${display}");
       }
       //  updateData(x); // actual parsed value
     }
@@ -135,11 +142,11 @@ class LInputDate extends LInput {
       return "";
     String display = null;
     if (type == EditorI.TYPE_DATE) {
-      display = DataUtil.asDateString(valueMs, _html5); // UTC
+      display = DataUtil.asDateString(valueMs, html5); // UTC
     } else if (type == EditorI.TYPE_DATETIME) {
-      display = DataUtil.asDateTimeString(valueMs, _html5); // local
+      display = DataUtil.asDateTimeString(valueMs, html5); // local
     } else if (type == EditorI.TYPE_TIME) {
-      display = DataUtil.asTimeString(valueMs, data, _html5); //
+      display = DataUtil.asTimeString(valueMs, data, html5); //
     }
     if (display == null || display.isEmpty) {
       if (setValidity)
@@ -158,11 +165,11 @@ class LInputDate extends LInput {
       return "";
     DateTime dt = null;
     if (type == EditorI.TYPE_DATE) {
-      dt = DataUtil.asDate(newValue, _html5); // UTC
+      dt = DataUtil.asDate(newValue, html5); // UTC
     } else if (type == EditorI.TYPE_DATETIME) {
-      dt = DataUtil.asDateTime(newValue, _html5); // local
+      dt = DataUtil.asDateTime(newValue, html5); // local
     } else if (type == EditorI.TYPE_TIME) {
-      dt = DataUtil.asTime(newValue, data, _html5); //
+      dt = DataUtil.asTime(newValue, data, html5); //
     }
     if (dt == null) {
       if (setValidity)
@@ -187,7 +194,7 @@ class LInputDate extends LInput {
     if (newValue) {
       input.type = EditorI.TYPE_TEXT; // don't show dd/mm/yyyy when empty
     } else {
-      if (_html5)
+      if (html5)
         input.type = _type;
     }
   }

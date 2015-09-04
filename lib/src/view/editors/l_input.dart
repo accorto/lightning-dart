@@ -17,8 +17,8 @@ class LInput extends LEditor with LFormElement {
   /// Input Element
   final InputElement input = new InputElement();
 
-  /// html5
-  bool _html5 = ClientEnv.html5; // default
+  /// html5 Mode (date, number)
+  bool html5 = ClientEnv.html5; // default
 
   /**
    * Input Editor

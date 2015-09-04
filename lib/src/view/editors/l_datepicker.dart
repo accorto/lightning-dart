@@ -48,11 +48,6 @@ class LDatepicker extends LInputDate {
   static const String MODE_RANGE = "r";
 
 
-  static int get firstDayInWeek {
-    return DateTime.SUNDAY;
-  //  return DateTime.MONDAY;
-  }
-
   /// Dropdown
   LDatePickerDropdown _dropdown;
 
@@ -64,16 +59,10 @@ class LDatepicker extends LInputDate {
 
   @override
   void _initEditor() {
-    _html5 = false;
+    html5 = false;
     element.onClick.listen(onInputClick); // w/o wrapper
-    wrapper = new DivElement();
-    //  ..classes.add(LDropdown.C_DROPDOWN_TRIGGER);
-    _dropdown = new LDatePickerDropdown(id);
-    _dropdown.mode = _mode;
-    _dropdown.editorChange = onDropdownChange;
-    _dropdown.show = false;
-    wrapper.append(_dropdown.element);
     //
+    _firstDayOfWeek = _formatter.dateSymbols.FIRSTDAYOFWEEK + 1; // zero based
     super._initEditor();
   } // initEditor
 
@@ -92,20 +81,51 @@ class LDatepicker extends LInputDate {
   }
   String _mode = LDatepicker.MODE_SINGLE;
 
+  /// First Day 1=Mo .. 7=Su
+  int get firstDayOfWeek => _firstDayOfWeek;
+  /// First Dat 1=Mo .. 7=Su
+  void set firstDayOfWeek (int first) {
+    if (first >= DateTime.MONDAY && first <= DateTime.SUNDAY)
+      _firstDayOfWeek = first;
+  }
+  int _firstDayOfWeek = DateTime.SUNDAY;
 
   /// Field Clicked
   void onInputClick(MouseEvent evt) {
-    _dropdown.show = !_dropdown.show; // toggle
+    if (_dropdown == null) {
+      _dropdown = new LDatePickerDropdown(id, _formatter, _firstDayOfWeek);
+      _dropdown.mode = _mode;
+      _dropdown.editorChange = onDropdownChange;
+      _dropdown.show = false;
+    }
+    // attach
+    if (!_dropdown.show) { // not showing yet
+      Element next = element.nextElementSibling;
+      if (next != null)
+        element.parent.insertBefore(_dropdown.element, next);
+      else
+        element.parent.append(_dropdown.element);
+    }
+    // toggle
+    _dropdown.show = !_dropdown.show;
+    // value
     _dropdown.value = value;
+    // detach
+    if (!_dropdown.show) { // not showing anymore
+      _dropdown.element.remove();
+    }
   } // onInputClicked
 
   /// Dropdown Changed
   void onDropdownChange(String name, String newValue, DEntry entry, var details) {
     value = newValue;
     _dropdown.show = false;
+    _dropdown.element.remove();
   }
 
 } // LDatePicker
+
+
 
 /**
  * Date Picker Dropdown
@@ -174,16 +194,17 @@ class LDatePickerDropdown {
     ..classes.add(LText.C_ASSISTIVE_TEXT)
     ..text = lDatePickerDropdownNext();
 
-  // Date Format
-  final DateFormat _dateFormat = new DateFormat.yMd();
   final DateTime _today = new DateTime.now();
   int _yearFirst = 1915;
   int _yearLast = 2045;
 
+  final DateFormat dateFormat;
+  final int firstDayOfWeek;
+
   /**
    * Date Picker Dropdown
    */
-  LDatePickerDropdown(String idPrefix) {
+  LDatePickerDropdown(String idPrefix, DateFormat this.dateFormat, int this.firstDayOfWeek) {
     element.append(_grid);
     _grid.append(_month);
     _month.append(_monthPrev);
@@ -323,7 +344,7 @@ class LDatePickerDropdown {
       if (target is TableCellElement) {
         if (mode == LDatepicker.MODE_WEEK_FIRST || mode == LDatepicker.MODE_WEEK_LAST) {
           _date = DataUtil.toDate(dateString, type: EditorI.TYPE_DATE);
-          while (_date.weekday != LDatepicker.firstDayInWeek)
+          while (_date.weekday != firstDayOfWeek)
             _date = _date.subtract(DAY);
           _dateTo = _date.add(new Duration(days:6));
           _buildCalendar();
@@ -363,7 +384,7 @@ class LDatePickerDropdown {
     _buildCalendarWeekdays(headRow);
     _buildCalendarDays();
     // month
-    List<String> monthNames = _dateFormat.dateSymbols.MONTHS;
+    List<String> monthNames = dateFormat.dateSymbols.MONTHS;
     _monthLabel.text = monthNames[month-1];
     // Year
     const int buffer = 1; // additional years to add
@@ -385,10 +406,10 @@ class LDatePickerDropdown {
 
   /// build first row S..S
   void _buildCalendarWeekdays(TableRowElement headRow) {
-    List<String> dayNames = _dateFormat.dateSymbols.WEEKDAYS;
-    List<String> dayAbbr = _dateFormat.dateSymbols.NARROWWEEKDAYS;
+    List<String> dayNames = dateFormat.dateSymbols.WEEKDAYS;
+    List<String> dayAbbr = dateFormat.dateSymbols.NARROWWEEKDAYS;
     for (int i = 0; i < 7; i++) {
-      int day = LDatepicker.firstDayInWeek + i;
+      int day = firstDayOfWeek + i;
       if (day >= DateTime.SUNDAY) { // Mo=1 Su=7
         day -= 7;
       }
@@ -404,17 +425,18 @@ class LDatePickerDropdown {
   /// build weeks
   void _buildCalendarDays() {
     TableSectionElement tbody = _cal.createTBody();
-    List<String> dayNames = _dateFormat.dateSymbols.WEEKDAYS;
+    List<String> dayNames = dateFormat.dateSymbols.WEEKDAYS;
+    // List<int> weekEndDays = dateFormat.dateSymbols.WEEKENDRANGE; // zero based
 
     DateTime weekStart = new DateTime.utc(_date.year, _date.month, 1);
-    while (weekStart.weekday != LDatepicker.firstDayInWeek)
+    while (weekStart.weekday != firstDayOfWeek)
       weekStart = weekStart.subtract(DAY);
 
     DateTime theDay = weekStart;
     do {
       TableRowElement row = tbody.addRow();
       for (int i = 0; i < 7; i++) {
-        int day = LDatepicker.firstDayInWeek + i;
+        int day = firstDayOfWeek + i;
         if (day >= DateTime.SUNDAY)
           day -= 7;
         SpanElement span = new SpanElement()
