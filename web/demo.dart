@@ -44,12 +44,12 @@ part 'demo/themes.dart';
 /**
  * Intro Page (copy part of index)
  */
-class IntroPage extends PageEntry {
+class IntroPage extends PageMainEntry {
 
   Element element = new DivElement();
 
   IntroPage() : super("intro", new LIconUtility(LIconUtility.HOME), "Home") {
-    DivElement ld = querySelector("#ld");
+    Element ld = querySelector("#ld");
     if (ld != null)
       element.append(ld);
   }
@@ -60,7 +60,7 @@ class IntroPage extends PageEntry {
 /**
  * Demo Page
  */
-class DemoPage extends PageEntry {
+class DemoPage extends PageMainEntry {
 
   Element element = new DivElement();
 
@@ -75,6 +75,10 @@ class DemoPage extends PageEntry {
     ParagraphElement p = new ParagraphElement()
       ..classes.add(LText.C_TEXT_BODY__REGULAR)
       ..text = "Check out the individual UI Components with their SLDS (Salesforce Lightning Design System) status and the Lightning Dart implementation status";
+    hdr.append(p);
+    p = new ParagraphElement()
+      ..classes.add(LText.C_TEXT_BODY__SMALL)
+      ..text = "Version: ${LightningDart.VERSION} - ${LightningDart.devTimestamp}";
     hdr.append(p);
 
     Element toc = new Element.nav()
@@ -117,7 +121,7 @@ class DemoPage extends PageEntry {
 /**
  * Demo Frame ... includes demo page
  */
-class DemoFrame extends PageEntry {
+class DemoFrame extends PageMainEntry {
 
   final IFrameElement element = new IFrameElement();
 
@@ -136,7 +140,7 @@ class DemoFrame extends PageEntry {
 /**
  * Example Signup Form Frame
  */
-class ExampleForm extends PageEntry {
+class ExampleForm extends PageMainEntry {
 
   static final LIcon formIcon = new LIconAction(LIconAction.RECORD);
 
@@ -156,7 +160,7 @@ class ExampleForm extends PageEntry {
 /**
  * Support Link
  */
-class SupportLink extends PageEntry {
+class SupportLink extends PageMainEntry {
 
   static final LIcon supportIcon = new LIconAction(LIconAction.NEW_CUSTOM86);
 

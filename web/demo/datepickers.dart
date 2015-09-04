@@ -13,43 +13,73 @@ class Datepickers extends DemoFeature {
   sldsStatus: DemoFeature.SLDS_PROTOTYPE,
   devStatus: DemoFeature.STATUS_PARTIAL,
   hints: ["date constants (e.g. month names) translated"],
-  issues: ["first day in week hardcoded", "css: week select with crossing month boundary"],
+  issues: ["css: week select with crossing month boundary"],
   plans: ["date ranges"]);
 
   LComponent get content {
-    CDiv div = new CDiv();
+    LForm form = new LForm.stacked("datePick");
 
-    LDatepicker dp = new LDatepicker("date");
+    LDatepicker dp = new LDatepicker("date")
+      ..label = "Date Picker";
     if (optionWeekSelect)
       dp.mode = LDatepicker.MODE_WEEK_FIRST;
-    dp.value = null; // today
+    dp.value = null;
+    form.addEditor(dp);
 
-    div.append(dp.element);
-    div.element.style.height = "300px"; // initial test
+    LInputDate id1 = new LInputDate("id1", EditorI.TYPE_DATE)
+      ..label = "Date Input Html5 (falls back if not supported)";
+    id1.value = null;
+    form.addEditor(id1);
 
+    LInputDate id2 = new LInputDate("id2", EditorI.TYPE_DATE)
+      ..label = "Date Input"
+      ..html5 = false;
+    id2.value = null;
+    form.addEditor(id2);
 
-
-    return div;
+    form.element.style.height = "300px"; // initial test
+    return form;
   }
+
+
   String get source {
     return '''
+    LForm form = new LForm.stacked("datePick");
+
+    LDatepicker dp = new LDatepicker("date")
+      ..label = "Date Picker";
+    if (optionWeekSelect)
+      dp.mode = LDatepicker.MODE_WEEK_FIRST;
+    dp.value = null;
+    form.addEditor(dp);
+
+    LInputDate id1 = new LInputDate("id1", EditorI.TYPE_DATE)
+      ..label = "Date Input Html5 (falls back if not supported)";
+    id1.value = null;
+    form.addEditor(id1);
+
+    LInputDate id2 = new LInputDate("id2", EditorI.TYPE_DATE)
+      ..label = "Date Input"
+      ..html5 = false;
+    id2.value = null;
+    form.addEditor(id2);
     ''';
   }
 
   bool optionWeekSelect = false;
 
-  DivElement optionWeekCb() {
+  EditorI optionWeekCb() {
     LCheckbox cb = new LCheckbox("optionW", idPrefix: id)
       ..label = "Option: Week Select (first day)";
     cb.input.onClick.listen((MouseEvent evt){
       optionWeekSelect = cb.input.checked;
       optionChanged();
     });
-    return cb.element;
+    return cb;
   }
 
-  List<DivElement> get options {
-    List<DivElement> list = new List<DivElement>();
+  List<EditorI> get options {
+    List<EditorI> list = new List<EditorI>();
     list.add(optionWeekCb());
     return list;
   }

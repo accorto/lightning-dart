@@ -43,18 +43,18 @@ class Tabs extends DemoFeature {
 
   bool option1 = false;
 
-  DivElement option1Cb() {
+  EditorI option1Cb() {
     LCheckbox cb = new LCheckbox("option1", idPrefix: id)
       ..label = "Option: Scoped";
     cb.input.onClick.listen((MouseEvent evt){
       option1 = cb.input.checked;
       optionChanged();
     });
-    return cb.element;
+    return cb;
   }
 
-  List<DivElement> get options {
-    List<DivElement> list = new List<DivElement>();
+  List<EditorI> get options {
+    List<EditorI> list = new List<EditorI>();
     list.add(option1Cb());
     return list;
   }

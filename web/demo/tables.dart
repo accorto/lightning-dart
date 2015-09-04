@@ -62,64 +62,64 @@ class Tables extends DemoFeature {
   bool responsiveStackedHorizontalOption = false;
   bool actionOption = false;
 
-  DivElement optionBorderedCb() {
+  EditorI optionBorderedCb() {
     LCheckbox cb = new LCheckbox("bordered", idPrefix: id)
       ..label = "Option: Bordered";
     cb.input.onClick.listen((MouseEvent evt){
       borderedOption = cb.input.checked;
       optionChanged();
     });
-    return cb.element;
+    return cb;
   }
-  DivElement optionResponsiveOCb() {
+  EditorI optionResponsiveOCb() {
     LCheckbox cb = new LCheckbox("responsiveO", idPrefix: id)
       ..label = "Option: Responsive Overflow";
     cb.input.onClick.listen((MouseEvent evt){
       responsiveOverflowOption = cb.input.checked;
       optionChanged();
     });
-    return cb.element;
+    return cb;
   }
-  DivElement optionResponsiveSCb() {
+  EditorI optionResponsiveSCb() {
     LCheckbox cb = new LCheckbox("responsiveS", idPrefix: id)
       ..label = "Option: Responsive Stacked";
     cb.input.onClick.listen((MouseEvent evt){
       responsiveStackedOption = cb.input.checked;
       optionChanged();
     });
-    return cb.element;
+    return cb;
   }
-  DivElement optionResponsiveSHCb() {
+  EditorI optionResponsiveSHCb() {
     LCheckbox cb = new LCheckbox("responsiveSH", idPrefix: id)
       ..label = "Option: Responsive Stacked Horizontal";
     cb.input.onClick.listen((MouseEvent evt){
       responsiveStackedHorizontalOption = cb.input.checked;
       optionChanged();
     });
-    return cb.element;
+    return cb;
   }
-  DivElement optionSortCb() {
+  EditorI optionSortCb() {
     LCheckbox cb = new LCheckbox("bordered", idPrefix: id)
       ..label = "Option: Sorting";
     cb.input.onClick.listen((MouseEvent evt){
       sortOption = cb.input.checked;
       optionChanged();
     });
-    return cb.element;
+    return cb;
   }
-  DivElement optionActionCb() {
+  EditorI optionActionCb() {
     LCheckbox cb = new LCheckbox("bordered", idPrefix: id)
       ..label = "Option: Actions";
     cb.input.onClick.listen((MouseEvent evt){
       actionOption = cb.input.checked;
       optionChanged();
     });
-    return cb.element;
+    return cb;
   }
 
 
-  List<DivElement> get options {
-    List<DivElement> list = new List<DivElement>();
+  List<EditorI> get options {
+    List<EditorI> list = new List<EditorI>();
     list.add(optionBorderedCb());
     list.add(optionResponsiveOCb());
     list.add(optionResponsiveSCb());

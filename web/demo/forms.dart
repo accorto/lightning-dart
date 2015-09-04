@@ -25,7 +25,7 @@ class Forms extends DemoFeature {
 
   LComponent get content {
     LForm form = new LForm.stacked("tf")
-      ..formType = formType; // demo toggle
+      ..formType = formType; // demo select
 
     LInput textInput = new LInput("text1", EditorI.TYPE_TEXT)
       ..label = "Text Input"
@@ -146,56 +146,61 @@ class Forms extends DemoFeature {
   }
 
 
-  DivElement optionTypeCb() {
-    LCheckbox cb = new LCheckbox("oType", idPrefix: id)
-      ..label = "Form Type: stacked/horizontal";
-    cb.input.onClick.listen((MouseEvent evt){
-      formType = cb.input.checked ? LForm.C_FORM__HORIZONTAL : LForm.C_FORM__STACKED;
+  EditorI optionTypeSelect() {
+    LSelect select = new LSelect("oType", idPrefix: id)
+      ..label = "Form Type"
+      ..small = true;
+    select.input.style.width = "inherit";
+    select.addOption(new OptionElement(data: "Stacked", value: LForm.C_FORM__STACKED));
+    select.addOption(new OptionElement(data: "Horizontal", value: LForm.C_FORM__HORIZONTAL));
+    select.addOption(new OptionElement(data: "Inline", value: LForm.C_FORM__INLINE));
+    select.input.onChange.listen((Event evt){
+      formType = select.value;
       optionChanged();
     });
-    return cb.element;
+    return select;
   }
-  DivElement optionRequiredCb() {
+  EditorI optionRequiredCb() {
     LCheckbox cb = new LCheckbox("oReq", idPrefix: id)
       ..label = "Field Required";
     cb.input.onClick.listen((MouseEvent evt){
       fieldRequired = cb.input.checked;
       optionChanged();
     });
-    return cb.element;
+    return cb;
   }
-  DivElement optionReadonlyCb() {
+  EditorI optionReadonlyCb() {
     LCheckbox cb = new LCheckbox("oRO", idPrefix: id)
       ..label = "Field ReadOnly";
     cb.input.onClick.listen((MouseEvent evt){
       fieldReadOnly = cb.input.checked;
       optionChanged();
     });
-    return cb.element;
+    return cb;
   }
-  DivElement optionDisabledCb() {
+  EditorI optionDisabledCb() {
     LCheckbox cb = new LCheckbox("oDis", idPrefix: id)
       ..label = "Field Disabled";
     cb.input.onClick.listen((MouseEvent evt){
       fieldDisabled = cb.input.checked;
       optionChanged();
     });
-    return cb.element;
+    return cb;
   }
-  DivElement optionSmallCb() {
+  EditorI optionSmallCb() {
     LCheckbox cb = new LCheckbox("oSmall", idPrefix: id)
       ..label = "Labels+Fields+Buttons small";
     cb.input.onClick.listen((MouseEvent evt){
       formSmall = cb.input.checked;
       optionChanged();
     });
-    return cb.element;
+    return cb;
   }
 
 
-  List<DivElement> get options {
-    List<DivElement> list = new List<DivElement>();
-    list.add(optionTypeCb());
+  List<EditorI> get options {
+    List<EditorI> list = new List<EditorI>();
+    list.add(optionTypeSelect());
     list.add(optionSmallCb());
     list.add(optionRequiredCb());
     list.add(optionReadonlyCb());

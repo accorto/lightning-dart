@@ -73,16 +73,13 @@ abstract class DemoFeature extends LComponent {
     DivElement col2 = new DivElement()
       ..classes.add(LGrid.C_COL);
     grid.append(col2);
-    UListElement ul = new UListElement()
-      ..classes.addAll([LList.C_LIST__VERTICAL, LMargin.C_TOP__SMALL]);
-    for (DivElement option in options) {
-      LIElement li = new LIElement()
-        ..classes.add(LList.C_LIST__ITEM);
-      li.append(option);
-      ul.append(li);
+    LForm form = new LForm.stacked("options");
+//      ..classes.addAll([LList.C_LIST__VERTICAL, LMargin.C_TOP__SMALL]);
+    for (EditorI option in options) {
+      form.addEditor(option);
     }
     // element.append(new HRElement());
-    col2.append(ul);
+    col2.append(form.element);
 
     // Info
     DivElement col3 = new DivElement()
@@ -182,7 +179,7 @@ abstract class DemoFeature extends LComponent {
 
   LComponent get content => contentNIY;
   String get source => sourceNIY;
-  List<DivElement> get options => [];
+  List<EditorI> get options => [];
 
 
   // Tab changed

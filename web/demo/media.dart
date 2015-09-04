@@ -37,7 +37,7 @@ class Media extends DemoFeature {
       ..append(new ParagraphElement()..text = "double - some lengthy text or content");
     div.add(mo);
     mo = new LMedia()
-      ..setImageSrc("avatar1.jpg")
+      ..setImageSrc("LightningDartLogoRotate.svg")
       ..responsive = true
       ..append(new ParagraphElement()..text = "responsive - some lengthy text or content - have to make thing longer, so that it works");
     div.add(mo);
@@ -46,6 +46,31 @@ class Media extends DemoFeature {
   }
   String get source {
     return '''
+    CDiv div = new CDiv();
+    LMedia mo = new LMedia()
+      ..setImageSrc("avatar1.jpg")
+      ..append(new ParagraphElement()..text = "base - some lengthy text or content");
+    div.add(mo);
+    mo = new LMedia()
+      ..setImageSrc("avatar2.jpg")
+      ..center = true
+      ..append(new ParagraphElement()..text = "center - some lengthy text or content");
+    div.add(mo);
+    mo = new LMedia()
+      ..setImageSrc("avatar3.jpg")
+      ..reverse = true
+      ..append(new ParagraphElement()..text = "reverse - some lengthy text or content");
+    div.add(mo);
+    mo = new LMedia()
+      ..setImageSrc("avatar1.jpg")
+      ..setImageRightSrc("avatar2.jpg")
+      ..append(new ParagraphElement()..text = "double - some lengthy text or content");
+    div.add(mo);
+    mo = new LMedia()
+      ..setImageSrc("LightningDartLogoRotate.svg")
+      ..responsive = true
+      ..append(new ParagraphElement()..text = "responsive - some lengthy text or content - have to make thing longer, so that it works");
+    div.add(mo);
     ''';
   }
 
