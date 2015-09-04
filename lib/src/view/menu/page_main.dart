@@ -65,7 +65,7 @@ class PageMain extends PageSimple {
     this.apps = apps;
     head.set(apps);
     _menu.set(apps);
-    for (PageEntry pe in apps.entries) {
+    for (PageMainEntry pe in apps.entries) {
       _subscriptions.add(pe.menuEntry.onClick.listen(onMenuClick));
       pe.active = false;
     }
@@ -78,14 +78,14 @@ class PageMain extends PageSimple {
   void onMenuClick (Event evt) {
     Element target = evt.target;
     String theId = target.id;
-    while (element != null && !theId.contains(PageEntry.MENU_SUFFIX)) {
+    while (element != null && !theId.contains(PageMainEntry.MENU_SUFFIX)) {
       target = target.parent;
       if (target != null)
         theId = target.id;
     }
-    theId = theId.replaceAll(PageEntry.MENU_SUFFIX, "");
-    PageEntry entry = null;
-    for (PageEntry pe in apps.entries) {
+    theId = theId.replaceAll(PageMainEntry.MENU_SUFFIX, "");
+    PageMainEntry entry = null;
+    for (PageMainEntry pe in apps.entries) {
       if (pe.id == theId) {
         entry = pe;
       } else {
@@ -103,7 +103,7 @@ class PageMain extends PageSimple {
   } // onMenuClick
 
   /// Set Page Entry
-  void _setPageEntry(PageEntry page) {
+  void _setPageEntry(PageMainEntry page) {
     _log.fine("setPageEntry ${page.id}");
     page.active = true;
     main.children.clear();
@@ -121,79 +121,3 @@ class PageMain extends PageSimple {
 
 } // PageMain
 
-/**
- * Left Side Menu
- */
-class PageMainMenu extends LComponent {
-
-  static const String C_MENU_MAIN = "menu-main";
-  static const String C_MENU_MAIN_SHOW = "menu-main-show";
-  static const String C_MENU_MAIN_ENTRY = "menu-main-entry";
-
-  static const String _C_EXPANDED = "expaned";
-
-  final Element element = new Element.nav()
-    ..classes.addAll([LGrid.C_COL, LTheme.C_THEME__ALT_INVERSE, C_MENU_MAIN]);
-
-  AnchorElement _menuShow = new AnchorElement(href: "#")
-    ..classes.add(PageMainMenu.C_MENU_MAIN_SHOW);
-
-
-  /// Left Side Menu
-  PageMainMenu() {
-    LIcon showIcon = new LIconUtility(LIconUtility.ROWS, size: LIcon.C_ICON__SMALL);
-    _menuShow.append(showIcon.element);
-    _menuShow.onClick.listen((MouseEvent evt){
-      expanded = !expanded; // toggle
-    });
-    element.append(_menuShow);
-  }
-
-  /**
-   * Set Application
-   */
-  void set(PageApplication apps) {
-    element.children.clear();
-    _menuShow.title = apps.label;
-    element.append(_menuShow);
-    // entries
-    for (PageEntry pe in apps.entries) {
-      element.append(pe.menuEntry);
-    }
-  } // set
-
-  /**
-   * Menu Expanded
-   */
-  bool get expanded => element.classes.contains(_C_EXPANDED);
-  void set expanded (bool newValue) {
-    if (newValue) {
-      element.classes.add(_C_EXPANDED);
-    } else {
-      element.classes.remove(_C_EXPANDED);
-    }
-  }
-
-} // PageMainMenu
-
-
-/**
- * Page Main Header - Logo (for the moment)
- */
-class PageMainHeader extends LComponent {
-
-  final Element element = new Element.header()
-    ..classes.add(LMargin.C_AROUND__SMALL);
-
-  /**
-   * Set Application
-   */
-  void set(PageApplication apps) {
-    element.children.clear();
-    if (apps.imageSrc != null) {
-      LImage img = new LImage.srcMedium(apps.imageSrc, apps.label, circle: false);
-      element.append(img.element);
-    }
-  } // set
-
-} // PageMainHeader

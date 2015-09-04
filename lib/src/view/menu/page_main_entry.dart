@@ -9,7 +9,7 @@ part of lightning_dart;
 /**
  * Main Page Menu Item - a menu Item and the container for the content
  */
-abstract class PageEntry extends LComponent {
+abstract class PageMainEntry extends LComponent {
 
   static const String MENU_SUFFIX = "-menu";
 
@@ -26,7 +26,7 @@ abstract class PageEntry extends LComponent {
    * the [icon] is best an action or utility icon - standard and custom items have a different size
    * if [externalHref] is provided, the user is redirected with the optional [target]
    */
-  PageEntry(String id, LIcon this.icon, String this.label, {String this.externalHref, String target}) {
+  PageMainEntry(String id, LIcon this.icon, String this.label, {String this.externalHref, String target}) {
     element.id = id;
     menuEntry.id = id + MENU_SUFFIX;
     if (externalHref != null && externalHref.isNotEmpty) {
@@ -76,7 +76,7 @@ class PageApplication {
   final LIcon icon;
   final String imageSrc;
 
-  List<PageEntry> entries = new List<PageEntry>();
+  List<PageMainEntry> entries = new List<PageMainEntry>();
 
   /**
    * Application with either [icon] or [imageSrc]
@@ -86,7 +86,7 @@ class PageApplication {
   }
 
   /// Add Page to Application
-  void add(PageEntry entry) {
+  void add(PageMainEntry entry) {
     entries.add(entry);
   }
 

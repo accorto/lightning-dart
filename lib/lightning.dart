@@ -78,7 +78,9 @@ part 'src/view/form/l_form_element.dart';
 part 'src/view/form/l_form_field_set.dart';
 
 part 'src/view/menu/page_main.dart';
-part 'src/view/menu/page_entry.dart';
+part 'src/view/menu/page_main_entry.dart';
+part 'src/view/menu/page_main_header.dart';
+part 'src/view/menu/page_main_menu.dart';
 part 'src/view/menu/page_simple.dart';
 
 part 'src/view/table/l_table.dart';
