@@ -54,9 +54,8 @@ class ObjectCtrl extends LComponent {
     _header.findEditorChange = onFindEditorChange;
 
     // Actions
-    _header.addAction(AppsAction.createNew(onAppsActionNew));
-    _header.addAction(AppsAction.createLayout(onAppsActionGridLayout));
-    _header.setActionGroupLayout(1);
+    if (!ui.isReadOnly)
+      _header.addAction(AppsAction.createNew(onAppsActionNew));
 
     _header.filterList.settings.dropdown.editorChange = onFilterChange;
 
@@ -168,7 +167,12 @@ class ObjectCtrl extends LComponent {
     } else {
       String viewLayout = _header.viewLayout;
       _table = null; // reset
-      if (viewLayout == LObjectHome.VIEW_LAYOUT_TABLE) {
+      _cardCompact = null;
+      if (viewLayout == LObjectHome.VIEW_LAYOUT_COMPACT) {
+        _displayCompact();
+      //} else if (viewLayout == LObjectHome.VIEW_LAYOUT_CARDS) {
+      //  _displayCards();
+      } else /* if (viewLayout == LObjectHome.VIEW_LAYOUT_TABLE) */ {
         _displayTable();
       }
 
@@ -181,18 +185,41 @@ class ObjectCtrl extends LComponent {
 
   } // display
 
-  LTable _table;
+  /**
+   * Table
+   */
   void _displayTable() {
-    _table = new LTable("id", true)
+    _table = new LTable(id, true)
       ..bordered = true;
     _table.setUi(ui); // header
     _table.addTableAction(AppsAction.createNew(onAppsActionNew));
     _table.addTableAction(AppsAction.createDeleteSelected(onAppsActionDeleteSelected));
+    _table.addTableAction(AppsAction.createLayout(onAppsActionTableLayout));
+
     _table.addRowAction(AppsAction.createEdit(onAppsActionEdit));
     _table.addRowAction(AppsAction.createDelete(onAppsActionDelete));
-    _table.display(_records, viewAction:onAppsActionRecord);
+    _table.display(_records, recordAction:onAppsActionRecord); // urv click
     _content.add(_table);
   } // displayTable
+  LTable _table;
+
+  /**
+   * Compact
+   */
+  void _displayCompact() {
+    _cardCompact = new LCardCompact(id);
+    _cardCompact.setUi(ui); // header
+    _cardCompact.addTableAction(AppsAction.createNew(onAppsActionNew));
+    _cardCompact.addTableAction(AppsAction.createLayout(onAppsActionCompactLayout));
+
+    _cardCompact.addRowAction(AppsAction.createEdit(onAppsActionEdit));
+    _cardCompact.addRowAction(AppsAction.createDelete(onAppsActionDelete));
+    _cardCompact.display(_records, recordAction:onAppsActionRecord); // urv click
+    _content.add(_cardCompact);
+  } // displayTable
+  LCardCompact _cardCompact;
+
+
 
   /// Table selected row count
   int get selectedRowCount {
@@ -293,11 +320,15 @@ class ObjectCtrl extends LComponent {
 
 
 
-  /// Application Action Grid Layout
-  void onAppsActionGridLayout(String value, DRecord record, DEntry entry, var actionVar) {
-    _log.config("onAppsActionGridLayout ${tableName} ${value}");
+  /// Application Action Table Layout
+  void onAppsActionTableLayout(String value, DRecord record, DEntry entry, var actionVar) {
+    _log.config("onAppsActionTableLayout ${tableName} ${value}");
     // edit UI Grid Column seq/active
     // reload table
+  }
+  /// Application Action Compact Layout
+  void onAppsActionCompactLayout(String value, DRecord record, DEntry entry, var actionVar) {
+    _log.config("onAppsActionCompactLayout ${tableName} ${value}");
   }
 
 

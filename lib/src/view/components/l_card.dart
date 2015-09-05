@@ -7,7 +7,7 @@
 part of lightning_dart;
 
 /**
- * Card
+ * Card - container for table, form
  */
 class LCard extends LComponent {
 
@@ -56,7 +56,7 @@ class LCard extends LComponent {
   /**
    * set Header with [label] and optional [icon] and button [group]
    */
-  void setHeader(LIcon icon, String label, {LButtonGroup group}) {
+  void setHeader(LIcon icon, String label, {LComponent action}) {
     _header.children.clear();
     DivElement headerDiv = new DivElement()
       ..classes.addAll([LMedia.C_MEDIA, LMedia.C_MEDIA__CENTER, LGrid.C_HAS_FLEXI_TRUNCATE]);
@@ -78,18 +78,18 @@ class LCard extends LComponent {
       ..text = label;
     hDiv.append(h3);
     // Button
-    if (group != null) {
-      DivElement groupDiv = new DivElement()
+    if (action != null) {
+      DivElement actionDiv = new DivElement()
         ..classes.add(LGrid.C_NO_FLEX);
-      _header.append(groupDiv);
-      groupDiv.append(group.element);
+      _header.append(actionDiv);
+      actionDiv.append(action.element);
     }
   } // setHeader
 
   /**
-   * set Body to [table] (classes set)
+   * add [table] to body (classes set)
    */
-  void setBody(LTable table) {
+  void addTable(LTable table) {
     table.bordered = true;
     table.responsiveStackedHorizontal = true;
     table.element.classes.add(LTable.C_NO_ROW_HOVER);
@@ -97,10 +97,21 @@ class LCard extends LComponent {
     _body.append(table.element);
   } // setBody
 
-  void setBodyForm(LForm form) {
+  /// add [form] to body
+  void addForm(LForm form) {
     form.classes.add(LMargin.C_HORIZONTAL__SMALL);
     _body.append(form.element);
   }
+
+  /// append element
+  void append(Element newValue) {
+    _body.append(newValue);
+  }
+  /// add component
+  void add(LComponent component) {
+    _body.append(component.element);
+  }
+
 
   /**
    * Add to Footer
@@ -113,85 +124,3 @@ class LCard extends LComponent {
   }
 
 } // LCard
-
-
-/**
- * Compact Card
- */
-class LCardCompact extends LCard {
-
-  /// List
-  UListElement _list = new UListElement();
-
-  /**
-   * Compact Card
-   */
-  LCardCompact(String idPrefix)
-      : super(idPrefix) {
-    element.classes.add(LCard.C_CARD__COMPACT);
-    _body.append(_list);
-  }
-
-  /// Ignored
-  @override
-  void setBody(LTable ignored) {
-  }
-
-  /**
-   * Add to the Body
-   */
-  void addBody(LCardCompactEntry entry) {
-    _list.append(entry.element);
-  }
-
-  /// clear body entries
-  void clearBody() {
-    _list.children.clear();
-  }
-
-} // LCardCompact
-
-
-/**
- * Compact Card Entry
- */
-class LCardCompactEntry {
-
-  /// Compact Entry
-  final LIElement element = new LIElement()
-    ..classes.addAll([LTile.C_TILE, LButton.C_HINT_PARENT]);
-
-  /// Detail Tile
-  final LTileDetail _detail = new LTileDetail();
-
-  /**
-   * label - e.g. link
-   * // TODO standard button?
-   */
-  LCardCompactEntry(Element label, LButton button) {
-    DivElement div = new DivElement()
-      ..classes.addAll([LGrid.C_GRID, LGrid.C_GRID__ALIGN_SPREAD, LGrid.C_HAS_FLEXI_TRUNCATE]);
-    element.append(div);
-    ParagraphElement labelPara = new ParagraphElement()
-      ..classes.addAll([LTile.C_TILE__TITLE, LText.C_TRUNCATE]);
-    labelPara.append(label);
-    div.append(labelPara);
-    //
-    if (button != null) {
-      button.classes.addAll([LButton.C_BUTTON__ICON_BORDER_FILLED, LButton.C_BUTTON__ICON__SMALL, LGrid.C_SHRINK_NONE]);
-      button.icon.size = LIcon.C_ICON__SMALL;
-      button.icon.classes.addAll([LButton.C_BUTTON__ICON, LButton.C_BUTTON__ICON__HINT, LButton.C_BUTTON__ICON__SMALL]);
-      div.append(button.element);
-    }
-    //
-    element.append(_detail.element);
-
-  } // LCardCompactEntry
-
-
-  /// Add Card details
-  void addEntry(String label, String value, {bool addColonsToLabel: true})
-    => _detail.addEntry(label, value, addColonsToLabel:addColonsToLabel);
-
-} // LCardCompactEntry
-

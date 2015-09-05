@@ -39,7 +39,7 @@ void main() {
     // The Card
     LCard card = new LCard("exCard")
       ..setHeader(new LIconAction(LIconAction.RECORD), "Sign up for Lightning Dart Updates")
-      ..setBodyForm(form);
+      ..addForm(form);
     // The Page
     PageSimple page = LightningDart.createPageSimple();
     page.add(card);

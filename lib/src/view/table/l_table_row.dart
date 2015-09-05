@@ -117,13 +117,13 @@ class LTableRow {
   }
 
   /// Add Link
-  LTableCell addCellUrv(DRecord record, AppsActionTriggered viewAction) {
+  LTableCell addCellUrv(DRecord record, AppsActionTriggered recordAction) {
     AnchorElement a = new AnchorElement(href: "#${record.urv}")
       ..text = record.drv;
-    if (viewAction != null) {
+    if (recordAction != null) {
       a.onClick.listen((MouseEvent evt) {
         evt.preventDefault();
-        viewAction("view", record, null, null);
+        recordAction("record", record, null, null);
       });
     }
     return addCell(a, LTable.URV, record.urv, null);
@@ -206,14 +206,14 @@ class LTableRow {
   LTableActionCell _actionCell;
 
 
-  /// Set Record
-  void setRecord(DRecord record, int rowNo, {AppsActionTriggered viewAction}) {
+  /// Set Record - [recordAction] click on urv
+  void setRecord(DRecord record, int rowNo, {AppsActionTriggered recordAction}) {
     data.setRecord(record, rowNo);
     for (String name in nameList) {
       if (name == null)
         continue;
       if (name == LTable.URV) {
-        addCellUrv(record, viewAction);
+        addCellUrv(record, recordAction);
       } else {
         String value = data.getValue(name:name);
         String display = value;

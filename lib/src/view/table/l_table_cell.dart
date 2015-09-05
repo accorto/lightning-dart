@@ -72,11 +72,15 @@ class LTableActionCell extends LTableCell {
   /// Add Action
   void addAction(AppsAction action) {
     _actions.add(action);
-    LDropdownItem item = action.asDropdown();
+    LDropdownItem item = action.asDropdown(false);
+    if (row != null)
+      item.reference = row.record;
     dropdown.dropdown.addItem(item);
   }
 
+  /// Dropdown Row Action Change
   void onActionChange(String name, String actionName, DEntry entry, LDropdownItem details) {
+    // see LCardCompact
     AppsAction action = null;
     for (AppsAction aa in _actions) {
       if (aa.value == actionName) {
@@ -84,20 +88,22 @@ class LTableActionCell extends LTableCell {
         break;
       }
     }
-    details.selected = false;
     if (action == null) {
       _log.warning("onActionChange NotFound=${actionName}");
     } else if (action.callback == null) {
       _log.info("onActionChange ${action.value} - no callback");
     } else {
       DRecord record = null;
-      if (row != null && row.record != null) {
+      if (details.reference is DRecord)
+        record = details.reference as DRecord;
+      if (record == null && row != null)
         record = row.record;
+      if (record != null) {
         _log.fine("onActionChange ${action.value} - ${record.urv}");
+        action.callback(action.value, record, null, action.actionVar);
       } else {
-        _log.fine("onActionChange ${action.value}");
+        _log.info("onActionChange ${action.value} - no record");
       }
-      action.callback(action.value, record, null, action.actionVar);
     }
   } // onActionChange
 

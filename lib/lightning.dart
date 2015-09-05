@@ -33,6 +33,8 @@ part 'src/view/components/l_breadcrumb.dart';
 part 'src/view/components/l_button.dart';
 part 'src/view/components/l_button_group.dart';
 part 'src/view/components/l_card.dart';
+part 'src/view/components/l_card_compact.dart';
+part 'src/view/components/l_card_compact_entry.dart';
 part 'src/view/components/l_component.dart';
 part 'src/view/components/l_dropdown.dart';
 part 'src/view/components/l_grid.dart';

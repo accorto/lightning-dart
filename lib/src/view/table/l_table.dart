@@ -63,11 +63,11 @@ class LTable extends LComponent {
   /// Name list by column #
   final List<String> nameList = new List<String>();
 
-  List<AppsAction> _tableActions = new List<AppsAction>();
-  List<AppsAction> _rowActions = new List<AppsAction>();
-
   /// UI Meta Data
   UI _ui;
+  /// Actions
+  List<AppsAction> _tableActions = new List<AppsAction>();
+  List<AppsAction> _rowActions = new List<AppsAction>();
 
   /**
    * Table
@@ -214,15 +214,15 @@ class LTable extends LComponent {
     }
   } // setUi
 
-  /// Set Records
-  void display(List<DRecord> records, {AppsActionTriggered viewAction}) {
+  /// Set Records - [recordAction] click on drv/urv
+  void display(List<DRecord> records, {AppsActionTriggered recordAction}) {
     if (_tbody != null) {
       _tbody.children.clear();
     }
     int i = 0;
     for (DRecord record in records) {
       LTableRow row = addBodyRow(rowValue: record.recordId);
-      row.setRecord(record, i++, viewAction:viewAction);
+      row.setRecord(record, i++, recordAction:recordAction);
     }
   } // display
 

@@ -105,8 +105,15 @@ class AppsAction {
   }
 
   /// as Dropdown Item
-  LDropdownItem asDropdown() {
+  LDropdownItem asDropdown(bool createOnClick) {
     LDropdownItem item = new LDropdownItem(option);
+    if (createOnClick && callback != null) {
+      item.onClick.listen((MouseEvent evt){
+        callback(value, null, null, actionVar);
+        evt.stopImmediatePropagation();
+        evt.preventDefault();
+      });
+    }
     return item;
   }
 

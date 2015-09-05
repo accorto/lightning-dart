@@ -247,6 +247,7 @@ abstract class EditorI {
     // type -- in editor constructor
 
     label = _column.label;
+    placeholder = _column.description;
     help = _column.help;
     hint = null;
 

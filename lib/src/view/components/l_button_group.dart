@@ -53,7 +53,7 @@ class LButtonGroup extends LComponent {
       element.append(button.element);
   }
 
-  /// layout with [showCount] 0 for all
+  /// layout with [showCount] 0 for all -1 for dropdown
   void layout(int showCount) {
     element.children.clear();
     List<LDropdownItem> dropdownItems = new List<LDropdownItem>();

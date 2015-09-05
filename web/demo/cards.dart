@@ -24,7 +24,7 @@ class Cards extends DemoFeature {
     bg.add(new LButton.neutral("btn", "Button"));
     bg.add(new LButton.neutral("add", "Action"));
     bg.layout(1);
-    card.setHeader(new LIconStandard(LIconStandard.CONTACT), "Card Header", group:bg);
+    card.setHeader(new LIconStandard(LIconStandard.CONTACT), "Card Header", action:bg);
 
     LTable table = new LTable("t1", true);
     LTableHeaderRow thead = table.addHeadRow(false);
@@ -39,7 +39,7 @@ class Cards extends DemoFeature {
     tbody.addCellText("First Col #2");
     tbody.addCellText("Second Col #2");
     tbody.addCellText("Third Col #2");
-    card.setBody(table);
+    card.addTable(table);
 
     card.appendFooter(new AnchorElement(href:"#")..text = "Some Link");
     return card;
@@ -67,7 +67,7 @@ class Cards extends DemoFeature {
     tbody.addCellText("First Col #2");
     tbody.addCellText("Second Col #2");
     tbody.addCellText("Third Col #2");
-    card.setBody(table);
+    card.addTable(table);
 
     card.appendFooter(new AnchorElement(href:"#")..text = "Some Link");
     return card;

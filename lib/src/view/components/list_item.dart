@@ -22,6 +22,8 @@ class ListItem extends SelectOption {
   final LIElement element = new LIElement();
   /// The Link
   final AnchorElement a = new AnchorElement(href: "#");
+  /// Reference
+  Object reference = null;
 
   /**
    * List Item from Option (referenceId == href)
