@@ -41,6 +41,10 @@ class LButtonGroup extends LComponent {
     });
   } // LButton
 
+  void set id (String newValue) {
+    element.id = newValue;
+  }
+
   /// add and attach button
   void add(LButton button, {bool append: true}) {
     button.classes.add(inverse ? LButton.C_BUTTON__INVERSE : LButton.C_BUTTON__NEUTRAL);
@@ -63,6 +67,9 @@ class LButtonGroup extends LComponent {
         }
       } else {
         LDropdownItem ddi = new LDropdownItem.fromButton(button);
+        ddi.onClick.listen((Event evt) {
+          button.element.click();
+        });
         dropdownItems.add(ddi);
       }
     }
@@ -71,7 +78,7 @@ class LButtonGroup extends LComponent {
       element.classes.remove(LDropdown.C_DROPDOWN_TRIGGER);
       element.classes.remove(LDropdown.C_CLICK_TO_SHOW);
       element.attributes.remove(Html0.ARIA_HASPOPUP);
-    } else {
+    } else { // dropdown
       element.append(_more.element);
       _more.disabled = false;
       _more.classes.add(C_BUTTON__LAST);

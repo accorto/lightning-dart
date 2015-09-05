@@ -23,6 +23,8 @@ class AppsAction {
   static const String DELETE = "delete";
   static const String DELETE_SELECTED = "deleteSelected";
 
+  static const String LAYOUT = "layout";
+
   static const String YES = "yes";
   static const String NO = "no";
 
@@ -44,11 +46,19 @@ class AppsAction {
     return new AppsAction(EDIT, appsActionEdit(), callback);
   }
 
+  /// Standard Layout Action
+  static AppsAction createLayout(AppsActionTriggered callback) {
+    return new AppsAction(LAYOUT, appsActionLayout(), callback)
+      ..icon = new LIconUtility(LIconUtility.LAYOUT);
+  }
+
+
+
   /// Standard Yes Action
   static AppsAction createYes(AppsActionTriggered callback) {
     return new AppsAction(YES, appsActionYes(), callback);
   }
-  /// Standard Yes Action
+  /// Standard No Action
   static AppsAction createNo(AppsActionTriggered callback) {
     return new AppsAction(NO, appsActionNo(), callback);
   }
@@ -60,6 +70,8 @@ class AppsAction {
   DOption option;
   /// Action Specific Variable
   var actionVar;
+  /// Action Icon
+  LIcon icon;
 
   /// Apps Action from option
   AppsAction.from(DOption this.option, AppsActionTriggered this.callback);
@@ -77,7 +89,7 @@ class AppsAction {
 
   /// as Button - [createClick] to call [callback]
   LButton asButton(bool createOnClick, {DataRecord data, List<String> buttonClasses}) {
-    LButton btn = new LButton(new ButtonElement(), value, label);
+    LButton btn = new LButton(new ButtonElement(), value, label, icon:icon);
     if (buttonClasses != null) {
       btn.classes.addAll(buttonClasses);
     }
@@ -108,6 +120,8 @@ class AppsAction {
   static String appsActionSave() => Intl.message("Save", name: "appsActionSave");
   static String appsActionDelete() => Intl.message("Delete", name: "appsActionDelete");
   static String appsActionDeleteSelected() => Intl.message("Delete Selected", name: "appsActionDeleteSelected");
+
+  static String appsActionLayout() => Intl.message("Layout", name: "appsActionLayout");
 
   static String appsActionYes() => Intl.message("Yes", name: "appsActionYes");
   static String appsActionNo() => Intl.message("No", name: "appsActionNo");

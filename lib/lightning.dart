@@ -66,6 +66,7 @@ part 'src/view/editors/l_editor.dart';
 part 'src/view/editors/l_input.dart';
 part 'src/view/editors/l_input_date.dart';
 part 'src/view/editors/l_input_duration.dart';
+part 'src/view/editors/l_input_search.dart';
 part 'src/view/editors/l_radio.dart';
 part 'src/view/editors/l_select.dart';
 part 'src/view/editors/l_textarea.dart';
@@ -89,6 +90,7 @@ part 'src/view/table/l_table_row.dart';
 
 part 'src/view/home/apps_action.dart';
 part 'src/view/home/l_object_home.dart';
+part 'src/view/home/l_object_home_filter.dart';
 part 'src/view/home/l_record_home.dart';
 part 'src/view/home/l_related_list.dart';
 

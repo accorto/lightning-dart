@@ -431,7 +431,9 @@ class LDropdownElement implements LSelectI {
   }
   bool _selectMode = false;
 
-  /// get value and set new value
+  /**
+   * Click get value and set new value
+   */
   void onItemClick(MouseEvent evt) {
     evt.preventDefault();
     Element telement = evt.target;
@@ -439,13 +441,14 @@ class LDropdownElement implements LSelectI {
     LDropdownItem selectedItem = null;
     for (LDropdownItem item in _items) {
       if (item.value == tvalue) {
-        item.selected = true;
+        if (_selectMode)
+          item.selected = true;
         selectedItem = item;
       } else {
         item.selected = false;
       }
     }
-    _log.finer("${name} = ${selectedItem == null ? "null" : selectedItem.value}");
+    _log.finer("onItemClick ${name} = ${selectedItem == null ? "null" : selectedItem.value}");
     if (editorChange != null) {
       if (selectedItem == null)
         editorChange("", null, null, null);
@@ -518,7 +521,7 @@ class LDropdownItem extends ListItem {
 
   /// create drop-down from button - with left icon!
   LDropdownItem.fromButton(LButton button) : this(button.asDOption(),
-    leftIcon:button.icon == null ? null : button.icon.copy());
+    rightIcon:button.icon == null ? null : button.icon.copy());
 
   /// Lookup Item from Option
   LDropdownItem.fromOption(OptionElement option)

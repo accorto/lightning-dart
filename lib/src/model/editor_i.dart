@@ -181,6 +181,10 @@ abstract class EditorI {
     return contextReplace(newValue);
   }
 
+  String get help;
+  void set help (String newValue);
+  String get hint;
+  void set hint (String newValue);
 
   /// base editor methods
 
@@ -242,27 +246,31 @@ abstract class EditorI {
     // name = column.name; -- in editor constructor
     // type -- in editor constructor
 
-    if (column.hasIsMandatory())
-      required = column.isMandatory;
-    if (column.hasIsReadOnly())
-      readOnly = column.isReadOnly;
+    label = _column.label;
+    help = _column.help;
+    hint = null;
 
-    if (column.hasColumnSize())
-      maxlength = column.columnSize;
-    if (column.hasDefaultValue())
-      defaultValue = column.defaultValue;
+    if (_column.hasIsMandatory())
+      required = _column.isMandatory;
+    if (_column.hasIsReadOnly())
+      readOnly = _column.isReadOnly;
 
-    if (column.hasFormatMask())
-      pattern = column.formatMask;
+    if (_column.hasColumnSize())
+      maxlength = _column.columnSize;
+    if (_column.hasDefaultValue())
+      defaultValue = _column.defaultValue;
+
+    if (_column.hasFormatMask())
+      pattern = _column.formatMask;
 
     // input: min = column.valFrom; max = column.valTo;
     // selects column.pickValueList
 
-    if (newValue.hasParentReference()) {
-      _addDependentOn(EditorIDependent.getParentColumnName(newValue.parentReference));
+    if (_column.hasParentReference()) {
+      _addDependentOn(EditorIDependent.getParentColumnName(_column.parentReference));
     }
-    if (newValue.hasRestrictionSql()) {
-      String sql = newValue.restrictionSql;
+    if (_column.hasRestrictionSql()) {
+      String sql = _column.restrictionSql;
       for (Match m in DataContext._RECORD.allMatches(sql)) {
         // _log.info("${m.input} start=${m.start} end=${m.end} groups=${m.groupCount}");
         String varName = m.input.substring(m.start+7, m.end);

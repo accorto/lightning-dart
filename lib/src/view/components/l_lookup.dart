@@ -148,6 +148,11 @@ class LLookup extends LEditor implements LSelectI {
     super.label = newValue;
     // TODO
   }
+  void set help (String newValue) {}
+  String get help => null;
+  void set hint (String newValue) {}
+  String get hint => null;
+
   /// Small Editor/Label
   void set small (bool newValue){}
 

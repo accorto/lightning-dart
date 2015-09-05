@@ -29,8 +29,9 @@ class LInput extends LEditor with LFormElement {
     input.id = createId(idPrefix, name);
     input.type = type;
     //
+    hint = null;
     _initEditor();
-  }
+  } // LInput
 
   /**
    * Input Editor

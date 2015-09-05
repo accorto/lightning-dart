@@ -55,3 +55,4 @@ part 'src/model/preference.dart';
 part 'src/model/preference_storage.dart';
 part 'src/model/string_tokenizer.dart';
 part 'src/model/tz.dart';
+part 'src/model/ui_util.dart';

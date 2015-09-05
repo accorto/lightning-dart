@@ -188,7 +188,7 @@ class LFormElement {
   String get help => _help;
   void set help (String newValue) {
     _help = newValue;
-
+    // TODO help
   }
   String _help;
 
@@ -206,6 +206,18 @@ class LFormElement {
       _hintSpan.classes.add(LVisibility.C_HIDE);
     } else {
       _hintSpan.classes.remove(LVisibility.C_HIDE);
+    }
+  }
+
+
+  /// set width of control (editor, hint, ..)
+  void set maxWidth (String newValue) {
+    if (_elementControl != null) {
+      if (newValue == null || newValue.isEmpty) {
+        _elementControl.style.removeProperty("maxWidth");
+      } else {
+        _elementControl.style.maxWidth = newValue;
+      }
     }
   }
 

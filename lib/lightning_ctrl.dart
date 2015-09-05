@@ -28,7 +28,10 @@ import 'package:intl/intl.dart';
 import 'lightning.dart';
 export 'lightning.dart';
 
+part 'src/ctrl/form_util.dart';
 part 'src/ctrl/object_ctrl.dart';
+part 'src/ctrl/object_filter.dart';
+part 'src/ctrl/object_filter_row.dart';
 part 'src/ctrl/record_ctrl.dart';
 part 'src/ctrl/record_ctrl_details.dart';
 part 'src/ctrl/record_ctrl_related.dart';
