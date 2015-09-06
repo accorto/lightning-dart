@@ -8,25 +8,64 @@ part of lightning_ctrl;
 
 typedef void FilterUpdated(SavedQuery query);
 
+/**
+ * Filter Dialog
+ */
 class ObjectFilter {
 
   static const String _ID = "o-filter";
+  static final Logger _log = new Logger("ObjectFilter");
 
   /// Modal
   LModal modal = new LModal(_ID);
+
   /// The Form
-  LForm _form = new LForm.stacked("savedQuery", idPrefix:_ID);
+  FormCtrl _form;
 
   final DTable table;
   final SavedQuery savedQuery;
   final FilterUpdated filterUpdated;
 
+  ObjectFilterTable filterTable;
+  ObjectFilterSort sortTable;
 
+  /**
+   * Filter Dialog
+   */
   ObjectFilter(DTable this.table, SavedQuery this.savedQuery, FilterUpdated this.filterUpdated) {
-    modal.setHeader(objectFilter());
+    // Saved Filter
+    _form = new FormCtrl("savedQuery", uiSavedQuery(),
+      element: new DivElement(), idPrefix:_ID);
+    _form.build();
+    modal.addFooterFormButtons(_form);
+    _form.addResetButton().onClick.listen(onReset);
+    _form.onRecordSaved = filterRecordSaved;
+
+    LIcon icon = new LIconUtility(LIconUtility.FILTER);
+    String label = "${objectFilter()}: ${table.label}";
+    if (!savedQuery.hasSavedQueryId())
+      label += " - ${AppsAction.appsActionNew()}";
+    modal.setHeader(label, icon:icon);
+    // Form
     modal.add(_form);
-    FormUtil fu = new FormUtil(_form, uiSavedQuery());
-    fu.build();
+
+    // Filter Rows
+    filterTable = new ObjectFilterTable(savedQuery.filterList, table);
+    modal.add(filterTable);
+    sortTable = new ObjectFilterSort(savedQuery.sortList, table);
+    modal.add(sortTable);
+  } // ObjectFilter
+
+  /// Reset dependents
+  void onReset(Event evt) {
+    filterTable.reset();
+    sortTable.reset();
+  }
+
+
+  void filterRecordSaved(DRecord record) {
+    _log.info("filterRecordSaved ${record}");
+    modal.show = false;
   }
 
 
@@ -47,7 +86,7 @@ class ObjectFilter {
       ..name = "name"
       ..label = "Name"
       ..dataType = DataType.STRING
-      ..uniqueSeqNo = 2
+      ..uniqueSeqNo = 1
       ..displaySeqNo = 1
       ..columnSize = 60
       ..isMandatory = true;

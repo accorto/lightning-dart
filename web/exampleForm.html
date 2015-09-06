@@ -77,11 +77,11 @@ LForm form = new LForm.stacked("mc-embedded-subscribe-form")
     ..label = "Comments")
   ..addResetButton()
   ..addSaveButton(label: "Subscribe", icon: new LIconUtility(LIconUtility.EMAIL));
-form.showDebug(); // adds+shows detail debug info
+form.showTrace(); // adds+shows detail debug info
 // The Card
 LCard card = new LCard("exCard")
   ..setHeader(new LIconAction(LIconAction.RECORD), "Sign up for Lightning Dart Updates")
-  ..setBodyForm(form);
+  ..addForm(form);
 // The Page
 PageSimple page = PageSimple.create();
 page.add(card);

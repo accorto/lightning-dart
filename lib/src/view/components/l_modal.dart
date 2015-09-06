@@ -108,9 +108,13 @@ class LModal extends LComponent {
     header.append(buttonClose.element);
   }
   /// Set header
-  void setHeader(String title, {String tagLine}) {
-    HeadingElement h2 = new HeadingElement.h2()
-      ..text = title;
+  void setHeader(String title, {String tagLine, LIcon icon}) {
+    HeadingElement h2 = new HeadingElement.h2();
+    if (icon != null) {
+      icon.classes.addAll([LIcon.C_ICON_TEXT_DEFAULT, LIcon.C_ICON__SMALL, LMargin.C_RIGHT__SMALL]);
+      h2.append(icon.element);
+    }
+    h2.appendText(title);
     ParagraphElement p;
     if (tagLine != null)
       p = new ParagraphElement()
@@ -213,6 +217,13 @@ class LModal extends LComponent {
     }
   } // setFooterActions
 
+  /// Add Form Buttons to footer
+  void addFooterFormButtons(LForm form) {
+    LButton reset = form.addResetButton();
+    footer.append(reset.element);
+    LButton save = form.addSaveButton();
+    footer.append(save.element);
+  }
 
 
   /// Showing Modal

@@ -36,23 +36,21 @@ class RecordCtrl extends LComponent {
   RecordCtrlDetails _details;
 
   final UI ui;
-  final DataRecord data = new DataRecord(null);
-
 
 
 
   RecordCtrl(UI this.ui) {
     // Structure
     String idPrefix = ui.tableName;
-    _header = new LRecordHome.from(ui, data);
+    _header = new LRecordHome.from(ui);
     element.append(_header.element);
     _breadcrumb = new LBreadcrumb(idPrefix:idPrefix);
     element.append(_breadcrumb.element);
     //
     _leftTab.id = idPrefix + "-tab";
     element.append(_leftTab.element);
-    _related = new RecordCtrlRelated(ui, data);
-    _details = new RecordCtrlDetails(ui, data);
+    _related = new RecordCtrlRelated(ui);
+    _details = new RecordCtrlDetails(ui);
     _leftTab.addTab(lRecordCtrlRelated(), name: "related", content:_related.element);
     _leftTab.addTab(lRecordCtrlDetails(), name: "details", content:_details.element);
     _leftTab.selectTabByPos(1);
@@ -61,10 +59,11 @@ class RecordCtrl extends LComponent {
   } // RecordCtrl
 
 
-  DRecord get record => data.record;
+  DRecord get record => _details.record;
   void set record (DRecord newValue) {
-    data.setRecord(newValue, 0);
-    display();
+    _header.record = newValue;
+    _details.record = newValue;
+    _related.record = newValue;
   } // setData
 
 

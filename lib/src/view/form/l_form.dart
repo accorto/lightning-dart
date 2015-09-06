@@ -9,7 +9,7 @@ part of lightning_dart;
 /**
  * Form with FormElements
  */
-class LForm extends LComponent {
+class LForm extends LComponent implements FormI {
 
   /// slds-form-element - Initializes form element | Required
   static const String C_FORM_ELEMENT = "slds-form-element";
@@ -84,8 +84,13 @@ class LForm extends LComponent {
   /// List of Editors
   final List<LEditor> editors = new List<LEditor>();
 
-  /// Form - type = C_FORM__HORIZONTAL, C_FORM__STACKED, C_FORM__INLINE
-  LForm(Element this.element, String name, String type, {String idPrefix, DataRecord data}) {
+  /// Record Saved
+  RecordSaved onRecordSaved;
+
+  /**
+   * Form - type = C_FORM__HORIZONTAL, C_FORM__STACKED, C_FORM__INLINE
+   */
+  LForm(Element this.element, String name, String type, {String idPrefix}) {
     element.classes.add(type);
     if (element is FormElement) {
       FormElement form = (element as FormElement);
@@ -95,8 +100,7 @@ class LForm extends LComponent {
       form.onReset.listen(onFormReset);
     }
     element.id = LComponent.createId(idPrefix, name);
-    if (data != null)
-      _data = data;
+    _data = new DataRecord(onRecordChange);
   }
 
   LForm.horizontal(String name, {String idPrefix})
@@ -113,7 +117,7 @@ class LForm extends LComponent {
 
   /// Add Editor
   void addEditor (LEditor editor) {
-    editor.editorChange = onEditorChange;
+    editor.editorChange = data.onEditorChange;
     editors.add(editor);
     element.append(editor.element);
     editor.data = _data;
@@ -143,9 +147,9 @@ class LForm extends LComponent {
       (element as FormElement).method = newValue;
   }
 
-  /// Data Container
+  /// Get Data Container
   DataRecord get data => _data;
-  DataRecord _data = new DataRecord(null);
+  DataRecord _data;
 
   /// Data Record
   DRecord get record => _data.record;
@@ -167,24 +171,40 @@ class LForm extends LComponent {
   } // display
 
   /// editor changed
-  void onEditorChange(String name, String newValue, DEntry entry, var details) {
+  void onRecordChange(DRecord record, DEntry columnChanged, int rowNo) {
     bool changed = _data.checkChanged();
-    _log.config("onEditorChange - changed=${changed}");
+    String name = columnChanged == null ? "-" : columnChanged.columnName;
+    _log.config("onRecordChange - ${name} - changed=${changed}");
     if (_buttonSave != null) {
       _buttonSave.disabled = !changed;
     }
-    _debug("change ${name}:");
+    String info = "change ";
+    for (EditorI editor in editors) {
+      if (editor.hasDependentOn) {
+        for (EditorIDependent edDep in editor.dependentOnList) {
+          if (name == edDep.columnName) {
+            _log.config("onRecordChange ${name} dependent: ${edDep.columnName}");
+            editor.onDependentOnChanged(columnChanged);
+            info += "(dependent:${edDep.columnName})";
+          }
+        }
+      }
+    }
+    info += name + ":";
+    _debug(info);
   }
 
 
   /// Add Reset Button
   LButton addResetButton() {
-    _buttonReset = new LButton.neutralIcon("reset", lFormReset(),
+    if (_buttonReset == null) {
+      _buttonReset = new LButton.neutralIcon("reset", lFormReset(),
       new LIconUtility(LIconUtility.UNDO), iconLeft:true)
-      ..typeReset = true;
-    element.append(_buttonReset.element);
-    if (element is! FormElement) {
-      _buttonReset.onClick.listen(onFormReset);
+        ..typeReset = true;
+      element.append(_buttonReset.element);
+      if (element is! FormElement) {
+        _buttonReset.onClick.listen(onFormReset);
+      }
     }
     return _buttonReset;
   }
@@ -192,20 +212,22 @@ class LForm extends LComponent {
 
   /// Add Save Button
   LButton addSaveButton({String label, String name:"save", LIcon icon}) {
-    String theLabel = label;
-    if (theLabel == null)
-      theLabel = lFormSave();
-    LIcon theIcon = icon;
-    if (theIcon == null)
-      theIcon = new LIconUtility(LIconAction.CHECK);
-    theIcon.element.style.setProperty("fill", "white"); // TODO add style
-    //
-    _buttonSave = new LButton.brandIcon(name, theLabel,
+    if (_buttonSave == null) {
+      String theLabel = label;
+      if (theLabel == null)
+        theLabel = lFormSave();
+      LIcon theIcon = icon;
+      if (theIcon == null)
+        theIcon = new LIconUtility(LIconAction.CHECK);
+      theIcon.element.style.setProperty("fill", "white"); // TODO add style
+      //
+      _buttonSave = new LButton.brandIcon(name, theLabel,
       theIcon, iconLeft:true)
-      ..typeSubmit = true;
-    element.append(_buttonSave.element);
-    if (element is! FormElement) {
-      _buttonSave.onClick.listen(onFormSubmit);
+        ..typeSubmit = true;
+      element.append(_buttonSave.element);
+      if (element is! FormElement) {
+        _buttonSave.onClick.listen(onFormSubmit);
+      }
     }
     _buttonSave.disabled = !_data.changed;
     return _buttonSave;
@@ -243,13 +265,13 @@ class LForm extends LComponent {
       }
     }
     _debug("submit valid=${valid}:");
-    if (valid) {
-      String a = action;
-      if (a != null && a.isNotEmpty) {
-        return;  // don't prevent default
-      }
+    String a = action;
+    if (!valid || a == null || a.isEmpty) {
+      evt.preventDefault();
     }
-    evt.preventDefault();
+    if (onRecordSaved != null) {
+      onRecordSaved(record);
+    }
   } // onFormSubmit
 
   /// Layout
@@ -269,25 +291,26 @@ class LForm extends LComponent {
       element.classes.add(newValue);
   }
 
-  // add debug field/info
-  void showDebug() {
+  // add trace field/info
+  void showTrace() {
     if (_debugElement == null) {
       _debugElement = new DivElement()
         ..classes.addAll([LTheme.C_BOX, LMargin.C_TOP__SMALL, LTheme.C_THEME__ALERT_TEXTURE]);
       form.append(_debugElement);
-      _debugElement.text = "Debug Info: Enter your email and press Subscribe to test :-)";
+      _debugElement.text = "Trace: Enter your email and press Subscribe to test :-)";
     }
   }
   void _debug(String info) {
-    if (_debugElement != null) {
-      for (DEntry entity in data.record.entryList) {
-        if (entity.hasValue()) {
-          info += " ${entity.columnName}=${entity.value}";
-        }
+    for (DEntry entity in data.record.entryList) {
+      if (entity.hasValue()) {
+        info += " ${entity.columnName}=${entity.value}";
       }
+    }
+    if (_debugElement == null) {
+      _log.config(info);
+    } else {
       _debugElement.text = info;
     }
-
   }
   DivElement _debugElement;
 

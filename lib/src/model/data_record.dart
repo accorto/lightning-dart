@@ -7,9 +7,9 @@
 part of lightning_model;
 
 /**
- * onRecordChanged Callback when [columnChanged] in [record] at [rowNo] was changed [temporary]
+ * onRecordChanged Callback when [columnChanged] in [record] at [rowNo]
  */
-typedef void RecordChange(DRecord record, DEntry columnChanged, int rowNo, bool temporary);
+typedef void RecordChange(DRecord record, DEntry columnChanged, int rowNo);
 
 /**
  * Callback for automatically submitting forms
@@ -174,7 +174,7 @@ class DataRecord {
   DRecord _record = new DRecord();
   /// row number
   int rowNo = 0;
-  /// callback to data list
+  /// callback to data owner
   RecordChange onRecordChange;
   /// AutoSubmit
   //AutoSubmit onAutoSubmit;
@@ -413,23 +413,23 @@ class DataRecord {
   } // getEntry
 
   /// Get Timezone
-//  TZ getTimezone() {
-//    for (DEntry entry in _record.entryList) {
-//      if (entry.columnName == "Timezone") {
-//        if (entry.value == NULLVALUE)
-//          return null;
-//        String tzName = entry.value;
-//        String alias = TzRef.alias(tzName);
-//        TZ tz = TZ.findTimeZone(alias);
-//        if (tz == null) {
-//          if (alias != tzName)
-//            tz = TZ.findTimeZone(tzName);
-//        }
-//        return tz;
-//      }
-//    }
-//    return null;
-//  } // getTimezone
+  TZ getTimezone() {
+    for (DEntry entry in _record.entryList) {
+      if (entry.columnName == "Timezone") {
+        if (entry.value == NULLVALUE)
+          return null;
+        String tzName = entry.value;
+        String alias = TzRef.alias(tzName);
+        TZ tz = TZ.findTimeZone(alias);
+        if (tz == null) {
+          if (alias != tzName)
+            tz = TZ.findTimeZone(tzName);
+        }
+        return tz;
+      }
+    }
+    return null;
+  } // getTimezone
 
   /**
    * Get Column Statistics by [id] columnId or column [name] (key)
@@ -566,52 +566,24 @@ class DataRecord {
 
   /**
    * Data Record Value Changed - called from EditorI
-   *
-  void onEditorChange(EditorI editor, String newValue, bool temporary) {
-    DEntry dataEntry = getEntry(null, editor.name, true);
-    String valueOriginal = dataEntry.valueOriginal;
+   */
+  void onEditorChange(String name, String newValue, DEntry entry, var details) {
+    String valueOriginal = entry.valueOriginal;
     if (NULLVALUE == valueOriginal)
       valueOriginal = "null";
-    String oldValue = dataEntry.value;
+    String oldValue = entry.value;
     if (NULLVALUE == oldValue)
       oldValue = "null";
-    _log.fine("onEditorChange ${editor.name} rowNo=${rowNo} value=${newValue} old=${oldValue} (orig=${valueOriginal})");
-    setEntryValue(dataEntry, newValue);
-    if (editor.valueRendered) {
-      dataEntry.valueDisplay = editor.valueDisplay;
-    }
+    _log.fine("onEditorChange ${name} rowNo=${rowNo} value=${newValue} old=${oldValue} (orig=${valueOriginal})");
     // data list - controller
     if (onRecordChange != null) {
-      onRecordChange(_record, dataEntry, rowNo, temporary); // data list
+      onRecordChange(_record, entry, rowNo); // data list
     }
-    if (!temporary && onAutoSubmit != null) {
-      onAutoSubmit(editor.name, newValue);
-    }
-  } // onEditorChanged */
+    // if (!temporary && onAutoSubmit != null) {
+    //  onAutoSubmit(editor.name, newValue);
+    //}
 
-  /* Value Changed - direct call
-  void onValueChange(String columnName, String newValue, bool temporary, String newValueDisplay) {
-    DEntry dataEntry = getEntry(null, columnName, true);
-    String valueOriginal = dataEntry.valueOriginal;
-    if (NULLVALUE == valueOriginal)
-      valueOriginal = "null";
-    String oldValue = dataEntry.value;
-    if (NULLVALUE == oldValue)
-      oldValue = "null";
-    _log.fine("onValueChange ${columnName} rowNo=${rowNo} value=${newValue} old=${oldValue} (orig=${valueOriginal})");
-    setEntryValue(dataEntry, newValue);
-    if (newValueDisplay != null) {
-      dataEntry.valueDisplay = newValueDisplay;
-    }
-    // data list - controller
-    if (onRecordChange != null) {
-      onRecordChange(_record, dataEntry, rowNo, temporary); // data list
-    }
-    if (!temporary && onAutoSubmit != null) {
-      onAutoSubmit(columnName, newValue);
-    }
-  } // onValueChanged */
-
+  } // onEditorChanged
 
   /// Table for Record ... or null
   DTable get table {

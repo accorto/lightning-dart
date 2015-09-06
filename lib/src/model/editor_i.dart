@@ -120,6 +120,7 @@ abstract class EditorI {
   String get name;
   /// Input Type or select, textarea
   String get type;
+
   /**
    * String Value
    */
@@ -139,14 +140,6 @@ abstract class EditorI {
   }
 
 
-  /// Replace context in value
-  String contextReplace(String newValue) {
-    if (DataUtil.isNotEmpty(newValue)) {
-      return DataContext.contextReplace(data, newValue,
-        nullResultOk: true, emptyResultOk: true, columnName: name);
-    }
-    return newValue;
-  }
 
   /**
    * Original Value (creates als default value)
@@ -179,6 +172,14 @@ abstract class EditorI {
     if (DataUtil.isEmpty(newValue))
       return "";
     return contextReplace(newValue);
+  }
+  /// Replace context in value
+  String contextReplace(String newValue) {
+    if (DataUtil.isNotEmpty(newValue)) {
+      return DataContext.contextReplace(data, newValue,
+      nullResultOk: true, emptyResultOk: true, columnName: name);
+    }
+    return newValue;
   }
 
   String get help;
@@ -285,32 +286,36 @@ abstract class EditorI {
   bool autoSubmit = false;
 
   /// Editor has columns it is dependent on
-  bool get hasDependentOn => _dependentOns != null;
+  bool get hasDependentOn => _dependentOnList != null;
   /// Add Dependent On Column Name
   void _addDependentOn(String columnName) {
     if (columnName != null && columnName.isNotEmpty) {
-      if (_dependentOns == null)
-        _dependentOns = new List<EditorIDependent>();
+      if (_dependentOnList == null)
+        _dependentOnList = new List<EditorIDependent>();
       bool found = false;
-      for (EditorIDependent dep in _dependentOns) {
+      for (EditorIDependent dep in _dependentOnList) {
         if (dep.columnName == columnName) {
           found = true;
           break;
         }
       }
       if (!found) {
-        _dependentOns.add(new EditorIDependent(columnName));
+        _dependentOnList.add(new EditorIDependent(columnName));
         _log.config("addDependentOn ${name}: ${columnName}");
       }
     }
   }
-  List<EditorIDependent> _dependentOns;
+  List<EditorIDependent> get dependentOnList => _dependentOnList;
+  List<EditorIDependent> _dependentOnList;
 
-  /// a dependent on column value has changed
+  /// notification that dependent changed
+  void onDependentOnChanged(DEntry dependentEntity) {}
+
+  /// check if a a dependent on column value has changed
   bool get dependentOnChanged {
-    if (_dependentOns != null) {
+    if (_dependentOnList != null) {
       bool change = false;
-      for (EditorIDependent dep in _dependentOns) {
+      for (EditorIDependent dep in _dependentOnList) {
         if (dep.isCurrentValueChanged(data)) {
           _log.config("dependentOnChanged ${name}: ${dep.columnName}=${dep.currentValue} from=${dep.lastValue}");
           change = true;
@@ -325,7 +330,7 @@ abstract class EditorI {
   String getRestrictionSql() {
     if (_column != null && _column.hasRestrictionSql()) {
       String sql = _column.restrictionSql;
-      if (_dependentOns != null && data != null) {
+      if (_dependentOnList != null && data != null) {
         return DataContext.contextReplace(data, sql, columnName: name); // not null/empty
       }
       return sql;
@@ -389,8 +394,9 @@ abstract class EditorI {
     doValidate();
     if (data != null && _entry != null) {
       data.updateEntry(_entry, theValue);
-      if (valueRendered)
+      if (valueRendered) {
         _entry.valueDisplay = valueDisplay;
+      }
     }
     if (editorChange != null) {
       editorChange(name, theValue, _entry, null);

@@ -42,6 +42,13 @@ class LTable extends LComponent {
 
   static const String URV = "urv";
 
+  /// Table Edit Mode - Read Only
+  static const String EDIT_RO = "ro";
+  /// Table Edit Mode - Selected Rows
+  static const String EDIT_SEL = "sel";
+  /// Table Edit Mode - All Rows
+  static const String EDIT_ALL = "all";
+
   static final Logger _log = new Logger("LTable");
 
 
@@ -72,7 +79,7 @@ class LTable extends LComponent {
   /**
    * Table
    */
-  LTable(String idPrefix, bool this.rowSelect) {
+  LTable(String idPrefix, {bool this.rowSelect: true}) {
     element.id = idPrefix == null || idPrefix.isEmpty ? LComponent.createId("table", null) : idPrefix;
   }
 
@@ -161,6 +168,18 @@ class LTable extends LComponent {
     // TODO table data sort
   }
 
+
+  /// Table Edit Mode
+  String get editMode => _editMode;
+  /// Set Edit Mode
+  void set editMode (String newValue) {
+    _editMode = newValue;
+    for (LTableRow row in _tbodyRows) {
+      row.editMode = newValue;
+    }
+  }
+  String _editMode = EDIT_RO;
+
   /**
    * Add Table Action - needs to be called before creating header
    */
@@ -182,8 +201,9 @@ class LTable extends LComponent {
   LTableRow addBodyRow({String rowValue}) {
     if (_tbody == null)
       _tbody = element.createTBody();
-    LTableRow row = new LTableRow(_thead.addRow(), _tbodyRows.length, id, rowValue,
+    LTableRow row = new LTableRow(_tbody.addRow(), _tbodyRows.length, id, rowValue,
         LButton.C_HINT_PARENT, rowSelect, nameList, nameLabelMap, LTableRow.TYPE_BODY, _rowActions);
+    row.editMode = _editMode;
     _tbodyRows.add(row);
     return row;
   }
@@ -192,9 +212,9 @@ class LTable extends LComponent {
   LTableRow addFootRow() {
     if (_tfoot == null)
       _tfoot = element.createTFoot();
-    LTableRow row = new LTableRow(_thead.addRow(), _tfootRows.length, id, null,
+    LTableRow row = new LTableRow(_tfoot.addRow(), _tfootRows.length, id, null,
         LButton.C_HINT_PARENT, rowSelect, nameList, nameLabelMap, LTableRow.TYPE_FOOT, null);
-    _tbodyRows.add(row);
+    _tfootRows.add(row);
     return row;
   }
 
@@ -218,6 +238,7 @@ class LTable extends LComponent {
   void display(List<DRecord> records, {AppsActionTriggered recordAction}) {
     if (_tbody != null) {
       _tbody.children.clear();
+      _tbodyRows.clear();
     }
     int i = 0;
     for (DRecord record in records) {

@@ -27,6 +27,10 @@ class LTableRow {
   final Map<String,String> nameLabelMap;
   /// Name list by column #
   final List<String> nameList;
+  /// Data Container
+  final DataRecord data = new DataRecord(null);
+  /// Record Action
+  AppsActionTriggered recordAction;
 
   /**
    * [rowNo] absolute row number 0..x (in type)
@@ -150,6 +154,11 @@ class LTableRow {
     return tc;
   }
 
+  LTableCell addCellEditor(LInput editor) {
+    LTableCell tc = addCell(editor.input, null, null, null);
+    return tc;
+  }
+
   /**
    * with [display] of column [name] with [value]
    * if you not provide the data column [name], it is derived - if found the label is derived (required for responsive)
@@ -209,19 +218,9 @@ class LTableRow {
   /// Set Record - [recordAction] click on urv
   void setRecord(DRecord record, int rowNo, {AppsActionTriggered recordAction}) {
     data.setRecord(record, rowNo);
-    for (String name in nameList) {
-      if (name == null)
-        continue;
-      if (name == LTable.URV) {
-        addCellUrv(record, recordAction);
-      } else {
-        String value = data.getValue(name:name);
-        String display = value;
-        addCellText(display, name:name, value:value);
-      }
-    }
+    this.recordAction = recordAction;
+    display();
   }
-  final DataRecord data = new DataRecord(null);
   /// get record or null if empty
   DRecord get record {
     if (data.isEmpty) {
@@ -229,6 +228,37 @@ class LTableRow {
     }
     return data.record;
   }
+
+  /// (re) display values
+  void display() {
+    for (String name in nameList) {
+      if (name == null)
+        continue;
+      if (name == LTable.URV) {
+        addCellUrv(record, recordAction);
+      } else {
+        String value = data.getValue(name:name);
+        if (_editMode == LTable.EDIT_ALL || (_editMode == LTable.EDIT_SEL && selected)) {
+          LInput editor = new LInput(name, EditorI.TYPE_TEXT);
+          editor.editorChange = data.onEditorChange;
+          editor.data = data;
+          editor.entry = data.getEntry(editor.id, editor.name, true);
+          addCellEditor(editor);
+        } else {
+          String display = value;
+          addCellText(display, name:name, value:value);
+        }
+      }
+    }
+  } // display
+
+  void set editMode (String newValue) {
+    _editMode = newValue;
+    if (record != null) {
+      display();
+    }
+  }
+  String _editMode = LTable.EDIT_RO;
 
 } // LTableRow
 

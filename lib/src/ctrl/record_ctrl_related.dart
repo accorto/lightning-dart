@@ -14,19 +14,21 @@ class RecordCtrlRelated extends LComponent {
   final DivElement element = new DivElement();
 
   final UI ui;
-  final DataRecord data;
 
 
-  RecordCtrlRelated(UI this.ui, DataRecord this.data) {
+  RecordCtrlRelated(UI this.ui) {
 
   }
 
 
-  DRecord get record => data.record;
+  /// Parent Record
+  DRecord get record => _record;
+  /// Parent Record
   void set record (DRecord newValue) {
-    data.setRecord(newValue, 0);
+    _record = newValue;
     display();
   } // setData
+  DRecord _record;
 
   void display() {
   }

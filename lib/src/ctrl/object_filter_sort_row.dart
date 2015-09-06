@@ -6,4 +6,6 @@
 
 part of lightning_ctrl;
 
+class ObjectFilterSortRow {
 
+}

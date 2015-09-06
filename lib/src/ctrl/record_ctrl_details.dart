@@ -12,14 +12,16 @@ part of lightning_ctrl;
 class RecordCtrlDetails extends LForm {
 
 
-  RecordCtrlDetails(UI ui, DataRecord data)
+  RecordCtrlDetails(UI ui)
       : super(new FormElement(), ui.tableName, LForm.C_FORM__STACKED,
-        idPrefix:"details", data:data) {
+        idPrefix:"details") {
 
   } // RecordCtrlDetails
 
 
+  /// The Form Record
   DRecord get record => data.record;
+  /// The Form Record
   void set record (DRecord newValue) {
     data.setRecord(newValue, 0);
     display();

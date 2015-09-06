@@ -189,7 +189,7 @@ class ObjectCtrl extends LComponent {
    * Table
    */
   void _displayTable() {
-    _table = new LTable(id, true)
+    _table = new LTable(id)
       ..bordered = true;
     _table.setUi(ui); // header
     _table.addTableAction(AppsAction.createNew(onAppsActionNew));

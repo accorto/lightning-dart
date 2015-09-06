@@ -18,7 +18,7 @@ class Tables extends DemoFeature {
 
   LComponent get content {
 
-    LTable table = new LTable("t2", true)
+    LTable table = new LTable("t2")
       ..bordered = borderedOption;
     if (responsiveStackedOption)
       table.responsiveStacked = responsiveStackedOption;

@@ -100,10 +100,10 @@ class LTableActionCell extends LTableCell {
         record = row.record;
       if (record != null) {
         _log.fine("onActionChange ${action.value} - ${record.urv}");
-        action.callback(action.value, record, null, action.actionVar);
       } else {
         _log.info("onActionChange ${action.value} - no record");
       }
+      action.callback(action.value, record, null, action.actionVar);
     }
   } // onActionChange
 
