@@ -17,16 +17,29 @@ class Picklists extends DemoFeature {
 
 
   LComponent get content {
-    LForm form = new LForm.stacked("tf");
+    CDiv div = new CDiv();
 
+    LForm form = new LForm.stacked("tf");
     LPicklist pl1 = new LPicklist("pl1");
     pl1.label = "Picklist 1"; // TODO
     pl1.listItems = generateListItems(10, iconLeft: true);
     pl1.value = "item5";
     form.addEditor(pl1);
+    div.add(form);
 
+    div.appendHR();
 
-    return form;
+    List<DOption> options = new List<DOption>()
+      ..add(new DOption()..value = "o1" ..label = "Option 1")
+      ..add(new DOption()..value = "o2" ..label = "Option 2" ..isSelected = true )
+      ..add(new DOption()..value = "o3" ..label = "Option 3" ..isSelected = true );
+    LPicklistMulti multi = new LPicklistMulti()
+      ..label = "Choices"
+      ..options = options;
+
+    div.add(multi);
+
+    return div;
   }
 
   String get source {

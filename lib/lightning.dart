@@ -49,6 +49,8 @@ part 'src/view/components/l_notification.dart';
 part 'src/view/components/l_page.dart';
 part 'src/view/components/l_page_header.dart';
 part 'src/view/components/l_picklist.dart';
+part 'src/view/components/l_picklist_multi.dart';
+part 'src/view/components/l_picklist_quick.dart';
 part 'src/view/components/l_pill.dart';
 part 'src/view/components/l_popover.dart';
 part 'src/view/components/l_scrollable.dart';

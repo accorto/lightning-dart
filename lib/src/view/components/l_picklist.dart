@@ -24,8 +24,14 @@ class LPicklist extends LEditor implements LSelectI {
   static const String C_PICKLIST__DRAGGABLE = "slds-picklist--draggable";
   /// slds-picklist__options - Custom select group of options | Required
   static const String C_PICKLIST__OPTIONS = "slds-picklist__options";
+
+  static const String C_PICKLIST__OPTIONS__MULTI = "slds-picklist__options--multi";
+
   /// slds-picklist__item - Styles for items within the optiongroup | Required
   static const String C_PICKLIST__ITEM = "slds-picklist__item";
+
+  static const String C_PICKLIST__MULTI = "slds-picklist--multi";
+
 
   /// Picklist form element
   final DivElement element = new DivElement()
@@ -219,17 +225,3 @@ class LPicklist extends LEditor implements LSelectI {
   static String lPicklistSelectOption() => Intl.message("Select an Option", name: "lPicklistSelectOption");
 
 } // LPicklist
-
-
-
-class LPicklistMulti {
-
-
-}
-
-
-class LPicklistFind {
-
-
-}
-
