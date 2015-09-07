@@ -46,7 +46,7 @@ class UiUtil {
   }
 
   /// add column
-  void addColumn(DColumn col, {List<String> examples}) {
+  void addColumn(DColumn col, {List<String> examples, String displayLogic}) {
     ui.table.columnList.add(col);
     if (_panel == null)
       addPanel(null);
@@ -56,6 +56,8 @@ class UiUtil {
       ..columnName = col.name;
     if (col.hasColumnId())
       pc.columnId = col.columnId;
+    if (displayLogic != null && displayLogic.isNotEmpty)
+      pc.displayLogic = displayLogic;
     _panel.panelColumnList.add(pc);
 
     UIGridColumn gc = new UIGridColumn()

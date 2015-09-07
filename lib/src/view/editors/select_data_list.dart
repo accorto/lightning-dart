@@ -21,16 +21,26 @@ class SelectDataList {
 
   /// Data List Id
   String get id => element.id;
+  /// dynamic Pick changes
+  bool dynamicPickUpdate = false;
 
 
   /// Add Option
   void add(SelectOption op) {
     element.append(op.asOptionElement());
+    if (op.option.validationList.isNotEmpty) {
+      dynamicPickUpdate = true;
+    //  _addDependentOnValidation(op.option.validationList);
+    }
   }
   /// Add Option List
   void addList(List<SelectOption> list) {
     for (SelectOption op in list) {
       element.append(op.asOptionElement());
+      if (op.option.validationList.isNotEmpty) {
+        dynamicPickUpdate = true;
+      //  _addDependentOnValidation(op.option.validationList);
+      }
     }
   }
   /// Get options
@@ -68,5 +78,6 @@ class SelectDataList {
       element.options.insert(0, new OptionElement()); // optional
     }
   } // required
+
 
 } // SelectDataList

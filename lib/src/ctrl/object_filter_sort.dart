@@ -10,19 +10,12 @@ part of lightning_ctrl;
 /**
  * Sort and Group By Table
  */
-class ObjectFilterSort extends LComponent {
+class ObjectFilterSort extends TableCtrl {
 
   static final Logger _log = new Logger("ObjectFilterSort");
 
-  /// Sorting Element
-  final DivElement element = new DivElement();
-  /// Table
-  LTable _table = new LTable("fs");
-
   /// Provided Sort List
   final List<DSort> sortList;
-  /// Table Sort List
-  final List<DRecord> sortRecordList = new List<DRecord>();
   /// Meta Table
   final DTable objectTable;
 
@@ -30,68 +23,29 @@ class ObjectFilterSort extends LComponent {
   /**
    * Sort and Group By
    */
-  ObjectFilterSort(List<DSort> this.sortList, DTable this.objectTable) {
-    _table.editMode = LTable.EDIT_ALL;
-    _table.addTableAction(AppsAction.createNew(onAppsActionNew));
-    _table.addTableAction(AppsAction.createDeleteSelected(onAppsActionDeleteSelected));
-    _table.addRowAction(AppsAction.createDelete(onAppsActionDelete));
-    element.append(_table.element);
-
-    _table.setUi(uiSort());
-    reset();
+  ObjectFilterSort(List<DSort> this.sortList, DTable this.objectTable)
+    : super(idPrefix: "ofs", rowSelect:false, alwaysOneEmptyLine:true) {
+    element.classes.add(LMargin.C_TOP__SMALL);
   } // ObjectFilterSort
 
   /// Reset
   void reset() {
     _toRecordList();
     _addNewRecord();
-    _table.display(sortRecordList);
-  }
-
-  /// Application Action New
-  void onAppsActionNew(String value, DRecord record, DEntry entry, var actionVar) {
-    _addNewRecord();
-    _log.config("onAppsActionNew ${value}  #${sortRecordList.length}");
-    _table.display(sortRecordList);
+    _table.display(recordList);
   }
 
   /// Add New Record at End
   void _addNewRecord() {
     DRecord rec = new DRecord()
       ..tableName = _TABLENAME;
-    sortRecordList.add(rec);
+    recordList.add(rec);
   }
 
-  /// Application Action Delete
-  void onAppsActionDelete(String value, DRecord record, DEntry entry, var actionVar) {
-    if (record != null) {
-      sortRecordList.remove(record);
-      if (sortRecordList.isEmpty)
-        _addNewRecord();
-      _log.config("onAppsActionDelete ${value}  #${sortRecordList.length}");
-      _table.display(sortRecordList);
-    }
-  }
-
-  /// Application Action Delete Selected Records
-  void onAppsActionDeleteSelected(String value, DRecord record, DEntry entry, var actionVar) {
-    List<DRecord> records = _table.selectedRecords;
-    int count = 0;
-    if (records != null && records.isNotEmpty) {
-      for (DRecord sel in records) {
-        sortRecordList.remove(sel);
-        count++;
-      }
-    }
-    if (sortRecordList.isEmpty)
-      _addNewRecord();
-    _log.config("onAppsActionDeleteSelected ${value} deleted=${count}  #${sortRecordList.length}");
-    _table.display(sortRecordList);
-  }
 
   /// Convert to Records
   void _toRecordList() {
-    sortRecordList.clear();
+    recordList.clear();
     for (DSort sort in sortList) {
       DRecord record = new DRecord()
         ..tableName = _TABLENAME;
@@ -107,7 +61,7 @@ class ObjectFilterSort extends LComponent {
         ..columnName = _COL_GROUP
         ..valueOriginal = sort.isGroupBy.toString()
       );
-      sortRecordList.add(record);
+      recordList.add(record);
     }
   } // toDRecords
 
@@ -115,7 +69,7 @@ class ObjectFilterSort extends LComponent {
   List<DSort> updateSortList() {
     sortList.clear();
     DataRecord dd = new DataRecord(null);
-    for (DRecord record in sortRecordList) {
+    for (DRecord record in recordList) {
       dd.setRecord(record, 0);
       String columnName = dd.getValue(name: _COL_NAME);
       if (columnName == null || columnName.isEmpty)
@@ -140,7 +94,7 @@ class ObjectFilterSort extends LComponent {
   /**
    * Saved Query UI
    */
-  UI uiSort() {
+  UI getUI() {
     UiUtil uiu = new UiUtil(new UI());
     DTable sqTable = new DTable()
       ..name = _TABLENAME
@@ -183,7 +137,6 @@ class ObjectFilterSort extends LComponent {
 
 
   return uiu.ui;
-  } // uiSort
-
+  } // getUI
 
 } // ObjectFilterSort

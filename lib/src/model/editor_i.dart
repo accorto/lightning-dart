@@ -307,8 +307,14 @@ abstract class EditorI {
   }
   List<EditorIDependent> get dependentOnList => _dependentOnList;
   List<EditorIDependent> _dependentOnList;
+  /// Option validation List
+  void addDependentOnValidation(List<DKeyValue> validationList) {
+    for (DKeyValue val in validationList) {
+      _addDependentOn(val.key); // columnName
+    }
+  }
 
-  /// notification that dependent changed
+  /// notification that dependent changed - subclasses to implement
   void onDependentOnChanged(DEntry dependentEntity) {}
 
   /// check if a a dependent on column value has changed

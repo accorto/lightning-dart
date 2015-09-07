@@ -25,6 +25,14 @@ part of lightning_ctrl;
  */
 class RecordCtrl extends LComponent {
 
+  /// Table Edit Mode - Read Only
+  static const String EDIT_RO = "ro";
+  /// Table Edit Mode - Field Click
+  static const String EDIT_FIELD = "field";
+  /// Table Edit Mode - Read/Write
+  static const String EDIT_RW = "rw";
+
+
   /// Record
   Element element = new Element.article();
   /// Header
@@ -38,7 +46,9 @@ class RecordCtrl extends LComponent {
   final UI ui;
 
 
-
+  /**
+   * Record Control
+   */
   RecordCtrl(UI this.ui) {
     // Structure
     String idPrefix = ui.tableName;
@@ -50,7 +60,7 @@ class RecordCtrl extends LComponent {
     _leftTab.id = idPrefix + "-tab";
     element.append(_leftTab.element);
     _related = new RecordCtrlRelated(ui);
-    _details = new RecordCtrlDetails(ui);
+    _details = new RecordCtrlDetails(ui, id);
     _leftTab.addTab(lRecordCtrlRelated(), name: "related", content:_related.element);
     _leftTab.addTab(lRecordCtrlDetails(), name: "details", content:_details.element);
     _leftTab.selectTabByPos(1);
@@ -73,6 +83,13 @@ class RecordCtrl extends LComponent {
     _details.display();
     _related.display();
   }
+
+  String get editMode => _editMode;
+  void set editMode (String newValue) {
+    _editMode = newValue;
+    _details.display();
+  }
+  String _editMode = EDIT_FIELD;
 
 
 

@@ -183,7 +183,7 @@ class LForm extends LComponent implements FormI {
       if (editor.hasDependentOn) {
         for (EditorIDependent edDep in editor.dependentOnList) {
           if (name == edDep.columnName) {
-            _log.config("onRecordChange ${name} dependent: ${edDep.columnName}");
+            _log.fine("onRecordChange ${name} dependent: ${editor.name}");
             editor.onDependentOnChanged(columnChanged);
             info += "(dependent:${edDep.columnName})";
           }
@@ -192,7 +192,7 @@ class LForm extends LComponent implements FormI {
     }
     info += name + ":";
     _debug(info);
-  }
+  } // onRecordChange
 
 
   /// Add Reset Button

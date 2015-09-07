@@ -44,6 +44,8 @@ class LTable extends LComponent {
 
   /// Table Edit Mode - Read Only
   static const String EDIT_RO = "ro";
+  /// Table Edit Mode - Field Click
+  static const String EDIT_FIELD = "field";
   /// Table Edit Mode - Selected Rows
   static const String EDIT_SEL = "sel";
   /// Table Edit Mode - All Rows
@@ -63,7 +65,8 @@ class LTable extends LComponent {
   final List<LTableRow> _tbodyRows = new List<LTableRow>();
   final List<LTableRow> _tfootRows = new List<LTableRow>();
 
-  final bool rowSelect;
+  /// Row Select
+  bool rowSelect = true;
 
   /// Column Name-Label Map - required for responsive
   final Map<String,String> nameLabelMap = new Map<String,String>();
@@ -77,7 +80,7 @@ class LTable extends LComponent {
   /**
    * Table
    */
-  LTable(String idPrefix, {bool this.rowSelect: true}) {
+  LTable(String idPrefix) {
     element.id = idPrefix == null || idPrefix.isEmpty ? LComponent.createId("table", null) : idPrefix;
   }
 

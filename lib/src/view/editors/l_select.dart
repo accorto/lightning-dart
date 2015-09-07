@@ -11,10 +11,14 @@ part of lightning_dart;
  */
 class LSelect extends LEditor with LFormElement implements LSelectI {
 
+  static final Logger _log = new Logger("LSelect");
+
   /// Select Element
   final SelectElement input = new SelectElement();
   /// Editor in Grid
   final bool inGrid;
+  /// all options
+  final List<SelectOption> optionList = new List<SelectOption>();
 
   /**
    * Select Editor
@@ -63,7 +67,12 @@ class LSelect extends LEditor with LFormElement implements LSelectI {
 
   String get value => input.value;
   void set value (String newValue) {
+    validateOptions();
     input.value = newValue;
+  }
+  /// notification that dependent changed
+  void onDependentOnChanged(DEntry dependentEntity) {
+    validateOptions();
   }
 
   String get defaultValue => _defaultValue;
@@ -157,9 +166,13 @@ class LSelect extends LEditor with LFormElement implements LSelectI {
   /// Add Option List
   void set selectOptions(List<SelectOption> list) {
     for (SelectOption op in list) {
+      optionList.add(op);
       input.append(op.asOptionElement());
+      if (op.option.validationList.isNotEmpty) {
+        addDependentOnValidation(op.option.validationList);
+      }
     }
-    required = required; // optional
+    required = required; // handle optional
   }
   /// Get options
   List<OptionElement> get options => input.options;
@@ -168,7 +181,7 @@ class LSelect extends LEditor with LFormElement implements LSelectI {
     for (OptionElement oe in list) {
       input.append(oe);
     }
-    required = required; // optional
+    required = required; // handle optional
   }
   /// Add Option
   void addOption(OptionElement oe) {
@@ -177,7 +190,11 @@ class LSelect extends LEditor with LFormElement implements LSelectI {
 
   /// Add Option
   void addSelectOption(SelectOption op) {
+    optionList.add(op);
     input.append(op.asOptionElement());
+    if (op.option.validationList.isNotEmpty) {
+      addDependentOnValidation(op.option.validationList);
+    }
   }
   /// Add DOption List
   void set dOptions(List<DOption> options) {
@@ -198,6 +215,47 @@ class LSelect extends LEditor with LFormElement implements LSelectI {
   void set listText (List<String> textList) {
     selectOptions = SelectOption.createListFromText(textList);
   }
+
+
+  /**
+   * dis|en/ables options
+   */
+  void validateOptions() {
+    if (data != null && hasDependentOn) {
+      int count = 0;
+      List<OptionElement> options = input.options;
+      for (OptionElement oe in options) {
+        bool valid = _validateOption(oe.value);
+        oe.disabled = !valid;
+        if (valid) {
+          oe.classes.remove(LVisibility.C_HIDE);
+        } else {
+          count++;
+          oe.classes.add(LVisibility.C_HIDE);
+        }
+      }
+      _log.fine("validateOptions disabled=${count} of ${options.length}");
+    }
+  } // isValidOption
+
+  /// Validate option - returns true if valid
+  bool _validateOption(String optionValue) {
+    for (SelectOption so in optionList) {
+      if (so.option.value == optionValue) {
+        if (so.option.validationList.isEmpty) {
+          return true; // no restrictions
+        }
+        for (DKeyValue val in so.option.validationList) {
+          DEntry entry = data.getEntry(null, val.key, false); // key = columnName
+          if (entry != null && val.value == entry.value) {
+            return true; // one is enough - show
+          }
+        }
+        return false; // not in positive list
+      } // found option
+    }
+    return true; // disabled
+  } // validate option
 
 } // LSelect
 

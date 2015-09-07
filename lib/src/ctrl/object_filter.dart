@@ -26,7 +26,7 @@ class ObjectFilter {
   final SavedQuery savedQuery;
   final FilterUpdated filterUpdated;
 
-  ObjectFilterTable filterTable;
+  ObjectFilterFilter filterTable;
   ObjectFilterSort sortTable;
 
   /**
@@ -50,7 +50,7 @@ class ObjectFilter {
     modal.add(_form);
 
     // Filter Rows
-    filterTable = new ObjectFilterTable(savedQuery.filterList, table);
+    filterTable = new ObjectFilterFilter(savedQuery.filterList, table);
     modal.add(filterTable);
     sortTable = new ObjectFilterSort(savedQuery.sortList, table);
     modal.add(sortTable);

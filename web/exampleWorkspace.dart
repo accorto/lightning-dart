@@ -27,13 +27,6 @@ void main() {
     PageSimple page = LightningDart.createPageSimple();
     page.add(ctrl);
 
-    /// Record
-    page.append(new HRElement());
-    RecordCtrl recordCtrl = new RecordCtrl(wbData.ui)
-      ..record = wbData.exampleList.first;
-
-    page.add(recordCtrl);
-
   });
 
 } // main
@@ -86,6 +79,25 @@ class WorbenchData {
       ..displaySeqNo = 2
       ..isMandatory = true;
     uiu.addColumn(col, examples:["Black", "Smith", "Johnson"]);
+
+    col = new DColumn()
+      ..columnId = _nextId()
+      ..name = "First"
+      ..label = "First Contact"
+      ..dataType = DataType.DATE;
+    uiu.addColumn(col, examples:[]);
+
+    col = new DColumn()
+      ..columnId = _nextId()
+      ..name = "Level"
+      ..label = "Level"
+      ..dataType = DataType.PICK;
+    col.pickValueList.add(new DOption()..value ="v" ..label="virtual");
+    col.pickValueList.add(new DOption()..value ="e" ..label="email exchange");
+    col.pickValueList.add(new DOption()..value ="p" ..label="talked on phone");
+    col.pickValueList.add(new DOption()..value ="p" ..label="met in person");
+    col.pickValueList.add(new DOption()..value ="f" ..label="friend");
+    uiu.addColumn(col, examples:[]);
 
     uiu.updateExamples();
   } // WorkbenchData

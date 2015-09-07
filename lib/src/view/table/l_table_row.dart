@@ -9,7 +9,9 @@ part of lightning_dart;
 /**
  * Table Row
  */
-class LTableRow {
+class LTableRow implements FormI {
+
+  static final Logger _log = new Logger("LTableRow");
 
   static const String TYPE_HEAD = "H";
   static const String TYPE_BODY = "B";
@@ -27,12 +29,16 @@ class LTableRow {
   final Map<String,String> nameLabelMap;
   /// Name list by column #
   final List<String> nameList;
-  /// Data Container
-  final DataRecord data = new DataRecord(null);
   /// Record Action
   AppsActionTriggered recordAction;
   /// Meta Data
   final DTable table;
+  /// Data Container
+  DataRecord data;
+  /// Callback when save
+  RecordSaved onRecordSaved;
+  /// Editors
+  List<LEditor> editors;
 
   /**
    * [rowNo] absolute row number 0..x (in type)
@@ -47,6 +53,7 @@ class LTableRow {
     if (idPrefix != null)
       rowElement.id = "${idPrefix}-${type}-${rowNo}";
 
+    data = new DataRecord(onRecordChange);
 
     // Row Select nor created as LTableCell but maintained by row directly
     if (rowSelect) {
@@ -157,8 +164,10 @@ class LTableRow {
   }
 
   LTableCell addCellEditor(LEditor editor) {
-    LTableCell tc = addCell(editor.input, null, null, null, editor.column);
-    return tc;
+    if (editors == null)
+      editors = new List<LEditor>();
+    editors.add(editor);
+    return addCell(editor.input, null, null, null, editor.column);
   }
 
   /**
@@ -288,6 +297,25 @@ class LTableRow {
     }
     return null;
   }
+
+  /// editor changed
+  void onRecordChange(DRecord record, DEntry columnChanged, int rowNo) {
+    bool changed = data.checkChanged();
+    String name = columnChanged == null ? "-" : columnChanged.columnName;
+    _log.config("onRecordChange - ${name} - changed=${changed}");
+    if (editors != null) {
+      for (EditorI editor in editors) {
+        if (editor.hasDependentOn) {
+          for (EditorIDependent edDep in editor.dependentOnList) {
+            if (name == edDep.columnName) {
+              _log.fine("onRecordChange ${name} dependent: ${editor.name}");
+              editor.onDependentOnChanged(columnChanged);
+            }
+          }
+        }
+      } // for all editors
+    }
+  } // onRecordChange
 
 } // LTableRow
 

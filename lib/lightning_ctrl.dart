@@ -31,15 +31,13 @@ export 'lightning.dart';
 
 part 'src/ctrl/form_ctrl.dart';
 part 'src/ctrl/object_ctrl.dart';
+part 'src/ctrl/object_edit.dart';
 part 'src/ctrl/object_filter.dart';
+part 'src/ctrl/object_filter_filter.dart';
 part 'src/ctrl/object_filter_sort.dart';
-part 'src/ctrl/object_filter_sort_row.dart';
-part 'src/ctrl/object_filter_table.dart';
-part 'src/ctrl/object_filter_table_row.dart';
 part 'src/ctrl/record_ctrl.dart';
 part 'src/ctrl/record_ctrl_details.dart';
 part 'src/ctrl/record_ctrl_related.dart';
-
 
 part 'src/ctrl/remote_logger.dart';
 part 'src/ctrl/router.dart';
@@ -47,6 +45,7 @@ part 'src/ctrl/service.dart';
 part 'src/ctrl/service_analytics.dart';
 part 'src/ctrl/service_fk.dart';
 part 'src/ctrl/service_tracker.dart';
+part 'src/ctrl/table_ctrl.dart';
 part 'src/ctrl/timezone.dart';
 
 /**

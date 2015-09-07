@@ -9,13 +9,13 @@ part of lightning_ctrl;
 /**
  * Detail View
  */
-class RecordCtrlDetails extends LForm {
+class RecordCtrlDetails extends FormCtrl {
 
 
-  RecordCtrlDetails(UI ui)
-      : super(new FormElement(), ui.tableName, LForm.C_FORM__STACKED,
-        idPrefix:"details") {
-
+  RecordCtrlDetails(UI ui, String idPrefix)
+      : super(ui.tableName, ui, idPrefix:idPrefix) {
+    build();
+    element.classes.add(LMargin.C_HORIZONTAL__LARGE);
   } // RecordCtrlDetails
 
 

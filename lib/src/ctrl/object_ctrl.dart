@@ -26,18 +26,17 @@ class ObjectCtrl extends LComponent {
 
   /// Object / Table Element
   final Element element = new Element.section();
-
   /// Header
   final LObjectHome _header = new LObjectHome();
-
   /// Content
   final CDiv _content = new CDiv.article();
-
   /// Meta Data
   final UI ui;
-
   /// Actual Data Records
   List<DRecord> _records;
+
+  /// Record Control
+  RecordCtrl recordCtrl;
 
 
   /**
@@ -239,13 +238,18 @@ class ObjectCtrl extends LComponent {
   /// Application Action Record - clicked on urv
   void onAppsActionRecord(String value, DRecord record, DEntry entry, var actionVar) {
     _log.config("onAppsActionRecord ${tableName} ${value} ${record.recordId}");
-    // change to Record Ctrl
-  }
+    _switchRecordCtrl(record, RecordCtrl.EDIT_FIELD);
+  } // onAppsActionRecord
 
   /// Application Action New
   void onAppsActionNew(String value, DRecord record, DEntry entry, var actionVar) {
     _log.config("onAppsActionNew ${tableName} ${value}");
-  }
+    DRecord newRecord = new DataRecord(null).newRecord(ui.table, null);
+    //
+    ObjectEdit oe = new ObjectEdit(ui);
+    oe.setRecord(newRecord, -1);
+    oe.modal.showInElement(element);
+  } // onAppsActionNew
 
   /// Application Action Delete
   void onAppsActionDelete(String value, DRecord record, DEntry entry, var actionVar) {
@@ -315,10 +319,21 @@ class ObjectCtrl extends LComponent {
   /// Application Action Edit
   void onAppsActionEdit(String value, DRecord record, DEntry entry, var actionVar) {
     _log.config("onAppsActionEdit ${tableName} ${value} id=${record.recordId}");
-    // edit record
+    _switchRecordCtrl(record, RecordCtrl.EDIT_RW);
+    // ObjectEdit oe = new ObjectEdit(ui);
+    // oe.setRecord(record, -1);
+    // oe.modal.showInElement(element);
   }
 
-
+  void _switchRecordCtrl(DRecord record, String editMode) {
+    if (recordCtrl == null) {
+      recordCtrl = new RecordCtrl(ui);
+      recordCtrl.element.classes.add(LMargin.C_TOP__X_LARGE);
+      element.parent.append(recordCtrl.element);
+    }
+    recordCtrl.editMode = editMode;
+    recordCtrl.record = record;
+  }
 
   /// Application Action Table Layout
   void onAppsActionTableLayout(String value, DRecord record, DEntry entry, var actionVar) {
