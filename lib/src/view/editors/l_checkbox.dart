@@ -15,11 +15,14 @@ class LCheckbox extends LEditor with LFormElement {
   final InputElement input = new InputElement()
     ..type = "checkbox";
 
+  /// Editor in Grid
+  final bool inGrid;
+
   /**
    * Checkbox
    * (note that if id is not unique, it does not work!)
    */
-  LCheckbox(String name, {String idPrefix}) {
+  LCheckbox(String name, {String idPrefix, bool this.inGrid:false}) {
     createCheckbox(this);
     input.name = name;
     input.id = createId(idPrefix, name);
@@ -29,7 +32,7 @@ class LCheckbox extends LEditor with LFormElement {
   /**
    * Checkbox Editor
    */
-  LCheckbox.from(DColumn column, {String idPrefix, String type}) {
+  LCheckbox.from(DColumn column, {String idPrefix, bool this.inGrid:false}) {
     createCheckbox(this);
     input.name = column.name;
     input.id = createId(idPrefix, name);

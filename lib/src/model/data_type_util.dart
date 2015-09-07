@@ -59,6 +59,11 @@ class DataTypeUtil {
     return dt == DataType.DATA;
   }
 
+  /// is display rendered for data type
+  static bool isDisplayRendered(DataType dt) {
+    return isFk(dt) || isDate(dt) || isPick(dt) || isNumber(dt);
+  }
+
   /// Default Editor width or 0
   static int getEditorWidth(DataType dt) {
     if (dt == DataType.DATE)
@@ -76,7 +81,7 @@ class DataTypeUtil {
 
   /**
    * Get DataType from html input [editorType]
-   * returns TEXT if not found
+   * returns STRING if not found
    */
   static DataType getDataTypeFromEditorType(String editorType) {
     _init();
@@ -84,7 +89,7 @@ class DataTypeUtil {
       if (editorType == dtu.editorType)
         return dtu.dataType;
     }
-    return DataType.TEXT;
+    return DataType.STRING;
   } // getDataTypeFromEditorType
 
   /**
@@ -101,76 +106,18 @@ class DataTypeUtil {
     return null;
   } // getDataType
 
-  static String getInputType (DataType dataType) {
-    // TODO
+  /**
+   * Get Editor Type from [dataType]
+   * returns TYPE_TEXT if not found
+   */
+  static String getEditorType(DataType dataType) {
+    _init();
+    for (DataTypeUtil dtu in _dataTypes) {
+      if (dataType == dtu.dataType)
+        return dtu.editorType;
+    }
     return EditorI.TYPE_TEXT;
-  }
-
-
-  /**
-   * Create Editor for [tableColumn] - fallback string/text
-   * register change notification with [data]
-   * (see also EditorI.create)
-   */
-//  static EditorI createEditor(String name, String idPrefix,
-//      DTable table, DColumn tableColumn, DataRecord data, bool inGrid) {
-//    _init();
-//    DataTypeUtil dtu = getDataTypeUtil(tableColumn.dataType, inGrid);
-//    if (dtu == null) {
-//      dtu = _STRING;
-//    }
-//    EditorI editor = _createEditorStatusAction(name, idPrefix, table, tableColumn, inGrid);
-//    if (editor == null)
-//      editor = dtu._createEditor(name, idPrefix, tableColumn, inGrid);
-//    if (data != null) {
-//      editor.data = data;
-//      editor.editorChange = data.onEditorChange;
-//      editor.editorKeyUp = data.onEditorChange;
-//    }
-//    return editor;
-//  } // createEditor
-  /// Create Editor or StatusAction
-//  static EditorI _createEditorStatusAction(String name, String idPrefix,
-//      DTable table, DColumn column, bool inGrid) {
-//    if (column.name == "TrxStatus") {
-//      EditorStatusAction editor = new EditorStatusAction(name, idPrefix: idPrefix, inGrid: inGrid);
-//      if (column.hasColumnSize())
-//        editor.maxlength = column.columnSize;
-//      if (column.hasDefaultValue())
-//        editor.defaultValue = column.defaultValue;
-//
-//      // selects
-//      if (column.pickValueList.isNotEmpty) {
-//      }
-//      // detail info
-//      editor.table = table;
-//      editor.column = column;
-//      return editor;
-//    } else if (column.name == "TrxAction") {
-//      EditorStatusAction editor = new EditorStatusAction(name, idPrefix: idPrefix, inGrid: inGrid);
-//    }
-//    return null;
-//  }
-
-  /**
-   * Create Editor for [property]
-   * - create range column when [rangeTo]
-   */
-//  static EditorI createEditorProperty(DProperty property, String idPrefix, DataRecord data, bool inGrid, bool rangeTo) {
-//    _init();
-//    DColumn tableColumn = toColumn(property, rangeTo);
-//    DataTypeUtil dtu = getDataTypeUtil(tableColumn.dataType, inGrid);
-//    if (dtu == null)
-//      dtu = _STRING;
-//    //
-//    EditorI editor = dtu._createEditor(tableColumn.name, idPrefix, tableColumn, inGrid);
-//    if (data != null) {
-//      editor.data = data;
-//      editor.editorChange = data.onEditorChange;
-//      editor.editorKeyUp = data.onEditorChange;
-//    }
-//    return editor;
-//  } // createEditorProperty
+  } // getDataTypeFromEditorType
 
 
   /// Table Column from [property]
@@ -249,101 +196,54 @@ class DataTypeUtil {
     if (_dataTypes != null)
       return;
     _dataTypes = new List<DataTypeUtil>();
-    // icons see: Icon0.dataType()
-//    _STRING =      new DataTypeUtil(DataType.STRING,    EditorI.TYPE_TEXT,      EditorInput.ICON_STRING);
-//    _dataTypes.add(_STRING);
-//    _dataTypes.add(new DataTypeUtil(DataType.ADDRESS,   EditorI.TYPE_ADDRESS,   EditorAddress.ICON));
-//    _dataTypes.add(new DataTypeUtil(DataType.AMOUNT,    EditorI.TYPE_DECIMAL,   EditorNumber.ICON_AMOUNT));
-//    _dataTypes.add(new DataTypeUtil(DataType.BOOLEAN,   EditorI.TYPE_CHECKBOX,  "icon-checkmark4"));
-//    _dataTypes.add(new DataTypeUtil(DataType.CODE,      EditorI.TYPE_CODE,      EditorCode.ICON));
-//    _dataTypes.add(new DataTypeUtil(DataType.COLOR,     EditorI.TYPE_COLOR,     "icon-palette"));
-//    _dataTypes.add(new DataTypeUtil(DataType.CURRENCY,  EditorI.TYPE_DECIMAL,   EditorNumber.ICON_CURRENCY));
-//    _dataTypes.add(new DataTypeUtil(DataType.DATA,      EditorI.TYPE_FILE,      EditorFile.ICON_DATA));
-//    _dataTypes.add(new DataTypeUtil(DataType.DATE,      EditorI.TYPE_DATE,      EditorDate.ICON_DATE));
-//    _dataTypes.add(new DataTypeUtil(DataType.DATETIME,  EditorI.TYPE_DATETIME,  EditorDate.ICON_DATETIME));
-//    _dataTypes.add(new DataTypeUtil(DataType.DECIMAL,   EditorI.TYPE_DECIMAL,   EditorNumber.ICON_DECIMAL));
-//    _dataTypes.add(new DataTypeUtil(DataType.DURATION,  EditorI.TYPE_DURATION,  EditorDuration.ICON));
-//    _dataTypes.add(new DataTypeUtil(DataType.EMAIL,     EditorI.TYPE_EMAIL,     "icon-envelop3"));
-//    _dataTypes.add(new DataTypeUtil(DataType.FK,        EditorI.TYPE_FK,        EditorFk.ICON));
-//    _dataTypes.add(new DataTypeUtil(DataType.GEO,       EditorI.TYPE_ADDRESS,   EditorAddress.ICON_GEO));
-//    _dataTypes.add(new DataTypeUtil(DataType.IM,        EditorI.TYPE_EMAIL,     "icon-at-sign"));
-//    _dataTypes.add(new DataTypeUtil(DataType.IMAGE,     EditorI.TYPE_FILE,      EditorFile.ICON_IMAGE));
-//    _dataTypes.add(new DataTypeUtil(DataType.INT,       EditorI.TYPE_NUMBER,    EditorNumber.ICON_INT));
-//    _dataTypes.add(new DataTypeUtil(DataType.NUMBER,    EditorI.TYPE_DECIMAL,   EditorNumber.ICON));
-//    _dataTypes.add(new DataTypeUtil(DataType.PASSWORD,  EditorI.TYPE_PASSWORD,  "icon-key5"));
-//    _dataTypes.add(new DataTypeUtil(DataType.PHONE,     EditorI.TYPE_TEL,       "icon-phone2"));
-//    _dataTypes.add(new DataTypeUtil(DataType.PICK,      EditorI.TYPE_SELECT,    EditorSelect.ICON_PICK));
-//    _dataTypes.add(new DataTypeUtil(DataType.PICKAUTO,  EditorI.TYPE_SELECTAUTO, EditorSelect.ICON_PICKAUTO));
-//    _dataTypes.add(new DataTypeUtil(DataType.PICKCHOICE, EditorI.TYPE_SELECTCHOICE, EditorSelect.ICON_PICKCHOICE));
-//    _dataTypes.add(new DataTypeUtil(DataType.PICKMULTI, EditorI.TYPE_SELECT,    EditorSelect.ICON_PICKMULTI));
-//    _dataTypes.add(new DataTypeUtil(DataType.PICKMULTICHOICE, EditorI.TYPE_SELECTCHOICE, EditorSelect.ICON_PICKMULTICHOICE));
-//    _dataTypes.add(new DataTypeUtil(DataType.QUANTITY,  EditorI.TYPE_DECIMAL,   EditorNumber.ICON_QUANTITY));
-//    _dataTypes.add(new DataTypeUtil(DataType.RATING,    EditorI.TYPE_RANGE,     EditorRange.ICON));
-//    _dataTypes.add(new DataTypeUtil(DataType.TAG,       EditorI.TYPE_TAG,       EditorTag.ICON));
-//    _dataTypes.add(new DataTypeUtil(DataType.TENANT,    EditorI.TYPE_FK,        EditorFk.ICON_TENANT));
-//    _dataTypes.add(new DataTypeUtil(DataType.TEXT,      EditorI.TYPE_TEXTAREA,  EditorTextArea.ICON));
-//    _dataTypes.add(new DataTypeUtil(DataType.TIME,      EditorI.TYPE_TIME,      EditorDate.ICON_TIME));
-//    _dataTypes.add(new DataTypeUtil(DataType.TIMEZONE,  EditorI.TYPE_TIMEZONE,  EditorTimezone.ICON));
-//    _dataTypes.add(new DataTypeUtil(DataType.URL,       EditorI.TYPE_URL,       EditorUrl.ICON));
-//    _dataTypes.add(new DataTypeUtil(DataType.USER,      EditorI.TYPE_FK,        EditorFk.ICON_USER));
+    _STRING =      new DataTypeUtil(DataType.STRING,    EditorI.TYPE_TEXT,      "");
+    _dataTypes.add(_STRING);
+    _dataTypes.add(new DataTypeUtil(DataType.ADDRESS,   EditorI.TYPE_ADDRESS,   ""));
+    _dataTypes.add(new DataTypeUtil(DataType.AMOUNT,    EditorI.TYPE_DECIMAL,   ""));
+    _dataTypes.add(new DataTypeUtil(DataType.BOOLEAN,   EditorI.TYPE_CHECKBOX,  ""));
+    _dataTypes.add(new DataTypeUtil(DataType.CODE,      EditorI.TYPE_CODE,      ""));
+    _dataTypes.add(new DataTypeUtil(DataType.COLOR,     EditorI.TYPE_COLOR,     ""));
+    _dataTypes.add(new DataTypeUtil(DataType.CURRENCY,  EditorI.TYPE_DECIMAL,   ""));
+    _dataTypes.add(new DataTypeUtil(DataType.DATA,      EditorI.TYPE_FILE,      ""));
+    _dataTypes.add(new DataTypeUtil(DataType.DATE,      EditorI.TYPE_DATE,      ""));
+    _dataTypes.add(new DataTypeUtil(DataType.DATETIME,  EditorI.TYPE_DATETIME,  ""));
+    _dataTypes.add(new DataTypeUtil(DataType.DECIMAL,   EditorI.TYPE_DECIMAL,   ""));
+    _dataTypes.add(new DataTypeUtil(DataType.DURATION,  EditorI.TYPE_DURATION,  ""));
+    _dataTypes.add(new DataTypeUtil(DataType.EMAIL,     EditorI.TYPE_EMAIL,     ""));
+    _dataTypes.add(new DataTypeUtil(DataType.FK,        EditorI.TYPE_FK,        ""));
+    _dataTypes.add(new DataTypeUtil(DataType.GEO,       EditorI.TYPE_ADDRESS,   ""));
+    _dataTypes.add(new DataTypeUtil(DataType.IM,        EditorI.TYPE_EMAIL,     ""));
+    _dataTypes.add(new DataTypeUtil(DataType.IMAGE,     EditorI.TYPE_FILE,      ""));
+    _dataTypes.add(new DataTypeUtil(DataType.INT,       EditorI.TYPE_NUMBER,    ""));
+    _dataTypes.add(new DataTypeUtil(DataType.NUMBER,    EditorI.TYPE_DECIMAL,   ""));
+    _dataTypes.add(new DataTypeUtil(DataType.PASSWORD,  EditorI.TYPE_PASSWORD,  ""));
+    _dataTypes.add(new DataTypeUtil(DataType.PHONE,     EditorI.TYPE_TEL,       ""));
+    _dataTypes.add(new DataTypeUtil(DataType.PICK,      EditorI.TYPE_SELECT,    ""));
+    _dataTypes.add(new DataTypeUtil(DataType.PICKAUTO,  EditorI.TYPE_SELECTAUTO, ""));
+    _dataTypes.add(new DataTypeUtil(DataType.PICKCHOICE, EditorI.TYPE_SELECTCHOICE, ""));
+    _dataTypes.add(new DataTypeUtil(DataType.PICKMULTI, EditorI.TYPE_SELECT,    ""));
+    _dataTypes.add(new DataTypeUtil(DataType.PICKMULTICHOICE, EditorI.TYPE_SELECTCHOICE, ""));
+    _dataTypes.add(new DataTypeUtil(DataType.QUANTITY,  EditorI.TYPE_DECIMAL,   ""));
+    _dataTypes.add(new DataTypeUtil(DataType.RATING,    EditorI.TYPE_RANGE,     ""));
+    _dataTypes.add(new DataTypeUtil(DataType.TAG,       EditorI.TYPE_TAG,       ""));
+    _dataTypes.add(new DataTypeUtil(DataType.TENANT,    EditorI.TYPE_FK,        ""));
+    _dataTypes.add(new DataTypeUtil(DataType.TEXT,      EditorI.TYPE_TEXTAREA,  ""));
+    _dataTypes.add(new DataTypeUtil(DataType.TIME,      EditorI.TYPE_TIME,      ""));
+    _dataTypes.add(new DataTypeUtil(DataType.TIMEZONE,  EditorI.TYPE_TIMEZONE,  ""));
+    _dataTypes.add(new DataTypeUtil(DataType.URL,       EditorI.TYPE_URL,       ""));
+    _dataTypes.add(new DataTypeUtil(DataType.USER,      EditorI.TYPE_FK,        ""));
   } // init
   static List<DataTypeUtil> _dataTypes;
-//  static DataTypeUtil _STRING;
+  static DataTypeUtil _STRING;
 
 
   /// Biz Data Type
   final DataType dataType;
   /// Html type +
   final String editorType;
-  /// Icon Class
+  /// Icon
   final String iconClass;
   /// Data Type Util
-  DataTypeUtil(DataType this.dataType, String this.editorType, String this.iconClass) {
-  }
-
-  /**
-   * Create Editor for DataType
-   */
-//  EditorI _createEditor(String name, String idPrefix, DColumn column, bool inGrid) {
-//    DataType dt = column.dataType;
-//    bool multiple = dt == DataType.PICKMULTI || dt == DataType.PICKMULTICHOICE;
-//    EditorI editor = EditorI.create(name, type: editorType, idPrefix: idPrefix, multiple: multiple, inGrid: inGrid);
-//
-//    if (column.hasIsMandatory())
-//      editor.required = column.isMandatory;
-//    if (column.hasIsReadOnly())
-//      editor.readOnly = column.isReadOnly;
-//
-//    if (column.hasColumnSize())
-//      editor.maxlength = column.columnSize;
-//    if (column.hasDefaultValue())
-//      editor.defaultValue = column.defaultValue;
-//
-//    if (column.hasFormatMask())
-//      editor.pattern = column.formatMask;
-//
-//    if (column.hasValFrom() && editor is EditorInput)
-//      editor.min = column.valFrom;
-//    if (column.hasValTo() && editor is EditorInput)
-//      editor.max = column.valTo;
-//
-//    // selects
-//    if (column.pickValueList.isNotEmpty) {
-//      if (editor is EditorDatalist) {
-//        (editor as EditorDatalist).setOptionList(column.pickValueList, column.isMandatory && !multiple);
-//      }
-//      else if (editor is EditorDatalistAuto) {
-//        (editor as EditorDatalistAuto).setOptionList(column.pickValueList);
-//      }
-//      else {
-//        _log.warning("createEditor picklist for ${editor.type}");
-//      //editor.options = column.pickValueList;
-//      }
-//    }
-//
-//    // detail info
-//    editor.column = column;
-//    return editor;
-//  } // create Editor
+  DataTypeUtil(DataType this.dataType, String this.editorType, String this.iconClass);
 
 } // DataTypeUtil

@@ -156,7 +156,7 @@ class ObjectFilterSort extends LComponent {
       ..uniqueSeqNo = 1
       ..displaySeqNo = 1
       ..columnSize = 60
-      ..isMandatory = true;
+      ..isMandatory = false;
     for (DColumn colOption in objectTable.columnList) {
       DOption option = new DOption()
         ..value = colOption.name

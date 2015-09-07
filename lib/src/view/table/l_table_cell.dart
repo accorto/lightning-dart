@@ -13,11 +13,13 @@ class LTableCell {
 
   /// td/th
   final TableCellElement cellElement;
+  /// Meta Data
+  final DColumn column;
 
   /**
    * Table Cell
    */
-  LTableCell(TableCellElement this.cellElement, Element content, String name, String label, String value, String align) {
+  LTableCell(TableCellElement this.cellElement, Element content, String name, String label, String value, String align, DColumn this.column) {
     if (align != null && align.isNotEmpty)
       cellElement.classes.add(align);
 
@@ -30,7 +32,7 @@ class LTableCell {
     cellElement.append(content);
   } // LTableCell
 
-} // TableCell
+} // LTableCell
 
 /**
  * Table Action Cell (head/tbody)
@@ -59,8 +61,8 @@ class LTableActionCell extends LTableCell {
   /**
    * Action Table Cell
    */
-  LTableActionCell(TableCellElement element, LButton button)
-      : super(element, button.element, "action", null, null, null) {
+  LTableActionCell(TableCellElement element, LButton button, DColumn column)
+      : super(element, button.element, "action", null, null, null, column) {
     this.button = button;
     cellElement.classes.add(LTable.C_ROW_ACTION);
     dropdown = new LDropdown(button, button.id,
@@ -120,8 +122,8 @@ class LTableHeaderCell extends LTableCell {
    * Table Header Cell
    */
   LTableHeaderCell(TableCellElement element, Element content, String name, String label, String value, String align,
-        TableSortClicked tableSortClicked)
-    : super(element, content, name, label, value, align) {
+        TableSortClicked tableSortClicked, DColumn column)
+    : super(element, content, name, label, value, align, column) {
     // set before element.attributes["scope"] = "col";
     if (tableSortClicked != null) {
       sortable = true;

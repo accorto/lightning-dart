@@ -13,11 +13,13 @@ class LSelect extends LEditor with LFormElement implements LSelectI {
 
   /// Select Element
   final SelectElement input = new SelectElement();
+  /// Editor in Grid
+  final bool inGrid;
 
   /**
    * Select Editor
    */
-  LSelect(String name, {String idPrefix, bool multiple:false}) {
+  LSelect(String name, {String idPrefix, bool multiple:false, bool this.inGrid:false}) {
     createStandard(this);
     input.name = name;
     input.id = createId(idPrefix, name);
@@ -26,7 +28,7 @@ class LSelect extends LEditor with LFormElement implements LSelectI {
   }
 
   /// Select Editor
-  LSelect.from(DColumn column, {String idPrefix, bool multiple}) {
+  LSelect.from(DColumn column, {String idPrefix, bool multiple, bool this.inGrid:false}) {
     createStandard(this);
     input.name = column.name;
     input.id = createId(idPrefix, name);

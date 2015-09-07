@@ -31,6 +31,8 @@ class LTableRow {
   final DataRecord data = new DataRecord(null);
   /// Record Action
   AppsActionTriggered recordAction;
+  /// Meta Data
+  final DTable table;
 
   /**
    * [rowNo] absolute row number 0..x (in type)
@@ -38,7 +40,7 @@ class LTableRow {
   LTableRow(TableRowElement this.rowElement, int this.rowNo, String idPrefix, String rowValue,
       String cssClass, bool rowSelect,
       List<String> this.nameList, Map<String,String> this.nameLabelMap, String this.type,
-      List<AppsAction> rowActions) {
+      List<AppsAction> rowActions, DTable this.table) {
     rowElement.classes.add(cssClass);
     if (rowValue != null)
       rowElement.attributes[Html0.DATA_VALUE] = rowValue;
@@ -113,11 +115,11 @@ class LTableRow {
    * Add Cell Text
    * with [display] of column [name] with [value]
    */
-  LTableCell addCellText(String display, {String name, String value, String align}) {
+  LTableCell addCellText(String display, {String name, String value, String align, DColumn column}) {
     SpanElement span = new SpanElement()
       ..classes.add(LText.C_TRUNCATE)
       ..text = display == null ? "" : display;
-    return addCell(span, name, value, align);
+    return addCell(span, name, value, align, column);
   }
 
   /// Add Link
@@ -130,16 +132,16 @@ class LTableRow {
         recordAction("record", record, null, null);
       });
     }
-    return addCell(a, LTable.URV, record.urv, null);
+    return addCell(a, LTable.URV, record.urv, null, null);
   }
 
   /**
    * Add Cell Link
    * of column [name] with [value]
    */
-  LTableCell addCellLink(AnchorElement a, {String name, String value, String align}) {
+  LTableCell addCellLink(AnchorElement a, {String name, String value, String align, DColumn column}) {
     a.classes.add(LText.C_TRUNCATE);
-    return addCell(a, name, value, align);
+    return addCell(a, name, value, align, column);
   }
 
   /**
@@ -149,13 +151,13 @@ class LTableRow {
     button.classes.addAll([LButton.C_BUTTON__ICON_BORDER_FILLED, LButton.C_BUTTON__ICON_BORDER_SMALL]);
     button.icon.classes.addAll([LButton.C_BUTTON__ICON, LButton.C_BUTTON__ICON__HINT, LButton.C_BUTTON__ICON__SMALL]);
 
-    LTableCell tc = addCell(button.element, null, null, null);
+    LTableCell tc = addCell(button.element, null, null, null, null);
     tc.cellElement.classes.add(LTable.C_ROW_ACTION);
     return tc;
   }
 
-  LTableCell addCellEditor(LInput editor) {
-    LTableCell tc = addCell(editor.input, null, null, null);
+  LTableCell addCellEditor(LEditor editor) {
+    LTableCell tc = addCell(editor.input, null, null, null, editor.column);
     return tc;
   }
 
@@ -164,7 +166,7 @@ class LTableRow {
    * if you not provide the data column [name], it is derived - if found the label is derived (required for responsive)
    * [align] LText.C_TEXT_CENTER LText.C_TEXT_RIGHT
    */
-  LTableCell addCell(Element content, String name, String value, String align) {
+  LTableCell addCell(Element content, String name, String value, String align, DColumn column) {
     // find column Name
     String theName = name;
     if (theName == null) {
@@ -190,7 +192,7 @@ class LTableRow {
     } else {
       rowElement.insertBefore(tc, _actionCell.cellElement);
     }
-    return new LTableCell(tc, content, theName, label, value, align);
+    return new LTableCell(tc, content, theName, label, value, align, column);
   } // addTableElement
 
   /**
@@ -202,9 +204,9 @@ class LTableRow {
         TableCellElement tc = document.createElement("th")
           ..attributes["scope"] = "col";
         rowElement.append(tc);
-        _actionCell = new LTableActionCell(tc, LTableActionCell.createButton("hdr"));
+        _actionCell = new LTableActionCell(tc, LTableActionCell.createButton("hdr"), null);
       } else {
-        _actionCell = new LTableActionCell(rowElement.addCell(), LTableActionCell.createButton("row"));
+        _actionCell = new LTableActionCell(rowElement.addCell(), LTableActionCell.createButton("row"), null);
       }
       _actionCell.row = this;
     }
@@ -237,20 +239,35 @@ class LTableRow {
       if (name == LTable.URV) {
         addCellUrv(record, recordAction);
       } else {
-        String value = data.getValue(name:name);
+        DColumn column = findColumn(name);
+        DEntry entry = data.getEntry(null, name, false);
         if (_editMode == LTable.EDIT_ALL || (_editMode == LTable.EDIT_SEL && selected)) {
-          LInput editor = new LInput(name, EditorI.TYPE_TEXT);
-          editor.editorChange = data.onEditorChange;
-          editor.data = data;
-          editor.entry = data.getEntry(editor.id, editor.name, true);
+          LEditor editor = EditorUtil.createfromColumn(name, column, data, true, rowElement.id);
           addCellEditor(editor);
         } else {
-          String display = value;
-          addCellText(display, name:name, value:value);
+          String value = DataRecord.getEntryValue(entry);
+          String display = displayRender(column, entry);
+          addCellText(display, name:name, value:value, column:column);
         }
       }
     }
   } // display
+
+  /// Render Value
+  String displayRender(DColumn column, DEntry entry) {
+    if (entry == null)
+      return null;
+    if (entry.hasValueDisplay())
+      return entry.valueDisplay;
+    String value = DataRecord.getEntryValue(entry);
+    if (column != null && value != null && value.isNotEmpty) {
+      if (DataTypeUtil.isDisplayRendered(column.dataType)) {
+        // todo render
+      }
+    }
+    return value;
+  }
+
 
   void set editMode (String newValue) {
     _editMode = newValue;
@@ -259,6 +276,18 @@ class LTableRow {
     }
   }
   String _editMode = LTable.EDIT_RO;
+
+
+  /// find column by name or null
+  DColumn findColumn(String name) {
+    if (table != null && name != null) {
+      for (DColumn col in table.columnList) {
+        if (col.name == name)
+          return col;
+      }
+    }
+    return null;
+  }
 
 } // LTableRow
 
@@ -277,16 +306,16 @@ class LTableHeaderRow extends LTableRow {
   LTableHeaderRow(TableRowElement element, int rowNo, String idPrefix,
       String cssClass, bool rowSelect,
       List<String> nameList, Map<String,String> nameLabelMap,
-      this.tableSortClicked, List<AppsAction> tableActions)
+      this.tableSortClicked, List<AppsAction> tableActions, DTable table)
     : super (element, rowNo, idPrefix, null, cssClass, rowSelect, nameList, nameLabelMap,
-        LTableRow.TYPE_HEAD, tableActions);
+        LTableRow.TYPE_HEAD, tableActions, table);
 
   /**
    * Add Cell with Header Text
    * with [label] of column [name] with optional [value]
    * - name/label are used for responsive
    */
-  LTableHeaderCell addHeaderCell(String name, String label, {String value, String align}) {
+  LTableHeaderCell addHeaderCell(String name, String label, {String value, String align, DColumn column}) {
     SpanElement span = new SpanElement()
       ..classes.add(LText.C_TRUNCATE)
       ..text = label == null ? "" : label;
@@ -306,7 +335,10 @@ class LTableHeaderRow extends LTableRow {
     } else {
       rowElement.insertBefore(tc, _actionCell.cellElement);
     }
-    return new LTableHeaderCell(tc, span, name, label, value, align, tableSortClicked);
+    if (column == null) {
+      column = findColumn(name);
+    }
+    return new LTableHeaderCell(tc, span, name, label, value, align, tableSortClicked, column);
   } // addHeaderCell
 
 
@@ -314,7 +346,7 @@ class LTableHeaderRow extends LTableRow {
    * Add Grid Column
    */
   void addGridColumn(UIGridColumn gc) {
-    addHeaderCell(gc.column.name, gc.column.label);
+    addHeaderCell(gc.column.name, gc.column.label, column:gc.column);
   }
 
 

@@ -446,7 +446,7 @@ class DataRecord {
   /**
    * Get value (original) of entry
    */
-  String getEntryValue(DEntry dataEntry) {
+  static String getEntryValue(DEntry dataEntry) {
     if (dataEntry != null) {
       String value = null;
       if (dataEntry.hasValue())

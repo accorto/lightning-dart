@@ -13,18 +13,20 @@ class LTextArea extends LEditor with LFormElement {
 
   /// Input Element
   final TextAreaElement input = new TextAreaElement();
+  /// Grid
+  final bool inGrid;
 
   /**
    * Text Area Input
    */
-  LTextArea(String name, {String idPrefix}) {
+  LTextArea(String name, {String idPrefix, bool this.inGrid:false}) {
     createStandard(this);
     input.name = name;
     input.id = createId(idPrefix, name);
     _initEditor();
   }
 
-  LTextArea.from(DColumn column, {String idPrefix}) {
+  LTextArea.from(DColumn column, {String idPrefix, bool this.inGrid:false}) {
     createStandard(this);
     input.name = column.name;
     input.id = createId(idPrefix, name);
@@ -34,6 +36,18 @@ class LTextArea extends LEditor with LFormElement {
   }
 
   void _initEditor() {
+    if (inGrid) {
+      rows = 1;
+      input.onFocus.listen((Event evt){
+        rows = 3;
+      });
+      input.onBlur.listen((Event evt){
+        rows = 1;
+      });
+    } else {
+      rows = 3;
+    }
+
     /// Changes
     input.onChange.listen(onInputChange);
     input.onKeyUp.listen(onInputKeyUp);
@@ -49,7 +63,7 @@ class LTextArea extends LEditor with LFormElement {
 
 
   int get rows => input.rows;
-  void set rowd (int newValue) {
+  void set rows (int newValue) {
     input.rows = newValue;
   }
 

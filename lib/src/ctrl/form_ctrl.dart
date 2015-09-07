@@ -31,8 +31,8 @@ class FormCtrl extends LForm {
     for (UIPanel panel in ui.panelList) {
       for (UIPanelColumn pc in panel.panelColumnList) {
 
-        LInput inp = new LInput.from(pc.column, idPrefix:id);
-        addEditor(inp);
+        LEditor editor = EditorUtil.createfromColumn(null, pc.column, data, false, element.id);
+        addEditor(editor);
       }
     }
     addResetButton();

@@ -9,13 +9,13 @@ part of lightning_dart;
 class LInputDuration extends LInput {
 
   /**
-   *
+   * Duration
    */
-  LInputDuration(String name, String type, {String idPrefix}) : super(name, type, idPrefix:idPrefix) {
-  }
+  LInputDuration(String name, {String idPrefix, bool inGrid:false})
+    : super(name, EditorI.TYPE_DURATION, idPrefix:idPrefix, inGrid:inGrid);
 
-  LInputDuration.from(DColumn column, {String idPrefix, String type}) :super.from(column, idPrefix:idPrefix, type:type) {
-  }
+  LInputDuration.from(DColumn column, {String idPrefix, bool inGrid:false})
+    : super.from(column, EditorI.TYPE_DURATION, idPrefix:idPrefix, inGrid:inGrid);
 
   /**
    * Value

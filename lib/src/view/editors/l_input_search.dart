@@ -16,10 +16,12 @@ class LInputSearch extends LInput {
 
 
   /// Search Input
-  LInputSearch(String name, {String idPrefix}) : super(name, EditorI.TYPE_SEARCH, idPrefix:idPrefix);
+  LInputSearch(String name, {String idPrefix, bool inGrid:false})
+    : super(name, EditorI.TYPE_SEARCH, idPrefix:idPrefix, inGrid:inGrid);
 
   /// Search Input
-  LInputSearch.from(DColumn column, {String idPrefix}) :super.from(column, idPrefix:idPrefix, type:EditorI.TYPE_SEARCH);
+  LInputSearch.from(DColumn column, {String idPrefix, bool inGrid:false})
+    : super.from(column, EditorI.TYPE_SEARCH, idPrefix:idPrefix, inGrid:inGrid);
 
   @override
   LIcon getIconRight() => _iconRight;

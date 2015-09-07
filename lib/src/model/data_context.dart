@@ -205,9 +205,8 @@ class DataContext {
    */
   static List<DKeyValue> asContext(DRecord record, int windowNo) {
     List<DKeyValue> context = new List<DKeyValue>();
-    DataRecord data = new DataRecord(null, value: record);
     for (DEntry ee in record.entryList) {
-      String value = data.getEntryValue(ee);
+      String value = DataRecord.getEntryValue(ee);
       if (value != null && value.isNotEmpty) {
         context.add(new DKeyValue()
             ..key = "${windowNo}|${ee.columnName}"

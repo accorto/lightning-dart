@@ -54,8 +54,11 @@ class LDatepicker extends LInputDate {
   /**
    * Date Input
    */
-  LDatepicker(String name, {String idPrefix})
-    : super(name, EditorI.TYPE_TEXT, idPrefix:idPrefix);
+  LDatepicker(String name, {String idPrefix, bool inGrid:false})
+    : super(name, type:EditorI.TYPE_TEXT, idPrefix:idPrefix, inGrid:inGrid);
+
+  LDatepicker.from(DColumn column, String type, {String idPrefix, bool inGrid:false})
+    : super.from(column, type, idPrefix:idPrefix, inGrid:inGrid);
 
   @override
   void _initEditor() {

@@ -70,8 +70,6 @@ class LTable extends LComponent {
   /// Name list by column #
   final List<String> nameList = new List<String>();
 
-  /// UI Meta Data
-  UI _ui;
   /// Actions
   List<AppsAction> _tableActions = new List<AppsAction>();
   List<AppsAction> _rowActions = new List<AppsAction>();
@@ -144,7 +142,7 @@ class LTable extends LComponent {
     if (primary) {
       row = new LTableHeaderRow(_thead.addRow(), _theadRows.length, id,
         LText.C_TEXT_HEADING__LABEL, rowSelect, nameList, nameLabelMap,
-        enableSort ? onTableSortClicked : null, _tableActions);
+        enableSort ? onTableSortClicked : null, _tableActions, table);
       if (rowSelect && _theadRows.isEmpty) {
         row.selectCb.onClick.listen((MouseEvent evt) {
           selectAll(row.selectCb.checked);
@@ -152,7 +150,7 @@ class LTable extends LComponent {
       }
     } else {
       row = new LTableRow(_thead.addRow(), _tbodyRows.length, id, null,
-        LText.C_TEXT_HEADING__LABEL, rowSelect, nameList, nameLabelMap, LTableRow.TYPE_HEAD, null);
+        LText.C_TEXT_HEADING__LABEL, rowSelect, nameList, nameLabelMap, LTableRow.TYPE_HEAD, null, table);
     }
     _theadRows.add(row);
     // add urv
@@ -202,7 +200,7 @@ class LTable extends LComponent {
     if (_tbody == null)
       _tbody = element.createTBody();
     LTableRow row = new LTableRow(_tbody.addRow(), _tbodyRows.length, id, rowValue,
-        LButton.C_HINT_PARENT, rowSelect, nameList, nameLabelMap, LTableRow.TYPE_BODY, _rowActions);
+        LButton.C_HINT_PARENT, rowSelect, nameList, nameLabelMap, LTableRow.TYPE_BODY, _rowActions, table);
     row.editMode = _editMode;
     _tbodyRows.add(row);
     return row;
@@ -213,7 +211,7 @@ class LTable extends LComponent {
     if (_tfoot == null)
       _tfoot = element.createTFoot();
     LTableRow row = new LTableRow(_tfoot.addRow(), _tfootRows.length, id, null,
-        LButton.C_HINT_PARENT, rowSelect, nameList, nameLabelMap, LTableRow.TYPE_FOOT, null);
+        LButton.C_HINT_PARENT, rowSelect, nameList, nameLabelMap, LTableRow.TYPE_FOOT, null, table);
     _tfootRows.add(row);
     return row;
   }
@@ -233,6 +231,11 @@ class LTable extends LComponent {
       hdr.addGridColumn(gc);
     }
   } // setUi
+  /// UI Meta Data
+  UI _ui;
+  /// Table Meta Data
+  DTable get table => _ui == null ? null : _ui.table;
+
 
   /// Set Records - [recordAction] click on drv/urv
   void display(List<DRecord> records, {AppsActionTriggered recordAction}) {

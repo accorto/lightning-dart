@@ -410,7 +410,7 @@ abstract class EditorI {
       String newValue = null;
       if (data != null) {
         data.resetEntry(entry);
-        newValue = data.getEntryValue(entry);
+        newValue = DataRecord.getEntryValue(entry);
       }
       if (newValue == null || newValue.isEmpty) {
         newValue = defaultValue;

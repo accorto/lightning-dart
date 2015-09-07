@@ -26,11 +26,13 @@ class LInputDate extends LInput {
   /**
    * Date Editor
    */
-  LInputDate(String name, String type, {String idPrefix}) : super(name, type, idPrefix:idPrefix) {
+  LInputDate(String name, {String type:EditorI.TYPE_DATE, String idPrefix, bool inGrid:false})
+      : super(name, type, idPrefix:idPrefix, inGrid:inGrid) {
     _initDate(type);
   }
 
-  LInputDate.from(DColumn column, {String idPrefix, String type}) :super.from(column, idPrefix:idPrefix, type:type) {
+  LInputDate.from(DColumn column, String type, {String idPrefix, bool inGrid:false})
+      : super.from(column, type, idPrefix:idPrefix, inGrid:inGrid) {
     _initDate(type);
   }
 

@@ -19,11 +19,13 @@ class LInput extends LEditor with LFormElement {
 
   /// html5 Mode (date, number)
   bool html5 = ClientEnv.html5; // default
+  /// Editor in Grid
+  final bool inGrid;
 
   /**
    * Input Editor
    */
-  LInput(String name, String type, {String idPrefix}) {
+  LInput(String name, String type, {String idPrefix, bool this.inGrid:false}) {
     createStandard(this);
     input.name = name;
     input.id = createId(idPrefix, name);
@@ -36,20 +38,13 @@ class LInput extends LEditor with LFormElement {
   /**
    * Input Editor
    */
-  LInput.from(DColumn column, {String idPrefix, String type}) {
+  LInput.from(DColumn column, String type, {String idPrefix, bool this.inGrid:false}) {
     createStandard(this);
     input.name = column.name;
     input.id = createId(idPrefix, name);
-    if (type != null && type.isEmpty) // override
-      input.type = type;
-    else
-      input.type = DataTypeUtil.getInputType(column.dataType);
-    //
+    input.type = type;
+
     this.column = column; // base values
-    if (column.hasValFrom())
-      min = column.valFrom;
-    if (column.hasValTo())
-      max = column.valTo;
     _initEditor();
   } // LInput
 
@@ -86,6 +81,16 @@ class LInput extends LEditor with LFormElement {
   String get value => input.value;
   void set value (String newValue) {
     input.value = newValue;
+  }
+
+  /// Set Column (input min/max)
+  void set column (DColumn newValue) {
+    super.column = newValue;
+
+    if (column.hasValFrom())
+      min = column.valFrom;
+   if (column.hasValTo())
+      max = column.valTo;
   }
 
   String get defaultValue => input.defaultValue;
