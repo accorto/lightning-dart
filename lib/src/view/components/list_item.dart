@@ -140,6 +140,15 @@ class ListItem extends SelectOption {
       element.classes.remove(LDropdown.C_HAS_ICON__LEFT);
   }
 
+  /// Left icon (e.g. for selection)
+  bool get hasIconRight => element.classes.contains(LDropdown.C_HAS_ICON__RIGHT);
+  void set hasIconRight (bool newValue) {
+    if (newValue || _leftIcon != null)
+      element.classes.add(LDropdown.C_HAS_ICON__RIGHT);
+    else
+      element.classes.remove(LDropdown.C_HAS_ICON__RIGHT);
+  }
+
   /// Right Icon (usually selected check)
   LIcon get rightIcon => _rightIcon;
   /// Right Icon
@@ -149,7 +158,7 @@ class ListItem extends SelectOption {
       _rightIcon.size = LIcon.C_ICON__SMALL;
       _rightIcon.classes.addAll([LIcon.C_ICON, LDropdown.C_ICON__RIGHT]);
     }
-    // hasIconRight = rightIcon != null;
+    hasIconRight = rightIcon != null;
     _rebuild(null);
   }
   LIcon _rightIcon;

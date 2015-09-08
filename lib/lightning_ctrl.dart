@@ -46,6 +46,7 @@ part 'src/ctrl/service_analytics.dart';
 part 'src/ctrl/service_fk.dart';
 part 'src/ctrl/service_tracker.dart';
 part 'src/ctrl/table_ctrl.dart';
+part 'src/ctrl/table_layout.dart';
 part 'src/ctrl/timezone.dart';
 
 /**

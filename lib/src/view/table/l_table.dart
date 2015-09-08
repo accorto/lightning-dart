@@ -65,8 +65,6 @@ class LTable extends LComponent {
   final List<LTableRow> _tbodyRows = new List<LTableRow>();
   final List<LTableRow> _tfootRows = new List<LTableRow>();
 
-  /// Row Select
-  bool rowSelect = true;
 
   /// Column Name-Label Map - required for responsive
   final Map<String,String> nameLabelMap = new Map<String,String>();
@@ -82,11 +80,13 @@ class LTable extends LComponent {
   /// Record action (click on drv)
   AppsActionTriggered recordAction;
 
+  /// Row Select
+  final bool optionRowSelect;
 
   /**
    * Table
    */
-  LTable(String idPrefix) {
+  LTable(String idPrefix, {bool this.optionRowSelect:true}) {
     element.id = idPrefix == null || idPrefix.isEmpty ? LComponent.createId("table", null) : idPrefix;
   }
 
@@ -150,16 +150,16 @@ class LTable extends LComponent {
     LTableHeaderRow row = null;
     if (primary) {
       row = new LTableHeaderRow(_thead.addRow(), _theadRows.length, id,
-        LText.C_TEXT_HEADING__LABEL, rowSelect, nameList, nameLabelMap,
+        LText.C_TEXT_HEADING__LABEL, optionRowSelect, nameList, nameLabelMap,
         enableSort ? onTableSortClicked : null, _tableActions, table);
-      if (rowSelect && _theadRows.isEmpty) {
+      if (optionRowSelect && _theadRows.isEmpty) {
         row.selectCb.onClick.listen((MouseEvent evt) {
           selectAll(row.selectCb.checked);
         });
       }
     } else {
       row = new LTableRow(_thead.addRow(), _tbodyRows.length, id, null,
-        LText.C_TEXT_HEADING__LABEL, rowSelect, nameList, nameLabelMap, LTableRow.TYPE_HEAD, null, table);
+        LText.C_TEXT_HEADING__LABEL, optionRowSelect, nameList, nameLabelMap, LTableRow.TYPE_HEAD, null, table);
     }
     _theadRows.add(row);
     // add urv
@@ -209,7 +209,7 @@ class LTable extends LComponent {
     if (_tbody == null)
       _tbody = element.createTBody();
     LTableRow row = new LTableRow(_tbody.addRow(), _tbodyRows.length, id, rowValue,
-        LButton.C_HINT_PARENT, rowSelect, nameList, nameLabelMap, LTableRow.TYPE_BODY, _rowActions, table);
+        LButton.C_HINT_PARENT, optionRowSelect, nameList, nameLabelMap, LTableRow.TYPE_BODY, _rowActions, table);
     row.editMode = _editMode;
     _tbodyRows.add(row);
     return row;
@@ -220,7 +220,7 @@ class LTable extends LComponent {
     if (_tfoot == null)
       _tfoot = element.createTFoot();
     LTableRow row = new LTableRow(_tfoot.addRow(), _tfootRows.length, id, null,
-        LButton.C_HINT_PARENT, rowSelect, nameList, nameLabelMap, LTableRow.TYPE_FOOT, null, table);
+        LButton.C_HINT_PARENT, optionRowSelect, nameList, nameLabelMap, LTableRow.TYPE_FOOT, null, table);
     _tfootRows.add(row);
     return row;
   }
@@ -237,9 +237,25 @@ class LTable extends LComponent {
     _ui = ui;
     LTableHeaderRow hdr = addHeadRow(true);
     for (UIGridColumn gc in ui.gridColumnList) {
-      hdr.addGridColumn(gc);
+      if (gc.isActive) {
+        hdr.addGridColumn(gc);
+      }
     }
   } // setUi
+  /// Reset Table Structure
+  void resetStructure() {
+    element.children.clear();
+    _thead = null;
+    _tbody = null;
+    _tfoot = null;
+    //
+    _theadRows.clear();
+    _tbodyRows.clear();
+    _tfootRows.clear();
+    //
+    nameLabelMap.clear();
+    nameList.clear();
+  }
   /// UI Meta Data
   UI _ui;
   /// Table Meta Data

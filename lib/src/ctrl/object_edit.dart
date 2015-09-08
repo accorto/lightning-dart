@@ -21,7 +21,7 @@ class ObjectEdit {
   LModal modal = new LModal(_ID);
   /// The Form
   FormCtrl form;
-
+  /// Base UI
   final UI ui;
   /// Callback when save
   RecordSaved recordSaved;

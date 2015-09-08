@@ -16,6 +16,10 @@ abstract class TableCtrl extends LTable {
 
   static final Logger _log = new Logger("TableCtrl");
 
+
+  final bool optionCreateNew;
+  final bool optionLayout;
+  final bool optionEdit;
   /// always one empty line
   final bool alwaysOneEmptyLine;
   /// Callback when save
@@ -30,28 +34,41 @@ abstract class TableCtrl extends LTable {
    * - provide [appsActionNewCallback] to overwrite creating new row (inline)
    */
   TableCtrl({String idPrefix,
-      bool rowSelect:true,
+      bool this.optionCreateNew:true,
+      bool optionRowSelect:true,
+      bool this.optionLayout:true,
+      bool this.optionEdit:true,
       String editMode: LTable.EDIT_ALL,
       bool this.alwaysOneEmptyLine:false})
-    : super(idPrefix) {
-    this.rowSelect = rowSelect;
+    : super(idPrefix, optionRowSelect:optionRowSelect) {
     this.editMode = editMode;
-    addTableAction(AppsAction.createNew(onAppsActionNew));
-    if (rowSelect)
-      addTableAction(AppsAction.createDeleteSelected(onAppsActionDeleteSelected));
-    addTableAction(AppsAction.createLayout(onAppsActionTableLayout));
     //
-    addRowAction(AppsAction.createEdit(onAppsActionEdit));
-    addRowAction(AppsAction.createDelete(onAppsActionDelete));
-
+    addActions();
     setUi(ui);
-    reset();
+    //
+    resetContent();
   } // ObjectTable
+
+  /// Add Table/Row Actions
+  void addActions() {
+    // Table Actions
+    if (optionCreateNew)
+      addTableAction(AppsAction.createNew(onAppsActionNew));
+    if (optionRowSelect)
+      addTableAction(AppsAction.createDeleteSelected(onAppsActionDeleteSelected));
+    if (optionLayout)
+      addTableAction(AppsAction.createLayout(onAppsActionTableLayout));
+    //
+    if (optionEdit && editMode != LTable.EDIT_RO)
+      addRowAction(AppsAction.createEdit(onAppsActionEdit));
+    if (editMode != LTable.EDIT_RO)
+      addRowAction(AppsAction.createDelete(onAppsActionDelete));
+  }
 
   String get tableName => ui.tableName;
 
-  /// Reset
-  void reset() {
+  /// Reset Content
+  void resetContent() {
     recordList.clear(); // override
     if (alwaysOneEmptyLine)
       addNewRecord();
@@ -177,9 +194,30 @@ abstract class TableCtrl extends LTable {
   /// Application Action Table Layout
   void onAppsActionTableLayout(String value, DRecord record, DEntry entry, var actionVar) {
     _log.config("onAppsActionTableLayout ${ui.tableName} ${value}");
-    // edit UI Grid Column seq/active
-    // reload table
+    TableLayout layout = new TableLayout(ui, onAppsActionTableLayoutUpdated);
+    layout.modal.showInComponent(this);
   }
+  void onAppsActionTableLayoutUpdated() {
+    _log.config("onAppsActionTableLayoutUpdated ${ui.tableName}");
+    resetStructure();
+    setUi(ui);
+    // TODO save ui
+    display();
+  }
+
+
+  void onAppsActionTableUp(String value, DRecord record, DEntry entry, var actionVar) {
+    // TODO sequence
+    onAppsActionSequence();
+    display();
+  }
+  void onAppsActionTableDown(String value, DRecord record, DEntry entry, var actionVar) {
+    onAppsActionSequence();
+    display();
+  }
+  /// notify subclass
+  void onAppsActionSequence() {}
+
 
 
   // delete confirmation
@@ -204,11 +242,15 @@ class TableCtrlUi extends TableCtrl {
    * Table Controller
    */
   TableCtrlUi(UI this.ui, {String idPrefix,
-      bool rowSelect:true,
-      String editMode: LTable.EDIT_RO,
-      bool alwaysOneEmptyLine:false,
-      AppsActionTriggered appsActionNewCallback})
-    : super(idPrefix:idPrefix, rowSelect:rowSelect, editMode:editMode,
-      alwaysOneEmptyLine:alwaysOneEmptyLine);
+      bool optionCreateNew:true,
+      bool optionRowSelect:true,
+      bool optionLayout:true,
+      bool optionEdit:true,
+      String editMode: LTable.EDIT_FIELD,
+      bool alwaysOneEmptyLine:false})
+    : super(idPrefix:idPrefix,
+        optionCreateNew:optionCreateNew, optionRowSelect:optionRowSelect,
+        optionLayout:optionLayout, optionEdit:optionEdit,
+        editMode:editMode, alwaysOneEmptyLine:alwaysOneEmptyLine);
 
 } // TableCtrlUi

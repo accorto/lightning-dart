@@ -128,16 +128,16 @@ class LPicklistMulti extends LComponent {
   /// Get Options
   List<DOption> get options {
     List<DOption> options = new List<DOption>();
-    for (DOption option in _rightItems) {
-      setOptionSelected(option, false);
-      option.clearSeqNo();
-      options.add(option);
+    for (LPicklistMultiItem item in _leftItems) {
+      setOptionSelected(item.option, false);
+      item.option.clearSeqNo();
+      options.add(item.option);
     }
     int seqNo = 1;
-    for (DOption option in _leftItems) {
-      setOptionSelected(option, true);
-      option.seqNo = (seqNo++ * 10);
-      options.add(option);
+    for (LPicklistMultiItem item in _rightItems) {
+      setOptionSelected(item.option, true);
+      item.option.seqNo = (seqNo++ * 10);
+      options.add(item.option);
     }
     return options;
   } // getOptions

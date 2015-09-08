@@ -25,25 +25,32 @@ class AppsAction {
 
   static const String LAYOUT = "layout";
 
+  static const String UP = "up";
+  static const String DOWN = "down";
+
   static const String YES = "yes";
   static const String NO = "no";
 
 
   /// Standard New Action
   static AppsAction createNew(AppsActionTriggered callback) {
-    return new AppsAction(NEW, appsActionNew(), callback);
+    return new AppsAction(NEW, appsActionNew(), callback)
+      ..icon = new LIconUtility(LIconUtility.NEW);
   }
   /// Standard Delete Action
   static AppsAction createDelete(AppsActionTriggered callback) {
-    return new AppsAction(DELETE, appsActionDelete(), callback);
+    return new AppsAction(DELETE, appsActionDelete(), callback)
+      ..icon = new LIconUtility(LIconUtility.DELETE);
   }
   /// Standard Delete Selected Action
   static AppsAction createDeleteSelected(AppsActionTriggered callback) {
-    return new AppsAction(DELETE_SELECTED, appsActionDeleteSelected(), callback);
+    return new AppsAction(DELETE_SELECTED, appsActionDeleteSelected(), callback)
+      ..icon = new LIconUtility(LIconUtility.DELETE);
   }
   /// Standard Edit Action
   static AppsAction createEdit(AppsActionTriggered callback) {
-    return new AppsAction(EDIT, appsActionEdit(), callback);
+    return new AppsAction(EDIT, appsActionEdit(), callback)
+      ..icon = new LIconUtility(LIconUtility.EDIT);
   }
 
   /// Standard Layout Action
@@ -52,15 +59,27 @@ class AppsAction {
       ..icon = new LIconUtility(LIconUtility.LAYOUT);
   }
 
+  /// Standard Seq Action
+  static AppsAction createUp(AppsActionTriggered callback) {
+    return new AppsAction(UP, appsActionUp(), callback)
+      ..icon = new LIconUtility(LIconUtility.UP);
+  }
+  /// Standard Seq Action
+  static AppsAction createDown(AppsActionTriggered callback) {
+    return new AppsAction(DOWN, appsActionDown(), callback)
+      ..icon = new LIconUtility(LIconUtility.DOWN);
+  }
 
 
   /// Standard Yes Action
   static AppsAction createYes(AppsActionTriggered callback) {
-    return new AppsAction(YES, appsActionYes(), callback);
+    return new AppsAction(YES, appsActionYes(), callback)
+      ..icon = new LIconUtility(LIconUtility.SUCCESS);
   }
   /// Standard No Action
   static AppsAction createNo(AppsActionTriggered callback) {
-    return new AppsAction(NO, appsActionNo(), callback);
+    return new AppsAction(NO, appsActionNo(), callback)
+      ..icon = new LIconUtility(LIconUtility.CLEAR);
   }
 
 
@@ -106,7 +125,7 @@ class AppsAction {
 
   /// as Dropdown Item
   LDropdownItem asDropdown(bool createOnClick) {
-    LDropdownItem item = new LDropdownItem(option);
+    LDropdownItem item = new LDropdownItem(option, rightIcon:icon.copy());
     if (createOnClick && callback != null) {
       item.onClick.listen((MouseEvent evt){
         callback(value, null, null, actionVar);
@@ -129,6 +148,9 @@ class AppsAction {
   static String appsActionDeleteSelected() => Intl.message("Delete Selected", name: "appsActionDeleteSelected");
 
   static String appsActionLayout() => Intl.message("Layout", name: "appsActionLayout");
+
+  static String appsActionUp() => Intl.message("Up", name: "appsActionUp");
+  static String appsActionDown() => Intl.message("Down", name: "appsActionDown");
 
   static String appsActionYes() => Intl.message("Yes", name: "appsActionYes");
   static String appsActionNo() => Intl.message("No", name: "appsActionNo");

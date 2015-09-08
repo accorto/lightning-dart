@@ -37,6 +37,7 @@ class ObjectFilter {
     _form = new FormCtrl("savedQuery", uiSavedQuery(),
       element: new DivElement(), idPrefix:_ID);
     _form.build();
+    modal.large = true;
     modal.addFooterFormButtons(_form);
     _form.addResetButton().onClick.listen(onReset);
     _form.recordSaved = filterRecordSaved;
@@ -70,6 +71,15 @@ class ObjectFilter {
   }
 
 
+  static const String _TABLENAME = "SavedQuery";
+  static const String _COL_NAME = "name";
+  static const String _COL_DESCRIPTION = "description";
+  static const String _COL_SHARING = "sharing";
+//  ..a(5, 'userId', GeneratedMessage.OS)
+//  ..a(6, 'isDefault', GeneratedMessage.OB)
+  static const String _COL_SQLWHERE = "sqlWhere";
+  static const String _COL_FILTERLOGIC = "filterLogic";
+
 
   /**
    * Saved Query UI
@@ -77,14 +87,14 @@ class ObjectFilter {
   static UI uiSavedQuery() {
     UiUtil uiu = new UiUtil(new UI());
     DTable sqTable = new DTable()
-      ..name = "SavedQuery"
+      ..name = _TABLENAME
       ..label = objectFilter();
     uiu.setTable(sqTable);
     uiu.addPanel(null);
 
-    // Columns
+    // Column Name
     DColumn col = new DColumn()
-      ..name = "name"
+      ..name = _COL_NAME
       ..label = "Name"
       ..dataType = DataType.STRING
       ..uniqueSeqNo = 1
@@ -93,14 +103,44 @@ class ObjectFilter {
       ..isMandatory = true;
     uiu.addColumn(col);
 
-    // Columns
+    // Column Description
     col = new DColumn()
-      ..name = "description"
+      ..name = _COL_DESCRIPTION
       ..label = "Description"
       ..dataType = DataType.STRING
-      ..columnSize = 255
-      ..isMandatory = false;
+      ..columnSize = 255;
     uiu.addColumn(col);
+
+    // Column Sharing
+    col = new DColumn()
+      ..name = _COL_SHARING
+      ..label = "Sharing"
+      ..dataType = DataType.PICK
+      ..isMandatory = true;
+    col.pickValueList.add(new DOption()..value = "s-" ..label = "Shared Filter");
+    col.pickValueList.add(new DOption()..value = "sd" ..label = "Shared Filter (Default)");
+    col.pickValueList.add(new DOption()..value = "p-" ..label = "Private Filter");
+    col.pickValueList.add(new DOption()..value = "pd" ..label = "Private Filter (Default)");
+    uiu.addColumn(col);
+
+    // Column Where
+    col = new DColumn()
+      ..name = _COL_SQLWHERE
+      ..label = "Direct SQL Where clause"
+      ..dataType = DataType.STRING
+      ..columnSize = 255;
+    uiu.addColumn(col);
+
+    // Column Filter Logic
+    col = new DColumn()
+      ..name = _COL_FILTERLOGIC
+      ..label = "Filter Logic"
+      ..help = "hint: all filter have AND conditions, unless specified, e.g. (1 OR 2) AND 3"
+      ..dataType = DataType.STRING
+      ..columnSize = 255;
+    uiu.addColumn(col);
+
+
 
 
     return uiu.ui;

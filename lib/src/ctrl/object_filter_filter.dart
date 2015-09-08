@@ -24,9 +24,17 @@ class ObjectFilterFilter extends TableCtrl {
    * Filter
    */
   ObjectFilterFilter(List<DFilter> this.filterList, DTable this.objectTable)
-      : super(idPrefix: "off", rowSelect:false, alwaysOneEmptyLine:true) {
+      : super(idPrefix: "off", optionRowSelect:false, optionLayout:false, optionEdit:false, alwaysOneEmptyLine:true) {
     element.classes.add(LMargin.C_TOP__SMALL);
+
   } // ObjectFilterFilter
+
+  /// Add Table/Row Actions
+  void addActions() {
+    super.addActions();
+    addRowAction(AppsAction.createUp(onAppsActionTableUp));
+    addRowAction(AppsAction.createDown(onAppsActionTableDown));
+  }
 
   /// Reset
   void reset() {
@@ -36,11 +44,21 @@ class ObjectFilterFilter extends TableCtrl {
   }
 
   /// Add New Record at End
-//  void addNewRecord() {
-//    DRecord rec = new DRecord()
-//      ..tableName = _TABLENAME;
-//    recordList.add(rec);
-//  }
+  DRecord addNewRecord() {
+    DRecord rec = super.addNewRecord();
+    rec.drv = recordList.length.toString();
+    return rec;
+  }
+
+  /// Sorting
+  void onAppsActionSequence() {
+    int seqNo = 1;
+    for (DRecord record in recordList) {
+      record.drv = seqNo.toString();
+      seqNo++;
+    }
+  }
+
 
   /// Convert to Records
   void _toRecordList() {

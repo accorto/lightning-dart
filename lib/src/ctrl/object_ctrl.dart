@@ -188,8 +188,7 @@ class ObjectCtrl extends LComponent {
    * Table
    */
   void _displayTable() {
-    _table = new TableCtrlUi(ui, idPrefix:id, editMode:LTable.EDIT_FIELD,
-          appsActionNewCallback:onAppsActionNew)
+    _table = new TableCtrlUi(ui, idPrefix:id, editMode:LTable.EDIT_FIELD)
       ..bordered = true;
     _table.recordSaved = onRecordSaved;
     _table.recordDeleted = onRecordDeleted;
@@ -265,20 +264,20 @@ class ObjectCtrl extends LComponent {
   /// Record Deleted (from table)
   String onRecordDeleted(DRecord record) {
     _log.config("onRecordDeleted ${tableName}");
+    // TODO delete
     _records.remove(record);
     _display();
-    // TODO delete
     return null;
   }
 
   /// Records Deleted (from table)
   String onRecordsDeleted(List<DRecord> records) {
     _log.config("onRecordsDeleted ${tableName}");
+    // TODO delete
     for (DRecord record in records) {
       _records.remove(record);
     }
     _display();
-    // TODO delete
     return null;
   }
 

@@ -24,9 +24,17 @@ class ObjectFilterSort extends TableCtrl {
    * Sort and Group By
    */
   ObjectFilterSort(List<DSort> this.sortList, DTable this.objectTable)
-    : super(idPrefix: "ofs", rowSelect:false, alwaysOneEmptyLine:true) {
+    : super(idPrefix: "ofs", optionRowSelect:false, optionLayout:false, optionEdit:false, alwaysOneEmptyLine:true) {
     element.classes.add(LMargin.C_TOP__SMALL);
   } // ObjectFilterSort
+
+  /// Add Table/Row Actions
+  void addActions() {
+    super.addActions();
+    addRowAction(AppsAction.createUp(onAppsActionTableUp));
+    addRowAction(AppsAction.createDown(onAppsActionTableDown));
+  }
+
 
   /// Reset
   void reset() {
@@ -36,12 +44,20 @@ class ObjectFilterSort extends TableCtrl {
   }
 
   /// Add New Record at End
-//  void addNewRecord() {
-//    DRecord rec = new DRecord()
-//      ..tableName = _TABLENAME;
-//    recordList.add(rec);
-//  }
+  DRecord addNewRecord() {
+    DRecord rec = super.addNewRecord();
+    rec.drv = recordList.length.toString();
+    return rec;
+  }
 
+  /// Sorting
+  void onAppsActionSequence() {
+    int seqNo = 1;
+    for (DRecord record in recordList) {
+      record.drv = seqNo.toString();
+      seqNo++;
+    }
+  }
 
   /// Convert to Records
   void _toRecordList() {

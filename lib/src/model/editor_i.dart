@@ -249,8 +249,12 @@ abstract class EditorI {
 
     label = _column.label;
     placeholder = _column.description;
-    help = _column.help;
-    hint = null;
+    String helpText = _column.help;
+    if (helpText != null && helpText.startsWith("hint:")) {
+      hint = helpText.substring(5).trim();
+    } else {
+      help = helpText;
+    }
 
     if (_column.hasIsMandatory())
       required = _column.isMandatory;
