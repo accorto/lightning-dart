@@ -31,16 +31,16 @@ class ObjectFilterFilter extends TableCtrl {
   /// Reset
   void reset() {
     _toRecordList();
-    _addNewRecord();
-    _table.display(recordList);
+    addNewRecord();
+    display();
   }
 
   /// Add New Record at End
-  void _addNewRecord() {
-    DRecord rec = new DRecord()
-      ..tableName = _TABLENAME;
-    recordList.add(rec);
-  }
+//  void addNewRecord() {
+//    DRecord rec = new DRecord()
+//      ..tableName = _TABLENAME;
+//    recordList.add(rec);
+//  }
 
   /// Convert to Records
   void _toRecordList() {
@@ -99,18 +99,18 @@ class ObjectFilterFilter extends TableCtrl {
   static const String _TABLENAME = "DSort";
   static const String _COL_NAME = "columnName";
   static const String _COL_OP = "operation";
-  static const String _COL_OP_DATE = "operationDate";
-  static const String _COL_DT = "dataType";
+//  static const String _COL_OP_DATE = "operationDate";
+//  static const String _COL_DT = "dataType";
   static const String _COL_VALUE = "filterValue";
   static const String _COL_VALUE_TO = "filterValueTo";
   static const String _COL_IN = "filterIn";
-  static const String _COL_RO = "isReadOnly";
-  static const String _COL_DIRECT = "filterDirectQuery";
+//  static const String _COL_RO = "isReadOnly";
+//  static const String _COL_DIRECT = "filterDirectQuery";
 
   /**
    * Saved Query UI
    */
-  UI getUI() {
+  UI get ui {
     UiUtil uiu = new UiUtil(new UI());
     DTable sqTable = new DTable()
       ..name = _TABLENAME
@@ -278,10 +278,3 @@ class ObjectFilterFilter extends TableCtrl {
 
 } // ObjectFilterFilter
 
-
-class ObjectFilterOp {
-
-
-
-
-}

@@ -5,8 +5,6 @@
  */
 
 
-import "dart:html";
-
 //import "package:lightning/lightning.dart";
 import "package:lightning/lightning_ctrl.dart";
 

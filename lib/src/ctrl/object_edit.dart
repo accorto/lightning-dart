@@ -20,21 +20,25 @@ class ObjectEdit {
   /// Modal
   LModal modal = new LModal(_ID);
   /// The Form
-  FormCtrl _form;
+  FormCtrl form;
 
   final UI ui;
+  /// Callback when save
+  RecordSaved recordSaved;
 
   /**
    * New|Edit Dialog
    */
   ObjectEdit(UI this.ui) {
-    _form = new FormCtrl(ui.table.name, ui,
+    form = new FormCtrl(ui.table.name, ui,
       element: new DivElement(), idPrefix:_ID);
-    _form.build();
-    modal.addFooterFormButtons(_form);
+    form.build();
+    form.recordSaved = onFormRecordSaved;
+    modal.addFooterFormButtons(form);
     // _form.addResetButton().onClick.listen(onReset);
     // _form.onRecordSaved = filterRecordSaved;
-    modal.add(_form);
+    modal.add(form);
+
   } // ObjectEdit
 
   /// set Record
@@ -44,7 +48,17 @@ class ObjectEdit {
     else
       modal.setHeader("${objectEditNew()} ${ui.table.label}");
     //
-    _form.setRecord(record, rowNo);
+    form.setRecord(record, rowNo);
+  }
+
+  /// close Modal
+  String onFormRecordSaved(DRecord record) {
+    String error = null;
+    if (recordSaved != null) {
+      error = recordSaved(record);
+    }
+    modal.show = error != null;
+    return null;
   }
 
 

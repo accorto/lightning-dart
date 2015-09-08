@@ -77,6 +77,12 @@ class LTable extends LComponent {
   List<AppsAction> _tableActions = new List<AppsAction>();
   List<AppsAction> _rowActions = new List<AppsAction>();
 
+  /// Record Sort List
+  final List<DRecord> recordList = new List<DRecord>();
+  /// Record action (click on drv)
+  AppsActionTriggered recordAction;
+
+
   /**
    * Table
    */
@@ -241,13 +247,21 @@ class LTable extends LComponent {
 
 
   /// Set Records - [recordAction] click on drv/urv
-  void display(List<DRecord> records, {AppsActionTriggered recordAction}) {
+  void setRecords(List<DRecord> records, {AppsActionTriggered recordAction}) {
+    recordList.clear();
+    recordList.addAll(records);
+    this.recordAction = recordAction;
+    display();
+  }
+
+  /// Display Records
+  void display() {
     if (_tbody != null) {
       _tbody.children.clear();
       _tbodyRows.clear();
     }
     int i = 0;
-    for (DRecord record in records) {
+    for (DRecord record in recordList) {
       LTableRow row = addBodyRow(rowValue: record.recordId);
       row.setRecord(record, i++, recordAction:recordAction);
     }

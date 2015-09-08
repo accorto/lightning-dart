@@ -188,19 +188,16 @@ class ObjectCtrl extends LComponent {
    * Table
    */
   void _displayTable() {
-    _table = new LTable(id)
+    _table = new TableCtrlUi(ui, idPrefix:id, editMode:LTable.EDIT_FIELD,
+          appsActionNewCallback:onAppsActionNew)
       ..bordered = true;
-    _table.setUi(ui); // header
-    _table.addTableAction(AppsAction.createNew(onAppsActionNew));
-    _table.addTableAction(AppsAction.createDeleteSelected(onAppsActionDeleteSelected));
-    _table.addTableAction(AppsAction.createLayout(onAppsActionTableLayout));
-
-    _table.addRowAction(AppsAction.createEdit(onAppsActionEdit));
-    _table.addRowAction(AppsAction.createDelete(onAppsActionDelete));
-    _table.display(_records, recordAction:onAppsActionRecord); // urv click
+    _table.recordSaved = onRecordSaved;
+    _table.recordDeleted = onRecordDeleted;
+    _table.recordsDeleted = onRecordsDeleted;
+    _table.setRecords(_records, recordAction:onAppsActionRecord); // urv click
     _content.add(_table);
   } // displayTable
-  LTable _table;
+  TableCtrl _table;
 
   /**
    * Compact
@@ -241,21 +238,55 @@ class ObjectCtrl extends LComponent {
     _switchRecordCtrl(record, RecordCtrl.EDIT_FIELD);
   } // onAppsActionRecord
 
-  /// Application Action New
+  /// Application Action New (if not table)
   void onAppsActionNew(String value, DRecord record, DEntry entry, var actionVar) {
     _log.config("onAppsActionNew ${tableName} ${value}");
     DRecord newRecord = new DataRecord(null).newRecord(ui.table, null);
     //
     ObjectEdit oe = new ObjectEdit(ui);
     oe.setRecord(newRecord, -1);
+    oe.recordSaved = onRecordSaved;
     oe.modal.showInElement(element);
   } // onAppsActionNew
 
+  /// Record Saved (from new/table)
+  String onRecordSaved(DRecord record) {
+    _log.config("onRecordSaved ${tableName}");
+    if (record.hasRecordId()) {
+      // TODO update
+    } else {
+      // TODO save
+      _records.add(record);
+    }
+    _display();
+    return null;
+  }
+
+  /// Record Deleted (from table)
+  String onRecordDeleted(DRecord record) {
+    _log.config("onRecordDeleted ${tableName}");
+    _records.remove(record);
+    _display();
+    // TODO delete
+    return null;
+  }
+
+  /// Records Deleted (from table)
+  String onRecordsDeleted(List<DRecord> records) {
+    _log.config("onRecordsDeleted ${tableName}");
+    for (DRecord record in records) {
+      _records.remove(record);
+    }
+    _display();
+    // TODO delete
+    return null;
+  }
+
+
+
   /// Application Action Delete
   void onAppsActionDelete(String value, DRecord record, DEntry entry, var actionVar) {
-    if (record == null) {
-
-    } else {
+    if (record != null) {
       _log.config("onAppsActionDelete ${tableName} ${value}");
       LIElement li = new LIElement()
           ..text = record.drv;
@@ -264,8 +295,8 @@ class ObjectCtrl extends LComponent {
         ..append(li);
       AppsAction deleteYes = AppsAction.createYes(onAppsActionDeleteConfirmed)
         ..actionVar = record;
-      LConfirmation conf = new LConfirmation("ds", label: objectCtrlDelete1Record(),
-        text:objectCtrlDelete1RecordText(), contentElements:[ul],
+      LConfirmation conf = new LConfirmation("ds", label:TableCtrl.tableCtrlDelete1Record(),
+        text:TableCtrl.tableCtrlDelete1RecordText(), contentElements:[ul],
         actions:[deleteYes], addCancel: true);
       conf.showInElement(element);
     }
@@ -275,9 +306,7 @@ class ObjectCtrl extends LComponent {
     if (actionVar is DRecord && value == AppsAction.YES) {
       DRecord record = actionVar;
       _log.info("onAppsActionDeleteConfirmed ${tableName} ${value} id=${record.recordId}");
-      // TODO delete
-    } else {
-      _log.info("onAppsActionDeleteConfirmed ${tableName} ${value} - ${actionVar}");
+      onRecordDeleted(record);
     }
   } // onAppsActionDeleteConfirmed
 
@@ -298,8 +327,8 @@ class ObjectCtrl extends LComponent {
       }
       AppsAction deleteYes = AppsAction.createYes(onAppsActionDeleteSelectedConfirmed)
         ..actionVar = records;
-      LConfirmation conf = new LConfirmation("ds", label: objectCtrlDeleteRecords(),
-        text:objectCtrlDeleteRecordsText(), contentElements:[ul],
+      LConfirmation conf = new LConfirmation("ds", label: TableCtrl.tableCtrlDeleteRecords(),
+        text:TableCtrl.tableCtrlDeleteRecordsText(), contentElements:[ul],
         actions:[deleteYes], addCancel: true);
       conf.showInElement(element);
     }
@@ -309,9 +338,7 @@ class ObjectCtrl extends LComponent {
     if (actionVar is List<DRecord> && value == AppsAction.YES) {
       List<DRecord> records = actionVar;
       _log.info("onAppsActionDeleteSelectedConfirmed ${tableName} ${value} #${records.length}");
-      // TODO delete
-    } else {
-      _log.info("onAppsActionDeleteSelectedConfirmed ${tableName} ${value} - ${actionVar}");
+      onRecordsDeleted(records);
     }
   }
 
@@ -321,7 +348,8 @@ class ObjectCtrl extends LComponent {
     _log.config("onAppsActionEdit ${tableName} ${value} id=${record.recordId}");
     _switchRecordCtrl(record, RecordCtrl.EDIT_RW);
     // ObjectEdit oe = new ObjectEdit(ui);
-    // oe.setRecord(record, -1);
+    // oe.setRecord(record, );
+    // oe.recordSaved = onRecordSaved;
     // oe.modal.showInElement(element);
   }
 
@@ -335,12 +363,6 @@ class ObjectCtrl extends LComponent {
     recordCtrl.record = record;
   }
 
-  /// Application Action Table Layout
-  void onAppsActionTableLayout(String value, DRecord record, DEntry entry, var actionVar) {
-    _log.config("onAppsActionTableLayout ${tableName} ${value}");
-    // edit UI Grid Column seq/active
-    // reload table
-  }
   /// Application Action Compact Layout
   void onAppsActionCompactLayout(String value, DRecord record, DEntry entry, var actionVar) {
     _log.config("onAppsActionCompactLayout ${tableName} ${value}");
@@ -354,11 +376,6 @@ class ObjectCtrl extends LComponent {
   static String objectCtrlRecords() => Intl.message("records", name: "objectCtrlRecords");
   static String objectCtrlSortedBy() => Intl.message("Sorted by", name: "objectCtrlSortedBy");
 
-  // delete confirmation
-  static String objectCtrlDelete1Record() => Intl.message("Delete current record", name: "objectCtrlDelete1Record");
-  static String objectCtrlDeleteRecords() => Intl.message("Delete selected Records?", name: "objectCtrlDeleteRecords");
-  static String objectCtrlDelete1RecordText() => Intl.message("Do you want to delete the current record?", name: "objectCtrlDelete1RecordText");
-  static String objectCtrlDeleteRecordsText() => Intl.message("Do you want to delete the selected records?", name: "objectCtrlDeleteRecordsText");
 
   static String objectCtrlFilterNew() => Intl.message("Create new Filter?", name: "objectCtrlFilterNew");
   static String objectCtrlFilterNewText() => Intl.message("The current filer cannot be changed. Do you wnat to create a new Filter?", name: "objectCtrlFilterNewText");

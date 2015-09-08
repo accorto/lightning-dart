@@ -85,7 +85,9 @@ class LForm extends LComponent implements FormI {
   final List<LEditor> editors = new List<LEditor>();
 
   /// Record Saved
-  RecordSaved onRecordSaved;
+  RecordSaved recordSaved;
+  /// Callback when delete
+  RecordDeleted recordDeleted;
 
   /**
    * Form - type = C_FORM__HORIZONTAL, C_FORM__STACKED, C_FORM__INLINE
@@ -153,6 +155,10 @@ class LForm extends LComponent implements FormI {
 
   /// Data Record
   DRecord get record => _data.record;
+  /// Data Record
+  void set record (DRecord record) {
+    setRecord(record, 0);
+  }
   /// Data Record/Row No
   void setRecord (DRecord record, int rowNo) {
     _data.setRecord(record, rowNo);
@@ -269,8 +275,11 @@ class LForm extends LComponent implements FormI {
     if (!valid || a == null || a.isEmpty) {
       evt.preventDefault();
     }
-    if (onRecordSaved != null) {
-      onRecordSaved(record);
+    if (recordSaved != null) {
+      String error = recordSaved(record);
+      if (error != null) {
+
+      }
     }
   } // onFormSubmit
 

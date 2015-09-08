@@ -6,8 +6,14 @@
 
 part of lightning_dart;
 
-/// Record Saved
-typedef void RecordSaved(DRecord record);
+/// Record Saved returning error
+typedef String RecordSaved(DRecord record);
+
+/// Record Deleted returning error
+typedef String RecordDeleted(DRecord record);
+
+/// Record Deleted returning error
+typedef String RecordsDeleted(List<DRecord> records);
 
 /**
  * Form Interface
@@ -21,6 +27,8 @@ abstract class FormI {
   void onRecordChange(DRecord record, DEntry columnChanged, int rowNo);
 
   /// Callback when save
-  RecordSaved onRecordSaved;
+  RecordSaved recordSaved;
+  /// Callback when delete
+  RecordDeleted recordDeleted;
 
 } // FormI

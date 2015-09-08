@@ -31,16 +31,16 @@ class ObjectFilterSort extends TableCtrl {
   /// Reset
   void reset() {
     _toRecordList();
-    _addNewRecord();
-    _table.display(recordList);
+    addNewRecord();
+    display();
   }
 
   /// Add New Record at End
-  void _addNewRecord() {
-    DRecord rec = new DRecord()
-      ..tableName = _TABLENAME;
-    recordList.add(rec);
-  }
+//  void addNewRecord() {
+//    DRecord rec = new DRecord()
+//      ..tableName = _TABLENAME;
+//    recordList.add(rec);
+//  }
 
 
   /// Convert to Records
@@ -94,7 +94,7 @@ class ObjectFilterSort extends TableCtrl {
   /**
    * Saved Query UI
    */
-  UI getUI() {
+  UI get ui {
     UiUtil uiu = new UiUtil(new UI());
     DTable sqTable = new DTable()
       ..name = _TABLENAME

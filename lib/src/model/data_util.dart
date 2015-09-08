@@ -244,18 +244,18 @@ class DataUtil {
 
   /// adjust date for record timezone
   static DateTime _adjustTimezone(DateTime date, DataRecord data, bool add) {
-//    if (date != null && data != null) {
-//      TZ tz = data.getTimezone();
-//      if (tz != null) {
-//        Duration tzDelta = tz.delta; // delta to current timezone
-//        if (tzDelta.inMilliseconds != 0) {
-//          if (add)
-//            return date.add(tzDelta);
-//          else
-//            return date.subtract(tzDelta);
-//        }
-//      }
-//    }
+    if (date != null && data != null) {
+      TZ tz = data.getTimezone();
+      if (tz != null) {
+        Duration tzDelta = tz.delta; // delta to current timezone
+        if (tzDelta.inMilliseconds != 0) {
+          if (add)
+            return date.add(tzDelta);
+          else
+            return date.subtract(tzDelta);
+        }
+      }
+    }
     return date; // no change
   }
 

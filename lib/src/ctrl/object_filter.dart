@@ -39,7 +39,7 @@ class ObjectFilter {
     _form.build();
     modal.addFooterFormButtons(_form);
     _form.addResetButton().onClick.listen(onReset);
-    _form.onRecordSaved = filterRecordSaved;
+    _form.recordSaved = filterRecordSaved;
 
     LIcon icon = new LIconUtility(LIconUtility.FILTER);
     String label = "${objectFilter()}: ${table.label}";
@@ -63,9 +63,10 @@ class ObjectFilter {
   }
 
 
-  void filterRecordSaved(DRecord record) {
+  String filterRecordSaved(DRecord record) {
     _log.info("filterRecordSaved ${record}");
     modal.show = false;
+    return null;
   }
 
 

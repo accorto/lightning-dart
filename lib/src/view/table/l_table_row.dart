@@ -36,7 +36,9 @@ class LTableRow implements FormI {
   /// Data Container
   DataRecord data;
   /// Callback when save
-  RecordSaved onRecordSaved;
+  RecordSaved recordSaved;
+  /// Callback when delete
+  RecordDeleted recordDeleted;
   /// Editors
   List<LEditor> editors;
 
