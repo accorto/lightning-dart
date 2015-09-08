@@ -128,9 +128,9 @@ class LTableHeaderCell extends LTableCell {
     if (tableSortClicked != null) {
       sortable = true;
       sortAsc = true;
-      element.onClick.listen((Event evt) {
+      element.onClick.listen((MouseEvent evt) {
         sortAsc = !sortAsc; // toggle
-        tableSortClicked(name, sortAsc);
+        tableSortClicked(name, sortAsc, evt);
       });
     }
   }

@@ -30,13 +30,13 @@ class ObjectCtrl extends LComponent {
   final LObjectHome _header = new LObjectHome();
   /// Content
   final CDiv _content = new CDiv.article();
+  /// Record Control (single record view)
+  RecordCtrl recordCtrl;
+
   /// Meta Data
   final UI ui;
   /// Actual Data Records
   List<DRecord> _records;
-
-  /// Record Control
-  RecordCtrl recordCtrl;
 
 
   /**
@@ -61,18 +61,17 @@ class ObjectCtrl extends LComponent {
     //_header.filterList.addFilter()
     _header.filterList.filterSelectionChange = onFilterSelectionChange;
     _doQuery();
-  }
-
-  // ObjectCtrl
+  } // ObjectCtrl
 
   /// table name
   String get tableName => ui.tableName;
 
-
+  /// Find in Table
   void onFindEditorChange(String name, String newValue, DEntry entry, var details) {
     _log.config("onFindEditorChange ${tableName} ${newValue}");
-    // scan through table for matches of newValue
-
+    if (_table != null) {
+      _table.findInTable(newValue);
+    }
   }
 
   /// Editor Change callback
@@ -169,20 +168,33 @@ class ObjectCtrl extends LComponent {
       _cardCompact = null;
       if (viewLayout == LObjectHome.VIEW_LAYOUT_COMPACT) {
         _displayCompact();
+        onTableSorted(null);
       //} else if (viewLayout == LObjectHome.VIEW_LAYOUT_CARDS) {
       //  _displayCards();
       } else /* if (viewLayout == LObjectHome.VIEW_LAYOUT_TABLE) */ {
         _displayTable();
+        onTableSorted(_table.tableSorting);
       }
-
-
-      if (_records.length == 1)
-        _header.summary = objectCtrl1Record();
-      else
-        _header.summary = "${_records.length} ${objectCtrlRecords()} * ${objectCtrlSortedBy()} x";
     }
-
   } // display
+
+  /// Display Table Sort
+  void onTableSorted(List<LTableSort> tableSorting) {
+    if (_records.length == 1) {
+      _header.summary = objectCtrl1Record();
+    } else if (tableSorting == null || tableSorting.isEmpty) {
+      _header.summary = "${_records.length} ${objectCtrlRecords()}";
+    } else {
+      String info = "${_records.length} ${objectCtrlRecords()} ${LightningDart.DOT} ${objectCtrlSortedBy()}";
+      String prefix = " ";
+      for (LTableSort sort in tableSorting) {
+        info += prefix + sort.columnLabel + (sort.asc ? "\u{2193}" : "\u{2191}");
+        prefix = LightningDart.DOT;
+      }
+      _header.summary = info;
+    }
+  }
+
 
   /**
    * Table
@@ -193,6 +205,7 @@ class ObjectCtrl extends LComponent {
     _table.recordSaved = onRecordSaved;
     _table.recordDeleted = onRecordDeleted;
     _table.recordsDeleted = onRecordsDeleted;
+    _table.tableSorted = onTableSorted;
     _table.setRecords(_records, recordAction:onAppsActionRecord); // urv click
     _content.add(_table);
   } // displayTable

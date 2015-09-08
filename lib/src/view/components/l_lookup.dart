@@ -32,9 +32,6 @@ class LLookup extends LEditor implements LSelectI {
   static const String DATA_SELECT_MULTI = "multi";
   static const String DATA_SELECT_SINGLE = "single";
 
-  static final String SPACES_REGEX = r"[\s_-]";
-  static final RegExp SPACES = new RegExp(SPACES_REGEX);
-
   /// Lookup form + menu
   final DivElement element = new DivElement()
     ..classes.add(C_LOOKUP);
@@ -297,7 +294,7 @@ class LLookup extends LEditor implements LSelectI {
     String restriction = input.value;
     RegExp exp = null;
     if (!showAll && restriction.isNotEmpty) {
-      exp = _createRegExp(restriction);
+      exp = LightningDart.createRegExp(restriction);
     }
     int count = 0;
     for (LLookupItem item in _items) {
@@ -377,22 +374,6 @@ class LLookup extends LEditor implements LSelectI {
     }
   }
 
-  /// Create regex for [search] returns null if empty or error
-  static RegExp _createRegExp(String search) {
-    if (search == null || search.isEmpty)
-      return null;
-    // fix spaces (spaces to match also _-)
-    String restriction = search.replaceAll(" ", SPACES_REGEX);
-    // fix regex
-    if (restriction == "[" || restriction == "(" || restriction == ".")
-      restriction = "\\" + restriction;
-    try {
-      return new RegExp(restriction, caseSensitive: false);
-    } catch (ex) {
-      _log.info("createRegExp search=${search} restriction=${restriction}) error=${ex}");
-    }
-    return null;
-  }
 
   void updateStatusValidationState() {
   }

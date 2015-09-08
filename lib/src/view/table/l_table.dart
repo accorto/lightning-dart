@@ -6,8 +6,11 @@
 
 part of lightning_dart;
 
+/// Sort Clicked
+typedef void TableSortClicked(String name, bool asc, MouseEvent evt);
 
-typedef void TableSortClicked(String name, bool asc);
+/// Table Sorted
+typedef void TableSorted(List<LTableSort> tableSorting);
 
 /**
  * Table
@@ -82,6 +85,11 @@ class LTable extends LComponent {
 
   /// Row Select
   final bool optionRowSelect;
+
+  /// Table Sorting
+  final List<LTableSort> tableSorting = new List<LTableSort>();
+  /// Callback
+  TableSorted tableSorted;
 
   /**
    * Table
@@ -170,11 +178,82 @@ class LTable extends LComponent {
   } // addHeadRow
 
   /// Table Sort
-  void onTableSortClicked(String name, bool asc) {
-    _log.info("onTableSortClicked ${name} ${asc}");
-    // TODO table data sort
-  }
+  void onTableSortClicked(String name, bool asc, MouseEvent evt) {
+    bool shiftMeta = (evt.shiftKey || evt.metaKey);
+    _log.info("onTableSortClicked ${name} ${asc} shiftMeta=${shiftMeta}");
+    if (shiftMeta) {
+      LTableSort sortFound = null;
+      for (LTableSort sort in tableSorting) {
+        if (sort.columnName == name) {
+          sortFound = sort;
+          break;
+        }
+      }
+      if (sortFound != null)
+        tableSorting.remove(sortFound);
+    } else {
+      tableSorting.clear();
+    }
+    tableSorting.add(new LTableSort(name, asc)..setLabel(_ui.table));
+    recordList.sort(recordSort);
+    display();
+    if (tableSorted != null)
+      tableSorted(tableSorting);
+  } // onTableSortClicked
 
+  /// Record Sort
+  int recordSort(DRecord one, DRecord two) {
+    int cmp = 0;
+    for (LTableSort sort in tableSorting) {
+      String oneValue = sort.columnName == URV ? one.drv : DataRecord.columnValue(one, sort.columnName);
+      if (oneValue == null)
+        oneValue = "";
+      String twoValue = sort.columnName == URV ? two.drv : DataRecord.columnValue(two, sort.columnName);
+      if (twoValue == null)
+        twoValue = "";
+      cmp = oneValue.compareTo(twoValue);
+      if (cmp != 0) {
+        if (!sort.asc)
+          cmp *= -1;
+        break;
+      }
+    }
+    return cmp;
+  } // recordSort
+
+  /// Find In Table
+  void findInTable(String findExpression) {
+    RegExp regEx = LightningDart.createRegExp(findExpression);
+    if (regEx == null) {
+      for (DRecord record in recordList) {
+        record.clearIsMatchFind();
+      }
+    } else {
+      for (DRecord record in recordList) {
+        bool match = false;
+        for (DEntry entry in record.entryList) {
+          if (entry.hasValueDisplay()) {
+            if (entry.valueDisplay.contains(regEx)) {
+              match = true;
+              break;
+            }
+          } else if (entry.hasValue()) {
+            if (entry.value.contains(regEx)) {
+              match = true;
+              break;
+            }
+          } else if (entry.hasValueOriginal()) {
+            if (entry.valueOriginal.contains(regEx)) {
+              match = true;
+              break;
+            }
+          }
+        }
+        record.isMatchFind = match;
+      }
+    }
+    display();
+  } // findInTable
 
   /// Table Edit Mode
   String get editMode => _editMode;
@@ -278,6 +357,8 @@ class LTable extends LComponent {
     }
     int i = 0;
     for (DRecord record in recordList) {
+      if (record.hasIsMatchFind() && !record.isMatchFind)
+        continue;
       LTableRow row = addBodyRow(rowValue: record.recordId);
       row.setRecord(record, i++, recordAction:recordAction);
     }
@@ -315,3 +396,32 @@ class LTable extends LComponent {
 } // LTable
 
 
+/// Table Sorting
+class LTableSort {
+
+  final String columnName;
+  final bool asc;
+
+  LTableSort(String this.columnName, bool this.asc);
+
+  String get columnLabel => _columnLabel == null ? columnName : _columnLabel;
+  void set columnLabel (String newValue) {
+    _columnLabel = newValue;
+  }
+  String _columnLabel;
+
+  /// set label from table column name
+  void setLabel(DTable table) {
+    if (columnName == LTable.URV)
+      _columnLabel = "record name";
+    else {
+      for (DColumn col in table.columnList) {
+        if (col.name == columnName) {
+          _columnLabel = col.label;
+          break;
+        }
+      }
+    }
+  } // setLabel
+
+} // LTableSort
