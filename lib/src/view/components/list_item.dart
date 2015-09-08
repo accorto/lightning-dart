@@ -255,4 +255,6 @@ class ListItem extends SelectOption {
       id:id, selected:selected, disabled:disabled);
   }
 
+  String toString() => "ListItem[${option.value}]";
+
 } // ListItem

@@ -52,6 +52,7 @@ class ObjectFilterFilter extends TableCtrl {
 
   /// Sorting
   void onAppsActionSequence() {
+    resequence();
     int seqNo = 1;
     for (DRecord record in recordList) {
       record.drv = seqNo.toString();

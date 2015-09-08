@@ -205,20 +205,79 @@ abstract class TableCtrl extends LTable {
     display();
   }
 
-
+  /// move record up
   void onAppsActionTableUp(String value, DRecord record, DEntry entry, var actionVar) {
-    // TODO sequence
-    onAppsActionSequence();
-    display();
+    int index = recordList.indexOf(record);
+    if (index > 0) {
+      DRecord thisRecord = recordList[index];
+      DRecord previousRecord = recordList[index-1];
+      recordList[index-1] = thisRecord;
+      recordList[index] = previousRecord;
+      //
+      onAppsActionSequence();
+      display();
+    }
   }
+  /// move record down
   void onAppsActionTableDown(String value, DRecord record, DEntry entry, var actionVar) {
-    onAppsActionSequence();
-    display();
+    int index = recordList.indexOf(record);
+    if (index >= 0 && index < recordList.length-1) {
+      DRecord thisRecord = recordList[index];
+      DRecord nextRecord = recordList[index + 1];
+      recordList[index + 1] = thisRecord;
+      recordList[index] = nextRecord;
+      //
+      onAppsActionSequence();
+      display();
+    }
   }
-  /// notify subclass
+  /// notify subclass - could call resequence
   void onAppsActionSequence() {}
 
-
+  /// re-sequence records based on [recordList] appearance
+  void resequence({String columnName:"seqNo", int start:10, int increment:10}) {
+    int seqNo = start;
+    for (DRecord record in recordList) {
+      DEntry entry = null;
+      for (DEntry e in record.entryList) {
+        if (e.columnName == columnName) {
+          entry = e;
+          break;
+        }
+      }
+      if (entry == null) {
+        entry = new DEntry()
+          ..columnName = columnName
+          ..value = seqNo.toString()
+          ..isChanged = true;
+        record.entryList.add(entry);
+        record.isChanged = true;
+      } else {
+        String newValue = seqNo.toString();
+        if (entry.hasValue()) {
+          if (entry.value != newValue) {
+            if (!entry.hasValueOriginal())
+              entry.valueOriginal = entry.value;
+            entry.value = newValue;
+            entry.isChanged = true;
+            record.isChanged = true;
+          }
+        } else if (entry.hasValueOriginal()) {
+          if (entry.valueOriginal != newValue) {
+            entry.value = newValue;
+            entry.isChanged = true;
+            record.isChanged = true;
+          }
+        } else {
+          entry.valueOriginal = DataRecord.NULLVALUE;
+          entry.value = newValue;
+          entry.isChanged = true;
+          record.isChanged = true;
+        }
+      }
+      seqNo += increment;
+    }
+  } // resequence
 
   // delete confirmation
   static String tableCtrlDelete1Record() => Intl.message("Delete current record", name: "tableCtrlDelete1Record");

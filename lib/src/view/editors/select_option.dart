@@ -103,5 +103,7 @@ class SelectOption {
     }
   } // disabled
 
+  String toString() => "SelectOption[${option.value}]";
+
 } // SelectOption
 

@@ -438,6 +438,12 @@ class LDropdownElement implements LSelectI {
     evt.preventDefault();
     Element telement = evt.target;
     String tvalue = telement.attributes[Html0.DATA_VALUE];
+    while (tvalue == null && telement != null) {
+      telement = telement.parent;
+      tvalue = telement.attributes[Html0.DATA_VALUE];
+      if (telement is AnchorElement)
+        break;
+    }
     LDropdownItem selectedItem = null;
     for (LDropdownItem item in _items) {
       if (item.value == tvalue) {
@@ -565,5 +571,8 @@ class LDropdownItem extends ListItem {
 
   /// Right Icon (left icon used for select)
   LIcon get icon => _rightIcon;
+
+
+  String toString() => "LDropdown[${option.value}]";
 
 } // LDropdownItem
