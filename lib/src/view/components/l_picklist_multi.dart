@@ -249,12 +249,12 @@ class LPicklistMulti extends LComponent {
 
 
   static String lPicklistMultiAdd() => Intl.message("Add", name: "lPicklistMultiAdd");
-  static String lPicklistMultiRemove() => Intl.message("Remove", name: "lPicklistiMultRemove");
+  static String lPicklistMultiRemove() => Intl.message("Remove", name: "lPicklistMultiRemove");
   static String lPicklistMultiUp() => Intl.message("Up", name: "lPicklistMultiUp");
   static String lPicklistMultiDown() => Intl.message("Down", name: "lPicklistMultiDown");
 
   static String lPicklistMultiSelected() => Intl.message("Selected", name: "lPicklistMultiSelected");
-  static String lPicklistMultiAvailable() => Intl.message("Available", name: "lPicklistiMultAvailable");
+  static String lPicklistMultiAvailable() => Intl.message("Available", name: "lPicklistMultiAvailable");
 
 } // LPicklistMulti
 

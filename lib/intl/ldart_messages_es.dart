@@ -6,7 +6,7 @@
  */
 
 library messages_es;
-//import 'package:intl/intl.dart';
+import 'package:intl/intl.dart';
 import 'package:intl/message_lookup_by_library.dart';
 
 final messages = new MessageLookup();
@@ -20,13 +20,19 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static appsActionDeleteSelected() => "Eliminar seleccionado";
 
+  static appsActionDown() => "Abajo";
+
   static appsActionEdit() => "Editar";
+
+  static appsActionLayout() => "Diseño";
 
   static appsActionNew() => "Nueva";
 
   static appsActionNo() => "Sin";
 
   static appsActionSave() => "Guardar";
+
+  static appsActionUp() => "Arriba";
 
   static appsActionYes() => "Sí";
 
@@ -35,6 +41,48 @@ class MessageLookup extends MessageLookupByLibrary {
   static editorValidateRequired() => "Por favor, proporcione un valor";
 
   static editorValidateTooLong() => "Valor demasiado largo";
+
+  static filterOpBetween() => "entre";
+
+  static filterOpDateDay() => "jornada";
+
+  static filterOpDateLast() => "último";
+
+  static filterOpDateMonth() => "meses";
+
+  static filterOpDateNext() => "Siguiente";
+
+  static filterOpDateQuarter() => "trimestre";
+
+  static filterOpDateThis() => "esta";
+
+  static filterOpDateWeek() => "semana";
+
+  static filterOpDateYear() => "curso";
+
+  static filterOpEquals() => "es igual a";
+
+  static filterOpGreater() => "mayor";
+
+  static filterOpGreaterEquals() => "mayor o igual a igual";
+
+  static filterOpIn() => "en";
+
+  static filterOpLess() => "Menos";
+
+  static filterOpLessEquals() => "menos o iguales";
+
+  static filterOpLike() => "como";
+
+  static filterOpNotEquals() => "no iguales";
+
+  static filterOpNotIn() => "no en";
+
+  static filterOpNotLike() => "diferente a";
+
+  static filterOpNotNull() => "no nulo";
+
+  static filterOpNull() => "nulo";
 
   static lBreadcrumbText() => "Tú estás aquí";
 
@@ -78,29 +126,13 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static lNotificationWarning() => "Advertencia";
 
-  static lObjectCtrl1Record() => "Un registro";
+  static lObjectHomeFilter() => "Filtro";
 
-  static lObjectCtrlDelete1Record() => "Eliminar registro actual";
+  static lObjectHomeFilterAll() => "Todos los registros";
 
-  static lObjectCtrlDelete1RecordText() => "¿Quieres eliminar el registro actual?";
+  static lObjectHomeFilterRecent() => "Recientemente visto";
 
-  static lObjectCtrlDeleteRecords() => "Borrar seleccionado registros?";
-
-  static lObjectCtrlDeleteRecordsText() => "¿Quieres eliminar los registros seleccionados?";
-
-  static lObjectCtrlNoRecordInfo() => "No hay registros que mostrar - Cambio de filtro o crear nuevos";
-
-  static lObjectCtrlNoRecords() => "No hay registros";
-
-  static lObjectCtrlRecords() => "archivos";
-
-  static lObjectCtrlSortedBy() => "Ordenado por";
-
-  static lObjectHomeFilterList() => "Lista de filtros";
-
-  static lObjectHomeFilterListAll() => "Todos los registros";
-
-  static lObjectHomeFilterListRecent() => "Recientemente visto";
+  static lObjectHomeFind() => "Encuentra en Vista";
 
   static lObjectHomeLayoutCards() => "Tarjetas";
 
@@ -112,11 +144,23 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static lObjectHomeLookupFindInList() => "Encuentra en Lista de filtros";
 
-  static lObjectHomeLookupList() => "Lista";
+  static lObjectHomeLookupList() => "Lista de filtros";
 
   static lObjectHomeLookupMore() => "Más";
 
   static lObjectHomeSave() => "Guardar";
+
+  static lPicklistMultiAdd() => "Añadir";
+
+  static lPicklistMultiAvailable() => "Disponible";
+
+  static lPicklistMultiDown() => "Abajo";
+
+  static lPicklistMultiRemove() => "Eliminar";
+
+  static lPicklistMultiSelected() => "Seleccionado";
+
+  static lPicklistMultiUp() => "Arriba";
 
   static lPicklistSelectOption() => "Seleccione una opcion";
 
@@ -126,6 +170,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static lRecordCtrlRelated() => "Relacionada";
 
+  static lSpinnerWorking() => "trabajo";
+
   static lTableColumnSortAsc() => "Orden ascendente";
 
   static lTableColumnSortDec() => "Ordenar decending";
@@ -134,19 +180,91 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static lTableRowSelectRow() => "Seleccionar fila";
 
+  static objectCtrl1Record() => "Un registro";
+
+  static objectCtrlFilterDelete() => "Eliminar filtro?";
+
+  static objectCtrlFilterDeleteText() => "¿Quieres eliminar el filtro actual?";
+
+  static objectCtrlFilterNew() => "Crear nuevo filtro?";
+
+  static objectCtrlFilterNewText() => "El archivador actual no se puede cambiar. ¿Es usted el wnat para crear un nuevo filtro?";
+
+  static objectCtrlNoRecordInfo() => "No hay registros que mostrar - Cambio de filtro o crear nuevos";
+
+  static objectCtrlNoRecords() => "No hay registros";
+
+  static objectCtrlRecords() => "archivos";
+
+  static objectCtrlSortedBy() => "Ordenado por";
+
+  static objectEditEdit() => "Editar";
+
+  static objectEditNew() => "Nueva";
+
+  static objectFilter() => "Filtro";
+
+  static preferenceGlobalSave() => "Guardar preferencias como Global";
+
+  static preferenceNothingToSave() => "No hay nada que salvar";
+
+  static preferenceSaved() => "Preferencias guardados como Preferencias Globales";
+
+  static serviceComErrorButton() => "Recargar Página";
+
+  static serviceComErrorMsg() => "Lo siento por esto - por favor intente de nuevo más tarde.";
+
+  static serviceComErrorTitle() => "Error de comunicacion";
+
+  static tableCtrlDelete1Record() => "Eliminar registro actual";
+
+  static tableCtrlDelete1RecordText() => "¿Quieres eliminar el registro actual?";
+
+  static tableCtrlDeleteRecords() => "Borrar seleccionado registros?";
+
+  static tableCtrlDeleteRecordsText() => "¿Quieres eliminar los registros seleccionados?";
+
+  static tableLayout() => "Formato de tabla";
+
+  static tableLayoutColumns() => "Columnas";
+
 
   final messages = const {
     "appsAction" : appsAction,
     "appsActionDelete" : appsActionDelete,
     "appsActionDeleteSelected" : appsActionDeleteSelected,
+    "appsActionDown" : appsActionDown,
     "appsActionEdit" : appsActionEdit,
+    "appsActionLayout" : appsActionLayout,
     "appsActionNew" : appsActionNew,
     "appsActionNo" : appsActionNo,
     "appsActionSave" : appsActionSave,
+    "appsActionUp" : appsActionUp,
     "appsActionYes" : appsActionYes,
     "appsActions" : appsActions,
     "editorValidateRequired" : editorValidateRequired,
     "editorValidateTooLong" : editorValidateTooLong,
+    "filterOpBetween" : filterOpBetween,
+    "filterOpDateDay" : filterOpDateDay,
+    "filterOpDateLast" : filterOpDateLast,
+    "filterOpDateMonth" : filterOpDateMonth,
+    "filterOpDateNext" : filterOpDateNext,
+    "filterOpDateQuarter" : filterOpDateQuarter,
+    "filterOpDateThis" : filterOpDateThis,
+    "filterOpDateWeek" : filterOpDateWeek,
+    "filterOpDateYear" : filterOpDateYear,
+    "filterOpEquals" : filterOpEquals,
+    "filterOpGreater" : filterOpGreater,
+    "filterOpGreaterEquals" : filterOpGreaterEquals,
+    "filterOpIn" : filterOpIn,
+    "filterOpLess" : filterOpLess,
+    "filterOpLessEquals" : filterOpLessEquals,
+    "filterOpLike" : filterOpLike,
+    "filterOpNotEquals" : filterOpNotEquals,
+    "filterOpNotIn" : filterOpNotIn,
+    "filterOpNotLike" : filterOpNotLike,
+    "filterOpNotNull" : filterOpNotNull,
+    "filterOpNull" : filterOpNull,
     "lBreadcrumbText" : lBreadcrumbText,
     "lButtonGroupMore" : lButtonGroupMore,
     "lDatePickerDropdownNext" : lDatePickerDropdownNext,
@@ -168,18 +286,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "lNotificationError" : lNotificationError,
     "lNotificationSuccess" : lNotificationSuccess,
     "lNotificationWarning" : lNotificationWarning,
-    "lObjectCtrl1Record" : lObjectCtrl1Record,
-    "lObjectCtrlDelete1Record" : lObjectCtrlDelete1Record,
-    "lObjectCtrlDelete1RecordText" : lObjectCtrlDelete1RecordText,
-    "lObjectCtrlDeleteRecords" : lObjectCtrlDeleteRecords,
-    "lObjectCtrlDeleteRecordsText" : lObjectCtrlDeleteRecordsText,
-    "lObjectCtrlNoRecordInfo" : lObjectCtrlNoRecordInfo,
-    "lObjectCtrlNoRecords" : lObjectCtrlNoRecords,
-    "lObjectCtrlRecords" : lObjectCtrlRecords,
-    "lObjectCtrlSortedBy" : lObjectCtrlSortedBy,
-    "lObjectHomeFilterList" : lObjectHomeFilterList,
-    "lObjectHomeFilterListAll" : lObjectHomeFilterListAll,
-    "lObjectHomeFilterListRecent" : lObjectHomeFilterListRecent,
+    "lObjectHomeFilter" : lObjectHomeFilter,
+    "lObjectHomeFilterAll" : lObjectHomeFilterAll,
+    "lObjectHomeFilterRecent" : lObjectHomeFilterRecent,
+    "lObjectHomeFind" : lObjectHomeFind,
     "lObjectHomeLayoutCards" : lObjectHomeLayoutCards,
     "lObjectHomeLayoutCompact" : lObjectHomeLayoutCompact,
     "lObjectHomeLayoutDisplay" : lObjectHomeLayoutDisplay,
@@ -188,13 +298,44 @@ class MessageLookup extends MessageLookupByLibrary {
     "lObjectHomeLookupList" : lObjectHomeLookupList,
     "lObjectHomeLookupMore" : lObjectHomeLookupMore,
     "lObjectHomeSave" : lObjectHomeSave,
+    "lPicklistMultiAdd" : lPicklistMultiAdd,
+    "lPicklistMultiAvailable" : lPicklistMultiAvailable,
+    "lPicklistMultiDown" : lPicklistMultiDown,
+    "lPicklistMultiRemove" : lPicklistMultiRemove,
+    "lPicklistMultiSelected" : lPicklistMultiSelected,
+    "lPicklistMultiUp" : lPicklistMultiUp,
     "lPicklistSelectOption" : lPicklistSelectOption,
     "lPillRemove" : lPillRemove,
     "lRecordCtrlDetails" : lRecordCtrlDetails,
     "lRecordCtrlRelated" : lRecordCtrlRelated,
+    "lSpinnerWorking" : lSpinnerWorking,
     "lTableColumnSortAsc" : lTableColumnSortAsc,
     "lTableColumnSortDec" : lTableColumnSortDec,
     "lTableRowSelectAll" : lTableRowSelectAll,
-    "lTableRowSelectRow" : lTableRowSelectRow
+    "lTableRowSelectRow" : lTableRowSelectRow,
+    "objectCtrl1Record" : objectCtrl1Record,
+    "objectCtrlFilterDelete" : objectCtrlFilterDelete,
+    "objectCtrlFilterDeleteText" : objectCtrlFilterDeleteText,
+    "objectCtrlFilterNew" : objectCtrlFilterNew,
+    "objectCtrlFilterNewText" : objectCtrlFilterNewText,
+    "objectCtrlNoRecordInfo" : objectCtrlNoRecordInfo,
+    "objectCtrlNoRecords" : objectCtrlNoRecords,
+    "objectCtrlRecords" : objectCtrlRecords,
+    "objectCtrlSortedBy" : objectCtrlSortedBy,
+    "objectEditEdit" : objectEditEdit,
+    "objectEditNew" : objectEditNew,
+    "objectFilter" : objectFilter,
+    "preferenceGlobalSave" : preferenceGlobalSave,
+    "preferenceNothingToSave" : preferenceNothingToSave,
+    "preferenceSaved" : preferenceSaved,
+    "serviceComErrorButton" : serviceComErrorButton,
+    "serviceComErrorMsg" : serviceComErrorMsg,
+    "serviceComErrorTitle" : serviceComErrorTitle,
+    "tableCtrlDelete1Record" : tableCtrlDelete1Record,
+    "tableCtrlDelete1RecordText" : tableCtrlDelete1RecordText,
+    "tableCtrlDeleteRecords" : tableCtrlDeleteRecords,
+    "tableCtrlDeleteRecordsText" : tableCtrlDeleteRecordsText,
+    "tableLayout" : tableLayout,
+    "tableLayoutColumns" : tableLayoutColumns
   };
 }
