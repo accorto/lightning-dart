@@ -13,7 +13,7 @@ typedef void FilterUpdated(SavedQuery query);
  */
 class ObjectFilter {
 
-  static const String _ID = "o-filter";
+  static const String _ID = "filter";
   static final Logger _log = new Logger("ObjectFilter");
 
   /// Modal
@@ -41,6 +41,7 @@ class ObjectFilter {
     modal.addFooterFormButtons(_form);
     _form.addResetButton().onClick.listen(onReset);
     _form.recordSaved = filterRecordSaved;
+    _toRecord();
 
     LIcon icon = new LIconUtility(LIconUtility.FILTER);
     String label = "${objectFilter()}: ${table.label}";
@@ -63,13 +64,113 @@ class ObjectFilter {
     sortTable.reset();
   }
 
-
   String filterRecordSaved(DRecord record) {
     _log.info("filterRecordSaved ${record}");
     modal.show = false;
+    if (filterUpdated != null)
+      filterUpdated(toSavedQuery());
     return null;
   }
 
+  /// Convert to Records
+  void _toRecord() {
+    DRecord record = new DRecord()
+      ..tableName = _TABLENAME;
+
+    if (savedQuery.hasName()) {
+      record.entryList.add(new DEntry()
+        ..columnName = _COL_NAME
+        ..valueOriginal = savedQuery.name);
+    }
+    if (savedQuery.hasDescription()) {
+      record.entryList.add(new DEntry()
+        ..columnName = _COL_DESCRIPTION
+        ..valueOriginal = savedQuery.description);
+    }
+    // Sharing
+    String sharing = (savedQuery.hasUserId() ? "p" : "s")
+      + (savedQuery.isDefault ? "d" : "-");
+    record.entryList.add(new DEntry()
+      ..columnName = _COL_SHARING
+      ..valueOriginal = sharing);
+
+    if (savedQuery.hasSqlWhere()) {
+      record.entryList.add(new DEntry()
+        ..columnName = _COL_SQLWHERE
+        ..valueOriginal = savedQuery.sqlWhere);
+    }
+    if (savedQuery.hasFilterLogic()) {
+      record.entryList.add(new DEntry()
+        ..columnName = _COL_FILTERLOGIC
+        ..valueOriginal = savedQuery.filterLogic);
+    }
+    _form.record = record;
+  } // toRecord
+
+  /// update Saved Qyery
+  SavedQuery toSavedQuery() {
+    savedQuery.name = _form.data.getValue(name: _COL_NAME);
+    String desc = _form.data.getValue(name: _COL_DESCRIPTION);
+    if (desc == null || desc.isEmpty)
+      savedQuery.clearDescription();
+    else
+      savedQuery.description = desc;
+    // Sharing
+    String sharing = _form.data.getValue(name: _COL_SHARING);
+    if (sharing == null || sharing.isEmpty) {
+      savedQuery.clearUserId();
+      savedQuery.clearIsDefault();
+    } else {
+      if (sharing.contains("p")) {
+        // set user
+      } else {
+        savedQuery.clearUserId();
+      }
+      savedQuery.isDefault = sharing.contains("d");
+    }
+    // FilterLogic
+    String logic = _form.data.getValue(name: _COL_FILTERLOGIC);
+    if (logic == null || logic.isEmpty)
+      savedQuery.clearFilterLogic();
+    else
+      savedQuery.filterLogic = logic;
+
+    // Direct Sql
+    if (_manualEntry) {
+      String sql = _form.data.getValue(name: _COL_SQLWHERE);
+      if (sql == null || sql.isEmpty)
+        savedQuery.clearSqlWhere();
+      else
+        savedQuery.sqlWhere = sql;
+    } else {
+      savedQuery.clearSqlWhere();
+    }
+
+    // get child values
+    savedQuery.filterList.clear();
+    savedQuery.filterList.addAll(filterTable.updateFilterList());
+
+    savedQuery.sortList.clear();
+    savedQuery.sortList.addAll(sortTable.updateSortList());
+
+    return savedQuery;
+  }
+
+  // TODO notice change in filter/sort
+  //
+  bool _manualEntry = false;
+
+  bool checkFilterLogic() {
+    String logic = _form.data.getValue(name: _COL_FILTERLOGIC);
+    if (logic == null || logic.isEmpty)
+      return true;
+
+    List<DFilter> filters = filterTable.updateFilterList();
+    if (filters.isEmpty)
+      return true;
+    // TODO check correctness of filter logic
+    return true;
+  }
 
   static const String _TABLENAME = "SavedQuery";
   static const String _COL_NAME = "name";
@@ -95,7 +196,7 @@ class ObjectFilter {
     // Column Name
     DColumn col = new DColumn()
       ..name = _COL_NAME
-      ..label = "Name"
+      ..label = objectFilterName()
       ..dataType = DataType.STRING
       ..uniqueSeqNo = 1
       ..displaySeqNo = 1
@@ -106,7 +207,7 @@ class ObjectFilter {
     // Column Description
     col = new DColumn()
       ..name = _COL_DESCRIPTION
-      ..label = "Description"
+      ..label = objectFilterDescription()
       ..dataType = DataType.STRING
       ..columnSize = 255;
     uiu.addColumn(col);
@@ -140,14 +241,13 @@ class ObjectFilter {
       ..columnSize = 255;
     uiu.addColumn(col);
 
-
-
-
     return uiu.ui;
   } // uiSavedQuery
 
 
   static String objectFilter() => Intl.message("Filter", name: "objectFilter");
+  static String objectFilterName() => Intl.message("Name", name: "objectFilterName");
+  static String objectFilterDescription() => Intl.message("Description", name: "objectFilterDescription");
 
 
 } // ObjectFilter

@@ -204,6 +204,30 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static objectFilter() => "Filter";
 
+  static objectFilterColumnName() => "Spaltenname";
+
+  static objectFilterDescription() => "Bezeichnung";
+
+  static objectFilterFilter() => "Filter";
+
+  static objectFilterName() => "Name";
+
+  static objectFilterOperation() => "Betrieb";
+
+  static objectFilterSort() => "Sortieren";
+
+  static objectFilterSortAsc() => "Aufsteigend";
+
+  static objectFilterSortColumnName() => "Spaltenname";
+
+  static objectFilterSortGrp() => "Gruppiere nach";
+
+  static objectFilterValue() => "Wert";
+
+  static objectFilterValueIn() => "Im";
+
+  static objectFilterValueTo() => "Bis";
+
   static preferenceGlobalSave() => "Einstellungen speichern Global";
 
   static preferenceNothingToSave() => "Nichts, um zu speichern";
@@ -223,6 +247,8 @@ class MessageLookup extends MessageLookupByLibrary {
   static tableCtrlDeleteRecords() => "Ausgewählte löschen Rekorde?";
 
   static tableCtrlDeleteRecordsText() => "Möchten Sie die ausgewählten Datensätze löschen?";
+
+  static tableCtrlRecords(count) => "{count, Plural, = 0 {keine Aufzeichnungen} = 1 {${count}} Rekord anderen {${count}}} records";
 
   static tableLayout() => "Tabellen-Layout";
 
@@ -325,6 +351,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "objectEditEdit" : objectEditEdit,
     "objectEditNew" : objectEditNew,
     "objectFilter" : objectFilter,
+    "objectFilterColumnName" : objectFilterColumnName,
+    "objectFilterDescription" : objectFilterDescription,
+    "objectFilterFilter" : objectFilterFilter,
+    "objectFilterName" : objectFilterName,
+    "objectFilterOperation" : objectFilterOperation,
+    "objectFilterSort" : objectFilterSort,
+    "objectFilterSortAsc" : objectFilterSortAsc,
+    "objectFilterSortColumnName" : objectFilterSortColumnName,
+    "objectFilterSortGrp" : objectFilterSortGrp,
+    "objectFilterValue" : objectFilterValue,
+    "objectFilterValueIn" : objectFilterValueIn,
+    "objectFilterValueTo" : objectFilterValueTo,
     "preferenceGlobalSave" : preferenceGlobalSave,
     "preferenceNothingToSave" : preferenceNothingToSave,
     "preferenceSaved" : preferenceSaved,
@@ -335,6 +373,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "tableCtrlDelete1RecordText" : tableCtrlDelete1RecordText,
     "tableCtrlDeleteRecords" : tableCtrlDeleteRecords,
     "tableCtrlDeleteRecordsText" : tableCtrlDeleteRecordsText,
+    "tableCtrlRecords" : tableCtrlRecords,
     "tableLayout" : tableLayout,
     "tableLayoutColumns" : tableLayoutColumns
   };

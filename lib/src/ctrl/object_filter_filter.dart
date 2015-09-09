@@ -76,10 +76,32 @@ class ObjectFilterFilter extends TableCtrl {
         ..columnName = _COL_OP
         ..valueOriginal = filter.operation.name
       );
-
-
-
-
+      // op date
+      if (filter.hasOperationDate()) {
+        record.entryList.add(new DEntry()
+          ..columnName = _COL_OP_DATE
+          ..valueOriginal = filter.operationDate.name
+        );
+      }
+      // value
+      if (filter.hasFilterValue()) {
+        record.entryList.add(new DEntry()
+          ..columnName = _COL_VALUE
+          ..valueOriginal = filter.filterValue
+        );
+      }
+      if (filter.hasFilterValueTo()) {
+        record.entryList.add(new DEntry()
+          ..columnName = _COL_VALUE_TO
+          ..valueOriginal = filter.filterValueTo
+        );
+      }
+      if (filter.filterInList.isNotEmpty) {
+        record.entryList.add(new DEntry()
+          ..columnName = _COL_IN
+          ..valueOriginal = filter.filterInList.join(",")
+        );
+      }
       recordList.add(record);
     }
   } // toRecordList
@@ -106,13 +128,42 @@ class ObjectFilterFilter extends TableCtrl {
         continue;
       }
       filter.operation = op;
-
-
-
+      // op date
+      String opDateName = dd.getValue(name:_COL_OP_DATE);
+      if (opDateName != null && opDateName.isNotEmpty) {
+        DOP opDate = getOperationByName(opDateName);
+        if (opDate == null) {
+          _log.warning("updateFilterList NotFound operationDate=${opDateName}");
+        } else {
+          filter.operationDate = opDate;
+        }
+      }
+      // value
+      String value = dd.getValue(name:_COL_VALUE);
+      if (value != null && value.isNotEmpty) {
+        filter.filterValue = value;
+      }
+      String valueTo = dd.getValue(name:_COL_VALUE_TO);
+      if (valueTo != null && valueTo.isNotEmpty) {
+        filter.filterValueTo = valueTo;
+      }
+      String valueIn = dd.getValue(name:_COL_IN);
+      if (valueIn != null && valueIn.isNotEmpty) {
+        filter.filterInList.addAll(valueIn.split(","));
+      }
       filterList.add(filter);
     }
     return filterList;
-  }
+  } // updateFilterList
+
+  // TODO notify filter when changed - to check for filter logic correctness
+
+  // TODO change value editor to data type
+
+  // TODO get IN options
+
+  // TODO multiple fields in table cell (day/value/to/in)
+
 
 
   static const String _TABLENAME = "DSort";
@@ -126,6 +177,8 @@ class ObjectFilterFilter extends TableCtrl {
 //  static const String _COL_RO = "isReadOnly";
 //  static const String _COL_DIRECT = "filterDirectQuery";
 
+
+
   /**
    * Saved Query UI
    */
@@ -133,14 +186,14 @@ class ObjectFilterFilter extends TableCtrl {
     UiUtil uiu = new UiUtil(new UI());
     DTable sqTable = new DTable()
       ..name = _TABLENAME
-      ..label = "Filter";
+      ..label = objectFilterFilter();
     uiu.setTable(sqTable);
     uiu.addPanel(null);
 
     // Column Name
     DColumn col = new DColumn()
       ..name = _COL_NAME
-      ..label = "Column Name"
+      ..label = objectFilterColumnName()
       ..dataType = DataType.PICK
       ..uniqueSeqNo = 1
       ..displaySeqNo = 1
@@ -183,7 +236,7 @@ class ObjectFilterFilter extends TableCtrl {
     // Operation
     col = new DColumn()
       ..name = _COL_OP
-      ..label = "Operation"
+      ..label = objectFilterOperation()
       ..dataType = DataType.PICK
       ..isMandatory = true
       ..defaultValue = DOP.LIKE.name;
@@ -206,7 +259,7 @@ class ObjectFilterFilter extends TableCtrl {
     // Value
     col = new DColumn()
       ..name = _COL_VALUE
-      ..label = "Value"
+      ..label = objectFilterValue()
       ..dataType = DataType.STRING
       ..isMandatory = true;
     uiu.addColumn(col, displayLogic: "!(record.${_COL_OP}=='${DOP.ISNULL}' || record.${_COL_OP}=='${DOP.NOTNULL}' ||  record.${_COL_OP}=='${DOP.IN.name}' || record.${_COL_OP}=='${DOP.NOTIN.name}' "
@@ -215,7 +268,7 @@ class ObjectFilterFilter extends TableCtrl {
     // Value To
     col = new DColumn()
       ..name = _COL_VALUE_TO
-      ..label = "To"
+      ..label = objectFilterValueTo()
       ..dataType = DataType.STRING
       ..isMandatory = false;
     // only if operation is between
@@ -224,7 +277,7 @@ class ObjectFilterFilter extends TableCtrl {
     // Value IN
     col = new DColumn()
       ..name = _COL_IN
-      ..label = "In"
+      ..label = objectFilterValueTo()
       ..dataType = DataType.PICKMULTI
       ..isMandatory = false;
     // only if pick list with values from column
@@ -285,6 +338,14 @@ class ObjectFilterFilter extends TableCtrl {
     }
     return null;
   }
+
+  static String objectFilterFilter() => Intl.message("Filter", name: "objectFilterFilter");
+  static String objectFilterColumnName() => Intl.message("Column Name", name: "objectFilterColumnName");
+  static String objectFilterOperation() => Intl.message("Operation", name: "objectFilterOperation");
+  static String objectFilterValue() => Intl.message("Value", name: "objectFilterValue");
+  static String objectFilterValueTo() => Intl.message("To", name: "objectFilterValueTo");
+  static String objectFilterValueIn() => Intl.message("In", name: "objectFilterValueIn");
+
 
   static String filterOpEquals() => Intl.message("equals", name: "filterOpEquals", args: []);
   static String filterOpNotEquals() => Intl.message("not equals", name: "filterOpNotEquals", args: []);

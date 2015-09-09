@@ -100,7 +100,10 @@ class ObjectFilterSort extends TableCtrl {
       sortList.add(sort);
     }
     return sortList;
-  }
+  } // updateSortList
+
+  // TODO ensure that group by is on top
+  // TODO notify filter when changed
 
 
   static const String _TABLENAME = "DSort";
@@ -115,14 +118,14 @@ class ObjectFilterSort extends TableCtrl {
     UiUtil uiu = new UiUtil(new UI());
     DTable sqTable = new DTable()
       ..name = _TABLENAME
-      ..label = "Sort";
+      ..label = objectFilterSort();
     uiu.setTable(sqTable);
     uiu.addPanel(null);
 
   // Columns
     DColumn col = new DColumn()
       ..name = _COL_NAME
-      ..label = "Column Name"
+      ..label = objectFilterSortColumnName()
       ..dataType = DataType.PICK
       ..uniqueSeqNo = 1
       ..displaySeqNo = 1
@@ -140,20 +143,25 @@ class ObjectFilterSort extends TableCtrl {
     // Columns
     col = new DColumn()
       ..name = _COL_ASC
-      ..label = "Ascending"
+      ..label = objectFilterSortAsc()
       ..dataType = DataType.BOOLEAN
       ..isMandatory = false;
     uiu.addColumn(col);
 
     col = new DColumn()
       ..name = _COL_GROUP
-      ..label = "Group By"
+      ..label = objectFilterSortGrp()
       ..dataType = DataType.BOOLEAN
       ..isMandatory = false;
     uiu.addColumn(col);
 
-
-  return uiu.ui;
+    return uiu.ui;
   } // getUI
+
+  static String objectFilterSort() => Intl.message("Sort", name: "objectFilterSort");
+  static String objectFilterSortColumnName() => Intl.message("Column Name", name: "objectFilterSortColumnName");
+  static String objectFilterSortAsc() => Intl.message("Ascending", name: "objectFilterSortAsc");
+  static String objectFilterSortGrp() => Intl.message("Group by", name: "objectFilterSortGrp");
+
 
 } // ObjectFilterSort
