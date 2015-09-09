@@ -32,20 +32,21 @@ class LSelect extends LEditor with LFormElement implements LSelectI {
   }
 
   /// Select Editor
-  LSelect.from(DColumn column, {String idPrefix, bool multiple, bool this.inGrid:false}) {
+  LSelect.from(DataColumn dataColumn, {String idPrefix, bool multiple, bool this.inGrid:false}) {
     createStandard(this);
-    input.name = column.name;
-    input.id = createId(idPrefix, name);
+    DColumn tableColumn = dataColumn.tableColumn;
+    input.name = tableColumn.name;
+    input.id = createId(idPrefix, input.name);
     if (multiple != null)
       input.multiple = multiple;
     else
-      input.multiple = column.dataType == DataType.PICKMULTI || column.dataType == DataType.PICKMULTICHOICE;
+      input.multiple = tableColumn.dataType == DataType.PICKMULTI || tableColumn.dataType == DataType.PICKMULTICHOICE;
 
     //
-    if (column.pickValueList.isNotEmpty) {
-      dOptions = column.pickValueList;
+    if (tableColumn.pickValueList.isNotEmpty) {
+      dOptions = tableColumn.pickValueList;
     }
-    this.column = column;
+    this.dataColumn = dataColumn;
     _initEditor();
   } // LSelect
 
@@ -72,6 +73,7 @@ class LSelect extends LEditor with LFormElement implements LSelectI {
   }
   /// notification that dependent changed
   void onDependentOnChanged(DEntry dependentEntity) {
+    super.onDependentOnChanged(dependentEntity);
     validateOptions();
   }
 
@@ -222,7 +224,9 @@ class LSelect extends LEditor with LFormElement implements LSelectI {
    */
   void validateOptions() {
     if (data != null && hasDependentOn) {
+      String currentValue = input.value;
       int count = 0;
+      bool invalidated = false;
       List<OptionElement> options = input.options;
       for (OptionElement oe in options) {
         bool valid = _validateOption(oe.value);
@@ -232,9 +236,13 @@ class LSelect extends LEditor with LFormElement implements LSelectI {
         } else {
           count++;
           oe.classes.add(LVisibility.C_HIDE);
+          if (oe.value == currentValue) {
+            input.value = ""; // invalidate current
+            invalidated = true;
+          }
         }
       }
-      _log.fine("validateOptions disabled=${count} of ${options.length}");
+      _log.fine("validateOptions disabled=${count} of ${options.length} - invalidated=${invalidated}");
     }
   } // isValidOption
 

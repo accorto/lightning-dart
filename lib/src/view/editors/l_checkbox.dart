@@ -32,12 +32,12 @@ class LCheckbox extends LEditor with LFormElement {
   /**
    * Checkbox Editor
    */
-  LCheckbox.from(DColumn column, {String idPrefix, bool this.inGrid:false}) {
+  LCheckbox.from(DataColumn dataColumn, {String idPrefix, bool this.inGrid:false}) {
     createCheckbox(this);
-    input.name = column.name;
-    input.id = createId(idPrefix, name);
+    input.name = dataColumn.name;
+    input.id = createId(idPrefix, input.name);
     //
-    this.column = column; // base values
+    this.dataColumn = dataColumn; // base values
     _initEditor();
   } // LInput
 

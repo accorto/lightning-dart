@@ -159,7 +159,7 @@ class LTable extends LComponent {
     if (primary) {
       row = new LTableHeaderRow(_thead.addRow(), _theadRows.length, id,
         LText.C_TEXT_HEADING__LABEL, optionRowSelect, nameList, nameLabelMap,
-        enableSort ? onTableSortClicked : null, _tableActions, table);
+        enableSort ? onTableSortClicked : null, _tableActions, dataColumns);
       if (optionRowSelect && _theadRows.isEmpty) {
         row.selectCb.onClick.listen((MouseEvent evt) {
           selectAll(row.selectCb.checked);
@@ -167,7 +167,7 @@ class LTable extends LComponent {
       }
     } else {
       row = new LTableRow(_thead.addRow(), _tbodyRows.length, id, null,
-        LText.C_TEXT_HEADING__LABEL, optionRowSelect, nameList, nameLabelMap, LTableRow.TYPE_HEAD, null, table);
+        LText.C_TEXT_HEADING__LABEL, optionRowSelect, nameList, nameLabelMap, LTableRow.TYPE_HEAD, null, dataColumns);
     }
     _theadRows.add(row);
     // add urv
@@ -288,7 +288,7 @@ class LTable extends LComponent {
     if (_tbody == null)
       _tbody = element.createTBody();
     LTableRow row = new LTableRow(_tbody.addRow(), _tbodyRows.length, id, rowValue,
-        LButton.C_HINT_PARENT, optionRowSelect, nameList, nameLabelMap, LTableRow.TYPE_BODY, _rowActions, table);
+        LButton.C_HINT_PARENT, optionRowSelect, nameList, nameLabelMap, LTableRow.TYPE_BODY, _rowActions, dataColumns);
     row.editMode = _editMode;
     _tbodyRows.add(row);
     return row;
@@ -299,7 +299,7 @@ class LTable extends LComponent {
     if (_tfoot == null)
       _tfoot = element.createTFoot();
     LTableRow row = new LTableRow(_tfoot.addRow(), _tfootRows.length, id, null,
-        LButton.C_HINT_PARENT, optionRowSelect, nameList, nameLabelMap, LTableRow.TYPE_FOOT, null, table);
+        LButton.C_HINT_PARENT, optionRowSelect, nameList, nameLabelMap, LTableRow.TYPE_FOOT, null, dataColumns);
     _tfootRows.add(row);
     return row;
   }
@@ -314,10 +314,14 @@ class LTable extends LComponent {
   /// Set Header
   void setUi(UI ui) {
     _ui = ui;
+    dataColumns.clear();
+    for (DColumn col in _ui.table.columnList) {
+      dataColumns.add(DataColumn.fromUi(_ui, col.name, tableColumn:col));
+    }
     LTableHeaderRow hdr = addHeadRow(true);
-    for (UIGridColumn gc in ui.gridColumnList) {
-      if (gc.isActive) {
-        hdr.addGridColumn(gc);
+    for (DataColumn dataColumn in dataColumns) {
+      if (dataColumn.isActiveGrid) {
+        hdr.addGridColumn(dataColumn);
       }
     }
   } // setUi
@@ -338,7 +342,7 @@ class LTable extends LComponent {
   /// UI Meta Data
   UI _ui;
   /// Table Meta Data
-  DTable get table => _ui == null ? null : _ui.table;
+  final List<DataColumn> dataColumns = new List<DataColumn>();
 
 
   /// Set Records - [recordAction] click on drv/urv

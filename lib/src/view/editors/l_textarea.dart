@@ -26,12 +26,12 @@ class LTextArea extends LEditor with LFormElement {
     _initEditor();
   }
 
-  LTextArea.from(DColumn column, {String idPrefix, bool this.inGrid:false}) {
+  LTextArea.from(DataColumn dataColumn, {String idPrefix, bool this.inGrid:false}) {
     createStandard(this);
-    input.name = column.name;
-    input.id = createId(idPrefix, name);
+    input.name = dataColumn.name;
+    input.id = createId(idPrefix, input.name);
     //
-    this.column = column;
+    this.dataColumn = dataColumn;
     _initEditor();
   }
 

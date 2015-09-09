@@ -219,15 +219,16 @@ abstract class EditorI {
 
   /// get Label
   String get label {
-    if (column != null)
-      return column.label;
+    if (dataColumn != null)
+      return dataColumn.label;
     return null;
   }
   /// set label
   void set label(String newValue) {
-    if (column == null)
-      column = new DColumn();
-    column.label = newValue;
+    if (dataColumn == null)
+      dataColumn = DataColumn.fromEditor(this, newValue, null);
+    else
+      dataColumn.tableColumn.label = newValue;
   }
 
   String get placeholder => "";
@@ -242,50 +243,63 @@ abstract class EditorI {
   /**
    * Set Column (info for specific editors)
    */
-  void set column (DColumn newValue){
-    _column = newValue;
+  void set dataColumn (DataColumn newValue){
+    _dataColumn = newValue;
     // name = column.name; -- in editor constructor
     // type -- in editor constructor
 
-    label = _column.label;
-    placeholder = _column.description;
-    String helpText = _column.help;
+    DColumn tableColumn = _dataColumn.tableColumn;
+    label = _dataColumn.label;
+    placeholder = tableColumn.description;
+    String helpText = tableColumn.help;
     if (helpText != null && helpText.startsWith("hint:")) {
       hint = helpText.substring(5).trim();
     } else {
       help = helpText;
     }
 
-    if (_column.hasIsMandatory())
-      required = _column.isMandatory;
-    if (_column.hasIsReadOnly())
-      readOnly = _column.isReadOnly;
+    if (tableColumn.hasIsMandatory())
+      required = tableColumn.isMandatory;
+    if (tableColumn.hasIsReadOnly())
+      readOnly = tableColumn.isReadOnly;
 
-    if (_column.hasColumnSize())
-      maxlength = _column.columnSize;
-    if (_column.hasDefaultValue())
-      defaultValue = _column.defaultValue;
+    if (tableColumn.hasColumnSize())
+      maxlength = tableColumn.columnSize;
+    if (tableColumn.hasDefaultValue())
+      defaultValue = tableColumn.defaultValue;
 
-    if (_column.hasFormatMask())
-      pattern = _column.formatMask;
+    if (tableColumn.hasFormatMask())
+      pattern = tableColumn.formatMask;
 
     // input: min = column.valFrom; max = column.valTo;
     // selects column.pickValueList
 
-    if (_column.hasParentReference()) {
-      _addDependentOn(EditorIDependent.getParentColumnName(_column.parentReference));
+    if (tableColumn.hasParentReference()) {
+      _addDependentOn(EditorIDependent.getParentColumnName(tableColumn.parentReference));
     }
-    if (_column.hasRestrictionSql()) {
-      String sql = _column.restrictionSql;
+    if (tableColumn.hasRestrictionSql()) {
+      String sql = tableColumn.restrictionSql;
       for (Match m in DataContext._RECORD.allMatches(sql)) {
         // _log.info("${m.input} start=${m.start} end=${m.end} groups=${m.groupCount}");
         String varName = m.input.substring(m.start+7, m.end);
         _addDependentOn(varName);
       }
     }
+    if (_dataColumn.uiPanelColumn != null) {
+      UIPanelColumn pc = _dataColumn.uiPanelColumn;
+      if (pc.hasDisplayLogic()) {
+        _addDependentOnLogic(pc.displayLogic);
+      }
+      if (pc.hasReadOnlyLogic()) {
+        _addDependentOnLogic(pc.readOnlyLogic);
+      }
+      if (pc.hasMandatoryLogic()) {
+        _addDependentOnLogic(pc.mandatoryLogic);
+      }
+    }
   } // column
-  DColumn get column => _column;
-  DColumn _column;
+  DataColumn get dataColumn => _dataColumn;
+  DataColumn _dataColumn;
   /// Automatically submit on enter
   bool autoSubmit = false;
 
@@ -311,6 +325,15 @@ abstract class EditorI {
   }
   List<EditorIDependent> get dependentOnList => _dependentOnList;
   List<EditorIDependent> _dependentOnList;
+  /// Extract variables in logic
+  void _addDependentOnLogic(String logic) {
+    Set<String> variables = DataContext.contextVariableList(logic);
+    if (variables != null) {
+      for (String variable in variables)
+        _addDependentOn(variable);
+    }
+  }
+
   /// Option validation List
   void addDependentOnValidation(List<DKeyValue> validationList) {
     for (DKeyValue val in validationList) {
@@ -319,7 +342,12 @@ abstract class EditorI {
   }
 
   /// notification that dependent changed - subclasses to implement
-  void onDependentOnChanged(DEntry dependentEntity) {}
+  void onDependentOnChanged(DEntry dependentEntity) {
+    // dynamic context
+    show = dataColumn.isDisplayed(data);
+    readOnly = dataColumn.isReadOnly(data);
+    required = dataColumn.isMandatory(data);
+  }
 
   /// check if a a dependent on column value has changed
   bool get dependentOnChanged {
@@ -338,8 +366,8 @@ abstract class EditorI {
 
   /// get restriction sql with dependent based on data info or null
   String getRestrictionSql() {
-    if (_column != null && _column.hasRestrictionSql()) {
-      String sql = _column.restrictionSql;
+    if (dataColumn != null && dataColumn.tableColumn != null && dataColumn.tableColumn.hasRestrictionSql()) {
+      String sql = dataColumn.tableColumn.restrictionSql;
       if (_dependentOnList != null && data != null) {
         return DataContext.contextReplace(data, sql, columnName: name); // not null/empty
       }
@@ -369,6 +397,10 @@ abstract class EditorI {
         theValue = null;
       value = theValue == null ? "" : theValue;
     }
+    // dynamic context
+    show = dataColumn.isDisplayed(data);
+    readOnly = dataColumn.isReadOnly(data);
+    required = dataColumn.isMandatory(data);
   } // setEntry
   DEntry _entry;
 

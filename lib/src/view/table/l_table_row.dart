@@ -32,7 +32,7 @@ class LTableRow implements FormI {
   /// Record Action
   AppsActionTriggered recordAction;
   /// Meta Data
-  final DTable table;
+  final List<DataColumn> dataColumns;
   /// Data Container
   DataRecord data;
   /// Callback when save
@@ -48,7 +48,7 @@ class LTableRow implements FormI {
   LTableRow(TableRowElement this.rowElement, int this.rowNo, String idPrefix, String rowValue,
       String cssClass, bool rowSelect,
       List<String> this.nameList, Map<String,String> this.nameLabelMap, String this.type,
-      List<AppsAction> rowActions, DTable this.table) {
+      List<AppsAction> rowActions, List<DataColumn> this.dataColumns) {
     rowElement.classes.add(cssClass);
     if (rowValue != null)
       rowElement.attributes[Html0.DATA_VALUE] = rowValue;
@@ -124,11 +124,12 @@ class LTableRow implements FormI {
    * Add Cell Text
    * with [display] of column [name] with [value]
    */
-  LTableCell addCellText(String display, {String name, String value, String align, DColumn column}) {
+  LTableCell addCellText(String display,
+      {String name, String value, String align, DataColumn dataColumn}) {
     SpanElement span = new SpanElement()
       ..classes.add(LText.C_TRUNCATE)
       ..text = display == null ? "" : display;
-    return addCell(span, name, value, align, column);
+    return addCell(span, name, value, align, dataColumn);
   }
 
   /// Add Link
@@ -148,9 +149,9 @@ class LTableRow implements FormI {
    * Add Cell Link
    * of column [name] with [value]
    */
-  LTableCell addCellLink(AnchorElement a, {String name, String value, String align, DColumn column}) {
+  LTableCell addCellLink(AnchorElement a, {String name, String value, String align, DataColumn dataColumn}) {
     a.classes.add(LText.C_TRUNCATE);
-    return addCell(a, name, value, align, column);
+    return addCell(a, name, value, align, dataColumn);
   }
 
   /**
@@ -165,11 +166,19 @@ class LTableRow implements FormI {
     return tc;
   }
 
-  LTableCell addCellEditor(LEditor editor) {
+  /// Add Editor
+  LTableCell addCellEditor(LEditor editor, String display, String value, String align, bool editModeField) {
     if (editors == null)
       editors = new List<LEditor>();
     editors.add(editor);
-    return addCell(editor.input, null, null, null, editor.column);
+
+    if (editModeField) {
+      SpanElement span = new SpanElement()
+        ..classes.add(LText.C_TRUNCATE)
+        ..text = display == null ? "" : display;
+      return addCell(span, editor.name, value, align, editor.dataColumn);
+    }
+    return addCell(editor.input, null, null, align, editor.dataColumn);
   }
 
   /**
@@ -177,7 +186,8 @@ class LTableRow implements FormI {
    * if you not provide the data column [name], it is derived - if found the label is derived (required for responsive)
    * [align] LText.C_TEXT_CENTER LText.C_TEXT_RIGHT
    */
-  LTableCell addCell(Element content, String name, String value, String align, DColumn column) {
+  LTableCell addCell(Element content, String name, String value,
+      String align, DataColumn dataColumn, {bool fieldEdit:false}) {
     // find column Name
     String theName = name;
     if (theName == null) {
@@ -203,7 +213,12 @@ class LTableRow implements FormI {
     } else {
       rowElement.insertBefore(tc, _actionCell.cellElement);
     }
-    return new LTableCell(tc, content, theName, label, value, align, column);
+    if (fieldEdit) {
+      tc.onFocus.listen((Event evt){
+        _log.config("fieldFocus ${theName}");
+      });
+    }
+    return new LTableCell(tc, content, theName, label, value, align, dataColumn);
   } // addTableElement
 
   /**
@@ -250,36 +265,60 @@ class LTableRow implements FormI {
       if (name == LTable.URV) {
         addCellUrv(record, recordAction);
       } else {
-        DColumn column = findColumn(name);
+        DataColumn dataColumn = findColumn(name);
         DEntry entry = data.getEntry(null, name, false);
-        if (_editMode == LTable.EDIT_ALL || (_editMode == LTable.EDIT_SEL && selected)) {
-          LEditor editor = EditorUtil.createfromColumn(name, column, data, true, rowElement.id);
-          addCellEditor(editor);
-        } else {
-          String value = DataRecord.getEntryValue(entry);
-          String display = displayRender(column, entry);
-          addCellText(display, name:name, value:value, column:column);
+        String value = DataRecord.getEntryValue(entry);
+        String align = _displayAlign(dataColumn);
+
+        LEditor editor = null;
+        if (_editMode == LTable.EDIT_RO
+            || (_editMode == LTable.EDIT_SEL && !selected)) {
+          String display = _displayRender(value, entry, dataColumn, editor);
+          addCellText(display, name:name, value:value, dataColumn:dataColumn);
+        } else { // all, sel or field
+          editor = EditorUtil.createfromColumn(name, dataColumn, true,
+            idPrefix:rowElement.id, data:data, entry:entry);
+          String display = _displayRender(value, entry, dataColumn, editor);
+          addCellEditor(editor, display, value, align, _editMode == LTable.EDIT_FIELD);
         }
       }
-    }
+    } // for all column names
   } // display
 
   /// Render Value
-  String displayRender(DColumn column, DEntry entry) {
-    if (entry == null)
-      return null;
-    if (entry.hasValueDisplay())
+  String _displayRender(String dataValue, DEntry entry, DataColumn dataColumn, LEditor editor) {
+    if (dataValue == null || dataValue.isEmpty)
+      return dataValue;
+    if (entry != null && entry.hasValueDisplay())
       return entry.valueDisplay;
-    String value = DataRecord.getEntryValue(entry);
-    if (column != null && value != null && value.isNotEmpty) {
-      if (DataTypeUtil.isDisplayRendered(column.dataType)) {
-        // todo render
+
+    if (editor != null) {
+      return editor.render(dataValue, false);
+    }
+    if (dataColumn != null) {
+      String valueDisplay = EditorUtil.render(dataColumn.tableColumn.dataType, dataValue);
+      if (valueDisplay != dataValue) {
+        if (entry != null)
+            entry.valueDisplay = valueDisplay;
+        return dataValue;
       }
     }
-    return value;
+    return dataValue;
+  } // displayRender
+
+  /// Render Value
+  String _displayAlign(DataColumn dataColumn) {
+    if (dataColumn != null) {
+      DataType dt = dataColumn.tableColumn.dataType;
+      if (DataTypeUtil.isCenterAligned(dt))
+        return LText.C_TEXT_CENTER;
+      if (DataTypeUtil.isRightAligned(dt))
+        return LText.C_TEXT_RIGHT;
+    }
+    return null;
   }
 
-
+  /// Edit Mode
   void set editMode (String newValue) {
     _editMode = newValue;
     if (record != null) {
@@ -290,12 +329,10 @@ class LTableRow implements FormI {
 
 
   /// find column by name or null
-  DColumn findColumn(String name) {
-    if (table != null && name != null) {
-      for (DColumn col in table.columnList) {
-        if (col.name == name)
-          return col;
-      }
+  DataColumn findColumn(String name) {
+    for (DataColumn col in dataColumns) {
+      if (col.name == name)
+        return col;
     }
     return null;
   }
@@ -336,16 +373,16 @@ class LTableHeaderRow extends LTableRow {
   LTableHeaderRow(TableRowElement element, int rowNo, String idPrefix,
       String cssClass, bool rowSelect,
       List<String> nameList, Map<String,String> nameLabelMap,
-      this.tableSortClicked, List<AppsAction> tableActions, DTable table)
+      this.tableSortClicked, List<AppsAction> tableActions, List<DataColumn> dataColumns)
     : super (element, rowNo, idPrefix, null, cssClass, rowSelect, nameList, nameLabelMap,
-        LTableRow.TYPE_HEAD, tableActions, table);
+        LTableRow.TYPE_HEAD, tableActions, dataColumns);
 
   /**
    * Add Cell with Header Text
    * with [label] of column [name] with optional [value]
    * - name/label are used for responsive
    */
-  LTableHeaderCell addHeaderCell(String name, String label, {String value, String align, DColumn column}) {
+  LTableHeaderCell addHeaderCell(String name, String label, {String value, String align, DataColumn dataColumn}) {
     SpanElement span = new SpanElement()
       ..classes.add(LText.C_TRUNCATE)
       ..text = label == null ? "" : label;
@@ -365,18 +402,18 @@ class LTableHeaderRow extends LTableRow {
     } else {
       rowElement.insertBefore(tc, _actionCell.cellElement);
     }
-    if (column == null) {
-      column = findColumn(name);
+    if (dataColumn == null) {
+      dataColumn = findColumn(name);
     }
-    return new LTableHeaderCell(tc, span, name, label, value, align, tableSortClicked, column);
+    return new LTableHeaderCell(tc, span, name, label, value, align, tableSortClicked, dataColumn);
   } // addHeaderCell
 
 
   /**
    * Add Grid Column
    */
-  void addGridColumn(UIGridColumn gc) {
-    addHeaderCell(gc.column.name, gc.column.label, column:gc.column);
+  void addGridColumn(DataColumn dataColumn) {
+    addHeaderCell(dataColumn.name, dataColumn.label, dataColumn:dataColumn);
   }
 
 

@@ -24,4 +24,9 @@
 		<priority>0.5</priority>
 		<changefreq>weekly</changefreq>
 	</url>
+	<url>
+		<loc>http://lightningdart.com/exampleWorkspace.html</loc>
+		<priority>0.5</priority>
+		<changefreq>weekly</changefreq>
+	</url>
 </urlset>

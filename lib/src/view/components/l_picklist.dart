@@ -45,6 +45,9 @@ class LPicklist extends LEditor implements LSelectI {
   LDropdownElement dropdown;
 
 
+  /// Displayed in Grid
+  final bool inGrid;
+
   /**
    * Picklist
    * div  element .form_element
@@ -52,7 +55,7 @@ class LPicklist extends LEditor implements LSelectI {
    * -- button .form-element--label
    * -- div .dropdown
    */
-  LPicklist(String idPrefix) {
+  LPicklist(String idPrefix, {bool this.inGrid:false}) {
     element.append(_pl);
     _button = new LButton(new ButtonElement(), "select", null, idPrefix:idPrefix,
       buttonClasses: [LButton.C_BUTTON__NEUTRAL, C_PICKLIST__LABEL],

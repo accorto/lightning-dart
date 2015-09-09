@@ -14,6 +14,8 @@ class FormCtrl extends LForm {
   /// The UI
   final UI ui;
 
+  final List<DataColumn> dataColumns = new List<DataColumn>();
+
   /**
    * Form Util
    */
@@ -30,9 +32,13 @@ class FormCtrl extends LForm {
   void build() {
     for (UIPanel panel in ui.panelList) {
       for (UIPanelColumn pc in panel.panelColumnList) {
-
-        LEditor editor = EditorUtil.createfromColumn(null, pc.column, data, false, element.id);
-        addEditor(editor);
+        DataColumn dataColumn = DataColumn.fromUi(ui, pc.columnName, tableColumn:pc.column, panelColumn:pc);
+        dataColumns.add(dataColumn);
+        if (dataColumn.isActivePanel) {
+          LEditor editor = EditorUtil.createfromColumn(null, dataColumn, false,
+            idPrefix: element.id, data:data);
+          addEditor(editor);
+        }
       }
     }
     addResetButton();

@@ -118,7 +118,7 @@ class ObjectFilterFilter extends TableCtrl {
   static const String _TABLENAME = "DSort";
   static const String _COL_NAME = "columnName";
   static const String _COL_OP = "operation";
-//  static const String _COL_OP_DATE = "operationDate";
+  static const String _COL_OP_DATE = "operationDate";
 //  static const String _COL_DT = "dataType";
   static const String _COL_VALUE = "filterValue";
   static const String _COL_VALUE_TO = "filterValueTo";
@@ -185,9 +185,23 @@ class ObjectFilterFilter extends TableCtrl {
       ..name = _COL_OP
       ..label = "Operation"
       ..dataType = DataType.PICK
-      ..isMandatory = true;
+      ..isMandatory = true
+      ..defaultValue = DOP.LIKE.name;
     getUIOp(col, neList,  likeList, pickList, notFkList, dateList, optionalList);
     uiu.addColumn(col);
+
+    // Operation
+    col = new DColumn()
+      ..name = _COL_OP_DATE
+      ..label = "D"
+      ..dataType = DataType.PICK
+      ..isMandatory = true
+      ..defaultValue = DOP.D_THIS.name;
+    col.pickValueList.add(new DOption()..value = DOP.D_LAST.name ..label = filterOpDateLast());
+    col.pickValueList.add(new DOption()..value = DOP.D_THIS.name ..label = filterOpDateThis());
+    col.pickValueList.add(new DOption()..value = DOP.D_NEXT.name ..label = filterOpDateNext());
+    String logicDateOp = "record.${_COL_OP}=='${DOP.D_DAY.name}' || record.${_COL_OP}=='${DOP.D_WEEK.name}' || record.${_COL_OP}=='${DOP.D_MONTH.name}' || record.${_COL_OP}=='${DOP.D_QUARTER.name}' || record.${_COL_OP}=='${DOP.D_YEAR.name}'";
+    uiu.addColumn(col, displayLogic: logicDateOp);
 
     // Value
     col = new DColumn()
@@ -195,25 +209,26 @@ class ObjectFilterFilter extends TableCtrl {
       ..label = "Value"
       ..dataType = DataType.STRING
       ..isMandatory = true;
-    uiu.addColumn(col);
+    uiu.addColumn(col, displayLogic: "!(record.${_COL_OP}=='${DOP.ISNULL}' || record.${_COL_OP}=='${DOP.NOTNULL}' ||  record.${_COL_OP}=='${DOP.IN.name}' || record.${_COL_OP}=='${DOP.NOTIN.name}' "
+      "|| ${logicDateOp})");
 
     // Value To
     col = new DColumn()
       ..name = _COL_VALUE_TO
-      ..label = "Value To"
+      ..label = "To"
       ..dataType = DataType.STRING
       ..isMandatory = false;
     // only if operation is between
-    uiu.addColumn(col, displayLogic: "record.${_COL_OP}='${DOP.BETWEEN.name}'");
+    uiu.addColumn(col, displayLogic: "record.${_COL_OP}=='${DOP.BETWEEN.name}'");
 
     // Value IN
     col = new DColumn()
       ..name = _COL_IN
-      ..label = "Value In"
+      ..label = "In"
       ..dataType = DataType.PICKMULTI
       ..isMandatory = false;
     // only if pick list with values from column
-    uiu.addColumn(col, displayLogic: "record.${_COL_OP}='${DOP.IN.name}' || record.${_COL_OP}='${DOP.NOTIN.name}'");
+    uiu.addColumn(col, displayLogic: "record.${_COL_OP}=='${DOP.IN.name}' || record.${_COL_OP}=='${DOP.NOTIN.name}'");
 
     //
     return uiu.ui;
@@ -238,11 +253,11 @@ class ObjectFilterFilter extends TableCtrl {
     col.pickValueList.add(getUIOpOption(DOP.LT.name, "<\u2003 ${filterOpLess()}", notFkList));
     col.pickValueList.add(getUIOpOption(DOP.BETWEEN.name, "|..|\u2002 ${filterOpBetween()}", notFkList));
     // Date
-    col.pickValueList.add(getUIOpOption(DOP.D_DAY.name, "${filterOpDateDay()}", dateList));
-    col.pickValueList.add(getUIOpOption(DOP.D_WEEK.name, "${filterOpDateWeek()}", dateList));
-    col.pickValueList.add(getUIOpOption(DOP.D_MONTH.name, "${filterOpDateMonth()}", dateList));
-    col.pickValueList.add(getUIOpOption(DOP.D_QUARTER.name, "${filterOpDateQuarter()}", dateList));
-    col.pickValueList.add(getUIOpOption(DOP.D_YEAR.name, "${filterOpDateYear()}", dateList));
+    col.pickValueList.add(getUIOpOption(DOP.D_DAY.name, filterOpDateDay(), dateList));
+    col.pickValueList.add(getUIOpOption(DOP.D_WEEK.name, filterOpDateWeek(), dateList));
+    col.pickValueList.add(getUIOpOption(DOP.D_MONTH.name, filterOpDateMonth(), dateList));
+    col.pickValueList.add(getUIOpOption(DOP.D_QUARTER.name, filterOpDateQuarter(), dateList));
+    col.pickValueList.add(getUIOpOption(DOP.D_YEAR.name, filterOpDateYear(), dateList));
     // Optional
     col.pickValueList.add(getUIOpOption(DOP.ISNULL.name, "\u2205\u2003 ${filterOpNull()}", optionalList));
     col.pickValueList.add(getUIOpOption(DOP.NOTNULL.name, "\u2203\u2003 ${filterOpNotNull()}", optionalList));

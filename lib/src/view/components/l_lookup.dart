@@ -53,6 +53,8 @@ class LLookup extends LEditor implements LSelectI {
   final List<LLookupItem> _items = new List<LLookupItem>();
   /// Display for Single Select
   LPill _singlePill;
+  /// Displayed in Grid
+  final bool inGrid;
 
   /**
    * Lookup
@@ -63,7 +65,8 @@ class LLookup extends LEditor implements LSelectI {
   LLookup(String name, {String idPrefix,
       String select: DATA_SELECT_SINGLE,
       String scope: "single",
-      bool typeahead: false}) {
+      bool typeahead: false,
+      bool this.inGrid:false}) {
     _setAttributes(select, scope, typeahead);
     _formElement.createStandard(this);
     input

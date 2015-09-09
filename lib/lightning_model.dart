@@ -45,6 +45,7 @@ import 'dart:web_sql';
 
 // Model Functionality
 part 'src/model/client_env.dart';
+part 'src/model/data_column.dart';
 part 'src/model/data_context.dart';
 part 'src/model/data_record.dart';
 part 'src/model/data_type_util.dart';

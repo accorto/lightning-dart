@@ -279,6 +279,9 @@ abstract class TableCtrl extends LTable {
     }
   } // resequence
 
+  /// not correctly translated
+  static String tableCtrlRecords(int count) => Intl.plural(count, zero: "no records", one: "${count} record", other: "${count} records", args:["count"], name: "tableCtrlRecords");
+
   // delete confirmation
   static String tableCtrlDelete1Record() => Intl.message("Delete current record", name: "tableCtrlDelete1Record");
   static String tableCtrlDeleteRecords() => Intl.message("Delete selected Records?", name: "tableCtrlDeleteRecords");

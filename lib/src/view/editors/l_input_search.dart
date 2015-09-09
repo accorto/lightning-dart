@@ -20,8 +20,8 @@ class LInputSearch extends LInput {
     : super(name, EditorI.TYPE_SEARCH, idPrefix:idPrefix, inGrid:inGrid);
 
   /// Search Input
-  LInputSearch.from(DColumn column, {String idPrefix, bool inGrid:false})
-    : super.from(column, EditorI.TYPE_SEARCH, idPrefix:idPrefix, inGrid:inGrid);
+  LInputSearch.from(DataColumn dataColumn, {String idPrefix, bool inGrid:false})
+    : super.from(dataColumn, EditorI.TYPE_SEARCH, idPrefix:idPrefix, inGrid:inGrid);
 
   @override
   LIcon getIconRight() => _iconRight;

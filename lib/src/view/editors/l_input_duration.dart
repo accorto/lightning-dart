@@ -14,8 +14,8 @@ class LInputDuration extends LInput {
   LInputDuration(String name, {String idPrefix, bool inGrid:false})
     : super(name, EditorI.TYPE_DURATION, idPrefix:idPrefix, inGrid:inGrid);
 
-  LInputDuration.from(DColumn column, {String idPrefix, bool inGrid:false})
-    : super.from(column, EditorI.TYPE_DURATION, idPrefix:idPrefix, inGrid:inGrid);
+  LInputDuration.from(DataColumn dataColumn, {String idPrefix, bool inGrid:false})
+    : super.from(dataColumn, EditorI.TYPE_DURATION, idPrefix:idPrefix, inGrid:inGrid);
 
   /**
    * Value

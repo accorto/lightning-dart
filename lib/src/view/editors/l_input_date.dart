@@ -31,8 +31,8 @@ class LInputDate extends LInput {
     _initDate(type);
   }
 
-  LInputDate.from(DColumn column, String type, {String idPrefix, bool inGrid:false})
-      : super.from(column, type, idPrefix:idPrefix, inGrid:inGrid) {
+  LInputDate.from(DataColumn dataColumn, String type, {String idPrefix, bool inGrid:false})
+      : super.from(dataColumn, type, idPrefix:idPrefix, inGrid:inGrid) {
     _initDate(type);
   }
 

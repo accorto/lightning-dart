@@ -17,16 +17,23 @@ abstract class LEditor extends EditorI {
 
   /// Get Form Element -- via with LFormElement or own
   Element get element;
+  /// Editor in Grid
+  bool get inGrid;
 
   /// Showing
   bool get show => !element.classes.contains(LVisibility.C_HIDE);
   /// Show/Hide
   void set show (bool newValue) {
-    if (newValue)
+    if (newValue) {
       element.classes.remove(LVisibility.C_HIDE);
-    else
+      if (inGrid)
+        input.classes.remove(LVisibility.C_HIDE);
+    } else {
       element.classes.add(LVisibility.C_HIDE);
-  }
+      if (inGrid)
+        input.classes.add(LVisibility.C_HIDE);
+    }
+  } // show
 
   /// called by sub class
   String createId(String idPrefix, String name) {

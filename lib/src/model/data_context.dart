@@ -113,6 +113,19 @@ class DataContext {
   /// Record indicator
   static final RegExp _PARENT = new RegExp(r'parent\.[a-zA-Z_0-9]+');
 
+  /// Get record variable names in [logic]
+  static Set<String> contextVariableList(String logic) {
+    if (logic == null || logic.isEmpty)
+      return null;
+    Set<String> variables = new Set<String>();
+    for (Match match in _RECORD.allMatches(logic)) {
+      String var1 = match.input.substring(match.start, match.end);
+      variables.add(var1.substring(7)); // remove record. prefix
+    }
+    return variables;
+  }
+
+
   /**
    * Parse [logic] for @variable@ returning list of variables
    */
@@ -236,7 +249,9 @@ class DataContext {
     }
 
     // https://www.dartlang.org/articles/js-dart-interop/
-    var biz = new JsObject(context['BizFabrik']);
+    // Exception: constructor not a function
+    //    <script src="packages/lightning/assets/ldart.js"></script>
+    var biz = new JsObject(context['LDART']);
     if (logic.contains("record"))
       biz.callMethod('set', ['record', getJsRecord(record, table)]);
     if (logic.contains("parent") && record.hasParent())

@@ -38,13 +38,13 @@ class LInput extends LEditor with LFormElement {
   /**
    * Input Editor
    */
-  LInput.from(DColumn column, String type, {String idPrefix, bool this.inGrid:false}) {
+  LInput.from(DataColumn dataColumn, String type, {String idPrefix, bool this.inGrid:false}) {
     createStandard(this);
-    input.name = column.name;
-    input.id = createId(idPrefix, name);
+    input.name = dataColumn.name;
+    input.id = createId(idPrefix, input.name);
     input.type = type;
 
-    this.column = column; // base values
+    this.column = dataColumn; // base values
     _initEditor();
   } // LInput
 
@@ -84,13 +84,13 @@ class LInput extends LEditor with LFormElement {
   }
 
   /// Set Column (input min/max)
-  void set column (DColumn newValue) {
-    super.column = newValue;
+  void set column (DataColumn newValue) {
+    super.dataColumn = newValue;
 
-    if (column.hasValFrom())
-      min = column.valFrom;
-   if (column.hasValTo())
-      max = column.valTo;
+    if (dataColumn.tableColumn.hasValFrom())
+      min = dataColumn.tableColumn.valFrom;
+   if (dataColumn.tableColumn.hasValTo())
+      max = dataColumn.tableColumn.valTo;
   }
 
   String get defaultValue => input.defaultValue;
