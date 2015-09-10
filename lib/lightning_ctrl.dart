@@ -78,6 +78,8 @@ class LightningCtrl {
       return completer.future;
     }
     //
+    ServiceAnalytics.enabled = true;
+    RemoteLogger.enabled = true;
     new RemoteLogger();
     futures.add(LightningDart.init()); // ClientEnv, Locale Intl, Date
     futures.add(Preference.init());
@@ -141,7 +143,7 @@ class LightningCtrl {
    * optional [classList] (if mot defined, container/fluid)
    */
   static AppsMain createAppsMain({String id: "wrap",
-    bool clearContainer: true, List<String> classList}) {
+      bool clearContainer: true, List<String> classList}) {
     if (router.hasParam(Router.P_LOADDIV)) {
       id = router.param(Router.P_LOADDIV);
     }
@@ -161,14 +163,14 @@ class LightningCtrl {
     AppsMain main = null;
     if (e == null) {
       Element body = document.body; // querySelector("body");
-      main = new AppsMain(new DivElement(), id, classList);
+      main = new AppsMain(new DivElement(), id, classList:classList);
       body.append(main.element);
     } else {
       LightningDart.devTimestamp = e.attributes["data-timestamp"];
       if (clearContainer) {
         e.children.clear();
       }
-      main = new AppsMain(e, id, classList);
+      main = new AppsMain(e, id, classList:classList);
     }
     //
     Service.onServerStart = main.onServerStart;

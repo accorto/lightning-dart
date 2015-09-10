@@ -16,24 +16,24 @@ class AppsMain extends PageSimple {
 
   static final Logger _log = new Logger("AppsMain");
 
-
+  /// Head
+  AppsHeader header;
   /// Menu
   AppsMenu _menu;
+  /// Content
+  DivElement content = new DivElement();
+  /// Footer
+  CDiv footer;
+
   /// Current Apps
   AppsCtrl apps;
-  /// Head
-  AppsHeader head;
-  /// Content
-  DivElement main = new DivElement();
-  /// Footer
-  CDiv foot;
 
   /**
-   * Main Page
-   * optional [classList] (if mot defined, container/fluid)
+   * Main Page with this [element]
+   * optional [classList] (if not defined, container/fluid)
    */
-  AppsMain(DivElement element, String id, List<String> classList)
-  : super(element, id, classList) {
+  AppsMain(DivElement element, String id, {List<String> classList})
+      : super(element, id, classList:classList) {
 
     DivElement mainGrid = new DivElement()
       ..classes.add(LGrid.C_GRID);
@@ -45,12 +45,15 @@ class AppsMain extends PageSimple {
     DivElement leftSide = new DivElement()
       ..classes.add(LGrid.C_COL);
     mainGrid.append(leftSide);
-    head = new AppsHeader();
-    leftSide.append(head.element);
-    leftSide.append(main);
-    foot = new CDiv.footer();
-    leftSide.append(foot.element);
-  }
+    header = new AppsHeader();
+    leftSide.append(header.element);
+    leftSide.append(content);
+    footer = new CDiv.footer();
+    leftSide.append(footer.element);
+    //
+    AppsPage.routeHandler = onRouteEnter;
+    LightningCtrl.router.fallbackHandler = onRouteEnter;
+  } // AppsMain
 
   /**
    * Set Application
@@ -60,14 +63,17 @@ class AppsMain extends PageSimple {
       sub.cancel();
     }
     this.apps = apps;
-    head.set(apps);
+    header.set(apps);
     _menu.set(apps);
     for (AppsPage pe in apps.pages) {
       _subscriptions.add(pe.menuEntry.onClick.listen(onMenuClick));
       pe.active = false;
     }
-    if (apps.pages.isNotEmpty)
-      _setPageEntry(apps.pages.first);
+    //if (apps.pages.isNotEmpty)
+    //  _setPageEntry(apps.pages.first);
+    LightningCtrl.router.start();
+    LightningCtrl.router.route(null);
+
   } // set
   List<StreamSubscription<MouseEvent>> _subscriptions = new List<StreamSubscription<MouseEvent>>();
 
@@ -75,45 +81,71 @@ class AppsMain extends PageSimple {
   void onMenuClick (Event evt) {
     Element target = evt.target;
     String theId = target.id;
+    String name = null;
     while (element != null && !theId.contains(AppsPage.MENU_SUFFIX)) {
       target = target.parent;
-      if (target != null)
+      if (target != null) {
         theId = target.id;
+        name = target.attributes[Html0.DATA_VALUE];
+      }
     }
-    theId = theId.replaceAll(AppsPage.MENU_SUFFIX, "");
-    AppsPage entry = null;
+    if (name == null)
+      name = theId.replaceAll(AppsPage.MENU_SUFFIX, "");
+    if (LightningCtrl.router.goto(name)) {
+      evt.preventDefault(); // internal
+    }
+/*
+    AppsPage page = findPage(theId, name);
+    if (page != null) {
+      if (page.internal) {
+        evt.preventDefault();
+        _setPage(page);
+      }
+    } else {
+      _log.fine("onMenuClick - not found: ${theId}");
+    } */
+  } // onMenuClick
+
+  /// Set Page Entry
+  void _setPage(AppsPage page) {
+    _log.fine("setPageEntry ${page.name}");
+    page.active = true;
+    content.children.clear();
+    content.append(page.element);
+  }
+
+  /// On Route Enter
+  bool onRouteEnter(RouterPath path) {
+    String name = path.toString();
+    AppsPage page = null;
     for (AppsPage pe in apps.pages) {
-      if (pe.id == theId) {
-        entry = pe;
+      if (pe.name == name) {
+        page = pe;
       } else {
         pe.active = false;
       }
     }
-    if (entry != null) {
-      if (entry.internal) {
-        evt.preventDefault();
-        _setPageEntry(entry);
-      }
+    if (page == null) {
+      _log.info("onRouteEnter NotFound path=${path} name=${name}");
+      return false;
     } else {
-      _log.fine("onMenuClick - not found: ${theId}");
+      _log.info("onRouteEnter path=${path} name=${name}");
+      if (page.internal) {
+        _setPage(page);
+        return true;
+      } else {
+        return false; // external
+      }
     }
-  } // onMenuClick
-
-  /// Set Page Entry
-  void _setPageEntry(AppsPage page) {
-    _log.fine("setPageEntry ${page.id}");
-    page.active = true;
-    main.children.clear();
-    main.append(page.element);
-  }
+  } // onRouteEnter
 
   /// append element to main
   void append(Element newValue) {
-    main.append(newValue);
+    content.append(newValue);
   }
   /// append component to main
   void add(LComponent component) {
-    main.append(component.element);
+    content.append(component.element);
   }
 
 } // AppsMain

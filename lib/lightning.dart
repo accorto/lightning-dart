@@ -157,14 +157,14 @@ class LightningDart {
     PageSimple main = null;
     if (e == null) {
       Element body = document.body; // querySelector("body");
-      main = new PageSimple(new DivElement(), id, classList);
+      main = new PageSimple(new DivElement(), id, classList:classList);
       body.append(main.element);
     } else {
       devTimestamp = e.attributes["data-timestamp"];
       if (clearContainer) {
         e.children.clear();
       }
-      main = new PageSimple(e, id, classList);
+      main = new PageSimple(e, id, classList:classList);
     }
     _log.info("createPageSimple ${id} version=${VERSION} timestamp=${devTimestamp}");
     return main;

@@ -17,6 +17,9 @@ class RemoteLogger {
   /** Transaction Name */
   static const String TRX = "webLog";
 
+  /// Enable Logging
+  static bool enabled = false;
+
   /**
    * Send Message to Logging service
    */
@@ -103,7 +106,7 @@ class RemoteLogger {
 
   /// Publish [data] to /webLog
   void sendWebLog(Map<String,String> data) {
-    if (_sendWebLogErrors > 9) {
+    if (!enabled || _sendWebLogErrors > 9) {
       return;
     }
     String dataString = LUtil.toJsonString(data);

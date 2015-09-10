@@ -81,6 +81,11 @@ class Router {
   String _currentPath;
   /// current Path move time
   DateTime _currentPathTime;
+  /// started
+  StreamSubscription<Event> _hashChangeSubscription;
+
+  /// Fall back handler in case route has no handler
+  RouteEventHandler fallbackHandler;
 
   /**
    * Router - call start
@@ -157,25 +162,27 @@ class Router {
    * Start listening (call route(null) to go to url)
    */
   RouterPath start() {
-    window.onHashChange.listen((_) {
-      String path = window.location.hash;
-      // #p2
-      _log.log(Level.CONFIG, "onHashChange ${path} - ${window.location.href}");
-      route(path);
-    });
-
-    window.onPopState.listen((_) {
-      String path = '${window.location.pathname}${window.location.hash}';
-      // /components.html#p2
-      if (useHash) {
-        //  path = window.location.hash;
-        //  _log.log(Level.CONFIG, "onPopState ${path} - ${window.location.href}");
-        //  route(path); // duplicate
-      } else {
-        _log.log(Level.CONFIG, "onPopState ${path} - ${window.location.href}");
+    if (_hashChangeSubscription == null) {
+      _hashChangeSubscription = window.onHashChange.listen((_) {
+        String path = window.location.hash;
+        // #p2
+        _log.log(Level.CONFIG, "onHashChange ${path} - ${window.location.href}");
         route(path);
-      }
-    });
+      });
+
+      window.onPopState.listen((_) {
+        String path = '${window.location.pathname}${window.location.hash}';
+        // /components.html#p2
+        if (useHash) {
+          //  path = window.location.hash;
+          //  _log.log(Level.CONFIG, "onPopState ${path} - ${window.location.href}");
+          //  route(path); // duplicate
+        } else {
+          _log.log(Level.CONFIG, "onPopState ${path} - ${window.location.href}");
+          route(path);
+        }
+      });
+    }
 
     // Router Path from URL
     List<String> pp = paths;
@@ -186,9 +193,7 @@ class Router {
         routerPath.setRoutePath(route, paths: pp);
       }
     }
-
-    _log.info("start ${routerPath}");
-    //
+    _log.info("start path=${routerPath}");
     return routerPath;
   } // start
 
@@ -207,7 +212,7 @@ class Router {
   /**
    * Add Route with [name] and [path] without starting / or #
    */
-  void addRoute({String name, String path, String title, RouteEventHandler enter, bool defaultRoute : false}) {
+  void addRoute({String name, String path, String title, RouteEventHandler enter, bool defaultRoute:false}) {
     path = cleanPath(path, addPrefix: false);
     for (Route rr in _routes) {
       if (rr.name == name || rr.path == path) {
@@ -281,13 +286,15 @@ class Router {
     if (path == null)
       thePath = useHash ? window.location.hash : "${window.location.pathname}${window.location.hash}";
     thePath = cleanPath(thePath, addPrefix: false);
-    // Pattern pattern = new RegExp(thePath);
     // find route
-    for (Route r in _routes) {
-      if (thePath.startsWith(r.path)) {
-        routerPath.setRoutePath(r, path: thePath);
-        if (go())
-          return true;
+    if (thePath.isNotEmpty) {
+      // Pattern pattern = new RegExp(thePath);
+      for (Route r in _routes) {
+        if (thePath.startsWith(r.path)) {
+          routerPath.setRoutePath(r, path: thePath);
+          if (go())
+            return true;
+        }
       }
     }
     if (defaultRoute != null) {
@@ -330,7 +337,16 @@ class Router {
   bool go () {
     Route theRoute = routerPath.route;
     String thePath = routerPath.toPath();
-    _log.log(Level.CONFIG, "go ${theRoute} path=${thePath}");
+    if (theRoute.handler == null) {
+      if (fallbackHandler == null) {
+        _log.log(Level.CONFIG, "go NoHandler for ${theRoute} path=${thePath}");
+        return false;
+      }
+      theRoute.handler = fallbackHandler;
+      _log.log(Level.CONFIG, "go FallbackHandler for ${theRoute} path=${thePath}");
+    } else {
+      _log.log(Level.CONFIG, "go ${theRoute} path=${thePath}");
+    }
     bool result = theRoute.handler(routerPath);
     if (result) {
       updateWindow(thePath, theRoute.title);

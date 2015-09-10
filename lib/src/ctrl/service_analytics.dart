@@ -21,6 +21,10 @@ class ServiceAnalytics {
 
   /** Transaction Name */
   static const TRX = "webAnalysis";
+
+  /// Enable Analytics
+  static bool enabled = false;
+
   /// initial web info
   static bool _initialSent = false;
 
@@ -192,7 +196,9 @@ class ServiceAnalytics {
     //
     String dataString = LUtil.toJsonString(data);
     String url = "${Service.serverUrl}${TRX}";
-    window.navigator.sendBeacon(url, dataString);
+    if (enabled) {
+      window.navigator.sendBeacon(url, dataString);
+    }
   } // sendUnload
 
   /// create map with time based on optional [now]
@@ -208,7 +214,7 @@ class ServiceAnalytics {
 
   /// send map
   static void _send(Map<String,String> data) {
-    if (_sendWebLogErrors > 9) {
+    if (!enabled || _sendWebLogErrors > 9) {
       return;
     }
     data["up"] = Service.upTime.inSeconds.toString(); // uptime

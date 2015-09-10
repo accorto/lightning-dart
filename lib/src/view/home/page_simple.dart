@@ -23,7 +23,8 @@ class PageSimple extends LComponent {
    * Simple Page
    * optional [classList] (if mot defined, container/fluid)
    */
-  PageSimple(Element this.element, String id, List<String> classList){
+  PageSimple(Element this.element, String id,
+        {List<String> classList}){
     element.classes.clear();
     if (classList != null && classList.isNotEmpty) {
       element.classes.addAll(classList);

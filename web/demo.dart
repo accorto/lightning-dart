@@ -46,14 +46,20 @@ part 'demo/themes.dart';
  */
 class IntroPage extends AppsPage {
 
+  static const String NAME = "home";
+
   Element element = new DivElement();
 
-  IntroPage() : super("intro", new LIconUtility(LIconUtility.HOME), "Home") {
+  /// Into Page
+  IntroPage()
+      : super(NAME, NAME, new LIconUtility(LIconUtility.HOME),
+          "Home", "Lightning Dart Home",
+          defaultRoute:true) {
+    /// add index part
     Element ld = querySelector("#ld");
     if (ld != null)
       element.append(ld);
   }
-
 } // IntroPage
 
 
@@ -64,7 +70,8 @@ class DemoPage extends AppsPage {
 
   Element element = new DivElement();
 
-  DemoPage(String id, LIcon icon, String label) : super(id, icon, label) {
+  DemoPage(String id, LIcon icon, String label)
+      : super(id, id, icon, label, "Lightning Dart Component Demo ${label}") {
     DivElement hdr = new DivElement()
       ..classes.addAll([LTheme.C_BOX, LTheme.C_THEME__SHADE]);
     element.append(hdr);
@@ -125,7 +132,8 @@ class DemoFrame extends AppsPage {
 
   final IFrameElement element = new IFrameElement();
 
-  DemoFrame(String id, LIcon icon, String label, int width) : super(id, icon, label) {
+  DemoFrame(String id, LIcon icon, String label, int width)
+      : super(id, id, icon, label, "Lightning Dart ${label}") {
     element
       ..name = id
       ..src = "demo.html"
@@ -146,7 +154,7 @@ class ExampleForm extends AppsPage {
 
   final IFrameElement element = new IFrameElement();
 
-  ExampleForm() : super ("form", formIcon, "Form") {
+  ExampleForm() : super ("form", "form", formIcon, "Form", "Lightning Dart Form Exmaple") {
     element
       ..name = id
       ..src = "exampleForm.html"
@@ -166,7 +174,7 @@ class SupportLink extends AppsPage {
 
   final DivElement element = new DivElement();
 
-  SupportLink() : super("support", supportIcon, "Doc + Support",
+  SupportLink() : super("support", "support", supportIcon, "Doc + Support", "Lightning Dart Support",
     externalHref: "http://lightning.accorto.com", target: "_blank");
 
 }
