@@ -11,6 +11,10 @@ part of lightning_dart;
  */
 class PageSimple extends LComponent {
 
+  /// Search for classes to find main element
+  static final List<String> MAIN_CLASSES = [LGrid.C_CONTAINER, LGrid.C_CONTAINER__FLUID,
+    LGrid.C_CONTAINER__LARGE, LGrid.C_CONTAINER__MEDIUM, LGrid.C_CONTAINER__SMALL, LGrid.C_GRID];
+
   /// Page Element
   final Element element;
 

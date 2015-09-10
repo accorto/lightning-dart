@@ -185,11 +185,11 @@ class ObjectCtrl extends LComponent {
     } else if (tableSorting == null || tableSorting.isEmpty) {
       _header.summary = "${_records.length} ${objectCtrlRecords()}";
     } else {
-      String info = "${_records.length} ${objectCtrlRecords()} ${LightningDart.DOT} ${objectCtrlSortedBy()}";
+      String info = "${_records.length} ${objectCtrlRecords()} ${LUtil.DOT} ${objectCtrlSortedBy()}";
       String prefix = " ";
       for (LTableSort sort in tableSorting) {
         info += prefix + sort.columnLabel + (sort.asc ? "\u{2193}" : "\u{2191}");
-        prefix = LightningDart.DOT;
+        prefix = LUtil.DOT;
       }
       _header.summary = info;
     }

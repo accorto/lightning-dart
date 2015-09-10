@@ -158,7 +158,6 @@ class LPicklist extends LEditor implements LSelectI {
 
   bool get required => _required;
   void set required (bool newValue) {
-    super.required = newValue; // ui
     _required = newValue; // don't make input required
   }
   bool _required = false;

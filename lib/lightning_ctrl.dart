@@ -28,6 +28,11 @@ import 'package:intl/intl.dart';
 import 'lightning.dart';
 export 'lightning.dart';
 
+part 'src/apps/apps_ctrl.dart';
+part 'src/apps/apps_header.dart';
+part 'src/apps/apps_main.dart';
+part 'src/apps/apps_menu.dart';
+part 'src/apps/apps_page.dart';
 
 part 'src/ctrl/form_ctrl.dart';
 part 'src/ctrl/object_ctrl.dart';
@@ -54,16 +59,17 @@ part 'src/ctrl/timezone.dart';
  */
 class LightningCtrl {
 
+  static final Logger _log = new Logger("LightningCtrl");
+
   /// Router Instance
   static final Router router = new Router();
-
 
   /**
    * Initialize Logging, Locale, Intl, Date
    * optional [serverUri] to overwrite target
    */
-  static Future<List<Future>> init(String serverUri,
-      {String clientPrefix: "ui/", bool embedded: false, bool test: false}) {
+  static Future<List<Future>> init({String serverUri: "/",
+      String clientPrefix: "ui/", bool embedded: false, bool test: false}) {
 
     Completer<List<Future>> completer = new Completer<List<Future>>();
     List<Future> futures = new List<Future>();
@@ -134,85 +140,43 @@ class LightningCtrl {
    * [clearContainer] clears all content from container
    * optional [classList] (if mot defined, container/fluid)
    */
-  static PageMain createPageMain({String id: "wrap",
-      bool clearContainer: true, List<String> classList}) {
+  static AppsMain createAppsMain({String id: "wrap",
+    bool clearContainer: true, List<String> classList}) {
     if (router.hasParam(Router.P_LOADDIV)) {
       id = router.param(Router.P_LOADDIV);
     }
     if (router.hasParam(Router.P_CLEARCONTAINER)) {
       clearContainer = "true" == router.param(Router.P_CLEARCONTAINER);
     }
+    // Top Level Main
+    Element e = querySelector("#${id}");
+    if (e == null) {
+      for (String cls in PageSimple.MAIN_CLASSES) {
+        e = querySelector(".${cls}");
+        if (e != null) {
+          break;
+        }
+      }
+    }
+    AppsMain main = null;
+    if (e == null) {
+      Element body = document.body; // querySelector("body");
+      main = new AppsMain(new DivElement(), id, classList);
+      body.append(main.element);
+    } else {
+      LightningDart.devTimestamp = e.attributes["data-timestamp"];
+      if (clearContainer) {
+        e.children.clear();
+      }
+      main = new AppsMain(e, id, classList);
+    }
+    //
+    Service.onServerStart = main.onServerStart;
+    Service.onServerSuccess = main.onServerSuccess;
+    Service.onServerError = main.onServerError;
 
-    PageMain page = LightningDart.createPageMain(id:id, clearContainer:clearContainer, classList:classList);
-    Service.onServerStart = page.onServerStart;
-    Service.onServerSuccess = page.onServerSuccess;
-    Service.onServerError = page.onServerError;
-    return page;
-  } // createPageMain
+    _log.info("createAppsMain ${id} version=${LightningDart.VERSION} timestamp=${LightningDart.devTimestamp}");
+    return main;
+  } // createAppsMain
 
 } // LightningCtrl
-
-
-
-/**
- * Utilities
- */
-class LUtil {
-
-  /// format bytes
-  static String formatBytes(int b) {
-    if (b < 1024)
-      return "${b}B";
-    double kb = b / 1024;
-    if (kb < 10)
-      return "${kb.toStringAsFixed(1)}kB";
-    double mb = kb / 1024;
-    if (mb < 1)
-      return "${kb.toInt()}kB";
-    if (mb < 10)
-      return "${mb.toStringAsFixed(1)}MB";
-    double gb = mb / 1024;
-    if (gb < 1)
-      return "${mb.toInt()}MB";
-    return "${gb.toStringAsFixed(1)}GB";
-  }
-
-  /// convert [data] map to json string
-  static String toJsonString(Map<String,String> data) {
-    StringBuffer sb = new StringBuffer();
-    String sep = "{";
-    data.forEach((K,V){
-      String value = "${V}".replaceAll(_reQuote, "'"); // replace "
-      sb.write('${sep}"${K}":"${value}"');
-      sep = ",";
-    });
-    sb.write("}");
-    return sb.toString();
-  }
-  static RegExp _reQuote = new RegExp(r'"');
-
-  /// convert [rext] to html - replace cr with <br/>
-  static String textToHtml(String text) {
-    if (text == null || text.isEmpty)
-      return "";
-    String text0 = text.replaceAll(_apro, "'"); // should be text apostrophe
-    String text1 = _sanitizer.convert(text0);
-    String text2 = text1.replaceAll(_crlf, "<br/>");
-    return text2;
-  }
-  static RegExp _apro = new RegExp(r'&#39;');
-  static RegExp _crlf = new RegExp(r'[\n\r]');
-  static HtmlEscape _sanitizer = new HtmlEscape(HtmlEscapeMode.ELEMENT);
-
-
-  /// Same day
-  static bool isSameDay(DateTime one, DateTime two) {
-    if (one == null || two == null)
-      return false;
-    return one.year == two.year
-    && one.month == two.month
-    && one.day == two.day;
-  } // isSameDay
-
-
-} // LUtil

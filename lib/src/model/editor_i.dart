@@ -219,16 +219,16 @@ abstract class EditorI {
 
   /// get Label
   String get label {
-    if (dataColumn != null)
-      return dataColumn.label;
+    if (_dataColumn != null)
+      return _dataColumn.label;
     return null;
   }
   /// set label
   void set label(String newValue) {
-    if (dataColumn == null)
+    if (_dataColumn == null)
       dataColumn = DataColumn.fromEditor(this, newValue, null);
     else
-      dataColumn.tableColumn.label = newValue;
+      _dataColumn.tableColumn.label = newValue;
   }
 
   String get placeholder => "";
@@ -298,6 +298,7 @@ abstract class EditorI {
       }
     }
   } // column
+  /// Optional data column
   DataColumn get dataColumn => _dataColumn;
   DataColumn _dataColumn;
   /// Automatically submit on enter
@@ -344,9 +345,11 @@ abstract class EditorI {
   /// notification that dependent changed - subclasses to implement
   void onDependentOnChanged(DEntry dependentEntity) {
     // dynamic context
-    show = dataColumn.isDisplayed(data);
-    readOnly = dataColumn.isReadOnly(data);
-    required = dataColumn.isMandatory(data);
+    if (_dataColumn != null) {
+      show = _dataColumn.isDisplayed(data);
+      readOnly = _dataColumn.isReadOnly(data);
+      required = _dataColumn.isMandatory(data);
+    }
   }
 
   /// check if a a dependent on column value has changed
@@ -366,8 +369,8 @@ abstract class EditorI {
 
   /// get restriction sql with dependent based on data info or null
   String getRestrictionSql() {
-    if (dataColumn != null && dataColumn.tableColumn != null && dataColumn.tableColumn.hasRestrictionSql()) {
-      String sql = dataColumn.tableColumn.restrictionSql;
+    if (_dataColumn != null && _dataColumn.tableColumn != null && _dataColumn.tableColumn.hasRestrictionSql()) {
+      String sql = _dataColumn.tableColumn.restrictionSql;
       if (_dependentOnList != null && data != null) {
         return DataContext.contextReplace(data, sql, columnName: name); // not null/empty
       }
@@ -398,9 +401,11 @@ abstract class EditorI {
       value = theValue == null ? "" : theValue;
     }
     // dynamic context
-    show = dataColumn.isDisplayed(data);
-    readOnly = dataColumn.isReadOnly(data);
-    required = dataColumn.isMandatory(data);
+    if (_dataColumn != null) {
+      show = _dataColumn.isDisplayed(data);
+      readOnly = _dataColumn.isReadOnly(data);
+      required = _dataColumn.isMandatory(data);
+    }
   } // setEntry
   DEntry _entry;
 

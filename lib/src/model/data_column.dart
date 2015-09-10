@@ -17,11 +17,12 @@ class DataColumn {
   static DataColumn fromEditor (EditorI editor, String label, String help) {
     DColumn tableColumn = new DColumn()
       ..name = editor.name
-      ..label = label
-      ..help = help
+      ..label = label == null ? editor.name : label
       ..isMandatory = editor.required
       ..isReadOnly = editor.readOnly
       ..columnSize = editor.maxlength;
+    if (help != null)
+      tableColumn.help = help;
     tableColumn.dataType = DataTypeUtil.getDataTypeFromEditorType(editor.type);
 
     return new DataColumn(null, tableColumn, null, null); // no table, panel/grid column

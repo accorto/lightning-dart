@@ -568,15 +568,24 @@ class DataRecord {
    * Data Record Value Changed - called from EditorI
    */
   void onEditorChange(String name, String newValue, DEntry entry, var details) {
-    String valueOriginal = entry.valueOriginal;
-    if (NULLVALUE == valueOriginal)
-      valueOriginal = "null";
-    String oldValue = entry.value;
-    if (NULLVALUE == oldValue)
-      oldValue = "null";
-    _log.fine("onEditorChange ${name} rowNo=${rowNo} value=${newValue} old=${oldValue} (orig=${valueOriginal})");
+    if (entry != null) {
+      String valueOriginal = entry.valueOriginal;
+      if (NULLVALUE == valueOriginal)
+        valueOriginal = "null";
+      String oldValue = entry.value;
+      if (NULLVALUE == oldValue)
+        oldValue = "null";
+      _log.fine("onEditorChange ${name} rowNo=${rowNo} value=${newValue} old=${oldValue} (orig=${valueOriginal})");
+    } else {
+      _log.fine("onEditorChange ${name} rowNo=${rowNo} value=${newValue}");
+    }
     // data list - controller
     if (onRecordChange != null) {
+      if (entry == null) {
+        entry = new DEntry()
+          ..columnName = name
+          ..value = newValue;
+      }
       onRecordChange(_record, entry, rowNo); // data list
     }
     // if (!temporary && onAutoSubmit != null) {

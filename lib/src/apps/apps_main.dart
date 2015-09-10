@@ -4,7 +4,7 @@
  * License options+support:  https://lightningdart.com
  */
 
-part of lightning_dart;
+part of lightning_ctrl;
 
 /**
  * Page Main Entry point with
@@ -12,20 +12,17 @@ part of lightning_dart;
  * - header with
  * - content on right
  */
-class PageMain extends PageSimple {
+class AppsMain extends PageSimple {
 
-  static final Logger _log = new Logger("PageMain");
+  static final Logger _log = new Logger("AppsMain");
 
-  /// Search for classes to find main element
-  static final List<String> MAIN_CLASSES = [LGrid.C_CONTAINER, LGrid.C_CONTAINER__FLUID,
-    LGrid.C_CONTAINER__LARGE, LGrid.C_CONTAINER__MEDIUM, LGrid.C_CONTAINER__SMALL, LGrid.C_GRID];
 
   /// Menu
-  PageMainMenu _menu;
+  AppsMenu _menu;
   /// Current Apps
-  PageApplication apps;
+  AppsCtrl apps;
   /// Head
-  PageMainHeader head;
+  AppsHeader head;
   /// Content
   DivElement main = new DivElement();
   /// Footer
@@ -35,20 +32,20 @@ class PageMain extends PageSimple {
    * Main Page
    * optional [classList] (if mot defined, container/fluid)
    */
-  PageMain(DivElement element, String id, List<String> classList)
-      : super(element, id, classList) {
+  AppsMain(DivElement element, String id, List<String> classList)
+  : super(element, id, classList) {
 
     DivElement mainGrid = new DivElement()
       ..classes.add(LGrid.C_GRID);
     element.append(mainGrid);
-    _menu = new PageMainMenu();
+    _menu = new AppsMenu();
     mainGrid.append(_menu.element);
 
     // Left Side
     DivElement leftSide = new DivElement()
       ..classes.add(LGrid.C_COL);
     mainGrid.append(leftSide);
-    head = new PageMainHeader();
+    head = new AppsHeader();
     leftSide.append(head.element);
     leftSide.append(main);
     foot = new CDiv.footer();
@@ -58,14 +55,14 @@ class PageMain extends PageSimple {
   /**
    * Set Application
    */
-  void set(PageApplication apps) {
+  void set(AppsCtrl apps) {
     for (StreamSubscription<MouseEvent> sub in _subscriptions) {
       sub.cancel();
     }
     this.apps = apps;
     head.set(apps);
     _menu.set(apps);
-    for (PageMainEntry pe in apps.entries) {
+    for (AppsPage pe in apps.entries) {
       _subscriptions.add(pe.menuEntry.onClick.listen(onMenuClick));
       pe.active = false;
     }
@@ -78,14 +75,14 @@ class PageMain extends PageSimple {
   void onMenuClick (Event evt) {
     Element target = evt.target;
     String theId = target.id;
-    while (element != null && !theId.contains(PageMainEntry.MENU_SUFFIX)) {
+    while (element != null && !theId.contains(AppsPage.MENU_SUFFIX)) {
       target = target.parent;
       if (target != null)
         theId = target.id;
     }
-    theId = theId.replaceAll(PageMainEntry.MENU_SUFFIX, "");
-    PageMainEntry entry = null;
-    for (PageMainEntry pe in apps.entries) {
+    theId = theId.replaceAll(AppsPage.MENU_SUFFIX, "");
+    AppsPage entry = null;
+    for (AppsPage pe in apps.entries) {
       if (pe.id == theId) {
         entry = pe;
       } else {
@@ -103,7 +100,7 @@ class PageMain extends PageSimple {
   } // onMenuClick
 
   /// Set Page Entry
-  void _setPageEntry(PageMainEntry page) {
+  void _setPageEntry(AppsPage page) {
     _log.fine("setPageEntry ${page.id}");
     page.active = true;
     main.children.clear();
@@ -119,5 +116,5 @@ class PageMain extends PageSimple {
     main.append(component.element);
   }
 
-} // PageMain
+} // AppsMain
 

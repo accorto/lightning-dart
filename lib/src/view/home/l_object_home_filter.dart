@@ -201,7 +201,7 @@ class LObjectHomeFilterLookup {
     String restriction = _dropdownHeaderFindInput.value;
     RegExp exp = null;
     if (!showAll && restriction.isNotEmpty) {
-      exp = LightningDart.createRegExp(restriction);
+      exp = LUtil.createRegExp(restriction);
     }
     int count = 0;
     for (LDropdownItem item in _dropdownElement._items) {

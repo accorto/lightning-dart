@@ -223,7 +223,7 @@ class LTable extends LComponent {
 
   /// Find In Table
   void findInTable(String findExpression) {
-    RegExp regEx = LightningDart.createRegExp(findExpression);
+    RegExp regEx = LUtil.createRegExp(findExpression);
     if (regEx == null) {
       for (DRecord record in recordList) {
         record.clearIsMatchFind();

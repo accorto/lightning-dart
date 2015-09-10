@@ -4,12 +4,12 @@
  * License options+support:  https://lightningdart.com
  */
 
-part of lightning_dart;
+part of lightning_ctrl;
 
 /**
  * Page Main Header - Logo (for the moment)
  */
-class PageMainHeader extends LComponent {
+class AppsHeader extends LComponent {
 
   final Element element = new Element.header()
     ..classes.add(LMargin.C_AROUND__SMALL);
@@ -17,7 +17,7 @@ class PageMainHeader extends LComponent {
   /**
    * Set Application
    */
-  void set(PageApplication apps) {
+  void set(AppsCtrl apps) {
     element.children.clear();
     if (apps.imageSrc != null) {
       LImage img = new LImage.srcMedium(apps.imageSrc, apps.label, circle: false);
@@ -25,5 +25,5 @@ class PageMainHeader extends LComponent {
     }
   } // set
 
-} // PageMainHeader
+} // AppsHeader
 

@@ -84,12 +84,6 @@ part 'src/view/form/l_form_compound.dart';
 part 'src/view/form/l_form_element.dart';
 part 'src/view/form/l_form_field_set.dart';
 
-part 'src/view/menu/page_main.dart';
-part 'src/view/menu/page_main_entry.dart';
-part 'src/view/menu/page_main_header.dart';
-part 'src/view/menu/page_main_menu.dart';
-part 'src/view/menu/page_simple.dart';
-
 part 'src/view/table/l_table.dart';
 part 'src/view/table/l_table_cell.dart';
 part 'src/view/table/l_table_row.dart';
@@ -99,8 +93,10 @@ part 'src/view/home/l_object_home.dart';
 part 'src/view/home/l_object_home_filter.dart';
 part 'src/view/home/l_record_home.dart';
 part 'src/view/home/l_related_list.dart';
+part 'src/view/home/page_simple.dart';
 
 part 'src/view/utility/html0.dart';
+part 'src/view/utility/l_util.dart';
 part 'src/view/utility/option_util.dart';
 
 /**
@@ -125,7 +121,7 @@ class LightningDart {
     Logger.root.level = Level.ALL;
     // local Logger
     Logger.root.onRecord.listen((LogRecord rec) {
-      print(formatLog(rec));
+      print(LUtil.formatLog(rec));
       if (rec.error != null) {
         print(rec.error);
       }
@@ -139,53 +135,6 @@ class LightningDart {
     return ClientEnv.init(); // Locale, Intl, Date
   } // init
 
-  // Format Log Record
-  static String formatLog(LogRecord rec) {
-    StringBuffer sb = new StringBuffer();
-    // time
-    int ii = rec.time.minute;
-    if (ii < 10)
-      sb.write("0");
-    sb.write(ii);
-    sb.write(":");
-    ii = rec.time.second;
-    if (ii < 10)
-      sb.write("0");
-    sb.write(ii);
-    sb.write(".");
-    ii = rec.time.millisecond;
-    if (ii < 10)
-      sb.write("00");
-    else if (ii < 100)
-      sb.write("0");
-    sb.write(ii);
-    // Level
-    Level ll = rec.level;
-    if (ll == Level.SHOUT)
-      sb.write(">>");
-    else if (ll == Level.SEVERE)
-      sb.write("~~");
-    else if (ll == Level.WARNING)
-      sb.write("~ ");
-    else if (ll == Level.INFO)
-      sb.write("  ");
-    else if (ll == Level.CONFIG)
-      sb.write("   ");
-    else if (ll == Level.FINE)
-      sb.write("    ");
-    else if (ll == Level.FINER)
-      sb.write("     ");
-    else if (ll == Level.FINEST)
-      sb.write("      ");
-    else {
-      sb.write(" ");
-      sb.write(ll.name);
-    }
-    //
-    sb.write("${rec.loggerName}: ${rec.message}");
-    return sb.toString();
-  } // format
-
 
   /**
    * Create Page (slds-grid)
@@ -198,7 +147,7 @@ class LightningDart {
     // Top Level Main
     Element e = querySelector("#${id}");
     if (e == null) {
-      for (String cls in PageMain.MAIN_CLASSES) {
+      for (String cls in PageSimple.MAIN_CLASSES) {
         e = querySelector(".${cls}");
         if (e != null) {
           break;
@@ -220,123 +169,5 @@ class LightningDart {
     _log.info("createPageSimple ${id} version=${VERSION} timestamp=${devTimestamp}");
     return main;
   } // createPageSimple
-
-
-  /**
-   * Create Page (slds-grid)
-   * [id] id of the application
-   * [clearContainer] clears all content from container
-   * optional [classList] (if mot defined, container/fluid)
-   */
-  static PageMain createPageMain({String id: "wrap",
-    bool clearContainer: true, List<String> classList}) {
-    // Top Level Main
-    Element e = querySelector("#${id}");
-    if (e == null) {
-      for (String cls in PageMain.MAIN_CLASSES) {
-        e = querySelector(".${cls}");
-        if (e != null) {
-          break;
-        }
-      }
-    }
-    PageMain main = null;
-    if (e == null) {
-      Element body = document.body; // querySelector("body");
-      main = new PageMain(new DivElement(), id, classList);
-      body.append(main.element);
-    } else {
-      devTimestamp = e.attributes["data-timestamp"];
-      if (clearContainer) {
-        e.children.clear();
-      }
-      main = new PageMain(e, id, classList);
-    }
-    _log.info("createPageMain ${id} version=${VERSION} timestamp=${devTimestamp}");
-    return main;
-  } // createPageMain
-
-
-
-  /**
-   * convert to variable/id name containing a..z A..Z 0..9
-   * as well as - _ .
-   * by ignoring non compliant characters
-   * must start with letter (html5 id)
-   */
-  static String toVariableName(String text) {
-    if (text == null || text.isEmpty)
-      return text;
-    StringBuffer sb = new StringBuffer();
-    bool first = true;
-    List chars = "azAZ09_-.".codeUnits;
-    text.codeUnits.forEach((code) {
-      if ((code >= chars[0] && code <= chars[1]) // a_z
-      || (code >= chars[2] && code <= chars[3])) // A_Z
-        sb.write(new String.fromCharCode(code));
-      else if (!first
-      && ((code >= chars[4] && code <= chars[5]) // 0_9
-      || code == chars[6] || code == chars[7] || code == chars[8])) // _-.
-        sb.write(new String.fromCharCode(code));
-      first = false;
-    });
-    String retValue = sb.toString();
-    // if (text.length != retValue.length)
-    //  _log.warning("Invalid VariableName=${text} -> ${retValue}");
-    return retValue;
-  } // toVariableName
-
-
-  /// Dot with spaces around
-  static const String DOT = " \u{00B7} ";
-
-  static final String SPACES_REGEX = r"[\s_-]";
-  static final RegExp SPACES = new RegExp(SPACES_REGEX);
-
-  /// Create regex for [search] returns null if empty or error
-  static RegExp createRegExp(String search) {
-    if (search == null || search.isEmpty)
-      return null;
-    // fix spaces (spaces to match also _-)
-    String restriction = search.replaceAll(" ", SPACES_REGEX);
-    // fix regex
-    if (restriction == "[" || restriction == "(" || restriction == ".")
-      restriction = "\\" + restriction;
-    try {
-      return new RegExp(restriction, caseSensitive: false);
-    } catch (ex) {
-      _log.info("createRegExp search=${search} restriction=${restriction}) error=${ex}");
-    }
-    return null;
-  }
-
-
-  /// dump element dimensions (l,t)w*h
-  static String dumpElement(Element e) =>
-    " bound${dumpRectangle(e.getBoundingClientRect())}"
-    " offset${dumpRectangle(e.offset)}"
-    " client${dumpRectangle(e.client)}"
-    " style(${e.style.left},${e.style.top})${e.style.width}*${e.style.height}"
-    " scroll(${e.scrollLeft},${e.scrollTop})${e.scrollWidth}*${e.scrollHeight}"
-    " content${dumpRectangle(e.contentEdge)}"
-    " border${dumpRectangle(e.borderEdge)}"
-    ;
-  /// dump mouse event position (x,y)
-  static String dumpMouse (MouseEvent e) => "(${e.which})"
-    " offset(${e.offset.x},${e.offset.y})"
-    " client(${e.client.x},${e.client.y})"
-    " screen(${e.screen.x},${e.screen.y})"
-    ;
-  /// dump window sizes
-  static String dumpWindow() =>
-    " inner(${window.innerWidth}*${window.innerHeight})"
-    " screen(${window.screenX},${window.screenY})"
-    " scroll(${window.scrollX},${window.scrollY})" // offset
-    ;
-  // dump rectangle(l,t)wxh
-  static String dumpRectangle(Rectangle r) =>
-    "(${r.left},${r.top})${r.width}*${r.height}";
-  // dump point (x,y)=(l,t)
-  static String dumpPoint(Point p) => "(${p.x},${p.y})";
 
 } // LightningDart

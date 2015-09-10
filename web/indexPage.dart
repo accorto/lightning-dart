@@ -15,9 +15,9 @@ void main() {
   .then((_) {
     IntroPage intro = new IntroPage();
     //
-    PageMain page = LightningDart.createPageMain();
-    PageApplication apps = new PageApplication("ldart", "Lightning Dart Demo",
-    imageSrc: "packages/lightning/assets/images/LightningDartLogo.svg");
+    AppsMain page = LightningCtrl.createAppsMain();
+    AppsCtrl apps = new AppsCtrl("ldart", "Lightning Dart Demo",
+      imageSrc: "packages/lightning/assets/images/LightningDartLogo.svg");
     apps.add(intro);
     apps.add(new DemoPage("desktop", new LIconUtility(LIconUtility.DESKTOP), "Desktop"));
     apps.add(new DemoFrame("tablet", new LIconUtility(LIconUtility.TABLET_PORTRAIT), "Tablet", 768));

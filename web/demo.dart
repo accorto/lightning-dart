@@ -9,8 +9,8 @@ library lightning_dart.demo;
 import 'dart:html';
 import 'dart:async';
 
-import "package:lightning/lightning.dart";
-export "package:lightning/lightning.dart";
+import "package:lightning/lightning_ctrl.dart";
+export "package:lightning/lightning_ctrl.dart";
 
 part 'demo/demo_feature.dart';
 part 'demo/activity_timeline.dart';
@@ -44,7 +44,7 @@ part 'demo/themes.dart';
 /**
  * Intro Page (copy part of index)
  */
-class IntroPage extends PageMainEntry {
+class IntroPage extends AppsPage {
 
   Element element = new DivElement();
 
@@ -60,7 +60,7 @@ class IntroPage extends PageMainEntry {
 /**
  * Demo Page
  */
-class DemoPage extends PageMainEntry {
+class DemoPage extends AppsPage {
 
   Element element = new DivElement();
 
@@ -121,7 +121,7 @@ class DemoPage extends PageMainEntry {
 /**
  * Demo Frame ... includes demo page
  */
-class DemoFrame extends PageMainEntry {
+class DemoFrame extends AppsPage {
 
   final IFrameElement element = new IFrameElement();
 
@@ -140,7 +140,7 @@ class DemoFrame extends PageMainEntry {
 /**
  * Example Signup Form Frame
  */
-class ExampleForm extends PageMainEntry {
+class ExampleForm extends AppsPage {
 
   static final LIcon formIcon = new LIconAction(LIconAction.RECORD);
 
@@ -160,7 +160,7 @@ class ExampleForm extends PageMainEntry {
 /**
  * Support Link
  */
-class SupportLink extends PageMainEntry {
+class SupportLink extends AppsPage {
 
   static final LIcon supportIcon = new LIconAction(LIconAction.NEW_CUSTOM86);
 

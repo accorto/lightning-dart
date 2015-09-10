@@ -4,12 +4,13 @@
  * License options+support:  https://lightningdart.com
  */
 
-part of lightning_dart;
+part of lightning_ctrl;
+
 
 /**
  * Left Side Menu
  */
-class PageMainMenu extends LComponent {
+class AppsMenu extends LComponent {
 
   static const String C_MENU_MAIN = "menu-main";
   static const String C_MENU_MAIN_SHOW = "menu-main-show";
@@ -21,11 +22,11 @@ class PageMainMenu extends LComponent {
     ..classes.addAll([LGrid.C_COL, LGrid.C_SHRINK_NONE, LTheme.C_THEME__ALT_INVERSE, C_MENU_MAIN]);
 
   AnchorElement _menuShow = new AnchorElement(href: "#")
-    ..classes.add(PageMainMenu.C_MENU_MAIN_SHOW);
+    ..classes.add(AppsMenu.C_MENU_MAIN_SHOW);
 
 
   /// Left Side Menu
-  PageMainMenu() {
+  AppsMenu() {
     LIcon showIcon = new LIconUtility(LIconUtility.ROWS, size: LIcon.C_ICON__SMALL);
     _menuShow.append(showIcon.element);
     _menuShow.onClick.listen((MouseEvent evt){
@@ -37,12 +38,12 @@ class PageMainMenu extends LComponent {
   /**
    * Set Application
    */
-  void set(PageApplication apps) {
+  void set(AppsCtrl apps) {
     element.children.clear();
     _menuShow.title = apps.label;
     element.append(_menuShow);
     // entries
-    for (PageMainEntry pe in apps.entries) {
+    for (AppsPage pe in apps.entries) {
       element.append(pe.menuEntry);
     }
   } // set
@@ -59,5 +60,5 @@ class PageMainMenu extends LComponent {
     }
   }
 
-} // PageMainMenu
+} // AppsMenu
 

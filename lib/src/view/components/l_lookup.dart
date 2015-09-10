@@ -297,7 +297,7 @@ class LLookup extends LEditor implements LSelectI {
     String restriction = input.value;
     RegExp exp = null;
     if (!showAll && restriction.isNotEmpty) {
-      exp = LightningDart.createRegExp(restriction);
+      exp = LUtil.createRegExp(restriction);
     }
     int count = 0;
     for (LLookupItem item in _items) {

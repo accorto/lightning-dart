@@ -202,10 +202,11 @@ class LForm extends LComponent implements FormI {
 
 
   /// Add Reset Button
-  LButton addResetButton() {
+  LButton addResetButton({String label}) {
     if (_buttonReset == null) {
-      _buttonReset = new LButton.neutralIcon("reset", lFormReset(),
-      new LIconUtility(LIconUtility.UNDO), iconLeft:true)
+      _buttonReset = new LButton.neutralIcon("reset",
+          label == null ? lFormReset() : label,
+          new LIconUtility(LIconUtility.UNDO), iconLeft:true)
         ..typeReset = true;
       element.append(_buttonReset.element);
       if (element is! FormElement) {
@@ -219,17 +220,15 @@ class LForm extends LComponent implements FormI {
   /// Add Save Button
   LButton addSaveButton({String label, String name:"save", LIcon icon}) {
     if (_buttonSave == null) {
-      String theLabel = label;
-      if (theLabel == null)
-        theLabel = lFormSave();
       LIcon theIcon = icon;
       if (theIcon == null)
         theIcon = new LIconUtility(LIconAction.CHECK);
       theIcon.element.style.setProperty("fill", "white"); // TODO add style
       //
-      _buttonSave = new LButton.brandIcon(name, theLabel,
-      theIcon, iconLeft:true)
-        ..typeSubmit = true;
+      _buttonSave = new LButton.brandIcon(name,
+          label == null ? lFormSave() : label,
+          theIcon, iconLeft:true)
+         ..typeSubmit = true;
       element.append(_buttonSave.element);
       if (element is! FormElement) {
         _buttonSave.onClick.listen(onFormSubmit);
@@ -264,12 +263,7 @@ class LForm extends LComponent implements FormI {
   /// On Form Submit
   void onFormSubmit(Event evt) {
     //_log.info("onFormSubmit - ${record}");
-    bool valid = true;
-    for (LEditor editor in editors) {
-      if (!editor.doValidate()) {
-        valid = false;
-      }
-    }
+    bool valid = doValidate();
     _debug("submit valid=${valid}:");
     String a = action;
     if (!valid || a == null || a.isEmpty) {
@@ -282,6 +276,16 @@ class LForm extends LComponent implements FormI {
       }
     }
   } // onFormSubmit
+
+  bool doValidate() {
+    bool valid = true;
+    for (LEditor editor in editors) {
+      if (!editor.doValidate()) {
+        valid = false;
+      }
+    }
+    return valid;
+  }
 
   /// Layout
 
