@@ -4498,24 +4498,24 @@ a.slds-button--inverse:focus {
   h2,
   h3 {
     page-break-after: avoid; } }
-.menu-main {
+.apps-menu {
   max-width: 3.5rem; }
-  .menu-main .menu-main-show,
-  .menu-main .menu-main-entry {
+  .apps-menu .apps-menu-show,
+  .apps-menu .apps-menu-entry {
     display: block;
     height: 3.5rem;
     padding: 1rem;
     text-decoration: none !important;
     white-space: nowrap;
     overflow-x: hidden; }
-    .menu-main .menu-main-show span,
-    .menu-main .menu-main-entry span {
+    .apps-menu .apps-menu-show span,
+    .apps-menu .apps-menu-entry span {
       margin-left: 1rem; }
-    .menu-main .menu-main-show.slds-is-selected,
-    .menu-main .menu-main-entry.slds-is-selected {
+    .apps-menu .apps-menu-show.slds-is-selected,
+    .apps-menu .apps-menu-entry.slds-is-selected {
       background-color: #1589ee; }
-  .menu-main:hover,
-  .menu-main.expaned {
+  .apps-menu:hover,
+  .apps-menu.expaned {
     max-width: 12rem; }
 .busy-backdrop {
   -webkit-transition-duration: 0.4s;

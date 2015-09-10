@@ -12,17 +12,22 @@ part of lightning_ctrl;
  */
 class AppsMenu extends LComponent {
 
-  static const String C_MENU_MAIN = "menu-main";
-  static const String C_MENU_MAIN_SHOW = "menu-main-show";
-  static const String C_MENU_MAIN_ENTRY = "menu-main-entry";
+  static const String C_APPS_MENU = "apps-menu";
+  /// Show = Button
+  static const String C_APPS_MENU_SHOW = "apps-menu-show";
+  /// Normal menu entry button
+  static const String C_APPS_MENU_ENTRY = "apps-menu-entry";
 
+  /// Menu expanded indicator
   static const String _C_EXPANDED = "expaned";
 
+  /// Menu Element
   final Element element = new Element.nav()
-    ..classes.addAll([LGrid.C_COL, LGrid.C_SHRINK_NONE, LTheme.C_THEME__ALT_INVERSE, C_MENU_MAIN]);
+    ..classes.addAll([LGrid.C_COL, LGrid.C_SHRINK_NONE, LTheme.C_THEME__ALT_INVERSE, C_APPS_MENU]);
 
+  /// Show Button
   AnchorElement _menuShow = new AnchorElement(href: "#")
-    ..classes.add(AppsMenu.C_MENU_MAIN_SHOW);
+    ..classes.add(AppsMenu.C_APPS_MENU_SHOW);
 
 
   /// Left Side Menu
@@ -33,7 +38,7 @@ class AppsMenu extends LComponent {
       expanded = !expanded; // toggle
     });
     element.append(_menuShow);
-  }
+  } // AppsMenu
 
   /**
    * Set Application
@@ -43,7 +48,7 @@ class AppsMenu extends LComponent {
     _menuShow.title = apps.label;
     element.append(_menuShow);
     // entries
-    for (AppsPage pe in apps.entries) {
+    for (AppsPage pe in apps.pages) {
       element.append(pe.menuEntry);
     }
   } // set

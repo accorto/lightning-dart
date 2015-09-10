@@ -7,17 +7,23 @@
 part of lightning_ctrl;
 
 /**
- * Page Application - assigned to main menu - list of menu items
+ * Page Application
+ * - assigned to apps menu
+ * maintains list of menu items = pages
  */
 class AppsCtrl {
 
+  /// Apps Name
   final String name;
+  /// Apps Label
   final String label;
+
 
   final LIcon icon;
   final String imageSrc;
 
-  List<AppsPage> entries = new List<AppsPage>();
+  /// Apps Pages
+  List<AppsPage> pages = new List<AppsPage>();
 
   /**
    * Application with either [icon] or [imageSrc]
@@ -27,8 +33,8 @@ class AppsCtrl {
   }
 
   /// Add Page to Application
-  void add(AppsPage entry) {
-    entries.add(entry);
+  void add(AppsPage page) {
+    pages.add(page);
   }
 
 } // AppsCtrl

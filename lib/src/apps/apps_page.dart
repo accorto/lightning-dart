@@ -7,7 +7,8 @@
 part of lightning_ctrl;
 
 /**
- * Main Page Menu Item - a menu Item and the container for the content
+ * Main Page Menu Item
+ * - a menu Item and the container for the content
  */
 abstract class AppsPage extends LComponent {
 
@@ -15,7 +16,7 @@ abstract class AppsPage extends LComponent {
 
   // Menu Entry
   AnchorElement menuEntry = new AnchorElement(href: "#")
-    ..classes.add(AppsMenu.C_MENU_MAIN_ENTRY);
+    ..classes.add(AppsMenu.C_APPS_MENU_ENTRY);
 
   final String label;
   final LIcon icon;

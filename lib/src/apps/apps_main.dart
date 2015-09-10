@@ -62,12 +62,12 @@ class AppsMain extends PageSimple {
     this.apps = apps;
     head.set(apps);
     _menu.set(apps);
-    for (AppsPage pe in apps.entries) {
+    for (AppsPage pe in apps.pages) {
       _subscriptions.add(pe.menuEntry.onClick.listen(onMenuClick));
       pe.active = false;
     }
-    if (apps.entries.isNotEmpty)
-      _setPageEntry(apps.entries.first);
+    if (apps.pages.isNotEmpty)
+      _setPageEntry(apps.pages.first);
   } // set
   List<StreamSubscription<MouseEvent>> _subscriptions = new List<StreamSubscription<MouseEvent>>();
 
@@ -82,7 +82,7 @@ class AppsMain extends PageSimple {
     }
     theId = theId.replaceAll(AppsPage.MENU_SUFFIX, "");
     AppsPage entry = null;
-    for (AppsPage pe in apps.entries) {
+    for (AppsPage pe in apps.pages) {
       if (pe.id == theId) {
         entry = pe;
       } else {
