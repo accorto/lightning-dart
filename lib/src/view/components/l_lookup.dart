@@ -17,8 +17,6 @@ class LLookup extends LEditor implements LSelectI {
 
   /// slds-lookup - Initializes lookup | Required
   static const String C_LOOKUP = "slds-lookup";
-  /// slds-lookup__control - Initializes lookup form control | Required
-  static const String C_LOOKUP__CONTROL = "slds-lookup__control";
   /// slds-lookup__menu - Initializes lookup results list container | Required
   static const String C_LOOKUP__MENU = "slds-lookup__menu";
   /// slds-lookup__list - Initializes lookup results list | Required
@@ -40,6 +38,8 @@ class LLookup extends LEditor implements LSelectI {
   final LFormElement _formElement = new LFormElement();
   /// Form Element Input
   final InputElement input = new InputElement(type: EditorI.TYPE_TEXT);
+  /// Search Icon
+  final LIcon _icon = new LIconUtility(LIconUtility.SEARCH);
   /// Lookup form + menu
   final DivElement _lookupMenu = new DivElement()
     ..classes.add(C_LOOKUP__MENU)
@@ -51,8 +51,10 @@ class LLookup extends LEditor implements LSelectI {
 
   /// Lookup Items
   final List<LLookupItem> _items = new List<LLookupItem>();
-  /// Display for Single Select
-  LPill _singlePill;
+
+  /// Pill Container
+  DivElement _pillContainer;
+
   /// Displayed in Grid
   final bool inGrid;
 
@@ -68,16 +70,12 @@ class LLookup extends LEditor implements LSelectI {
       bool typeahead: false,
       bool this.inGrid:false}) {
     _setAttributes(select, scope, typeahead);
-    _formElement.createStandard(this);
-    input
-      ..classes.clear()
-      ..classes.add(LForm.C_INPUT__BARE);
+    _formElement.createStandard(this, iconRight: _icon);
     input
       ..attributes[Html0.ROLE] = Html0.ROLE_COMBOBOX
       ..attributes[Html0.ARIA_AUTOCOMPLETE] = Html0.ARIA_AUTOCOMPLETE_LIST
-      ..attributes[Html0.ARIA_HASPOPUP] = "true";
+      ..attributes[Html0.ARIA_EXPANED] = "false";
     _formElement.labelInputText = lLookupLabel();
-
     input.name = name;
     _formElement.id = createId(idPrefix, name);
     element.id = "${_formElement.id}-lookup";
@@ -87,13 +85,19 @@ class LLookup extends LEditor implements LSelectI {
       input.onFocus.listen((Event e) {
         _lookupMenu.classes.remove(LVisibility.C_HIDE);
       });
-    } else if (select == DATA_SELECT_SINGLE) { // show pill - hide input
-      input.classes.add(LVisibility.C_HIDE);
-      _singlePill = new LPill("", "", null, null, null, null, null);
-      _singlePill.element.classes.add(LPill.C_PILL__BARE);
-      _formElement._elementControl.insertBefore(_singlePill.element, input);
     } else {
-      /// Multi
+      _pillContainer = new DivElement()
+        ..classes.add(LPill.C_PILL_CONTAINER);
+
+      if (select == DATA_SELECT_SINGLE) {
+        input.classes.add(LVisibility.C_HIDE);
+        _pillContainer.classes.add(LVisibility.C_SHOW);
+        // _formElement._elementControl.insertBefore(_pillContainer, input);
+        _formElement._elementControl.append(_pillContainer); // needs to be before input
+        _formElement._elementControl.append(input);
+      } else { /// Multi
+        _formElement.element.append(_pillContainer);
+      }
     }
     // div .lookup
     // - div .form-element ... label...
@@ -116,7 +120,6 @@ class LLookup extends LEditor implements LSelectI {
 
   LLookup.multi(String name, {String idPrefix})
     : this(name, idPrefix:idPrefix, select:DATA_SELECT_MULTI, typeahead: false);
-
 
   /// Set Lookup Attributes
   void _setAttributes(String select, String scope, bool typeahead) {
@@ -144,14 +147,18 @@ class LLookup extends LEditor implements LSelectI {
   String get name => input.name;
   String get type => input.type;
 
+  String get label => _formElement.label;
   void set label (String newValue) {
-    super.label = newValue;
-    // TODO
+    _formElement.label = newValue;
   }
-  void set help (String newValue) {}
-  String get help => null;
-  void set hint (String newValue) {}
-  String get hint => null;
+  void set help (String newValue) {
+    _formElement.help = newValue;
+  }
+  String get help => _formElement.help;
+  void set hint (String newValue) {
+    _formElement.hint = newValue;
+  }
+  String get hint => _formElement.hint;
 
   /// Small Editor/Label
   void set small (bool newValue){}
@@ -160,7 +167,7 @@ class LLookup extends LEditor implements LSelectI {
   String get value => input.value;
   void set value (String newValue) {
     input.value = newValue;
-    // TODO
+    // TODO validate
   }
 
   String get defaultValue => null; // ignore
@@ -279,12 +286,12 @@ class LLookup extends LEditor implements LSelectI {
     int kc = evt.keyCode;
     Element telement = evt.target;
     String tvalue = telement.attributes[Html0.DATA_VALUE];
-    print("Menu ${kc} ${tvalue}");
+    _log.fine("onMenuKeyDown ${kc} ${tvalue}");
   }
   void onInputKeyUp(KeyboardEvent evt) {
     int kc = evt.keyCode;
     String match = input.value;
-    print("Input u ${kc} ${match}");
+    _log.fine("onInputKeyUp ${kc} ${match}");
     if (kc == KeyCode.ESC) {
       showResults = false;
     } else {
@@ -375,7 +382,7 @@ class LLookup extends LEditor implements LSelectI {
         _lookupMenu.classes.remove(LVisibility.C_HIDE);
       });
     }
-  }
+  } // showResults
 
 
   void updateStatusValidationState() {

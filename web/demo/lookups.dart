@@ -12,7 +12,7 @@ class Lookups extends DemoFeature {
   sldsStatus: DemoFeature.SLDS_PROTOTYPE,
   devStatus: DemoFeature.STATUS_INITIAL,
   hints: [],
-  issues: ["issues when using lookups as select type ahead (probably not intended)"],
+  issues: ["Single Select+Multi Lookup instable"],
   plans: []);
 
 

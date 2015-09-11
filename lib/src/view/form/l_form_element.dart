@@ -38,7 +38,7 @@ class LFormElement {
    * div control
    * - input
    */
-  void createStandard(EditorI editor) {
+  void createStandard(EditorI editor, {LIcon iconRight, LIcon iconLeft}) {
     this.editor = editor;
     _input = editor.input;
     _labelElement.classes.add(LForm.C_FORM_ELEMENT__LABEL);
@@ -51,13 +51,14 @@ class LFormElement {
     // input
     if (_input is InputElement)
       _input.classes.add(LForm.C_INPUT);
-    if (_input is TextAreaElement)
+    else if (_input is TextAreaElement)
       _input.classes.add(LForm.C_TEXTAREA);
-    if (_input is SelectElement)
+    else if (_input is SelectElement)
       _input.classes.add(LForm.C_SELECT);
 
     DivElement inputWrapper = null;
-    LIcon iconRight = getIconRight();
+    if (iconRight == null)
+      iconRight = getIconRight();
     if (iconRight != null) {
       inputWrapper = new DivElement()
         ..classes.add(LForm.C_INPUT_HAS_ICON)
@@ -67,7 +68,8 @@ class LFormElement {
       iconRight.classes.addAll([LForm.C_INPUT__ICON, LIcon.C_ICON_TEXT_DEFAULT]);
       inputWrapper.append(iconRight.element);
     }
-    LIcon iconLeft = getIconLeft();
+    if (iconLeft == null)
+      iconLeft = getIconLeft();
     if (iconLeft != null) {
       if (inputWrapper == null) {
         inputWrapper = new DivElement()

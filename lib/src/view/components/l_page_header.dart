@@ -29,8 +29,8 @@ class LPageHeader extends LComponent {
 
   /// Page Header
   final Element element = new Element.header()
-    ..classes.add(C_PAGE_HEADER);
+    ..classes.add(C_PAGE_HEADER)
+    ..attributes[Html0.ROLE] = Html0.ROLE_BANNER;
 
-}
-// LPageHeader
+} // LPageHeader
 
