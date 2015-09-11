@@ -11,36 +11,59 @@ part of lightning_dart;
  * Compact Card Entry (Tile)
  * - target: same api as row
  */
-class LCardCompactEntry {
+class LCardCompactEntry extends LTileGeneric {
 
-  /// Compact Entry
-  final LIElement element = new LIElement()
-    ..classes.addAll([LTile.C_TILE, LButton.C_HINT_PARENT]);
 
-  /// Detail Tile
-  final LTileDetail _detail = new LTileDetail();
+  /// The record
+  DRecord record;
+
+  final AppsActionTriggered recordAction;
 
   /**
-   * label - e.g. link
+   * Card Entry
    */
-  LCardCompactEntry(Element label, Element button) {
-    DivElement div = new DivElement()
-      ..classes.addAll([LGrid.C_GRID, LGrid.C_GRID__ALIGN_SPREAD, LGrid.C_HAS_FLEXI_TRUNCATE]);
-    element.append(div);
-    ParagraphElement labelPara = new ParagraphElement()
-      ..classes.addAll([LTile.C_TILE__TITLE, LText.C_TRUNCATE]);
-    labelPara.append(label);
-    div.append(labelPara);
-    //
+  LCardCompactEntry(String label, {Element button, AppsActionTriggered this.recordAction})
+      : super(label) {
     if (button != null) {
-      div.append(button);
+      _heading.append(button);
     }
-    element.append(_detail.element);
   } // LCardCompactEntry
 
-  /// Add Card details
-  void addDetail(String label, String value, {bool addColonsToLabel: true})
-    => _detail.addEntry(label, value, addColonsToLabel:addColonsToLabel);
+  /**
+   * Card Entry
+   */
+  LCardCompactEntry.from(DRecord record, {Element button, AppsActionTriggered this.recordAction})
+      : super(record.drv) {
+    this.record = record;
+
+    element.attributes[Html0.DATA_VALUE] = record.recordId;
+    titleLink.href = "#${record.urv}";
+
+    if (button != null) {
+      _heading.append(button);
+    }
+  } // LCardCompactEntry
+
+  void addActions(List<AppsAction> actions, {Object actionReference}) {
+    if (_dropdown == null) { // init
+      titleLink.onClick.listen((MouseEvent evt) {
+        evt.preventDefault();
+        recordAction("record", record, null, null);
+      });
+    }
+    super.addActions(actions,
+      actionReference: actionReference == null ? record : actionReference);
+  }
+
+  void display(UI ui) {
+    DataRecord data = new DataRecord(null, value: record);
+    for (UIGridColumn gc in ui.gridColumnList) {
+      String label = gc.column.label;
+      String value = data.getValue(name: gc.columnName);
+      // TODO render correctly
+      addEntry(label, value, addColonsToLabel: true);
+    }
+  } // display
 
 } // LCardCompactEntry
 

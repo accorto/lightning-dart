@@ -11,10 +11,10 @@ class Tables extends DemoFeature {
   Tables()
   : super("data-tables", "Data Tables",
   sldsStatus: DemoFeature.SLDS_PROTOTYPE,
-  devStatus: DemoFeature.STATUS_PARTIAL,
-  hints: [],
-  issues: ["stacked not working"],
-  plans: ["client side sort"]);
+  devStatus: DemoFeature.STATUS_COMPLETE,
+  hints: ["sorting works with Records, not as here when when cells are populated directly", "see workspace demo"],
+  issues: [],
+  plans: []);
 
   LComponent get content {
 
@@ -100,7 +100,7 @@ class Tables extends DemoFeature {
   }
   EditorI optionSortCb() {
     LCheckbox cb = new LCheckbox("bordered", idPrefix: id)
-      ..label = "Option: Sorting";
+      ..label = "Option: Sorting *";
     cb.input.onClick.listen((MouseEvent evt){
       sortOption = cb.input.checked;
       optionChanged();

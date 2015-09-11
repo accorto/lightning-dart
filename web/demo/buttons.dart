@@ -12,7 +12,7 @@ class Buttons extends DemoFeature {
   sldsStatus: DemoFeature.SLDS_DEV_READY,
   devStatus: DemoFeature.STATUS_COMPLETE,
   hints: [],
-  issues: ["hint not implemented yet"],
+  issues: [],
   plans: []);
 
 
@@ -58,7 +58,7 @@ class Buttons extends DemoFeature {
       new LIconUtility(LIconUtility.LIKE)));
 
     div.append(new LButton.neutralIcon("b58", "hint icon",
-      new LIconUtility(LIconUtility.DOWNLOAD)).hint()); // TODO hint container
+      new LIconUtility(LIconUtility.DOWNLOAD)).hintParent());
 
     div.appendHrSmall();
     div.add(new LButton.iconBare("b61",
@@ -117,7 +117,7 @@ class Buttons extends DemoFeature {
       new LIconUtility("like")));
 
     div.append(new LButton.neutralIcon("b58", "hint icon",
-      new LIconUtility("download")).hint()); // TODO hint container
+      new LIconUtility(LIconUtility.DOWNLOAD)).hintParent());
 
     div.addHrSmall();
     div.add(new LButton.iconBare("b61",

@@ -10,14 +10,14 @@ class Cards extends DemoFeature {
 
   Cards() : super("cards", "Cards",
   sldsStatus: DemoFeature.SLDS_DEV_READY,
-  devStatus: DemoFeature.STATUS_PARTIAL,
+  devStatus: DemoFeature.STATUS_COMPLETE,
   hints: [],
   issues: [],
-  plans: ["compact, empty"]);
-
+  plans: ["empty"]);
 
 
   LComponent get content {
+    CDiv div = new CDiv();
 
     LCard card = new LCard("c1");
     LButtonGroup bg = new LButtonGroup();
@@ -40,9 +40,26 @@ class Cards extends DemoFeature {
     tbody.addCellText("Second Col #2");
     tbody.addCellText("Third Col #2");
     card.addTable(table);
-
     card.appendFooter(new AnchorElement(href:"#")..text = "Some Link");
-    return card;
+
+    div.add(card);
+    div.appendHR();
+
+    LCardCompact cc = new LCardCompact("c2");
+    LButtonGroup bg2 = new LButtonGroup();
+    bg2.add(new LButton.neutral("btn", "Button"));
+    bg2.add(new LButton.neutral("add", "Action"));
+    bg2.layout(1);
+    cc.setHeader(new LIconStandard(LIconStandard.CONTACT), "Compact Card Header", action:bg2);
+
+    LCardCompactEntry entry = new LCardCompactEntry("Adam");
+    entry.addActions([AppsAction.createEdit(null)]);
+    entry.addEntry("Title", "VP");
+    entry.addEntry("Email", "mail@mail.com");
+    cc.addEntry(entry);
+
+    div.add(cc);
+    return div;
   }
 
   String get source {
@@ -52,13 +69,13 @@ class Cards extends DemoFeature {
     bg.add(new LButton.neutral("btn", "Button"));
     bg.add(new LButton.neutral("add", "Action"));
     bg.layout(1);
-    card.setHeader(new LIconStandard(LIconStandard.CONTACT), "Card Header", group:bg);
+    card.setHeader(new LIconStandard(LIconStandard.CONTACT), "Card Header", action:bg);
 
     LTable table = new LTable("t1");
-    LTableHeaderRow thead = table.addHeadRow();
-    thead.addHeaderCell("First Column", "c1");
-    thead.addHeaderCell("Second Column", "c2");
-    thead.addHeaderCell("Third Column", "c3");
+    LTableHeaderRow thead = table.addHeadRow(false);
+    thead.addHeaderCell("c1", "First Column");
+    thead.addHeaderCell("c2", "Second Column");
+    thead.addHeaderCell("c3", "Third Column");
     LTableRow tbody = table.addBodyRow();
     tbody.addCellText("First Col #1");
     tbody.addCellText("Second Col #1");
@@ -68,9 +85,21 @@ class Cards extends DemoFeature {
     tbody.addCellText("Second Col #2");
     tbody.addCellText("Third Col #2");
     card.addTable(table);
-
     card.appendFooter(new AnchorElement(href:"#")..text = "Some Link");
-    return card;
+
+
+    LCardCompact cc = new LCardCompact("c2");
+    LButtonGroup bg2 = new LButtonGroup();
+    bg2.add(new LButton.neutral("btn", "Button"));
+    bg2.add(new LButton.neutral("add", "Action"));
+    bg2.layout(1);
+    cc.setHeader(new LIconStandard(LIconStandard.CONTACT), "Compact Card Header", action:bg2);
+
+    LCardCompactEntry entry = new LCardCompactEntry("Adam");
+    entry.addActions([AppsAction.createEdit(null)]);
+    entry.addEntry("Title", "VP");
+    entry.addEntry("Email", "mail@mail.com");
+    cc.addEntry(entry);
     ''';
   }
 

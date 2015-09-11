@@ -58,8 +58,7 @@ class LDropdown extends LComponent {
 
   /// Dropdown with Button
   final DivElement element = new DivElement()
-    ..classes.add(C_DROPDOWN_TRIGGER)
-    ..setAttribute(Html0.ARIA_HASPOPUP, "true");
+    ..classes.add(C_DROPDOWN_TRIGGER);
 
   /// Dropdown Button
   final LButton button;
@@ -87,6 +86,7 @@ class LDropdown extends LComponent {
    */
   LDropdown(LButton this.button, String this.idPrefix, {List<String> dropdownClasses}) {
     button.classes.addAll([LButton.C_BUTTON]);
+    button.element.setAttribute(Html0.ARIA_HASPOPUP, "true");
     if (button.icon != null)
       button.icon.classes.add(LButton.C_BUTTON__ICON);
     add(button);

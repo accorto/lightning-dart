@@ -142,7 +142,8 @@ class LTableRow implements FormI {
         recordAction("record", record, null, null);
       });
     }
-    return addCell(a, LTable.URV, record.urv, null, null);
+    return addCell(a, LTable.URV, record.urv, null, null)
+      ..cellElement.attributes[Html0.ROLE] = Html0.ROLE_ROW;
   }
 
   /**

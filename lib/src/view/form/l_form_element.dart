@@ -83,7 +83,7 @@ class LFormElement {
     if (inputWrapper == null)
       inputWrapper = _elementControl;
     inputWrapper.append(_input);
-    inputWrapper.append(_hintSpan);
+    inputWrapper.append(_hintSpan); // __help
   }
 
   /**
@@ -106,7 +106,7 @@ class LFormElement {
     _labelSpan = new SpanElement()
       ..classes.add(LForm.C_FORM_ELEMENT__LABEL);
     _labelElement.append(_labelSpan);
-    _labelElement.append(_hintSpan);
+    element.append(_hintSpan); // __help
   }
 
   /// Get Id
@@ -201,7 +201,7 @@ class LFormElement {
   }
   String _hint;
   void _hintDisplay(String text) {
-    _hintSpan.text = text == null ? "" : text;
+    _hintSpan.text = text == null ? "" : text; // __help
     if (text == null || text.isEmpty) {
       _hintSpan.classes.add(LVisibility.C_HIDE);
     } else {

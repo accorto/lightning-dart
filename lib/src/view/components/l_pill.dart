@@ -18,6 +18,9 @@ class LPill extends LComponent {
   /// Used in Lookup
   static const String C_PILL__BARE = "slds-pill--bare";
 
+  static const String C_PILL_CONTAINER = "slds-pill-container";
+
+
   /// Pill Element
   final SpanElement element = new SpanElement()
     ..classes.add(C_PILL);

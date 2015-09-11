@@ -6,14 +6,21 @@
 
 part of lightning_dart.demo;
 
-class PageHeaders extends DemoFeature {
+class Trees extends DemoFeature {
 
-  PageHeaders()
-  : super("page-headers", "Page Headers",
+  Trees() : super ("trees", "Trees",
   sldsStatus: DemoFeature.SLDS_PROTOTYPE,
-  devStatus: DemoFeature.STATUS_INITIAL,
-  hints: ["see example workspace"],
+  devStatus: DemoFeature.STATUS_NIY,
+  hints: [],
   issues: [],
   plans: []);
 
+  LComponent get content {
+   return null;
+  }
+
+  String get source {
+    return '''
+    ''';
+  }
 }

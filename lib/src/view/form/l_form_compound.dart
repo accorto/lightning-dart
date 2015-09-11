@@ -68,7 +68,7 @@ class LFormCompoundFieldSet extends LComponent {
    * div    .group
    * - div  .row
    * -- label
-   * --- small
+   * --- span
    * --- input
    */
   void addRow(List<LEditor> editors) {
@@ -86,7 +86,7 @@ class LFormCompoundFieldSet extends LComponent {
         ..classes.add(LForm.C_FORM_ELEMENT__CONTROL)
         ..classes.add(size);
       row.append(label);
-      // TODO label.append(editor.labelSmall);
+      // TODO label.append(editor.labelSmall); slds-form-element__helper
       // TODO label.append(editor.input);
     } */
   } // addRow

@@ -11,8 +11,8 @@ class Forms extends DemoFeature {
   Forms() : super ("forms", "Forms",
   sldsStatus: DemoFeature.SLDS_DEV_READY,
   devStatus: DemoFeature.STATUS_COMPLETE,
-  hints: [],
-  issues: ["css: required rendering is off", "horizontal checkbox right aligned"],
+  hints: ["when using Required, ensure to have some left margin"],
+  issues: ["css: horizontal checkbox right aligned"],
   plans: ["help icon"]);
 
 

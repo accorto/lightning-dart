@@ -29,7 +29,10 @@ abstract class LNotification extends LComponent {
    * Create Default Icon for color/theme
    */
   static LIcon createDefaultIcon(String color) {
-    if (color == LTheme.C_THEME__SUCCESS) {
+    if (color == LTheme.C_THEME__ALT_INVERSE) {
+      return new LIconUtility(LIconUtility.INFO);
+    }
+    else if (color == LTheme.C_THEME__SUCCESS) {
       return new LIconUtility(LIconUtility.SUCCESS);
     }
     else if (color == LTheme.C_THEME__WARNING) {
@@ -218,22 +221,32 @@ class LAlert extends LNotification {
   }
   /// green background
   LAlert.success({String label, List<Element> headingElements, String idPrefix,
-        LIcon icon,  String assistiveText, bool addDefaultIcon: false})
+        LIcon icon,  String assistiveText, bool addDefaultIcon: true})
     : this(label:label, headingElements:headingElements, idPrefix:idPrefix, icon:icon,
         assistiveText:assistiveText, addDefaultIcon:addDefaultIcon, color:LTheme.C_THEME__SUCCESS);
+  /// blue background
+  LAlert.info({String label, List<Element> headingElements, String idPrefix,
+        LIcon icon,  String assistiveText, bool addDefaultIcon: true})
+    : this(label:label, headingElements:headingElements, idPrefix:idPrefix, icon:icon,
+        assistiveText:assistiveText, addDefaultIcon:addDefaultIcon, color:LTheme.C_THEME__ALT_INVERSE);
+  /// blue background
+  LAlert.notification({String label, List<Element> headingElements, String idPrefix,
+        LIcon icon,  String assistiveText, bool addDefaultIcon: true})
+    : this(label:label, headingElements:headingElements, idPrefix:idPrefix, icon:icon,
+        assistiveText:assistiveText, addDefaultIcon:addDefaultIcon);
   /// yellow background
   LAlert.warning({String label, List<Element> headingElements, String idPrefix,
-        LIcon icon,  String assistiveText, bool addDefaultIcon: false})
+        LIcon icon,  String assistiveText, bool addDefaultIcon: true})
     : this(label:label, headingElements:headingElements, idPrefix:idPrefix, icon:icon,
         assistiveText:assistiveText, addDefaultIcon:addDefaultIcon, color:LTheme.C_THEME__WARNING);
   /// red background
   LAlert.error({String label, List<Element> headingElements, String idPrefix,
-        LIcon icon,  String assistiveText, bool addDefaultIcon: false})
+        LIcon icon,  String assistiveText, bool addDefaultIcon: true})
     : this(label:label, headingElements:headingElements, idPrefix:idPrefix, icon:icon,
         assistiveText:assistiveText, addDefaultIcon:addDefaultIcon, color:LTheme.C_THEME__ERROR);
   /// grayblack background
   LAlert.offline({String label, List<Element> headingElements, String idPrefix,
-      LIcon icon,  String assistiveText, bool addDefaultIcon: false})
+      LIcon icon,  String assistiveText, bool addDefaultIcon: true})
   : this(label:label, headingElements:headingElements, idPrefix:idPrefix, icon:icon,
       assistiveText:assistiveText, addDefaultIcon:addDefaultIcon, color:LTheme.C_THEME__OFFLINE);
 
@@ -306,32 +319,49 @@ class LToast extends LNotification {
 
   /// green background
   LToast.success({String label, List<Element> headingElements, String idPrefix, LIcon icon,
-      String text, List<Element> contentElements, String assistiveText, bool addDefaultIcon: false,
+      String text, List<Element> contentElements, String assistiveText, bool addDefaultIcon: true,
       bool inContainer: false})
     : this(label:label, headingElements:headingElements, idPrefix:idPrefix, icon:icon,
       text:text, contentElements:contentElements, assistiveText:assistiveText, addDefaultIcon:addDefaultIcon,
       inContainer:inContainer, color:LTheme.C_THEME__SUCCESS);
+
   /// yellow background
   LToast.warning({String label, List<Element> headingElements, String idPrefix, LIcon icon,
-      String text, List<Element> contentElements, String assistiveText, bool addDefaultIcon: false,
+      String text, List<Element> contentElements, String assistiveText, bool addDefaultIcon: true,
       bool inContainer: false})
     : this(label:label, headingElements:headingElements, idPrefix:idPrefix, icon:icon,
       text:text, contentElements:contentElements, assistiveText:assistiveText, addDefaultIcon:addDefaultIcon,
       inContainer:inContainer, color:LTheme.C_THEME__WARNING);
 
   LToast.error({String label, List<Element> headingElements, String idPrefix, LIcon icon,
-      String text, List<Element> contentElements, String assistiveText, bool addDefaultIcon: false,
+      String text, List<Element> contentElements, String assistiveText, bool addDefaultIcon: true,
       bool inContainer: false})
     : this(label:label, headingElements:headingElements, idPrefix:idPrefix, icon:icon,
       text:text, contentElements:contentElements, assistiveText:assistiveText, addDefaultIcon:addDefaultIcon,
       inContainer:inContainer, color:LTheme.C_THEME__ERROR);
 
   LToast.offline({String label, List<Element> headingElements, String idPrefix, LIcon icon,
-      String text, List<Element> contentElements, String assistiveText, bool addDefaultIcon: false,
+      String text, List<Element> contentElements, String assistiveText, bool addDefaultIcon: true,
       bool inContainer: false})
     : this(label:label, headingElements:headingElements, idPrefix:idPrefix, icon:icon,
       text:text, contentElements:contentElements, assistiveText:assistiveText, addDefaultIcon:addDefaultIcon,
       inContainer:inContainer, color:LTheme.C_THEME__OFFLINE);
+
+  /// blue background
+  LToast.info({String label, List<Element> headingElements, String idPrefix, LIcon icon,
+      String text, List<Element> contentElements, String assistiveText, bool addDefaultIcon: true,
+      bool inContainer: false})
+  : this(label:label, headingElements:headingElements, idPrefix:idPrefix, icon:icon,
+      text:text, contentElements:contentElements, assistiveText:assistiveText, addDefaultIcon:addDefaultIcon,
+      inContainer:inContainer, color:LTheme.C_THEME__ALT_INVERSE);
+
+  /// blue background
+  LToast.notification({String label, List<Element> headingElements, String idPrefix, LIcon icon,
+      String text, List<Element> contentElements, String assistiveText, bool addDefaultIcon: true,
+      bool inContainer: false})
+  : this(label:label, headingElements:headingElements, idPrefix:idPrefix, icon:icon,
+      text:text, contentElements:contentElements, assistiveText:assistiveText, addDefaultIcon:addDefaultIcon,
+      inContainer:inContainer);
 
 
   List<Element> _contentElements;

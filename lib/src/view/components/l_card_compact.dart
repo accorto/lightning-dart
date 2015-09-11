@@ -86,48 +86,13 @@ class LCardCompact extends LCard {
    * Create Card Entry
    */
   LCardCompactEntry _createEntry(DRecord record, int rowNo, AppsActionTriggered recordAction) {
-    // label
-    AnchorElement label = new AnchorElement(href: "#${record.urv}")
-      ..text = record.drv;
-    if (recordAction != null) {
-      label.onClick.listen((MouseEvent evt) {
-        evt.preventDefault();
-        recordAction("record", record, null, null);
-      });
-    }
     // action drop down
-    Element actions = null;
-    if (_rowActions.isNotEmpty) {
-      LButton button = new LButton(new ButtonElement(), "action", null, idPrefix:"row",
-        buttonClasses: [LButton.C_BUTTON__ICON_BORDER_FILLED, LButton.C_BUTTON__ICON_BORDER_SMALL, LGrid.C_SHRINK_NONE],
-        icon: new LIconUtility(LIconUtility.DOWN, color: LButton.C_BUTTON__ICON__HINT, size: LButton.C_BUTTON__ICON__SMALL),
-        assistiveText: AppsAction.appsActions());
-      LDropdown dropdown = new LDropdown(button, button.id,
-        dropdownClasses: [LDropdown.C_DROPDOWN__RIGHT, LDropdown.C_DROPDOWN__ACTIONS]);
-      for (AppsAction action in _rowActions) {
-        LDropdownItem item = action.asDropdown(false);
-        item.reference = record;
-        dropdown.dropdown.addItem(item);
-      }
-      dropdown.dropdown.editorChange = onActionChange;
-      actions = dropdown.element;
-    }
-
-    LCardCompactEntry entry = new LCardCompactEntry(label, actions);
-    entry.element.attributes[Html0.DATA_VALUE] = record.recordId;
-    return _createEntryDetails(entry, record);
-  } // createEntry
-  /// card detail entries
-  LCardCompactEntry _createEntryDetails(LCardCompactEntry entry, DRecord record) {
-    DataRecord data = new DataRecord(null, value: record);
-    for (UIGridColumn gc in _ui.gridColumnList) {
-      String label = gc.column.label;
-      String value = data.getValue(name: gc.columnName);
-      // TODO render correctly
-      entry.addDetail(label, value, addColonsToLabel: true);
-    }
+    LCardCompactEntry entry = new LCardCompactEntry.from(record, recordAction:recordAction);
+    entry.addActions(_rowActions);
+    entry.display(_ui);
     return entry;
-  }
+  } // createEntry
+
 
   /// Dropdown Row Action Change
   void onActionChange(String name, String actionName, DEntry entry, LDropdownItem details) {

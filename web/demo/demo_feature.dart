@@ -47,11 +47,12 @@ abstract class DemoFeature extends LComponent {
       ..classes.addAll([LPageHeader.C_PAGE_HEADER, LMargin.C_TOP__X_LARGE]);
     element.append(header);
     DivElement grid = new DivElement()
-      ..classes.add(LGrid.C_GRID);
+      ..classes.addAll([LGrid.C_GRID, LGrid.C_WRAP]);
     header.append(grid);
 
+    // Col 1
     DivElement col1 = new DivElement()
-      ..classes.add(LGrid.C_COL);
+      ..classes.addAll([LGrid.C_COL, LGrid.C_SHRINK_NONE]);
     grid.append(col1);
     HeadingElement h2 = new HeadingElement.h2()
       ..classes.add(LText.C_TEXT_HEADING__MEDIUM)
@@ -71,7 +72,7 @@ abstract class DemoFeature extends LComponent {
 
     // Parameter
     DivElement col2 = new DivElement()
-      ..classes.add(LGrid.C_COL);
+      ..classes.addAll([LGrid.C_COL]);
     grid.append(col2);
     LForm form = new LForm.stacked("options");
 //      ..classes.addAll([LList.C_LIST__VERTICAL, LMargin.C_TOP__SMALL]);
@@ -83,7 +84,7 @@ abstract class DemoFeature extends LComponent {
 
     // Info
     DivElement col3 = new DivElement()
-      ..classes.add(LGrid.C_COL);
+      ..classes.addAll([LGrid.C_COL]);
     grid.append(col3);
     if (hints != null && hints.isNotEmpty) {
       HeadingElement h3 = new HeadingElement.h3()

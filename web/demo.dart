@@ -36,6 +36,8 @@ part 'demo/popovers.dart';
 part 'demo/spinners.dart';
 part 'demo/tables.dart';
 part 'demo/tabs.dart';
+part 'demo/tiles.dart';
+part 'demo/trees.dart';
 part 'demo/tooltips.dart';
 
 part 'demo/themes.dart';
@@ -84,6 +86,10 @@ class DemoPage extends AppsPage {
       ..text = "Check out the individual UI Components with their SLDS (Salesforce Lightning Design System) status and the Lightning Dart implementation status";
     hdr.append(p);
     p = new ParagraphElement()
+      ..classes.add(LText.C_TEXT_BODY__REGULAR)
+      ..text = "The components are displayed without any horizontal/verical spacing, which is provided by the container.";
+    hdr.append(p);
+    p = new ParagraphElement()
       ..classes.add(LText.C_TEXT_BODY__SMALL)
       ..text = "Version: ${LightningDart.VERSION} - ${LightningDart.devTimestamp}";
     hdr.append(p);
@@ -116,9 +122,9 @@ class DemoPage extends AppsPage {
     add(new Popovers()..toc(toc));
     add(new Spinners()..toc(toc));
     add(new Tabs()..toc(toc));
-    // tiles
+    add(new Tiles()..toc(toc));
     add(new Tooltips()..toc(toc));
-    // trees
+    add(new Trees()..toc(toc));
 
     add(new Themes()..toc(toc));
   }

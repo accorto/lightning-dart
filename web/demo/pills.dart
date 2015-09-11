@@ -17,7 +17,8 @@ class Pills extends DemoFeature {
 
 
   LComponent get content {
-    CDiv div = new CDiv();
+    CDiv div = new CDiv()
+      ..classes.add(LPill.C_PILL_CONTAINER);
 
     div.add(new LPill.base("Pill Base", "pb", null,
         (MouseEvent e){print("Pill Base clicked");},
@@ -37,7 +38,8 @@ class Pills extends DemoFeature {
 
   String get source {
     return '''
-    CDiv div = new CDiv();
+    CDiv div = new CDiv()
+      ..classes.add(LPill.C_PILL_CONTAINER);
 
     div.add(new LPill.base("Pill Base", "pb", null,
         (MouseEvent e){print("Pill Base clicked");},

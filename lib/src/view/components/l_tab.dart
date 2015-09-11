@@ -70,7 +70,7 @@ class LTab extends LComponent {
     theContent.attributes[Html0.ROLE] = Html0.ROLE_TABPANEL;
     element.append(theContent);
 
-    //
+    // Label
     AnchorElement a = new AnchorElement()
       ..href = href == null || href.isEmpty ? "#" : href
       ..attributes[Html0.ROLE] = Html0.ROLE_TAB
@@ -94,6 +94,7 @@ class LTab extends LComponent {
     }
     a.id = LComponent.createId(id, name);
     theContent.id = a.id + "-content";
+    a.attributes[Html0.ARIA_CONTROLS] = theContent.id;
 
     selectTabByPos(currentPos);
     return theContent;

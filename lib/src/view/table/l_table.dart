@@ -194,7 +194,13 @@ class LTable extends LComponent {
     } else {
       tableSorting.clear();
     }
-    tableSorting.add(new LTableSort(name, asc)..setLabel(_ui.table));
+    LTableSort sort = new LTableSort(name, asc);
+    if (_ui == null) {
+      sort.columnLabel = name;
+    } else {
+      sort.setLabelFrom(_ui.table);
+    }
+    tableSorting.add(sort);
     recordList.sort(recordSort);
     display();
     if (tableSorted != null)
@@ -415,7 +421,7 @@ class LTableSort {
   String _columnLabel;
 
   /// set label from table column name
-  void setLabel(DTable table) {
+  void setLabelFrom(DTable table) {
     if (columnName == LTable.URV)
       _columnLabel = "record name";
     else {

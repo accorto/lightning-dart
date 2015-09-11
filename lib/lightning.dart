@@ -59,6 +59,7 @@ part 'src/view/components/l_tab.dart';
 part 'src/view/components/l_text.dart';
 part 'src/view/components/l_theme.dart';
 part 'src/view/components/l_tile.dart';
+part 'src/view/components/l_tile_generic.dart';
 part 'src/view/components/l_tooltip.dart';
 part 'src/view/components/l_utilities.dart';
 part 'src/view/components/l_visibility.dart';
@@ -67,6 +68,7 @@ part 'src/view/components/list_item.dart';
 part 'src/view/editors/editor_util.dart';
 part 'src/view/editors/l_checkbox.dart';
 part 'src/view/editors/l_datepicker.dart';
+part 'src/view/editors/l_datepicker_dropdown.dart';
 part 'src/view/editors/l_editor.dart';
 part 'src/view/editors/l_input.dart';
 part 'src/view/editors/l_input_date.dart';
@@ -105,7 +107,7 @@ part 'src/view/utility/option_util.dart';
 class LightningDart {
 
   /// SLDS Version + rel
-  static const VERSION = "v0.8.0+2";
+  static const VERSION = "v0.9.0+0";
   /** Timestamp */
   static String devTimestamp = "-";
 

@@ -30,11 +30,11 @@ class LCard extends LComponent {
   final DivElement element = new DivElement()
     ..classes.add(C_CARD);
 
-  final Element _header = new Element.header()
+  final Element _header = new DivElement()
     ..classes.addAll([C_CARD__HEADER, LGrid.C_GRID]);
-  final Element _body = new Element.section()
+  final Element _body = new DivElement()
     ..classes.add(C_CARD__BODY);
-  final Element _footer = new Element.footer()
+  final Element _footer = new DivElement()
     ..classes.add(C_CARD__FOOTER);
 
   /// prefix

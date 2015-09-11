@@ -59,6 +59,8 @@ class Html0 {
   static const String ROLE_MENUITEMRADIO = "menuitemradio";
 
   /// Aria Attribute role Value
+  static const String ROLE_ROW = "row";
+  /// Aria Attribute role Value
   static const String ROLE_DIALOG = "dialog";
   /// Aria Attribute role Value
   static const String ROLE_DOCUMENT = "document";
@@ -78,8 +80,10 @@ class Html0 {
   static const String ROLE_GRIDCELL = "gridcell";
 
 
-  /// Attribute Aria Labelled By
+  /// Attribute Aria Labelled By (id)
   static const String ARIA_LABELLEDBY = "aria-labelledby";
+  /// Attribute Aria Controls (id)
+  static const String ARIA_CONTROLS = "aria-controls";
   /// Attribute Aria Label
   static const String ARIA_LABEL = "aria-label";
   /// Attribute Aria

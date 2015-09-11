@@ -368,13 +368,26 @@ class LButton extends LComponent {
 
   /**
    * Hint Button wrapper - grayed out until hovered over
-   * Returns div with button appended
+   * Returns div hint container with button appended
    */
-  DivElement hint() {
+  DivElement hintParent() {
     DivElement div = new DivElement()
       ..classes.add(C_HINT_PARENT);
     div.append(element);
+    hint = true;
     return div;
+  }
+
+  /// Hint button
+  bool get hint => _icon != null && _icon.classes.contains(C_BUTTON__ICON__HINT);
+    /// Set Hint (needs to be in hint-parent)
+  void set hint(bool newValue) {
+    if (_icon != null) {
+      if (newValue)
+        _icon.classes.add(C_BUTTON__ICON__HINT);
+      else
+        _icon.classes.remove(C_BUTTON__ICON__HINT);
+    }
   }
 
   /// disabled

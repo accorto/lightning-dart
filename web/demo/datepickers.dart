@@ -12,7 +12,7 @@ class Datepickers extends DemoFeature {
   : super("datepickers", "Datepickers",
   sldsStatus: DemoFeature.SLDS_PROTOTYPE,
   devStatus: DemoFeature.STATUS_PARTIAL,
-  hints: ["date constants (e.g. month names) translated"],
+  hints: ["date constants (e.g. month names) are translated"],
   issues: ["css: week select with crossing month boundary"],
   plans: ["date ranges"]);
 

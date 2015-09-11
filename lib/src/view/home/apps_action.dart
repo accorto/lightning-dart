@@ -125,7 +125,10 @@ class AppsAction {
 
   /// as Dropdown Item
   LDropdownItem asDropdown(bool createOnClick) {
-    LDropdownItem item = new LDropdownItem(option, rightIcon:icon.copy());
+    LIcon theIcon = null;
+    if (icon != null)
+      theIcon = icon.copy();
+    LDropdownItem item = new LDropdownItem(option, rightIcon:theIcon);
     if (createOnClick && callback != null) {
       item.onClick.listen((MouseEvent evt){
         callback(value, null, null, actionVar);
