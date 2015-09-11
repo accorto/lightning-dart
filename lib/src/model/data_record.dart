@@ -581,10 +581,10 @@ class DataRecord {
     }
     // data list - controller
     if (onRecordChange != null) {
-      if (entry == null) {
-        entry = new DEntry()
-          ..columnName = name
-          ..value = newValue;
+      if (entry == null && name != null && name.isNotEmpty) {
+        entry = getEntry(null, name, true);
+        if (newValue != null)
+          entry.value = newValue;
       }
       onRecordChange(_record, entry, rowNo); // data list
     }

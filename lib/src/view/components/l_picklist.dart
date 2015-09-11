@@ -14,7 +14,7 @@ part of lightning_dart;
  * -- button
  * -- div .dropdown
  */
-class LPicklist extends LEditor implements LSelectI {
+class LPicklist extends LEditor with LFormElement implements LSelectI {
 
   /// slds-picklist - Initializes picklist | Required
   static const String C_PICKLIST = "slds-picklist";
@@ -32,17 +32,16 @@ class LPicklist extends LEditor implements LSelectI {
 
   static const String C_PICKLIST__MULTI = "slds-picklist--multi";
 
-
-  /// Picklist form element
-  final DivElement element = new DivElement()
-    ..classes.add(LForm.C_FORM_ELEMENT);
+  /// Picklist Element
   final DivElement _pl = new DivElement()
     ..classes.add(C_PICKLIST);
+  /// Button Label
   final SpanElement _buttonLabel = new SpanElement()
     ..classes.add(LText.C_TRUNCATE);
+  /// Button (proxy input)
   LButton _button;
   /// The Dropdown
-  LDropdownElement dropdown;
+  LDropdownElement _dropdown;
 
 
   /// Displayed in Grid
@@ -55,28 +54,39 @@ class LPicklist extends LEditor implements LSelectI {
    * -- button .form-element--label
    * -- div .dropdown
    */
-  LPicklist(String idPrefix, {bool this.inGrid:false}) {
+  LPicklist(String name, {String idPrefix, bool this.inGrid:false}) {
+    _initEditor(name, idPrefix);
+  } // LPicklist
+
+  /// Picklist Editor
+  LPicklist.from(DataColumn dataColumn, {String idPrefix, bool this.inGrid:false}) {
+    _initEditor(dataColumn.name, idPrefix);
+  }
+  /// initialize
+  void _initEditor(String name, String idPrefix) {
     element.append(_pl);
-    _button = new LButton(new ButtonElement(), "select", null, idPrefix:idPrefix,
-      buttonClasses: [LButton.C_BUTTON__NEUTRAL, C_PICKLIST__LABEL],
-      labelElement: _buttonLabel,
-      icon: new LIconUtility(LIconUtility.DOWN));
+    _button = new LButton(new ButtonElement(), name, null, idPrefix:idPrefix,
+    buttonClasses: [LButton.C_BUTTON__NEUTRAL, C_PICKLIST__LABEL],
+    labelElement: _buttonLabel,
+    icon: new LIconUtility(LIconUtility.DOWN));
     _button.element.attributes[Html0.ARIA_HASPOPUP] = "true";
+    _button.iconButton = false;
     _button.onClick.listen(onButtonClick);
     _pl.append(_button.element);
     _buttonLabel.text = lPicklistSelectOption();
+    createStandard(this);
     //
-    dropdown = new LDropdownElement(
+    _dropdown = new LDropdownElement(
         new DivElement()
           ..classes.addAll([LDropdown.C_DROPDOWN, LDropdown.C_DROPDOWN__LEFT,
-              LDropdown.C_DROPDOWN__SMALL, LDropdown.C_DROPDOWN__MENU]),
+        LDropdown.C_DROPDOWN__SMALL, LDropdown.C_DROPDOWN__MENU]),
         name:name, idPrefix:id);
-    _pl.append(dropdown.element);
+    _pl.append(_dropdown.element);
     //
     expanded = false;
-    dropdown.selectMode = true;
-    dropdown.editorChange = onEditorChange;
-  } // LPicklist
+    _dropdown.selectMode = true;
+    _dropdown.editorChange = onEditorChange;
+  } // initEditor
 
   String get id => _button.id;
   void set id (String newValue) {
@@ -95,30 +105,18 @@ class LPicklist extends LEditor implements LSelectI {
   Element get input => _button.element;
   bool get multiple => false;
 
-  String get title => _button.title;
-  void set title (String newValue) {
-    _button.title = newValue;
-  }
-
-  void set label (String newValue) {
-    super.label = newValue;
-    // TODO
-  }
-  void set help (String newValue) {}
-  String get help => null;
-  void set hint (String newValue) {}
-  String get hint => null;
-
-
   /// Small Editor/Label
   void set small (bool newValue) {}
 
   /// String Value
 
-  String get value => dropdown.value;
+  String get value => _dropdown.value;
   void set value (String newValue) {
-    dropdown.value = newValue;
+    _settingValue = true;
+    _dropdown.value = newValue;
+    _settingValue = false;
   }
+  bool _settingValue = false;
 
   /// Set Button - label
   void _setValue(ListItem item) {
@@ -130,13 +128,15 @@ class LPicklist extends LEditor implements LSelectI {
   }
 
   /// Editor Change callback
-  void onEditorChange(String name, String newValue, DEntry ignored, var details) {
+  void onEditorChange(String name, String newValue, DEntry entry, var details) {
     if (details is ListItem) {
       _setValue(details as ListItem);
     }
-    if (editorChange != null) // this is the actual editor
+    if (!_settingValue && editorChange != null) {  // this is the actual editor
       editorChange(name, newValue, entry, details);
-  }
+    }
+    expanded =  false;
+  } // onEditorChange
 
 
   String get defaultValue => null; // not supported
@@ -180,30 +180,30 @@ class LPicklist extends LEditor implements LSelectI {
   }
 
   /// Get options
-  List<OptionElement> get options => dropdown.options;
+  List<OptionElement> get options => _dropdown.options;
   /// Set options
   void set options (List<OptionElement> list) {
-    dropdown.options = list;
+    _dropdown.options = list;
   }
   /// Add Option
   void addOption(OptionElement oe) {
-    dropdown.addOption(oe);
+    _dropdown.addOption(oe);
   }
   /// Add Option
   void addSelectOption(SelectOption op) {
-    dropdown.addSelectOption(op);
+    _dropdown.addSelectOption(op);
   }
   /// Add Option List
   void set selectOptions(List<SelectOption> list) {
-    dropdown.selectOptions = list;
+    _dropdown.selectOptions = list;
   }
   /// Add Option List
   void set dOptions(List<DOption> options) {
-    dropdown.dOptions = options;
+    _dropdown.dOptions = options;
   }
   /// Set List Items
   void set listItems (List<ListItem> listItems) {
-    dropdown.listItems = listItems;
+    _dropdown.listItems = listItems;
   }
   void set listText (List<String> textList) {
     selectOptions = SelectOption.createListFromText(textList);
@@ -220,7 +220,7 @@ class LPicklist extends LEditor implements LSelectI {
   /// PickList Expanded
   void set expanded (bool newValue) {
     _pl.attributes[Html0.ARIA_EXPANED] = newValue.toString();
-    dropdown.show = newValue;
+    _dropdown.show = newValue;
   }
 
   // Trl

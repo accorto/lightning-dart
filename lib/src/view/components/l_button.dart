@@ -140,14 +140,16 @@ class LButton extends LComponent {
         element.append(_icon.element);
       } else {
         if (_iconLeft) {
-          _icon.classes.add(C_BUTTON__ICON__LEFT);
+          if (_iconButton)
+            _icon.classes.add(C_BUTTON__ICON__LEFT);
           element.append(_icon.element);
           if (_labelElement != null)
             element.append(_labelElement);
           else if (_label != null)
             element.appendText(_label);
         } else {
-          _icon.classes.add(C_BUTTON__ICON__RIGHT);
+          if (_iconButton)
+            _icon.classes.add(C_BUTTON__ICON__RIGHT);
           if (_labelElement != null)
             element.append(_labelElement);
           else if (_label != null)
@@ -327,7 +329,7 @@ class LButton extends LComponent {
     }
   }
 
-  /// button icon is 1rem gray - icon is 2rem white
+  /// button icon is 1rem gray (default) - icon is 2rem white
   void set iconButton (bool newValue) {
     _iconButton = newValue;
     _rebuild();

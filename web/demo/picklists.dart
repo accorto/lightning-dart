@@ -10,9 +10,9 @@ class Picklists extends DemoFeature {
 
   Picklists() : super("picklists", "Picklists",
   sldsStatus: DemoFeature.SLDS_PROTOTYPE,
-  devStatus: DemoFeature.STATUS_INITIAL,
+  devStatus: DemoFeature.STATUS_COMPLETE,
   hints: ["same api as select, lookup and dropdown"],
-  issues: ["instable"],
+  issues: [],
   plans: []);
 
 
@@ -21,12 +21,12 @@ class Picklists extends DemoFeature {
 
     LForm form = new LForm.stacked("tf");
     LPicklist pl1 = new LPicklist("pl1");
-    pl1.label = "Picklist 1"; // TODO
+    pl1.label = "Picklist 1";
     pl1.listItems = generateListItems(10, iconLeft: true);
-    pl1.value = "item5";
     form.addEditor(pl1);
-    div.add(form);
+    pl1.value = "item5";
 
+    div.add(form);
     div.appendHR();
 
     List<DOption> options = new List<DOption>()
@@ -45,12 +45,19 @@ class Picklists extends DemoFeature {
   String get source {
     return '''
     LForm form = new LForm.stacked("tf");
-
     LPicklist pl1 = new LPicklist("pl1");
-    pl1.label = "Picklist 1"; // TODO
+    pl1.label = "Picklist 1";
     pl1.listItems = generateListItems(10, iconLeft: true);
-    pl1.value = "item5";
     form.addEditor(pl1);
+    pl1.value = "item5";
+
+    List<DOption> options = new List<DOption>()
+      ..add(new DOption()..value = "o1" ..label = "Option 1")
+      ..add(new DOption()..value = "o2" ..label = "Option 2" ..isSelected = true )
+      ..add(new DOption()..value = "o3" ..label = "Option 3" ..isSelected = true );
+    LPicklistMulti multi = new LPicklistMulti()
+      ..label = "Choices"
+      ..options = options;
     ''';
   }
 

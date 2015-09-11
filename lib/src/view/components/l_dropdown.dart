@@ -457,9 +457,9 @@ class LDropdownElement implements LSelectI {
     _log.finer("onItemClick ${name} = ${selectedItem == null ? "null" : selectedItem.value}");
     if (editorChange != null) {
       if (selectedItem == null)
-        editorChange("", null, null, null);
+        editorChange(name, null, null, null);
       else
-        editorChange("", selectedItem.value, null, selectedItem);
+        editorChange(name, selectedItem.value, null, selectedItem);
     }
   } // onItemClick (dropdown)
 
@@ -485,9 +485,9 @@ class LDropdownElement implements LSelectI {
     }
     if (editorChange != null) {
       if (selectedItem == null)
-        editorChange("", null, null, null);
+        editorChange(name, null, null, null);
       else
-        editorChange("", selectedItem.value, null, selectedItem);
+        editorChange(name, selectedItem.value, null, selectedItem);
     }
   } // setValue
 
