@@ -4,8 +4,6 @@
  * License options+support:  https://lightningdart.com
  */
 
-
-//import "package:lightning/lightning.dart";
 import "package:lightning/lightning_ctrl.dart";
 
 /**
