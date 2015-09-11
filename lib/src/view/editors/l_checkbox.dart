@@ -43,6 +43,7 @@ class LCheckbox extends LEditor with LFormElement {
 
   /// Initialize Editor
   void _initEditor() {
+    _labelElement.htmlFor = input.id;
     input.onClick.listen(onInputChange);
   }
 
