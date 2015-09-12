@@ -23,7 +23,7 @@ class AppsCtrl {
   final String imageSrc;
 
   /// Apps Pages
-  List<AppsPage> pages = new List<AppsPage>();
+  final List<AppsPage> pages = new List<AppsPage>();
 
   /**
    * Application with either [icon] or [imageSrc]

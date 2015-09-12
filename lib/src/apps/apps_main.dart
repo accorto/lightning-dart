@@ -19,23 +19,25 @@ class AppsMain extends PageSimple {
   /// Current Instance
   static AppsMain instance;
   /// Modal Div
-  static DivElement get modals => instance.modalDiv;
+  static DivElement get modals => instance._modalDiv;
 
   /// Head
-  AppsHeader header;
+  final AppsHeader _header = new AppsHeader();
   /// Menu
-  AppsMenu _menu;
+  final AppsMenu _menu = new AppsMenu();
   /// Content
-  final DivElement content = new DivElement()
+  final DivElement _content = new DivElement()
     ..id = "content";
   /// Footer
-  final CDiv footer = new CDiv.footer(id:"footer");
+  final CDiv _footer = new CDiv.footer(id:"footer");
   /// Modal Div Area
-  final DivElement modalDiv = new DivElement()
+  final DivElement _modalDiv = new DivElement()
     ..id = "modals";
 
   /// Current Apps
-  AppsCtrl apps;
+  AppsCtrl _currentApps;
+  /// Current Page
+  AppsPage _currentPage;
 
   /**
    * Main Page with this [element]
@@ -47,19 +49,17 @@ class AppsMain extends PageSimple {
     DivElement mainGrid = new DivElement()
       ..classes.add(LGrid.C_GRID);
     element.append(mainGrid);
-    _menu = new AppsMenu();
     mainGrid.append(_menu.element);
 
     // Left Side
     DivElement leftSide = new DivElement()
       ..classes.add(LGrid.C_COL);
     mainGrid.append(leftSide);
-    header = new AppsHeader();
-    leftSide.append(header.element);
-    leftSide.append(content);
-    leftSide.append(footer.element);
+    leftSide.append(_header.element);
+    leftSide.append(_content);
+    leftSide.append(_footer.element);
     //
-    element.append(modalDiv);
+    element.append(_modalDiv);
     //
     AppsPage.routeHandler = onRouteEnter;
     LightningCtrl.router.fallbackHandler = onRouteEnter;
@@ -69,11 +69,21 @@ class AppsMain extends PageSimple {
    * Set Application
    */
   void set(AppsCtrl apps) {
+    if (_currentPage != null) {
+      String error = _currentPage.hidePrevent();
+      if (error != null) {
+        showError(appsMainHidePrevent(), _currentPage.label, error);
+        return;
+      }
+    }
+    // reset
     for (StreamSubscription<MouseEvent> sub in _subscriptions) {
       sub.cancel();
     }
-    this.apps = apps;
-    header.set(apps);
+    _currentApps = apps;
+    _currentPage = null;
+    // set
+    _header.set(apps);
     _menu.set(apps);
     for (AppsPage pe in apps.pages) {
       _subscriptions.add(pe.menuEntry.onClick.listen(onMenuClick));
@@ -100,34 +110,35 @@ class AppsMain extends PageSimple {
     }
     if (name == null)
       name = theId.replaceAll(AppsPage.MENU_SUFFIX, "");
-    if (LightningCtrl.router.goto(name)) {
-      evt.preventDefault(); // internal
+    bool result = LightningCtrl.router.goto(name);
+    if (result == null || result){
+      evt.preventDefault(); // internal or "stay there"
     }
-/*
-    AppsPage page = findPage(theId, name);
-    if (page != null) {
-      if (page.internal) {
-        evt.preventDefault();
-        _setPage(page);
-      }
-    } else {
-      _log.fine("onMenuClick - not found: ${theId}");
-    } */
   } // onMenuClick
 
   /// Set Page Entry
   void _setPage(AppsPage page) {
     _log.fine("setPageEntry ${page.name}");
     page.active = true;
-    content.children.clear();
-    content.append(page.element);
+    _content.children.clear();
+    _content.append(page.element);
+    page.showingNow();
+    _currentPage = page;
   }
 
-  /// On Route Enter
+  /// On Route Enter - return false for external or not found
   bool onRouteEnter(RouterPath path) {
+    if (_currentPage != null) {
+      String error = _currentPage.hidePrevent();
+      if (error != null) {
+        showError(appsMainHidePrevent(), _currentPage.label, error);
+        return null;
+      }
+    }
+
     String name = path.toString();
     AppsPage page = null;
-    for (AppsPage pe in apps.pages) {
+    for (AppsPage pe in _currentApps.pages) {
       if (pe.name == name) {
         page = pe;
       } else {
@@ -137,24 +148,29 @@ class AppsMain extends PageSimple {
     if (page == null) {
       _log.info("onRouteEnter NotFound path=${path} name=${name}");
       return false;
-    } else {
-      _log.info("onRouteEnter path=${path} name=${name}");
-      if (page.internal) {
-        _setPage(page);
-        return true;
-      } else {
-        return false; // external
-      }
     }
+
+    _log.info("onRouteEnter path=${path} name=${name}");
+    String error = page.showPrevent();
+    if (error != null) {
+      showError(appsMainShowPrevent(), page.label, error);
+      return null;
+    }
+    if (page.internal) {
+      _setPage(page);
+      return true;
+    }
+    page.showingNow();
+    return false; // external
   } // onRouteEnter
 
   /// append element to main
   void append(Element newValue) {
-    content.append(newValue);
+    _content.append(newValue);
   }
   /// append component to main
   void add(LComponent component) {
-    content.append(component.element);
+    _content.append(component.element);
   }
 
   /**
@@ -163,14 +179,14 @@ class AppsMain extends PageSimple {
   void set loggedIn (bool newValue) {
     // cannot use hide as it does not have !important
     if (newValue && ClientEnv.session != null) {
-      for (AppsPage pe in apps.pages) {
+      for (AppsPage pe in _currentApps.pages) {
         if (pe.name == Route.NAME_LOGIN)
           pe.menuEntry.style.display = "none"; // hide login
         else
           pe.menuEntry.style.removeProperty("display");
       }
     } else {
-      for (AppsPage pe in apps.pages) {
+      for (AppsPage pe in _currentApps.pages) {
         if (pe.name == Route.NAME_LOGIN)
           pe.menuEntry.style.removeProperty("display");
         else
@@ -178,6 +194,22 @@ class AppsMain extends PageSimple {
       }
     }
   } // loggedIn
+
+
+  /// Show Header
+  void showHeader(bool show) {
+    _header.element.classes.toggle(LVisibility.C_HIDE, !show);
+  } // showHeader
+
+  /// Show Error
+  void showError(String heading, String label, String error) {
+    LToast toast = new LToast.error(label:"${heading}: ${label}", text:error);
+    toast.showBottomRight(element, autohideSeconds: 15);
+  }
+
+
+  static String appsMainHidePrevent() => Intl.message("Cannot Hide", name: "appsMainHidePrevent");
+  static String appsMainShowPrevent() => Intl.message("Cannot Show", name: "appsMainShowPrevent");
 
 } // AppsMain
 

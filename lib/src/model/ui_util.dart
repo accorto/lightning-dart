@@ -51,6 +51,7 @@ class UiUtil {
     if (_panel == null)
       addPanel(null);
 
+    // panel
     UIPanelColumn pc = new UIPanelColumn()
       ..column = col
       ..columnName = col.name;
@@ -58,17 +59,20 @@ class UiUtil {
       pc.columnId = col.columnId;
     if (displayLogic != null && displayLogic.isNotEmpty)
       pc.displayLogic = displayLogic;
+    pc.seqNo = (_panel.panelColumnList.length + 1);
     _panel.panelColumnList.add(pc);
 
+    // grid
     UIGridColumn gc = new UIGridColumn()
       ..column = col
       ..columnName = col.name
       ..panelColumn = pc;
     if (col.hasColumnId())
       gc.columnId = col.columnId;
+    gc.seqNo = (ui.gridColumnList.length + 1);
     ui.gridColumnList.add(gc);
 
-    // Data
+    // -- data
     if (exampleList != null && examples != null) {
       for (int i = 0; i < examples.length; i++) {
         String value = examples[i];

@@ -278,7 +278,7 @@ class Router {
   }
 
   /**
-   * Find route with matching [path] or default - return false if not routed
+   * Find route with matching [path] or default - return false if not routed or null if "stay there"
    */
   bool route(final String path) {
     String thePath = path;
@@ -292,8 +292,9 @@ class Router {
       for (Route r in _routes) {
         if (thePath.startsWith(r.path)) {
           routerPath.setRoutePath(r, path: thePath);
-          if (go())
-            return true;
+          bool result = go();
+          if (result == null || result)
+            return result;
         }
       }
     }
@@ -319,7 +320,7 @@ class Router {
 
   /**
    * GoTo route [routeName] with optional [value] and [map]
-   * - return false if not found or rejected
+   * - return false if not found or rejected or full if "stay there"
    */
   bool goto(String routeName, {String value, Map<String,String> map}) {
     Route r = findRouteWithName(routeName);
@@ -332,7 +333,7 @@ class Router {
   } // goto
 
   /**
-   * Go to [routerPath] - return false if rejected
+   * Go to [routerPath] - return false if rejected or null if "stay there"
    */
   bool go () {
     Route theRoute = routerPath.route;
@@ -347,8 +348,8 @@ class Router {
     } else {
       _log.log(Level.CONFIG, "go ${theRoute} path=${thePath}");
     }
-    bool result = theRoute.handler(routerPath);
-    if (result) {
+    bool result = theRoute.handler(routerPath); // might be null
+    if (result != null && result) {
       updateWindow(thePath, theRoute.title);
     //  GoogleAnalytics.gaSendPageview(theRoute.path);
       //
@@ -512,7 +513,6 @@ class Route {
   /// Route Name
   static final String NAME_DEFAULT = "default";
   static const String NAME_LOGIN = "login";
-  static const String NAME_MENU = "menu";
 
   /// name
   String name;

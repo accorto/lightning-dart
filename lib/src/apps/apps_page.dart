@@ -89,4 +89,16 @@ abstract class AppsPage extends LComponent {
     return false;
   }
 
+  String showPrevent() {
+    _log.fine("showPrevent");
+    return null;
+  }
+  void showingNow() {
+    _log.config("showingNow");
+  }
+  String hidePrevent() {
+    _log.fine("hidePrevent");
+    return null;
+  }
+
 } // AppsPage
