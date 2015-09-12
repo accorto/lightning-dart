@@ -208,7 +208,7 @@ class Service {
     if (sendNotification != null) {
       String details = "${sresponse.trxType} ${sresponse.trxNo} ${ServiceTracker.getDuration(sresponse)}";
       sendNotification(sresponse.isSuccess ? ServiceResponse.Ok : ServiceResponse.Error,
-      subject, sresponse.msg, sresponse.clientReceiptTime, details);
+        subject, sresponse.msg, sresponse.clientReceiptTime, details);
     }
   } // handleSuccess
 
@@ -366,42 +366,36 @@ class RequestResponse {
       _showModal(status == 0 || status >= 400);
   } // showPopup
 
-  // TODO Service Error Dialog
+  // Service Error Dialog
   void _showModal(bool reload) {
-    /*
-    Modal modal = new Modal("error-rr");
-    modal.setHeading(iconClass: "icon-bug", label: serviceComErrorTitle());
-    ParagraphElement p = new ParagraphElement()
-      ..text = subject;
-    modal.addBodyElement(p);
+    LModal modal = new LModal("error-rr");
+    modal.setHeader(serviceComErrorTitle(), tagLine:subject, icon:new LIconUtility(LIconUtility.OFFLINE));
     if (message != null) {
-      p = new ParagraphElement()
+      ParagraphElement p = new ParagraphElement()
         ..text = message;
-      modal.addBodyElement(p);
+      modal.append(p);
     }
     //
-    MiniTable details = new MiniTable();
-    modal.addBodyElement(details.element);
-    details.addRowHdrData("Status", "${status} ${statusText}", style: Bootstrap.STYLE_INFO);
-    details.addRowHdrData("Url", window.location.href, style: Bootstrap.STYLE_INFO);
+    LTable details = new LTable("error-details", optionRowSelect:false);
+    modal.add(details);
+    details.addRowHdrData("Status", "${status} ${statusText}");
+    details.addRowHdrData("Url", window.location.href);
     // Parameter
-    BizPage.router.queryParams.forEach((String key, String value){
-      details.addRowHdrData("P: ${key}", value, style: Bootstrap.STYLE_INFO);
+    LightningCtrl.router.queryParams.forEach((String key, String value){
+      details.addRowHdrData("P: ${key}", value);
     });
     //
-    p = new ParagraphElement()
+    ParagraphElement p = new ParagraphElement()
       ..text = serviceComErrorMsg();
-    modal.addBodyElement(p);
-
+    modal.append(p);
     //
     if (reload) {
-      BsButton reload = modal.addButton("reload", label: serviceComErrorButton(), iconClass: "icon-loop2");
-      reload.btn.onClick.listen((e){
+      LButton reload = modal.addFooterButtons(saveNameOverride:serviceComErrorButton(), addCancel:false);
+      reload.onClick.listen((e){
         window.location.reload();
       });
     }
-    modal.show(modal: false);
-    */
+    modal.showInElement(AppsMain.modals);
   } // _showModal
 
 
@@ -501,8 +495,6 @@ class CGeo {
       });
     }
   } // get
-
-
 
 } // CGeo
 

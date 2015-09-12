@@ -18,6 +18,7 @@ class FormCtrl extends LForm {
 
   /**
    * Form Util
+   * must call [build]
    */
   FormCtrl(String name, UI this.ui, {
       Element element,
@@ -28,8 +29,8 @@ class FormCtrl extends LForm {
   } // FormUtil
 
 
-
-  void build() {
+  /// Build form
+  void build({bool addButtons:true}) {
     for (UIPanel panel in ui.panelList) {
       for (UIPanelColumn pc in panel.panelColumnList) {
         DataColumn dataColumn = DataColumn.fromUi(ui, pc.columnName, tableColumn:pc.column, panelColumn:pc);
@@ -41,8 +42,10 @@ class FormCtrl extends LForm {
         }
       }
     }
-    addResetButton();
-    addSaveButton();
+    if (addButtons) {
+      addResetButton();
+      addSaveButton();
+    }
   } // build
 
 } // FormCtrl

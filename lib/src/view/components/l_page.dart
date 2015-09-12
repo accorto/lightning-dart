@@ -67,7 +67,7 @@ class LPage extends CDiv {
         bool createHeaderMainFooter: true,
         CDiv mainSection
       })
-      : super._(element) {
+      : super._(element, null) {
     element.id = id == null || id.isEmpty ? LComponent.createId("c", null) : id;
     if (baseClass.isNotEmpty)
       element.classes.add(baseClass);

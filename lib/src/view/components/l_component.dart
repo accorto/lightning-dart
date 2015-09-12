@@ -171,18 +171,21 @@ class CDiv extends LComponent {
   final Element element;
 
   /// Div Element
-  CDiv() : this._(new DivElement());
+  CDiv({String id}) : this._(new DivElement(), id);
   /// Section Element
-  CDiv.section() : this._(new Element.section());
+  CDiv.section({String id}) : this._(new Element.section(), id);
   /// Article Element
-  CDiv.article() : this._(new Element.article());
+  CDiv.article({String id}) : this._(new Element.article(), id);
   /// Header Element
-  CDiv.header() : this._(new Element.header());
+  CDiv.header({String id}) : this._(new Element.header(), id);
   /// Footer Element
-  CDiv.footer() : this._(new Element.footer());
+  CDiv.footer({String id}) : this._(new Element.footer(), id);
 
   /// Component
-  CDiv._(Element this.element);
+  CDiv._(Element this.element, String id) {
+    if (id != null)
+      element.id = id;
+  }
 
   /// Text
   String get text => element.text;

@@ -16,14 +16,23 @@ class AppsMain extends PageSimple {
 
   static final Logger _log = new Logger("AppsMain");
 
+  /// Current Instance
+  static AppsMain instance;
+  /// Modal Div
+  static DivElement get modals => instance.modalDiv;
+
   /// Head
   AppsHeader header;
   /// Menu
   AppsMenu _menu;
   /// Content
-  DivElement content = new DivElement();
+  final DivElement content = new DivElement()
+    ..id = "content";
   /// Footer
-  CDiv footer;
+  final CDiv footer = new CDiv.footer(id:"footer");
+  /// Modal Div Area
+  final DivElement modalDiv = new DivElement()
+    ..id = "modals";
 
   /// Current Apps
   AppsCtrl apps;
@@ -34,7 +43,7 @@ class AppsMain extends PageSimple {
    */
   AppsMain(DivElement element, String id, {List<String> classList})
       : super(element, id, classList:classList) {
-
+    instance = this;
     DivElement mainGrid = new DivElement()
       ..classes.add(LGrid.C_GRID);
     element.append(mainGrid);
@@ -48,8 +57,9 @@ class AppsMain extends PageSimple {
     header = new AppsHeader();
     leftSide.append(header.element);
     leftSide.append(content);
-    footer = new CDiv.footer();
     leftSide.append(footer.element);
+    //
+    element.append(modalDiv);
     //
     AppsPage.routeHandler = onRouteEnter;
     LightningCtrl.router.fallbackHandler = onRouteEnter;
@@ -69,11 +79,10 @@ class AppsMain extends PageSimple {
       _subscriptions.add(pe.menuEntry.onClick.listen(onMenuClick));
       pe.active = false;
     }
-    //if (apps.pages.isNotEmpty)
-    //  _setPageEntry(apps.pages.first);
+    loggedIn = ClientEnv.session != null;
+    //
     LightningCtrl.router.start();
     LightningCtrl.router.route(null);
-
   } // set
   List<StreamSubscription<MouseEvent>> _subscriptions = new List<StreamSubscription<MouseEvent>>();
 
@@ -147,6 +156,28 @@ class AppsMain extends PageSimple {
   void add(LComponent component) {
     content.append(component.element);
   }
+
+  /**
+   * Logged In
+   */
+  void set loggedIn (bool newValue) {
+    // cannot use hide as it does not have !important
+    if (newValue && ClientEnv.session != null) {
+      for (AppsPage pe in apps.pages) {
+        if (pe.name == Route.NAME_LOGIN)
+          pe.menuEntry.style.display = "none"; // hide login
+        else
+          pe.menuEntry.style.removeProperty("display");
+      }
+    } else {
+      for (AppsPage pe in apps.pages) {
+        if (pe.name == Route.NAME_LOGIN)
+          pe.menuEntry.style.removeProperty("display");
+        else
+          pe.menuEntry.style.display = "none"; // hide others
+      }
+    }
+  } // loggedIn
 
 } // AppsMain
 
