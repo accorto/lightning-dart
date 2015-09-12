@@ -82,7 +82,7 @@ class LTableRow implements FormI {
       label.htmlFor = selectCb.id;
       // th/td
       if (type == TYPE_HEAD) {
-        TableCellElement tc = document.createElement("th")
+        TableCellElement tc = new Element.th()
           ..classes.add(LTable.C_ROW_SELECT)
           ..attributes["scope"] = "col";
         rowElement.append(tc);
@@ -228,7 +228,7 @@ class LTableRow implements FormI {
   void addActions(List<AppsAction> actions) {
     if (_actionCell == null) {
       if (type == TYPE_HEAD) {
-        TableCellElement tc = document.createElement("th")
+        TableCellElement tc = new Element.th()
           ..attributes["scope"] = "col";
         rowElement.append(tc);
         _actionCell = new LTableActionCell(tc, LTableActionCell.createButton("hdr"), null);
@@ -396,7 +396,7 @@ class LTableHeaderRow extends LTableRow {
       nameLabelMap[name] = label;
     }
 
-    TableCellElement tc = document.createElement("th")
+    TableCellElement tc = new Element.th()
       ..attributes["scope"] = "col";
     if (_actionCell == null) {
       rowElement.append(tc);

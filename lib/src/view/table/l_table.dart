@@ -395,6 +395,43 @@ class LTable extends LComponent {
     return records;
   }
 
+  /**
+   * Add Body Row
+   */
+  void addRowHdrData(String thText, String tdText) {
+    if (_tbody == null)
+      _tbody = element.createTBody();
+    TableRowElement tr = _tbody.addRow();
+
+    Element th = new Element.th();
+    tr.append(tr);
+    if (thText != null)
+      th.text = thText;
+
+    TableCellElement td = tr.addCell();
+    if (tdText != null)
+      td.text = tdText;
+  } // addRowHdrData
+
+  /**
+   * Add Body Row
+   */
+  void addRowHdrDataList(String thText, List<String> tdTexts) {
+    if (_tbody == null)
+      _tbody = element.createTBody();
+    TableRowElement tr = _tbody.addRow();
+
+    Element th = new Element.th();
+    tr.append(tr);
+    if (thText != null)
+      th.text = thText;
+
+    for (String tdText in tdTexts) {
+      TableCellElement td = tr.addCell();
+      if (tdText != null)
+        td.text = tdText;
+    }
+  } // addRowHdrDataList
 
 
   static String lTableRowSelectAll() => Intl.message("Select All", name: "lTableRowSelectAll", args: []);
