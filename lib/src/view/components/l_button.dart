@@ -92,7 +92,7 @@ class LButton extends LComponent {
    */
   LButton(Element this.element, String name, String label, {String idPrefix,
       Element labelElement,
-      List<String> buttonClasses, String href,
+      List<String> buttonClasses,
       LIcon icon, bool iconLeft: false, String assistiveText}) {
     element.classes.add(C_BUTTON);
     if (element is ButtonElement) {
@@ -102,9 +102,6 @@ class LButton extends LComponent {
         (element as InputElement).value = label;
     } else {
       element.attributes[Html0.DATA_NAME] = name;
-      if (href != null && href.isNotEmpty && element is AnchorElement) {
-        (element as AnchorElement).href = href;
-      }
     }
     element.id = LComponent.createId(idPrefix, name);
     // classes
@@ -184,7 +181,7 @@ class LButton extends LComponent {
         buttonClasses: [C_BUTTON__NEUTRAL]);
   /// Neutral Anchor
   LButton.neutralAnchor(String name, String label, {String href})
-    : this(new AnchorElement(href: "#"), name, label, href:href,
+    : this(new AnchorElement(href:(href == null ? "#" : href)), name, label,
         buttonClasses: [C_BUTTON__NEUTRAL]);
   /// Neutral Input Button
   LButton.neutralInput(String name, String label)
@@ -211,7 +208,7 @@ class LButton extends LComponent {
         buttonClasses: [C_BUTTON__BRAND], icon:icon, iconLeft:iconLeft);
   /// Brand Button
   LButton.brandAnchor(String name, String label, {String href})
-    : this(new AnchorElement(href: "#"), name, label, href:href,
+    : this(new AnchorElement(href: (href == null ? "#" : href)), name, label,
         buttonClasses: [C_BUTTON__BRAND]);
 
   /// Inverse Button
@@ -235,6 +232,11 @@ class LButton extends LComponent {
   /// Icon Only - border filled
   LButton.iconBorderFilled(String name, LIcon icon, String assistiveText)
     : this(new ButtonElement(), name, null, icon:icon,
+        buttonClasses: [C_BUTTON__ICON_BORDER_FILLED], assistiveText:assistiveText);
+
+  /// Icon Only - border filled
+  LButton.iconBorderFilledAnchor(String name, LIcon icon, String assistiveText, {String href})
+    : this(new AnchorElement(href: (href == null ? "#" : href)), name, null, icon:icon,
         buttonClasses: [C_BUTTON__ICON_BORDER_FILLED], assistiveText:assistiveText);
 
 
