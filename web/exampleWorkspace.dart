@@ -4,6 +4,8 @@
  * License options+support:  https://lightningdart.com
  */
 
+import "dart:async";
+
 import "package:lightning/lightning_ctrl.dart";
 
 /**
@@ -16,9 +18,7 @@ void main() {
   .then((_) {
     WorbenchData wbData = new WorbenchData();
 
-    ObjectCtrl ctrl = new ObjectCtrl(wbData.ui);
-    ctrl.display(wbData.exampleList);
-
+    ObjectCtrl ctrl = new ObjectCtrl(wbData);
 
     PageSimple page = LightningDart.createPageSimple();
     page.add(ctrl);
@@ -31,19 +31,50 @@ void main() {
 /**
  * Data Structure for Workbench
  */
-class WorbenchData {
-
-  final UI ui = new UI();
-  final List<DRecord> recordList = new List<DRecord>();
-  final List<DRecord> exampleList = new List<DRecord>();
+class WorbenchData extends Datasource {
 
 
-  WorbenchData() {
-    ui.uiId = _nextId();
-    UiUtil uiu = new UiUtil(ui, exampleList:exampleList);
+  Future<UI> meta_ui() {
+    Completer<UI> completer = new Completer<UI>();
+
+    new Timer(new Duration(seconds: 5), (){
+      _create();
+      completer.complete(_ui);
+    });
+
+    return completer.future;
+  } // meta_ui
+
+
+  Future<DataResponse> query(DataRequest request) {
+    Completer<DataResponse> completer = new Completer<DataResponse>();
+
+    new Timer(new Duration(seconds: 5), (){
+      DataResponse response = new DataResponse();
+      response.recordList.addAll(_exampleList);
+      completer.complete(response);
+    });
+
+    return completer.future;
+  }
+
+
+  static const String NAME =  "MyContact";
+
+  final UI _ui = new UI();
+  final List<DRecord> _exampleList = new List<DRecord>();
+
+  WorbenchData()
+    : super (NAME) {
+  } // WorkbenchData
+
+
+  void _create() {
+    _ui.uiId = _nextId();
+    UiUtil uiu = new UiUtil(_ui, exampleList:_exampleList);
     DTable table = new DTable()
       ..tableId = _nextId()
-      ..name = "MyContact"
+      ..name = NAME
       ..label = "My Contact"
       ..description = "My brief Object description"
       ..help = "This is an example object to demonstrate the workbench"
@@ -96,8 +127,7 @@ class WorbenchData {
     uiu.addColumn(col, examples:[]);
 
     uiu.updateExamples();
-  } // WorkbenchData
-
+  } // create
 
   /// next id
   String _nextId() {

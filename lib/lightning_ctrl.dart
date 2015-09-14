@@ -34,6 +34,7 @@ part 'src/apps/apps_main.dart';
 part 'src/apps/apps_menu.dart';
 part 'src/apps/apps_page.dart';
 
+part 'src/ctrl/datasource.dart';
 part 'src/ctrl/form_ctrl.dart';
 part 'src/ctrl/object_ctrl.dart';
 part 'src/ctrl/object_edit.dart';

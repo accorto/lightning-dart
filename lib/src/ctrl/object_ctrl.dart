@@ -26,45 +26,63 @@ class ObjectCtrl extends LComponent {
 
   /// Object / Table Element
   final Element element = new Element.section();
+
   /// Header
-  final LObjectHome _header = new LObjectHome();
+  LObjectHome _header;
+
   /// Content
   final CDiv _content = new CDiv.article();
+
   /// Record Control (single record view)
   RecordCtrl recordCtrl;
 
   /// Meta Data
-  final UI ui;
+  final Datasource datasource;
+
   /// Actual Data Records
   List<DRecord> _records;
-
 
   /**
    * Object Controller
    */
-  ObjectCtrl(UI this.ui) {
+  ObjectCtrl(Datasource this.datasource, {String containerClass: LGrid.C_CONTAINER__FLUID}) {
+    if (containerClass != null && containerClass.isNotEmpty) {
+      element.classes.add(containerClass);
+    }
+    _header = new LObjectHome(datasource.recordSorting);
     element.append(_header.element);
     element.append(_content.element);
     //
-    _header.setUi(ui);
     // layout change table/..
     _header.viewLayoutChange = onViewLayoutChange;
     // find
     _header.findEditorChange = onFindEditorChange;
 
-    // Actions
-    if (!ui.isReadOnly)
-      _header.addAction(AppsAction.createNew(onAppsActionNew));
-
     _header.filterList.settings.dropdown.editorChange = onFilterChange;
-
-    //_header.filterList.addFilter()
     _header.filterList.filterSelectionChange = onFilterSelectionChange;
-    _doQuery();
-  } // ObjectCtrl
+
+    _content.element.style.minHeight = "100px";
+
+    datasource.recordSorting.sortExecuted = onRecordsSorted;
+    _header.loading = true;
+    datasource.ui()
+    .then((UI ui) {
+      _header.loading = false;
+      _header.setUi(ui);
+      // actions
+      if (!ui.isReadOnly) {
+        _header.addAction(AppsAction.createNew(onAppsActionNew));
+      }
+
+      // TODO _header.filterList.addFilter()
+      _doQuery();
+    });
+  }
+
+  // ObjectCtrl
 
   /// table name
-  String get tableName => ui.tableName;
+  String get tableName => datasource.tableName;
 
   /// Find in Table
   void onFindEditorChange(String name, String newValue, DEntry entry, var details) {
@@ -89,8 +107,8 @@ class ObjectCtrl extends LComponent {
     if (newValue != AppsAction.NEW && (filter == LObjectHomeFilter.RECENT || filter == LObjectHomeFilter.ALL)) {
       AppsAction filterNew = AppsAction.createYes(onFilterNewConfirmed);
       LConfirmation conf = new LConfirmation("fn", label: objectCtrlFilterNew(),
-        text:objectCtrlFilterNewText(),
-        actions:[filterNew], addCancel: true);
+      text:objectCtrlFilterNewText(),
+      actions:[filterNew], addCancel: true);
       conf.showInElement(element);
       return;
     }
@@ -103,29 +121,32 @@ class ObjectCtrl extends LComponent {
       AppsAction filterDelete = AppsAction.createYes(onFilterDeleteConfirmed)
         ..actionVar = query;
       LConfirmation conf = new LConfirmation("fn", label: objectCtrlFilterDelete(),
-        text:objectCtrlFilterDeleteText(), contentElements:[ul],
-        actions:[filterDelete], addCancel: true);
+      text:objectCtrlFilterDeleteText(), contentElements:[ul],
+      actions:[filterDelete], addCancel: true);
       conf.showInElement(element);
       return;
     }
     if (newValue == AppsAction.NEW) {
       query = new SavedQuery();
     }
-    ObjectFilter fe = new ObjectFilter(ui.table, query, onFilterUpdated);
+    ObjectFilter fe = new ObjectFilter(datasource.tableDirect, query, onFilterUpdated);
     fe.modal.showInElement(element);
   }
+
   void onFilterDeleteConfirmed(String value, DRecord record, DEntry entry, var actionVar) {
     if (value == AppsAction.YES && actionVar is SavedQuery) {
       SavedQuery query = actionVar as SavedQuery;
       _log.config("onFilterDeleteConfirmed ${tableName} ${value} ${query.name}");
     }
   }
+
   void onFilterNewConfirmed(String value, DRecord record, DEntry entry, var actionVar) {
     if (value == AppsAction.YES) {
-      ObjectFilter fe = new ObjectFilter(ui.table, new SavedQuery(), onFilterUpdated);
+      ObjectFilter fe = new ObjectFilter(datasource.tableDirect, new SavedQuery(), onFilterUpdated);
       fe.modal.showInElement(element);
     }
   }
+
   /// callback after filter updated
   void onFilterUpdated(SavedQuery query) {
     // add query to lookup + set active
@@ -138,20 +159,32 @@ class ObjectCtrl extends LComponent {
     _log.config("onFilterSelectionChange ${tableName} ${name}");
     _doQuery();
   }
+
   void _doQuery() {
     String filter = _header.filterList.filterValue;
     _log.config("doQuery ${tableName} ${filter}");
-    // set lists
-    // get current list
-    _display();
+    _content.loading = true;
+    DataRequest request = null;
+    datasource.query(request)
+    .then((DataResponse response) {
+      _content.loading = false;
+
+      // set lists
+      // get current list
+      display(response.recordList);
+    });
   }
+
+  // doQuery
 
 
   /// Display Items
   void display(List<DRecord> records) {
     _records = records;
     _display();
-  } // display
+  }
+
+  // display
   void _display() {
     _content.clear();
     if (_records == null || _records.isEmpty) {
@@ -168,27 +201,27 @@ class ObjectCtrl extends LComponent {
       _cardCompact = null;
       if (viewLayout == LObjectHome.VIEW_LAYOUT_COMPACT) {
         _displayCompact();
-        onTableSorted(null);
-      //} else if (viewLayout == LObjectHome.VIEW_LAYOUT_CARDS) {
-      //  _displayCards();
+        //} else if (viewLayout == LObjectHome.VIEW_LAYOUT_CARDS) {
+        //  _displayCards();
       } else /* if (viewLayout == LObjectHome.VIEW_LAYOUT_TABLE) */ {
         _displayTable();
-        onTableSorted(_table.tableSorting);
       }
+      onRecordsSorted();
     }
   } // display
 
-  /// Display Table Sort
-  void onTableSorted(List<LTableSort> tableSorting) {
+
+  /// Display Table Sort Info
+  void onRecordsSorted() {
     if (_records.length == 1) {
       _header.summary = objectCtrl1Record();
-    } else if (tableSorting == null || tableSorting.isEmpty) {
+    } else if (datasource.recordSorting.isEmpty) {
       _header.summary = "${_records.length} ${objectCtrlRecords()}";
     } else {
       String info = "${_records.length} ${objectCtrlRecords()} ${LUtil.DOT} ${objectCtrlSortedBy()}";
       String prefix = " ";
-      for (LTableSort sort in tableSorting) {
-        info += prefix + sort.columnLabel + (sort.asc ? "\u{2193}" : "\u{2191}");
+      for (RecordSort sort in datasource.recordSorting.list) {
+        info += prefix + sort.columnLabel + (sort.isAscending ? "\u{2193}" : "\u{2191}");
         prefix = LUtil.DOT;
       }
       _header.summary = info;
@@ -200,12 +233,12 @@ class ObjectCtrl extends LComponent {
    * Table
    */
   void _displayTable() {
-    _table = new TableCtrlUi(ui, idPrefix:id, editMode:LTable.EDIT_FIELD)
+    _table = new TableCtrlUi(datasource.uiDirect, recordSorting:datasource.recordSorting,
+        idPrefix:id, editMode:LTable.EDIT_FIELD)
       ..bordered = true;
     _table.recordSaved = onRecordSaved;
     _table.recordDeleted = onRecordDeleted;
     _table.recordsDeleted = onRecordsDeleted;
-    _table.tableSorted = onTableSorted;
     _table.setRecords(_records, recordAction:onAppsActionRecord); // urv click
     _content.add(_table);
   } // displayTable
@@ -216,7 +249,7 @@ class ObjectCtrl extends LComponent {
    */
   void _displayCompact() {
     _cardCompact = new LCardCompact(id);
-    _cardCompact.setUi(ui); // header
+    _cardCompact.setUi(datasource.uiDirect); // header
     _cardCompact.addTableAction(AppsAction.createNew(onAppsActionNew));
     _cardCompact.addTableAction(AppsAction.createLayout(onAppsActionCompactLayout));
 
@@ -253,9 +286,9 @@ class ObjectCtrl extends LComponent {
   /// Application Action New (if not table)
   void onAppsActionNew(String value, DRecord record, DEntry entry, var actionVar) {
     _log.config("onAppsActionNew ${tableName} ${value}");
-    DRecord newRecord = new DataRecord(null).newRecord(ui.table, null);
+    DRecord newRecord = new DataRecord(null).newRecord(datasource.tableDirect, null);
     //
-    ObjectEdit oe = new ObjectEdit(ui);
+    ObjectEdit oe = new ObjectEdit(datasource.uiDirect);
     oe.setRecord(newRecord, -1);
     oe.recordSaved = onRecordSaved;
     oe.modal.showInElement(element);
@@ -367,7 +400,7 @@ class ObjectCtrl extends LComponent {
 
   void _switchRecordCtrl(DRecord record, String editMode) {
     if (recordCtrl == null) {
-      recordCtrl = new RecordCtrl(ui);
+      recordCtrl = new RecordCtrl(datasource.uiDirect);
       recordCtrl.element.classes.add(LMargin.C_TOP__X_LARGE);
       element.parent.append(recordCtrl.element);
     }

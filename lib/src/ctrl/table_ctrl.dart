@@ -36,11 +36,12 @@ abstract class TableCtrl extends LTable {
   TableCtrl({String idPrefix,
       bool this.optionCreateNew:true,
       bool optionRowSelect:true,
+      RecordSorting recordSorting,
       bool this.optionLayout:true,
       bool this.optionEdit:true,
       String editMode: LTable.EDIT_ALL,
       bool this.alwaysOneEmptyLine:false})
-    : super(idPrefix, optionRowSelect:optionRowSelect) {
+    : super(idPrefix, optionRowSelect:optionRowSelect, recordSorting:recordSorting) {
     this.editMode = editMode;
     //
     addActions();
@@ -306,12 +307,13 @@ class TableCtrlUi extends TableCtrl {
   TableCtrlUi(UI this.ui, {String idPrefix,
       bool optionCreateNew:true,
       bool optionRowSelect:true,
+      RecordSorting recordSorting,
       bool optionLayout:true,
       bool optionEdit:true,
       String editMode: LTable.EDIT_FIELD,
       bool alwaysOneEmptyLine:false})
     : super(idPrefix:idPrefix,
-        optionCreateNew:optionCreateNew, optionRowSelect:optionRowSelect,
+        optionCreateNew:optionCreateNew, optionRowSelect:optionRowSelect, recordSorting:recordSorting,
         optionLayout:optionLayout, optionEdit:optionEdit,
         editMode:editMode, alwaysOneEmptyLine:alwaysOneEmptyLine);
 

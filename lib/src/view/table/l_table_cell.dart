@@ -15,11 +15,13 @@ class LTableCell {
   final TableCellElement cellElement;
   /// Meta Data
   final DataColumn dataColumn;
+  /// (Column)Name
+  final String name;
 
   /**
    * Table Cell
    */
-  LTableCell(TableCellElement this.cellElement, Element content, String name, String label, String value, String align,
+  LTableCell(TableCellElement this.cellElement, Element content, String this.name, String label, String value, String align,
       DataColumn this.dataColumn) {
     if (align != null && align.isNotEmpty)
       cellElement.classes.add(align);

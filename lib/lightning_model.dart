@@ -33,11 +33,13 @@ import 'protoc/structure.pb.dart';
 import 'protoc/data.pb.dart';
 import 'protoc/display.pb.dart';
 import 'protoc/rr.pb.dart';
+import 'protoc/rr_data.pb.dart';
 
 export 'protoc/structure.pb.dart';
 export 'protoc/data.pb.dart';
 export 'protoc/display.pb.dart';
 export 'protoc/rr.pb.dart';
+export 'protoc/rr_data.pb.dart';
 
 
 import 'dart:indexed_db';
@@ -54,6 +56,7 @@ part 'src/model/duration_util.dart';
 part 'src/model/editor_i.dart';
 part 'src/model/preference.dart';
 part 'src/model/preference_storage.dart';
+part 'src/model/record_sorting.dart';
 part 'src/model/string_tokenizer.dart';
 part 'src/model/tz.dart';
 part 'src/model/ui_util.dart';

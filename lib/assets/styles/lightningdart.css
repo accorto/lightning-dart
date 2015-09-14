@@ -4599,6 +4599,8 @@ a.slds-button--inverse:focus {
     opacity: 1;
     -webkit-transition: opacity 0.4s linear;
             transition: opacity 0.4s linear; }
+.loading {
+  position: relative; }
 .loading-backdrop {
   -webkit-transition-duration: 0.4s;
           transition-duration: 0.4s;

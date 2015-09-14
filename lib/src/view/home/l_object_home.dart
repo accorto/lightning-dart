@@ -6,6 +6,7 @@
 
 part of lightning_dart;
 
+
 /**
  * Object Home
  * - List view of the Object with Record Lookup / Search
@@ -16,6 +17,7 @@ class LObjectHome extends LPageHeader {
   static const String VIEW_LAYOUT_CARDS = "cards";
   static const String VIEW_LAYOUT_COMPACT = "compact";
 
+  static const String ID = "oh";
 
   /// Top Row - Icon - Title - Label - Follow - Actions
   final DivElement _header = new DivElement()
@@ -31,21 +33,26 @@ class LObjectHome extends LPageHeader {
 
   final DivElement _headerCenter = new DivElement()
     ..classes.addAll([LGrid.C_COL, LGrid.C_ALIGN_BOTTOM]);
-  final LInputSearch _headerFind = new LInputSearch("find");
+  final LInputSearch _headerFind = new LInputSearch("find", idPrefix:ID);
 
   /// Top row right
   final DivElement _headerRight = new DivElement()
     ..classes.addAll([LGrid.C_COL, LGrid.C_NO_FLEX, LGrid.C_ALIGN_BOTTOM]);
-  final LDropdown _viewLayout = new LDropdown.selectIcon("vs");
+  final LDropdown _sort = new LDropdown.icon("sort", new LIconUtility(LIconUtility.SORT),
+      idPrefix:ID, assistiveText:lObjectHomeSort());
+  final LDropdown _viewLayout = new LDropdown.selectIcon(idPrefix:ID);
   final LButtonGroup _actionButtonGroup = new LButtonGroup();
 
   final ParagraphElement _summary = new ParagraphElement()
     ..classes.addAll([LText.C_TEXT_BODY__SMALL, LMargin.C_TOP__X_SMALL]);
 
+  /// Record Sort
+  final RecordSorting recordSorting;
+
   /**
    * Object Home
    */
-  LObjectHome() {
+  LObjectHome(RecordSorting this.recordSorting) {
     // Header Row
     element.append(_header);
     // div .slds-col
@@ -69,8 +76,13 @@ class LObjectHome extends LPageHeader {
     DivElement _headerRightGrid = new DivElement()
       ..classes.add(LGrid.C_GRID);
     _headerRight.append(_headerRightGrid);
-
     //
+    if (recordSorting != null) {
+      _sort.right = true;
+      _headerRightGrid.append(_sort.element);
+    }
+    //
+    _viewLayout.right = true;
     _viewLayout.headingLabel = lObjectHomeLayoutDisplay();
     _viewLayout.dropdown.addItem(LDropdownItem.create(label: lObjectHomeLayoutTable(), value: VIEW_LAYOUT_TABLE,
     icon: new LIconUtility(LIconUtility.TABLE)));
@@ -85,7 +97,7 @@ class LObjectHome extends LPageHeader {
     _headerRightGrid.append(_viewWrapper);
 
     // Actions
-    _actionButtonGroup.id = "ohome-action-group";
+    _actionButtonGroup.id = "oh-action-group";
     _actionButtonGroup.classes.add(LButton.C_BUTTON_SPACE_LEFT);
     _headerRightGrid.append(_actionButtonGroup.element);
 
@@ -95,8 +107,24 @@ class LObjectHome extends LPageHeader {
   /// Object Home from UI
   void setUi(UI ui) {
     recordType = ui.table.label + "s"; // TODO plural
-
+    // sort columns
+    if (recordSorting != null) {
+      _sort.dropdown.clear();
+      for (UIGridColumn gc in ui.gridColumnList) {
+        LDropdownItem item = LDropdownItem.create(value:gc.columnName, label:gc.column.label);
+        _sort.dropdown.addItem(item);
+      }
+      _sort.dropdown.editorChange = onSortChange;
+    }
   } // setUi
+
+  /// Sort
+  void onSortChange(String name, String newValue, DEntry entry, var details) {
+    if (recordSorting != null) {
+      recordSorting.set(new RecordSort.create(newValue, true));
+      recordSorting.sort();
+    }
+  }
 
   /**
    * Add Action
@@ -148,6 +176,7 @@ class LObjectHome extends LPageHeader {
 
   static String lObjectHomeFind() => Intl.message("Find in View", name: "lObjectHomeFind");
 
+  static String lObjectHomeSort() => Intl.message("Sort", name: "lObjectHomeSort");
 
   static String lObjectHomeSave() => Intl.message("Save", name: "lObjectHomeSave", args: []);
 

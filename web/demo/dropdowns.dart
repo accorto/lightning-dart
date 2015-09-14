@@ -18,7 +18,7 @@ class Dropdowns extends DemoFeature {
   LComponent get content {
     CDiv div = new CDiv();
     div.appendText("Hover:");
-    LDropdown dd = new LDropdown.settings("dd1")
+    LDropdown dd = new LDropdown.settings(idPrefix: "dd1")
       ..left = true;
     dd.dropdown.addItem(LDropdownItem.create(label: "Menu Item One"));
     dd.dropdown.addItem(LDropdownItem.create(label: "Menu Item Two"));
@@ -26,7 +26,7 @@ class Dropdowns extends DemoFeature {
     dd.dropdown.addItem(LDropdownItem.create(label: "Menu Item Four")..divider = true);
     div.add(dd);
 
-    dd = new LDropdown.settings("dd2");
+    dd = new LDropdown.settings(idPrefix: "dd2");
     dd.headingLabel = "List View Controls";
     dd.dropdown.nubbinTop = true;
     dd.dropdown.addItem(LDropdownItem.create(label: "Rename...")..disabled = true);
@@ -35,7 +35,7 @@ class Dropdowns extends DemoFeature {
     dd.dropdown.addItem(LDropdownItem.create(label: "Discard Changes to List"));
     div.add(dd);
 
-    dd = new LDropdown.selectIcon("dd3");
+    dd = new LDropdown.selectIcon(idPrefix: "dd3");
     dd.headingLabel = "Display As";
     dd.dropdown.addItem(LDropdownItem.create(label: "Table", value: "table",
       icon: new LIconUtility(LIconUtility.TABLE)));

@@ -142,7 +142,7 @@ class LTableRow implements FormI {
         recordAction("record", record, null, null);
       });
     }
-    return addCell(a, LTable.URV, record.urv, null, null)
+    return addCell(a, DataRecord.URV, record.urv, null, null)
       ..cellElement.attributes[Html0.ROLE] = Html0.ROLE_ROW;
   }
 
@@ -263,7 +263,7 @@ class LTableRow implements FormI {
     for (String name in nameList) {
       if (name == null)
         continue;
-      if (name == LTable.URV) {
+      if (name == DataRecord.URV) {
         addCellUrv(record, recordAction);
       } else {
         DataColumn dataColumn = findColumn(name);
@@ -406,9 +406,12 @@ class LTableHeaderRow extends LTableRow {
     if (dataColumn == null) {
       dataColumn = findColumn(name);
     }
-    return new LTableHeaderCell(tc, span, name, label, value, align, tableSortClicked, dataColumn);
+    LTableHeaderCell cell = new LTableHeaderCell(tc, span, name, label, value, align, tableSortClicked, dataColumn);
+    _cells.add(cell);
+    return cell;
   } // addHeaderCell
 
+  List<LTableHeaderCell> _cells = new List<LTableHeaderCell>();
 
   /**
    * Add Grid Column
@@ -417,7 +420,18 @@ class LTableHeaderRow extends LTableRow {
     addHeaderCell(dataColumn.name, dataColumn.label, dataColumn:dataColumn);
   }
 
-
+  /// Set Sorting
+  void setSorting(RecordSorting recordSorting) {
+    for (LTableHeaderCell cell in _cells) {
+      if (cell.sortable) {
+        RecordSort sort = recordSorting.getSort(cell.name);
+        if (sort == null)
+          cell.sortAsc = true;
+        else
+          cell.sortAsc = sort.isAscending;
+      }
+    }
+  }
 
 
 } // LTableHeaderRow

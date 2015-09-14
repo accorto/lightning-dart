@@ -92,7 +92,7 @@ class LDropdown extends LComponent {
     add(button);
     dropdown = new LDropdownElement(new DivElement()
         ..classes.addAll([C_DROPDOWN, C_DROPDOWN__MENU]),
-      name:idPrefix);
+      name:button.name, idPrefix:idPrefix);
     //
     if (dropdownClasses != null) {
       dropdown.element.classes.addAll(dropdownClasses);
@@ -101,7 +101,7 @@ class LDropdown extends LComponent {
   } // LDropdown
 
   /// Settings Button+Dropdown
-  LDropdown.settings(String idPrefix)
+  LDropdown.settings({String idPrefix})
     : this(new LButton(new ButtonElement(), "settings", null,
         icon: new LIconUtility(LIconUtility.SETTINGS),
         buttonClasses: [LButton.C_BUTTON__ICON_CONTAINER],
@@ -109,8 +109,17 @@ class LDropdown extends LComponent {
         idPrefix:idPrefix),
     idPrefix);
 
+  /// Icon Button+Dropdown
+  LDropdown.icon (String name, LIcon icon, {String idPrefix, String assistiveText})
+    : this(new LButton(new ButtonElement(), name, null,
+        icon:icon,
+        buttonClasses: [LButton.C_BUTTON__ICON_CONTAINER],
+        assistiveText:assistiveText,
+        idPrefix:idPrefix),
+    idPrefix);
 
-  LDropdown.action(String idPrefix)
+
+  LDropdown.action({String idPrefix})
     : this(new LButton(new ButtonElement(), "more", null,
         buttonClasses: [LButton.C_BUTTON__ICON_BORDER_FILLED],
         icon: new LIconUtility(LIconUtility.DOWN),
@@ -122,7 +131,7 @@ class LDropdown extends LComponent {
   /**
    * Select Dropdown
    */
-  LDropdown.selectIcon(String idPrefix)
+  LDropdown.selectIcon({String idPrefix})
     : this(new LButton(new ButtonElement(), "select", null,
         buttonClasses: [LButton.C_BUTTON__ICON_MORE], idPrefix:idPrefix),
       idPrefix,
@@ -132,6 +141,7 @@ class LDropdown extends LComponent {
   /**
    * Search Drop Down
    */
+  @deprecated
   LDropdown.search(String this.idPrefix, LButton this.button, InputElement input, {
       String placeholder: "Find in list...",
       String headingLabel: "List"}) {
@@ -170,10 +180,12 @@ class LDropdown extends LComponent {
   } // search
 
 
+  /// left aligned  |=
   bool get left => dropdown.left;
   void set left (bool newValue) {
     dropdown.left = newValue;
   }
+  /// right aligned  =|
   bool get right => dropdown.right;
   void set right (bool newValue) {
     dropdown.right = newValue;
@@ -286,7 +298,7 @@ class LDropdownElement implements LSelectI {
   /// Dropdown Element
   LDropdownElement(DivElement this.element, {String this.name: "dd", String idPrefix}) {
     element.append(_dropdownList);
-    element.id = LComponent.createId(idPrefix, name);
+    element.id = LComponent.createId(idPrefix, "dd");
   }
 
 

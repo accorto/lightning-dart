@@ -15,7 +15,7 @@ class PageSimple extends LComponent {
   static final List<String> MAIN_CLASSES = [LGrid.C_CONTAINER, LGrid.C_CONTAINER__FLUID,
     LGrid.C_CONTAINER__LARGE, LGrid.C_CONTAINER__MEDIUM, LGrid.C_CONTAINER__SMALL, LGrid.C_GRID];
 
-  /// Page Element
+  /// Outer Page Element
   final Element element;
 
 
@@ -29,7 +29,7 @@ class PageSimple extends LComponent {
     if (classList != null && classList.isNotEmpty) {
       element.classes.addAll(classList);
     } else {
-      element.classes.addAll([LGrid.C_CONTAINER, LGrid.C_CONTAINER__FLUID]);
+      element.classes.addAll([LGrid.C_GRID, LGrid.C_CONTAINER, LGrid.C_CONTAINER__FLUID]);
     }
     element.id = id;
   } // PageSimple

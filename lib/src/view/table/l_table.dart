@@ -9,8 +9,6 @@ part of lightning_dart;
 /// Sort Clicked
 typedef void TableSortClicked(String name, bool asc, MouseEvent evt);
 
-/// Table Sorted
-typedef void TableSorted(List<LTableSort> tableSorting);
 
 /**
  * Table
@@ -43,7 +41,6 @@ class LTable extends LComponent {
   static const String C_ROW_SELECT = "slds-row-select";
   static const String C_ROW_ACTION = "slds-row-action";
 
-  static const String URV = "urv";
 
   /// Table Edit Mode - Read Only
   static const String EDIT_RO = "ro";
@@ -85,17 +82,16 @@ class LTable extends LComponent {
 
   /// Row Select
   final bool optionRowSelect;
-
-  /// Table Sorting
-  final List<LTableSort> tableSorting = new List<LTableSort>();
-  /// Callback
-  TableSorted tableSorted;
+  /// Record Sort List
+  RecordSorting recordSorting;
 
   /**
    * Table
    */
-  LTable(String idPrefix, {bool this.optionRowSelect:true}) {
+  LTable(String idPrefix, {bool this.optionRowSelect:true, RecordSorting this.recordSorting}) {
     element.id = idPrefix == null || idPrefix.isEmpty ? LComponent.createId("table", null) : idPrefix;
+    if (recordSorting == null)
+      this.recordSorting = new RecordSorting();
   }
 
   /// scrollable-x wrapper with table
@@ -157,14 +153,15 @@ class LTable extends LComponent {
       _thead = element.createTHead();
     LTableHeaderRow row = null;
     if (primary) {
-      row = new LTableHeaderRow(_thead.addRow(), _theadRows.length, id,
+      _headerRow = new LTableHeaderRow(_thead.addRow(), _theadRows.length, id,
         LText.C_TEXT_HEADING__LABEL, optionRowSelect, nameList, nameLabelMap,
         enableSort ? onTableSortClicked : null, _tableActions, dataColumns);
       if (optionRowSelect && _theadRows.isEmpty) {
-        row.selectCb.onClick.listen((MouseEvent evt) {
-          selectAll(row.selectCb.checked);
+        _headerRow.selectCb.onClick.listen((MouseEvent evt) {
+          selectAll(_headerRow.selectCb.checked);
         });
       }
+      row = _headerRow;
     } else {
       row = new LTableRow(_thead.addRow(), _tbodyRows.length, id, null,
         LText.C_TEXT_HEADING__LABEL, optionRowSelect, nameList, nameLabelMap, LTableRow.TYPE_HEAD, null, dataColumns);
@@ -172,60 +169,35 @@ class LTable extends LComponent {
     _theadRows.add(row);
     // add urv
     if (_ui != null) {
-      row.addHeaderCell(URV, _ui.table.label);
+      row.addHeaderCell(DataRecord.URV, _ui.table.label);
     }
     return row;
   } // addHeadRow
+  LTableHeaderRow _headerRow;
 
   /// Table Sort
   void onTableSortClicked(String name, bool asc, MouseEvent evt) {
     bool shiftMeta = (evt.shiftKey || evt.metaKey);
-    _log.info("onTableSortClicked ${name} ${asc} shiftMeta=${shiftMeta}");
+    _log.config("onTableSortClicked ${name} ${asc} shiftMeta=${shiftMeta}");
     if (shiftMeta) {
-      LTableSort sortFound = null;
-      for (LTableSort sort in tableSorting) {
-        if (sort.columnName == name) {
-          sortFound = sort;
-          break;
-        }
-      }
+      RecordSort sortFound = recordSorting.getSort(name);
       if (sortFound != null)
-        tableSorting.remove(sortFound);
+        recordSorting.remove(sortFound);
     } else {
-      tableSorting.clear();
+      recordSorting.clear();
     }
-    LTableSort sort = new LTableSort(name, asc);
+    RecordSort sort = new RecordSort.create(name, asc);
     if (_ui == null) {
       sort.columnLabel = name;
     } else {
       sort.setLabelFrom(_ui.table);
     }
-    tableSorting.add(sort);
-    recordList.sort(recordSort);
-    display();
-    if (tableSorted != null)
-      tableSorted(tableSorting);
-  } // onTableSortClicked
-
-  /// Record Sort
-  int recordSort(DRecord one, DRecord two) {
-    int cmp = 0;
-    for (LTableSort sort in tableSorting) {
-      String oneValue = sort.columnName == URV ? one.drv : DataRecord.columnValue(one, sort.columnName);
-      if (oneValue == null)
-        oneValue = "";
-      String twoValue = sort.columnName == URV ? two.drv : DataRecord.columnValue(two, sort.columnName);
-      if (twoValue == null)
-        twoValue = "";
-      cmp = oneValue.compareTo(twoValue);
-      if (cmp != 0) {
-        if (!sort.asc)
-          cmp *= -1;
-        break;
-      }
+    recordSorting.add(sort);
+    if (recordSorting.sort()) { // sortLocal
+      recordSorting.sortList(recordList);
+      display();
     }
-    return cmp;
-  } // recordSort
+  } // onTableSortClicked
 
   /// Find In Table
   void findInTable(String findExpression) {
@@ -324,13 +296,14 @@ class LTable extends LComponent {
     for (DColumn col in _ui.table.columnList) {
       dataColumns.add(DataColumn.fromUi(_ui, col.name, tableColumn:col));
     }
-    LTableHeaderRow hdr = addHeadRow(true);
+    LTableHeaderRow row = addHeadRow(true);
     for (DataColumn dataColumn in dataColumns) {
       if (dataColumn.isActiveGrid) {
-        hdr.addGridColumn(dataColumn);
+        row.addGridColumn(dataColumn);
       }
     }
   } // setUi
+
   /// Reset Table Structure
   void resetStructure() {
     element.children.clear();
@@ -357,7 +330,9 @@ class LTable extends LComponent {
     recordList.addAll(records);
     this.recordAction = recordAction;
     display();
-  }
+    if (_headerRow != null)
+      _headerRow.setSorting(recordSorting);
+  } // setRecords
 
   /// Display Records
   void display() {
@@ -441,34 +416,3 @@ class LTable extends LComponent {
   static String lTableColumnSortDec() => Intl.message("Sort Decending", name: "lTableColumnSortDec", args: []);
 
 } // LTable
-
-
-/// Table Sorting
-class LTableSort {
-
-  final String columnName;
-  final bool asc;
-
-  LTableSort(String this.columnName, bool this.asc);
-
-  String get columnLabel => _columnLabel == null ? columnName : _columnLabel;
-  void set columnLabel (String newValue) {
-    _columnLabel = newValue;
-  }
-  String _columnLabel;
-
-  /// set label from table column name
-  void setLabelFrom(DTable table) {
-    if (columnName == LTable.URV)
-      _columnLabel = "record name";
-    else {
-      for (DColumn col in table.columnList) {
-        if (col.name == columnName) {
-          _columnLabel = col.label;
-          break;
-        }
-      }
-    }
-  } // setLabel
-
-} // LTableSort

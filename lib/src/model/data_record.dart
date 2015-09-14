@@ -166,6 +166,8 @@ class DataRecord {
   static const String C_PROCESSED = "Processed";
   /// Column Name IsActive
   static const String C_SEQNO = "SeqNo";
+  /// URV Constant
+  static const String URV = "urv";
 
   // Log
   static final Logger _log = new Logger("DataRecord");
