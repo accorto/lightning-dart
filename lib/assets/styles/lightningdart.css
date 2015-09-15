@@ -4577,7 +4577,6 @@ a.slds-button--inverse:focus {
     .apps-menu .apps-menu-show.slds-is-selected,
     .apps-menu .apps-menu-entry.slds-is-selected {
       background-color: #1589ee; }
-  .apps-menu:hover,
   .apps-menu.expaned {
     max-width: 12rem; }
 .busy-backdrop {

@@ -107,7 +107,7 @@ part 'src/view/utility/option_util.dart';
 class LightningDart {
 
   /// SLDS Version + rel
-  static const VERSION = "v0.9.0+0";
+  static const VERSION = "v0.9.1+0";
   /** Timestamp */
   static String devTimestamp = "-";
 
