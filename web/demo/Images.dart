@@ -17,7 +17,8 @@ class Images extends DemoFeature {
   plans: []);
 
   LComponent get content {
-    CDiv div = new CDiv();
+    CDiv div = new CDiv()
+      ..classes.add(LMargin.C_HORIZONTAL__MEDIUM);
 
     div.add(new LImage.srcXSmall("avatar1.jpg", "x-small"));
     div.add(new LImage.srcSmall("avatar1.jpg", "small"));
