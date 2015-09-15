@@ -6,7 +6,7 @@ Version numbers are based on the Salesforce Lightning css Framework version numb
 
 - 
 
-## 0.9.0
+## 0.9.1
 
 - improved components
 - signup form example
