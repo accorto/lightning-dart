@@ -205,12 +205,12 @@ class LFormElement {
   String get help => _help;
   void set help (String newValue) {
     _help = newValue;
-    if (_helpLabel == null) {
+    if (_helpLabel == null && _help != null && _help.isNotEmpty) {
       _helpLabel = new DivElement()
         ..classes.addAll([LForm.C_FORM_ELEMENT__LABEL, LMargin.C_BOTTOM__X_SMALL]);
       LButton _helpButton = new LButton.iconBare("${editor.name}-hb",
-          new LIconUtility(LIconUtility.INFO),
-          "Help")
+        new LIconUtility(LIconUtility.INFO),
+        "Help")
         ..classes.add(LMargin.C_RIGHT__XX_SMALL)
         ..typeButton = true;
       _helpTip = new LTooltip();
@@ -222,7 +222,8 @@ class LFormElement {
       _labelElement.classes.add(LGrid.C_ALIGN_MIDDLE);
       _helpLabel.append(_labelElement); // add again
     }
-    _helpTip.bodyText = _help;
+    if (_helpLabel != null)
+      _helpTip.bodyText = _help;
   }
   String _help;
   DivElement _helpLabel;
