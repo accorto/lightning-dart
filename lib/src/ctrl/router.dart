@@ -74,7 +74,7 @@ class Router {
   String initialHref;
 
   // Routes
-  final List<Route> _routes = new List<Route>();
+  final List<Route> _routeList = new List<Route>();
   /// Base URL
   String _baseUrl = "";
   /// current Path
@@ -214,20 +214,20 @@ class Router {
    */
   void addRoute({String name, String path, String title, RouteEventHandler enter, bool defaultRoute:false}) {
     path = cleanPath(path, addPrefix: false);
-    for (Route rr in _routes) {
+    for (Route rr in _routeList) {
       if (rr.name == name || rr.path == path) {
         _log.warning("addRoute name=${name} path=${path} - already exists: ${rr}");
       }
     }
     Route route = new Route(name, path, title, enter);
-    _routes.add(route);
+    _routeList.add(route);
     if (defaultRoute)
       this.defaultRoute = route;
   } // addRoute
 
   /// Get Route with [name]
   Route findRouteWithName(String name) {
-    for (Route r in _routes) {
+    for (Route r in _routeList) {
       if (name == r.name) {
         return r;
       }
@@ -236,7 +236,7 @@ class Router {
   }
   /// Get Route with [path]
   Route findRouteWithPath(String path) {
-    for (Route r in _routes) {
+    for (Route r in _routeList) {
       if (path == r.path) {
         return r;
       }
@@ -289,7 +289,7 @@ class Router {
     // find route
     if (thePath.isNotEmpty) {
       // Pattern pattern = new RegExp(thePath);
-      for (Route r in _routes) {
+      for (Route r in _routeList) {
         if (thePath.startsWith(r.path)) {
           routerPath.setRoutePath(r, path: thePath);
           bool result = go();
@@ -366,7 +366,7 @@ class Router {
    * [clean] removes parameter if [replace]
    */
   void set(String name, {bool replace: false, bool clean: false}) {
-    for (Route r in _routes) {
+    for (Route r in _routeList) {
       if (name == r.name) {
         updateWindow(r.path, r.title, replace: replace, clean: clean);
         return;

@@ -423,6 +423,21 @@ abstract class EditorI {
     debugTitle();
   } // updateData
 
+  /// Clear Value
+  void clearValue() {
+    value = "";
+    doValidate();
+    if (data != null && _entry != null) {
+      data.updateEntry(_entry, "");
+      if (valueRendered) {
+        _entry.valueDisplay = valueDisplay;
+      }
+    }
+    if (editorChange != null) {
+      editorChange(name, "", _entry, null);
+    }
+  } // clearValue
+
 
   /**
    *  onChange Callback (e.g. onInputChange calls editorChange)
@@ -441,9 +456,6 @@ abstract class EditorI {
     doValidate();
     if (data != null && _entry != null) {
       data.updateEntry(_entry, theValue);
-      if (valueRendered) {
-        _entry.valueDisplay = valueDisplay;
-      }
     }
     if (editorChange != null) {
       editorChange(name, theValue, _entry, null);

@@ -23,7 +23,7 @@ class AppsCtrl {
   final String imageSrc;
 
   /// Apps Pages
-  final List<AppsPage> pages = new List<AppsPage>();
+  final List<AppsPage> pageList = new List<AppsPage>();
 
   /**
    * Application with either [icon] or [imageSrc]
@@ -34,7 +34,7 @@ class AppsCtrl {
 
   /// Add Page to Application
   void add(AppsPage page) {
-    pages.add(page);
+    pageList.add(page);
   }
 
 } // AppsCtrl

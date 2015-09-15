@@ -12,19 +12,19 @@ part of lightning_dart;
 class LInputSearch extends LInput {
 
   /// The Icon
-  final LIcon _iconRight = new LIconUtility(LIconUtility.SEARCH);
+  LIcon get _icon => new LIconUtility(LIconUtility.SEARCH);
 
 
   /// Search Input
-  LInputSearch(String name, {String idPrefix, bool inGrid:false})
-    : super(name, EditorI.TYPE_SEARCH, idPrefix:idPrefix, inGrid:inGrid);
+  LInputSearch(String name, {String idPrefix, bool inGrid:false, bool withClearValue:false})
+    : super(name, EditorI.TYPE_SEARCH, idPrefix:idPrefix, inGrid:inGrid, withClearValue:withClearValue);
 
   /// Search Input
-  LInputSearch.from(DataColumn dataColumn, {String idPrefix, bool inGrid:false})
-    : super.from(dataColumn, EditorI.TYPE_SEARCH, idPrefix:idPrefix, inGrid:inGrid);
+  LInputSearch.from(DataColumn dataColumn, {String idPrefix, bool inGrid:false, bool withClearValue:false})
+    : super.from(dataColumn, EditorI.TYPE_SEARCH, idPrefix:idPrefix, inGrid:inGrid, withClearValue:withClearValue);
 
   @override
-  LIcon getIconRight() => _iconRight;
+  LIcon getIconRight() => _icon;
 
 
 } // LInputSearch

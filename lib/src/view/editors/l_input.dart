@@ -25,8 +25,8 @@ class LInput extends LEditor with LFormElement {
   /**
    * Input Editor
    */
-  LInput(String name, String type, {String idPrefix, bool this.inGrid:false}) {
-    createStandard(this);
+  LInput(String name, String type, {String idPrefix, bool this.inGrid:false, bool withClearValue:false}) {
+    createStandard(this, withClearValue:withClearValue);
     input.name = name;
     input.id = createId(idPrefix, name);
     input.type = type;
@@ -38,8 +38,8 @@ class LInput extends LEditor with LFormElement {
   /**
    * Input Editor
    */
-  LInput.from(DataColumn dataColumn, String type, {String idPrefix, bool this.inGrid:false}) {
-    createStandard(this);
+  LInput.from(DataColumn dataColumn, String type, {String idPrefix, bool this.inGrid:false, bool withClearValue:false}) {
+    createStandard(this, withClearValue:withClearValue);
     input.name = dataColumn.name;
     input.id = createId(idPrefix, input.name);
     input.type = type;

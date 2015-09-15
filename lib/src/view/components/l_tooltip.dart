@@ -8,6 +8,12 @@ part of lightning_dart;
 
 /**
  * Tooltip
+ *
+ *    Tooltip tip = new LTooltip()
+ *      ..bodyText = "x";
+ *    tip.showBelow(button);
+ *    div.add(tip); // tip is wrapper for button
+ *
  */
 class LTooltip extends LPopbase {
 

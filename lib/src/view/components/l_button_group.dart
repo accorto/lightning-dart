@@ -20,7 +20,7 @@ class LButtonGroup extends LComponent {
     ..setAttribute(Html0.ROLE, Html0.ROLE_GROUP);
 
   /// all buttons in group
-  List<LButton> _buttons = new List<LButton>();
+  List<LButton> _buttonList = new List<LButton>();
   /// More Button
   final LButton _more = new LButton(new ButtonElement(), "more", null,
       icon: new LIconUtility(LIconUtility.DOWN),
@@ -48,7 +48,7 @@ class LButtonGroup extends LComponent {
   /// add and attach button
   void add(LButton button, {bool append: true}) {
     button.classes.add(inverse ? LButton.C_BUTTON__INVERSE : LButton.C_BUTTON__NEUTRAL);
-    _buttons.add(button);
+    _buttonList.add(button);
     if (append)
       element.append(button.element);
   }
@@ -57,8 +57,8 @@ class LButtonGroup extends LComponent {
   void layout(int showCount) {
     element.children.clear();
     List<LDropdownItem> dropdownItems = new List<LDropdownItem>();
-    for (int i = 0; i < _buttons.length; i++) {
-      LButton button = _buttons[i];
+    for (int i = 0; i < _buttonList.length; i++) {
+      LButton button = _buttonList[i];
       button.classes.remove(C_BUTTON__LAST);
       if (showCount == 0 || i < showCount) {
         element.append(button.element);

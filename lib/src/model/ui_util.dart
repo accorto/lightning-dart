@@ -20,12 +20,10 @@ class UiUtil {
   UIPanel _panel;
 
 
-  final List<DRecord> exampleList;
-
   /**
    * UI Construction Utility
    */
-  UiUtil(UI this.ui, {List<DRecord> this.exampleList}) {
+  UiUtil(UI this.ui) {
   }
 
   /// Set Table
@@ -46,7 +44,7 @@ class UiUtil {
   }
 
   /// add column
-  void addColumn(DColumn col, {List<String> examples, String displayLogic}) {
+  void addColumn(DColumn col, {String displayLogic}) {
     ui.table.columnList.add(col);
     if (_panel == null)
       addPanel(null);
@@ -72,6 +70,30 @@ class UiUtil {
     gc.seqNo = (ui.gridColumnList.length + 1);
     ui.gridColumnList.add(gc);
 
+  } // addColumn
+
+
+} // UiUtil
+
+
+/**
+ * Demo UiUtil
+ */
+class UiUtilDemo extends UiUtil {
+
+  final List<DRecord> exampleList;
+
+  /**
+   * UI Demo Construction Utility
+   */
+  UiUtilDemo(UI ui, {List<DRecord> this.exampleList}) : super(ui) {
+  }
+
+
+  /// add column
+  void addColumn(DColumn col, {List<String> examples, String displayLogic}) {
+    super.addColumn(col, displayLogic:displayLogic);
+
     // -- data
     if (exampleList != null && examples != null) {
       for (int i = 0; i < examples.length; i++) {
@@ -84,7 +106,8 @@ class UiUtil {
         record.entryList.add(entry);
       }
     }
-  }
+  } // addColumn
+
 
   /// get example record
   DRecord _getExample(int i) {
@@ -106,8 +129,21 @@ class UiUtil {
     }
   }
 
-  /// update header
+  /// update exmpple header
   void updateHeader(DRecord record) {
+    // "save"
+    if (!record.hasRecordId()) {
+      record.recordId = nextId();
+    }
+    for (DEntry entry in record.entryList) {
+      if (entry.hasValue()) {
+        entry.valueOriginal = entry.value;
+        entry.clearValue();
+        entry.clearValueDisplay();
+        entry.clearIsChanged();
+      }
+    }
+
     record.drv = "";
     record.urv = "";
     // unique
@@ -150,4 +186,10 @@ class UiUtil {
     }
   } // updateHeader
 
-} // UiUtil
+  /// next id
+  String nextId() {
+    return "${_nid++}";
+  }
+  int _nid = 1;
+
+}

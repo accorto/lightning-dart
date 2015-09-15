@@ -48,7 +48,7 @@ class AppsMenu extends LComponent {
     _menuShow.title = apps.label;
     element.append(_menuShow);
     // entries
-    for (AppsPage pe in apps.pages) {
+    for (AppsPage pe in apps.pageList) {
       element.append(pe.menuEntry);
     }
   } // set

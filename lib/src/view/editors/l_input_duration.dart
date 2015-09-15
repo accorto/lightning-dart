@@ -17,6 +17,17 @@ class LInputDuration extends LInput {
   LInputDuration.from(DataColumn dataColumn, {String idPrefix, bool inGrid:false})
     : super.from(dataColumn, EditorI.TYPE_DURATION, idPrefix:idPrefix, inGrid:inGrid);
 
+  @override
+  void _initEditor() {
+    super._initEditor();
+    if (hint == null) {
+      hint = lInputDurationHint();
+    }
+    input.onBlur.listen((Event evt){
+      input.value = render(input.value, true);
+    });
+  }
+
   /**
    * Value
    */
@@ -65,7 +76,8 @@ class LInputDuration extends LInput {
    */
   @override
   String get valueDisplay {
-    return input.value;
+    String inp = input.value;
+    return render(inp, true);
   }
   /// is the rendered [valueDisplay] different from the [value]
   @override
@@ -122,6 +134,8 @@ class LInputDuration extends LInput {
   /// translation
   static String lInputDurationInvalidValue() => Intl.message("Invalid value", name: "lInputDurationInvalidValue");
   static String lInputDurationInvalidInput() => Intl.message("Invalid input for duration", name: "lInputDurationInvalidInput");
+
+  static String lInputDurationHint() => Intl.message("without indicator, duration is in hours - enter with decimal or colon (1.5 = 1:30); example: 5d1h20m or 5d 1h 10", name: "lInputDurationHint");
 
 
 } // LInputDuration

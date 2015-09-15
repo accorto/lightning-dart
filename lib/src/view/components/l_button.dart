@@ -113,6 +113,7 @@ class LButton extends LComponent {
     _icon = icon;
     _iconLeft = iconLeft;
     _assistiveText = assistiveText;
+    typeButton = true; // default = submit
     _rebuild();
   } // LButton
 

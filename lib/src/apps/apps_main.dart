@@ -85,7 +85,7 @@ class AppsMain extends PageSimple {
     // set
     _header.set(apps);
     _menu.set(apps);
-    for (AppsPage pe in apps.pages) {
+    for (AppsPage pe in apps.pageList) {
       _subscriptions.add(pe.menuEntry.onClick.listen(onMenuClick));
       pe.active = false;
     }
@@ -116,16 +116,6 @@ class AppsMain extends PageSimple {
     }
   } // onMenuClick
 
-  /// Set Page Entry
-  void _setPage(AppsPage page) {
-    _log.fine("setPageEntry ${page.name}");
-    page.active = true;
-    _content.children.clear();
-    _content.append(page.element);
-    page.showingNow();
-    _currentPage = page;
-  }
-
   /// On Route Enter - return false for external or not found
   bool onRouteEnter(RouterPath path) {
     if (_currentPage != null) {
@@ -138,7 +128,7 @@ class AppsMain extends PageSimple {
 
     String name = path.toString();
     AppsPage page = null;
-    for (AppsPage pe in _currentApps.pages) {
+    for (AppsPage pe in _currentApps.pageList) {
       if (pe.name == name) {
         page = pe;
       } else {
@@ -164,6 +154,17 @@ class AppsMain extends PageSimple {
     return false; // external
   } // onRouteEnter
 
+  /// Set Page Entry
+  void _setPage(AppsPage page) {
+    _log.fine("setPageEntry ${page.name}");
+    page.active = true;
+    _content.children.clear();
+    _content.append(page.element);
+    page.showingNow();
+    _currentPage = page;
+  }
+
+
   /// append element to main
   void append(Element newValue) {
     _content.append(newValue);
@@ -179,14 +180,14 @@ class AppsMain extends PageSimple {
   void set loggedIn (bool newValue) {
     // cannot use hide as it does not have !important
     if (newValue && ClientEnv.session != null) {
-      for (AppsPage pe in _currentApps.pages) {
+      for (AppsPage pe in _currentApps.pageList) {
         if (pe.name == Route.NAME_LOGIN)
           pe.menuEntry.style.display = "none"; // hide login
         else
           pe.menuEntry.style.removeProperty("display");
       }
     } else {
-      for (AppsPage pe in _currentApps.pages) {
+      for (AppsPage pe in _currentApps.pageList) {
         if (pe.name == Route.NAME_LOGIN)
           pe.menuEntry.style.removeProperty("display");
         else

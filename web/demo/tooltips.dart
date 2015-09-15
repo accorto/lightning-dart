@@ -12,8 +12,8 @@ class Tooltips extends DemoFeature {
   sldsStatus: DemoFeature.SLDS_PROTOTYPE,
   devStatus: DemoFeature.STATUS_COMPLETE,
   hints: ["shows on hover or stays when trigger clicked"],
-  issues: [],
-  plans: ["move if it does not fit on screen"]);
+  issues: ["by default, position not adjusted for screen boundaries"],
+  plans: []);
 
   LComponent get content {
     CDiv div = new CDiv();
@@ -29,14 +29,14 @@ class Tooltips extends DemoFeature {
       ..append(new AnchorElement(href: "#")..text = "Some Link")
       ..appendText(" Additional Text");
     LButton button = new LButton.neutral("btnA", "See Above");
-    pop.showAbove(button); // shows button
-    div.add(pop);
+    pop.showAbove(button);
+    div.add(pop); // tooltip is wrapper for button
 
     pop = new LTooltip()
       ..bodyText = "Another Below Tooltip with some info";
     button = new LButton.neutral("btnB", "See Below");
-    pop.showBelow(button); // shows button
-    div.add(pop);
+    pop.showBelow(button);
+    div.add(pop); // tooltip is wrapper for button
 
     pop = new LTooltip()
       ..bodyText = "Another Below Tooltip with some info";
@@ -62,13 +62,20 @@ class Tooltips extends DemoFeature {
     div.add(pop);
 
     div.appendHR();
-    pop = new LTooltip(null)
-      ..nubbinTop = true;
+    pop = new LTooltip();
     pop.body
       ..appendText("Another Tooltip Some text comes here ")
       ..append(new AnchorElement(href: "#")..text = "Some Link")
       ..appendText(" Additional Text");
-    div.add(pop);
+    LButton button = new LButton.neutral("btnA", "See Above");
+    pop.showAbove(button); // shows button
+    div.add(pop); // tooltip is wrapper for button
+
+    pop = new LTooltip()
+      ..bodyText = "Another Below Tooltip with some info";
+    button = new LButton.neutral("btnB", "See Below");
+    pop.showBelow(button);
+    div.add(pop); // tooltip is wrapper for button
     ''';
   }
 

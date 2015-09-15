@@ -9,8 +9,8 @@ part of lightning_model;
 /// Execute Sorting
 typedef bool SortExecute();
 
-/// Sort was executed
-typedef void SortExecuted();
+/// Sort was executed locally or needs to go to server
+typedef void SortExecuted(bool sortedLocally);
 
 /**
  * Record Sorting - maintains Record Sort Info
@@ -39,14 +39,6 @@ class RecordSorting {
 
   bool get isEmpty => list.isEmpty;
   bool get isNotEmpty => list.isNotEmpty;
-
-  /// Set Sorting
-  void updateRequest(DataRequest request) {
-    request.querySortList.clear();
-    for (RecordSort sort in list) {
-      request.querySortList.add(sort.sort);
-    }
-  }
 
   /// Set From Sorting
   void setFromRequest(DataRequest request) {
@@ -91,26 +83,28 @@ class RecordSorting {
 
   /// Execute Sort
   bool sort() {
-    bool sortLocal = true;
+    bool sortedLocally = true;
     if (list.isEmpty) {
       _log.info("sort - no entries");
-      sortLocal = false; // no need
+      sortedLocally = true; // no need
     } else {
       if (sortExecute != null) {
-        sortLocal = sortExecute();
+        sortedLocally = sortExecute();
       }
     }
     if (sortExecuted != null) {
-      sortExecuted();
+      sortExecuted(sortedLocally);
     }
-    return sortLocal;
+    return sortedLocally;
   }
 
 
   /// Local Sort
   void sortList(List<DRecord> recordList) {
-    if (recordList != null && recordList.length > 1)
+    if (recordList != null && recordList.length > 1) {
+      _log.config("sortList ${toString()}");
       recordList.sort(recordSortCompare);
+    }
   }
 
   /// Record Sort
@@ -133,6 +127,12 @@ class RecordSorting {
     }
     return cmp;
   } // recordSortCompare
+
+
+  String toString() {
+    return list.toString();
+  }
+
 
 } // RecordSorting
 
@@ -188,5 +188,8 @@ class RecordSort {
       }
     }
   } // setLabel
+
+  /// column name : a|d
+  String toString() => "${columnName}:${isAscending ? "a" : "d"}";
 
 } // RecordSort

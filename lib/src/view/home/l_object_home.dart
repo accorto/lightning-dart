@@ -33,7 +33,7 @@ class LObjectHome extends LPageHeader {
 
   final DivElement _headerCenter = new DivElement()
     ..classes.addAll([LGrid.C_COL, LGrid.C_ALIGN_BOTTOM]);
-  final LInputSearch _headerFind = new LInputSearch("find", idPrefix:ID);
+  final LInputSearch _headerFind = new LInputSearch("find", idPrefix:ID, withClearValue:true);
 
   /// Top row right
   final DivElement _headerRight = new DivElement()

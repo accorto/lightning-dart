@@ -164,13 +164,9 @@ class ObjectCtrl extends LComponent {
     String filter = _header.filterList.filterValue;
     _log.config("doQuery ${tableName} ${filter}");
     _content.loading = true;
-    DataRequest request = null;
-    datasource.query(request)
+    datasource.query()
     .then((DataResponse response) {
       _content.loading = false;
-
-      // set lists
-      // get current list
       display(response.recordList);
     });
   }
@@ -206,27 +202,33 @@ class ObjectCtrl extends LComponent {
       } else /* if (viewLayout == LObjectHome.VIEW_LAYOUT_TABLE) */ {
         _displayTable();
       }
-      onRecordsSorted();
+      // Summary
+      if (_records.length == 1) {
+        _header.summary = objectCtrl1Record();
+      } else if (datasource.recordSorting.isEmpty) {
+        _header.summary = "${_records.length} ${objectCtrlRecords()}";
+      } else {
+        String info = "${_records.length} ${objectCtrlRecords()} ${LUtil.DOT} ${objectCtrlSortedBy()}";
+        String prefix = " ";
+        for (RecordSort sort in datasource.recordSorting.list) {
+          info += prefix + sort.columnLabel + (sort.isAscending ? "\u{2193}" : "\u{2191}");
+          prefix = LUtil.DOT;
+        }
+        _header.summary = info;
+      }
     }
   } // display
 
 
   /// Display Table Sort Info
-  void onRecordsSorted() {
-    if (_records.length == 1) {
-      _header.summary = objectCtrl1Record();
-    } else if (datasource.recordSorting.isEmpty) {
-      _header.summary = "${_records.length} ${objectCtrlRecords()}";
+  void onRecordsSorted(bool sortedLocally) {
+    if (sortedLocally) {
+      display(datasource.recordList);
     } else {
-      String info = "${_records.length} ${objectCtrlRecords()} ${LUtil.DOT} ${objectCtrlSortedBy()}";
-      String prefix = " ";
-      for (RecordSort sort in datasource.recordSorting.list) {
-        info += prefix + sort.columnLabel + (sort.isAscending ? "\u{2193}" : "\u{2191}");
-        prefix = LUtil.DOT;
-      }
-      _header.summary = info;
+      _doQuery();
     }
-  }
+  } // onRecordsSorted
+
 
 
   /**
@@ -297,33 +299,36 @@ class ObjectCtrl extends LComponent {
   /// Record Saved (from new/table)
   String onRecordSaved(DRecord record) {
     _log.config("onRecordSaved ${tableName}");
-    if (record.hasRecordId()) {
-      // TODO update
-    } else {
-      // TODO save
-      _records.add(record);
-    }
-    _display();
+    _content.loading = true;
+    datasource.save(record)
+    .then((DataResponse response) {
+      _content.loading = false;
+      display(response.recordList);
+    });
     return null;
   }
 
   /// Record Deleted (from table)
   String onRecordDeleted(DRecord record) {
     _log.config("onRecordDeleted ${tableName}");
-    // TODO delete
-    _records.remove(record);
-    _display();
+    _content.loading = true;
+    datasource.delete(record)
+    .then((DataResponse response) {
+      _content.loading = false;
+      display(response.recordList);
+    });
     return null;
   }
 
   /// Records Deleted (from table)
   String onRecordsDeleted(List<DRecord> records) {
     _log.config("onRecordsDeleted ${tableName}");
-    // TODO delete
-    for (DRecord record in records) {
-      _records.remove(record);
-    }
-    _display();
+    _content.loading = true;
+    datasource.deleteAll(records)
+    .then((DataResponse response) {
+      _content.loading = false;
+      display(response.recordList);
+    });
     return null;
   }
 

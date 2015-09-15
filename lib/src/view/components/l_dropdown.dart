@@ -282,7 +282,7 @@ class LDropdownElement implements LSelectI {
   /// Dropdown Element
   final DivElement element;
   /// Dropdown Items
-  final List<LDropdownItem> _items = new List<LDropdownItem>();
+  final List<LDropdownItem> _itemList = new List<LDropdownItem>();
 
   /// Dropdown List
   final UListElement _dropdownList = new UListElement()
@@ -370,7 +370,7 @@ class LDropdownElement implements LSelectI {
   /// Get options
   List<OptionElement> get options {
     List<OptionElement> list = new List<OptionElement>();
-    for (LDropdownItem item in _items) {
+    for (LDropdownItem item in _itemList) {
       list.add(item.asOption());
     }
     return list;
@@ -419,7 +419,7 @@ class LDropdownElement implements LSelectI {
 
   /// Clear Items
   void clear() {
-    _items.clear();
+    _itemList.clear();
     _dropdownList.children.clear();
   }
 
@@ -427,7 +427,7 @@ class LDropdownElement implements LSelectI {
    * Add actual Dropdown Item
    */
   void addItem(LDropdownItem item) {
-    _items.add(item);
+    _itemList.add(item);
     _dropdownList.append(item.element);
     item.onClick.listen(onItemClick);
     item.hasIconLeft = _selectMode;
@@ -437,7 +437,7 @@ class LDropdownElement implements LSelectI {
   bool get selectMode => _selectMode;
   void set selectMode (bool newValue) {
     _selectMode = newValue;
-    for (LDropdownItem item in _items) {
+    for (LDropdownItem item in _itemList) {
       item.hasIconLeft = newValue;
     }
   }
@@ -457,7 +457,7 @@ class LDropdownElement implements LSelectI {
         break;
     }
     LDropdownItem selectedItem = null;
-    for (LDropdownItem item in _items) {
+    for (LDropdownItem item in _itemList) {
       if (item.value == tvalue) {
         if (_selectMode)
           item.selected = true;
@@ -478,7 +478,7 @@ class LDropdownElement implements LSelectI {
 
   /// Get Selected Value
   String get value {
-    for (LDropdownItem item in _items) {
+    for (LDropdownItem item in _itemList) {
       if (item.selected)
         return item.value;
     }
@@ -487,7 +487,7 @@ class LDropdownElement implements LSelectI {
   /// Set Selected Value (and inform parent)
   void set value (String newValue) {
     LDropdownItem selectedItem = null;
-    for (LDropdownItem item in _items) {
+    for (LDropdownItem item in _itemList) {
       if (item.value == newValue) {
         item.selected = true;
         selectedItem = item;

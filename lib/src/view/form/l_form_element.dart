@@ -38,7 +38,7 @@ class LFormElement {
    * div control
    * - input
    */
-  void createStandard(EditorI editor, {LIcon iconRight, LIcon iconLeft}) {
+  void createStandard(EditorI editor, {LIcon iconRight, LIcon iconLeft, bool withClearValue:false}) {
     this.editor = editor;
     _input = editor.input;
     _labelElement.classes.add(LForm.C_FORM_ELEMENT__LABEL);
@@ -57,8 +57,16 @@ class LFormElement {
       _input.classes.add(LForm.C_SELECT);
 
     DivElement inputWrapper = null;
-    if (iconRight == null)
-      iconRight = getIconRight();
+    if (iconRight == null) {
+      if (withClearValue) {
+        iconRight = new LIconUtility(LIconUtility.CLEAR);
+        iconRight.element.onClick.listen((MouseEvent evt){
+          editor.clearValue();
+        });
+      } else {
+        iconRight = getIconRight();
+      }
+    }
     if (iconRight != null) {
       inputWrapper = new DivElement()
         ..classes.add(LForm.C_INPUT_HAS_ICON)
@@ -68,8 +76,11 @@ class LFormElement {
       iconRight.classes.addAll([LForm.C_INPUT__ICON, LIcon.C_ICON_TEXT_DEFAULT]);
       inputWrapper.append(iconRight.element);
     }
-    if (iconLeft == null)
+    if (iconLeft == null) {
       iconLeft = getIconLeft();
+      if (iconLeft == null && withClearValue)
+        iconLeft = getIconRight();
+    }
     if (iconLeft != null) {
       if (inputWrapper == null) {
         inputWrapper = new DivElement()
@@ -80,6 +91,10 @@ class LFormElement {
       iconLeft.classes.clear();
       iconLeft.classes.addAll([LForm.C_INPUT__ICON, LIcon.C_ICON_TEXT_DEFAULT]);
       inputWrapper.append(iconLeft.element);
+      if (iconRight != null) {
+        iconRight.element.style.left = "inherit";
+        iconLeft.element.style.right = "inherit";
+      }
     }
     //
     if (inputWrapper == null)
@@ -190,9 +205,28 @@ class LFormElement {
   String get help => _help;
   void set help (String newValue) {
     _help = newValue;
-    // TODO help
+    if (_helpLabel == null) {
+      _helpLabel = new DivElement()
+        ..classes.addAll([LForm.C_FORM_ELEMENT__LABEL, LMargin.C_BOTTOM__X_SMALL]);
+      LButton _helpButton = new LButton.iconBare("${editor.name}-hb",
+          new LIconUtility(LIconUtility.INFO),
+          "Help")
+        ..classes.add(LMargin.C_RIGHT__XX_SMALL)
+        ..typeButton = true;
+      _helpTip = new LTooltip();
+      _helpTip.showAbove(_helpButton); // shows button
+      _helpLabel.append(_helpTip.element);
+      // replace label
+      _labelElement.replaceWith(_helpLabel);
+      _labelElement.classes.clear();
+      _labelElement.classes.add(LGrid.C_ALIGN_MIDDLE);
+      _helpLabel.append(_labelElement); // add again
+    }
+    _helpTip.bodyText = _help;
   }
   String _help;
+  DivElement _helpLabel;
+  LTooltip _helpTip;
 
 
   /// Hint Text

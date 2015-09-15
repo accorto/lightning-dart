@@ -82,7 +82,7 @@ class LForm extends LComponent implements FormI {
     return null;
   }
   /// List of Editors
-  final List<LEditor> editors = new List<LEditor>();
+  final List<LEditor> editorList = new List<LEditor>();
 
   /// Record Saved
   RecordSaved recordSaved;
@@ -120,7 +120,7 @@ class LForm extends LComponent implements FormI {
   /// Add Editor
   void addEditor (LEditor editor) {
     editor.editorChange = data.onEditorChange;
-    editors.add(editor);
+    editorList.add(editor);
     element.append(editor.element);
     editor.data = _data;
     editor.entry = _data.getEntry(editor.id, editor.name, true);
@@ -170,7 +170,7 @@ class LForm extends LComponent implements FormI {
     if (_buttonSave != null) {
       _buttonSave.disabled = !data.changed;
     }
-    for (LEditor editor in editors) {
+    for (LEditor editor in editorList) {
       editor.data = _data;
       editor.entry = _data.getEntry(editor.id, editor.name, true);
     }
@@ -185,7 +185,7 @@ class LForm extends LComponent implements FormI {
       _buttonSave.disabled = !changed;
     }
     String info = "change ";
-    for (EditorI editor in editors) {
+    for (EditorI editor in editorList) {
       if (editor.hasDependentOn) {
         for (EditorIDependent edDep in editor.dependentOnList) {
           if (name == edDep.columnName) {
@@ -242,7 +242,7 @@ class LForm extends LComponent implements FormI {
 
   /// Small Editor/Label
   void set small (bool newValue) {
-    for (LEditor editor in editors) {
+    for (LEditor editor in editorList) {
       editor.small = newValue;
     }
     if (_buttonReset != null)
@@ -279,7 +279,7 @@ class LForm extends LComponent implements FormI {
 
   bool doValidate() {
     bool valid = true;
-    for (LEditor editor in editors) {
+    for (LEditor editor in editorList) {
       if (!editor.doValidate()) {
         valid = false;
       }

@@ -12,8 +12,9 @@ class Forms extends DemoFeature {
   sldsStatus: DemoFeature.SLDS_DEV_READY,
   devStatus: DemoFeature.STATUS_COMPLETE,
   hints: ["when using Required, ensure to have some left margin"],
-  issues: ["css: horizontal checkbox right aligned"],
-  plans: ["help icon"]);
+  issues: ["css: horizontal checkbox right aligned",
+    "help popup position - see tooltip"],
+  plans: []);
 
 
   String formType = LForm.C_FORM__STACKED;
