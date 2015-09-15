@@ -204,7 +204,7 @@ class LObjectHomeFilterLookup {
       exp = LUtil.createRegExp(restriction);
     }
     int count = 0;
-    for (LDropdownItem item in _dropdownElement._items) {
+    for (LDropdownItem item in _dropdownElement._itemList) {
       if (exp == null) {
         item.show = true;
         item.labelHighlightClear();
@@ -220,7 +220,7 @@ class LObjectHomeFilterLookup {
         item.show = false;
       }
     }
-    if (count == 0 && _dropdownElement._items.isNotEmpty) {
+    if (count == 0 && _dropdownElement._itemList.isNotEmpty) {
       //  input.setCustomValidity("No matching options"); // TODO Trl
       _dropdownHeaderFind.classes.add(LForm.C_HAS_ERROR);
     } else {
@@ -228,7 +228,7 @@ class LObjectHomeFilterLookup {
       _dropdownHeaderFind.classes.remove(LForm.C_HAS_ERROR);
     }
     //doValidate();
-    _log.fine("lookupUpdateList '${restriction}' ${count} of ${_dropdownElement._items.length}");
+    _log.fine("lookupUpdateList '${restriction}' ${count} of ${_dropdownElement._itemList.length}");
   } // lookupUpdateList
 
 
