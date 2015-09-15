@@ -17,7 +17,8 @@ class ButtonGroups extends DemoFeature {
 
 
   LComponent get content {
-    CDiv div = new CDiv();
+    CDiv div = new CDiv()
+      ..classes.add(LMargin.C_HORIZONTAL__MEDIUM);
 
     LButtonGroup bg = new LButtonGroup();
     bg.add(new LButton.neutral("refresh", "Refresh"));

@@ -99,7 +99,7 @@ class Tables extends DemoFeature {
     return cb;
   }
   EditorI optionSortCb() {
-    LCheckbox cb = new LCheckbox("bordered", idPrefix: id)
+    LCheckbox cb = new LCheckbox("sorting", idPrefix: id)
       ..label = "Option: Sorting *";
     cb.input.onClick.listen((MouseEvent evt){
       sortOption = cb.input.checked;
@@ -108,7 +108,7 @@ class Tables extends DemoFeature {
     return cb;
   }
   EditorI optionActionCb() {
-    LCheckbox cb = new LCheckbox("bordered", idPrefix: id)
+    LCheckbox cb = new LCheckbox("actions", idPrefix: id)
       ..label = "Option: Actions";
     cb.input.onClick.listen((MouseEvent evt){
       actionOption = cb.input.checked;

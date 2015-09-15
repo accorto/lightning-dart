@@ -17,7 +17,8 @@ class Cards extends DemoFeature {
 
 
   LComponent get content {
-    CDiv div = new CDiv();
+    CDiv div = new CDiv()
+      ..classes.add(LMargin.C_HORIZONTAL__MEDIUM);
 
     LCard card = new LCard("c1");
     LButtonGroup bg = new LButtonGroup();

@@ -20,7 +20,8 @@ class FormsEditor extends DemoFeature {
 
   LComponent get content {
 
-    LForm form = new LForm.stacked("tfe");
+    LForm form = new LForm.stacked("tfe")
+      ..classes.add(LMargin.C_HORIZONTAL__MEDIUM);
 
     LInputSearch searchInput1 = new LInputSearch("search1")
       ..label = "Search Input 1"

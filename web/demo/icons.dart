@@ -17,7 +17,8 @@ class Icons extends DemoFeature {
 
 
   LComponent get content {
-    CDiv div = new CDiv();
+    CDiv div = new CDiv()
+      ..classes.add(LMargin.C_HORIZONTAL__MEDIUM);
 
     div.add(new LIconSpan.utility(LIconUtility.ANNOUNCEMENT, size:LIcon.C_ICON__X_SMALL));
     div.add(new LIconSpan.action(LIconAction.DESCRIPTION, size:LIcon.C_ICON__X_SMALL));

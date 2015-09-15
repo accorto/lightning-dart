@@ -16,7 +16,8 @@ class Tiles extends DemoFeature {
   plans: ["task tile", "list tiles", "Board"]);
 
   LComponent get content {
-    CDiv div = new CDiv();
+    CDiv div = new CDiv()
+      ..classes.add(LMargin.C_HORIZONTAL__MEDIUM);
 
     LTileBase t1 = new LTileBase("Base Tile")
       ..addText("26 members");

@@ -16,7 +16,8 @@ class Media extends DemoFeature {
   plans: []);
 
   LComponent get content {
-    CDiv div = new CDiv();
+    CDiv div = new CDiv()
+      ..classes.add(LMargin.C_HORIZONTAL__MEDIUM);
     LMedia mo = new LMedia()
       ..setImageSrc("avatar1.jpg")
       ..append(new ParagraphElement()..text = "base - some lengthy text or content");

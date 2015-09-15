@@ -160,12 +160,18 @@ abstract class DemoFeature extends LComponent {
 
   /// Link to Feature
   void toc(Element toc) {
+    AnchorElement a = new AnchorElement(href: "#${id}")
+      ..text = label;
+    a.onClick.listen((MouseEvent evt){
+      evt.preventDefault();
+      element.scrollIntoView(ScrollAlignment.TOP);
+    });
+    //
     DivElement col = new DivElement()
       ..classes.addAll([LGrid.C_COL, LMargin.C_AROUND__SMALL])
-      ..style.minWidth = "10rem";
+      ..style.minWidth = "10rem"
+      ..append(a);
     toc.append(col);
-    col.append(new AnchorElement(href: "#${id}")
-      ..text = label);
   }
 
   AnchorElement createSldsLink() {

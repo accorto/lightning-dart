@@ -17,7 +17,8 @@ class Lookups extends DemoFeature {
 
 
   LComponent get content {
-    LForm form = new LForm.stacked("tf");
+    LForm form = new LForm.stacked("tf")
+      ..classes.add(LMargin.C_HORIZONTAL__MEDIUM);
 
     LLookup l1 = new LLookup.base("l1");
     l1.label = "Base Lookup";

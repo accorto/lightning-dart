@@ -17,7 +17,8 @@ class Buttons extends DemoFeature {
 
 
   LComponent get content {
-    CDiv div = new CDiv();
+    CDiv div = new CDiv()
+      ..classes.add(LMargin.C_HORIZONTAL__MEDIUM);
 
     div.add(new LButton.base("b11", "base button"));
     div.add(new LButton.base("b12", "base disabled")..disabled = true);

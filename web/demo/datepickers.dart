@@ -17,7 +17,8 @@ class Datepickers extends DemoFeature {
   plans: ["date ranges"]);
 
   LComponent get content {
-    LForm form = new LForm.stacked("datePick");
+    LForm form = new LForm.stacked("datePick")
+      ..classes.add(LMargin.C_HORIZONTAL__MEDIUM);
 
     LDatepicker dp = new LDatepicker("date")
       ..label = "Date Picker";

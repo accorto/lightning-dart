@@ -16,7 +16,8 @@ class Tooltips extends DemoFeature {
   plans: []);
 
   LComponent get content {
-    CDiv div = new CDiv();
+    CDiv div = new CDiv()
+      ..classes.add(LMargin.C_HORIZONTAL__MEDIUM);
     LTooltip pop = new LTooltip()
       ..bodyText = "Tooltip Content Test lines come here"
       ..nubbinRight = true;

@@ -16,7 +16,8 @@ class Breadcrumbs extends DemoFeature {
     plans: []);
 
   LComponent get content {
-    CDiv div = new CDiv();
+    CDiv div = new CDiv()
+      ..classes.add(LMargin.C_HORIZONTAL__MEDIUM);
 
     LBreadcrumb b1 = new LBreadcrumb();
     b1.setLinkText("Parent Entity A", null, 0);

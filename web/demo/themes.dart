@@ -17,7 +17,8 @@ class Themes extends DemoFeature {
 
 
   LComponent get content {
-    CDiv div = new CDiv();
+    CDiv div = new CDiv()
+      ..classes.add(LMargin.C_HORIZONTAL__MEDIUM);
     div.add(new LBox()..text = "Regular Box");
     div.add(new LBox()..small = true ..text = "Small Box");
     div.add(new LBox()..xsmall = true ..text = "X Small Box");

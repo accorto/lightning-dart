@@ -16,7 +16,8 @@ class Popovers extends DemoFeature {
   plans: ["move if it does not fit on screen"]);
 
   LComponent get content {
-    CDiv div = new CDiv();
+    CDiv div = new CDiv()
+      ..classes.add(LMargin.C_HORIZONTAL__MEDIUM);
     LPopover pop = new LPopover()
       ..headText = "Popover Heading"
       ..bodyText = "Popover Content Test lines come here"

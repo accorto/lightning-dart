@@ -16,7 +16,8 @@ class Dropdowns extends DemoFeature {
   plans: []);
 
   LComponent get content {
-    CDiv div = new CDiv();
+    CDiv div = new CDiv()
+      ..classes.add(LMargin.C_HORIZONTAL__MEDIUM);
     div.appendText("Hover:");
     LDropdown dd = new LDropdown.settings(idPrefix: "dd1")
       ..left = true;

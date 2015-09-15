@@ -19,7 +19,8 @@ class Picklists extends DemoFeature {
   LComponent get content {
     CDiv div = new CDiv();
 
-    LForm form = new LForm.stacked("tf");
+    LForm form = new LForm.stacked("tf")
+      ..classes.add(LMargin.C_HORIZONTAL__MEDIUM);
     LPicklist pl1 = new LPicklist("pl1");
     pl1.label = "Picklist 1";
     pl1.listItems = generateListItems(10, iconLeft: true);
@@ -34,6 +35,7 @@ class Picklists extends DemoFeature {
       ..add(new DOption()..value = "o2" ..label = "Option 2" ..isSelected = true )
       ..add(new DOption()..value = "o3" ..label = "Option 3" ..isSelected = true );
     LPicklistMulti multi = new LPicklistMulti()
+      ..classes.add(LMargin.C_HORIZONTAL__MEDIUM)
       ..label = "Choices"
       ..options = options;
 

@@ -16,7 +16,8 @@ class Spinners extends DemoFeature {
   plans: []);
 
   LComponent get content {
-    CDiv div = new CDiv();
+    CDiv div = new CDiv()
+      ..classes.add(LMargin.C_HORIZONTAL__MEDIUM);
 
     LButton btn1 = new LButton.neutral("bbusy", "Click me: Busy for 10 seconds");
     btn1.onClick.listen((MouseEvent evt){

@@ -18,7 +18,8 @@ class Modals extends DemoFeature {
 
 
   LComponent get content {
-    CDiv div = new CDiv();
+    CDiv div = new CDiv()
+      ..classes.add(LMargin.C_HORIZONTAL__MEDIUM);
     LModal modal = new LModal("m")
       ..setHeader("The Modal", tagLine: "You can drag me!")
       ..addContentText("Some Text to add - you can also add any components or elements")

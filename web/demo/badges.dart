@@ -16,7 +16,8 @@ class Badges extends DemoFeature {
     plans: []);
 
   LComponent get content {
-    CDiv div = new CDiv();
+    CDiv div = new CDiv()
+      ..classes.add(LMargin.C_HORIZONTAL__MEDIUM);
 
     div.add(new LBadge("base badge"));
     div.add(new LBadge.def("default badge"));

@@ -17,7 +17,8 @@ class Tabs extends DemoFeature {
 
   LComponent get content {
 
-    LTab tab = new LTab(scoped: option1);
+    LTab tab = new LTab(scoped: option1)
+      ..classes.add(LMargin.C_HORIZONTAL__MEDIUM);
     DivElement c1 = tab.addTab("One");
     c1.text = "One Content";
     DivElement c2 = tab.addTab("Two");
