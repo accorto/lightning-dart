@@ -20,6 +20,8 @@ class AppsMain extends PageSimple {
   static AppsMain instance;
   /// Modal Div
   static DivElement get modals => instance._modalDiv;
+  /// Login Required
+  static bool loginRequired = false;
 
   /// Head
   final AppsHeader _header = new AppsHeader();
@@ -27,12 +29,12 @@ class AppsMain extends PageSimple {
   final AppsMenu _menu = new AppsMenu();
   /// Content
   final DivElement _content = new DivElement()
-    ..id = "content";
+    ..id = "a-content";
   /// Footer
-  final CDiv _footer = new CDiv.footer(id:"footer");
+  final CDiv _footer = new CDiv.footer(id:"a-footer");
   /// Modal Div Area
   final DivElement _modalDiv = new DivElement()
-    ..id = "modals";
+    ..id = "a-modals";
 
   /// Current Apps
   AppsCtrl _currentApps;
@@ -46,19 +48,24 @@ class AppsMain extends PageSimple {
   AppsMain(DivElement element, String id, {List<String> classList})
       : super(element, id, classList:classList) {
     instance = this;
-    DivElement mainGrid = new DivElement()
-      ..classes.add(LGrid.C_GRID);
-    element.append(mainGrid);
-    mainGrid.append(_menu.element);
 
-    // Left Side
-    DivElement leftSide = new DivElement()
-      ..classes.add(LGrid.C_COL);
-    mainGrid.append(leftSide);
-    leftSide.append(_header.element);
-    leftSide.append(_content);
-    leftSide.append(_footer.element);
+    // Right Side
+    DivElement rightSide = new DivElement()
+      ..classes.add(LGrid.C_COL)
+      ..id = "a-right"
+      ..append(_header.element)
+      ..append(_content)
+      ..append(_footer.element);
+
+    // Main grid
+    DivElement mainGrid = new DivElement()
+      ..classes.add(LGrid.C_GRID)
+      ..id = "a-main"
+      ..append(_menu.element) // left
+      ..append(rightSide);
     //
+    element.classes.remove(LGrid.C_GRID);
+    element.append(mainGrid);
     element.append(_modalDiv);
     //
     AppsPage.routeHandler = onRouteEnter;
@@ -178,20 +185,23 @@ class AppsMain extends PageSimple {
    * Logged In
    */
   void set loggedIn (bool newValue) {
-    // cannot use hide as it does not have !important
-    if (newValue && ClientEnv.session != null) {
-      for (AppsPage pe in _currentApps.pageList) {
-        if (pe.name == Route.NAME_LOGIN)
-          pe.menuEntry.style.display = "none"; // hide login
-        else
-          pe.menuEntry.style.removeProperty("display");
-      }
-    } else {
-      for (AppsPage pe in _currentApps.pageList) {
-        if (pe.name == Route.NAME_LOGIN)
-          pe.menuEntry.style.removeProperty("display");
-        else
-          pe.menuEntry.style.display = "none"; // hide others
+    if (loginRequired) {
+      // cannot use hide as it does not have !important
+      if (newValue && ClientEnv.session != null) {
+        for (AppsPage pe in _currentApps.pageList) {
+          if (pe.name == Route.NAME_LOGIN)
+            pe.menuEntry.style.display = "none"; // hide login
+          else
+            pe.menuEntry.style.removeProperty("display");
+        }
+      } else {
+        for (AppsPage pe in _currentApps.pageList) {
+          if (pe.name == Route.NAME_LOGIN)
+            pe.menuEntry.style.removeProperty("display");
+          else
+            pe.menuEntry.style.display = "none";
+          // hide others
+        }
       }
     }
   } // loggedIn

@@ -38,6 +38,10 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static appsActions() => "Acciones";
 
+  static appsMainHidePrevent() => "No se puede ocultar";
+
+  static appsMainShowPrevent() => "No se puede mostrar";
+
   static editorValidateRequired() => "Por favor, proporcione un valor";
 
   static editorValidateTooLong() => "Valor demasiado largo";
@@ -102,11 +106,13 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static lInputDateInvalidInputTime() => "Entrada no válida para el tiempo";
 
-  static lInputDateInvalidValue() => "Valor inválido";
+  static lInputDateInvalidValue() => "valor inválido";
+
+  static lInputDurationHint() => "sin indicador, la duración es en horas - entrar con decimal o coma (1.5 = 1:30); ejemplo: 5d1h20m o 5d 1h 10";
 
   static lInputDurationInvalidInput() => "Entrada no válida para la duración";
 
-  static lInputDurationInvalidValue() => "Valor inválido";
+  static lInputDurationInvalidValue() => "valor inválido";
 
   static lLookupLabel() => "Buscar";
 
@@ -149,6 +155,8 @@ class MessageLookup extends MessageLookupByLibrary {
   static lObjectHomeLookupMore() => "Más";
 
   static lObjectHomeSave() => "Guardar";
+
+  static lObjectHomeSort() => "Especie";
 
   static lPicklistMultiAdd() => "Añadir";
 
@@ -268,6 +276,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "appsActionUp" : appsActionUp,
     "appsActionYes" : appsActionYes,
     "appsActions" : appsActions,
+    "appsMainHidePrevent" : appsMainHidePrevent,
+    "appsMainShowPrevent" : appsMainShowPrevent,
     "editorValidateRequired" : editorValidateRequired,
     "editorValidateTooLong" : editorValidateTooLong,
     "filterOpBetween" : filterOpBetween,
@@ -301,6 +311,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "lInputDateInvalidInputDateTime" : lInputDateInvalidInputDateTime,
     "lInputDateInvalidInputTime" : lInputDateInvalidInputTime,
     "lInputDateInvalidValue" : lInputDateInvalidValue,
+    "lInputDurationHint" : lInputDurationHint,
     "lInputDurationInvalidInput" : lInputDurationInvalidInput,
     "lInputDurationInvalidValue" : lInputDurationInvalidValue,
     "lLookupLabel" : lLookupLabel,
@@ -324,6 +335,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "lObjectHomeLookupList" : lObjectHomeLookupList,
     "lObjectHomeLookupMore" : lObjectHomeLookupMore,
     "lObjectHomeSave" : lObjectHomeSave,
+    "lObjectHomeSort" : lObjectHomeSort,
     "lPicklistMultiAdd" : lPicklistMultiAdd,
     "lPicklistMultiAvailable" : lPicklistMultiAvailable,
     "lPicklistMultiDown" : lPicklistMultiDown,

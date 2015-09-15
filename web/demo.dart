@@ -12,6 +12,9 @@ import 'dart:async';
 import "package:lightning/lightning_ctrl.dart";
 export "package:lightning/lightning_ctrl.dart";
 
+import 'exampleWorkspace.dart';
+
+
 part 'demo/demo_feature.dart';
 part 'demo/activity_timeline.dart';
 part 'demo/badges.dart';
@@ -143,11 +146,9 @@ class DemoFrame extends AppsPage {
   DemoFrame(String id, LIcon icon, String label, int width)
       : super(id, id, icon, label, "Lightning Dart ${label}") {
     element
-      ..name = id
       ..src = "demo.html"
       ..width = "${width}px"
       ..height = "1000px";
-
   }
 
 } // DemoFrame
@@ -164,13 +165,30 @@ class ExampleForm extends AppsPage {
 
   ExampleForm() : super ("form", "form", formIcon, "Form", "Lightning Dart Form Exmaple") {
     element
-      ..name = id
       ..src = "exampleForm.html"
       ..width = "100%"
       ..height = "1000px";
   }
 
-}
+} // ExampleForm
+
+
+/**
+ * Example Workbench Form Frame
+ */
+class ExampleWorkspace extends AppsPage {
+
+  static final LIcon formIcon = new LIconAction(LIconAction.FLOW);
+
+  Element element = new DivElement();
+
+  ExampleWorkspace() : super ("wb", "wb", formIcon, "Workspace", "Lightning Dart Workspace Exmaple") {
+    WorbenchData wbData = new WorbenchData();
+    ObjectCtrl ctrl = new ObjectCtrl(wbData);
+    element.append(ctrl.element);
+  } // ExampleWorkspace
+
+} // ExampleWorkspace
 
 
 /**

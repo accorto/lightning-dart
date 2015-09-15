@@ -25,6 +25,7 @@ void main() {
     ObjectCtrl ctrl = new ObjectCtrl(wbData);
 
     PageSimple page = LightningDart.createPageSimple();
+    page.element.classes.add(LGrid.C_WRAP);
     page.add(ctrl);
 
   });

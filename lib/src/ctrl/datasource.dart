@@ -13,8 +13,8 @@ part of lightning_ctrl;
 abstract class Datasource extends Service {
 
   static final Logger _log = new Logger("Datasource");
-  /// WindowNo
-  static int s_windowNo = 0;
+  /// current WindowNo
+  static int _s_windowNo = 0;
 
 
   /// Table Name
@@ -23,7 +23,7 @@ abstract class Datasource extends Service {
   final RecordSorting recordSorting = new RecordSorting();
 
   /// WindowNo
-  final int windowNo = ++s_windowNo;
+  final int windowNo = ++_s_windowNo;
   /// Parent query
   final List<DFilter> queryParentList = new List<DFilter>();
   /// Parent context

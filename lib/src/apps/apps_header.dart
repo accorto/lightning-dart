@@ -12,7 +12,8 @@ part of lightning_ctrl;
 class AppsHeader extends LComponent {
 
   final Element element = new Element.header()
-    ..classes.add(LMargin.C_AROUND__SMALL);
+    ..classes.add(LMargin.C_AROUND__SMALL)
+    ..id = "a-header";
 
   /**
    * Set Application

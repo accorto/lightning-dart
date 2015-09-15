@@ -34,7 +34,8 @@ class RecordCtrl extends LComponent {
 
 
   /// Record
-  Element element = new Element.article();
+  Element element = new Element.article()
+    ..id = "rc";
   /// Header
   LRecordHome _header;
   LBreadcrumb _breadcrumb;
@@ -49,11 +50,16 @@ class RecordCtrl extends LComponent {
   /**
    * Record Control
    */
-  RecordCtrl(UI this.ui) {
+  RecordCtrl(UI this.ui, {String containerClass: LGrid.C_CONTAINER__FLUID}) {
+    String idPrefix = "rc-" + ui.tableName;
+    element.id = idPrefix;
+    if (containerClass != null && containerClass.isNotEmpty) {
+      element.classes.add(containerClass);
+    }
     // Structure
-    String idPrefix = ui.tableName;
     _header = new LRecordHome.from(ui);
     element.append(_header.element);
+    //
     _breadcrumb = new LBreadcrumb(idPrefix:idPrefix);
     element.append(_breadcrumb.element);
     //

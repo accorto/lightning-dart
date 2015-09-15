@@ -23,11 +23,13 @@ class AppsMenu extends LComponent {
 
   /// Menu Element
   final Element element = new Element.nav()
-    ..classes.addAll([LGrid.C_COL, LGrid.C_SHRINK_NONE, LTheme.C_THEME__ALT_INVERSE, C_APPS_MENU]);
+    ..classes.addAll([LGrid.C_COL, LGrid.C_SHRINK_NONE, LTheme.C_THEME__ALT_INVERSE, C_APPS_MENU])
+    ..id = "a-menu";
 
   /// Show Button
   AnchorElement _menuShow = new AnchorElement(href: "#")
-    ..classes.add(AppsMenu.C_APPS_MENU_SHOW);
+    ..classes.add(AppsMenu.C_APPS_MENU_SHOW)
+    ..id = "a-menu-show";
 
 
   /// Left Side Menu

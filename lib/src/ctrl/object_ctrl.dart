@@ -25,7 +25,8 @@ class ObjectCtrl extends LComponent {
   static final Logger _log = new Logger("ObjectCtrl");
 
   /// Object / Table Element
-  final Element element = new Element.section();
+  final Element element = new Element.section()
+    ..id = "oc";
 
   /// Header
   LObjectHome _header;
@@ -52,7 +53,7 @@ class ObjectCtrl extends LComponent {
     _header = new LObjectHome(datasource.recordSorting);
     element.append(_header.element);
     element.append(_content.element);
-    //
+
     // layout change table/..
     _header.viewLayoutChange = onViewLayoutChange;
     // find
@@ -68,6 +69,8 @@ class ObjectCtrl extends LComponent {
     datasource.ui()
     .then((UI ui) {
       _header.loading = false;
+      String idPrefix = "oc-" + ui.tableName;
+      element.id = idPrefix;
       _header.setUi(ui);
       // actions
       if (!ui.isReadOnly) {
