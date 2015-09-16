@@ -38,6 +38,12 @@ class FormsEditor extends DemoFeature {
       ..placeholder = "Duration Placeholder";
     form.addEditor(durationInput);
 
+    LInputRange rangeInput = new LInputRange("range")
+      ..label = "Range Input 7 - 7 - 182"
+      ..setMinStepMax(7, 7, 182);
+    form.addEditor(rangeInput);
+    rangeInput.valueAsInt = 35;
+
     return form;
   }
 

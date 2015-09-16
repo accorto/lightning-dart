@@ -79,6 +79,7 @@ part 'src/view/editors/l_editor.dart';
 part 'src/view/editors/l_input.dart';
 part 'src/view/editors/l_input_date.dart';
 part 'src/view/editors/l_input_duration.dart';
+part 'src/view/editors/l_input_range.dart';
 part 'src/view/editors/l_input_search.dart';
 part 'src/view/editors/l_radio.dart';
 part 'src/view/editors/l_select.dart';
