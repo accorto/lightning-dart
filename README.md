@@ -26,9 +26,9 @@ A simple usage example:
 
     main() async {
       await LightningDart.init(); // client env
-      PageSimple page = PageSimple.create();
-      // check example: http://lightningdart.com/exampleForm.html
-      page.add(...content...);
+      PageSimple.create()
+        // check example: http://lightningdart.com/exampleForm.html
+        ..add(...content...);
     }
     
 For more details, see [documentation](http://lightning.accorto.com) 
