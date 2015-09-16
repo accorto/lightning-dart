@@ -43,6 +43,7 @@ part 'src/apps/apps_page.dart';
 
 part 'src/ctrl/datasource.dart';
 part 'src/ctrl/form_ctrl.dart';
+part 'src/ctrl/meta_cache.dart';
 part 'src/ctrl/object_ctrl.dart';
 part 'src/ctrl/object_edit.dart';
 part 'src/ctrl/object_filter.dart';

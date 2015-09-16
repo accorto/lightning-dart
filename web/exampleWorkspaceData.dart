@@ -12,19 +12,25 @@ part of lightning.exampleWorkspace;
 class WorbenchData extends Datasource {
 
 
-  Future<UI> execute_ui() {
-    Completer<UI> completer = new Completer<UI>();
+  /// simulate server
+  @override
+  Future<DisplayResponse> execute_ui({String info, bool setBusy:true}) {
+    Completer<DisplayResponse> completer = new Completer<DisplayResponse>();
 
     new Timer(new Duration(seconds: 2), (){
       _create();
-      completer.complete(_ui);
+      DisplayResponse response = new DisplayResponse()
+        ..uiList.add(_ui);
+      completer.complete(response);
     });
 
     return completer.future;
-  } // meta_ui
+  } // execute_ui
 
 
-  Future<DataResponse> execute_data(DataRequest request) {
+  /// simulate server
+  @override
+  Future<DataResponse> execute_data(DataRequest request, {String info, bool setBusy: true}) {
     Completer<DataResponse> completer = new Completer<DataResponse>();
 
     new Timer(new Duration(seconds: 2), (){
@@ -50,7 +56,7 @@ class WorbenchData extends Datasource {
     });
 
     return completer.future;
-  }
+  } // execute_data
 
 
   static const String NAME =  "MyContact";
@@ -63,7 +69,7 @@ class WorbenchData extends Datasource {
    *
    */
   WorbenchData()
-  : super (NAME) {
+    : super (NAME, "dummy", "dummy") {
   } // WorkbenchData
 
 

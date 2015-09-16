@@ -10,7 +10,8 @@ part of lightning_ctrl;
 /**
  * Datasource - Meta Data and Persistence Interface
  */
-abstract class Datasource extends Service {
+abstract class Datasource
+    extends Service {
 
   static final Logger _log = new Logger("Datasource");
   /// current WindowNo
@@ -19,6 +20,11 @@ abstract class Datasource extends Service {
 
   /// Table Name
   final String tableName;
+  /// Data Request Server Uri
+  final String dataUri;
+  /// UI Request Server Uri
+  final String uiUri;
+
   /// Record Sort List
   final RecordSorting recordSorting = new RecordSorting();
 
@@ -49,30 +55,43 @@ abstract class Datasource extends Service {
 
 
   /**
-   * Init Data Source
+   * Init Data Source for [tableName]
+   * to server uri [serverUrl][dataUri] or [uiUri]
    */
-  Datasource(String this.tableName) {
+  Datasource(String this.tableName, String this.dataUri, String this.uiUri) {
     recordSorting.sortExecute = sortExecute;
   }
 
-  /// Implement - data
-  Future<DataResponse> execute_data(DataRequest request);
-  /// Implement - retrieve ui
-  Future<UI> execute_ui();
-
+  /// Data Source Initialized
+  bool get initialized => _ui != null;
 
   /// Initialize and get ui
   Future<UI> ui() {
     Completer<UI> completer = new Completer<UI>();
+    // check cache
+    if (_ui == null) {
+      _ui = MetaCache.getUi(tableName: tableName);
+    }
+    // go to server
     if (_ui == null) {
       execute_ui()
-      .then((UI ui) {
-        _ui = ui;
-        _table = ui.table;
-        completer.complete(_ui);
+      .then((DisplayResponse response) {
+        for (UI ui in response.uiList) {
+          if (ui.tableName == tableName) {
+            _ui = ui;
+            _table = ui.table;
+            break;
+          }
+        }
+        if (_ui == null) {
+          completer.completeError("UI not found");
+          _log.warning("ui ${tableName}: - not found response: #${response.uiList.length} ${response.response.msg}");
+        } else {
+          completer.complete(_ui);
+        }
       })
       .catchError((Object error, StackTrace stackTrace){
-        completer.completeError(error, stackTrace);
+        completer.completeError(error, stackTrace); // 2nd
       });
     } else {
       completer.complete(_ui);
@@ -87,7 +106,36 @@ abstract class Datasource extends Service {
   DTable get tableDirect => _table;
   DTable _table;
 
+  /**
+   * Send UI Request to Server
+   */
+  Future<DisplayResponse> execute_ui({String info, bool setBusy:true}) {
+    DisplayRequest request = new DisplayRequest()
+      ..type = DisplayRequestType.GET;
+    UIInfo uiInfo = new UIInfo()
+      ..tableName = tableName;
+    request.displayList.add(uiInfo);
+    //
+    if (info == null)
+      info = "UI ${tableName}";
+    _log.config("execute_ui ${tableName}");
+    request.request = createCRequest(uiUri, info);
+    Completer<DisplayResponse> completer = new Completer<DisplayResponse>();
 
+    sendRequest(uiUri, request.writeToBuffer(), info, setBusy: setBusy)
+    .then((HttpRequest httpRequest) {
+      List<int> buffer = new Uint8List.view(httpRequest.response);
+      DisplayResponse response = new DisplayResponse.fromBuffer(buffer);
+      handleSuccess(info, response.response, setBusy: setBusy);
+      completer.complete(response);
+      MetaCache.update(response);
+    })
+    .catchError((Event error, StackTrace stackTrace) {
+      String message = handleError(uiUri, error, stackTrace);
+      completer.completeError(message); // 1st
+    });
+    return completer.future;
+  } // execute_ui
 
 
   /// Execute Sort
@@ -148,6 +196,23 @@ abstract class Datasource extends Service {
     return completer.future;
   }
 
+  /// save All
+  Future<DataResponse> saveAll(List<DRecord> records) {
+    Completer<DataResponse> completer = new Completer<DataResponse>();
+    //
+    DataRequest req = _createRequest(DataRequestType.SAVE);
+    req.recordList.addAll(records);
+    //
+    execute_data(req)
+    .then((DataResponse response) {
+      totalRows = response.totalRows;
+      recordList = response.recordList;
+      statisticList = response.statisticList;
+      completer.complete(response);
+    });
+    return completer.future;
+  }
+
   /// delete
   Future<DataResponse> delete(DRecord record) {
     Completer<DataResponse> completer = new Completer<DataResponse>();
@@ -181,6 +246,91 @@ abstract class Datasource extends Service {
     });
     return completer.future;
   }
+
+  /// new record server side
+  Future<DRecord> newRecord (Datasource list, DRecord record)  {
+    Completer<DRecord> completer = new Completer<DRecord>();
+    DataRequest request = new DataRequest()
+      ..tableName = list.tableName
+      ..type = DataRequestType.NEW
+      ..recordList.add(record);
+
+    // Context - windowId
+    request.windowNo = list.windowNo.toString();
+    // - AD_Window_ID|AD_Tab_ID
+    if (_ui.hasExternalKey())
+      request.uiExternalKey = _ui.externalKey;
+    // - Window Context (general context is on server)
+    if (parentContext.isNotEmpty)
+      request.contextList.addAll(parentContext);
+
+    execute_data(request, setBusy: false)
+    .then((DataResponse resp) {
+      ServiceTracker track = new ServiceTracker(resp.response, "new ${list.tableName} #${resp.contextChangeList.length}");
+      // copy values
+      DataRecord data = new DataRecord(null, value: record);
+      for (DKeyValue nv in resp.contextChangeList) {
+        String name = nv.key;
+        DEntry dataEntry = data.getEntry(null, name, true);
+        String value = nv.value;
+        dataEntry.value = value;
+        dataEntry.valueOriginal = value; // for reset
+      }
+      completer.complete(record);
+      track.send();
+    })
+    .catchError((error, StackTrace stackTrace) {
+      completer.completeError(error, stackTrace); // 2nd
+    });
+    return completer.future;
+  } // newRecord
+
+  /// server callout
+  Future<DRecord> callout (Datasource list, DRecord record, DEntry columnChanged, DColumn column) {
+    Completer<DRecord> completer = new Completer<DRecord>();
+    assert(record != null);
+    assert(columnChanged != null);
+    //
+    String tableName = list.tableName;
+    String columnName = columnChanged.columnName;
+    String validationCallout = column.validationCallout;
+
+    DataRequest req = new DataRequest()
+      ..tableName = list.tableName
+      ..type = DataRequestType.CALLOUT
+      ..recordList.add(record)
+      ..columnChanged = columnChanged
+      ..validationCallout = validationCallout;
+
+    // Context - windowId
+    req.windowNo = list.windowNo.toString();
+    // - AD_Window_ID|AD_Tab_ID
+    if (_ui.hasExternalKey())
+      req.uiExternalKey = _ui.externalKey;
+    // - AD_Field_ID
+    req.fieldExternalKey = column.tempExternalKey; // = panelColumn.externalKey;
+    if (!column.hasTempExternalKey()) {
+      _log.config("recordCallout ${tableName}.${columnName} ${validationCallout} no Field ExtKey");
+    }
+    // - Window Context (general context is on server)
+    if (parentContext.isNotEmpty)
+      req.contextList.addAll(parentContext);
+    final DataRecord data = new DataRecord(null, value: record);
+    req.contextList.addAll(data.asContext(list.windowNo));
+
+    execute_data(req, info:validationCallout, setBusy:false)
+    .then((DataResponse resp) {
+      ServiceTracker track = new ServiceTracker(resp.response, "callout ${validationCallout} #${resp.contextChangeList.length}");
+      completer.complete(record);
+      track.send();
+    })
+    .catchError((error, StackTrace stackTrace) {
+      completer.completeError(error, stackTrace); // 2nd
+    });
+    return completer.future;
+  } // callout
+
+
 
   /**
    * Create Request with query info
@@ -232,6 +382,35 @@ abstract class Datasource extends Service {
     // req.queryColumnNames;
     return req;
   } // createRequest
+
+
+  /**
+   * Send Data Request to Server
+   */
+  Future<DataResponse> execute_data(DataRequest request, {String info, bool setBusy: true}) {
+    if (info == null) {
+      info = "${request.type} ${request.tableName}";
+    }
+    _log.config("execute_data ${tableName} ${request.type}");
+    request.request = createCRequest(dataUri, info);
+    Completer<DataResponse> completer = new Completer<DataResponse>();
+    //
+    sendRequest(dataUri, request.writeToBuffer(), info, setBusy: setBusy)
+    .then((HttpRequest httpRequest) {
+      List<int> buffer = new Uint8List.view(httpRequest.response);
+      DataResponse response = new DataResponse.fromBuffer(buffer);
+      handleSuccess(info, response.response, setBusy: setBusy);
+      completer.complete(response);
+    })
+    .catchError((Event error, StackTrace stackTrace) {
+      String message = handleError(dataUri, error, stackTrace);
+      completer.completeError(message); // 1st
+    });
+    return completer.future;
+  } // execute_data
+
+
+
 
 } // Datasource
 

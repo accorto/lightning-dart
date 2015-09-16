@@ -35,12 +35,14 @@ import 'protoc/data.pb.dart';
 import 'protoc/display.pb.dart';
 import 'protoc/rr.pb.dart';
 import 'protoc/rr_data.pb.dart';
+import 'protoc/rr_display.pb.dart';
 
 export 'protoc/structure.pb.dart';
 export 'protoc/data.pb.dart';
 export 'protoc/display.pb.dart';
 export 'protoc/rr.pb.dart';
 export 'protoc/rr_data.pb.dart';
+export 'protoc/rr_display.pb.dart';
 
 
 import 'dart:indexed_db';

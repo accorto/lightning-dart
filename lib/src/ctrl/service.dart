@@ -109,10 +109,10 @@ class Service {
 
 
   /**
-   * Create Client Request for [trxType] with user [info].
+   * Create Client Request for [serverUri] with user [info].
    * Request GeoLocation [withGeo] for this - defaults to [addGeo]
    */
-  CRequest createCRequest(String trxType, String info, {bool withGeo: false}) {
+  CRequest createCRequest(String serverUri, String info, {bool withGeo: false}) {
     trxNo++;
     DateTime now = new DateTime.now();
     //
@@ -140,7 +140,7 @@ class Service {
       env.timeZone = ClientEnv.timeZone.id; // user selection
     //
     CRequest request = new CRequest()
-      ..trxType = trxType
+      ..trxType = serverUri
       ..trxNo = trxNo
       ..info = info
       ..clientRequestTime = new Int64(now.millisecondsSinceEpoch)
@@ -155,7 +155,7 @@ class Service {
         request.sfToken = ClientEnv.session.sfToken;
     }
     //
-    _log.fine("${trxType} ${trxNo}: ${info}");
+    _log.fine("${serverUri} ${trxNo}: ${info}");
     return request;
   } // createCRequest
 
@@ -183,19 +183,19 @@ class Service {
   /**
    * Create+Send protocol buffers HttpRequest to [trx] with [data]
    */
-  Future<HttpRequest> sendRequest(String trx, Uint8List data, String info, {bool setBusy: true}) {
+  Future<HttpRequest> sendRequest(String serverUri, Uint8List data, String info, {bool setBusy: true}) {
     if (setBusy && onServerStart != null) {
-      onServerStart(trx, info);
+      onServerStart(serverUri, info);
     }
-    Uri uri = Uri.parse("${serverUrl}${trx}");
+    Uri uri = Uri.parse("${serverUrl}${serverUri}");
     String url = uri.toString();
     return HttpRequest.request(url,
-    method: "POST",
-    withCredentials: false,
-    responseType: "arraybuffer",
-    mimeType: "application/x-google-protobuf",
-    requestHeaders: requestHeaders,
-    sendData: data);
+      method: "POST",
+      withCredentials: false,
+      responseType: "arraybuffer",
+      mimeType: "application/x-google-protobuf",
+      requestHeaders: requestHeaders,
+      sendData: data);
   } // sendRequest
 
   /**
