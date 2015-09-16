@@ -24,13 +24,11 @@ A simple usage example:
 
     import "package:lightning/lightning.dart";
 
-    main() {
-        LightningDart.init() // client env
-        .then((_) {
-            PageSimple page = PageSimple.create();
-            // check example: http://lightningdart.com/exampleForm.html
-            page.add(...content...);
-        }
+    main() async {
+      await LightningDart.init(); // client env
+      PageSimple page = PageSimple.create();
+      // check example: http://lightningdart.com/exampleForm.html
+      page.add(...content...);
     }
     
 For more details, see [documentation](http://lightning.accorto.com) 
