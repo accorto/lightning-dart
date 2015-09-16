@@ -4,11 +4,12 @@
  * License options+support:  https://www.lightningdart.com
  */
 
-library lightning_model;
-
 /**
- * Lightning Model Functionality
+ * Lightning Dart Model level Functionality.
+ *
+ * Uses Protocol Buffers.
  */
+library lightning_model;
 
 import 'dart:async';
 import 'dart:html';

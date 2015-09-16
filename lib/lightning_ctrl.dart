@@ -4,11 +4,18 @@
  * License options+support:  https://lightningdart.com
  */
 
-library lightning_ctrl;
-
 /**
- * Lightning Controller Functionality
+ * Lightning Dart Controller level Functionality - extends Lightning Dart and provides component controller functionality.
+ *
+ * Lightning Dart Controller main entry point
+ *
+ *     LightningCtrl.init()
+ *     .then((_){
+ *       // application code
+ *     });
+ *
  */
+library lightning_ctrl;
 
 import 'dart:html';
 import 'dart:js';
@@ -56,7 +63,13 @@ part 'src/ctrl/table_layout.dart';
 part 'src/ctrl/timezone.dart';
 
 /**
- * Lightning Controller
+ * Lightning Dart Controller main entry point
+ *
+ *     LightningCtrl.init()
+ *     .then((_){
+ *       // application code
+ *     });
+ *
  */
 class LightningCtrl {
 

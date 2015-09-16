@@ -4,13 +4,19 @@
  * License options+support:  https://www.lightningdart.com
  */
 
+/**
+ * Lightning Dart View level Functionality - basic UI components
+ *
+ * Lightning Dart main entry point
+ *
+ *     LightningDart.init()
+ *     .then((_){
+ *       // application code
+ *     });
+ *
+ */
 library lightning_dart;
 
-/**
- * Lightning UI View Functionality
- */
-
-// Dart Core
 import 'dart:async';
 import 'dart:html';
 import 'dart:svg' as svg;
@@ -102,7 +108,12 @@ part 'src/view/utility/l_util.dart';
 part 'src/view/utility/option_util.dart';
 
 /**
- * Lightning Dart
+ * Lightning Dart main entry point
+ *
+ *     LightningDart.init()
+ *     .then((_){
+ *       // application code
+ *     });
  */
 class LightningDart {
 
@@ -116,7 +127,6 @@ class LightningDart {
 
   /**
    * Initialize Logging, Locale, Intl, Date
-   * optional [serverUri] to overwrite target
    */
   static Future<bool> init() {
     // Initialize

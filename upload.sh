@@ -10,7 +10,9 @@ dartanalyzer lib/lightning.dart
 dartanalyzer lib/lightning_ctrl.dart
 dartanalyzer web/demo.dart
 
-dartdocgen .
+dartdoc
+# pub global activate simple_http_server
+# dhttpd --path /Users/jorg/Documents/BizPlatform/lightning/lightning-dart/doc/api
 
 pub deps > dependencies.txt
 
