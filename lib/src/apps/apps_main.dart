@@ -212,6 +212,12 @@ class AppsMain extends PageSimple {
     _header.element.classes.toggle(LVisibility.C_HIDE, !show);
   } // showHeader
 
+  /// Show Menu
+  void showMenuBar(bool show) {
+    _menu.element.classes.toggle(LVisibility.C_HIDE, !show);
+  }
+
+
   /// Show Error
   void showError(String heading, String label, String error) {
     LToast toast = new LToast.error(label:"${heading}: ${label}", text:error);
