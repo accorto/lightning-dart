@@ -255,6 +255,11 @@ class ListItem extends SelectOption {
       id:id, selected:selected, disabled:disabled);
   }
 
+  /// Convert to Select Option
+  SelectOption asSelectOption() {
+    return new SelectOption(asDOption());
+  }
+
   String toString() => "ListItem[${option.value}]";
 
 } // ListItem

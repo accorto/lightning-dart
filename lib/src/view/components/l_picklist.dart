@@ -14,7 +14,8 @@ part of lightning_dart;
  * -- button
  * -- div .dropdown
  */
-class LPicklist extends LEditor with LFormElement implements LSelectI {
+class LPicklist
+    extends LEditor with LFormElement, LSelectI {
 
   /// slds-picklist - Initializes picklist | Required
   static const String C_PICKLIST = "slds-picklist";
@@ -189,25 +190,33 @@ class LPicklist extends LEditor with LFormElement implements LSelectI {
   void addOption(OptionElement oe) {
     _dropdown.addOption(oe);
   }
+  /// Option Count
+  int get length => _dropdown.length;
+  /// Selected count
+  int get selectedCount {
+    String vv = value;
+    return vv == null || vv.isEmpty ? 0 : 1;
+  }
+
+  /// Get select option list
+  List<SelectOption> get selectOptionList => _dropdown.selectOptionList;
+  /// Add Option List
+  void set selectOptionList(List<SelectOption> list) {
+    _dropdown.selectOptionList = list;
+  }
   /// Add Option
   void addSelectOption(SelectOption op) {
     _dropdown.addSelectOption(op);
   }
-  /// Add Option List
-  void set selectOptions(List<SelectOption> list) {
-    _dropdown.selectOptions = list;
+  /// clear options
+  void clearOptions() {
+    _dropdown.clearOptions();
   }
-  /// Add Option List
-  void set dOptions(List<DOption> options) {
-    _dropdown.dOptions = options;
+  /// Add Option
+  void addDOption(DOption option) {
+    _dropdown.addDOption(option);
   }
-  /// Set List Items
-  void set listItems (List<ListItem> listItems) {
-    _dropdown.listItems = listItems;
-  }
-  void set listText (List<String> textList) {
-    selectOptions = SelectOption.createListFromText(textList);
-  }
+
 
   /// Button clicked
   void onButtonClick(MouseEvent evt) {

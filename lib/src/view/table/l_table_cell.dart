@@ -80,7 +80,7 @@ class LTableActionCell extends LTableCell {
     LDropdownItem item = action.asDropdown(false);
     if (row != null)
       item.reference = row.record;
-    dropdown.dropdown.addItem(item);
+    dropdown.dropdown.addDropdownItem(item);
   }
 
   /// Dropdown Row Action Change

@@ -61,7 +61,7 @@ class LCardCompact extends LCard {
       _createHeader();
     }
     LDropdownItem item = action.asDropdown(true);
-    _action.dropdown.addItem(item);
+    _action.dropdown.addDropdownItem(item);
   } // addTableAction
 
   /**

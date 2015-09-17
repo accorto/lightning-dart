@@ -89,7 +89,7 @@ class LTileGeneric extends LTile {
     for (AppsAction action in actions) {
       LDropdownItem item = action.asDropdown(false);
       item.reference = actionReference;
-      _dropdown.dropdown.addItem(item);
+      _dropdown.dropdown.addDropdownItem(item);
     }
   } // addActions
 

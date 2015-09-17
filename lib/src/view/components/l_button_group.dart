@@ -95,7 +95,7 @@ class LButtonGroup extends LComponent {
       LDropdownElement dde = new LDropdownElement(dd, name:name);
       element.append(dde.element);
       for (LDropdownItem ddi in dropdownItems) {
-        dde.addItem(ddi);
+        dde.addDropdownItem(ddi);
       }
     }
   } // layout

@@ -8,8 +8,21 @@ part of lightning_dart;
 
 /**
  * Select Editor
+ *
+ *    LSelect s = new LSelect("s");
+ *    // either use OptionElement
+ *    s.options = optionList;
+ *    s.addOption(oe);
+ *
+ *    // and/or use SelectOption
+ *    s.selectOptions = selectOptionList;
+ *    s.addSelectOption(so);
+ *
+ *    // and/or
+ *    s.addOptionValue(myValue, label:myLabel);
  */
-class LSelect extends LEditor with LFormElement implements LSelectI {
+class LSelect
+    extends LEditor with LFormElement, LSelectI {
 
   static final Logger _log = new Logger("LSelect");
 
@@ -18,7 +31,7 @@ class LSelect extends LEditor with LFormElement implements LSelectI {
   /// Editor in Grid
   final bool inGrid;
   /// all options
-  final List<SelectOption> optionList = new List<SelectOption>();
+  final List<SelectOption> _selectOptionList = new List<SelectOption>();
 
   /**
    * Select Editor
@@ -44,7 +57,7 @@ class LSelect extends LEditor with LFormElement implements LSelectI {
 
     //
     if (tableColumn.pickValueList.isNotEmpty) {
-      dOptions = tableColumn.pickValueList;
+      dOptionList = tableColumn.pickValueList;
     }
     this.dataColumn = dataColumn;
     _initEditor();
@@ -63,6 +76,14 @@ class LSelect extends LEditor with LFormElement implements LSelectI {
   String get type => input.type;
 
   bool get multiple => input.multiple;
+  void set multiple (bool newValue) {
+    input.multiple = newValue;
+  }
+
+  int get size => input.size;
+  void set size (int newValue) {
+    input.size = newValue;
+  }
 
   /// String Value
 
@@ -165,59 +186,74 @@ class LSelect extends LEditor with LFormElement implements LSelectI {
     input.attributes["list"] = dl.id;
   }
 
-  /// Add Option List
-  void set selectOptions(List<SelectOption> list) {
-    for (SelectOption op in list) {
-      optionList.add(op);
-      input.append(op.asOptionElement());
-      if (op.option.validationList.isNotEmpty) {
-        addDependentOnValidation(op.option.validationList);
-      }
-    }
-    required = required; // handle optional
-  }
+  /// -- options --
+
   /// Get options
   List<OptionElement> get options => input.options;
   /// Add Option List
   void set options (List<OptionElement> list) {
+    clearOptions();
     for (OptionElement oe in list) {
-      input.append(oe);
+      addSelectOption(new SelectOption.fromElement(oe));
     }
     required = required; // handle optional
   }
   /// Add Option
   void addOption(OptionElement oe) {
-    input.append(oe);
+    addSelectOption(new SelectOption.fromElement(oe));
   }
 
+  /// -- select options --
+
+  /// get updated Option list
+  List<SelectOption> get selectOptionList {
+    for (SelectOption so in _selectOptionList) {
+      so.option.isSelected = so.oe.selected;
+    }
+    return _selectOptionList;
+  }
+  /// Add Option List
+  void set selectOptionList(List<SelectOption> list) {
+    clearOptions();
+    for (SelectOption so in list) {
+      _selectOptionList.add(so);
+      input.append(so.asOptionElement());
+      if (so.option.validationList.isNotEmpty) {
+        addDependentOnValidation(so.option.validationList);
+      }
+    }
+    required = required; // handle optional
+  }
   /// Add Option
-  void addSelectOption(SelectOption op) {
-    optionList.add(op);
-    input.append(op.asOptionElement());
-    if (op.option.validationList.isNotEmpty) {
-      addDependentOnValidation(op.option.validationList);
+  void addSelectOption(SelectOption so) {
+    _selectOptionList.add(so);
+    input.append(so.asOptionElement());
+    if (so.option.validationList.isNotEmpty) {
+      addDependentOnValidation(so.option.validationList);
     }
-  }
-  /// Add DOption List
-  void set dOptions(List<DOption> options) {
-    for (DOption option in options) {
-      SelectOption so = new SelectOption(option);
-      addSelectOption(so);
-    }
-    required = required; // optional
-  }
-  /// Set List Items
-  void set listItems (List<ListItem> listItems) {
-    for (ListItem li in listItems) {
-      SelectOption so = new SelectOption(li.asDOption());
-      addSelectOption(so);
-    }
-    required = required; // optional
-  }
-  void set listText (List<String> textList) {
-    selectOptions = SelectOption.createListFromText(textList);
   }
 
+  /// clear options
+  void clearOptions() {
+    _selectOptionList.clear();
+    input.children.clear();
+  }
+
+  /// Add DOption
+  void addDOption(DOption option) {
+    SelectOption so = new SelectOption(option);
+    addSelectOption(so);
+  }
+
+  /// Option Count
+  int get length {
+    return input.length;
+  }
+
+  /// Selected Count
+  int get selectedCount {
+    return input.selectedOptions.length;
+  }
 
   /**
    * dis|en/ables options
@@ -248,7 +284,7 @@ class LSelect extends LEditor with LFormElement implements LSelectI {
 
   /// Validate option - returns true if valid
   bool _validateOption(String optionValue) {
-    for (SelectOption so in optionList) {
+    for (SelectOption so in _selectOptionList) {
       if (so.option.value == optionValue) {
         if (so.option.validationList.isEmpty) {
           return true; // no restrictions
@@ -266,47 +302,3 @@ class LSelect extends LEditor with LFormElement implements LSelectI {
   } // validate option
 
 } // LSelect
-
-
-
-/**
- * Select Interface
- */
-abstract class LSelectI {
-
-  String get name;
-
-  String get value;
-  void set value (String newValue);
-
-  /// Multi
-  bool get multiple;
-
-  /// required
-  bool get required;
-  /// required - add/remove optional element
-  void set required(bool newValue);
-
-
-  /// Get options
-  List<OptionElement> get options;
-  /// Set options
-  void set options (List<OptionElement> list);
-  /// Add Option
-  void addOption(OptionElement oe);
-
-
-  /// Set List Items
-  void set listItems (List<ListItem> listItems);
-  /// Add Option List
-  void set selectOptions(List<SelectOption> list);
-  /// Add Option
-  void addSelectOption(SelectOption op);
-
-  /// Add Option List
-  void set dOptions(List<DOption> options);
-
-  /// Set Options from text list
-  void set listText (List<String> textList);
-
-} // LSelectI

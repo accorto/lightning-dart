@@ -84,11 +84,11 @@ class LObjectHome extends LPageHeader {
     //
     _viewLayout.right = true;
     _viewLayout.headingLabel = lObjectHomeLayoutDisplay();
-    _viewLayout.dropdown.addItem(LDropdownItem.create(label: lObjectHomeLayoutTable(), value: VIEW_LAYOUT_TABLE,
+    _viewLayout.dropdown.addDropdownItem(LDropdownItem.create(label: lObjectHomeLayoutTable(), value: VIEW_LAYOUT_TABLE,
     icon: new LIconUtility(LIconUtility.TABLE)));
-    _viewLayout.dropdown.addItem(LDropdownItem.create(label: lObjectHomeLayoutCards(), value: VIEW_LAYOUT_CARDS,
+    _viewLayout.dropdown.addDropdownItem(LDropdownItem.create(label: lObjectHomeLayoutCards(), value: VIEW_LAYOUT_CARDS,
     icon: new LIconUtility(LIconUtility.KANBAN)));
-    _viewLayout.dropdown.addItem(LDropdownItem.create(label: lObjectHomeLayoutCompact(), value: VIEW_LAYOUT_COMPACT,
+    _viewLayout.dropdown.addDropdownItem(LDropdownItem.create(label: lObjectHomeLayoutCompact(), value: VIEW_LAYOUT_COMPACT,
     icon: new LIconUtility(LIconUtility.SIDE_LIST)));
     _viewLayout.value = VIEW_LAYOUT_TABLE; // toggles also selectMode
     DivElement _viewWrapper = new DivElement()
@@ -109,10 +109,10 @@ class LObjectHome extends LPageHeader {
     recordType = ui.table.label + "s"; // TODO plural
     // sort columns
     if (recordSorting != null) {
-      _sort.dropdown.clear();
+      _sort.dropdown.clearOptions();
       for (UIGridColumn gc in ui.gridColumnList) {
         LDropdownItem item = LDropdownItem.create(value:gc.columnName, label:gc.column.label);
-        _sort.dropdown.addItem(item);
+        _sort.dropdown.addDropdownItem(item);
       }
       _sort.dropdown.editorChange = onSortChange;
     }

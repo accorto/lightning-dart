@@ -23,7 +23,7 @@ class Picklists extends DemoFeature {
       ..classes.add(LMargin.C_HORIZONTAL__MEDIUM);
     LPicklist pl1 = new LPicklist("pl1");
     pl1.label = "Picklist 1";
-    pl1.listItems = generateListItems(10, iconLeft: true);
+    pl1.listItemList = generateListItems(10, iconLeft: true);
     form.addEditor(pl1);
     pl1.value = "item5";
 

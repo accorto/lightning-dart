@@ -13,7 +13,8 @@ part of lightning_dart;
  *
  * https://www.getslds.com/components/lookups#role=regular&status=all
  */
-class LLookup extends LEditor implements LSelectI {
+class LLookup
+    extends LEditor with LSelectI {
 
   /// slds-lookup - Initializes lookup | Required
   static const String C_LOOKUP = "slds-lookup";
@@ -50,7 +51,7 @@ class LLookup extends LEditor implements LSelectI {
     ..attributes[Html0.ROLE] = Html0.ROLE_PRESENTATION;
 
   /// Lookup Items
-  final List<LLookupItem> _items = new List<LLookupItem>();
+  final List<LLookupItem> _lookupItemList = new List<LLookupItem>();
 
   /// Pill Container
   DivElement _pillContainer;
@@ -214,7 +215,7 @@ class LLookup extends LEditor implements LSelectI {
   /// Get options
   List<OptionElement> get options {
     List<OptionElement> list = new List<OptionElement>();
-    for (LLookupItem item in _items) {
+    for (LLookupItem item in _lookupItemList) {
       list.add(item.asOption());
     }
     return list;
@@ -223,60 +224,61 @@ class LLookup extends LEditor implements LSelectI {
   void set options (List<OptionElement> list) {
     for (OptionElement oe in list) {
       LLookupItem item = new LLookupItem.fromOption(oe);
-      addItem(item);
+      addLookupItem(item);
     }
   }
   /// Add Option
   void addOption(OptionElement oe) {
-    addItem(new LLookupItem.fromOption(oe));
+    addLookupItem(new LLookupItem.fromOption(oe));
   }
 
+  /// Option Count
+  int get length => _lookupItemList.length;
+
+  /// Selected count
+  int get selectedCount {
+    String vv = value;
+    return vv == null || vv.isEmpty ? 0 : 1;
+  }
+
+
+  /// Get select option list
+  List<SelectOption> get selectOptionList {
+    List<SelectOption> retValue = new List<SelectOption>();
+    for (LLookupItem item in _lookupItemList) {
+      retValue.add(item.asSelectOption());
+    }
+    return retValue;
+  }
   /// Add Option
   void addSelectOption(SelectOption op) {
     LLookupItem item = new LLookupItem.fromSelectOption(op);
-    addItem(item);
-  }
-  /// Add Option List
-  void set selectOptions(List<SelectOption> list) {
-    for (SelectOption so in list)
-      addSelectOption(so);
-  }
-  /// Add Option List
-  void set dOptions(List<DOption> options) {
-    for (DOption op in options) {
-      SelectOption so = new SelectOption(op);
-      addSelectOption(so);
-    }
-  }
-  void set listText (List<String> textList) {
-    selectOptions = SelectOption.createListFromText(textList);
+    addLookupItem(item);
   }
 
-  /// Set List Items
-  void set listItems (List<ListItem> listItems) {
-    clear();
-    for (ListItem li in listItems) {
-      LLookupItem lookup = new LLookupItem.from(li);
-      addItem(lookup);
-    }
+  /// Add Option
+  void addDOption(DOption option) {
+    LLookupItem item = new LLookupItem(option);
+    addLookupItem(item);
   }
+
   /// Set Lookup Items
-  void set items (List<LLookupItem> itemList) {
-    clear();
+  void set lookupItems (List<LLookupItem> itemList) {
+    clearOptions();
     for (LLookupItem item in itemList) {
-      addItem(item);
+      addLookupItem(item);
     }
   }
 
   /// Clear Items
-  void clear() {
-    _items.clear();
+  void clearOptions() {
+    _lookupItemList.clear();
     _lookupList.children.clear();
   }
 
   /// add Lookup Item
-  void addItem(LLookupItem item) {
-    _items.add(item);
+  void addLookupItem(LLookupItem item) {
+    _lookupItemList.add(item);
     _lookupList.append(item.element);
     item.onClick.listen(onItemClick);
   }
@@ -307,7 +309,7 @@ class LLookup extends LEditor implements LSelectI {
       exp = LUtil.createRegExp(restriction);
     }
     int count = 0;
-    for (LLookupItem item in _items) {
+    for (LLookupItem item in _lookupItemList) {
       if (exp == null) {
         item.show = true;
         item.labelHighlightClear();
@@ -323,13 +325,13 @@ class LLookup extends LEditor implements LSelectI {
         item.show = false;
       }
     }
-    if (count == 0 && _items.isNotEmpty) {
+    if (count == 0 && _lookupItemList.isNotEmpty) {
       input.setCustomValidity("No matching options"); // TODO Trl
     } else {
       input.setCustomValidity("");
     }
     //doValidate();
-    _log.fine("lookupUpdateList ${name} '${restriction}' ${count} of ${_items.length}");
+    _log.fine("lookupUpdateList ${name} '${restriction}' ${count} of ${_lookupItemList.length}");
     showResults = true;
   } // lookupUpdateList
 
@@ -341,7 +343,7 @@ class LLookup extends LEditor implements LSelectI {
     Element telement = evt.target;
     String tvalue = telement.attributes[Html0.DATA_VALUE];
     LLookupItem selectedItem = null;
-    for (LLookupItem item in _items) {
+    for (LLookupItem item in _lookupItemList) {
       if (item.value == tvalue) {
         selectedItem = item;
         break;
@@ -363,7 +365,7 @@ class LLookup extends LEditor implements LSelectI {
         editorChange(name, selectedItem.value, null, selectedItem);
     }
     showResults = false;
-    for (LLookupItem item in _items) { // remove restrictions
+    for (LLookupItem item in _lookupItemList) { // remove restrictions
       item.show = true;
       item.labelHighlightClear();
     }
@@ -392,42 +394,3 @@ class LLookup extends LEditor implements LSelectI {
   static String lLookupLabel() => Intl.message("Lookup", name: "lLookupLabel", args: []);
 
 } // LLookup
-
-
-/**
- * Lookup Item
- * - li > a|span
- */
-class LLookupItem extends ListItem {
-
-  /**
-   * Lookup Option
-   */
-  LLookupItem(DOption option, {LIcon leftIcon, LIcon rightIcon})
-    : super(option, leftIcon:leftIcon, rightIcon:rightIcon) {
-    element
-      ..classes.add(LLookup.C_LOOKUP__ITEM)
-      ..attributes[Html0.ROLE] = Html0.ROLE_PRESENTATION;
-    a
-      ..attributes[Html0.ROLE] = Html0.ROLE_OPTION;
-  } // LLookupItem
-
-
-  /// Lookup Item from List
-  LLookupItem.from(ListItem item)
-    : this(item.option, leftIcon:item.leftIcon, rightIcon:item.rightIcon);
-
-  /// Lookup Item from Option
-  LLookupItem.fromOption(OptionElement option)
-     : this(OptionUtil.optionFromElement(option));
-
-  /// Lookup Item from SelectOption
-  LLookupItem.fromSelectOption(SelectOption option)
-      : this(option.option);
-
-
-  /// On Click
-  ElementStream<MouseEvent> get onClick => a.onClick;
-
-
-} // LLookupItem

@@ -50,9 +50,9 @@ class LObjectHomeFilter {
     settings.classes.add(LMargin.C_LEFT__LARGE);
     settings.headingLabel = lObjectHomeFilter();
     settings.dropdown.nubbinTop = true; // see ObjectCtr.onFilterChange
-    settings.dropdown.addItem(LDropdownItem.create(label: AppsAction.appsActionEdit(), value: AppsAction.EDIT));
-    settings.dropdown.addItem(LDropdownItem.create(label: AppsAction.appsActionNew(), value: AppsAction.NEW));
-    settings.dropdown.addItem(LDropdownItem.create(label: AppsAction.appsActionDelete(), value: AppsAction.DELETE));
+    settings.dropdown.addDropdownItem(LDropdownItem.create(label: AppsAction.appsActionEdit(), value: AppsAction.EDIT));
+    settings.dropdown.addDropdownItem(LDropdownItem.create(label: AppsAction.appsActionNew(), value: AppsAction.NEW));
+    settings.dropdown.addDropdownItem(LDropdownItem.create(label: AppsAction.appsActionDelete(), value: AppsAction.DELETE));
   } // LObjectHomeFilter
 
   /// Filter Value/Name
@@ -187,7 +187,7 @@ class LObjectHomeFilterLookup {
 
   /// Set Options
   void set options (List<DOption> options) {
-    _dropdownElement.dOptions = options;
+    _dropdownElement.dOptionList = options;
   } // setOptions
 
 
@@ -204,7 +204,7 @@ class LObjectHomeFilterLookup {
       exp = LUtil.createRegExp(restriction);
     }
     int count = 0;
-    for (LDropdownItem item in _dropdownElement._itemList) {
+    for (LDropdownItem item in _dropdownElement._dropdownItemList) {
       if (exp == null) {
         item.show = true;
         item.labelHighlightClear();
@@ -220,7 +220,7 @@ class LObjectHomeFilterLookup {
         item.show = false;
       }
     }
-    if (count == 0 && _dropdownElement._itemList.isNotEmpty) {
+    if (count == 0 && _dropdownElement._dropdownItemList.isNotEmpty) {
       //  input.setCustomValidity("No matching options"); // TODO Trl
       _dropdownHeaderFind.classes.add(LForm.C_HAS_ERROR);
     } else {
@@ -228,7 +228,7 @@ class LObjectHomeFilterLookup {
       _dropdownHeaderFind.classes.remove(LForm.C_HAS_ERROR);
     }
     //doValidate();
-    _log.fine("lookupUpdateList '${restriction}' ${count} of ${_dropdownElement._itemList.length}");
+    _log.fine("lookupUpdateList '${restriction}' ${count} of ${_dropdownElement._dropdownItemList.length}");
   } // lookupUpdateList
 
 

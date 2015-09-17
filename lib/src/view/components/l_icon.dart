@@ -104,7 +104,7 @@ class LIcon {
   /// Set Link (Icon) Name and use reference
   void set linkName (String newValue) {
     _linkName = newValue;
-    _use.href.baseVal = "${HREF_PREFIX}${linkPrefix}${_linkName}";
+    _use.href.baseVal = "${prefix}${linkPrefix}${_linkName}";
   }
   /// Link name
   String _linkName;
@@ -119,6 +119,8 @@ class LIcon {
       }
     }
   }
+
+  String get prefix => HREF_PREFIX;
 
 } // LIcon
 

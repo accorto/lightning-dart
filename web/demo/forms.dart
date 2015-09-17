@@ -64,7 +64,7 @@ class Forms extends DemoFeature {
 
     LSelect sel = new LSelect("sel1")
       ..label = "Select Example"
-      ..listItems = generateListItems(5)
+      ..listItemList = generateListItems(5)
       ..readOnly = fieldReadOnly // demo toggle
       ..disabled = fieldDisabled // demo toggle
       ..required = fieldRequired; // demo toggle

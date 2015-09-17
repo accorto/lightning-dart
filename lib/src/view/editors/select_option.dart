@@ -15,7 +15,7 @@ class SelectOption {
   /**
    * Create List of Select Options From simple text list
    */
-  static List<SelectOption> createListFromText(List<String> textList) {
+  static List<SelectOption> createListFromText(Iterable<String> textList) {
     List<SelectOption> list = new List<SelectOption>();
     for (String text in textList) {
       DOption option = new DOption()
@@ -29,78 +29,73 @@ class SelectOption {
 
 
   /// The Option Source
-  final DOption option;
+  DOption option;
   /// Select Option
   OptionElement oe;
 
   /**
    * Select Option
+   * - selected is synced for [option] from [oe] when [selected] is read
    */
   SelectOption(DOption this.option) {
+    oe = OptionUtil.element(option);
   }
+
+  /**
+   * Select Option
+   */
+  SelectOption.fromElement(OptionElement this.oe) {
+    option = OptionUtil.optionFromElement(oe);
+  }
+
 
   /// Get Id
   String get id => option.id;
   /// Id
   void set id(String newValue) {
     option.id = newValue;
-    if (oe != null) {
-      oe.id = newValue;
-    }
+    oe.id = newValue;
   }
   /// Get Label
   String get label => option.label;
   /// Label
   void set label(String newValue) {
     option.label = newValue;
-    if (oe != null) {
-      oe.label = newValue;
-    }
+    oe.label = newValue;
   }
   /// Get Value
   String get value => option.value;
   /// Value
   void set value (String newValue) {
     option.value = newValue == null ? "" : newValue;
-    if (oe != null) {
-      oe.value = newValue;
-    }
+    oe.value = newValue;
   }
 
-
-  /// create Option Element
-  OptionElement asOptionElement() {
-    if (oe == null) {
-      oe = OptionUtil.element(option);
-    }
-    return oe;
-  }
+  /// Option Element
+  OptionElement asOptionElement() => oe;
 
   /// Show/Hide option
-  bool get show => oe == null || !oe.classes.contains(LVisibility.C_HIDE);
+  bool get show => !oe.classes.contains(LVisibility.C_HIDE);
   void set show (bool newValue) {
-    if (oe != null) {
-      if (newValue)
-        oe.classes.remove(LVisibility.C_HIDE);
-      else
-        oe.classes.add(LVisibility.C_HIDE);
-    }
+    if (newValue)
+      oe.classes.remove(LVisibility.C_HIDE);
+    else
+      oe.classes.add(LVisibility.C_HIDE);
   }
 
-  bool get selected => option.isSelected;
+  bool get selected {
+    option.isSelected = oe.selected;
+    return option.isSelected;
+  }
   void set selected (bool newValue) {
     option.isSelected = newValue;
-    if (oe != null) {
-      oe.selected = newValue;
-    }
+    oe.selected = newValue;
   } // selected
 
   bool get disabled => !option.isActive;
   void set disabled (bool newValue) {
     option.isActive = !newValue;
-    if (oe != null) {
-      oe.disabled = newValue;
-    }
+    oe.disabled = newValue;
   } // disabled
 
   String toString() => "SelectOption[${option.value}]";
