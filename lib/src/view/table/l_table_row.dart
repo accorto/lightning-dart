@@ -312,9 +312,9 @@ class LTableRow implements FormI {
     if (dataColumn != null) {
       DataType dt = dataColumn.tableColumn.dataType;
       if (DataTypeUtil.isCenterAligned(dt))
-        return LText.C_TEXT_CENTER;
+        return LTable.C_TEXT_CENTER;
       if (DataTypeUtil.isRightAligned(dt))
-        return LText.C_TEXT_RIGHT;
+        return LTable.C_TEXT_RIGHT;
     }
     return null;
   }

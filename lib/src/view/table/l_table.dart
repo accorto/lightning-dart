@@ -41,6 +41,9 @@ class LTable extends LComponent {
   static const String C_ROW_SELECT = "slds-row-select";
   static const String C_ROW_ACTION = "slds-row-action";
 
+  static const String C_TEXT_CENTER = "slds-text-center";
+  static const String C_TEXT_RIGHT = "slds-text-right";
+
 
   /// Table Edit Mode - Read Only
   static const String EDIT_RO = "ro";
