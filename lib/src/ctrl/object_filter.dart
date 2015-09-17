@@ -36,7 +36,7 @@ class ObjectFilter {
     // Saved Filter
     _form = new FormCtrl("savedQuery", uiSavedQuery(),
       element: new DivElement(), idPrefix:_ID);
-    _form.build();
+    _form.buildPanels();
     modal.large = true;
     modal.addFooterFormButtons(_form);
     _form.addResetButton().onClick.listen(onReset);

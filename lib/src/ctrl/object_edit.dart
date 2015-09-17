@@ -32,7 +32,7 @@ class ObjectEdit {
   ObjectEdit(UI this.ui) {
     form = new FormCtrl(ui.table.name, ui,
       element: new DivElement(), idPrefix:_ID);
-    form.build();
+    form.buildPanels();
     form.recordSaved = onFormRecordSaved;
     modal.addFooterFormButtons(form);
     // _form.addResetButton().onClick.listen(onReset);

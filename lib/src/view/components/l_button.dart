@@ -100,7 +100,7 @@ class LButton extends LComponent {
     } else if (element is InputElement) {
         (element as InputElement).name = name;
         (element as InputElement).value = label;
-    } else {
+    } else { // anchor
       element.attributes[Html0.DATA_NAME] = name;
     }
     element.id = LComponent.createId(idPrefix, name);
@@ -192,6 +192,10 @@ class LButton extends LComponent {
   /// Neutral Button with Icon
   LButton.neutralIcon(String name, String label, LIcon icon, {bool iconLeft: false, String idPrefix})
     : this(new ButtonElement(), name, label,
+        buttonClasses: [C_BUTTON__NEUTRAL], icon:icon, iconLeft:iconLeft, idPrefix:idPrefix);
+  /// Neutral Anchor
+  LButton.neutralAnchorIcon(String name, String label, LIcon icon, {String href, bool iconLeft: false, String idPrefix})
+    : this(new AnchorElement(href:(href == null ? "#" : href)), name, label,
         buttonClasses: [C_BUTTON__NEUTRAL], icon:icon, iconLeft:iconLeft, idPrefix:idPrefix);
 
   /// (Neutral) Icon Button with More

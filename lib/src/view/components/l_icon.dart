@@ -46,6 +46,67 @@ class LIcon {
       "/assets/icons/utility-sprite/svg/symbols.svg#"; // 3dots
 
 
+
+  /**
+   * Create Icon from [iconSpec] xx|yy|zz
+   * where xx is action|standard|utility|custom|doctype
+   * and yy is the name
+   * and zz is the optional color (overwritten if [color] is specified
+   */
+  static LIcon create(String iconSpec,
+      {String className: LIcon.C_ICON,
+      String size,
+      String color,
+      List<String> addlCss}) {
+    //
+    String linkName = null;
+    String linkPrefix = null;
+    //
+    if (iconSpec == null || iconSpec.isEmpty) {
+      linkName = LIconUtility.BUCKET;
+      linkPrefix = SPRITE_UTILITY;
+    } else {
+      List<String> parts = iconSpec.split("|");
+      if (parts.length > 1) {
+        String xx = parts[0];
+        linkName = parts[1];
+        if (color == null && parts.length > 2) {
+          color = parts[2];
+        }
+        if (xx == "utility") {
+          linkPrefix = SPRITE_UTILITY;
+        } else if (xx == "action") {
+          linkPrefix = SPRITE_ACTION;
+          if (color == null)
+            color = "${LIconAction.C_ICON_ACTION_}${linkName}";
+        } else if (xx == "standard") {
+          linkPrefix = SPRITE_STANDARD;
+          if (color == null)
+            color = "${LIconStandard.C_ICON_STANDARD_}${linkName}";
+        } else if (xx == "custom") {
+          linkPrefix = SPRITE_CUSTOM;
+          if (color == null)
+            color = "${LIconCustom.C_ICON_}${linkName}";
+        } else if (xx == "doctype") {
+          linkPrefix = SPRITE_DOCTYPE;
+        }
+      } else {
+        linkName = LIconUtility.BUILDER;
+        linkPrefix = SPRITE_UTILITY;
+      }
+    }
+
+    if (linkPrefix == null) {
+      linkName = LIconUtility.DASH;
+      linkPrefix = SPRITE_UTILITY;
+    }
+    if (linkPrefix == SPRITE_UTILITY && color == null) {
+      color = LIcon.C_ICON_TEXT_DEFAULT;
+    }
+    return new LIcon(linkName, linkPrefix, className, size, color, addlCss);
+  } // create
+
+
   /// SVG Element
   final svg.SvgSvgElement element = new svg.SvgSvgElement();
   /// Svg Use reference
