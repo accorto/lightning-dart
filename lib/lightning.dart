@@ -14,6 +14,14 @@
  *       // application code
  *     });
  *
+ * - or-
+ *
+ *    main() async {
+ *      await LightningDart.init(); // client env
+ *      PageSimple.create()
+ *        ..add(...content...);
+ *    }
+ *
  */
 library lightning_dart;
 

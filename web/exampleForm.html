@@ -56,8 +56,8 @@
         </div>
       </header>
       <article id="code" class="slds-box slds-box--x-small slds-m-top--x-small slds-scrollable--x" style="font-family: monospace; white-space: pre">
-LightningDart.init() // client env
-.then((_) {
+await LightningDart.init(); // client env
+
 // The Form
 LForm form = new LForm.stacked("mc-embedded-subscribe-form")
   ..addEditor(new LInput("FNAME", EditorI.TYPE_TEXT)
@@ -87,7 +87,7 @@ LCard card = new LCard("exCard")
 // The Page
 PageSimple page = PageSimple.create();
 page.add(card);
-});
+
       </article>
     </section>
   </div> <!-- grid -->

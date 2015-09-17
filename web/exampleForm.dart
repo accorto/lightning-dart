@@ -10,43 +10,41 @@ import "package:lightning/lightning.dart";
 /**
  * Stand alone Example Form
  */
-void main() {
+main() async {
 
-  LightningDart.init() // client env
-  .then((_) {
-    // The Form
-    LForm form = new LForm.stacked("mc-embedded-subscribe-form")
-      ..addEditor(new LInput("FNAME", EditorI.TYPE_TEXT)
-        ..label = "First Name"
-        ..placeholder = "Your First Name")
-      ..addEditor(new LInput("LNAME", EditorI.TYPE_TEXT)
-        ..label = "Last Name"
-        ..placeholder = "Your Last Name")
-      ..addEditor(new LInput("EMAIL", EditorI.TYPE_EMAIL)
-        ..label = "Email"
-        ..placeholder = "Your Email"
-        ..required = true)
-      ..addEditor(new LCheckbox("cool")
-        ..label = "Lightning Dart is Cool!")
-      ..addEditor(new LSelect("interest")
-        ..label = "Interest Area"
-        ..listText = ["Lightning Dart", "Accorto", "Time+Expense", "Gantt"])
-      ..addEditor(new LTextArea("comments")
-        ..label = "Comments")
-        ..addResetButton()
-        ..addSaveButton(label: "Subscribe", icon: new LIconUtility(LIconUtility.EMAIL));
-    form.showTrace(); // shows detail info
-    // The Card
-    LCard card = new LCard("exCard")
-      ..setHeader(new LIconAction(LIconAction.RECORD), "Sign up for Lightning Dart Updates")
-      ..addForm(form);
-    // The Page
-    PageSimple page = LightningDart.createPageSimple();
-    page.add(card);
+  await LightningDart.init(); // client env
+  // The Form
+  LForm form = new LForm.stacked("mc-embedded-subscribe-form")
+    ..addEditor(new LInput("FNAME", EditorI.TYPE_TEXT)
+      ..label = "First Name"
+      ..placeholder = "Your First Name")
+    ..addEditor(new LInput("LNAME", EditorI.TYPE_TEXT)
+      ..label = "Last Name"
+      ..placeholder = "Your Last Name")
+    ..addEditor(new LInput("EMAIL", EditorI.TYPE_EMAIL)
+      ..label = "Email"
+      ..placeholder = "Your Email"
+      ..required = true)
+    ..addEditor(new LCheckbox("cool")
+      ..label = "Lightning Dart is Cool!")
+    ..addEditor(new LSelect("interest")
+      ..label = "Interest Area"
+      ..listText = ["Lightning Dart", "Accorto", "Time+Expense", "Gantt"])
+    ..addEditor(new LTextArea("comments")
+      ..label = "Comments")
+      ..addResetButton()
+      ..addSaveButton(label: "Subscribe", icon: new LIconUtility(LIconUtility.EMAIL));
+  form.showTrace(); // shows detail info
+  // The Card
+  LCard card = new LCard("exCard")
+    ..setHeader(new LIconAction(LIconAction.RECORD), "Sign up for Lightning Dart Updates")
+    ..addForm(form);
+  // The Page
+  PageSimple page = LightningDart.createPageSimple();
+  page.add(card);
 
-    // MailChimp
-    form.method = "post";
-    form.action = "//accorto.us1.list-manage.com/subscribe/post?u=60bc6eb9647e94e9c50548ce7&amp;id=243863cca2";
-  });
+  // MailChimp
+  form.method = "post";
+  form.action = "//accorto.us1.list-manage.com/subscribe/post?u=60bc6eb9647e94e9c50548ce7&amp;id=243863cca2";
 
 } // main

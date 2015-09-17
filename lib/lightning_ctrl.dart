@@ -71,6 +71,14 @@ part 'src/ctrl/timezone.dart';
  *       // application code
  *     });
  *
+ * - or-
+ *
+ *    main() async {
+ *      await LightningCtrl.init(); // client env
+ *      PageSimple.create()
+ *        ..add(...content...);
+ *    }
+ *
  */
 class LightningCtrl {
 
