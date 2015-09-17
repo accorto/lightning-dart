@@ -4633,6 +4633,8 @@ a.slds-button--inverse:focus {
   -webkit-justify-content: center;
       -ms-flex-pack: center;
           justify-content: center; }
+.slds-select[size] {
+  height: inherit; }
 .grab {
   cursor: -moz-grab;
   cursor: url(https://www.google.com/intl/en_ALL/mapfiles/openhand.cur), move; }

@@ -80,9 +80,14 @@ class LSelect
     input.multiple = newValue;
   }
 
+  /// Size of Select
   int get size => input.size;
+  /// Size of Select
   void set size (int newValue) {
-    input.size = newValue;
+    if (newValue < 2)
+      input.attributes.remove("size"); // fix
+    else
+      input.size = newValue;
   }
 
   /// String Value
