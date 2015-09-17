@@ -40,10 +40,6 @@ class LText {
 
 
 
-
-
-
-
   static const String C_SECTION_GROUP__IS_OPEN = "section-group--is-open";
   static const String C_SECTION_GROUP__IS_CLOSED = "slds-section-group--is-closed";
 
@@ -51,9 +47,6 @@ class LText {
   static const String C_ASSISTIVE_TEXT = "slds-assistive-text";
   /// Truncate Text
   static const String C_TRUNCATE = "slds-truncate";
-
-  static const String C_TEXT_CENTER = "slds-text-center";
-  static const String C_TEXT_RIGHT = "slds-text-right";
 
   static const String C_TEXT_NOT_SELECTED = "slds-text-not-selected";
   static const String C_TEXT_SELECTED = "slds-text-selected";

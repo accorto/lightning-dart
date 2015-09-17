@@ -173,72 +173,72 @@ class LButton extends LComponent {
   } // rebuild
 
   /// Default Button
-  LButton.base(String name, String label)
-    : this(new ButtonElement(), name, label);
+  LButton.base(String name, String label, {String idPrefix})
+    : this(new ButtonElement(), name, label, idPrefix:idPrefix);
 
   /// Neutral Button
-  LButton.neutral(String name, String label)
+  LButton.neutral(String name, String label, {String idPrefix})
     : this(new ButtonElement(), name, label,
-        buttonClasses: [C_BUTTON__NEUTRAL]);
+        buttonClasses: [C_BUTTON__NEUTRAL], idPrefix:idPrefix);
   /// Neutral Anchor
-  LButton.neutralAnchor(String name, String label, {String href})
+  LButton.neutralAnchor(String name, String label, {String href, String idPrefix})
     : this(new AnchorElement(href:(href == null ? "#" : href)), name, label,
-        buttonClasses: [C_BUTTON__NEUTRAL]);
+        buttonClasses: [C_BUTTON__NEUTRAL], idPrefix:idPrefix);
   /// Neutral Input Button
-  LButton.neutralInput(String name, String label)
+  LButton.neutralInput(String name, String label, {String idPrefix})
     : this(new InputElement(type: "button"), name, label,
-        buttonClasses: [C_BUTTON__NEUTRAL]);
+        buttonClasses: [C_BUTTON__NEUTRAL], idPrefix:idPrefix);
 
   /// Neutral Button with Icon
-  LButton.neutralIcon(String name, String label, LIcon icon, {bool iconLeft: false})
+  LButton.neutralIcon(String name, String label, LIcon icon, {bool iconLeft: false, String idPrefix})
     : this(new ButtonElement(), name, label,
-        buttonClasses: [C_BUTTON__NEUTRAL], icon:icon, iconLeft:iconLeft);
+        buttonClasses: [C_BUTTON__NEUTRAL], icon:icon, iconLeft:iconLeft, idPrefix:idPrefix);
 
   /// (Neutral) Icon Button with More
-  LButton.more(String name, String label, LIcon icon, String assistiveText)
+  LButton.more(String name, String label, LIcon icon, String assistiveText, {String idPrefix})
     : this(new ButtonElement(), name, label,
-        buttonClasses: [C_BUTTON__ICON_MORE], icon:icon, assistiveText:assistiveText);
+        buttonClasses: [C_BUTTON__ICON_MORE], icon:icon, assistiveText:assistiveText, idPrefix:idPrefix);
 
   /// Brand Button
-  LButton.brand(String name, String label)
+  LButton.brand(String name, String label, {String idPrefix})
     : this(new ButtonElement(), name, label,
-        buttonClasses: [C_BUTTON__BRAND]);
+        buttonClasses: [C_BUTTON__BRAND], idPrefix:idPrefix);
   /// Neutral Button with Icon
-  LButton.brandIcon(String name, String label, LIcon icon, {bool iconLeft: false})
+  LButton.brandIcon(String name, String label, LIcon icon, {bool iconLeft: false, String idPrefix})
     : this(new ButtonElement(), name, label,
-        buttonClasses: [C_BUTTON__BRAND], icon:icon, iconLeft:iconLeft);
+        buttonClasses: [C_BUTTON__BRAND], icon:icon, iconLeft:iconLeft, idPrefix:idPrefix);
   /// Brand Button
-  LButton.brandAnchor(String name, String label, {String href})
+  LButton.brandAnchor(String name, String label, {String href, String idPrefix})
     : this(new AnchorElement(href: (href == null ? "#" : href)), name, label,
-        buttonClasses: [C_BUTTON__BRAND]);
+        buttonClasses: [C_BUTTON__BRAND], idPrefix:idPrefix);
 
   /// Inverse Button
-  LButton.inverse(String name, String label)
+  LButton.inverse(String name, String label, {String idPrefix})
     : this(new ButtonElement(), name, label,
-        buttonClasses: [C_BUTTON__INVERSE]);
+        buttonClasses: [C_BUTTON__INVERSE], idPrefix:idPrefix);
 
 
   /// Icon Only - bare
-  LButton.iconBare(String name, LIcon icon, String assistiveText)
+  LButton.iconBare(String name, LIcon icon, String assistiveText, {String idPrefix})
     : this(new ButtonElement(), name, null, icon:icon,
-        buttonClasses: [C_BUTTON__ICON_BARE], assistiveText:assistiveText);
+        buttonClasses: [C_BUTTON__ICON_BARE], assistiveText:assistiveText, idPrefix:idPrefix);
   /// Icon Only - container
-  LButton.iconContainer(String name, LIcon icon, String assistiveText)
+  LButton.iconContainer(String name, LIcon icon, String assistiveText, {String idPrefix})
     : this(new ButtonElement(), name, null, icon:icon,
-        buttonClasses: [C_BUTTON__ICON_CONTAINER], assistiveText:assistiveText);
+        buttonClasses: [C_BUTTON__ICON_CONTAINER], assistiveText:assistiveText, idPrefix:idPrefix);
   /// Icon Only - border
-  LButton.iconBorder(String name, LIcon icon, String assistiveText)
+  LButton.iconBorder(String name, LIcon icon, String assistiveText, {String idPrefix})
     : this(new ButtonElement(), name, null, icon:icon,
-        buttonClasses: [C_BUTTON__ICON_BORDER], assistiveText:assistiveText);
+        buttonClasses: [C_BUTTON__ICON_BORDER], assistiveText:assistiveText, idPrefix:idPrefix);
   /// Icon Only - border filled
-  LButton.iconBorderFilled(String name, LIcon icon, String assistiveText)
+  LButton.iconBorderFilled(String name, LIcon icon, String assistiveText, {String idPrefix})
     : this(new ButtonElement(), name, null, icon:icon,
-        buttonClasses: [C_BUTTON__ICON_BORDER_FILLED], assistiveText:assistiveText);
+        buttonClasses: [C_BUTTON__ICON_BORDER_FILLED], assistiveText:assistiveText, idPrefix:idPrefix);
 
   /// Icon Only - border filled
-  LButton.iconBorderFilledAnchor(String name, LIcon icon, String assistiveText, {String href})
+  LButton.iconBorderFilledAnchor(String name, LIcon icon, String assistiveText, {String href, String idPrefix})
     : this(new AnchorElement(href: (href == null ? "#" : href)), name, null, icon:icon,
-        buttonClasses: [C_BUTTON__ICON_BORDER_FILLED], assistiveText:assistiveText);
+        buttonClasses: [C_BUTTON__ICON_BORDER_FILLED], assistiveText:assistiveText, idPrefix:idPrefix);
 
 
   /// Button id
