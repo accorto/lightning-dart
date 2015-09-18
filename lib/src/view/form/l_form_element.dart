@@ -237,7 +237,7 @@ class LFormElement {
    *      div     .form-element__control
    *        input
    *
-   *  or --from--
+   *  or for cb --from--
    *    div       .from-element
    *      label   .checkbox
    *      input

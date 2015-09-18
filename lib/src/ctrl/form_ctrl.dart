@@ -16,6 +16,11 @@ part of lightning_ctrl;
  *          div     .form-element__control
  *            input .input
  *
+ *  Multi Column
+ *  - Z flow (not supported: N flow)
+ *  - stacked only
+ *  - wrap or not
+ *  - change no of column per panel
  *
  */
 class FormCtrl extends LForm {
@@ -47,10 +52,10 @@ class FormCtrl extends LForm {
         ..classes.add(LMargin.C_BOTTOM__SMALL);
       add(processGroup);
     }
-    //
+    // Panels as Field Sets
     for (UIPanel panel in ui.panelList) {
       bool closed = panel.type == UIPanelType.ICLOSED || panel.type == UIPanelType.HIDDEN;
-      LSectionTitle section = new LSectionTitle.h3(label:panel.name, open:!closed);
+      LSectionTitle section = new LSectionTitle.legend(label:panel.name, open:!closed);
       setSection(section);
       for (UIPanelColumn pc in panel.panelColumnList) {
         DataColumn dataColumn = DataColumn.fromUi(ui, pc.columnName, tableColumn:pc.column, panelColumn:pc);

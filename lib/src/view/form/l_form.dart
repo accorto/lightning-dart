@@ -135,8 +135,15 @@ class LForm extends LComponent implements FormI {
     } else {
       _sectionElement = new DivElement();
       _section.setSectionElement(_sectionElement);
-      element.append(_section.element);
-      element.append(_sectionElement);
+      if (_section.element is LegendElement) {
+        FieldSetElement fs = new FieldSetElement()
+          ..append(_section.element)
+          ..append(_sectionElement);
+        element.append(fs);
+      } else {
+        element.append(_section.element);
+        element.append(_sectionElement);
+      }
     }
   }
   LSectionTitle _section;

@@ -102,6 +102,8 @@ class LSectionTitle {
       : this(new DivElement(), open:open, label:label);
   LSectionTitle.h3({bool open: true, String label})
       : this(new HeadingElement.h3(), open:open, label:label);
+  LSectionTitle.legend({bool open: true, String label})
+      : this(new LegendElement(), open:open, label:label);
 
   /// The Label
   String get label => _labelText;
