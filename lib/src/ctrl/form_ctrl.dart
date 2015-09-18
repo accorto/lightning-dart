@@ -8,6 +8,15 @@ part of lightning_ctrl;
 
 /**
  * Form Util - create Form from UI
+ *
+ *    form          .form--stacked        .grid .wrap
+ *      div                               .col--padded .size-1-of-..
+ *        div       .form-element
+ *          label   .form-element__label
+ *          div     .form-element__control
+ *            input .input
+ *
+ *
  */
 class FormCtrl extends LForm {
 

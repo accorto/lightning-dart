@@ -34,9 +34,11 @@ class LFormElement {
 
   /**
    * Default Layout:
-   * label
-   * div control
-   * - input
+   *
+   *    div       .from-element
+   *      label   .form-element__label
+   *      div     .form-element__control
+   *        input
    */
   void createStandard(EditorI editor, {LIcon iconRight, LIcon iconLeft, bool withClearValue:false}) {
     this.editor = editor;
@@ -117,10 +119,12 @@ class LFormElement {
 
   /**
    * Checkbox Layout
-   * label .checkbox
-   * - input
-   * - span .faux
-   * - span .label
+   *
+   *    div       .from-element
+   *      label   .checkbox
+   *      input
+   *      span    .checkbox--faux
+   *      span    .form-element__label
    */
   void createCheckbox(EditorI editor) {
     this.editor = editor;
@@ -215,11 +219,45 @@ class LFormElement {
 
   /// Help Text
   String get help => _help;
+
+  /**
+   *  --from--
+   *    div       .from-element
+   *      label   .form-element__label  (_labelElement)
+   *      div     .form-element__control
+   *        input
+   *
+   *  --to--
+   *    div       .form-element
+   *      div     .form_element__label (_helpLabel)
+   *        div   (popup)
+   *          button
+   *          div .popover
+   *        label                     (_labelElement)
+   *      div     .form-element__control
+   *        input
+   *
+   *  or --from--
+   *    div       .from-element
+   *      label   .checkbox
+   *      input
+   *      span    .checkbox--faux
+   *      span    .form-element__label  (_labelSpan)
+   *      span    .form-element__help   (_hintSpan)
+   *  --to--
+   *    div       .form-element
+   *      label   .checkbox
+   *      input
+   *      span    .checkbox--faux
+   *      span    .form-element__label  (_labelSpan)
+   *      div   (popup)
+   *        button
+   *        div .popover
+   *      span    .form-element__help   (_hintSpan)
+   */
   void set help (String newValue) {
     _help = newValue;
-    if (_helpLabel == null && _help != null && _help.isNotEmpty) {
-      _helpLabel = new DivElement()
-        ..classes.addAll([LForm.C_FORM_ELEMENT__LABEL, LMargin.C_BOTTOM__X_SMALL]);
+    if (_helpTip == null && _help != null && _help.isNotEmpty) {
       LButton _helpButton = new LButton.iconBare("${editor.name}-hb",
         new LIconUtility(LIconUtility.INFO),
         "Help")
@@ -227,18 +265,25 @@ class LFormElement {
         ..typeButton = true;
       _helpTip = new LTooltip();
       _helpTip.showAbove(_helpButton); // shows button
-      _helpLabel.append(_helpTip.element);
-      // replace label
-      _labelElement.replaceWith(_helpLabel);
-      _labelElement.classes.clear();
-      _labelElement.classes.add(LGrid.C_ALIGN_MIDDLE);
-      _helpLabel.append(_labelElement); // add again
+
+      if (EditorI.isCheckbox(editor.type)) {
+        element.insertBefore(_helpTip.element, _hintSpan);
+      } else { // standard
+        DivElement _helpLabel = new DivElement()
+          ..classes.addAll([LForm.C_FORM_ELEMENT__LABEL, LMargin.C_BOTTOM__X_SMALL])
+          ..append(_helpTip.element);
+        // replace label
+        _labelElement.replaceWith(_helpLabel);
+        _labelElement.classes.clear();
+        _labelElement.classes.add(LGrid.C_ALIGN_MIDDLE);
+        _helpLabel.append(_labelElement);
+        // add again
+      }
     }
-    if (_helpLabel != null)
+    if (_helpTip != null)
       _helpTip.bodyText = _help;
   }
   String _help;
-  DivElement _helpLabel;
   LTooltip _helpTip;
 
 

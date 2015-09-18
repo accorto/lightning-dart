@@ -8,6 +8,16 @@ part of lightning_dart;
 
 /**
  * Compound Form
+ *
+ *    fieldset      .form--compound
+ *      legend      .form-element__label
+ *      div         .form-element__group
+ *        div       .form-element__row
+ *          label   .form-element__control  size-1-of-..
+ *            span  .form-element__helper
+ *            input .input
+ *          label   .form-element__control  size-1-of-..
+ *
  */
 class LFormCompound extends LComponent {
 
