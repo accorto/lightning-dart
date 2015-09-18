@@ -57,6 +57,7 @@ class LFormElement {
       _input.classes.add(LForm.C_SELECT);
 
     DivElement inputWrapper = null;
+    // right side (clear or icon)
     if (iconRight == null) {
       if (withClearValue) {
         iconRight = new LIconUtility(LIconUtility.CLEAR);
@@ -76,6 +77,7 @@ class LFormElement {
       iconRight.classes.addAll([LForm.C_INPUT__ICON, LIcon.C_ICON_TEXT_DEFAULT]);
       inputWrapper.append(iconRight.element);
     }
+    // left side
     if (iconLeft == null) {
       iconLeft = getIconLeft();
       if (iconLeft == null && withClearValue)
@@ -95,6 +97,16 @@ class LFormElement {
         iconRight.element.style.left = "inherit";
         iconLeft.element.style.right = "inherit";
       }
+    }
+    Element left = getLeftElement();
+    if (left != null) {
+      if (inputWrapper == null) {
+        inputWrapper = new DivElement();
+        _elementControl.append(inputWrapper);
+      }
+      inputWrapper.classes.add(LForm.C_INPUT_HAS_PREFIX);
+      inputWrapper.classes.add(LForm.C_INPUT_HAS_PREFIX__LEFT);
+      inputWrapper.append(left);
     }
     //
     if (inputWrapper == null)
@@ -286,7 +298,11 @@ class LFormElement {
     element.style.marginTop = ".5rem"; // from 1
   }
 
+  /// Right side Icon
   LIcon getIconRight() => null;
+  /// Left side Icon
   LIcon getIconLeft() => null;
+  /// Left Element
+  Element getLeftElement() => null;
 
 } // LFormElement

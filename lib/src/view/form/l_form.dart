@@ -71,6 +71,16 @@ class LForm extends LComponent implements FormI {
   static final List<String> FORMTYPES = [C_FORM__HORIZONTAL, C_FORM__STACKED, C_FORM__INLINE];
 
 
+  /// slds-input__icon - Hook for .slds-input-has-prefix
+  static const String C_INPUT__PREFIX = "slds-input__prefix";
+  /// slds-input-has-icon - Lets text input know how to position .slds-input__prefix
+  static const String C_INPUT_HAS_PREFIX = "slds-input-has-prefix";
+  /// slds-input-has-icon--left - Positions .slds-input__prefix to the left of the text input
+  static const String C_INPUT_HAS_PREFIX__LEFT = "slds-input-has-prefix--left";
+  /// slds-input-has-icon--right - Positions .slds-input__prefix to the right of the text input
+  static const String C_INPUT_HAS_PREFIX__RIGHT = "slds-input-has-prefix--right";
+
+
   static final Logger _log = new Logger("LForm");
 
   /// Form Element

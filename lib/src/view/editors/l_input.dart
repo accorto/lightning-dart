@@ -9,7 +9,8 @@ part of lightning_dart;
 /**
  * Input Editor
  */
-class LInput extends LEditor with LFormElement {
+class LInput
+    extends LEditor with LFormElement {
 
   /// Logger
   static final Logger _log = new Logger("LInput");

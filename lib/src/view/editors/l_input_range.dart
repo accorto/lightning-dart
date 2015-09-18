@@ -9,19 +9,31 @@ part of lightning_dart;
 /**
  * Range Editor - min/max/step
  */
-class LInputRange extends LInput {
+class LInputRange
+    extends LInput {
 
-  // TODO display value
-  final SpanElement _text = new SpanElement();
 
-  /// Search Input
+  /// Left Side Element
+  final SpanElement _text = new SpanElement()
+    ..classes.add(LForm.C_INPUT__PREFIX);
+
+  /// Range Input
   LInputRange(String name, {String idPrefix, bool inGrid:false, bool withClearValue:false})
     : super(name, EditorI.TYPE_RANGE, idPrefix:idPrefix, inGrid:inGrid, withClearValue:withClearValue);
 
-  /// Search Input
+  /// Range Input
   LInputRange.from(DataColumn dataColumn, {String idPrefix, bool inGrid:false, bool withClearValue:false})
     : super.from(dataColumn, EditorI.TYPE_RANGE, idPrefix:idPrefix, inGrid:inGrid, withClearValue:withClearValue);
 
+
+  /// initialize listeners
+  @override
+  void _initEditor() {
+    super._initEditor();
+  }
+
+  /// Left Side Element
+  Element getLeftElement() => _text;
 
   @override
   void set value (String newValue) {
