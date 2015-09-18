@@ -46,6 +46,19 @@ class LIcon {
       "/assets/icons/utility-sprite/svg/symbols.svg#"; // 3dots
 
 
+  /// Create Img vs. use
+  static bool createImg() {
+    if (_createImg == null) {
+      _createImg = !document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#BasicStructure", "1.1");
+      if (_createImg) {
+        window.alert("Browser not capable displaying SVG - images not displayed");
+      }
+    }
+    return _createImg;
+  }
+  static bool _createImg;
+
+
 
   /**
    * Create Icon from [iconSpec] xx|yy|zz
@@ -141,6 +154,9 @@ class LIcon {
     element.setAttributeNS(null, Html0.ARIA_HIDDEN, "true");
     element.append(_use);
     this.linkName = linkName;
+    //
+    if (createImg()) {
+    }
   } // LIcon
 
   /// Copy Icon
