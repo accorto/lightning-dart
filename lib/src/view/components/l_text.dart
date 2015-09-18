@@ -66,7 +66,10 @@ class LSectionTitle {
   /// The Element
   final Element element;
   /// Label element
-  final SpanElement _labelElement = new SpanElement();
+  final SpanElement _labelElement = new SpanElement()
+    ..classes.add(LMargin.C_LEFT__X_SMALL);
+  /// Element to show or hide
+  Element elementToShowHide;
 
   /**
    * element
@@ -74,9 +77,12 @@ class LSectionTitle {
    * -- icon
    * -- label
    */
-  LSectionTitle(Element this.element, {bool open: true, String label}) {
+  LSectionTitle(Element this.element, {bool open:true, String label, String margin: LMargin.C_VERTICAL__SMALL}) {
     // structure
     element.classes.add(LText.C_SECTION_TITLE);
+    if (margin != null && margin.isNotEmpty) {
+      element.classes.add(margin);
+    }
     AnchorElement a = new AnchorElement(href: "#");
     element.append(a);
     //
@@ -86,9 +92,16 @@ class LSectionTitle {
     //
     this.open = open;
     this.label = label;
+    //
+    element.onClick.listen((MouseEvent evt){
+      evt.preventDefault();
+      this.open = !_open; // toggle
+    });
   }
   LSectionTitle.div({bool open: true, String label})
       : this(new DivElement(), open:open, label:label);
+  LSectionTitle.h3({bool open: true, String label})
+      : this(new HeadingElement.h3(), open:open, label:label);
 
   /// The Label
   String get label => _labelText;
@@ -105,12 +118,22 @@ class LSectionTitle {
     if (_open) {
       element.classes.add(LText.C_SECTION_GROUP__IS_OPEN);
       element.classes.remove(LText.C_SECTION_GROUP__IS_CLOSED);
+      if (elementToShowHide != null)
+        elementToShowHide.classes.remove(LVisibility.C_HIDE);
     } else {
       element.classes.remove(LText.C_SECTION_GROUP__IS_OPEN);
       element.classes.add(LText.C_SECTION_GROUP__IS_CLOSED);
+      if (elementToShowHide != null)
+        elementToShowHide.classes.add(LVisibility.C_HIDE);
     }
   }
   bool _open;
+
+  /// set element
+  void setSectionElement(Element elementToShowHide) {
+    this.elementToShowHide = elementToShowHide;
+    open = _open; // apply
+  }
 
 
 } // LSectionTitle

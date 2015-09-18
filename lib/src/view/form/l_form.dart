@@ -117,11 +117,30 @@ class LForm extends LComponent implements FormI {
     element.id = newValue;
   }
 
-  /// Add Editor
+  /// Set Section
+  void setSection(LSectionTitle section) {
+    _section = section;
+    if (section == null) {
+      _sectionElement = null;
+    } else {
+      _sectionElement = new DivElement();
+      _section.setSectionElement(_sectionElement);
+      element.append(_section.element);
+      element.append(_sectionElement);
+    }
+  }
+  LSectionTitle _section;
+  DivElement _sectionElement;
+
+  /// Add Editor (to current section)
   void addEditor (LEditor editor) {
     editor.editorChange = data.onEditorChange;
     editorList.add(editor);
-    element.append(editor.element);
+    if (_sectionElement == null) {
+      element.append(editor.element);
+    } else {
+      _sectionElement.append(editor.element);
+    }
     editor.data = _data;
     editor.entry = _data.getEntry(editor.id, editor.name, true);
   }

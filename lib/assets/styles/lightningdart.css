@@ -4633,7 +4633,16 @@ a.slds-button--inverse:focus {
   -webkit-justify-content: center;
       -ms-flex-pack: center;
           justify-content: center; }
+.slds-section-title {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none; }
+  .slds-section-title a:focus {
+    outline: none;
+    box-shadow: none; }
 .slds-select[size] {
+  min-height: 2.125rem;
   height: inherit; }
 .grab {
   cursor: -moz-grab;

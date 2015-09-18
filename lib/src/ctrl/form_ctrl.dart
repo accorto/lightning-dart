@@ -12,7 +12,7 @@ part of lightning_ctrl;
 class FormCtrl extends LForm {
 
   static final Logger _log = new Logger("FormCtrl");
-  
+
   /// The UI
   final UI ui;
   /// Data Columns
@@ -32,8 +32,17 @@ class FormCtrl extends LForm {
 
 
   /// Build form panels
-  void buildPanels({bool addButtons:true}) {
+  void buildPanels({bool addButtons:true, bool addProcesses:true}) {
+    if (addProcesses && ui.processList.isNotEmpty) {
+      LButtonGroup processGroup = buildProcesses()
+        ..classes.add(LMargin.C_BOTTOM__SMALL);
+      add(processGroup);
+    }
+    //
     for (UIPanel panel in ui.panelList) {
+      bool closed = panel.type == UIPanelType.ICLOSED || panel.type == UIPanelType.HIDDEN;
+      LSectionTitle section = new LSectionTitle.h3(label:panel.name, open:!closed);
+      setSection(section);
       for (UIPanelColumn pc in panel.panelColumnList) {
         DataColumn dataColumn = DataColumn.fromUi(ui, pc.columnName, tableColumn:pc.column, panelColumn:pc);
         dataColumns.add(dataColumn);
