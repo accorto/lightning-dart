@@ -36,9 +36,10 @@ class UiUtil {
   }
 
   /// Add/Set Panel
-  UIPanel addPanel(String name) {
+  UIPanel addPanel(String name, {int columnCount:0}) {
     _panel = new UIPanel()
-      ..name = name == null ? "Default" : name;
+      ..name = name == null ? "Default" : name
+      ..panelColumnNumber = columnCount;
     ui.panelList.add(_panel);
     return _panel;
   }

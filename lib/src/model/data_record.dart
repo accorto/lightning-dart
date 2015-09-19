@@ -395,7 +395,7 @@ class DataRecord {
   /**
    * Get Column Entry by [id] columnId or column [name] (key) - [create] if not exists
    */
-  DEntry getEntry (String id, String name, bool create) {
+  DEntry getEntry (String id, String name, bool create, {String createDefault}) {
     for (DEntry entry in _record.entryList) {
       if ((id != null && id.isNotEmpty && entry.columnId == id)
           || (name != null && name.isNotEmpty && entry.columnName == name))
@@ -408,6 +408,8 @@ class DataRecord {
         dataEntry.columnId = id;
       if (name != null)
         dataEntry.columnName = name;
+      if (createDefault != null && createDefault.isNotEmpty)
+        dataEntry.value = createDefault;
       _record.entryList.add(dataEntry);
       return dataEntry;
     }

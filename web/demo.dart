@@ -25,6 +25,7 @@ part 'demo/cards.dart';
 part 'demo/datepickers.dart';
 part 'demo/dropdowns.dart';
 part 'demo/forms.dart';
+part 'demo/forms2.dart';
 part 'demo/forms_editor.dart';
 part 'demo/gridsystem.dart';
 part 'demo/icons.dart';
@@ -113,6 +114,7 @@ class DemoPage extends AppsPage {
     add(new Datepickers()..toc(toc));
     add(new Dropdowns()..toc(toc));
     add(new Forms()..toc(toc));
+    add(new Forms2()..toc(toc));
     add(new FormsEditor()..toc(toc));
     add(new GridSystem()..toc(toc));
     add(new Icons()..toc(toc));

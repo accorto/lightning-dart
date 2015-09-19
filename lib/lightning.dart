@@ -100,6 +100,7 @@ part 'src/view/editors/select_data_list.dart';
 part 'src/view/editors/select_option.dart';
 
 part 'src/view/form/form_i.dart';
+part 'src/view/form/form_section.dart';
 part 'src/view/form/l_form.dart';
 part 'src/view/form/l_form_compound.dart';
 part 'src/view/form/l_form_element.dart';

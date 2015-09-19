@@ -41,7 +41,6 @@ class FormCtrl extends LForm {
       String type: LForm.C_FORM__STACKED,
       String idPrefix})
     : super(element == null ? new FormElement() : element, name, type, idPrefix:idPrefix) {
-
   } // FormUtil
 
 
@@ -55,7 +54,7 @@ class FormCtrl extends LForm {
     // Panels as Field Sets
     for (UIPanel panel in ui.panelList) {
       bool closed = panel.type == UIPanelType.ICLOSED || panel.type == UIPanelType.HIDDEN;
-      LSectionTitle section = new LSectionTitle.legend(label:panel.name, open:!closed);
+      FormSection section = new FormSection(panel.panelColumnNumber, label:panel.name, open:!closed);
       setSection(section);
       for (UIPanelColumn pc in panel.panelColumnList) {
         DataColumn dataColumn = DataColumn.fromUi(ui, pc.columnName, tableColumn:pc.column, panelColumn:pc);
@@ -63,7 +62,7 @@ class FormCtrl extends LForm {
         if (dataColumn.isActivePanel) {
           LEditor editor = EditorUtil.createfromColumn(null, dataColumn, false,
             idPrefix: element.id, data:data);
-          addEditor(editor);
+          addEditor(editor, newRow:pc.isNewRow, width:pc.width, height:pc.height);
         }
       }
     }

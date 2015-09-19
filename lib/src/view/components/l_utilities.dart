@@ -57,6 +57,42 @@ class LSizing {
   static const String C_SIZE__10_OF_12 = "slds-size--10-of-12";
   static const String C_SIZE__11_OF_12 = "slds-size--11-of-12";
 
+  /// default
+  static const String C__SIZE__1_OF_ = "slds-size--1-of-";
+  /// 30rem / 480px
+  static const String C_SMALL_SIZE__1_OF_ = "slds-small-size--1-of-";
+  /// 48rem / 768px
+  static const String C_MEDIUM_SIZE__1_OF_ = "slds-medium-size--1-of-";
+  /// 64rem / 1024px
+  static const String C_LARGE_SIZE__1_OF_ = "slds-large-size--1-of-";
+
+
+  static String sizeXofY(int x, int y) {
+    return "slds-size--${x}-of-${y}";
+  }
+  static String sizeSmallXofY(int x, int y) {
+    return "slds-small-size--${x}-of-${y}";
+  }
+  static String sizeMediumXofY(int x, int y) {
+    return "slds-medium-size--${x}-of-${y}";
+  }
+  static String sizeLargeXofY(int x, int y) {
+    return "slds-medium-size--${x}-of-${y}";
+  }
+
+  static String size1ofY(int y) {
+    return "slds-size--1-of-${y}";
+  }
+  static String sizeSmall1ofY(int y) {
+    return "slds-small-size--1-of-${y}";
+  }
+  static String sizeMedium1ofY( int y) {
+    return "slds-medium-size--1-of-${y}";
+  }
+  static String sizeLarge1ofY(int y) {
+    return "slds-medium-size--y-of-${y}";
+  }
+
 } // LSizing
 
 

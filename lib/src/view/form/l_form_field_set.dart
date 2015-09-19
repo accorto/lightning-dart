@@ -105,7 +105,7 @@ class LFormFieldSetGroupRow {
   void addEditor(InputElement input, String label, {int width:1}) {
     LabelElement labelElement = new LabelElement()
       ..classes.add(LForm.C_FORM_ELEMENT__CONTROL)
-      ..classes.add("slds-size--${width}-of-${fieldCount}");
+      ..classes.add(LSizing.sizeMediumXofY(width, fieldCount));
     Element small = new Element.tag("small")
       ..classes.add(LForm.C_FORM_ELEMENT__HELPER)
       ..text = label;

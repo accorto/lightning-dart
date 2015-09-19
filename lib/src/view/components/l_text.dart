@@ -68,8 +68,9 @@ class LSectionTitle {
   /// Label element
   final SpanElement _labelElement = new SpanElement()
     ..classes.add(LMargin.C_LEFT__X_SMALL);
-  /// Element to show or hide
-  Element elementToShowHide;
+
+  /// Part of the Sections
+  List<Element> _sectionParts = new List<Element> ();
 
   /**
    * element
@@ -77,8 +78,13 @@ class LSectionTitle {
    * -- icon
    * -- label
    */
-  LSectionTitle(Element this.element, {bool open:true, String label, String margin: LMargin.C_VERTICAL__SMALL}) {
+  LSectionTitle(Element this.element, {bool open:true, String label,
+      String margin: LMargin.C_VERTICAL__SMALL,
+      Element sectionElement}) {
     // structure
+    _sectionElement = sectionElement == null ? new DivElement() : sectionElement;
+    _sectionParts.add(_sectionElement);
+    //
     element.classes.add(LText.C_SECTION_TITLE);
     if (margin != null && margin.isNotEmpty) {
       element.classes.add(margin);
@@ -99,11 +105,24 @@ class LSectionTitle {
     });
   }
   LSectionTitle.div({bool open: true, String label})
-      : this(new DivElement(), open:open, label:label);
+      : this(new DivElement(), open:open, label:label,
+          margin: LMargin.C_VERTICAL__SMALL);
   LSectionTitle.h3({bool open: true, String label})
-      : this(new HeadingElement.h3(), open:open, label:label);
+      : this(new HeadingElement.h3(), open:open, label:label,
+          margin: LMargin.C_VERTICAL__SMALL);
   LSectionTitle.legend({bool open: true, String label})
-      : this(new LegendElement(), open:open, label:label);
+      : this(new LegendElement(), open:open, label:label,
+          margin: LMargin.C_VERTICAL__SMALL);
+
+  /// Current Element to show or hide
+  Element get  sectionElement => _sectionElement;
+  Element _sectionElement;
+
+  /// add new Section Element Part
+  void addSectionElement(Element newElement) {
+    _sectionParts.add(newElement);
+    _sectionElement = newElement;
+  }
 
   /// The Label
   String get label => _labelText;
@@ -120,22 +139,15 @@ class LSectionTitle {
     if (_open) {
       element.classes.add(LText.C_SECTION_GROUP__IS_OPEN);
       element.classes.remove(LText.C_SECTION_GROUP__IS_CLOSED);
-      if (elementToShowHide != null)
-        elementToShowHide.classes.remove(LVisibility.C_HIDE);
+      for (Element part in _sectionParts)
+        part.classes.remove(LVisibility.C_HIDE);
     } else {
       element.classes.remove(LText.C_SECTION_GROUP__IS_OPEN);
       element.classes.add(LText.C_SECTION_GROUP__IS_CLOSED);
-      if (elementToShowHide != null)
-        elementToShowHide.classes.add(LVisibility.C_HIDE);
+      for (Element part in _sectionParts)
+        part.classes.add(LVisibility.C_HIDE);
     }
   }
   bool _open;
-
-  /// set element
-  void setSectionElement(Element elementToShowHide) {
-    this.elementToShowHide = elementToShowHide;
-    open = _open; // apply
-  }
-
 
 } // LSectionTitle

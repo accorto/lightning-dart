@@ -128,38 +128,38 @@ class LForm extends LComponent implements FormI {
   }
 
   /// Set Section
-  void setSection(LSectionTitle section) {
+  void setSection(FormSection section) {
     _section = section;
-    if (section == null) {
-      _sectionElement = null;
-    } else {
-      _sectionElement = new DivElement();
-      _section.setSectionElement(_sectionElement);
-      if (_section.element is LegendElement) {
-        FieldSetElement fs = new FieldSetElement()
-          ..append(_section.element)
-          ..append(_sectionElement);
-        element.append(fs);
-      } else {
-        element.append(_section.element);
-        element.append(_sectionElement);
-      }
+    if (section != null) {
+      FieldSetElement fs = new FieldSetElement()
+        ..append(_section.element)
+        ..append(_section.sectionElement);
+      element.append(fs);
     }
   }
-  LSectionTitle _section;
-  DivElement _sectionElement;
+  FormSection _section;
+
 
   /// Add Editor (to current section)
-  void addEditor (LEditor editor) {
+  void addEditor (LEditor editor, {bool newRow:false, int width:1, int height:1}) {
     editor.editorChange = data.onEditorChange;
     editorList.add(editor);
-    if (_sectionElement == null) {
+    if (_section == null) {
       element.append(editor.element);
     } else {
-      _sectionElement.append(editor.element);
+      _section.addEditor(editor, element, newRow, width, height);
     }
     editor.data = _data;
-    editor.entry = _data.getEntry(editor.id, editor.name, true);
+    editor.entry = _data.getEntry(editor.id, editor.name, true, createDefault:editor.value);
+  }
+
+  /// append element
+  void append(Element newValue) {
+    element.append(newValue);
+  }
+  /// add component
+  void add(LComponent component) {
+    element.append(component.element);
   }
 
   /// Get Action or null
@@ -244,7 +244,7 @@ class LForm extends LComponent implements FormI {
           label == null ? lFormReset() : label,
           new LIconUtility(LIconUtility.UNDO), iconLeft:true)
         ..typeReset = true;
-      element.append(_buttonReset.element);
+      add(_buttonReset);
       if (element is! FormElement) {
         _buttonReset.onClick.listen(onFormReset);
       }
@@ -265,7 +265,7 @@ class LForm extends LComponent implements FormI {
           label == null ? lFormSave() : label,
           theIcon, iconLeft:true)
          ..typeSubmit = true;
-      element.append(_buttonSave.element);
+      add(_buttonSave);
       if (element is! FormElement) {
         _buttonSave.onClick.listen(onFormSubmit);
       }

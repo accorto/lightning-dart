@@ -90,7 +90,7 @@ class LFormCompoundFieldSet extends LComponent {
     /*
     DivElement row = new DivElement()
       ..classes.add(LFormCompound.C_FORM_ELEMENT__ROW);
-    String size = "slds-size--1-of-${editors.length}";
+    String size = LSizing.size1OfY{editors.length);
     for (LEditor editor in editors) {
       LabelElement label = new LabelElement()
         ..classes.add(LForm.C_FORM_ELEMENT__CONTROL)
