@@ -26,8 +26,8 @@ A simple usage example:
 
     main() async {
       await LightningDart.init(); // client env
-      PageSimple.create()
-        // check example: http://lightningdart.com/exampleForm.html
+      // example: http://lightningdart.com/exampleForm.html
+      LightningDart.createPageSimple()
         ..add(...content...);
     }
     

@@ -11,6 +11,11 @@ part of lightning_ctrl;
  * - menu bar on left and
  * - header with
  * - content on right
+ *
+ *    // example: http://lightningdart.com/exampleWorkspace.html
+ *    // https://github.com/accorto/lightning-dart/blob/master/web/exampleWorkspace.dart
+ *    LightningCtrl.createAppsMain();
+ *
  */
 class AppsMain extends PageSimple {
 

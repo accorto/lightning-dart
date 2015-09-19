@@ -126,8 +126,19 @@ part 'src/view/utility/option_util.dart';
  *
  *     LightningDart.init()
  *     .then((_){
- *       // application code
+ *      LightningDart.createPageSimple()
+ *        ..add(...content...);
  *     });
+
+ * - or-
+ *
+ *    main() async {
+ *      await LightningDart.init(); // client env
+ *      // check example: http://lightningdart.com/exampleForm.html
+ *      LightningDart.createPageSimple()
+ *        ..add(...content...);
+ *    }
+ *
  */
 class LightningDart {
 

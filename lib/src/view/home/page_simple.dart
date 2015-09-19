@@ -8,6 +8,16 @@ part of lightning_dart;
 
 /**
  * Simple Page with Status Toast
+ *
+ * create directly -or-
+ *
+ *    // example: http://lightningdart.com/exampleForm.html
+ *    // https://github.com/accorto/lightning-dart/blob/master/web/exampleForm.dart
+ *    LightningDart.createPageSimple();
+ *
+ * -or-
+ *
+ *    LightningCtrl.createPageSimple();
  */
 class PageSimple extends LComponent {
 

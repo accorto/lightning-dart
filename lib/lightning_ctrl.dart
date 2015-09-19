@@ -75,9 +75,22 @@ part 'src/ctrl/timezone.dart';
  *
  *    main() async {
  *      await LightningCtrl.init(); // client env
- *      PageSimple.create()
- *        ..add(...content...);
+ *      // application code
  *    }
+ *
+ * To initialize a simple page (ho header, menu, ...)
+ *
+ *    // example: http://lightningdart.com/exampleForm.html
+ *    // https://github.com/accorto/lightning-dart/blob/master/web/exampleForm.dart
+ *    LightningCtrl.createPageSimple()
+ *      ..add(...content...);
+ *
+ * or
+ *
+ *    // example: http://lightningdart.com/exampleWorkspace.html
+ *    // https://github.com/accorto/lightning-dart/blob/master/web/exampleWorkspace.dart
+ *    LightningCtrl.createAppsMain();
+ *
  *
  */
 class LightningCtrl {
