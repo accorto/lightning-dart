@@ -12,11 +12,6 @@ part of lightning_model;
 typedef void RecordChange(DRecord record, DEntry columnChanged, int rowNo);
 
 /**
- * Callback for automatically submitting forms
- */
-//typedef void AutoSubmit(String name, String value);
-
-/**
  * Data Record - DRecord functionality
  * Manages the Record value/context
  */
@@ -178,8 +173,6 @@ class DataRecord {
   int rowNo = 0;
   /// callback to data owner
   RecordChange onRecordChange;
-  /// AutoSubmit
-  //AutoSubmit onAutoSubmit;
 
   /**
    * Data Record with [value] and optional [onRecordChange] callback to data list
@@ -592,10 +585,6 @@ class DataRecord {
       }
       onRecordChange(_record, entry, rowNo); // data list
     }
-    // if (!temporary && onAutoSubmit != null) {
-    //  onAutoSubmit(editor.name, newValue);
-    //}
-
   } // onEditorChanged
 
   /// Table for Record ... or null
