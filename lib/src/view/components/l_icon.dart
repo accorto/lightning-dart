@@ -10,9 +10,34 @@ part of lightning_dart;
  * Component Icon
  * https://www.getslds.com/components/icons
  * https://www.getslds.com/resources/icons
+ *
+ *  Icons
+ *
+ *      all sprites
+ *        <symbol id="xx" viewBox="0 0 24 24">
+ *
+ *      action
+ *        <svg xmlns="http://www.w3.org/2000/svg" width="52" height="52" viewBox="0 0 52 52">
+ *          <g fill="#fff">
+ *
+ *      custom
+ *        <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
+ *          <g fill="#fff">
+ *
+ *      doctype
+ *        <svg xmlns="http://www.w3.org/2000/svg" width="56" height="64" viewBox="0 0 56 64">
+ *          // includes fill !
+ *
+ *      standard (with 20 px margin)
+ *        <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
+ *          <g fill="#fff">
+ *
+ *      utility
+ *        <svg xmlns="http://www.w3.org/2000/svg" width="52" height="52" viewBox="0 0 52 52">
+ *          <path fill="#fff"
+ *
  */
 class LIcon {
-
 
   /// slds-icon - Defines an svg as an icon | Required
   static const String C_ICON = "slds-icon";
