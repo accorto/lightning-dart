@@ -7,6 +7,17 @@
 part of lightning_dart;
 
 /**
+ * Form Submitted [valid] form validated
+ * return true if continue
+ */
+typedef bool FormSubmitted (bool valid);
+
+/**
+ * Form Reset (info)
+ */
+typedef void FormResetted ();
+
+/**
  * Form with FormElements
  */
 class LForm extends LComponent implements FormI {
@@ -80,7 +91,6 @@ class LForm extends LComponent implements FormI {
   /// slds-input-has-icon--right - Positions .slds-input__prefix to the right of the text input
   static const String C_INPUT_HAS_PREFIX__RIGHT = "slds-input-has-prefix--right";
 
-
   static final Logger _log = new Logger("LForm");
 
   /// Form Element
@@ -98,6 +108,10 @@ class LForm extends LComponent implements FormI {
   RecordSaved recordSaved;
   /// Callback when delete
   RecordDeleted recordDeleted;
+  /// Callback when Form submitted
+  FormSubmitted formSubmitted;
+  /// Callback when Form reset
+  FormResetted formResetted;
 
   /**
    * Form - type = C_FORM__HORIZONTAL, C_FORM__STACKED, C_FORM__INLINE
@@ -151,6 +165,19 @@ class LForm extends LComponent implements FormI {
     }
     editor.data = _data;
     editor.entry = _data.getEntry(editor.id, editor.name, true, createDefault:editor.value);
+  }
+
+  /**
+   * Add AutoSubmit (on ENTER) - returns true if found
+   */
+  bool addAutoSubmit(String editorName) {
+    for (LEditor ed in editorList) {
+      if (ed.name == editorName) {
+        ed.autoSubmit = onFormSubmit;
+        return true;
+      }
+    }
+    return false;
   }
 
   /// append element
@@ -237,23 +264,21 @@ class LForm extends LComponent implements FormI {
   } // onRecordChange
 
 
-  /// Add Reset Button
+  /// Add Reset Button - use [formResetted] to listen to reset events
   LButton addResetButton({String label}) {
     if (_buttonReset == null) {
       _buttonReset = new LButton.neutralIcon("reset",
           label == null ? lFormReset() : label,
           new LIconUtility(LIconUtility.UNDO), iconLeft:true)
-        ..typeReset = true;
+        ..typeReset = false; // channel explicitly through onFormReset
       add(_buttonReset);
-      if (element is! FormElement) {
-        _buttonReset.onClick.listen(onFormReset);
-      }
+      _buttonReset.onClick.listen(onFormReset);
     }
     return _buttonReset;
   }
   LButton _buttonReset;
 
-  /// Add Save Button
+  /// Add Save Button - use [formSubmitted] to listen to submit events
   LButton addSaveButton({String label, String name:"save", LIcon icon}) {
     if (_buttonSave == null) {
       LIcon theIcon = icon;
@@ -264,11 +289,9 @@ class LForm extends LComponent implements FormI {
       _buttonSave = new LButton.brandIcon(name,
           label == null ? lFormSave() : label,
           theIcon, iconLeft:true)
-         ..typeSubmit = true;
+         ..typeSubmit = false; // channel explicitly through onFormSubmit
       add(_buttonSave);
-      if (element is! FormElement) {
-        _buttonSave.onClick.listen(onFormSubmit);
-      }
+      _buttonSave.onClick.listen(onFormSubmit);
     }
     _buttonSave.disabled = !_data.changed;
     return _buttonSave;
@@ -292,24 +315,34 @@ class LForm extends LComponent implements FormI {
     //_log.info("onFormReset");
     evt.preventDefault(); // resets to default
     data.resetRecord(); // resets to original/default
+    if (formResetted != null)
+      formResetted();
     display();
     _debug("reset:");
   }
 
   /// On Form Submit
   void onFormSubmit(Event evt) {
+    evt.preventDefault(); // might be form or button event
     //_log.info("onFormSubmit - ${record}");
     bool valid = doValidate();
+    if (formSubmitted != null)
+      valid = formSubmitted(valid);
+    //
     _debug("submit valid=${valid}:");
-    String a = action;
-    if (!valid || a == null || a.isEmpty) {
-      evt.preventDefault();
-    }
     if (recordSaved != null) {
       String error = recordSaved(record);
       if (error != null) {
-
+        _debug("submit error=${error}:");
+        valid = false;
       }
+    }
+
+    // Submit form if there is an action
+    if (valid && element is FormElement) {
+      FormElement ff = element as FormElement;
+      if (ff.action.isNotEmpty)
+        ff.submit();
     }
   } // onFormSubmit
 

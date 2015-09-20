@@ -14,7 +14,7 @@ typedef void RecordChange(DRecord record, DEntry columnChanged, int rowNo);
 /**
  * Callback for automatically submitting forms
  */
-typedef void AutoSubmit(String name, String value);
+//typedef void AutoSubmit(String name, String value);
 
 /**
  * Data Record - DRecord functionality

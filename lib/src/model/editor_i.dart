@@ -13,6 +13,11 @@ part of lightning_model;
 typedef void EditorChange(String name, String newValue, DEntry entry, var details);
 
 /**
+ * Submit Form (called from Editor)
+ */
+typedef void FormSubmit (Event evt);
+
+/**
  * Editor Interface
  */
 abstract class EditorI {
@@ -302,7 +307,7 @@ abstract class EditorI {
   DataColumn get dataColumn => _dataColumn;
   DataColumn _dataColumn;
   /// Automatically submit on enter
-  bool autoSubmit = false;
+  FormSubmit autoSubmit;
 
   /// Editor has columns it is dependent on
   bool get hasDependentOn => _dependentOnList != null;
@@ -478,8 +483,10 @@ abstract class EditorI {
       onInputChange(evt);
       value = newValue == null ? "" : newValue;
     } else if (kc == KeyCode.ENTER) {
-      _log.config("onInputKeyPress ${name}=${value} - autoSubmit=${autoSubmit}");
-      if (!autoSubmit) {
+      _log.config("onInputKeyPress ${name}=${value} - autoSubmit=${autoSubmit != null}");
+      if (autoSubmit != null) {
+        autoSubmit(evt);
+      } else {
         evt.preventDefault();
         // TODO move focus to next
       }
