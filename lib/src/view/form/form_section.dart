@@ -14,7 +14,8 @@ part of lightning_dart;
  *
  * A new row adds a new section element.
  */
-class FormSection extends LSectionTitle {
+class FormSection
+    extends LSectionTitle {
 
   /// Section column Count
   final int columnCount;

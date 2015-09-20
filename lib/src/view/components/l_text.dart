@@ -132,6 +132,17 @@ class LSectionTitle {
   }
   String _labelText;
 
+  bool get showLabel => element.classes.contains(LVisibility.C_HIDE);
+  void set showLabel (bool newValue) {
+    if (newValue) {
+      element.classes.remove(LVisibility.C_HIDE);
+    } else {
+      element.classes.add(LVisibility.C_HIDE);
+      open = true; // show main
+    }
+  }
+
+
   /// State
   bool get open => _open;
   void set open (bool newValue) {
