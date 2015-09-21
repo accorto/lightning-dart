@@ -20,7 +20,8 @@ typedef void FormResetted ();
 /**
  * Form with FormElements
  */
-class LForm extends LComponent implements FormI {
+class LForm
+    extends LComponent implements FormI {
 
   /// slds-form-element - Initializes form element | Required
   static const String C_FORM_ELEMENT = "slds-form-element";
@@ -104,14 +105,16 @@ class LForm extends LComponent implements FormI {
   /// List of Editors
   final List<LEditor> editorList = new List<LEditor>();
 
-  /// Record Saved
+  /// Calback when Record saved
   RecordSaved recordSaved;
-  /// Callback when delete
+  /// Callback when Record deleted
   RecordDeleted recordDeleted;
-  /// Callback when Form submitted
+  /// Callback when Form submitted - allows to prevent submitting form
   FormSubmitted formSubmitted;
-  /// Callback when Form reset
+  /// Callback after Form reset
   FormResetted formResetted;
+  /// Callback after record was changed in Form (info only)
+  RecordChange formRecordChange;
 
   /**
    * Form - type = C_FORM__HORIZONTAL, C_FORM__STACKED, C_FORM__INLINE
@@ -230,7 +233,7 @@ class LForm extends LComponent implements FormI {
 
   /// Display Data in Editors
   void display() {
-    if (_buttonSave != null) {
+    if (_buttonSave != null && _buttonSaveChangeOnly) {
       _buttonSave.disabled = !data.changed;
     }
     for (LEditor editor in editorList) {
@@ -244,7 +247,7 @@ class LForm extends LComponent implements FormI {
     bool changed = _data.checkChanged();
     String name = columnChanged == null ? "-" : columnChanged.columnName;
     _log.config("onRecordChange - ${name} - changed=${changed}");
-    if (_buttonSave != null) {
+    if (_buttonSave != null && _buttonSaveChangeOnly) {
       _buttonSave.disabled = !changed;
     }
     String info = "change ";
@@ -261,6 +264,9 @@ class LForm extends LComponent implements FormI {
     }
     info += name + ":";
     _debug(info);
+    if (formRecordChange != null) {
+      formRecordChange(record, columnChanged, rowNo);
+    }
   } // onRecordChange
 
 
@@ -279,7 +285,7 @@ class LForm extends LComponent implements FormI {
   LButton _buttonReset;
 
   /// Add Save Button - use [formSubmitted] to listen to submit events
-  LButton addSaveButton({String label, String name:"save", LIcon icon}) {
+  LButton addSaveButton({String label, String name:"save", LIcon icon, bool buttonSaveChangeOnly:true}) {
     if (_buttonSave == null) {
       LIcon theIcon = icon;
       if (theIcon == null)
@@ -292,12 +298,18 @@ class LForm extends LComponent implements FormI {
          ..typeSubmit = false; // channel explicitly through onFormSubmit
       add(_buttonSave);
       _buttonSave.onClick.listen(onFormSubmit);
+      _buttonSaveChangeOnly = buttonSaveChangeOnly;
     }
-    _buttonSave.disabled = !_data.changed;
+    //
+    if (_buttonSaveChangeOnly) {
+      _buttonSave.disabled = !_data.changed;
+    } else {
+      _buttonSave.disabled = false;
+    }
     return _buttonSave;
   }
   LButton _buttonSave;
-
+  bool _buttonSaveChangeOnly = true;
 
   /// Small Editor/Label
   void set small (bool newValue) {
