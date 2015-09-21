@@ -4,11 +4,24 @@
  * License options+support:  https://www.lightningdart.com
  */
 
-library lightning_dart.test;
+/**
+ * Testing Lightning Dart.
+ *
+ */
+library lightning.test;
 
-//import 'package:lightning_dart/lightning_dart.dart';
+@TestOn("dartium")
+
 import 'package:test/test.dart';
+import 'package:lightning/lightning.dart';
 
+
+/**
+ * Execute test:
+ * - pub global run test_runner
+ * - run_tests
+ *
+ */
 void main() {
   group('A group of tests', () {
     Object awesome;

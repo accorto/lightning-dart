@@ -4,3 +4,9 @@ dart:
   - dev
   - stable
 
+
+# https://pub.dartlang.org/packages/test_runner
+# pub global activate test_runner
+
+# pub global run test_runner --disable-ansi --skip-browser-tests
+# or run_tests

@@ -1,6 +1,6 @@
 # Lightning Dart
 
-[![Build Status](https://travis-ci.org/accorto/lightning-dart?branch=master)](https://travis-ci.org/accorto/lightning-dart)
+[![Build Status](https://travis-ci.org/accorto/lightning-dart.svg?branch=master)](https://travis-ci.org/accorto/lightning-dart)
 [![pub package](https://img.shields.io/pub/v/lightning.svg)](https://pub.dartlang.org/packages/lightning)
 
 
