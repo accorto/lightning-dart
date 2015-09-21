@@ -1,5 +1,9 @@
 # Lightning Dart
 
+[![Build Status](https://travis-ci.org/accorto/lightning-dart?branch=master)](https://travis-ci.org/accorto/lightning-dart)
+[![pub package](https://img.shields.io/pub/v/lightning.svg)](https://pub.dartlang.org/packages/lightning)
+
+
 Lightning Dart is a library for developing web applications based on the css framework
 [http://www.lightningDesignSystem.com](http://www.lightningdesignsystem.com "SLDS"). SLDS provides scss/css, icons and fonts, but no functionality.
 

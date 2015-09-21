@@ -1,6 +1,7 @@
 # Changelog
 
-Version numbers are based on the Salesforce Lightning css Framework version numbers
+Version numbers are based on the Salesforce Lightning css Framework version numbers. 
+Patches, Functionality improvements via +x prefix.
 
 ## trunk
 
