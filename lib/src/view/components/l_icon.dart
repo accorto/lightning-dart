@@ -141,7 +141,7 @@ class LIcon {
     if (linkPrefix == SPRITE_UTILITY && color == null) {
       color = LIcon.C_ICON_TEXT_DEFAULT;
     }
-    return new LIcon(linkName, linkPrefix, className, size, color, addlCss);
+    return new LIcon(linkName, linkPrefix, className, size, color, addlCss, HREF_PREFIX);
   } // create
 
 
@@ -151,6 +151,8 @@ class LIcon {
   final svg.UseElement _use = new svg.UseElement();
   /// Link Prefix
   final String linkPrefix;
+  /// Package Prefix
+  String packagePrefix;
 
   /**
    * svg
@@ -162,7 +164,8 @@ class LIcon {
    * [color] optional C_ICON_TEXT_DEFAULT/WARNING
    */
   LIcon(String linkName, String this.linkPrefix,
-        String className, String size, String color, List<String> addlCss) {
+        String className, String size, String color,
+        List<String> addlCss, String this.packagePrefix) {
     // css classes
     if (className != null && className.isNotEmpty) {
       element.classes.add(className);
@@ -187,7 +190,7 @@ class LIcon {
   /// Copy Icon
   LIcon copy() {
     return new LIcon(linkName, linkPrefix, null, null, null,
-        new List<String>.from(element.classes));
+        new List<String>.from(element.classes), packagePrefix);
   }
 
   /// svg element classes
@@ -206,7 +209,7 @@ class LIcon {
   /// Set Link (Icon) Name and use reference
   void set linkName (String newValue) {
     _linkName = newValue;
-    _use.href.baseVal = "${prefix}${linkPrefix}${_linkName}";
+    _use.href.baseVal = "${packagePrefix}${linkPrefix}${_linkName}";
   }
   /// Link name
   String _linkName;
@@ -221,8 +224,6 @@ class LIcon {
       }
     }
   }
-
-  String get prefix => HREF_PREFIX;
 
 } // LIcon
 
@@ -489,7 +490,8 @@ class LIconAction extends LIcon {
   LIconAction(String name, {String className: LIcon.C_ICON, String size,
         String colorOverride, List<String> addlCss})
     : super(name, LIcon.SPRITE_ACTION, className, size,
-        colorOverride == null ? "${C_ICON_ACTION_}${name}" : colorOverride, addlCss);
+        colorOverride == null ? "${C_ICON_ACTION_}${name}" : colorOverride,
+        addlCss, LIcon.HREF_PREFIX);
 
 
 } // LIconAction
@@ -598,7 +600,8 @@ class LIconStandard extends LIcon {
   LIconStandard(String linkName, {String className: LIcon.C_ICON, String size,
       String colorOverride, List<String> addlCss})
     : super(linkName, LIcon.SPRITE_STANDARD, size, className,
-        colorOverride == null ? "${C_ICON_STANDARD_}${linkName}" : colorOverride, addlCss);
+        colorOverride == null ? "${C_ICON_STANDARD_}${linkName}" : colorOverride,
+        addlCss, LIcon.HREF_PREFIX);
 
 } // LIconStandard
 
@@ -781,7 +784,8 @@ class LIconUtility extends LIcon {
    */
   LIconUtility(String linkName, {String className:LIcon.C_ICON, String size,
       String color, List<String> addlCss})
-    : super(linkName, LIcon.SPRITE_UTILITY, className, size, color, addlCss);
+    : super(linkName, LIcon.SPRITE_UTILITY, className, size, color,
+        addlCss, LIcon.HREF_PREFIX);
 
 
 } // LIconUtility
@@ -906,7 +910,8 @@ class LIconCustom extends LIcon {
   LIconCustom(String colorName, {String className: LIcon.C_ICON, String size,
       String colorOverride, List<String> addlCss})
     : super(colorName.replaceAll("-", ""), LIcon.SPRITE_CUSTOM, className, size,
-        colorOverride == null ? "${C_ICON_}${colorName}" : colorOverride, addlCss);
+        colorOverride == null ? "${C_ICON_}${colorName}" : colorOverride,
+        addlCss, LIcon.HREF_PREFIX);
 
 } // LIconCustom
 
@@ -956,6 +961,6 @@ class LIconDoctype extends LIcon {
   LIconDoctype(String name, {String className: LIcon.C_ICON, String size,
       String colorOverride, List<String> addlCss})
     : super(name, LIcon.SPRITE_DOCTYPE, className, size,
-      colorOverride, addlCss);
+        colorOverride, addlCss, LIcon.HREF_PREFIX);
 
 }
