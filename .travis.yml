@@ -1,8 +1,11 @@
 language: dart
 dart:
   - stable
+with_content_shell: true
 
 sudo: false
+
+# https://github.com/travis-ci/travis-build/blob/master/lib/travis/build/script/dart.rb
 
 # https://pub.dartlang.org/packages/test_runner
 # pub global activate test_runner
@@ -23,6 +26,7 @@ cache:
     - node_modules
 
 before_install:
+  - pub global activate test_runner
   - pub global activate dart_coveralls
   - export CHROME_CANARY_BIN=`./tool/get_chrome_canary.sh`
   - export DISPLAY=:99.0
