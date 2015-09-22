@@ -1,11 +1,29 @@
 language: dart
-
 dart:
   - stable
 
+sudo: false
 
 # https://pub.dartlang.org/packages/test_runner
 # pub global activate test_runner
 
 # pub global run test_runner --disable-ansi --skip-browser-tests
 # or run_tests
+
+script: ./tool/travis.sh
+
+branches:
+  only:
+    - master
+
+cache:
+  directories:
+    - $HOME/.pub-cache
+    - $HOME/.chrome/canary
+    - node_modules
+
+before_install:
+  - pub global activate dart_coveralls
+  - export CHROME_CANARY_BIN=`./tool/get_chrome_canary.sh`
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
