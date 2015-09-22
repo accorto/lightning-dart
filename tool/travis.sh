@@ -14,8 +14,8 @@ dartanalyzer --fatal-warnings \
 # Run the tests.
 echo "Running tests..."
 #pub run test
-# pub global activate test_runner
-pub global run test_runner
+pub global run test_runner --verbose --disable-ansi --skip-browser-tests
+xvfb-run -s '-screen 0 1024x768x24' pub global run test_runner --verbose --disable-ansi
 
 
 # Install dart_coveralls; gather and send coverage data.
