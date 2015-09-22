@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/accorto/lightning-dart.png?label=ready&title=Ready)](https://waffle.io/accorto/lightning-dart)
 # Lightning Dart
 
 [![Build Status](https://travis-ci.org/accorto/lightning-dart.svg?branch=master)](https://travis-ci.org/accorto/lightning-dart)
