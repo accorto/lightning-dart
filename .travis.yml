@@ -3,7 +3,7 @@ dart:
   - stable
 with_content_shell: true
 
-sudo: false
+# sudo: false
 
 # https://github.com/travis-ci/travis-build/blob/master/lib/travis/build/script/dart.rb
 
