@@ -13,6 +13,7 @@ dartanalyzer --fatal-warnings \
 # Run the tests.
 echo "Running tests..."
 #pub run test
+pub global activate test_runner
 pub global run test_runner
 
 # Install dart_coveralls; gather and send coverage data.
