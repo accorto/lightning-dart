@@ -12,7 +12,8 @@ dartanalyzer --fatal-warnings \
 
 # Run the tests.
 echo "Running tests..."
-pub run test
+#pub run test
+pub global run test_runner
 
 # Install dart_coveralls; gather and send coverage data.
 if [ "$COVERALLS_TOKEN" ] && [ "$TRAVIS_DART_VERSION" = "stable" ]; then
