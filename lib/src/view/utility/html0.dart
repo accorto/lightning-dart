@@ -112,6 +112,8 @@ class Html0 {
   /// Disabled attribute
   static const String DISABLED = "disabled";
 
+  /// Data Attribute - Data Column ID
+  static const String DATA_ID = "data-id";
   /// Data Attribute - Data Column Name
   static const String DATA_NAME = "data-name";
   /// Data Attribute - Data Column Label
