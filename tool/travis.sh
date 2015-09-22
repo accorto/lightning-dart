@@ -28,5 +28,5 @@ if [ "$COVERALLS_TOKEN" ] && [ "$TRAVIS_DART_VERSION" = "stable" ]; then
     --retry 2 \
     --exclude-test-files \
     --debug \
-    test/lightning_all.dart
+    test/lightning_test.dart
 fi
