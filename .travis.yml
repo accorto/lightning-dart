@@ -1,7 +1,7 @@
 language: dart
 dart:
   - stable
-# with_content_shell: true
+with_content_shell: true
 
 # sudo: false
 

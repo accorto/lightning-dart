@@ -13,20 +13,19 @@ dartanalyzer --fatal-warnings \
 
 # Run the tests.
 
-echo "Running tests ... no_content_shell:"
-pub global run test_runner --verbose --disable-ansi --skip-browser-tests
+#echo "Running tests ... no_content_shell:"
+#pub global run test_runner --verbose --disable-ansi --skip-browser-tests
 
-#echo "Running tests ... with_content_shell:"
+# https://github.com/google/test_runner.dart
+echo "Running tests ... with_content_shell:"
 #xvfb-run -s '-screen 0 1024x768x24' pub global run test_runner --verbose --disable-ansi
+pub run test -p content-shell
 
 
+# https://github.com/duse-io/dart-coveralls
 # Install dart_coveralls; gather and send coverage data.
 if [ "$COVERALLS_TOKEN" ] && [ "$TRAVIS_DART_VERSION" = "stable" ]; then
   echo "Running coverage..."
 # pub global activate dart_coveralls
-  pub global run dart_coveralls report \
-    --retry 2 \
-    --exclude-test-files \
-    --debug \
-    test/lightning_test.dart
+  pub global run report --retry 2 --exclude-test-files --debug test/lightning_test.dart
 fi
