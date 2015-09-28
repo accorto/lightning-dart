@@ -20,6 +20,11 @@ class DurationUtil {
     if (inputText == null || inputText.isEmpty) {
       return null;
     }
+    // xml
+    if (inputText.contains("P")) {
+      return new DurationUtil.xml(inputText);
+    }
+
     int years = 0;
     int months = 0;
     int days = 0;
@@ -151,7 +156,8 @@ class DurationUtil {
         }
       }
     }
-    catch (error) {
+    catch (error, stackTrace) {
+    //_log.warning("parse ${inputText}", error, stackTrace);
       return null; // parse error
     }
     return new DurationUtil(!negative, years, months, days, hours, minutes, seconds);
@@ -419,6 +425,26 @@ class DurationUtil {
     }
     return sec * _signum;
   } // asSeconds
+
+  /**
+   * As Hours based on [hoursPerDay] and [daysPerMonth]
+   */
+  double asHours({int hoursPerDay: 8, int daysPerMonth: 20}) {
+    double hours = _hours.toDouble();
+    if (_minutes > 0) {
+      hours += (_minutes / 60);
+    }
+    if (_days != 0) {
+      hours += _days * hoursPerDay;
+    }
+    if (_months != 0) {
+      hours += _months * hoursPerDay * daysPerMonth;
+    }
+    if (_years != 0) {
+      hours += _years * 12 * hoursPerDay * daysPerMonth;
+    }
+    return hours;
+  }
 
   /// Zero Duration
   bool get isZero => _signum == 0;
