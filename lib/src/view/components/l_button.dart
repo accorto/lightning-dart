@@ -112,7 +112,11 @@ class LButton extends LComponent {
     _labelElement = labelElement;
     _icon = icon;
     _iconLeft = iconLeft;
+    //
     _assistiveText = assistiveText;
+    if (assistiveText != null && assistiveText.isNotEmpty) {
+      element.title = assistiveText;
+    }
     typeButton = true; // default = submit
     _rebuild();
   } // LButton
@@ -315,6 +319,7 @@ class LButton extends LComponent {
   /// Add/Set Assistive Text
   void set assistiveText (String newValue) {
     _assistiveText = newValue;
+    element.title = (_assistiveText == null ? "" : _assistiveText);
     _rebuild();
   }
 
