@@ -1,6 +1,6 @@
-/**
- *  Generated code. Do not modify.
- */
+///
+//  Generated code. Do not modify.
+///
 library data;
 
 import 'package:protobuf/protobuf.dart';

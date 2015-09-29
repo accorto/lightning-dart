@@ -196,6 +196,7 @@ class DColumn extends GeneratedMessage {
     ..a(5, 'description', GeneratedMessage.OS)
     ..a(7, 'isActive', GeneratedMessage.OB, true)
     ..a(8, 'columnSql', GeneratedMessage.OS)
+    ..a(9, 'externalKey', GeneratedMessage.OS)
     ..e(10, 'dataType', GeneratedMessage.QE, DataType.STRING, (var v) => DataType.valueOf(v))
     ..a(11, 'columnSize', GeneratedMessage.O3)
     ..a(12, 'decimalDigits', GeneratedMessage.O3)
@@ -275,6 +276,11 @@ class DColumn extends GeneratedMessage {
   void set columnSql(String v) { setField(8, v); }
   bool hasColumnSql() => hasField(8);
   void clearColumnSql() => clearField(8);
+
+  String get externalKey => getField(9);
+  void set externalKey(String v) { setField(9, v); }
+  bool hasExternalKey() => hasField(9);
+  void clearExternalKey() => clearField(9);
 
   DataType get dataType => getField(10);
   void set dataType(DataType v) { setField(10, v); }
