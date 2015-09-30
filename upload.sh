@@ -32,3 +32,16 @@ cat build/web/demo.html | grep $TS
 
 TARGET=/Users/jorg/Documents/Accorto/gh-pages/lightning-dart/
 cp -R build/web/* ${TARGET}
+
+# Model
+export IN="/Users/jorg/Library/Application Support/VisualParadigm/ws/teamwork_client/projects/lightning-dart/lightning-dart.vpp"
+export OUT=/Users/jorg/Documents/Accorto/gh-pages/lightning-dart/model
+if [ -d ${OUT} ]; then
+  rm -rf ${OUT}
+fi
+mkdir ${OUT}
+
+cd "/Applications/Visual Paradigm 11.2/scripts"
+sh ProjectPublisher.sh -project "${IN}" -out ${OUT}
+cd -
+
