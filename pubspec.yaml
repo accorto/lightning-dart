@@ -6,16 +6,16 @@ homepage: http://lightningdart.com
 documentation:
 
 environment:
-  sdk: '>=1.0.0 <2.0.0'
+  sdk: any
 
 dependencies:
-  browser: ">=0.10.0"
-  logging: ">=0.11.1"
-  fixnum: ">=0.9.1+2"
-  intl:  ">=0.12.4"
-  protobuf: ">=0.4.2"
+  browser: any
+  logging: any
+  fixnum: any
+  intl:  any
+  protobuf: 0.4.2
   stack_trace: any
   uuid: any
 
 dev_dependencies:
-  test: '>=0.12.4'
+  test: any
