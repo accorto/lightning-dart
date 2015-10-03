@@ -15,23 +15,33 @@ library lightning.test;
 import 'package:test/test.dart';
 import 'package:lightning/lightning.dart';
 
+import '../web/demo.dart';
 
 /**
  * Execute test:
+ *  pub run test -p dartium -p cartium -p content-shell
+ *
+ * or
  * - pub global run test_runner
  * - run_tests
  *
  */
 void main() {
-  group('A group of tests', () {
-    Object awesome;
+  group('LightningDart Components', () {
+    PageSimple  page;
+    DemoPage demoPage;
 
-    setUp(() {
-      awesome = new Object();
+    setUp(() async {
+      await LightningDart.init();
+      page = LightningDart.createPageSimple();
+      demoPage = new DemoPage("demo", new LIconUtility(LIconUtility.DESKTOP), "Demo");
+      page.add(demoPage);
     });
 
     test('First Test', () {
-      expect(awesome.toString(), isNotEmpty);
+      expect(page, isNotNull);
+      expect(demoPage, isNotNull);
+      expect(demoPage.element.children.length, equals(31));
     });
   });
 }
