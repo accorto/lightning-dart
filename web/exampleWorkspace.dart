@@ -16,19 +16,17 @@ part "exampleWorkspaceData.dart";
  * Workbench Example
  * - Object Home with records
  */
-void main() {
+main() async {
 
-  LightningDart.init() // client env
-  .then((_) {
-    WorbenchData wbData = new WorbenchData();
+  await LightningDart.init(); // client env
 
-    ObjectCtrl ctrl = new ObjectCtrl(wbData);
+  WorbenchData wbData = new WorbenchData();
 
-    PageSimple page = LightningDart.createPageSimple();
-    page.element.classes.add(LGrid.C_WRAP);
-    page.add(ctrl);
+  ObjectCtrl ctrl = new ObjectCtrl(wbData);
 
-  });
+  PageSimple page = LightningDart.createPageSimple();
+  page.element.classes.add(LGrid.C_WRAP);
+  page.add(ctrl);
 
 } // main
 

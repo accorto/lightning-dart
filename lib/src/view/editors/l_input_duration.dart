@@ -8,6 +8,8 @@ part of lightning_dart;
 
 class LInputDuration extends LInput {
 
+  static final Logger _log = new Logger("LInputDuration");
+
   /**
    * Duration
    */
