@@ -63,17 +63,21 @@ class Popovers extends DemoFeature {
   String get source {
     return '''
     CDiv div = new CDiv();
-    LPopover pop = new LPopover("Popover Heading", "Popover Content Test lines come here")
+    LPopover pop = new LPopover()
+      ..headText = "Popover Heading"
+      ..bodyText = "Popover Content Test lines come here"
       ..nubbinRight = true;
     div.add(pop);
 
     div.appendHR();
-    pop = new LPopover("Another Popover", null)
-      ..nubbinTop = true;
+    pop = new LPopover()
+      ..headText = "Another Popover";
     pop.body
       ..appendText("Some text comes here ")
       ..append(new AnchorElement(href: "#")..text = "Some Link")
       ..appendText(" Additional Text");
+    LButton button = new LButton.neutral("btnA", "See Above");
+    pop.showAbove(button);
     div.add(pop);
     ''';
   }

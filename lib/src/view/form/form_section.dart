@@ -21,6 +21,8 @@ class FormSection
   final int columnCount;
   /// Editor count
   int _currentEditor = 0;
+  /// Editors
+  List<LEditor> _editors = new List<LEditor>();
 
   /// Form Section
   FormSection(int this.columnCount, {bool open:true, String label})
@@ -42,6 +44,7 @@ class FormSection
 
   /// add editor
   void addEditor (LEditor editor, Element formElement, bool newRow, int width, int height) {
+    _editors.add(editor);
     if (columnCount > 0) {
       if (newRow && sectionElement.children.isNotEmpty) {
         DivElement div = new DivElement()
@@ -62,5 +65,13 @@ class FormSection
     _currentEditor++;
     editor.element.tabIndex = _currentEditor;
   } // addEditor
+
+
+  /// Expand if section contains editor
+  void expandIfContains(LEditor editor) {
+    if (!open && _editors.contains(editor)) {
+      open = true;
+    }
+  }
 
 } // FormSection

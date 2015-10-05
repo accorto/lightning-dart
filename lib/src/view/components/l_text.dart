@@ -55,6 +55,15 @@ class LText {
   /// Heading Sizes
   static final List<String> HEADING_SIZES = [C_TEXT_HEADING__LABEL, C_TEXT_HEADING__LARGE, C_TEXT_HEADING__MEDIUM, C_TEXT_HEADING__SMALL];
 
+
+  /// Ext Text Color Error
+  static const String C_TEXT_ERROR = "text-error";
+  /// Ext Text Color Warning
+  static const String C_TEXT_WARNING = "text-warning";
+  /// Ext Text Color Success
+  static const String C_TEXT_SUCCESS = "text-success";
+
+
 } // LText
 
 

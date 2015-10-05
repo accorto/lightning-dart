@@ -4656,10 +4656,22 @@ a.slds-button--inverse:focus {
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
-          user-select: none; }
+          user-select: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; }
   .slds-section-title a:focus {
     outline: none;
     box-shadow: none; }
+.text-error {
+  color: #c23934;
+  stroke: #c23934; }
+.text-warning {
+  color: #ffb75d;
+  stroke: #ffb75d; }
+.text-success {
+  color: #04844b;
+  stroke: #04844b; }
 .slds-select[size] {
   min-height: 2.125rem;
   height: inherit; }

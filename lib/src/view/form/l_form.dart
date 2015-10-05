@@ -152,9 +152,13 @@ class LForm
         ..append(_section.element)
         ..append(_section.sectionElement);
       element.append(fs);
+      if (_sections == null)
+        _sections = new List<FormSection>();
+      _sections.add(_section);
     }
   }
   FormSection _section;
+  List<FormSection> _sections;
 
 
   /// Add Editor (to current section)
@@ -311,6 +315,25 @@ class LForm
   LButton _buttonSave;
   bool _buttonSaveChangeOnly = true;
 
+
+  /// Error Indicator
+  LPopover addErrorIndicator() {
+    if (_error == null) {
+      _errorPop = new LPopover()
+        ..headText = lFormError();
+      _error = new LButton.iconBare("formError", new LIconUtility(LIconUtility.ERROR), lFormError(), idPrefix: id);
+      _error.icon.classes.addAll([LText.C_TEXT_ERROR, LMargin.C_HORIZONTAL__LARGE]);
+      _errorPop.showAbove(_error, showOnClick:true, showOnHover:true);
+      _errorPop.wrapper.classes.add(LMargin.C_HORIZONTAL__X_SMALL);
+      _error.classes.add(LVisibility.C_HIDE); // button hide
+      add(_errorPop);
+    }
+    return _errorPop;
+  }
+  LButton _error;
+  LPopover _errorPop;
+
+
   /// Small Editor/Label
   void set small (bool newValue) {
     for (LEditor editor in editorList) {
@@ -358,12 +381,28 @@ class LForm
     }
   } // onFormSubmit
 
+  /// Validate Form and display errors
   bool doValidate() {
     bool valid = true;
+    List<String> errors = new List<String>();
     for (LEditor editor in editorList) {
-      if (!editor.doValidate()) {
+      if (!editor.doValidate()) { // validation
         valid = false;
+        errors.add("${editor.label}: ${editor.statusText}");
+        if (_sections != null) {
+          for (FormSection section in _sections) {
+            section.expandIfContains(editor);
+          }
+        }
       }
+    }
+    // show error indicator
+    if (_error != null) {
+      _errorPop.bodyLines = errors;
+      if (valid)
+        _error.classes.add(LVisibility.C_HIDE);
+      else
+        _error.classes.remove(LVisibility.C_HIDE);
     }
     return valid;
   }
@@ -411,5 +450,6 @@ class LForm
   // Trl
   static String lFormSave() => Intl.message("Save", name: "lFormSave");
   static String lFormReset() => Intl.message("Reset", name: "lFormReset");
+  static String lFormError() => Intl.message("Form Error", name: "lFormError");
 
 } // LForm

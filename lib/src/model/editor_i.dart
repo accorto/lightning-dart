@@ -571,7 +571,7 @@ abstract class EditorI {
 
 
   /**
-   *
+   * Update Status
    */
   void updateStatus() {
     updateStatusValidationState();

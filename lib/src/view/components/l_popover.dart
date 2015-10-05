@@ -59,11 +59,20 @@ class LPopover extends LPopbase {
     _content.append(body);
   } // LPopover
 
+  /// header text
   void set headText (String text) {
     _headParagraph.text = text;
   }
+  /// body text
   void set bodyText (String text) {
     body.text = text;
+  }
+  /// body text
+  void set bodyLines (List<String> lines) {
+    body.children.clear();
+    for (String text in lines) {
+      body.append(new ParagraphElement()..text = text);
+    }
   }
 
 
@@ -188,6 +197,7 @@ abstract class LPopbase extends LComponent {
 
     pop.style.float = "left";
     pop.style.position = "absolute";
+    pop.style.textAlign = "left"; // footer is left aligned
     hide();
     // trigger
     if (showOnHover) {

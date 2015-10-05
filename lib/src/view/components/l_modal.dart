@@ -221,6 +221,10 @@ class LModal extends LComponent {
   void addFooterFormButtons(LForm form) {
     LButton reset = form.addResetButton();
     footer.append(reset.element);
+
+    LPopover error = form.addErrorIndicator();
+    footer.append(error.element);
+
     LButton save = form.addSaveButton();
     footer.append(save.element);
   }
