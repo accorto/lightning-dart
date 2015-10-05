@@ -98,6 +98,8 @@ abstract class LPopbase extends LComponent {
   Element target;
   /// Pop Element (popover)
   DivElement get pop;
+  /// Pop Element (popover)
+  DivElement get _content;
 
   String _nub = LPopover.C_NUBBIN__BOTTOM;
   bool _clickShow = false;
@@ -197,7 +199,7 @@ abstract class LPopbase extends LComponent {
 
     pop.style.float = "left";
     pop.style.position = "absolute";
-    pop.style.textAlign = "left"; // footer is left aligned
+    pop.style.textAlign = "left"; // footer is right aligned
     hide();
     // trigger
     if (showOnHover) {
@@ -225,6 +227,9 @@ abstract class LPopbase extends LComponent {
   // do show
   void _show() {
     Rectangle targetRect = target.getBoundingClientRect();
+    Rectangle offsetRect = target.offset;
+    var posX = offsetRect.left - window.scrollX;
+    var posY = offsetRect.top - window.scrollY;
     //_log.fine("-target ${targetRect}");
 
     pop.classes.remove(LVisibility.C_HIDE);
@@ -239,9 +244,18 @@ abstract class LPopbase extends LComponent {
     // show above
     if (_nub == LPopover. C_NUBBIN__BOTTOM) {
       double top = -(elementRect.height + nubHeight);
-      pop.style.top = "${top.toInt()}px";
+      pop.style.top = "${top.toInt()}px"; // negative - push up
       double left = -(elementRect.width - targetRect.width) / 2;
-      pop.style.left = "${left.toInt()}px";
+      double deltaLeft = targetRect.left + left;
+    //  if (deltaLeft > 0) {
+        pop.style.left = "${left.toInt()}px";
+    //  } else {
+    //    left = targetRect.width / 2;
+        // set pseudo before/after element css left
+        // CssStyleDeclaration cssB = _content.getComputedStyle('::before');
+        // List<CssRule> rulesB = window.getMatchedCssRules(_content, ':before');
+        //List<CssRule> rulesA = window.getMatchedCssRules(_content, ':after');
+    //  }
     }
     // show below
     else if (_nub == LPopover. C_NUBBIN__TOP) {
