@@ -151,11 +151,11 @@ class LModal extends LComponent {
   }
   /// add component to content
   void add(LComponent component) {
-    content.append(component.element);
+    content.add(component);
   }
   /// add form to content + buttons to footer
   void addForm(LForm form) {
-    content.append(form.element);
+    content.add(form);
     addFooterFormButtons(form);
   }
 
@@ -243,6 +243,7 @@ class LModal extends LComponent {
     if (newValue) {
       _dialog.classes.add(C_FADE_IN_OPEN);
       _backdrop.classes.add(C_MODAL_BACKDROP__OPEN);
+      content.focus();
     } else {
       _dialog.classes.remove(C_FADE_IN_OPEN);
       _backdrop.classes.remove(C_MODAL_BACKDROP__OPEN);

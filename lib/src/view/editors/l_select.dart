@@ -41,6 +41,8 @@ class LSelect
     input.name = name;
     input.id = createId(idPrefix, name);
     input.multiple = multiple;
+    if (multiple && !inGrid)
+      size = 2;
     _initEditor();
   }
 
@@ -50,11 +52,13 @@ class LSelect
     DColumn tableColumn = dataColumn.tableColumn;
     input.name = tableColumn.name;
     input.id = createId(idPrefix, input.name);
-    if (multiple != null)
+    if (multiple != null) {
       input.multiple = multiple;
-    else
+    } else {
       input.multiple = tableColumn.dataType == DataType.PICKMULTI || tableColumn.dataType == DataType.PICKMULTICHOICE;
-
+    }
+    if (multiple && !inGrid)
+      size = 2;
     //
     if (tableColumn.pickValueList.isNotEmpty) {
       dOptionList = tableColumn.pickValueList;

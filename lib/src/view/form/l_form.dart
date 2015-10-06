@@ -130,7 +130,7 @@ class LForm
     }
     element.id = LComponent.createId(idPrefix, name);
     _data = new DataRecord(onRecordChange);
-  }
+  } // LForm
 
   LForm.horizontal(String name, {String idPrefix})
     : this(new FormElement(), name, C_FORM__HORIZONTAL, idPrefix:idPrefix);
@@ -299,7 +299,8 @@ class LForm
       _buttonSave = new LButton.brandIcon(name,
           label == null ? lFormSave() : label,
           theIcon, iconLeft:true)
-         ..typeSubmit = false; // channel explicitly through onFormSubmit
+        ..typeSubmit = false; // channel explicitly through onFormSubmit
+      _buttonSave.autofocus = true;
       add(_buttonSave);
       _buttonSave.onClick.listen(onFormSubmit);
       _buttonSaveChangeOnly = buttonSaveChangeOnly;
@@ -448,6 +449,26 @@ class LForm
     }
   }
   DivElement _debugElement;
+
+  /// focus form
+  void focus() {
+    if (_buttonSave != null && !_buttonSave.disabled) {
+      _buttonSave.focus();
+      _log.fine("focus ${_buttonSave.name}");
+      return;
+    }
+    if (editorList.isNotEmpty) {
+      for (LEditor ed in editorList) {
+        if (!ed.readOnly) {
+          ed.focus();
+          _log.fine("focus ${ed.name}");
+          return;
+        }
+      }
+    }
+    _log.fine("focus");
+    element.focus();
+  } // focus
 
   // Trl
   static String lFormSave() => Intl.message("Save", name: "lFormSave");

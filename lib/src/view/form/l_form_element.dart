@@ -263,6 +263,7 @@ class LFormElement {
         "Help")
         ..classes.add(LMargin.C_RIGHT__XX_SMALL)
         ..typeButton = true;
+      _helpButton.tabIndex = -1;
       _helpTip = new LTooltip();
       _helpTip.showAbove(_helpButton); // shows button
 

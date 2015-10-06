@@ -19,8 +19,6 @@ class FormSection
 
   /// Section column Count
   final int columnCount;
-  /// Editor count
-  int _currentEditor = 0;
   /// Editors
   List<LEditor> _editors = new List<LEditor>();
 
@@ -62,8 +60,6 @@ class FormSection
     } else {
       sectionElement.append(editor.element);
     }
-    _currentEditor++;
-    editor.element.tabIndex = _currentEditor;
   } // addEditor
 
 

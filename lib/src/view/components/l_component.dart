@@ -32,7 +32,10 @@ abstract class LComponent {
   /// add component
   void add(LComponent component) {
     element.append(component.element);
+    if (_firstComponent == null)
+      _firstComponent = component;
   }
+  LComponent _firstComponent;
 
   /**
    * Set [roleAttribute] e.g. Html0.V_ROLE_MAIN
@@ -158,6 +161,21 @@ abstract class LComponent {
     }
   }
   DivElement _loading;
+
+  /// Focus
+  void focus() {
+    if (_firstComponent != null)
+      _firstComponent.focus();
+    else if (element.children.isNotEmpty)
+      element.children.first.focus();
+    else
+      element.focus();
+  }
+
+  /// Tab Index
+  void set tabIndex (int tabIndex) {
+    element.tabIndex = tabIndex;
+  }
 
 } // LComponent
 

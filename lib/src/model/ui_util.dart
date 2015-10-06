@@ -48,7 +48,7 @@ class UiUtil {
   }
 
   /// Add (default) Panel if missing
-  void addPanelIfMissing({String name, int columnCount:0}) {
+  void addPanelIfMissing({String name:"Default", int columnCount:0}) {
     if (_panel != null) {
       return;
     }

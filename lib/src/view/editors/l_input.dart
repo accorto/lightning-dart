@@ -52,7 +52,7 @@ class LInput
   /// initialize listeners
   void _initEditor() {
     if (type == EditorI.TYPE_PASSWORD) {
-      input.autocomplete = "off";
+      input.autocomplete = "off"; // https://html.spec.whatwg.org/multipage/forms.html#autofill
       input.attributes["autocapitalize"] = "off";
       input.attributes["autocorrect"] = "off";
     }

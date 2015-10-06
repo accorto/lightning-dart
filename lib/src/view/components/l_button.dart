@@ -288,7 +288,13 @@ class LButton extends LComponent {
     type = newValue ? "reset" : "button";
   }
 
-
+  /// auto focus if button or input
+  void set autofocus (bool newValue) {
+    if (element is ButtonElement)
+      (element as ButtonElement).autofocus = newValue;
+    else if (element is InputElement)
+      (element as InputElement).autofocus = newValue;
+  }
 
   /// Button Label
   String get label {
@@ -471,6 +477,11 @@ class LButton extends LComponent {
     }
     return new ListItem(option);
   } // asListItem
+
+  /// Focus on Button
+  void focus() {
+    element.focus();
+  }
 
 } // LButton
 
