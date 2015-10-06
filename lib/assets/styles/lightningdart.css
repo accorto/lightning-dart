@@ -166,19 +166,19 @@ th {
 *:after {
   box-sizing: border-box; }
 *::-webkit-input-placeholder {
-  color: #54698d;
+  color: rgba(84, 105, 141, 0.6);
   font-weight: 400;
   font-size: 0.875rem; }
 *:-moz-placeholder {
-  color: #54698d;
+  color: rgba(84, 105, 141, 0.6);
   font-weight: 400;
   font-size: 0.875rem; }
 *::-moz-placeholder {
-  color: #54698d;
+  color: rgba(84, 105, 141, 0.6);
   font-weight: 400;
   font-size: 0.875rem; }
 *:-ms-input-placeholder {
-  color: #54698d;
+  color: rgba(84, 105, 141, 0.6);
   font-weight: 400;
   font-size: 0.875rem; }
 html {
@@ -747,22 +747,22 @@ a.slds-button--inverse:focus {
 .slds-input--small {
   line-height: 1.875rem;
   min-height: calc(1.875rem + 2px);
-  font-size: inherit;
-  font-weight: 400; }
+  padding-left: 0.5rem;
+  padding-right: 0.5rem; }
   .slds-input--small::-webkit-input-placeholder {
-    color: #54698d;
+    color: rgba(84, 105, 141, 0.6);
     font-weight: 400;
     font-size: 0.875rem; }
   .slds-input--small:-moz-placeholder {
-    color: #54698d;
+    color: rgba(84, 105, 141, 0.6);
     font-weight: 400;
     font-size: 0.875rem; }
   .slds-input--small::-moz-placeholder {
-    color: #54698d;
+    color: rgba(84, 105, 141, 0.6);
     font-weight: 400;
     font-size: 0.875rem; }
   .slds-input--small:-ms-input-placeholder {
-    color: #54698d;
+    color: rgba(84, 105, 141, 0.6);
     font-weight: 400;
     font-size: 0.875rem; }
 .slds-input--big {
@@ -998,6 +998,11 @@ a.slds-button--inverse:focus {
     .slds-has-error .slds-select:focus,
     .slds-has-error .slds-select:active {
       box-shadow: #c23934 0 0 0 1px inset, 0 0 3px #0070D2; }
+  .slds-select[size] {
+    min-height: 2.125rem;
+    height: inherit; }
+    .slds-select[size] option {
+      padding: 0.5rem; }
 @media (min-width: 48em) {
   .slds-form--horizontal {
     text-align: right; } }
@@ -1021,6 +1026,9 @@ a.slds-button--inverse:focus {
       width: calc(66% - (0.75rem * 2));
       display: inline-block;
       text-align: left; } }
+  .slds-form--horizontal .slds-form-element__control .slds-checkbox,
+  .slds-form--horizontal .slds-form-element__control .slds-radio {
+    display: block; }
 @media (max-width: 29.9375em) {
   .slds-form--horizontal .slds-form-element {
     margin-bottom: 1rem; } }
@@ -1522,8 +1530,6 @@ a.slds-button--inverse:focus {
   padding-right: 2rem;
   min-width: 15rem;
   max-width: 20rem;
-  font-weight: 300;
-  font-size: 1.125rem;
   color: #16325c;
   text-align: left; }
   .slds-picklist__label .slds-icon {
@@ -1806,19 +1812,20 @@ a.slds-button--inverse:focus {
 .slds-disabled-text {
   color: #d8dde6; }
 .slds-datepicker--time {
-  padding: 0.75rem 0;
-  font-size: 0.875rem; }
-  .slds-datepicker--time__list {
-    max-height: 13.5rem;
+  max-width: 12rem;
+  max-height: 13.5rem;
+  overflow: hidden;
     overflow-y: auto; }
-    .slds-datepicker--time__list > li {
-      padding: 0.5rem;
-        padding-left: 2rem; }
-      .slds-datepicker--time__list > li:hover,
-      .slds-datepicker--time__list > li:focus {
-        background: #f4f6f9;
-        text-decoration: none;
-        cursor: pointer; }
+  .slds-datepicker--time__list > li {
+    white-space: nowrap;
+    padding: 0.5rem;
+      padding-left: 2rem;
+      padding-right: 2rem; }
+    .slds-datepicker--time__list > li:hover,
+    .slds-datepicker--time__list > li:focus {
+      background: #f4f6f9;
+      text-decoration: none;
+      cursor: pointer; }
 .slds-modal {
   opacity: 0;
   visibility: hidden;
@@ -4672,9 +4679,6 @@ a.slds-button--inverse:focus {
 .text-success {
   color: #04844b;
   stroke: #04844b; }
-.slds-select[size] {
-  min-height: 2.125rem;
-  height: inherit; }
 .grab {
   cursor: -moz-grab;
   cursor: url(https://www.google.com/intl/en_ALL/mapfiles/openhand.cur), move; }

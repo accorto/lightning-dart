@@ -7,6 +7,12 @@ Patches, Functionality improvements via +x prefix.
 
 - 
 
+## 0.9.2
+
+- improved components
+- form controller logic, validation, error display
+- form in modal
+
 ## 0.9.1
 
 - improved components
