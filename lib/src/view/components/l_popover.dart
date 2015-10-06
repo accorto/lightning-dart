@@ -86,6 +86,12 @@ abstract class LPopbase extends LComponent {
 
   static final Logger _log = new Logger("LPopbase");
 
+  /// css for positioning
+  static CssStyleSheet _cssStyleSheet;
+
+  /// Css Rule for this
+  CssStyleRule _cssRule;
+
   DivElement get element {
     if (wrapper == null)
       return pop;
@@ -227,11 +233,16 @@ abstract class LPopbase extends LComponent {
   // do show
   void _show() {
     Rectangle targetRect = target.getBoundingClientRect();
-    //Rectangle offsetRect = target.offset;
-    //var posX = offsetRect.left - window.scrollX;
-    //var posY = offsetRect.top - window.scrollY;
-    //_log.fine("-target ${targetRect}");
-
+    // Contained in Modal (cuts off)
+    Rectangle contentRect = null;
+    Element parent = target.parent;
+    while (parent != null && contentRect == null) {
+      if (parent.classes.contains(LModal.C_MODAL__CONTENT)) {
+        contentRect = parent.getBoundingClientRect();
+      }
+      parent = parent.parent;
+    }
+    //
     pop.classes.remove(LVisibility.C_HIDE);
     pop.style.width = "20rem"; // not just max width
     // should calculate max required with from content
@@ -245,16 +256,21 @@ abstract class LPopbase extends LComponent {
     if (_nub == LPopover. C_NUBBIN__BOTTOM) {
       double top = -(elementRect.height + nubHeight);
       pop.style.top = "${top.toInt()}px"; // negative - push up
-      double left = -(elementRect.width - targetRect.width) / 2;
-      double deltaLeft = targetRect.left + left; // insufficient - should be parent container
-      if (deltaLeft > 0) {
+      num left = -(elementRect.width - targetRect.width) / 2;
+      // enough room on left side?
+      num deltaLeft = targetRect.left + left;
+      if (contentRect != null)
+        deltaLeft -= contentRect.left;
+      if (deltaLeft > 0) { // enough room on left side
         pop.style.left = "${left.toInt()}px";
-    //  } else {
-    //    left = targetRect.width / 2;
+      } else {
+        left = 5 - targetRect.left; // 5px margin
+        if (contentRect != null)
+          left += contentRect.left;
+        pop.style.left = "${left}px";
+        num popLeft = (targetRect.width / 2) - left;
         // set pseudo before/after element css left
-        // CssStyleDeclaration cssB = _content.getComputedStyle('::before');
-        // List<CssRule> rulesB = window.getMatchedCssRules(_content, ':before');
-        //List<CssRule> rulesA = window.getMatchedCssRules(_content, ':after');
+        _setCssPseudoClass(popLeft);
       }
     }
     // show below
@@ -280,6 +296,30 @@ abstract class LPopbase extends LComponent {
     }
     // TODO adjust for when out of screen
   } // show
+
+  /// set css for pseudo classes
+  void _setCssPseudoClass(num popLeft) {
+    String id = _content.id;
+    if (id == null || id.isEmpty) {
+      id = LComponent.createId(null, null, autoPrefixId: "pop");
+      _content.id = id;
+    }
+    // List<CssRule> rulesB = window.getMatchedCssRules(_content, ':before');
+    // modifies css class - need to create new rule
+
+    if (_cssRule == null) {
+      if (_cssStyleSheet == null) {
+        StyleElement se = new StyleElement();
+        document.head.append(se);
+        _cssStyleSheet = se.sheet as CssStyleSheet;
+      }
+      _cssStyleSheet.addRule("#${id}:before, #${id}:after", "left: ${popLeft}px");
+      int length = _cssStyleSheet.cssRules.length;
+      _cssRule = _cssStyleSheet.cssRules[length - 1];
+    } else {
+      _cssRule.style.left = "${popLeft}px";
+    }
+  } // setCssPseudoClass
 
 
   /// Showing
