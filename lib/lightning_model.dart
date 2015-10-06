@@ -7,7 +7,8 @@
 /**
  * Lightning Dart Model level Functionality.
  *
- * Uses Protocol Buffers.
+ * Protocol Buffers based Model and utilities.
+ * Not required if only View layer used.
  */
 library lightning_model;
 
@@ -35,7 +36,7 @@ import 'protoc/data.pb.dart';
 import 'protoc/display.pb.dart';
 import 'protoc/rr.pb.dart';
 import 'protoc/rr_data.pb.dart';
-import 'protoc/rr_display.pb.dart';
+//import 'protoc/rr_display.pb.dart';
 
 export 'protoc/structure.pb.dart';
 export 'protoc/data.pb.dart';

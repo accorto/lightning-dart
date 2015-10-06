@@ -41,7 +41,7 @@ class Forms2 extends DemoFeature {
   }
 
 
-    /**
+  /**
    * Saved Query UI
    */
   static UI ui(int columnCount) {
@@ -50,7 +50,7 @@ class Forms2 extends DemoFeature {
       ..name = "MyForm2"
       ..label = "My Form 2";
     uiu.setTable(sqTable);
-    uiu.addPanel("Collapsible Region", columnCount:columnCount);
+    uiu.addPanel(name:"Collapsible Region", columnCount:columnCount);
 
     // Column Name
     DColumn col = new DColumn()

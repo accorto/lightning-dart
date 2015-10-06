@@ -87,7 +87,7 @@ class WorbenchData extends Datasource {
 
     // Set Table
     uiu.setTable(table);
-    uiu.addPanel(null)
+    uiu.addPanel()
       ..uiPanelId = uiu.nextId();
 
     // Columns

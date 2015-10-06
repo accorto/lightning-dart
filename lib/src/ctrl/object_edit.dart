@@ -34,11 +34,9 @@ class ObjectEdit {
       element: new DivElement(), idPrefix:_ID);
     form.buildPanels();
     form.recordSaved = onFormRecordSaved;
-    modal.addFooterFormButtons(form);
+    modal.addForm(form);
     // _form.addResetButton().onClick.listen(onReset);
     // _form.onRecordSaved = filterRecordSaved;
-    modal.add(form);
-
   } // ObjectEdit
 
   /// set Record

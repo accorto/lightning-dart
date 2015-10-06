@@ -156,7 +156,7 @@ class DurationUtil {
         }
       }
     }
-    catch (error, stackTrace) {
+    catch (error) {
     //_log.warning("parse ${inputText}", error, stackTrace);
       return null; // parse error
     }

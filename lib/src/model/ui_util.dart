@@ -11,6 +11,9 @@ part of lightning_model;
  */
 class UiUtil {
 
+  static final Logger _log = new Logger("UiUtil");
+
+
   /// The UI
   final UI ui;
   /// The Table
@@ -36,19 +39,31 @@ class UiUtil {
   }
 
   /// Add/Set Panel
-  UIPanel addPanel(String name, {int columnCount:0}) {
+  UIPanel addPanel({String name:"Default", int columnCount:0}) {
     _panel = new UIPanel()
-      ..name = name == null ? "Default" : name
+      ..name = name
       ..panelColumnNumber = columnCount;
     ui.panelList.add(_panel);
     return _panel;
+  }
+
+  /// Add (default) Panel if missing
+  void addPanelIfMissing({String name, int columnCount:0}) {
+    if (_panel != null) {
+      return;
+    }
+    if (ui.panelList.isNotEmpty) {
+      _panel = ui.panelList[0];
+      return;
+    }
+    addPanel(name:name, columnCount:columnCount);
   }
 
   /// add column
   void addColumn(DColumn col, {String displayLogic}) {
     ui.table.columnList.add(col);
     if (_panel == null)
-      addPanel(null);
+      addPanel();
 
     // panel
     UIPanelColumn pc = new UIPanelColumn()
@@ -70,8 +85,24 @@ class UiUtil {
       gc.columnId = col.columnId;
     gc.seqNo = (ui.gridColumnList.length + 1);
     ui.gridColumnList.add(gc);
-
   } // addColumn
+
+  /// add column if missing
+  void addIfMissing(String columnName) {
+    // exists?
+    for (UIGridColumn gc in ui.gridColumnList) {
+      if (gc.columnName == columnName)
+        return; // exists
+    }
+    // find column
+    for (DColumn col in ui.table.columnList) {
+      if (col.name == columnName) {
+        addColumn(col);
+        return;
+      }
+    }
+    _log.warning("${ui.name} addIfMissing NotFound ${columnName}");
+  } // addIfMissing
 
 
 } // UiUtil

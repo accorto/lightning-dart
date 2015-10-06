@@ -188,7 +188,7 @@ class ObjectFilterFilter extends TableCtrl {
       ..name = _TABLENAME
       ..label = objectFilterFilter();
     uiu.setTable(sqTable);
-    uiu.addPanel(null);
+    uiu.addPanel();
 
     // Column Name
     DColumn col = new DColumn()

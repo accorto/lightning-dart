@@ -229,7 +229,7 @@ class LForm
   void set record (DRecord record) {
     setRecord(record, 0);
   }
-  /// Data Record/Row No
+  /// Data Record/Row No + Display
   void setRecord (DRecord record, int rowNo) {
     _data.setRecord(record, rowNo);
     display();
@@ -389,11 +389,13 @@ class LForm
       if (!editor.doValidate()) { // validation
         valid = false;
         errors.add("${editor.label}: ${editor.statusText}");
+        // display if hidden
         if (_sections != null) {
           for (FormSection section in _sections) {
             section.expandIfContains(editor);
           }
         }
+        editor.focus();
       }
     }
     // show error indicator

@@ -84,10 +84,14 @@ class LSelect
   int get size => input.size;
   /// Size of Select
   void set size (int newValue) {
-    if (newValue < 2)
-      input.attributes.remove("size"); // fix
-    else
+    if (newValue > 0) {
       input.size = newValue;
+      if (newValue > 2) { // set size to prevent re-render if options change
+        input.style.height = "${2.125*newValue}rem"; // line height
+      } else {
+        input.style.removeProperty("height");
+      }
+    }
   }
 
   /// String Value

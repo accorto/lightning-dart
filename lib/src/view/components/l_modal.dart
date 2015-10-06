@@ -153,6 +153,11 @@ class LModal extends LComponent {
   void add(LComponent component) {
     content.append(component.element);
   }
+  /// add form to content + buttons to footer
+  void addForm(LForm form) {
+    content.append(form.element);
+    addFooterFormButtons(form);
+  }
 
   /**
    * Set Footer
@@ -174,10 +179,10 @@ class LModal extends LComponent {
 
   /**
    * Set Footer Buttons - returns save button
-   * [buttonCancel] hides the dialog
+   * [hideOnSave] hide+remove on Save
+   * [buttonCancel] hides+removes the dialog
    */
-  LButton addFooterButtons({String saveNameOverride, bool hideOnSave: true,
-      bool addCancel: true}) {
+  LButton addFooterButtons({String saveNameOverride, bool hideOnSave: true, bool addCancel: true}) {
     String saveLabel = saveNameOverride;
     if (saveLabel == null || saveLabel.isEmpty)
       saveLabel = lModalSave();

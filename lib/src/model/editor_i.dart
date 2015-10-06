@@ -245,6 +245,11 @@ abstract class EditorI {
   bool get show;
   void set show (bool newValue);
 
+  /// focus on input
+  void focus() {
+    input.focus();
+  }
+
   /**
    * Set Column (info for specific editors)
    */

@@ -33,12 +33,11 @@ class ObjectFilter {
    * Filter Dialog
    */
   ObjectFilter(DTable this.table, SavedQuery this.savedQuery, FilterUpdated this.filterUpdated) {
+    modal.large = true;
     // Saved Filter
     _form = new FormCtrl("savedQuery", uiSavedQuery(),
       element: new DivElement(), idPrefix:_ID);
     _form.buildPanels();
-    modal.large = true;
-    modal.addFooterFormButtons(_form);
     _form.addResetButton().onClick.listen(onReset);
     _form.recordSaved = filterRecordSaved;
     _toRecord();
@@ -49,7 +48,7 @@ class ObjectFilter {
       label += " - ${AppsAction.appsActionNew()}";
     modal.setHeader(label, icon:icon);
     // Form
-    modal.add(_form);
+    modal.addForm(_form);
 
     // Filter Rows
     filterTable = new ObjectFilterFilter(savedQuery.filterList, table);
@@ -191,7 +190,7 @@ class ObjectFilter {
       ..name = _TABLENAME
       ..label = objectFilter();
     uiu.setTable(sqTable);
-    uiu.addPanel(null);
+    uiu.addPanel();
 
     // Column Name
     DColumn col = new DColumn()

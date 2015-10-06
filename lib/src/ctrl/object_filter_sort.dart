@@ -120,7 +120,7 @@ class ObjectFilterSort extends TableCtrl {
       ..name = _TABLENAME
       ..label = objectFilterSort();
     uiu.setTable(sqTable);
-    uiu.addPanel(null);
+    uiu.addPanel();
 
   // Columns
     DColumn col = new DColumn()

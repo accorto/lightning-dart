@@ -227,9 +227,9 @@ abstract class LPopbase extends LComponent {
   // do show
   void _show() {
     Rectangle targetRect = target.getBoundingClientRect();
-    Rectangle offsetRect = target.offset;
-    var posX = offsetRect.left - window.scrollX;
-    var posY = offsetRect.top - window.scrollY;
+    //Rectangle offsetRect = target.offset;
+    //var posX = offsetRect.left - window.scrollX;
+    //var posY = offsetRect.top - window.scrollY;
     //_log.fine("-target ${targetRect}");
 
     pop.classes.remove(LVisibility.C_HIDE);
@@ -246,8 +246,8 @@ abstract class LPopbase extends LComponent {
       double top = -(elementRect.height + nubHeight);
       pop.style.top = "${top.toInt()}px"; // negative - push up
       double left = -(elementRect.width - targetRect.width) / 2;
-      double deltaLeft = targetRect.left + left;
-    //  if (deltaLeft > 0) {
+      double deltaLeft = targetRect.left + left; // insufficient - should be parent container
+      if (deltaLeft > 0) {
         pop.style.left = "${left.toInt()}px";
     //  } else {
     //    left = targetRect.width / 2;
@@ -255,7 +255,7 @@ abstract class LPopbase extends LComponent {
         // CssStyleDeclaration cssB = _content.getComputedStyle('::before');
         // List<CssRule> rulesB = window.getMatchedCssRules(_content, ':before');
         //List<CssRule> rulesA = window.getMatchedCssRules(_content, ':after');
-    //  }
+      }
     }
     // show below
     else if (_nub == LPopover. C_NUBBIN__TOP) {

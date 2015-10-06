@@ -34,7 +34,7 @@ class FormCtrl extends LForm {
 
   /**
    * Form Util
-   * must call [build]
+   * must call [buildPanels]
    */
   FormCtrl(String name, UI this.ui, {
       Element element,
