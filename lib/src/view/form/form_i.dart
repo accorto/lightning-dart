@@ -7,13 +7,13 @@
 part of lightning_dart;
 
 /// Record Saved returning error
-typedef String RecordSaved(DRecord record);
+typedef Future<SResponse> RecordSaved(DRecord record);
 
 /// Record Deleted returning error
-typedef String RecordDeleted(DRecord record);
+typedef Future<SResponse> RecordDeleted(DRecord record);
 
 /// Record Deleted returning error
-typedef String RecordsDeleted(List<DRecord> records);
+typedef Future<SResponse> RecordsDeleted(List<DRecord> records);
 
 /**
  * Form Interface

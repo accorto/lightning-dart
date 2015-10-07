@@ -9,7 +9,7 @@ part of lightning_ctrl;
 /// Info Server Communication Start (busy)
 typedef void ServerStart(String trxName, String info);
 /// Info Server Communication Success (busy, msg)
-typedef void ServerSuccess(SResponse response);
+typedef void ServerSuccess(SResponse response, String dataDetail);
 /// Info Server Communication Error (busy, msg)
 typedef void ServerError(var error);
 
@@ -203,10 +203,10 @@ class Service {
    */
   void handleSuccess(String subject, SResponse sresponse, {bool setBusy: true}) {
     sresponse.clientReceiptTime = new Int64(new DateTime.now().millisecondsSinceEpoch);
+    String details = "${sresponse.trxType} ${sresponse.trxNo} ${ServiceTracker.getDuration(sresponse)}";
     if (setBusy && onServerSuccess != null)
-      onServerSuccess(sresponse);
+      onServerSuccess(sresponse, details);
     if (sendNotification != null) {
-      String details = "${sresponse.trxType} ${sresponse.trxNo} ${ServiceTracker.getDuration(sresponse)}";
       sendNotification(sresponse.isSuccess ? ServiceResponse.Ok : ServiceResponse.Error,
         subject, sresponse.msg, sresponse.clientReceiptTime, details);
     }

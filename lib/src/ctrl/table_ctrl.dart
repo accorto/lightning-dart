@@ -130,15 +130,15 @@ abstract class TableCtrl extends LTable {
       DRecord record = actionVar;
       _log.info("onAppsActionDeleteConfirmed ${tableName} ${value} id=${record.recordId}");
       if (recordDeleted != null) {
-        String error = recordDeleted(record);
-        if (error != null) {
-        }
+        recordDeleted(record)
+        .then((SResponse response) {
+          recordList.remove(record);
+          if (alwaysOneEmptyLine && recordList.isEmpty)
+            addNewRecord();
+          display();
+          _log.config("onAppsActionDeleteConfirmed ${tableName} ${value}  #${recordList.length}");
+        });
       }
-      recordList.remove(record);
-      if (alwaysOneEmptyLine && recordList.isEmpty)
-        addNewRecord();
-      display();
-      _log.config("onAppsActionDeleteConfirmed ${tableName} ${value}  #${recordList.length}");
     }
   } // onAppsActionDeleteConfirmed
 
@@ -172,17 +172,17 @@ abstract class TableCtrl extends LTable {
       List<DRecord> records = actionVar;
       _log.info("onAppsActionDeleteSelectedConfirmed ${tableName} ${value} #${records.length}");
       if (recordsDeleted != null) {
-        String error = recordsDeleted(records);
-        if (error != null) {
-        }
+        recordsDeleted(records)
+        .then((SResponse response) {
+          for (DRecord sel in records) {
+            recordList.remove(sel);
+          }
+          if (alwaysOneEmptyLine && recordList.isEmpty)
+            addNewRecord();
+          _log.config("onAppsActionDeleteSelectedConfirmed ${tableName} ${value} deleted=${records.length}  #${recordList.length}");
+          display();
+        });
       }
-      for (DRecord sel in records) {
-        recordList.remove(sel);
-      }
-      if (alwaysOneEmptyLine && recordList.isEmpty)
-        addNewRecord();
-      _log.config("onAppsActionDeleteSelectedConfirmed ${tableName} ${value} deleted=${records.length}  #${recordList.length}");
-      display();
     }
   } // onAppsActionDeleteSelectedConfirmed
 

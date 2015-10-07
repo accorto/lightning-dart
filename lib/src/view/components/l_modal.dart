@@ -104,7 +104,7 @@ class LModal extends LComponent {
         icon: new LIconAction("close", className: LButton.C_BUTTON__ICON,
           colorOverride: LButton.C_BUTTON__ICON__INVERSE, size: LButton.C_BUTTON__ICON__LARGE),
         assistiveText: lModalClose());
-    buttonClose.onClick.listen(onClickHide);
+    buttonClose.onClick.listen(onClickHideAndRemove);
     header.append(buttonClose.element);
   }
   /// Set header
@@ -261,12 +261,12 @@ class LModal extends LComponent {
   }
 
   /// Hide Modal
-  void onClickHide(MouseEvent evt) {
+  void onClickHideOnly(MouseEvent evt) {
     show = false;
   }
 
   /// Hide and Remove Modal
-  void onClickHideAndRemove(MouseEvent evt) {
+  void onClickHideAndRemove(MouseEvent ignored) {
     show = false;
     element.remove();
   }

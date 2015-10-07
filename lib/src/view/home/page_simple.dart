@@ -47,16 +47,16 @@ class PageSimple extends LComponent {
 
   /// Server Start (busy)
   void onServerStart(String trxName, String info) {
-    setStatus(LTheme.C_THEME__ALT_INVERSE, new LIconUtility(LIconUtility.SPINNER), "... ${LSpinner.lSpinnerWorking()} ...", null, "busy", "");
+    setStatus(LTheme.C_THEME__ALT_INVERSE, new LIconUtility(LIconUtility.SPINNER), "... ${LSpinner.lSpinnerWorking()} ...", null, "busy", null);
     busy = true;
   }
   /// Info Server Communication Success (busy/msg)
-  void onServerSuccess(SResponse response) {
+  void onServerSuccess(SResponse response, String dataDetail) {
     busy = false;
     if (response.isSuccess)
-      setStatusSuccess(response.msg);
+      setStatusSuccess(response.msg, detail:response.info, dataDetail:dataDetail);
     else
-      setStatusWarning(response.msg);
+      setStatusWarning(response.msg, detail:response.info, dataDetail:dataDetail);
   }
   /// Info Server Communication Error
   void onServerError(var error) {
@@ -114,12 +114,12 @@ class PageSimple extends LComponent {
   void setStatus(String color, LIcon icon, String message, String detail,
       String dataSuccess, String dataDetail) {
 
-    if (detail != null && detail.isNotEmpty) {
+    //if (detail != null && detail.isNotEmpty) {
       LToast toast = new LToast(label:message, idPrefix:"status", icon:icon,
         text:detail, addDefaultIcon: true,
         color:color);
       toast.showBottomRight(element, autohideSeconds:10);
-    }
+    //}
     //
     element.attributes["data-success"] = dataSuccess == null ? "" : dataSuccess;
     element.attributes["data-detail"] = dataDetail == null ? "" : dataDetail;

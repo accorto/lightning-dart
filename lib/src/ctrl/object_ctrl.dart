@@ -300,39 +300,45 @@ class ObjectCtrl extends LComponent {
   } // onAppsActionNew
 
   /// Record Saved (from new/table)
-  String onRecordSaved(DRecord record) {
+  Future<SResponse> onRecordSaved(DRecord record) {
     _log.config("onRecordSaved ${tableName}");
+    Completer<SResponse> completer = new Completer<SResponse>();
     _content.loading = true;
     datasource.save(record)
     .then((DataResponse response) {
+      completer.complete(response.response);
       _content.loading = false;
       display(response.recordList);
     });
-    return null;
+    return completer.future;
   }
 
   /// Record Deleted (from table)
-  String onRecordDeleted(DRecord record) {
+  Future<SResponse> onRecordDeleted(DRecord record) {
     _log.config("onRecordDeleted ${tableName}");
+    Completer<SResponse> completer = new Completer<SResponse>();
     _content.loading = true;
     datasource.delete(record)
     .then((DataResponse response) {
+      completer.complete(response.response);
       _content.loading = false;
       display(response.recordList);
     });
-    return null;
+    return completer.future;
   }
 
   /// Records Deleted (from table)
-  String onRecordsDeleted(List<DRecord> records) {
+  Future<SResponse> onRecordsDeleted(List<DRecord> records) {
     _log.config("onRecordsDeleted ${tableName}");
+    Completer<SResponse> completer = new Completer<SResponse>();
     _content.loading = true;
     datasource.deleteAll(records)
     .then((DataResponse response) {
+      completer.complete(response.response);
       _content.loading = false;
       display(response.recordList);
     });
-    return null;
+    return completer.future;
   }
 
 

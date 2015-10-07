@@ -63,12 +63,17 @@ class ObjectFilter {
     sortTable.reset();
   }
 
-  String filterRecordSaved(DRecord record) {
+  Future<SResponse> filterRecordSaved(DRecord record) {
     _log.info("filterRecordSaved ${record}");
     modal.show = false;
-    if (filterUpdated != null)
+    Completer<SResponse> completer = new Completer<SResponse>();
+    if (filterUpdated != null) {
       filterUpdated(toSavedQuery());
-    return null;
+      completer.completeError("NotImplementedYet");
+    } else {
+      completer.completeError("NoServer");
+    }
+    return completer.future;
   }
 
   /// Convert to Records

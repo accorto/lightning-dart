@@ -362,16 +362,17 @@ class LForm
     evt.preventDefault(); // might be form or button event
     //_log.info("onFormSubmit - ${record}");
     bool valid = doValidate();
-    if (formSubmitted != null)
-      valid = formSubmitted(valid);
-    //
-    _debug("submit valid=${valid}:");
-    if (recordSaved != null) {
-      String error = recordSaved(record);
-      if (error != null) {
-        _debug("submit error=${error}:");
-        valid = false;
-      }
+    if (formSubmitted != null) {
+      valid = formSubmitted(valid); // inform
+    }
+    _debug("onFormSubmit valid=${valid}:");
+
+    if (valid && recordSaved != null) {
+      recordSaved(record)
+      .then((SResponse response){
+        _debug("onFormSubmit ${response.msg}");
+
+      });
     }
 
     // Submit form if there is an action
@@ -439,7 +440,8 @@ class LForm
   void _debug(String info) {
     for (DEntry entity in data.record.entryList) {
       if (entity.hasValue()) {
-        info += " ${entity.columnName}=${entity.value}";
+        if (entity.value != DataRecord.NULLVALUE)
+          info += " ${entity.columnName}=${entity.value}";
       }
     }
     if (_debugElement == null) {

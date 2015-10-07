@@ -50,13 +50,18 @@ class ObjectEdit {
   }
 
   /// close Modal
-  String onFormRecordSaved(DRecord record) {
-    String error = null;
+  Future<SResponse> onFormRecordSaved(DRecord record) {
+    Completer<SResponse> completer = new Completer<SResponse>();
     if (recordSaved != null) {
-      error = recordSaved(record);
+      recordSaved(record)
+      .then((SResponse response) {
+        completer.complete(response);
+        modal.show = !response.isSuccess;
+      });
+    } else {
+      completer.completeError("NoServer");
     }
-    modal.show = error != null;
-    return null;
+    return completer.future;
   }
 
 
