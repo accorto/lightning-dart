@@ -52,6 +52,8 @@ class ClientEnv {
   static DateFormat dateFormat_ymd_hm;
   /// Integer
   static NumberFormat numberFormat_int;
+  /// Number with one decimals
+  static NumberFormat numberFormat_1;
   /// Number with two decimals
   static NumberFormat numberFormat_2;
 
@@ -111,6 +113,9 @@ class ClientEnv {
     numberFormat_int = new NumberFormat("#,###,##0", localeName);
     numberFormat_int.minimumFractionDigits = 0;
     numberFormat_int.maximumFractionDigits = 0;
+    numberFormat_1 = new NumberFormat("#,###,##0.0", localeName);
+    numberFormat_1.minimumFractionDigits = 1;
+    numberFormat_1.maximumFractionDigits = 1;
     numberFormat_2 = new NumberFormat("#,###,##0.00", localeName);
     numberFormat_2.minimumFractionDigits = 2;
     numberFormat_2.maximumFractionDigits = 2;

@@ -126,7 +126,7 @@ abstract class Datasource
     .then((HttpRequest httpRequest) {
       List<int> buffer = new Uint8List.view(httpRequest.response);
       DisplayResponse response = new DisplayResponse.fromBuffer(buffer);
-      handleSuccess(info, response.response, setBusy: setBusy);
+      handleSuccess(info, response.response, buffer.length, setBusy: setBusy);
       completer.complete(response);
       MetaCache.update(response);
     })
@@ -284,7 +284,7 @@ abstract class Datasource
 
     execute_data(request, setBusy: false)
     .then((DataResponse resp) {
-      ServiceTracker track = new ServiceTracker(resp.response, "new ${list.tableName} #${resp.contextChangeList.length}");
+      ServiceTracker track = new ServiceTracker(resp.response, "new_${list.tableName}", "#${resp.contextChangeList.length}");
       // copy values
       DataRecord data = new DataRecord(null, value: record);
       for (DKeyValue nv in resp.contextChangeList) {
@@ -338,7 +338,7 @@ abstract class Datasource
 
     execute_data(req, info:validationCallout, setBusy:false)
     .then((DataResponse resp) {
-      ServiceTracker track = new ServiceTracker(resp.response, "callout ${validationCallout} #${resp.contextChangeList.length}");
+      ServiceTracker track = new ServiceTracker(resp.response, "callout_${validationCallout}", "#${resp.contextChangeList.length}");
       completer.complete(record);
       track.send();
     })
@@ -417,7 +417,7 @@ abstract class Datasource
     .then((HttpRequest httpRequest) {
       List<int> buffer = new Uint8List.view(httpRequest.response);
       DataResponse response = new DataResponse.fromBuffer(buffer);
-      handleSuccess(info, response.response, setBusy: setBusy);
+      handleSuccess(info, response.response, buffer.length, setBusy: setBusy);
       completer.complete(response);
     })
     .catchError((Event error, StackTrace stackTrace) {

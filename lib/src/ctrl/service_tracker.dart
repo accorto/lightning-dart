@@ -15,22 +15,27 @@ class ServiceTracker {
   static Duration getDuration(SResponse response) {
     int start = response.clientRequestTime.toInt();
     int receipt = response.clientReceiptTime.toInt();
-    int delta = receipt - start;
-    if (delta > 0 && start > 0) {
-      return new Duration(microseconds: delta);
+    int deltaMs = receipt - start;
+    if (deltaMs > 0 && start > 0) {
+      return new Duration(milliseconds: deltaMs);
     }
     return new Duration();
   }
 
+  /// format duration in sec
+  static String formatDuration(SResponse response) {
+    return DurationUtil.formatDuration(getDuration(response));
+  }
 
   /// Server Response
   final SResponse response;
-  final String info;
+  final String utv;
+  final String details;
 
   /**
    * Service Performance Tracker
    */
-  ServiceTracker(SResponse this.response, String this.info) {
+  ServiceTracker(SResponse this.response, String this.utv, String this.details) {
     if (!response.hasClientRequestTime())
       response.clientRequestTime = new Int64(new DateTime.now().millisecondsSinceEpoch);
     if (!response.hasClientReceiptTime())
@@ -40,7 +45,7 @@ class ServiceTracker {
 
   /// Process Complete - send
   void send() {
-    ServiceAnalytics.sendTimingApp(info, response);
+    ServiceAnalytics.sendTimingApp(utv, response, details);
   } // send
 
 } // ServiceTracker

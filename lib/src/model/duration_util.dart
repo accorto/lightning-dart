@@ -163,6 +163,30 @@ class DurationUtil {
     return new DurationUtil(!negative, years, months, days, hours, minutes, seconds);
   } // parse
 
+  /// format milliseconds
+  static String formatDuration(Duration dur) {
+    String twoDigits(int n) {
+      if (n >= 10) return "$n";
+      return "0$n";
+    }
+    String threeDigits(int n) {
+      if (n >= 100) return "$n";
+      if (n >= 10) return "0$n";
+      return "00$n";
+    }
+    String twoDigitSeconds = twoDigits(dur.inSeconds.remainder(Duration.SECONDS_PER_MINUTE));
+    String threeDigitUs = threeDigits(dur.inMilliseconds.remainder(Duration.MILLISECONDS_PER_SECOND));
+    if (dur.inHours != 0) {
+      String twoDigitMinutes = twoDigits(dur.inMinutes.remainder(Duration.MINUTES_PER_HOUR));
+      return "${dur.inHours}:${twoDigitMinutes}:${twoDigitSeconds}.${threeDigitUs}s";
+    }
+    if (dur.inMinutes != 0) {
+      return "${dur.inMinutes}:${twoDigitSeconds}.${threeDigitUs}s";
+    }
+    return "${dur.inSeconds}.${threeDigitUs}s";
+  } // formatDuration
+
+
 
   /** Day in Seconds 24h (86400). */
   static final int SEC_DAYS = 60 * 60 * 24;

@@ -201,15 +201,16 @@ class Service {
   /**
    * Handle Success - send notifications, unlock ui
    */
-  void handleSuccess(String subject, SResponse sresponse, {bool setBusy: true}) {
+  String handleSuccess(String subject, SResponse sresponse, int length, {bool setBusy: true}) {
     sresponse.clientReceiptTime = new Int64(new DateTime.now().millisecondsSinceEpoch);
-    String details = "${sresponse.trxType} ${sresponse.trxNo} ${ServiceTracker.getDuration(sresponse)}";
+    String details = "${sresponse.trxType}#${sresponse.trxNo} ${subject} ${ServiceTracker.formatDuration(sresponse)} ${ClientEnv.numberFormat_1.format(length/1024)}k";
     if (setBusy && onServerSuccess != null)
       onServerSuccess(sresponse, details);
     if (sendNotification != null) {
       sendNotification(sresponse.isSuccess ? ServiceResponse.Ok : ServiceResponse.Error,
         subject, sresponse.msg, sresponse.clientReceiptTime, details);
     }
+    return details;
   } // handleSuccess
 
   /**

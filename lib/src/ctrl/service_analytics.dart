@@ -20,7 +20,7 @@ part of lightning_ctrl;
 class ServiceAnalytics {
 
   /** Transaction Name */
-  static const TRX = "webAnalysis";
+  static const TRX = "webAnalysis"; // WebAnalysisServlet _sourceCategory=BizAnalysis
 
   /// Enable Analytics
   static bool enabled = false;
@@ -32,7 +32,7 @@ class ServiceAnalytics {
    * Application Timing
    * [utv] timing variable
    */
-  static void sendTimingApp(String utv, SResponse response) {
+  static void sendTimingApp(String utv, SResponse response, String details) {
     if (sendTimingWeb(utv, response))
       return;
     // initial
@@ -40,6 +40,8 @@ class ServiceAnalytics {
     Map<String, String> data = _createMap(now);
     data["utv"] = utv;
     _timingResponse(data, response, now);
+    if (details != null && details.isNotEmpty)
+      data["details"] = details;
     _send(data);
   } // sendTimingApp
 
