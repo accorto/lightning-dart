@@ -12,7 +12,7 @@ dartanalyzer web/demo.dart
 
 dartdoc
 # pub global activate simple_http_server
-# dhttpd --path /Users/jorg/Documents/BizPlatform/lightning/lightning-dart/doc/api
+#  --path /Users/jorg/Documents/BizPlatform/lightning/lightning-dart/doc/api
 
 pub deps > dependencies.txt
 

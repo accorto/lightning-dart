@@ -3,7 +3,7 @@
 
 ## lightning_dart
 
-View - UI components
+View - UI component library
 
 - assets - from lightning-design (Salesforce Lightning Design System)
 - view - lightning components
@@ -20,7 +20,6 @@ Communication via Protocol Buffers
 
 ## lightning_ctrl
 
-Controller 
-
-
+Controller Framework
+(see exampleWorkspace)
 
