@@ -151,10 +151,14 @@ class ObjectCtrl extends LComponent {
   }
 
   /// callback after filter updated
-  void onFilterUpdated(SavedQuery query) {
-    // add query to lookup + set active
+  Future<SResponse> onFilterUpdated(SavedQuery query) {
+    _log.config("onFilterUpdated NIY");
+    Completer<SResponse> completer = new Completer<SResponse>();
+    // TODO add query to lookup + set active
     // save query
     // execute query
+    completer.completeError(null);
+    return completer.future;
   }
 
   /// Filter changed - query
@@ -172,9 +176,7 @@ class ObjectCtrl extends LComponent {
       _content.loading = false;
       display(response.recordList);
     });
-  }
-
-  // doQuery
+  } // doQuery
 
 
   /// Display Items
@@ -211,13 +213,36 @@ class ObjectCtrl extends LComponent {
       } else if (datasource.recordSorting.isEmpty) {
         _header.summary = "${_records.length} ${objectCtrlRecords()}";
       } else {
-        String info = "${_records.length} ${objectCtrlRecords()} ${LUtil.DOT} ${objectCtrlSortedBy()}";
+        String info = "${_records.length} ${objectCtrlRecords()} ${LUtil.DOT_SPACE} ${objectCtrlSortedBy()}";
         String prefix = " ";
         for (RecordSort sort in datasource.recordSorting.list) {
-          info += prefix + sort.columnLabel + (sort.isAscending ? "\u{2193}" : "\u{2191}");
-          prefix = LUtil.DOT;
+          info += prefix + sort.columnLabel + (sort.isAscending ? LUtil.SORT_ASC : LUtil.SORT_DESC);
+          prefix = LUtil.DOT_SPACE;
         }
         _header.summary = info;
+      }
+    }
+    if (recordCtrl != null) {
+      DRecord oldRecord = recordCtrl.record;
+      bool found = false;
+      for (DRecord record in _records) {
+        if (oldRecord.hasRecordId()) {
+          if (oldRecord.recordId == record.recordId) {
+            recordCtrl.record = record;
+            found = true;
+            break;
+          }
+        } else if (oldRecord.hasUrv()) {
+          if (oldRecord.urv == record.urv) {
+            recordCtrl.record = record;
+            found = true;
+            break;
+          }
+        }
+      }
+      if (!found) {
+        recordCtrl.record = new DRecord(); // empty
+        // TODO close detail
       }
     }
   } // display
@@ -412,15 +437,48 @@ class ObjectCtrl extends LComponent {
     // oe.modal.showInElement(element);
   }
 
+  /// Switch to Record Edit mode
   void _switchRecordCtrl(DRecord record, String editMode) {
     if (recordCtrl == null) {
       recordCtrl = new RecordCtrl(datasource.uiDirect);
-      recordCtrl.element.classes.add(LMargin.C_TOP__X_LARGE);
+      recordCtrl._details.recordSaved = onRecordSaved;
+
+      // recordCtrl.element.classes.add(LMargin.C_TOP__X_LARGE);
+
+      AnchorElement back = new AnchorElement(href: "#")
+        ..id = "${id}-ctrl-back"
+        ..text = "${LUtil.ARROW_LEFT_D} ${objectCtrlBackList()}"
+        ..tabIndex = -1;
+      back.onClick.listen((Event evt){
+        evt.preventDefault();
+        showRecord = false;
+      });
+      _recordCtrlBack = new DivElement()
+        ..append(back);
+      element.parent.append(_recordCtrlBack);
       element.parent.append(recordCtrl.element);
     }
     recordCtrl.editMode = editMode;
     recordCtrl.record = record;
+    showRecord = true;
   }
+  DivElement _recordCtrlBack;
+
+  /// toggle record/list view
+  void set showRecord (bool newValue) {
+    if (recordCtrl == null)
+      return;
+    if (newValue) {
+      _recordCtrlBack.classes.remove(LVisibility.C_HIDE);
+      recordCtrl.element.classes.remove(LVisibility.C_HIDE);
+      element.classes.add(LVisibility.C_HIDE);
+    } else {
+      element.classes.remove(LVisibility.C_HIDE);
+      _recordCtrlBack.classes.add(LVisibility.C_HIDE);
+      recordCtrl.element.classes.add(LVisibility.C_HIDE);
+    }
+  } // showRecord
+
 
   /// Application Action Compact Layout
   void onAppsActionCompactLayout(String value, DRecord record, DEntry entry, var actionVar) {
@@ -440,6 +498,8 @@ class ObjectCtrl extends LComponent {
   static String objectCtrlFilterNewText() => Intl.message("The current filer cannot be changed. Do you wnat to create a new Filter?", name: "objectCtrlFilterNewText");
   static String objectCtrlFilterDelete() => Intl.message("Delete Filter?", name: "objectCtrlFilterDelete");
   static String objectCtrlFilterDeleteText() => Intl.message("Do you want to delete the current filter?", name: "objectCtrlFilterDeleteText");
+
+  static String objectCtrlBackList() => Intl.message("Back to List", name: "objectCtrlBackList");
 
 
 } // ObjectCtrl

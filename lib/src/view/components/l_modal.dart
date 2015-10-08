@@ -222,17 +222,23 @@ class LModal extends LComponent {
     }
   } // setFooterActions
 
-  /// Add Form Buttons to footer
+  /// Add Form Buttons + cancel to footer
   void addFooterFormButtons(LForm form) {
+    _addFooterCancel();
+
     LButton reset = form.addResetButton();
     footer.append(reset.element);
-
     LPopover error = form.addErrorIndicator();
     footer.append(error.element);
-
     LButton save = form.addSaveButton();
     footer.append(save.element);
-  }
+
+    // remove button div
+    if (form.buttonDiv != null) {
+      form.buttonDiv.remove();
+      form.buttonDiv = null;
+    }
+  } // addFooterFormButtons
 
 
   /// Showing Modal

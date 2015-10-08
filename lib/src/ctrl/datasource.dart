@@ -163,6 +163,9 @@ abstract class Datasource
       recordList = response.recordList;
       statisticList = response.statisticList;
       completer.complete(response);
+    })
+    .catchError((error, stackTrace) {
+      completer.completeError(error, stackTrace);
     });
     return completer.future;
   } // query
@@ -175,6 +178,9 @@ abstract class Datasource
     execute_data(req)
     .then((DataResponse response){
       completer.complete(response.totalRows);
+    })
+    .catchError((error, stackTrace) {
+      completer.completeError(error, stackTrace);
     });
     return completer.future;
   }
@@ -192,6 +198,9 @@ abstract class Datasource
       recordList = response.recordList;
       statisticList = response.statisticList;
       completer.complete(response);
+    })
+    .catchError((error, stackTrace) {
+      completer.completeError(error, stackTrace);
     });
     return completer.future;
   }
@@ -209,6 +218,9 @@ abstract class Datasource
       recordList = response.recordList;
       statisticList = response.statisticList;
       completer.complete(response);
+    })
+    .catchError((error, stackTrace) {
+      completer.completeError(error, stackTrace);
     });
     return completer.future;
   }
@@ -226,6 +238,9 @@ abstract class Datasource
       recordList = response.recordList;
       statisticList = response.statisticList;
       completer.complete(response);
+    })
+    .catchError((error, stackTrace) {
+      completer.completeError(error, stackTrace);
     });
     return completer.future;
   }
@@ -243,6 +258,9 @@ abstract class Datasource
       recordList = response.recordList;
       statisticList = response.statisticList;
       completer.complete(response);
+    })
+    .catchError((error, stackTrace) {
+      completer.completeError(error, stackTrace);
     });
     return completer.future;
   }
@@ -409,8 +427,4 @@ abstract class Datasource
     return completer.future;
   } // execute_data
 
-
-
-
 } // Datasource
-

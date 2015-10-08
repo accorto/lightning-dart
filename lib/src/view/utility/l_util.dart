@@ -13,6 +13,31 @@ class LUtil {
 
   static final Logger _log = new Logger("LUtil");
 
+  /// middle dot with spaces around
+  static const String DOT_SPACE = " \u{00B7} ";
+
+  // small circle - http://www.fileformat.info/info/unicode/char/25CF/index.htm
+  static const String CIRCLE ="\u{25CF}";
+  // small square - http://www.fileformat.info/info/unicode/char/25a0/index.htm
+  static const String SQUARE ="\u{25A0}";
+  // rectangle
+  static const String RECTANGLE ="\u{25AC}";
+  // small parallelogram
+  static const String PARALLEL ="\u{25B0}";
+  // small triangle up
+  static const String TRIANGLE ="\u{25B4}";
+  // inverse bullet
+  static const String INV_BULLET ="\u{25D8}";
+
+  // double left arrow
+  static const String ARROW_LEFT_D = "\u{21D0}";
+
+  // downwards single arrow
+  static const String SORT_ASC = "\u{2193}";
+  // upwards single arrow
+  static const String SORT_DESC = "\u{2191}";
+
+
   // Format Log Record
   static String formatLog(LogRecord rec) {
     StringBuffer sb = new StringBuffer();
@@ -142,9 +167,6 @@ class LUtil {
     && one.month == two.month
     && one.day == two.day;
   } // isSameDay
-
-  /// Dot with spaces around
-  static const String DOT = " \u{00B7} ";
 
   static final String SPACES_REGEX = r"[\s_-]";
   static final RegExp SPACES = new RegExp(SPACES_REGEX);

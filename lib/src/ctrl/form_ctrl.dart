@@ -68,6 +68,7 @@ class FormCtrl extends LForm {
     }
     if (addButtons) {
       addResetButton();
+      addErrorIndicator();
       addSaveButton();
     }
   } // build

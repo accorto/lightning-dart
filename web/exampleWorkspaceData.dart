@@ -35,11 +35,17 @@ class WorbenchData extends Datasource {
 
     new Timer(new Duration(seconds: 2), (){
       DataResponse response = new DataResponse();
+      response.response = new SResponse()
+        ..isSuccess = true
+        ..msg = "example data";
 
       if (request.type == DataRequestType.SAVE) {
         for (DRecord record in request.recordList) {
+          bool isNew = !record.hasRecordId();
           uiu.updateHeader(record);
-          _exampleList.add(record);
+          if (isNew) {
+            _exampleList.add(record);
+          }
         }
       }
       if (request.type == DataRequestType.DELETE) {

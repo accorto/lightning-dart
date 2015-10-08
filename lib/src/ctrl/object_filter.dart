@@ -6,7 +6,10 @@
 
 part of lightning_ctrl;
 
-typedef void FilterUpdated(SavedQuery query);
+/**
+ * Filter Updated
+ */
+typedef Future<SResponse> FilterUpdated(SavedQuery query);
 
 /**
  * Filter Dialog
@@ -64,14 +67,17 @@ class ObjectFilter {
   }
 
   Future<SResponse> filterRecordSaved(DRecord record) {
-    _log.info("filterRecordSaved ${record}");
+    _log.info("filterRecordSaved TODO ${record}");
+    // TODO save Filter
     modal.show = false;
     Completer<SResponse> completer = new Completer<SResponse>();
     if (filterUpdated != null) {
-      filterUpdated(toSavedQuery());
-      completer.completeError("NotImplementedYet");
+      filterUpdated(toSavedQuery())
+      .then((SResponse response){
+        completer.complete(response);
+      });
     } else {
-      completer.completeError("NoServer");
+      completer.completeError(null);
     }
     return completer.future;
   }

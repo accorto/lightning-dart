@@ -216,6 +216,7 @@ class UiUtilDemo extends UiUtil {
           record.drv += " " + value;
       }
     }
+    record.clearIsChanged();
   } // updateHeader
 
   /// next id

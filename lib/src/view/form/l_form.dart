@@ -10,7 +10,12 @@ part of lightning_dart;
  * Form Submitted [valid] form validated
  * return true if continue
  */
-typedef bool FormSubmitted (bool valid);
+typedef bool FormSubmitPre (bool valid);
+
+/**
+ * Form submitted and operation completed [response] is null if error
+ */
+typedef void FormSubmitPost (SResponse response);
 
 /**
  * Form Reset (info)
@@ -110,11 +115,15 @@ class LForm
   /// Callback when Record deleted
   RecordDeleted recordDeleted;
   /// Callback when Form submitted - allows to prevent submitting form
-  FormSubmitted formSubmitted;
+  FormSubmitPre formSubmitPre;
+  /// Callback when Form submitted and [recordSaved] complete
+  FormSubmitPost formSubmitPost;
   /// Callback after Form reset
   FormResetted formResetted;
   /// Callback after record was changed in Form (info only)
   RecordChange formRecordChange;
+  /// optional Buttons
+  DivElement buttonDiv;
 
   /**
    * Form - type = C_FORM__HORIZONTAL, C_FORM__STACKED, C_FORM__INLINE
@@ -281,8 +290,11 @@ class LForm
           label == null ? lFormReset() : label,
           new LIconUtility(LIconUtility.UNDO), iconLeft:true)
         ..typeReset = false; // channel explicitly through onFormReset
-      add(_buttonReset);
       _buttonReset.onClick.listen(onFormReset);
+      if (buttonDiv == null)
+        add(_buttonReset);
+      else
+        buttonDiv.append(_buttonReset.element);
     }
     return _buttonReset;
   }
@@ -301,9 +313,12 @@ class LForm
           theIcon, iconLeft:true)
         ..typeSubmit = false; // channel explicitly through onFormSubmit
       _buttonSave.autofocus = true;
-      add(_buttonSave);
       _buttonSave.onClick.listen(onFormSubmit);
       _buttonSaveChangeOnly = buttonSaveChangeOnly;
+      if (buttonDiv == null)
+        add(_buttonSave);
+      else
+        buttonDiv.append(_buttonSave.element);
     }
     //
     if (_buttonSaveChangeOnly) {
@@ -327,7 +342,10 @@ class LForm
       _errorPop.showAbove(_error, showOnClick:true, showOnHover:true);
       _errorPop.wrapper.classes.add(LMargin.C_HORIZONTAL__X_SMALL);
       _error.classes.add(LVisibility.C_HIDE); // button hide
-      add(_errorPop);
+      if (buttonDiv == null)
+        add(_errorPop);
+      else
+        buttonDiv.append(_errorPop.element);
     }
     return _errorPop;
   }
@@ -362,16 +380,21 @@ class LForm
     evt.preventDefault(); // might be form or button event
     //_log.info("onFormSubmit - ${record}");
     bool valid = doValidate();
-    if (formSubmitted != null) {
-      valid = formSubmitted(valid); // inform
+    if (formSubmitPre != null) {
+      valid = formSubmitPre(valid); // inform/confirm
     }
     _debug("onFormSubmit valid=${valid}:");
 
     if (valid && recordSaved != null) {
       recordSaved(record)
       .then((SResponse response){
-        _debug("onFormSubmit ${response.msg}");
-
+        _log.fine("onFormSubmit success=${response.isSuccess} ${response.msg}");
+        if (formSubmitPost != null) {
+          formSubmitPost(response); // inform/confirm
+        }
+      })
+      .catchError((Event error, StackTrace stackTrace) {
+        formSubmitPost(null);
       });
     }
 
@@ -404,11 +427,19 @@ class LForm
     if (_error != null) {
       _errorPop.bodyLines = errors;
       if (valid)
-        _error.classes.add(LVisibility.C_HIDE);
+        _error.classes.add(LVisibility.C_HIDE); // button
       else
         _error.classes.remove(LVisibility.C_HIDE);
     }
     return valid;
+  } // doValidate
+
+  /// show error [message]
+  void showError(String message) {
+    if (_error != null) {
+      _errorPop.bodyText = message;
+      _error.classes.remove(LVisibility.C_HIDE); // button
+    }
   }
 
   /// Layout

@@ -15,7 +15,11 @@ class RecordCtrlDetails extends FormCtrl {
   /// Detail View
   RecordCtrlDetails(UI ui, String idPrefix)
       : super(ui.tableName, ui, idPrefix:idPrefix) {
+    buttonDiv = new DivElement()
+//    ..classes.add(LMargin.C_VERTICAL__MEDIUM)
+      ..classes.add(LModal.C_MODAL__FOOTER);
     buildPanels();
+    append(buttonDiv);
     element.classes.add(LMargin.C_HORIZONTAL__LARGE);
   } // RecordCtrlDetails
 

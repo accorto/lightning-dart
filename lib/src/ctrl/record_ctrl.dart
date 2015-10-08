@@ -42,8 +42,9 @@ class RecordCtrl extends LComponent {
   /// Left Side (related/details)
   final LTab _leftTab = new LTab();
   RecordCtrlRelated _related;
+  /// Form
   RecordCtrlDetails _details;
-
+  /// UI
   final UI ui;
 
 
@@ -66,23 +67,27 @@ class RecordCtrl extends LComponent {
     _leftTab.id = idPrefix + "-tab";
     element.append(_leftTab.element);
     _related = new RecordCtrlRelated(ui);
+
+    // form
     _details = new RecordCtrlDetails(ui, id);
+    //
     _leftTab.addTab(lRecordCtrlRelated(), name: "related", content:_related.element);
     _leftTab.addTab(lRecordCtrlDetails(), name: "details", content:_details.element);
     _leftTab.selectTabByPos(1);
-    //
-
   } // RecordCtrl
 
 
+  /// get (details) record
   DRecord get record => _details.record;
+  /// set record to header, details, related
   void set record (DRecord newValue) {
     _header.record = newValue;
     _details.record = newValue;
     _related.record = newValue;
-  } // setData
+  } // setRecord
 
 
+  /// display current record
   void display() {
     _header.display();
     // _breadcrumb

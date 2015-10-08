@@ -34,9 +34,9 @@ class ObjectEdit {
       element: new DivElement(), idPrefix:_ID);
     form.buildPanels();
     form.recordSaved = onFormRecordSaved;
+    // form.formSubmitPre
+    form.formSubmitPost = onFormSubmitPost;
     modal.addForm(form);
-    // _form.addResetButton().onClick.listen(onReset);
-    // _form.onRecordSaved = filterRecordSaved;
   } // ObjectEdit
 
   /// set Record
@@ -55,17 +55,30 @@ class ObjectEdit {
     if (recordSaved != null) {
       recordSaved(record)
       .then((SResponse response) {
-        completer.complete(response);
-        modal.show = !response.isSuccess;
+        completer.complete(response); // calls onFormSubmitPost
       });
     } else {
-      completer.completeError("NoServer");
+      completer.completeError(null);
     }
     return completer.future;
+  } // onFormRecordSaved
+
+  /// Post Form Submit
+  void onFormSubmitPost (SResponse response) {
+    if (response == null) {
+      form.showError(objectEditError());
+    } else if (response.isSuccess) {
+      modal.show = false;
+    } else {
+      form.showError(response.msg);
+    }
   }
+
 
 
   static String objectEditEdit() => Intl.message("Edit", name: "objectEditEdit");
   static String objectEditNew() => Intl.message("New", name: "objectEditNew");
+
+  static String objectEditError() => Intl.message("Communication Error", name: "objectEditError");
 
 } // ObjectEdit
