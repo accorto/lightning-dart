@@ -1,7 +1,7 @@
-///
-//  Generated code. Do not modify.
-///
-library rr_display;
+/**
+ * Generated Protocol Buffers code. Do not modify.
+ */
+library protoc.rr_display;
 
 import 'dart:async';
 
@@ -9,6 +9,7 @@ import 'package:protobuf/protobuf.dart';
 import 'rr.pb.dart';
 import 'display.pb.dart';
 import 'structure.pb.dart';
+import 'data.pb.dart';
 
 class DisplayRequestType extends ProtobufEnum {
   static const DisplayRequestType LIST = const DisplayRequestType._(1, 'LIST');
@@ -23,28 +24,31 @@ class DisplayRequestType extends ProtobufEnum {
 
   static final Map<int, DisplayRequestType> _byValue = ProtobufEnum.initByValue(values);
   static DisplayRequestType valueOf(int value) => _byValue[value];
+  static void $checkItem(DisplayRequestType v) {
+    if (v is !DisplayRequestType) checkItemFailed(v, 'DisplayRequestType');
+  }
 
   const DisplayRequestType._(int v, String n) : super(v, n);
 }
 
 class DisplayRequest extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('DisplayRequest')
-    ..a(1, 'request', GeneratedMessage.QM, CRequest.create, CRequest.create)
-    ..e(5, 'type', GeneratedMessage.QE, DisplayRequestType.GET, (var v) => DisplayRequestType.valueOf(v))
-    ..a(6, 'listPattern', GeneratedMessage.OS)
-    ..a(7, 'isNoCache', GeneratedMessage.OB)
-    ..m(10, 'display', UIInfo.create, UIInfo.createRepeated)
-    ..a(15, 'uiId', GeneratedMessage.OS)
-    ..a(16, 'updatedLabel', GeneratedMessage.OS)
-    ..a(17, 'updatedTenantId', GeneratedMessage.OS)
-    ..a(18, 'updatedRoleId', GeneratedMessage.OS)
-    ..a(19, 'updatedUserId', GeneratedMessage.OS)
-    ..a(20, 'uiUpdateFlag', GeneratedMessage.OS)
-    ..m(30, 'updatedGridColumn', UIGridColumn.create, UIGridColumn.createRepeated)
-    ..m(31, 'updatedPanel', UIPanel.create, UIPanel.createRepeated)
-    ..m(32, 'updatedProcess', UIProcess.create, UIProcess.createRepeated)
-    ..m(33, 'updatedLink', UILink.create, UILink.createRepeated)
-    ..m(34, 'updatedQueryColumn', UIQueryColumn.create, UIQueryColumn.createRepeated)
+    ..a(1, 'request', PbFieldType.QM, CRequest.getDefault, CRequest.create)
+    ..e(5, 'type', PbFieldType.QE, DisplayRequestType.GET, DisplayRequestType.valueOf)
+    ..a(6, 'listPattern', PbFieldType.OS)
+    ..a(7, 'isNoCache', PbFieldType.OB)
+    ..pp(10, 'display', PbFieldType.PM, UIInfo.$checkItem, UIInfo.create)
+    ..a(15, 'uiId', PbFieldType.OS)
+    ..a(16, 'updatedLabel', PbFieldType.OS)
+    ..a(17, 'updatedTenantId', PbFieldType.OS)
+    ..a(18, 'updatedRoleId', PbFieldType.OS)
+    ..a(19, 'updatedUserId', PbFieldType.OS)
+    ..a(20, 'uiUpdateFlag', PbFieldType.OS)
+    ..pp(30, 'updatedGridColumn', PbFieldType.PM, UIGridColumn.$checkItem, UIGridColumn.create)
+    ..pp(31, 'updatedPanel', PbFieldType.PM, UIPanel.$checkItem, UIPanel.create)
+    ..pp(32, 'updatedProcess', PbFieldType.PM, UIProcess.$checkItem, UIProcess.create)
+    ..pp(33, 'updatedLink', PbFieldType.PM, UILink.$checkItem, UILink.create)
+    ..pp(34, 'updatedQueryColumn', PbFieldType.PM, UIQueryColumn.$checkItem, UIQueryColumn.create)
   ;
 
   DisplayRequest() : super();
@@ -54,76 +58,86 @@ class DisplayRequest extends GeneratedMessage {
   BuilderInfo get info_ => _i;
   static DisplayRequest create() => new DisplayRequest();
   static PbList<DisplayRequest> createRepeated() => new PbList<DisplayRequest>();
+  static DisplayRequest getDefault() {
+    if (_defaultInstance == null) _defaultInstance = new _ReadonlyDisplayRequest();
+    return _defaultInstance;
+  }
+  static DisplayRequest _defaultInstance;
+  static void $checkItem(DisplayRequest v) {
+    if (v is !DisplayRequest) checkItemFailed(v, 'DisplayRequest');
+  }
 
-  CRequest get request => getField(1);
+  CRequest get request => $_get(0, 1, null);
   void set request(CRequest v) { setField(1, v); }
-  bool hasRequest() => hasField(1);
+  bool hasRequest() => $_has(0, 1);
   void clearRequest() => clearField(1);
 
-  DisplayRequestType get type => getField(5);
+  DisplayRequestType get type => $_get(1, 5, null);
   void set type(DisplayRequestType v) { setField(5, v); }
-  bool hasType() => hasField(5);
+  bool hasType() => $_has(1, 5);
   void clearType() => clearField(5);
 
-  String get listPattern => getField(6);
-  void set listPattern(String v) { setField(6, v); }
-  bool hasListPattern() => hasField(6);
+  String get listPattern => $_get(2, 6, '');
+  void set listPattern(String v) { $_setString(2, 6, v); }
+  bool hasListPattern() => $_has(2, 6);
   void clearListPattern() => clearField(6);
 
-  bool get isNoCache => getField(7);
-  void set isNoCache(bool v) { setField(7, v); }
-  bool hasIsNoCache() => hasField(7);
+  bool get isNoCache => $_get(3, 7, false);
+  void set isNoCache(bool v) { $_setBool(3, 7, v); }
+  bool hasIsNoCache() => $_has(3, 7);
   void clearIsNoCache() => clearField(7);
 
-  List<UIInfo> get displayList => getField(10);
+  List<UIInfo> get displayList => $_get(4, 10, null);
 
-  String get uiId => getField(15);
-  void set uiId(String v) { setField(15, v); }
-  bool hasUiId() => hasField(15);
+  String get uiId => $_get(5, 15, '');
+  void set uiId(String v) { $_setString(5, 15, v); }
+  bool hasUiId() => $_has(5, 15);
   void clearUiId() => clearField(15);
 
-  String get updatedLabel => getField(16);
-  void set updatedLabel(String v) { setField(16, v); }
-  bool hasUpdatedLabel() => hasField(16);
+  String get updatedLabel => $_get(6, 16, '');
+  void set updatedLabel(String v) { $_setString(6, 16, v); }
+  bool hasUpdatedLabel() => $_has(6, 16);
   void clearUpdatedLabel() => clearField(16);
 
-  String get updatedTenantId => getField(17);
-  void set updatedTenantId(String v) { setField(17, v); }
-  bool hasUpdatedTenantId() => hasField(17);
+  String get updatedTenantId => $_get(7, 17, '');
+  void set updatedTenantId(String v) { $_setString(7, 17, v); }
+  bool hasUpdatedTenantId() => $_has(7, 17);
   void clearUpdatedTenantId() => clearField(17);
 
-  String get updatedRoleId => getField(18);
-  void set updatedRoleId(String v) { setField(18, v); }
-  bool hasUpdatedRoleId() => hasField(18);
+  String get updatedRoleId => $_get(8, 18, '');
+  void set updatedRoleId(String v) { $_setString(8, 18, v); }
+  bool hasUpdatedRoleId() => $_has(8, 18);
   void clearUpdatedRoleId() => clearField(18);
 
-  String get updatedUserId => getField(19);
-  void set updatedUserId(String v) { setField(19, v); }
-  bool hasUpdatedUserId() => hasField(19);
+  String get updatedUserId => $_get(9, 19, '');
+  void set updatedUserId(String v) { $_setString(9, 19, v); }
+  bool hasUpdatedUserId() => $_has(9, 19);
   void clearUpdatedUserId() => clearField(19);
 
-  String get uiUpdateFlag => getField(20);
-  void set uiUpdateFlag(String v) { setField(20, v); }
-  bool hasUiUpdateFlag() => hasField(20);
+  String get uiUpdateFlag => $_get(10, 20, '');
+  void set uiUpdateFlag(String v) { $_setString(10, 20, v); }
+  bool hasUiUpdateFlag() => $_has(10, 20);
   void clearUiUpdateFlag() => clearField(20);
 
-  List<UIGridColumn> get updatedGridColumnList => getField(30);
+  List<UIGridColumn> get updatedGridColumnList => $_get(11, 30, null);
 
-  List<UIPanel> get updatedPanelList => getField(31);
+  List<UIPanel> get updatedPanelList => $_get(12, 31, null);
 
-  List<UIProcess> get updatedProcessList => getField(32);
+  List<UIProcess> get updatedProcessList => $_get(13, 32, null);
 
-  List<UILink> get updatedLinkList => getField(33);
+  List<UILink> get updatedLinkList => $_get(14, 33, null);
 
-  List<UIQueryColumn> get updatedQueryColumnList => getField(34);
+  List<UIQueryColumn> get updatedQueryColumnList => $_get(15, 34, null);
 }
+
+class _ReadonlyDisplayRequest extends DisplayRequest with ReadonlyMessageMixin {}
 
 class DisplayResponse extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('DisplayResponse')
-    ..a(1, 'response', GeneratedMessage.QM, SResponse.create, SResponse.create)
-    ..m(10, 'ui', UI.create, UI.createRepeated)
-    ..m(11, 'table', DTable.create, DTable.createRepeated)
-    ..m(12, 'display', UIInfo.create, UIInfo.createRepeated)
+    ..a(1, 'response', PbFieldType.QM, SResponse.getDefault, SResponse.create)
+    ..pp(10, 'ui', PbFieldType.PM, UI.$checkItem, UI.create)
+    ..pp(11, 'table', PbFieldType.PM, DTable.$checkItem, DTable.create)
+    ..pp(12, 'display', PbFieldType.PM, UIInfo.$checkItem, UIInfo.create)
   ;
 
   DisplayResponse() : super();
@@ -133,27 +147,36 @@ class DisplayResponse extends GeneratedMessage {
   BuilderInfo get info_ => _i;
   static DisplayResponse create() => new DisplayResponse();
   static PbList<DisplayResponse> createRepeated() => new PbList<DisplayResponse>();
+  static DisplayResponse getDefault() {
+    if (_defaultInstance == null) _defaultInstance = new _ReadonlyDisplayResponse();
+    return _defaultInstance;
+  }
+  static DisplayResponse _defaultInstance;
+  static void $checkItem(DisplayResponse v) {
+    if (v is !DisplayResponse) checkItemFailed(v, 'DisplayResponse');
+  }
 
-  SResponse get response => getField(1);
+  SResponse get response => $_get(0, 1, null);
   void set response(SResponse v) { setField(1, v); }
-  bool hasResponse() => hasField(1);
+  bool hasResponse() => $_has(0, 1);
   void clearResponse() => clearField(1);
 
-  List<UI> get uiList => getField(10);
+  List<UI> get uiList => $_get(1, 10, null);
 
-  List<DTable> get tableList => getField(11);
+  List<DTable> get tableList => $_get(2, 11, null);
 
-  List<UIInfo> get displayList => getField(12);
+  List<UIInfo> get displayList => $_get(3, 12, null);
 }
+
+class _ReadonlyDisplayResponse extends DisplayResponse with ReadonlyMessageMixin {}
 
 class DisplayServiceApi {
   RpcClient _client;
   DisplayServiceApi(this._client);
 
-  Future<DisplayResponse> display(ClientContext ctx, DisplayRequest request) async {
+  Future<DisplayResponse> display(ClientContext ctx, DisplayRequest request) {
     var emptyResponse = new DisplayResponse();
-    var result = await _client.invoke(ctx, 'DisplayService', 'Display', request, emptyResponse);
-    return result;
+    return _client.invoke(ctx, 'DisplayService', 'Display', request, emptyResponse);
   }
 }
 
@@ -167,11 +190,86 @@ abstract class DisplayServiceBase extends GeneratedService {
     }
   }
 
-  Future<GeneratedMessage> handleCall(ServerContext ctx, String method, GeneratedMessage request) async {
+  Future<GeneratedMessage> handleCall(ServerContext ctx, String method, GeneratedMessage request) {
     switch (method) {
-      case 'Display': return await display(ctx, request);
+      case 'Display': return display(ctx, request);
       default: throw new ArgumentError('Unknown method: $method');
     }
   }
+
+  Map<String, dynamic> get $json => DisplayService$json;
+  Map<String, dynamic> get $messageJson => DisplayService$messageJson;
 }
+
+const DisplayRequestType$json = const {
+  '1': 'DisplayRequestType',
+  '2': const [
+    const {'1': 'LIST', '2': 1},
+    const {'1': 'GET', '2': 2},
+    const {'1': 'UPDATE', '2': 3},
+  ],
+};
+
+const DisplayRequest$json = const {
+  '1': 'DisplayRequest',
+  '2': const [
+    const {'1': 'request', '3': 1, '4': 2, '5': 11, '6': '.CRequest'},
+    const {'1': 'type', '3': 5, '4': 2, '5': 14, '6': '.DisplayRequestType', '7': 'GET'},
+    const {'1': 'list_pattern', '3': 6, '4': 1, '5': 9},
+    const {'1': 'is_no_cache', '3': 7, '4': 1, '5': 8, '7': 'false'},
+    const {'1': 'display', '3': 10, '4': 3, '5': 11, '6': '.UIInfo'},
+    const {'1': 'ui_id', '3': 15, '4': 1, '5': 9},
+    const {'1': 'updated_label', '3': 16, '4': 1, '5': 9},
+    const {'1': 'updated_tenant_id', '3': 17, '4': 1, '5': 9},
+    const {'1': 'updated_role_id', '3': 18, '4': 1, '5': 9},
+    const {'1': 'updated_user_id', '3': 19, '4': 1, '5': 9},
+    const {'1': 'ui_update_flag', '3': 20, '4': 1, '5': 9},
+    const {'1': 'updated_grid_column', '3': 30, '4': 3, '5': 11, '6': '.UIGridColumn'},
+    const {'1': 'updated_panel', '3': 31, '4': 3, '5': 11, '6': '.UIPanel'},
+    const {'1': 'updated_process', '3': 32, '4': 3, '5': 11, '6': '.UIProcess'},
+    const {'1': 'updated_link', '3': 33, '4': 3, '5': 11, '6': '.UILink'},
+    const {'1': 'updated_query_column', '3': 34, '4': 3, '5': 11, '6': '.UIQueryColumn'},
+  ],
+};
+
+const DisplayResponse$json = const {
+  '1': 'DisplayResponse',
+  '2': const [
+    const {'1': 'response', '3': 1, '4': 2, '5': 11, '6': '.SResponse'},
+    const {'1': 'ui', '3': 10, '4': 3, '5': 11, '6': '.UI'},
+    const {'1': 'table', '3': 11, '4': 3, '5': 11, '6': '.DTable'},
+    const {'1': 'display', '3': 12, '4': 3, '5': 11, '6': '.UIInfo'},
+  ],
+};
+
+const DisplayService$json = const {
+  '1': 'DisplayService',
+  '2': const [
+    const {'1': 'Display', '2': '.DisplayRequest', '3': '.DisplayResponse'},
+  ],
+};
+
+const DisplayService$messageJson = const {
+  '.DisplayRequest': DisplayRequest$json,
+  '.CRequest': CRequest$json,
+  '.CEnv': CEnv$json,
+  '.UIInfo': UIInfo$json,
+  '.UIGridColumn': UIGridColumn$json,
+  '.DColumn': DColumn$json,
+  '.DOption': DOption$json,
+  '.DKeyValue': DKeyValue$json,
+  '.UIPanelColumn': UIPanelColumn$json,
+  '.UIPanel': UIPanel$json,
+  '.UIProcess': UIProcess$json,
+  '.DProperty': DProperty$json,
+  '.UILink': UILink$json,
+  '.UIQueryColumn': UIQueryColumn$json,
+  '.DisplayResponse': DisplayResponse$json,
+  '.SResponse': SResponse$json,
+  '.UI': UI$json,
+  '.DTable': DTable$json,
+  '.SavedQuery': SavedQuery$json,
+  '.DFilter': DFilter$json,
+  '.DSort': DSort$json,
+};
 
