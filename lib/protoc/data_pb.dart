@@ -5,7 +5,7 @@ library protoc.data;
 
 import 'package:fixnum/fixnum.dart';
 import 'package:protobuf/protobuf.dart';
-import 'structure.pb.dart';
+import 'structure_pb.dart';
 
 class DOP extends ProtobufEnum {
   static const DOP EQ = const DOP._(1, 'EQ');

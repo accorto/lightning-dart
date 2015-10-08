@@ -4,7 +4,7 @@
 library protoc.structure;
 
 import 'package:protobuf/protobuf.dart';
-import 'rr.pb.dart';
+import 'rr_pb.dart';
 
 class DataType extends ProtobufEnum {
   static const DataType STRING = const DataType._(25, 'STRING');

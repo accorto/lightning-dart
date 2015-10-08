@@ -6,8 +6,8 @@ library protoc.rr_data;
 import 'dart:async';
 
 import 'package:protobuf/protobuf.dart';
-import 'rr.pb.dart';
-import 'data.pb.dart';
+import 'rr_pb.dart';
+import 'data_pb.dart';
 
 class DataRequestType extends ProtobufEnum {
   static const DataRequestType QUERY = const DataRequestType._(1, 'QUERY');

@@ -4,8 +4,8 @@
 library protoc.display;
 
 import 'package:protobuf/protobuf.dart';
-import 'structure.pb.dart';
-import 'data.pb.dart';
+import 'structure_pb.dart';
+import 'data_pb.dart';
 
 class UILabelPosition extends ProtobufEnum {
   static const UILabelPosition LEFT = const UILabelPosition._(1, 'LEFT');

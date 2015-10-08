@@ -9,13 +9,12 @@ environment:
   sdk: any
 
 dependencies:
-  browser: any
-  logging: any
-  fixnum: any
-  intl:  any
-  protobuf: 0.5.0
-  stack_trace: any
-  uuid: any
+  browser: '>=0.10.0+2 <0.11.0'
+  logging: '>=0.11.2 <0.12.0'
+  fixnum: '>=0.9.1+2 <0.10.0'
+  protobuf: '>=0.5.0 <0.6.0'
+  uuid: '>=0.5.0 <0.6.0'
+  intl:  '>=0.12.4+2 <0.13.0'
 
 dev_dependencies:
-  test: any
+  test: '>=0.12.4+9'

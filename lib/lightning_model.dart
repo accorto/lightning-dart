@@ -31,19 +31,19 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:fixnum/fixnum.dart';
 
 //Protocol Buffers - Generated
-import 'protoc/structure.pb.dart';
-import 'protoc/data.pb.dart';
-import 'protoc/display.pb.dart';
-import 'protoc/rr.pb.dart';
-import 'protoc/rr_data.pb.dart';
+import 'protoc/structure_pb.dart';
+import 'protoc/data_pb.dart';
+import 'protoc/display_pb.dart';
+import 'protoc/rr_pb.dart';
+import 'protoc/rr_data_pb.dart';
 //import 'protoc/rr_display.pb.dart';
 
-export 'protoc/structure.pb.dart';
-export 'protoc/data.pb.dart';
-export 'protoc/display.pb.dart';
-export 'protoc/rr.pb.dart';
-export 'protoc/rr_data.pb.dart';
-export 'protoc/rr_display.pb.dart';
+export 'protoc/structure_pb.dart';
+export 'protoc/data_pb.dart';
+export 'protoc/display_pb.dart';
+export 'protoc/rr_pb.dart';
+export 'protoc/rr_data_pb.dart';
+export 'protoc/rr_display_pb.dart';
 
 
 import 'dart:indexed_db';

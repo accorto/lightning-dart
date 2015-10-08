@@ -6,10 +6,10 @@ library protoc.rr_display;
 import 'dart:async';
 
 import 'package:protobuf/protobuf.dart';
-import 'rr.pb.dart';
-import 'display.pb.dart';
-import 'structure.pb.dart';
-import 'data.pb.dart';
+import 'rr_pb.dart';
+import 'display_pb.dart';
+import 'structure_pb.dart';
+import 'data_pb.dart';
 
 class DisplayRequestType extends ProtobufEnum {
   static const DisplayRequestType LIST = const DisplayRequestType._(1, 'LIST');
