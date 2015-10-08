@@ -22,14 +22,15 @@ echo "*** Running tests ... with_content_shell:"
 pub run test -p content-shell
 
 
+# -- only works for VM tests
 # https://github.com/duse-io/dart-coveralls
 # https://pub.dartlang.org/packages/dart_coveralls
 #
 # https://coveralls.io/github/accorto/lightning-dart
 # export COVERALLS_TOKEN=x
-if [ "$COVERALLS_TOKEN" ] && [ "$TRAVIS_DART_VERSION" = "stable" ]; then
-  echo "*** Running coverage ..."
+# if [ "$COVERALLS_TOKEN" ] && [ "$TRAVIS_DART_VERSION" = "stable" ]; then
+# echo "*** Running coverage ..."
 # Install dart_coveralls; gather and send coverage data.
 # pub global activate dart_coveralls
-  pub global run dart_coveralls report --debug test/lightning_test.dart
-fi
+# pub global run dart_coveralls report --debug test/lightning_test.dart
+# fi
