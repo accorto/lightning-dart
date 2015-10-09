@@ -45,16 +45,18 @@ class FormCtrl extends LForm {
 
 
   /// Build form panels
-  void buildPanels({bool addButtons:true, bool addProcesses:true}) {
+  void buildPanels({bool addButtons:true, bool addProcesses:true, bool showSection1label:true}) {
     if (addProcesses && ui.processList.isNotEmpty) {
       LButtonGroup processGroup = buildProcesses()
         ..classes.add(LMargin.C_BOTTOM__SMALL);
       add(processGroup);
     }
     // Panels as Field Sets
+    int count = 0;
     for (UIPanel panel in ui.panelList) {
       bool closed = panel.type == UIPanelType.ICLOSED || panel.type == UIPanelType.HIDDEN;
       FormSection section = new FormSection(panel.panelColumnNumber, label:panel.name, open:!closed);
+      section.showLabel = count > 0 || showSection1label;
       setSection(section);
       for (UIPanelColumn pc in panel.panelColumnList) {
         DataColumn dataColumn = DataColumn.fromUi(ui, pc.columnName, tableColumn:pc.column, panelColumn:pc);
@@ -65,6 +67,7 @@ class FormCtrl extends LForm {
           addEditor(editor, newRow:pc.isNewRow, width:pc.width, height:pc.height);
         }
       }
+      count++;
     }
     if (addButtons) {
       addResetButton();

@@ -33,37 +33,58 @@ class LRecordHome extends LPageHeader {
     ..classes.addAll([LGrid.C_COL, LGrid.C_NO_FLEX, LGrid.C_ALIGN_BOTTOM]);
   final LButtonGroup _actionButtonGroup = new LButtonGroup();
 
-
-  /// Detail row
-  DivElement detail;
-
+  //
   UI ui;
+  final List<LRecordHomeDetail> _detailList = new List<LRecordHomeDetail>();
 
   /**
    * Record Home
    */
-  LRecordHome() {
-    _initComponent();
+  LRecordHome({bool withFollow:true}) {
+    _initComponent(withFollow);
   } // LRecordHome
 
   /// Record Home from UI
-  LRecordHome.from(UI this.ui) {
-    _initComponent();
+  LRecordHome.from(UI this.ui, {LIcon icon, bool withFollow:true}) {
+    _initComponent(withFollow);
     DTable table = ui.table;
     // image
-    String iconImage = table.iconImage;
-    if (iconImage != null && iconImage.isNotEmpty) {
-      if (iconImage.startsWith(LIconStandard.C_ICON_STANDARD_)) {
-        String linkName = iconImage.substring(LIconStandard.C_ICON_STANDARD_.length);
-        icon = new LIconStandard(linkName, size: LIcon.C_ICON__LARGE);
+    if (icon != null) {
+      this.icon = icon;
+    } else {
+      String iconImage = table.iconImage;
+      if (iconImage != null && iconImage.isNotEmpty) {
+        if (iconImage.startsWith(LIconStandard.C_ICON_STANDARD_)) {
+          String linkName = iconImage.substring(LIconStandard.C_ICON_STANDARD_.length);
+          this.icon = new LIconStandard(linkName, size: LIcon.C_ICON__LARGE);
+        }
       }
     }
     // record type
     recordType = table.label;
+
+    // Details
+    if (ui.queryColumnList.isNotEmpty) {
+      DivElement detail = new DivElement()
+        ..classes.addAll([LGrid.C_GRID, LPageHeader.C_PAGE_HEADER__DETAIL__ROW]);
+      element.append(detail);
+
+      for (UIQueryColumn qc in ui.queryColumnList) {
+        String columnName = qc.columnName;
+        String label = qc.columnLabel;
+        LRecordHomeDetail d = new LRecordHomeDetail(columnName, label, qc.column);
+        _detailList.add(d);
+        DivElement div = new DivElement()
+          ..classes.add(LGrid.C_COL__PADDED)
+          ..classes.add(LSizing.size1ofY(ui.queryColumnList.length));
+        div.append(d.element);
+        detail.append(div);
+      }
+    }
   } // LRecordHome.ui
 
   /// Initialize Component Structure
-  void _initComponent() {
+  void _initComponent(bool withFollow) {
     // Header Row
     element.append(_header);
     // div .slds-col
@@ -76,11 +97,12 @@ class LRecordHome extends LPageHeader {
       ..classes.add(LGrid.C_GRID);
     _headerLeftMedia.append(leftGrid);
     leftGrid.append(_headerLeftRecordTitle);
-    DivElement followDiv = new DivElement()
-      ..classes.addAll([LGrid.C_SHRINK_NONE, LGrid.C_ALIGN_BOTTOM]);
-    leftGrid.append(followDiv);
-    followDiv.append(followButton.element);
-
+    if (withFollow) {
+      DivElement followDiv = new DivElement()
+        ..classes.addAll([LGrid.C_SHRINK_NONE, LGrid.C_ALIGN_BOTTOM]);
+      leftGrid.append(followDiv);
+      followDiv.append(followButton.element);
+    }
     // right - actions
     _header.append(_headerRight);
     _headerRight.append(_actionButtonGroup.element);
@@ -113,8 +135,9 @@ class LRecordHome extends LPageHeader {
   /**
    * Add Actions
    */
-  void addAction(LButton action) {
-    _actionButtonGroup.add(action);
+  void addAction(AppsAction action) {
+    LButton btn = action.asButton(true);
+    _actionButtonGroup.add(btn);
   }
 
   DRecord get record => _record;
@@ -126,24 +149,80 @@ class LRecordHome extends LPageHeader {
 
   /// Display data
   void display() {
-    recordTitle = _record.drv;
-  }
-
-
-
-
-  void addDetail(String fieldName, String fieldLabel) {
-    if (detail == null) {
-      detail = new DivElement()
-        ..classes.addAll([LGrid.C_GRID, LPageHeader.C_PAGE_HEADER__REC_HOME_DETAIL__ROW]);
-      _header.append(detail);
+    if (_record.hasDrv()) {
+      recordTitle = _record.drv;
+    } else if (ui != null) {
+      recordTitle = ui.label;
     }
-    // TODO slds-col--padded slds-size--1-of-4 + dl
-  }
-
-  void setDetail(String fieldName, String fieldValue) {
-
-  }
+    for (LRecordHomeDetail detail in _detailList) {
+      detail.display(_record);
+    }
+  } // display
 
 } // LRecordHome
 
+
+
+/// Record Home Detail
+class LRecordHomeDetail {
+
+  /// List Element
+  DListElement element = new DListElement();
+  /// Value Element
+  final Element _dd = new Element.tag('dd');
+
+  final String columnName;
+  final DColumn column;
+
+  /// Record Home Detail
+  LRecordHomeDetail(String this.columnName, String label, DColumn this.column) {
+    ParagraphElement p = new ParagraphElement()
+      ..classes.add(LText.C_TEXT_HEADING__LABEL)
+      ..classes.add(LText.C_TRUNCATE)
+      ..text = label
+      ..title = label;
+    Element dt = new Element.tag('dt')
+      ..append(p);
+    element.append(dt);
+    _dd.attributes[Html0.DATA_NAME] = columnName;
+    element.append(_dd);
+  }
+
+  /// Display Value
+  void display(DRecord record) {
+    _dd.children.clear();
+    for (DEntry entry in record.entryList) {
+      if (columnName == entry.columnName) {
+        _display(entry);
+        return;
+      }
+    }
+    _dd.attributes[Html0.DATA_VALUE] = "";
+    _dd.append(new ParagraphElement());
+  } // display
+
+  void _display(DEntry entry) {
+    String value = null;
+    if (entry.hasValue())
+      value = entry.value;
+    else if (entry.hasValueOriginal())
+      value = entry.valueOriginal;
+    if (value == DataRecord.NULLVALUE)
+      value = null;
+
+    ParagraphElement p = new ParagraphElement()
+      ..classes.add(LText.C_TEXT_BODY__REGULAR)
+      ..classes.add(LText.C_TRUNCATE);
+    _dd.append(p);
+    if (value == null) {
+      _dd.attributes[Html0.DATA_VALUE] = "";
+    } else {
+      _dd.attributes[Html0.DATA_VALUE] = value;
+      String display = value;
+      if (entry.hasValueDisplay())
+        display = entry.valueDisplay;
+      p.text = display;
+    }
+  } // display
+
+} // LRecordHomeDetail

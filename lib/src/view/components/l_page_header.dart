@@ -22,7 +22,7 @@ class LPageHeader extends LComponent {
   static const String C_MEDIA__REC_HOME__TITLE = "slds-media--rec-home__title";
   static const String C_MEDIA__REC_HOME__BUTTON = "slds-media--rec-home__button";
 
-  static const String C_PAGE_HEADER__REC_HOME_DETAIL__ROW = "slds-page-header--rec-home__detail-row";
+  static const String C_PAGE_HEADER__DETAIL__ROW = "slds-page-header__detail-row";
 
   static const String C_PAGE_HEADER__DETAIL = "slds-page-header__detail";
 

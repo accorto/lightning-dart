@@ -74,13 +74,15 @@ class LSectionTitle {
 
   /// The Element
   final Element element;
+
+  /// Clickable Element
+  final AnchorElement sectionAnchor = new AnchorElement(href: "#");
   /// Label element
   final SpanElement _labelElement = new SpanElement()
     ..classes.add(LMargin.C_LEFT__X_SMALL);
 
   /// Part of the Sections
   List<Element> _sectionParts = new List<Element> ();
-
   /**
    * element
    * - a
@@ -98,12 +100,11 @@ class LSectionTitle {
     if (margin != null && margin.isNotEmpty) {
       element.classes.add(margin);
     }
-    AnchorElement a = new AnchorElement(href: "#");
-    element.append(a);
+    element.append(sectionAnchor);
     //
     LIcon icon = new LIconUtility(LIconUtility.SWITCH);
-    a.append(icon.element);
-    a.append(_labelElement);
+    sectionAnchor.append(icon.element);
+    sectionAnchor.append(_labelElement);
     //
     this.open = open;
     this.label = label;
@@ -124,7 +125,7 @@ class LSectionTitle {
           margin: LMargin.C_VERTICAL__SMALL);
 
   /// Current Element to show or hide
-  Element get  sectionElement => _sectionElement;
+  Element get sectionElement => _sectionElement;
   Element _sectionElement;
 
   /// add new Section Element Part

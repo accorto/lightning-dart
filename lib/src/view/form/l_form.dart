@@ -157,13 +157,10 @@ class LForm
   void setSection(FormSection section) {
     _section = section;
     if (section != null) {
-      FieldSetElement fs = new FieldSetElement()
-        ..append(_section.element)
-        ..append(_section.sectionElement);
-      element.append(fs);
       if (_sections == null)
         _sections = new List<FormSection>();
       _sections.add(_section);
+      element.append(_section.createFieldSet("${id}-s${_sections.length}"));
     }
   }
   FormSection _section;
@@ -288,7 +285,7 @@ class LForm
     if (_buttonReset == null) {
       _buttonReset = new LButton.neutralIcon("reset",
           label == null ? lFormReset() : label,
-          new LIconUtility(LIconUtility.UNDO), iconLeft:true)
+          new LIconUtility(LIconUtility.UNDO), iconLeft:true, idPrefix:id)
         ..typeReset = false; // channel explicitly through onFormReset
       _buttonReset.onClick.listen(onFormReset);
       if (buttonDiv == null)
@@ -310,7 +307,7 @@ class LForm
       //
       _buttonSave = new LButton.brandIcon(name,
           label == null ? lFormSave() : label,
-          theIcon, iconLeft:true)
+          theIcon, iconLeft:true, idPrefix:id)
         ..typeSubmit = false; // channel explicitly through onFormSubmit
       _buttonSave.autofocus = true;
       _buttonSave.onClick.listen(onFormSubmit);

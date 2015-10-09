@@ -13,6 +13,20 @@ class UiUtil {
 
   static final Logger _log = new Logger("UiUtil");
 
+  /**
+   * Copy UI (table the same)
+   */
+  static UiUtil clone(UI original, {String label, String name}) {
+    UI ui = original.clone();
+    //
+    if (label != null && label.isNotEmpty)
+      ui.label = label;
+    if (name != null && name.isNotEmpty)
+      ui.name = name;
+    //
+    return new UiUtil(ui);
+  } // copy
+
 
   /// The UI
   final UI ui;
@@ -87,7 +101,7 @@ class UiUtil {
     ui.gridColumnList.add(gc);
   } // addColumn
 
-  /// add column if missing
+  /// add grid/panel column if missing
   void addIfMissing(String columnName) {
     // exists?
     for (UIGridColumn gc in ui.gridColumnList) {
@@ -104,6 +118,25 @@ class UiUtil {
     _log.warning("${ui.name} addIfMissing NotFound ${columnName}");
   } // addIfMissing
 
+  /// Add Query Column
+  void addQueryColumn(String columnName) {
+    DColumn column = null;
+    for (DColumn col in ui.table.columnList) {
+      if (col.name == columnName) {
+        column = col;
+        break;
+      }
+    }
+    if (column != null) {
+      UIQueryColumn qc = new UIQueryColumn()
+        ..column = column
+        ..columnName = columnName
+        ..columnLabel = column.label;
+      if (column.hasColumnId())
+        qc.columnId = column.columnId;
+      ui.queryColumnList.add(qc);
+    }
+  } // addQueryColumn
 
 } // UiUtil
 

@@ -95,6 +95,7 @@ class LModal extends LComponent {
   void setHeaderComponents(HeadingElement h2, Element tagLine) {
     header.children.clear();
     h2.classes.add(LText.C_TEXT_HEADING__MEDIUM);
+    h2.id = "${id}-h2";
     header.append(h2);
     if (tagLine != null)
       header.append(tagLine);
@@ -227,10 +228,13 @@ class LModal extends LComponent {
     _addFooterCancel();
 
     LButton reset = form.addResetButton();
+    reset.element.id = "${id}-reset";
     footer.append(reset.element);
     LPopover error = form.addErrorIndicator();
+    error.element.id = "${id}-error";
     footer.append(error.element);
     LButton save = form.addSaveButton();
+    save.element.id = "${id}-save";
     footer.append(save.element);
 
     // remove button div

@@ -70,4 +70,14 @@ class FormSection
     }
   }
 
+  /// Create Field Set
+  FieldSetElement createFieldSet (String sectionId) {
+    sectionAnchor.id = "${sectionId}a";
+    sectionElement.id = "${sectionId}b";
+    return new FieldSetElement()
+      ..id = "${sectionId}"
+      ..append(element)
+      ..append(sectionElement);
+  }
+
 } // FormSection

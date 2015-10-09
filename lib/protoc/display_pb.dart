@@ -1011,6 +1011,7 @@ class UIQueryColumn extends GeneratedMessage {
     ..a(2, 'column', PbFieldType.OM, DColumn.getDefault, DColumn.create)
     ..a(3, 'columnId', PbFieldType.OS)
     ..a(4, 'columnName', PbFieldType.OS)
+    ..a(5, 'columnLabel', PbFieldType.OS)
     ..a(6, 'isActive', PbFieldType.OB, true)
     ..a(10, 'seqNo', PbFieldType.O3)
     ..a(11, 'isParent', PbFieldType.OB)
@@ -1053,24 +1054,29 @@ class UIQueryColumn extends GeneratedMessage {
   bool hasColumnName() => $_has(3, 4);
   void clearColumnName() => clearField(4);
 
-  bool get isActive => $_get(4, 6, true);
-  void set isActive(bool v) { $_setBool(4, 6, v); }
-  bool hasIsActive() => $_has(4, 6);
+  String get columnLabel => $_get(4, 5, '');
+  void set columnLabel(String v) { $_setString(4, 5, v); }
+  bool hasColumnLabel() => $_has(4, 5);
+  void clearColumnLabel() => clearField(5);
+
+  bool get isActive => $_get(5, 6, true);
+  void set isActive(bool v) { $_setBool(5, 6, v); }
+  bool hasIsActive() => $_has(5, 6);
   void clearIsActive() => clearField(6);
 
-  int get seqNo => $_get(5, 10, 0);
-  void set seqNo(int v) { $_setUnsignedInt32(5, 10, v); }
-  bool hasSeqNo() => $_has(5, 10);
+  int get seqNo => $_get(6, 10, 0);
+  void set seqNo(int v) { $_setUnsignedInt32(6, 10, v); }
+  bool hasSeqNo() => $_has(6, 10);
   void clearSeqNo() => clearField(10);
 
-  bool get isParent => $_get(6, 11, false);
-  void set isParent(bool v) { $_setBool(6, 11, v); }
-  bool hasIsParent() => $_has(6, 11);
+  bool get isParent => $_get(7, 11, false);
+  void set isParent(bool v) { $_setBool(7, 11, v); }
+  bool hasIsParent() => $_has(7, 11);
   void clearIsParent() => clearField(11);
 
-  String get updateFlag => $_get(7, 50, '');
-  void set updateFlag(String v) { $_setString(7, 50, v); }
-  bool hasUpdateFlag() => $_has(7, 50);
+  String get updateFlag => $_get(8, 50, '');
+  void set updateFlag(String v) { $_setString(8, 50, v); }
+  bool hasUpdateFlag() => $_has(8, 50);
   void clearUpdateFlag() => clearField(50);
 }
 
@@ -1283,6 +1289,7 @@ const UIQueryColumn$json = const {
     const {'1': 'column', '3': 2, '4': 1, '5': 11, '6': '.DColumn'},
     const {'1': 'column_id', '3': 3, '4': 1, '5': 9},
     const {'1': 'column_name', '3': 4, '4': 1, '5': 9},
+    const {'1': 'column_label', '3': 5, '4': 1, '5': 9},
     const {'1': 'is_active', '3': 6, '4': 1, '5': 8, '7': 'true'},
     const {'1': 'seq_no', '3': 10, '4': 1, '5': 5},
     const {'1': 'is_parent', '3': 11, '4': 1, '5': 8, '7': 'false'},
