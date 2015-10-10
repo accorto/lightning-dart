@@ -85,6 +85,8 @@ abstract class EditorI {
   static const String TYPE_ADDRESS = "address"; // biz
   /// Input type duration
   static const String TYPE_DURATION = "duration"; // biz
+  /// Input type duration hour
+  static const String TYPE_DURATIONHOUR = "durationHour"; // biz
   /// Input type fk
   static const String TYPE_FK = "fk"; // biz
   /// Input type code

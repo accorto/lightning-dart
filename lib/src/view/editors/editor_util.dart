@@ -39,7 +39,9 @@ class EditorUtil {
         editor = new LInputDate.from(dataColumn, EditorI.TYPE_DATETIME, idPrefix:idPrefix, inGrid:inGrid);
       else if (dataType == DataType.DECIMAL);
       else if (dataType == DataType.DURATION)
-        editor = new LInputDuration.from(dataColumn, idPrefix:idPrefix, inGrid:inGrid);
+        editor = new LInputDuration.from(dataColumn, EditorI.TYPE_DURATION, idPrefix:idPrefix, inGrid:inGrid);
+      else if (dataType == DataType.DURATIONHOUR)
+        editor = new LInputDuration.from(dataColumn, EditorI.TYPE_DURATIONHOUR, idPrefix:idPrefix, inGrid:inGrid);
       else if (dataType == DataType.EMAIL);
       else if (dataType == DataType.FK);
       else if (dataType == DataType.GEO);

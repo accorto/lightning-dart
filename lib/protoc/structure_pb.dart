@@ -42,6 +42,7 @@ class DataType extends ProtobufEnum {
   static const DataType PICKMULTICHOICE = const DataType._(33, 'PICKMULTICHOICE');
   static const DataType TIMEZONE = const DataType._(34, 'TIMEZONE');
   static const DataType TAG = const DataType._(35, 'TAG');
+  static const DataType DURATIONHOUR = const DataType._(36, 'DURATIONHOUR');
 
   static const List<DataType> values = const <DataType> [
     STRING,
@@ -79,6 +80,7 @@ class DataType extends ProtobufEnum {
     PICKMULTICHOICE,
     TIMEZONE,
     TAG,
+    DURATIONHOUR,
   ];
 
   static final Map<int, DataType> _byValue = ProtobufEnum.initByValue(values);
@@ -1003,6 +1005,7 @@ const DataType$json = const {
     const {'1': 'PICKMULTICHOICE', '2': 33},
     const {'1': 'TIMEZONE', '2': 34},
     const {'1': 'TAG', '2': 35},
+    const {'1': 'DURATIONHOUR', '2': 36},
   ],
 };
 

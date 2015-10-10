@@ -16,8 +16,8 @@ class LInputDuration extends LInput {
   LInputDuration(String name, {String idPrefix, bool inGrid:false})
     : super(name, EditorI.TYPE_DURATION, idPrefix:idPrefix, inGrid:inGrid);
 
-  LInputDuration.from(DataColumn dataColumn, {String idPrefix, bool inGrid:false})
-    : super.from(dataColumn, EditorI.TYPE_DURATION, idPrefix:idPrefix, inGrid:inGrid);
+  LInputDuration.from(DataColumn dataColumn, String type, {String idPrefix, bool inGrid:false})
+    : super.from(dataColumn, type, idPrefix:idPrefix, inGrid:inGrid);
 
   @override
   void _initEditor() {
@@ -35,8 +35,8 @@ class LInputDuration extends LInput {
    */
   @override
   String get value {
-    String v = input.value;
-    return parse(v, true);
+    String vv = input.value;
+    return parse(vv, true);
   } // get value
 
   /// Set new value
@@ -45,6 +45,8 @@ class LInputDuration extends LInput {
     input.value = render(newValue, true);
   } // set value
 
+  /// is the value in hours (number)
+  bool get isHour => type == EditorI.TYPE_DURATIONHOUR;
 
   /// user -> value - sets validity
   String parse(String userInput, bool setValidity) {
@@ -58,6 +60,8 @@ class LInputDuration extends LInput {
         input.setCustomValidity("${lInputDurationInvalidInput()}=${userInput}");
       return null;
     }
+    if (isHour)
+      return dd.asHours().toString(); // 8/20
     return dd.asXml();
   } // parseDuration
 
