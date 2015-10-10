@@ -273,7 +273,7 @@ abstract class EditorI {
     if (tableColumn.hasIsReadOnly())
       readOnly = tableColumn.isReadOnly;
 
-    if (tableColumn.hasColumnSize())
+    if (tableColumn.hasColumnSize() && tableColumn.columnSize > 0)
       maxlength = tableColumn.columnSize;
     if (tableColumn.hasDefaultValue())
       defaultValue = tableColumn.defaultValue;

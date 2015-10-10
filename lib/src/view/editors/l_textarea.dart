@@ -111,7 +111,8 @@ class LTextArea extends LEditor with LFormElement {
 
   int get maxlength => input.maxLength;
   void set maxlength (int newValue) {
-    input.maxLength = newValue;
+    if (newValue > 0)
+      input.maxLength = newValue;
   }
 
   /// Validation state from Input

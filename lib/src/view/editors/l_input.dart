@@ -126,7 +126,8 @@ class LInput
 
   int get maxlength => input.maxLength;
   void set maxlength (int newValue) {
-    input.maxLength = newValue;
+    if (newValue > 0)
+      input.maxLength = newValue;
   }
 
   String get pattern => input.pattern;
