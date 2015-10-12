@@ -28,8 +28,8 @@ class LInputRange
 
   /// initialize listeners
   @override
-  void _initEditor() {
-    super._initEditor();
+  void _initEditor(String type) {
+    super._initEditor(type);
   }
 
   /// Left Side Element

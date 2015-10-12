@@ -26,18 +26,20 @@ class EditorUtil {
       else if (dataType == DataType.ADDRESS)
         ;
       else if (dataType == DataType.AMOUNT)
-        ;
+        editor = new LInputNumber.from(dataColumn, EditorI.TYPE_NUMBER, idPrefix:idPrefix, inGrid:inGrid);
       else if (dataType == DataType.BOOLEAN)
         editor = new LCheckbox.from(dataColumn, idPrefix:idPrefix, inGrid:inGrid);
       else if (dataType == DataType.CODE);
       else if (dataType == DataType.COLOR);
-      else if (dataType == DataType.CURRENCY);
+      else if (dataType == DataType.CURRENCY)
+        editor = new LInputNumber.from(dataColumn, EditorI.TYPE_NUMBER, idPrefix:idPrefix, inGrid:inGrid);
       else if (dataType == DataType.DATA);
       else if (dataType == DataType.DATE)
         editor = new LInputDate.from(dataColumn, EditorI.TYPE_DATE, idPrefix:idPrefix, inGrid:inGrid);
       else if (dataType == DataType.DATETIME)
         editor = new LInputDate.from(dataColumn, EditorI.TYPE_DATETIME, idPrefix:idPrefix, inGrid:inGrid);
-      else if (dataType == DataType.DECIMAL);
+      else if (dataType == DataType.DECIMAL)
+        editor = new LInputNumber.from(dataColumn, EditorI.TYPE_NUMBER, idPrefix:idPrefix, inGrid:inGrid);
       else if (dataType == DataType.DURATION)
         editor = new LInputDuration.from(dataColumn, EditorI.TYPE_DURATION, idPrefix:idPrefix, inGrid:inGrid);
       else if (dataType == DataType.DURATIONHOUR)
@@ -47,9 +49,12 @@ class EditorUtil {
       else if (dataType == DataType.GEO);
       else if (dataType == DataType.IM);
       else if (dataType == DataType.IMAGE);
-      else if (dataType == DataType.INT);
-      else if (dataType == DataType.NUMBER);
-      else if (dataType == DataType.PASSWORD);
+      else if (dataType == DataType.INT)
+        editor = new LInputNumber.from(dataColumn, EditorI.TYPE_NUMBER, idPrefix:idPrefix, inGrid:inGrid);
+      else if (dataType == DataType.NUMBER)
+        editor = new LInputNumber.from(dataColumn, EditorI.TYPE_NUMBER, idPrefix:idPrefix, inGrid:inGrid);
+      else if (dataType == DataType.PASSWORD)
+        editor = new LInput.from(dataColumn, EditorI.TYPE_PASSWORD, idPrefix:idPrefix, inGrid:inGrid);
       else if (dataType == DataType.PHONE);
       else if (dataType == DataType.PICK)
         editor = new LSelect.from(dataColumn, multiple:false, idPrefix:idPrefix, inGrid:inGrid);
@@ -64,7 +69,8 @@ class EditorUtil {
         if (inGrid)
           editor = new LSelect.from(dataColumn, multiple:false, idPrefix:idPrefix, inGrid:inGrid);
       }
-      else if (dataType == DataType.QUANTITY);
+      else if (dataType == DataType.QUANTITY)
+        editor = new LInputNumber.from(dataColumn, EditorI.TYPE_NUMBER, idPrefix:idPrefix, inGrid:inGrid);
       else if (dataType == DataType.RATING);
       else if (dataType == DataType.TAG);
       else if (dataType == DataType.TENANT);

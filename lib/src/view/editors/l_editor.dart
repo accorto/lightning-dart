@@ -10,7 +10,8 @@ part of lightning_dart;
  * Form Editor
  * (LLookup extends LEditor but not with LFormElement)
  */
-abstract class LEditor extends EditorI {
+abstract class LEditor
+    extends EditorI {
 
   /// Auto Id Numbering
   static int _autoId = 1;

@@ -408,7 +408,7 @@ abstract class EditorI {
         theValue = _entry.valueOriginal;
       if (_entry.hasValue())
         theValue = _entry.value;
-      if (value == DataRecord.NULLVALUE)
+      if (theValue == DataRecord.NULLVALUE)
         theValue = null;
       value = theValue == null ? "" : theValue;
     }
@@ -463,9 +463,9 @@ abstract class EditorI {
 
   /// Input changed
   void onInputChange(Event evt){
+    doValidate();
     String theValue = value;
     _log.config("onInputChange ${name}=${theValue}");
-    doValidate();
     if (data != null && _entry != null) {
       data.updateEntry(_entry, theValue);
     }
@@ -542,13 +542,13 @@ abstract class EditorI {
     if (isCheckbox(type) || isButton(type)) {
       return true;
     }
-    String v = value;
-    if (v == null)
-      v = "";
+    String vv = value;
+    if (vv == null)
+      vv = "";
     //
     ValidityState state = inputValidationState;
     if (state == null) {
-      if (required && (v == null || v.isEmpty)) {
+      if (required && (vv == null || vv.isEmpty)) {
         statusValid = false;
         statusText = editorValidateRequired();
       }
@@ -562,9 +562,9 @@ abstract class EditorI {
 
     // MaxLength
     int m = maxlength;
-    if (maxlength > 0 && v.length > m) {
+    if (maxlength > 0 && vv.length > m) {
       statusValid = false;
-      statusText = "${editorValidateTooLong()}: ${v.length} > ${m}";
+      statusText = "${editorValidateTooLong()}: ${vv.length} > ${m}";
     }
 
     doValidateCustom();
@@ -603,12 +603,13 @@ abstract class EditorI {
     StringBuffer sb = new StringBuffer();
     sb.write(name);
     sb.write("=");
-    if (value == null || value.length < 60) {
-      sb.write(value);
+    String vv = value;
+    if (vv == null || vv.length < 60) {
+      sb.write(vv);
     } else {
-      sb.write(value.substring(0, 60));
+      sb.write(vv.substring(0, 60));
       sb.write("...");
-      sb.write(value.length);
+      sb.write(vv.length);
     }
     sb.write(readOnly ? " ro" : " rw");
     sb.write(required ? " req" : " opt");
@@ -616,12 +617,13 @@ abstract class EditorI {
     sb.write(type);
     if (changed) {
       sb.write(" orig=");
-      if (valueOriginal == null || valueOriginal.length < 60) {
-        sb.write(valueOriginal);
+      String vo = valueOriginal;
+      if (vo == null || vo.length < 60) {
+        sb.write(vo);
       } else {
-        sb.write(valueOriginal.substring(0, 60));
+        sb.write(vo.substring(0, 60));
         sb.write("...");
-        sb.write(valueOriginal.length);
+        sb.write(vo.length);
       }
     }
     title = sb.toString();

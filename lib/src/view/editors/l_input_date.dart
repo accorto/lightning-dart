@@ -37,7 +37,7 @@ class LInputDate extends LInput {
   }
 
   @override
-  void _initEditor() {
+  void _initEditor(String type) {
     input.onChange.listen(onInputChange);
     input.onKeyUp.listen(onInputKeyUp);
   }

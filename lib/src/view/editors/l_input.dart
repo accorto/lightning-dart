@@ -33,7 +33,7 @@ class LInput
     input.type = type;
     //
     hint = null;
-    _initEditor();
+    _initEditor(type);
   } // LInput
 
   /**
@@ -46,11 +46,11 @@ class LInput
     input.type = type;
 
     this.column = dataColumn; // base values
-    _initEditor();
+    _initEditor(type);
   } // LInput
 
-  /// initialize listeners
-  void _initEditor() {
+  /// initialize listeners with original type
+  void _initEditor(String type) {
     if (type == EditorI.TYPE_PASSWORD) {
       input.autocomplete = "off"; // https://html.spec.whatwg.org/multipage/forms.html#autofill
       input.attributes["autocapitalize"] = "off";

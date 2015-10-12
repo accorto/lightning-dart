@@ -4679,6 +4679,11 @@ a.slds-button--inverse:focus {
 .text-success {
   color: #04844b;
   stroke: #04844b; }
+input[type=number]::-webkit-outer-spin-button.decimal,
+input[type=number]::-webkit-inner-spin-button.decimal {
+  -moz-appearance: textfield;
+  -webkit-appearance: none;
+  margin: 0; }
 .grab {
   cursor: -moz-grab;
   cursor: url(https://www.google.com/intl/en_ALL/mapfiles/openhand.cur), move; }

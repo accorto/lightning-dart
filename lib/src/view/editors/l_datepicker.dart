@@ -61,12 +61,12 @@ class LDatepicker extends LInputDate {
     : super.from(dataColumn, type, idPrefix:idPrefix, inGrid:inGrid);
 
   @override
-  void _initEditor() {
+  void _initEditor(String type) {
     html5 = false;
     element.onClick.listen(onInputClick); // w/o wrapper
     //
     _firstDayOfWeek = _formatter.dateSymbols.FIRSTDAYOFWEEK + 1; // zero based
-    super._initEditor();
+    super._initEditor(type);
   } // initEditor
 
   @override

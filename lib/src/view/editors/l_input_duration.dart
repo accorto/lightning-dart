@@ -27,18 +27,15 @@ class LInputDuration
    * Duration
    */
   LInputDuration.from(DataColumn dataColumn, String type, {String idPrefix, bool inGrid:false})
-    : super.from(dataColumn, type, idPrefix:idPrefix, inGrid:inGrid) {
-    _isHour = (type == EditorI.TYPE_DURATIONHOUR);
-    if (_isHour)
-      hint = lInputDurationHourHint();
-  }
+    : super.from(dataColumn, type, idPrefix:idPrefix, inGrid:inGrid);
 
 
   @override
-  void _initEditor() {
-    super._initEditor();
+  void _initEditor(String type) {
+    super._initEditor(type);
+    _isHour = (type == EditorI.TYPE_DURATIONHOUR);
     if (hint == null) {
-      hint = lInputDurationHint();
+      hint = _isHour ? lInputDurationHourHint() : lInputDurationHint();
     }
     input.onBlur.listen((Event evt){
       input.value = render(input.value, true);
@@ -75,8 +72,10 @@ class LInputDuration
         input.setCustomValidity("${lInputDurationInvalidInput()}=${userInput}");
       return null;
     }
-    if (_isHour)
-      return ClientEnv.numberFormat_2.format(dd.asHours()); // 8/20
+    if (_isHour) {
+      // return ClientEnv.numberFormat_2.format(dd.asHours()); // 8/20
+      return dd.asHours().toStringAsFixed(2); // 8/20
+    }
     return dd.asXml();
   } // parseDuration
 
@@ -127,8 +126,10 @@ class LInputDuration
         input.setCustomValidity("${lInputDurationInvalidValue()}=${newValue}");
       return newValue; // invalid
     }
-    if (_isHour)
-      return ClientEnv.numberFormat_2.format(dd.asHours()); // 8/20
+    if (_isHour) {
+      // return ClientEnv.numberFormat_2.format(dd.asHours()); // 8/20
+      return dd.asHours().toStringAsFixed(2); // 8/20
+    }
     return dd.asString(); // user
   } // render
 
