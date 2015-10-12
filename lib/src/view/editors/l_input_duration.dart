@@ -6,9 +6,16 @@
 
 part of lightning_dart;
 
-class LInputDuration extends LInput {
+/**
+ * Duration Editor
+ */
+class LInputDuration
+    extends LInput {
 
   static final Logger _log = new Logger("LInputDuration");
+
+  /// Type
+  String _type;
 
   /**
    * Duration
@@ -16,8 +23,16 @@ class LInputDuration extends LInput {
   LInputDuration(String name, {String idPrefix, bool inGrid:false})
     : super(name, EditorI.TYPE_DURATION, idPrefix:idPrefix, inGrid:inGrid);
 
+  /**
+   * Duration
+   */
   LInputDuration.from(DataColumn dataColumn, String type, {String idPrefix, bool inGrid:false})
-    : super.from(dataColumn, type, idPrefix:idPrefix, inGrid:inGrid);
+    : super.from(dataColumn, type, idPrefix:idPrefix, inGrid:inGrid) {
+    _type = type;
+    if (isHour)
+      hint = lInputDurationHourHint();
+  }
+
 
   @override
   void _initEditor() {
@@ -46,7 +61,7 @@ class LInputDuration extends LInput {
   } // set value
 
   /// is the value in hours (number)
-  bool get isHour => type == EditorI.TYPE_DURATIONHOUR;
+  bool get isHour => _type == EditorI.TYPE_DURATIONHOUR;
 
   /// user -> value - sets validity
   String parse(String userInput, bool setValidity) {
@@ -136,12 +151,18 @@ class LInputDuration extends LInput {
     input.defaultValue = render(newValue, false);
   } // defaultValue
 
+  /// maxlength ignored
+  @override
+  void set maxlength (int ignored) {
+  }
+
 
   /// translation
   static String lInputDurationInvalidValue() => Intl.message("Invalid value", name: "lInputDurationInvalidValue");
   static String lInputDurationInvalidInput() => Intl.message("Invalid input for duration", name: "lInputDurationInvalidInput");
 
   static String lInputDurationHint() => Intl.message("without indicator, duration is in hours - enter with decimal or colon (1.5 = 1:30); example: 5d1h20m or 5d 1h 10", name: "lInputDurationHint");
+  static String lInputDurationHourHint() => Intl.message("hours with decimal or colon (1.5 = 1:30)", name: "lInputDurationHourHint");
 
 
 } // LInputDuration
