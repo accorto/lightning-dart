@@ -15,7 +15,7 @@ class LInputDuration
   static final Logger _log = new Logger("LInputDuration");
 
   /// Type
-  String _type;
+  bool _isHour = false;
 
   /**
    * Duration
@@ -28,8 +28,8 @@ class LInputDuration
    */
   LInputDuration.from(DataColumn dataColumn, String type, {String idPrefix, bool inGrid:false})
     : super.from(dataColumn, type, idPrefix:idPrefix, inGrid:inGrid) {
-    _type = type;
-    if (isHour)
+    _isHour = (type == EditorI.TYPE_DURATIONHOUR);
+    if (_isHour)
       hint = lInputDurationHourHint();
   }
 
@@ -61,7 +61,7 @@ class LInputDuration
   } // set value
 
   /// is the value in hours (number)
-  bool get isHour => _type == EditorI.TYPE_DURATIONHOUR;
+  bool get isHour => _isHour;
 
   /// user -> value - sets validity
   String parse(String userInput, bool setValidity) {
@@ -75,8 +75,8 @@ class LInputDuration
         input.setCustomValidity("${lInputDurationInvalidInput()}=${userInput}");
       return null;
     }
-    if (isHour)
-      return dd.asHours().toString(); // 8/20
+    if (_isHour)
+      return ClientEnv.numberFormat_2.format(dd.asHours()); // 8/20
     return dd.asXml();
   } // parseDuration
 
@@ -127,6 +127,8 @@ class LInputDuration
         input.setCustomValidity("${lInputDurationInvalidValue()}=${newValue}");
       return newValue; // invalid
     }
+    if (_isHour)
+      return ClientEnv.numberFormat_2.format(dd.asHours()); // 8/20
     return dd.asString(); // user
   } // render
 
