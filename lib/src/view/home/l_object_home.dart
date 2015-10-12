@@ -11,7 +11,8 @@ part of lightning_dart;
  * Object Home
  * - List view of the Object with Record Lookup / Search
  */
-class LObjectHome extends LPageHeader {
+class LObjectHome
+    extends LPageHeader {
 
   static const String VIEW_LAYOUT_TABLE = "table";
   static const String VIEW_LAYOUT_CARDS = "cards";
@@ -53,7 +54,7 @@ class LObjectHome extends LPageHeader {
    * Object Home
    */
   LObjectHome(RecordSorting this.recordSorting) {
-    // Header Row
+    // -- Header Row
     element.append(_header);
     // div .slds-col
     // - p
@@ -72,6 +73,8 @@ class LObjectHome extends LPageHeader {
     _headerCenter.append(_headerFind.element);
     _header.append(_headerCenter);
 
+    // -- Header Row right
+    _headerRight.style.marginLeft = "auto"; // TEMP right align
     _header.append(_headerRight);
     DivElement _headerRightGrid = new DivElement()
       ..classes.add(LGrid.C_GRID);

@@ -13,7 +13,8 @@ typedef void TableSortClicked(String name, bool asc, MouseEvent evt);
 /**
  * Table
  */
-class LTable extends LComponent {
+class LTable
+    extends LComponent {
 
   /// slds-table - Initializes data table | Required
   static const String C_TABLE = "slds-table";
@@ -58,7 +59,16 @@ class LTable extends LComponent {
 
 
   /// Table Element
-  final TableElement element = new TableElement()
+  Element get element {
+    if (_wrapper != null)
+      return _wrapper;
+    return _table;
+  }
+  /// responsive wrapper
+  DivElement _wrapper;
+
+  /// Table Element
+  final TableElement _table = new TableElement()
     ..classes.add(C_TABLE);
 
   TableSectionElement _thead;
@@ -97,14 +107,6 @@ class LTable extends LComponent {
       this.recordSorting = new RecordSorting();
   }
 
-  /// scrollable-x wrapper with table
-  CDiv responsiveOverflow() {
-    CDiv wrapper = new CDiv()
-      ..classes.add(LScrollable.C_SCROLLABLE__X);
-    wrapper.append(element);
-    return wrapper;
-  }
-
   /// Responsive Stacked
   bool get responsiveStacked => element.classes.contains(C_MAX_MEDIUM_TABLE__STACKED);
   void set responsiveStacked (bool newValue) {
@@ -122,6 +124,22 @@ class LTable extends LComponent {
       element.classes.add(C_MAX_MEDIUM_TABLE__STACKED_HORIZONTAL);
     else
       element.classes.remove(C_MAX_MEDIUM_TABLE__STACKED_HORIZONTAL);
+  }
+
+  /// responsive overflow scrollable-x wrapper with table
+  bool get responsiveOverflow => _wrapper != null;
+  /// responsive overflow scrollable-x wrapper with table
+  void set responsiveOverflow (bool newValue) {
+    if (newValue) {
+      if (_wrapper == null) {
+        _wrapper = new DivElement()
+          ..classes.add(LScrollable.C_SCROLLABLE__X)
+          ..append(element);
+      }
+    } else if (_wrapper != null) {
+      _table.remove();
+      _wrapper = null;
+    }
   }
 
   /// Table bordered
@@ -147,13 +165,14 @@ class LTable extends LComponent {
     }
   }
 
+
   /**
    * Add Table Head Row
    * for responsive - use row.addHeaderCell to add name-label info
    */
   LTableHeaderRow addHeadRow(bool enableSort, {bool primary:true}) {
     if (_thead == null)
-      _thead = element.createTHead();
+      _thead = _table.createTHead();
     LTableHeaderRow row = null;
     if (primary) {
       _headerRow = new LTableHeaderRow(_thead.addRow(), _theadRows.length, id,
@@ -267,7 +286,7 @@ class LTable extends LComponent {
   /// Add Table Body Row
   LTableRow addBodyRow({String rowValue}) {
     if (_tbody == null)
-      _tbody = element.createTBody();
+      _tbody = _table.createTBody();
     LTableRow row = new LTableRow(_tbody.addRow(), _tbodyRows.length, id, rowValue,
         LButton.C_HINT_PARENT, optionRowSelect, nameList, nameLabelMap, LTableRow.TYPE_BODY, _rowActions, dataColumns);
     row.editMode = _editMode;
@@ -278,7 +297,7 @@ class LTable extends LComponent {
   /// Add Table Foot Row
   LTableRow addFootRow() {
     if (_tfoot == null)
-      _tfoot = element.createTFoot();
+      _tfoot = _table.createTFoot();
     LTableRow row = new LTableRow(_tfoot.addRow(), _tfootRows.length, id, null,
         LButton.C_HINT_PARENT, optionRowSelect, nameList, nameLabelMap, LTableRow.TYPE_FOOT, null, dataColumns);
     _tfootRows.add(row);
@@ -378,7 +397,7 @@ class LTable extends LComponent {
    */
   void addRowHdrData(String thText, String tdText) {
     if (_tbody == null)
-      _tbody = element.createTBody();
+      _tbody = _table.createTBody();
     TableRowElement tr = _tbody.addRow();
 
     Element th = new Element.th();
@@ -396,7 +415,7 @@ class LTable extends LComponent {
    */
   void addRowHdrDataList(String thText, List<String> tdTexts) {
     if (_tbody == null)
-      _tbody = element.createTBody();
+      _tbody = _table.createTBody();
     TableRowElement tr = _tbody.addRow();
 
     Element th = new Element.th();

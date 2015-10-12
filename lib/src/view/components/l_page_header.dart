@@ -10,7 +10,8 @@ part of lightning_dart;
  * Page Header
  * for implementations check [LObjectHome] [LRecordHome] [LRelatedList]
  */
-class LPageHeader extends LComponent {
+class LPageHeader
+    extends LComponent {
 
   static const String C_PAGE_HEADER = "slds-page-header";
 
@@ -31,6 +32,11 @@ class LPageHeader extends LComponent {
   final Element element = new Element.header()
     ..classes.add(C_PAGE_HEADER)
     ..attributes[Html0.ROLE] = Html0.ROLE_BANNER;
+
+  /// Set Id
+  void set id (String newValue) {
+    element.id = newValue;
+  }
 
 } // LPageHeader
 

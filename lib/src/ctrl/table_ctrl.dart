@@ -12,7 +12,8 @@ part of lightning_ctrl;
  * SubClasses need to implement:
  * - UI get [ui]
  */
-abstract class TableCtrl extends LTable {
+abstract class TableCtrl
+    extends LTable {
 
   static final Logger _log = new Logger("TableCtrl");
 

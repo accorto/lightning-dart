@@ -19,7 +19,8 @@ class Tables extends DemoFeature {
   LComponent get content {
 
     LTable table = new LTable("t2")
-      ..bordered = borderedOption;
+      ..bordered = borderedOption
+      ..responsiveOverflow = responsiveOverflowOption;
     if (responsiveStackedOption)
       table.responsiveStacked = responsiveStackedOption;
     if (responsiveStackedHorizontalOption) // overwrites stacked
@@ -49,9 +50,6 @@ class Tables extends DemoFeature {
     tbody.addCellText("Smith");
     tbody.addCellText("Near You");
 
-    if (responsiveOverflowOption) {
-      return table.responsiveOverflow();
-    }
     return table;
   }
 

@@ -32,7 +32,7 @@ class ObjectCtrl extends LComponent {
   LObjectHome _header;
 
   /// Content
-  final CDiv _content = new CDiv.article();
+  final CDiv _content = new CDiv.article(id: "oc-c");
 
   /// Record Control (single record view)
   RecordCtrl recordCtrl;
@@ -50,7 +50,8 @@ class ObjectCtrl extends LComponent {
     if (containerClass != null && containerClass.isNotEmpty) {
       element.classes.add(containerClass);
     }
-    _header = new LObjectHome(datasource.recordSorting);
+    _header = new LObjectHome(datasource.recordSorting)
+      ..id = "oc-h";
     element.append(_header.element);
     element.append(_content.element);
 
@@ -265,7 +266,8 @@ class ObjectCtrl extends LComponent {
   void _displayTable() {
     _table = new TableCtrlUi(datasource.uiDirect, recordSorting:datasource.recordSorting,
         idPrefix:id, editMode:LTable.EDIT_FIELD)
-      ..bordered = true;
+      ..bordered = true
+      ..responsiveOverflow = true;
     _table.recordSaved = onRecordSaved;
     _table.recordDeleted = onRecordDeleted;
     _table.recordsDeleted = onRecordsDeleted;
