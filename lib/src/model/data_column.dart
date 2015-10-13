@@ -194,7 +194,14 @@ class DataColumn {
     return uiPanelColumn != null && uiPanelColumn.hasDisplayLogic() && uiPanelColumn.displayLogic.isNotEmpty;
   }
 
-
+  /// get table column for anothe column
+  DColumn getTableColumn(String columnName) {
+    for (DColumn col in table.columnList) {
+      if (col.name == columnName)
+        return col;
+    }
+    return null;
+  }
 
   /// Get Data Entry for this Column if exists
   DEntry getEntry(DataRecord data) => data.getEntry(tableColumn.columnId, tableColumn.name, false);

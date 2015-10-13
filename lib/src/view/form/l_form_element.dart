@@ -30,6 +30,7 @@ class LFormElement {
   EditorI editor;
   /// Input element (select|textarea|input)
   Element _input;
+  DivElement _inputWrapper = null;
 
 
   /**
@@ -58,7 +59,7 @@ class LFormElement {
     else if (_input is SelectElement)
       _input.classes.add(LForm.C_SELECT);
 
-    DivElement inputWrapper = null;
+    _inputWrapper = null;
     // right side (clear or icon)
     if (iconRight == null) {
       if (withClearValue) {
@@ -71,13 +72,13 @@ class LFormElement {
       }
     }
     if (iconRight != null) {
-      inputWrapper = new DivElement()
+      _inputWrapper = new DivElement()
         ..classes.add(LForm.C_INPUT_HAS_ICON)
         ..classes.add(LForm.C_INPUT_HAS_ICON__RIGHT);
-      _elementControl.append(inputWrapper);
+      _elementControl.append(_inputWrapper);
       iconRight.classes.clear();
       iconRight.classes.addAll([LForm.C_INPUT__ICON, LIcon.C_ICON_TEXT_DEFAULT]);
-      inputWrapper.append(iconRight.element);
+      _inputWrapper.append(iconRight.element);
     }
     // left side
     if (iconLeft == null) {
@@ -86,36 +87,40 @@ class LFormElement {
         iconLeft = getIconRight();
     }
     if (iconLeft != null) {
-      if (inputWrapper == null) {
-        inputWrapper = new DivElement()
+      if (_inputWrapper == null) {
+        _inputWrapper = new DivElement()
           ..classes.add(LForm.C_INPUT_HAS_ICON);
-        _elementControl.append(inputWrapper);
+        _elementControl.append(_inputWrapper);
       }
-      inputWrapper.classes.add(LForm.C_INPUT_HAS_ICON__LEFT);
+      _inputWrapper.classes.add(LForm.C_INPUT_HAS_ICON__LEFT);
       iconLeft.classes.clear();
       iconLeft.classes.addAll([LForm.C_INPUT__ICON, LIcon.C_ICON_TEXT_DEFAULT]);
-      inputWrapper.append(iconLeft.element);
+      _inputWrapper.append(iconLeft.element);
       if (iconRight != null) {
         iconRight.element.style.left = "inherit";
         iconLeft.element.style.right = "inherit";
       }
     }
+    createStandardLeftElement();
+  } // createStandard
+
+  void createStandardLeftElement() {
     Element left = getLeftElement();
     if (left != null) {
-      if (inputWrapper == null) {
-        inputWrapper = new DivElement();
-        _elementControl.append(inputWrapper);
+      if (_inputWrapper == null) {
+        _inputWrapper = new DivElement();
+        _elementControl.append(_inputWrapper);
       }
-      inputWrapper.classes.add(LForm.C_INPUT_HAS_PREFIX);
-      inputWrapper.classes.add(LForm.C_INPUT_HAS_PREFIX__LEFT);
-      inputWrapper.append(left);
+      _inputWrapper.classes.add(LForm.C_INPUT_HAS_PREFIX);
+      _inputWrapper.classes.add(LForm.C_INPUT_HAS_PREFIX__LEFT);
+      _inputWrapper.append(left);
     }
-    //
-    if (inputWrapper == null)
-      inputWrapper = _elementControl;
-    inputWrapper.append(_input);
-    inputWrapper.append(_hintSpan); // __help
+    if (_inputWrapper == null)
+      _inputWrapper = _elementControl;
+    _inputWrapper.append(_input);
+    _inputWrapper.append(_hintSpan); // __help
   }
+
 
   /**
    * Checkbox Layout
@@ -140,7 +145,7 @@ class LFormElement {
       ..classes.add(LForm.C_FORM_ELEMENT__LABEL);
     _labelElement.append(_labelSpan);
     element.append(_hintSpan); // __help
-  }
+  } // createCheckbox
 
   /// Get Id
   String get id => _input.id;
@@ -348,7 +353,7 @@ class LFormElement {
   LIcon getIconRight() => null;
   /// Left side Icon
   LIcon getIconLeft() => null;
-  /// Left Element
+  /// Left Element (called early in constructor)
   Element getLeftElement() => null;
 
 } // LFormElement

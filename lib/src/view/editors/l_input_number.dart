@@ -13,10 +13,15 @@ part of lightning_dart;
 class LInputNumber
     extends LInput {
 
+  /// Currency Column Name
+  static String currencyColumnName;
+
   /// Number Format
   NumberFormat numberFormat = new NumberFormat("#,###,##0", ClientEnv.localeName);
   /// Data Type
   DataType dataType;
+  /// Currency Selection
+  SelectElement _currencySelect;
 
   /**
    * Number Editor
@@ -46,9 +51,6 @@ class LInputNumber
     input.onBlur.listen((Event evt){
       input.value = render(input.value, true);
     });
-    if (dataType == DataType.CURRENCY) {
-      // TODO
-    }
   } // initEditor
 
   void _initNumber() {
@@ -160,13 +162,57 @@ class LInputNumber
   void set maxlength (int ignored) {
   }
 
-  /// Set Column (digits)
+  /// Set Column (currency, digits)
   @override
   void set column (DataColumn newValue) {
     super.column = newValue; // min/max
-    dataType = newValue.tableColumn.dataType;
+    // digits
     decimalDigits = newValue.tableColumn.decimalDigits;
-  }
+    // data type
+    dataType = newValue.tableColumn.dataType;
+    if (dataType == DataType.CURRENCY && _currencySelect == null) {
+      _columnCurrency();
+    }
+  } // column
+
+  // currency column
+  void _columnCurrency() {
+    if (currencyColumnName == null || dataColumn == null)
+      return;
+    // get currency column
+    DColumn curColumn = dataColumn.getTableColumn(currencyColumnName);
+    if (curColumn == null)
+      return;
+    // Currency Select
+    _currencySelect = new SelectElement()
+      ..name = currencyColumnName
+      ..id = createId(id, name)
+      ..classes.add(LForm.C_INPUT__PREFIX)
+      ..style.left = "0"
+      ..style.height = "2.125rem"
+    //..style.borderColor = "" // this or background
+      ..style.background = "transparent";
+    // get currency values
+    for (DOption op in curColumn.pickValueList) {
+      _currencySelect.append(OptionUtil.element(op));
+    }
+    if (_currencySelect.options.isEmpty) {
+      _currencySelect = null;
+      return;
+    }
+    if (_currencySelect.options.length == 1) {
+      _currencySelect.disabled = true;
+    }
+    createStandardLeftElement();
+    // set width (3rem - 5px)
+    num width = _currencySelect.getBoundingClientRect().width;
+    // set input width: calc(100% - 3rem); margin-left: 3rem
+    int space = width.toInt() + 5; // margin
+    input.style
+      ..marginLeft = "${space}px"
+      ..width = "calc(100% - ${space}px)";
+  } // columnCurrency
+
 
   /// Decimal Digits
   int get decimalDigits => numberFormat.maximumFractionDigits;
@@ -185,6 +231,8 @@ class LInputNumber
 
   } // decimalDigits
 
+  /// Left Side Element (called early in constructor from LFormElement.createStandard)
+  Element getLeftElement() => _currencySelect;
 
   String toString() {
     return "LInputNumber@${name} text=${input.text} digits=${decimalDigits} html5=${html5}";
