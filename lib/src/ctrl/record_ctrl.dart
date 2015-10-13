@@ -58,7 +58,8 @@ class RecordCtrl extends LComponent {
       element.classes.add(containerClass);
     }
     // Structure
-    _header = new LRecordHome.from(ui);
+    _header = new LRecordHome.from(ui)
+      ..id = "rc-h";
     element.append(_header.element);
     //
     _breadcrumb = new LBreadcrumb(idPrefix:idPrefix);

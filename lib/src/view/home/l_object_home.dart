@@ -25,7 +25,7 @@ class LObjectHome
     ..classes.addAll([LGrid.C_GRID, LGrid.C_WRAP, LGrid.C_GRID__ALIGN_SPREAD]);
   /// Top row left
   final DivElement _headerLeft = new DivElement()
-    ..classes.addAll([LGrid.C_COL]); // LGrid.C_HAS_FLEXI_TRUNCATE
+    ..classes.addAll([LGrid.C_COL, LGrid.C_ALIGN_BOTTOM]); //
   final ParagraphElement _headerLeftRecordType = new ParagraphElement()
     ..classes.add(LText.C_TEXT_HEADING__LABEL);
 
