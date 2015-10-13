@@ -20,8 +20,8 @@ class LInputDuration
   /**
    * Duration
    */
-  LInputDuration(String name, {String idPrefix, bool inGrid:false})
-    : super(name, EditorI.TYPE_DURATION, idPrefix:idPrefix, inGrid:inGrid);
+  LInputDuration(String name, {String type:EditorI.TYPE_DURATION, String idPrefix, bool inGrid:false})
+    : super(name, type, idPrefix:idPrefix, inGrid:inGrid);
 
   /**
    * Duration
@@ -164,7 +164,7 @@ class LInputDuration
   static String lInputDurationInvalidValue() => Intl.message("Invalid value", name: "lInputDurationInvalidValue");
   static String lInputDurationInvalidInput() => Intl.message("Invalid input for duration", name: "lInputDurationInvalidInput");
 
-  static String lInputDurationHint() => Intl.message("without indicator, duration is in hours - enter with decimal or colon (1.5 = 1:30); example: 5d1h20m or 5d 1h 10", name: "lInputDurationHint");
+  static String lInputDurationHint() => Intl.message("without indicator enter hours with decimal or colon (1.5 = 1:30); e.g.: 5d1h20m or 5d 1h 10", name: "lInputDurationHint");
   static String lInputDurationHourHint() => Intl.message("hours with decimal or colon (1.5 = 1:30)", name: "lInputDurationHourHint");
 
 
