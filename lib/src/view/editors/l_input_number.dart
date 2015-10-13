@@ -21,14 +21,18 @@ class LInputNumber
   /**
    * Number Editor
    */
-  LInputNumber(String name, String type, {String idPrefix, bool inGrid:false})
-    : super(name, type, idPrefix:idPrefix, inGrid:inGrid);
+  LInputNumber(String name, {String type:EditorI.TYPE_NUMBER, String idPrefix, bool inGrid:false})
+    : super(name, type, idPrefix:idPrefix, inGrid:inGrid) {
+    _initNumber();
+  }
 
   /**
    * Number Editor
    */
   LInputNumber.from(DataColumn dataColumn, String type, {String idPrefix, bool inGrid:false})
-    : super.from(dataColumn, type, idPrefix:idPrefix, inGrid:inGrid);
+    : super.from(dataColumn, type, idPrefix:idPrefix, inGrid:inGrid) {
+    _initNumber();
+  }
 
 
   @override
@@ -39,17 +43,33 @@ class LInputNumber
     // pattern
     input.pattern = "[0-9+-.,]*";
     //
+    input.onBlur.listen((Event evt){
+      input.value = render(input.value, true);
+    });
     if (dataType == DataType.CURRENCY) {
       // TODO
     }
   } // initEditor
+
+  void _initNumber() {
+    if (html5) {
+      input.type = EditorI.TYPE_NUMBER;
+    } else {
+      input.type = EditorI.TYPE_TEXT;
+    }
+  } // initNumber
+
+  void set html5 (bool newValue) {
+    super.html5 = newValue;
+    _initNumber();
+  }
 
   /**
    * Value
    */
   @override
   String get value {
-    String vv = input.value; // will be "" if invalid
+    String vv = input.value; // will be "" if html5 invalid
     return parse(vv, true);
   } // get value
 
@@ -68,12 +88,12 @@ class LInputNumber
     //
     try {
       num vv = numberFormat.parse(userInput);
-      return vv.toString(); // value as string
+      return vv.toStringAsFixed(decimalDigits); // value as string
     } catch (error) {
     }
     try {
       num vv = num.parse(userInput);
-      return vv.toString(); // value as string
+      return vv.toStringAsFixed(decimalDigits); // value as string
     } catch (error) {
       if (setValidity)
         input.setCustomValidity("${error}");
@@ -108,12 +128,16 @@ class LInputNumber
     }
     try {
       num vv = numberFormat.parse(newValue);
+      if (html5)
+        return vv.toStringAsFixed(decimalDigits); // no thousands
       return numberFormat.format(vv);
     } catch (error) {
     }
     // fallback
     try {
       num vv = num.parse(newValue);
+      if (html5)
+        return vv.toStringAsFixed(decimalDigits); // no thousands
       return numberFormat.format(vv);
     } catch (error) {
       if (setValidity)
@@ -161,5 +185,9 @@ class LInputNumber
 
   } // decimalDigits
 
+
+  String toString() {
+    return "LInputNumber@${name} text=${input.text} digits=${decimalDigits} html5=${html5}";
+  }
 
 } // LInputNumber
