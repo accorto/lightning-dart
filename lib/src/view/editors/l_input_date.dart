@@ -41,7 +41,7 @@ class LInputDate extends LInput {
     input.onChange.listen(onInputChange);
     input.onKeyUp.listen(onInputKeyUp);
   }
-
+  /// Init Date
   void _initDate(String type) {
     if (html5) {
       input.type = type;

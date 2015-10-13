@@ -15,13 +15,14 @@ class FormsEditor extends DemoFeature {
     "any input can have a clear value icon, then the icon is on the left",
     "date editors in date picker"],
   issues: [],
-  plans: ["address, geo, file, timezone, number/currency"]);
+  plans: ["address, geo, file, timezone, currency"]);
 
 
   LComponent get content {
 
     LForm form = new LForm.stacked("tfe")
       ..classes.add(LMargin.C_HORIZONTAL__MEDIUM);
+    form.setSection(new FormSection(2));
 
     LInputSearch searchInput1 = new LInputSearch("search1")
       ..label = "Search Input 1"
@@ -38,6 +39,37 @@ class FormsEditor extends DemoFeature {
       ..placeholder = "Duration Placeholder";
     form.addEditor(durationInput);
 
+    LInputDuration durationInput2 = new LInputDuration("duration", type:EditorI.TYPE_DURATIONHOUR)
+      ..label = "Duration Hour Input"
+      ..placeholder = "Duration Hour Placeholder";
+    form.addEditor(durationInput2);
+
+    LInputNumber number1h = new LInputNumber("n1h")
+      ..label = "Html5 Integer"
+      ..placeholder = "Number Placeholder"
+      ..decimalDigits = 0;
+    form.addEditor(number1h);
+
+    LInputNumber number1 = new LInputNumber("n1")
+      ..label = "Standard Integer"
+      ..placeholder = "Number Placeholder"
+      ..decimalDigits = 0
+      ..html5 = false;
+    form.addEditor(number1);
+
+    LInputNumber number2h = new LInputNumber("n2h")
+      ..label = "Html5 Number(2)"
+      ..placeholder = "Number Placeholder"
+      ..decimalDigits = 2;
+    form.addEditor(number2h);
+
+    LInputNumber number2 = new LInputNumber("n2")
+      ..label = "Standard Number(2)"
+      ..placeholder = "Number Placeholder"
+      ..decimalDigits = 2
+      ..html5 = false;
+    form.addEditor(number2);
+
     LInputRange rangeInput = new LInputRange("range")
       ..label = "Range Input 7 - 7 - 182"
       ..setMinStepMax(7, 7, 182);
@@ -49,7 +81,9 @@ class FormsEditor extends DemoFeature {
 
   String get source {
     return '''
-    LForm form = new LForm.stacked("tfe");
+    LForm form = new LForm.stacked("tfe")
+      ..classes.add(LMargin.C_HORIZONTAL__MEDIUM);
+    form.setSection(new FormSection(2));
 
     LInputSearch searchInput1 = new LInputSearch("search1")
       ..label = "Search Input 1"
@@ -61,6 +95,49 @@ class FormsEditor extends DemoFeature {
       ..placeholder = "Search Placeholder";
     form.addEditor(searchInput2);
 
+    LInputDuration durationInput = new LInputDuration("duration")
+      ..label = "Duration Input"
+      ..placeholder = "Duration Placeholder";
+    form.addEditor(durationInput);
+
+    LInputDuration durationInput2 = new LInputDuration("duration", type:EditorI.TYPE_DURATIONHOUR)
+      ..label = "Duration Hour Input"
+      ..placeholder = "Duration Hour Placeholder";
+    form.addEditor(durationInput2);
+
+    LInputNumber number1h = new LInputNumber("n1h")
+      ..label = "Html5 Integer"
+      ..placeholder = "Number Placeholder"
+      ..decimalDigits = 0;
+    form.addEditor(number1h);
+
+    LInputNumber number1 = new LInputNumber("n1")
+      ..label = "Standard Integer"
+      ..placeholder = "Number Placeholder"
+      ..decimalDigits = 0
+      ..html5 = false;
+    form.addEditor(number1);
+
+    LInputNumber number2h = new LInputNumber("n2h")
+      ..label = "Html5 Number(2)"
+      ..placeholder = "Number Placeholder"
+      ..decimalDigits = 2;
+    form.addEditor(number2h);
+
+    LInputNumber number2 = new LInputNumber("n2")
+      ..label = "Standard Number(2)"
+      ..placeholder = "Number Placeholder"
+      ..decimalDigits = 2
+      ..html5 = false;
+    form.addEditor(number2);
+
+    LInputRange rangeInput = new LInputRange("range")
+      ..label = "Range Input 7 - 7 - 182"
+      ..setMinStepMax(7, 7, 182);
+    form.addEditor(rangeInput);
+    rangeInput.valueAsInt = 35;
+
+    return form;
     ''';
   }
 }

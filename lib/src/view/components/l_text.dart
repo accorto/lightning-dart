@@ -108,6 +108,8 @@ class LSectionTitle {
     //
     this.open = open;
     this.label = label;
+    if (label == null || label.isEmpty)
+      showLabel = false;
     //
     element.onClick.listen((MouseEvent evt){
       evt.preventDefault();
@@ -163,6 +165,8 @@ class LSectionTitle {
       for (Element part in _sectionParts)
         part.classes.remove(LVisibility.C_HIDE);
     } else {
+      if (!showLabel)
+        showLabel = true; // ensure we can open again
       element.classes.remove(LText.C_SECTION_GROUP__IS_OPEN);
       element.classes.add(LText.C_SECTION_GROUP__IS_CLOSED);
       for (Element part in _sectionParts)
