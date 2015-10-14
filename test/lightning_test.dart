@@ -26,6 +26,8 @@ import '../web/exampleWorkspace.dart';
  * or eventually (fails at this point)
  * - pub global run test_runner
  * - run_tests
+ *
+ * https://travis-ci.org/accorto/lightning-dart
  */
 void main() {
 
