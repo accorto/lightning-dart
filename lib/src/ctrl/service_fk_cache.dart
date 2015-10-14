@@ -20,7 +20,7 @@ typedef Future<List<DRecord>> ServiceFkSearch (String tableName, String serach, 
  * FK Cache Management
  * - requires ServiceFkSubmit to do actual query
  */
-class ServiceFk {
+class ServiceFkCache {
 
   /**
    * Callback calls back [updateCache]
@@ -302,7 +302,7 @@ class ServiceFk {
   }
 
 
-  static Logger _log = new Logger("ServiceFk");
+  static Logger _log = new Logger("ServiceFkCache");
 
   /// The Cache: tableName!id
   static final Map<String, DFK> _map = new Map<String, DFK>();

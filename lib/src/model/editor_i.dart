@@ -184,7 +184,7 @@ abstract class EditorI {
   String contextReplace(String newValue) {
     if (DataUtil.isNotEmpty(newValue)) {
       return DataContext.contextReplace(data, newValue,
-      nullResultOk: true, emptyResultOk: true, columnName: name);
+        nullResultOk: true, emptyResultOk: true, columnName: name);
     }
     return newValue;
   }
@@ -287,7 +287,7 @@ abstract class EditorI {
     // selects column.pickValueList
 
     if (tableColumn.hasParentReference()) {
-      _addDependentOn(EditorIDependent.getParentColumnName(tableColumn.parentReference));
+      _columnParentReference(tableColumn.parentReference);
     }
     if (tableColumn.hasRestrictionSql()) {
       String sql = tableColumn.restrictionSql;
@@ -313,6 +313,15 @@ abstract class EditorI {
   /// Optional data column
   DataColumn get dataColumn => _dataColumn;
   DataColumn _dataColumn;
+
+  /// Column Parent Reference
+  void _columnParentReference(String parentReference) {
+    List<String> refs = parentReference.split(",");
+    for (String ref in refs) { // can be a list
+      _addDependentOn(EditorIDependent.getParentColumnName(ref));
+    }
+  } // _columnParentReference
+
   /// Automatically submit on enter
   FormSubmit autoSubmit;
 

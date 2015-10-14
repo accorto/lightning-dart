@@ -111,6 +111,31 @@ class LSelect
     validateOptions();
   }
 
+  /**
+   * Rendered Value (different from value)
+   */
+  String get valueDisplay => render(value, false);
+  /// is the rendered [valueDisplay] different from the [value]
+  bool get valueRendered => true;
+  /// render [newValue]
+  String render(String newValue, bool setValidity) {
+    if (setValidity) {
+      input.setCustomValidity("");
+    }
+    if (newValue == null || newValue.isEmpty) {
+      return "";
+    }
+    for (OptionElement oe in options) {
+      if (oe.value == newValue)
+        return oe.label;
+    }
+    if (setValidity) {
+      input.setCustomValidity("Invalid Value: ${newValue}");
+    }
+    return newValue;
+  } // render
+
+
   String get defaultValue => _defaultValue;
   void set defaultValue (String newValue) {
     _defaultValue = newValue;
@@ -293,7 +318,7 @@ class LSelect
       }
       _log.fine("validateOptions disabled=${count} of ${options.length} - invalidated=${invalidated}");
     }
-  } // isValidOption
+  } // validateOptions
 
   /// Validate option - returns true if valid
   bool _validateOption(String optionValue) {

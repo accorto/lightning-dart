@@ -65,6 +65,11 @@ class FormCtrl extends LForm {
           LEditor editor = EditorUtil.createfromColumn(null, dataColumn, false,
             idPrefix: element.id, data:data);
           addEditor(editor, newRow:pc.isNewRow, width:pc.width, height:pc.height);
+          if (editor is LLookup) {
+            LLookup lookup = editor;
+            ServiceFk serviceFk = new ServiceFk(lookup);
+            lookup.serviceFk = serviceFk;
+          }
         }
       }
       count++;

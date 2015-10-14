@@ -30,6 +30,7 @@ class LLookup
 
   static const String DATA_SELECT_MULTI = "multi";
   static const String DATA_SELECT_SINGLE = "single";
+  static const String DATA_SCOPE_SINGLE = "single";
 
   /// Lookup form + menu
   final DivElement element = new DivElement()
@@ -58,6 +59,7 @@ class LLookup
 
   /// Displayed in Grid
   final bool inGrid;
+  ServiceFk serviceFk;
 
   /**
    * Lookup
@@ -67,9 +69,30 @@ class LLookup
    */
   LLookup(String name, {String idPrefix,
       String select: DATA_SELECT_SINGLE,
-      String scope: "single",
+      String scope: DATA_SCOPE_SINGLE,
       bool typeahead: false,
       bool this.inGrid:false}) {
+    _initEditor(name, idPrefix, select, scope, typeahead);
+  } // LLookup
+
+  LLookup.base(String name, {String idPrefix})
+    : this(name, idPrefix:idPrefix, typeahead: true);
+
+  LLookup.single(String name, {String idPrefix})
+    : this(name, idPrefix:idPrefix, typeahead: false);
+
+  LLookup.multi(String name, {String idPrefix})
+    : this(name, idPrefix:idPrefix, select:DATA_SELECT_MULTI, typeahead: false);
+
+  /// Lookup Editor
+  LLookup.from(DataColumn dataColumn, {String idPrefix, bool this.inGrid:false}) {
+    _initEditor(dataColumn.name, idPrefix, DATA_SELECT_SINGLE, DATA_SCOPE_SINGLE, true);
+    this.dataColumn = dataColumn;
+  }
+
+  /// Init Lookup
+  void _initEditor(String name, String idPrefix,
+      String select, String scope, bool typeahead) {
     _setAttributes(select, scope, typeahead);
     _formElement.createStandard(this, iconRight: _icon);
     input
@@ -78,7 +101,7 @@ class LLookup
       ..attributes[Html0.ARIA_EXPANED] = "false";
     _formElement.labelInputText = lLookupLabel();
     input.name = name;
-    _formElement.id = createId(idPrefix, name);
+    _formElement.id = createId(idPrefix, input.name);
     element.id = "${_formElement.id}-lookup";
 
     if (typeahead) { // show input with search icon
@@ -110,17 +133,7 @@ class LLookup
     //
     _lookupMenu.classes.add(LVisibility.C_AUTO_VISIBLE);
     _lookupMenu.onKeyDown.listen(onMenuKeyDown);
-  } // LLookup
-
-
-  LLookup.base(String name, {String idPrefix})
-    : this(name, idPrefix:idPrefix, typeahead: true);
-
-  LLookup.single(String name, {String idPrefix})
-    : this(name, idPrefix:idPrefix, typeahead: false);
-
-  LLookup.multi(String name, {String idPrefix})
-    : this(name, idPrefix:idPrefix, select:DATA_SELECT_MULTI, typeahead: false);
+  }
 
   /// Set Lookup Attributes
   void _setAttributes(String select, String scope, bool typeahead) {
@@ -167,9 +180,39 @@ class LLookup
 
   String get value => input.value;
   void set value (String newValue) {
+    validateOptions();
     input.value = newValue;
     // TODO validate
   }
+
+  /// Dependent On Changed
+  void onDependentOnChanged(DEntry dependentEntry) {
+    super.onDependentOnChanged(dependentEntry);
+    validateOptions();
+    if (serviceFk != null)
+      onDependentOnChanged(dependentEntry);
+  }
+
+  /**
+   * Rendered Value (different from value)
+   */
+  String get valueDisplay => render(value, false);
+  /// is the rendered [valueDisplay] different from the [value]
+  bool get valueRendered => true;
+  /// render [newValue]
+  String render(String newValue, bool setValidity) {
+    if (setValidity) {
+      input.setCustomValidity("");
+    }
+    if (newValue == null || newValue.isEmpty) {
+      return "";
+    }
+    // TODO render
+    if (setValidity) {
+      input.setCustomValidity("Invalid Value: ${newValue}");
+    }
+    return newValue;
+  } // render
 
   String get defaultValue => null; // ignore
   void set defaultValue (String newValue) {
@@ -386,6 +429,32 @@ class LLookup
     }
   } // showResults
 
+
+  void validateOptions() {
+    if (data != null && hasDependentOn) {
+      /*
+      String currentValue = input.value;
+      int count = 0;
+      bool invalidated = false;
+      List<OptionElement> options = input.options;
+      for (OptionElement oe in options) {
+        bool valid = _validateOption(oe.value);
+        oe.disabled = !valid;
+        if (valid) {
+          oe.classes.remove(LVisibility.C_HIDE);
+        } else {
+          count++;
+          oe.classes.add(LVisibility.C_HIDE);
+          if (oe.value == currentValue) {
+            input.value = ""; // invalidate current
+            invalidated = true;
+          }
+        }
+      }
+      _log.fine("validateOptions disabled=${count} of ${options.length} - invalidated=${invalidated}");
+      */
+    }
+  } // validateOptions
 
   void updateStatusValidationState() {
   }

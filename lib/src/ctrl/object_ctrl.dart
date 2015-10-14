@@ -261,7 +261,7 @@ class ObjectCtrl extends LComponent {
 
 
   /**
-   * Table
+   * UI Table
    */
   void _displayTable() {
     _table = new TableCtrlUi(datasource.uiDirect, recordSorting:datasource.recordSorting,

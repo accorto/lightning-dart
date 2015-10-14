@@ -28,7 +28,8 @@ import '../web/exampleWorkspace.dart';
  * - run_tests
  */
 void main() {
-  //
+
+  // Components
   group('LightningDart Components', () {
     PageSimple  page;
     DemoPage demoPage;
@@ -46,9 +47,9 @@ void main() {
       expect(demoPage.element.children.length, equals(31));
       print('first test');
     });
-  });
+  }); // Components
 
-  //
+  // Workspace
   group('LightningWorkspace', () {
     PageSimple page;
     ObjectCtrl ctrl;
@@ -60,7 +61,7 @@ void main() {
       page = LightningDart.createPageSimple();
       page.element.classes.add(LGrid.C_WRAP);
       page.add(ctrl);
-    });
+    }); // setUp
 
     test('Second Test', () {
       expect(page, isNotNull);
@@ -68,7 +69,51 @@ void main() {
       expect(ctrl.element.children.length, equals(2));
       print('second test');
     });
-  });
+  }); // Workspace
 
+  // Select/Lookups
+  group('SelectLookup', () {
+    List<DOption> options = new List<DOption>();
+    setUp((){
+      options.add(new DOption()..value="v1" ..label="d1");
+      options.add(new DOption()..value="v2" ..label="d2");
+      options.add(new DOption()..value="v3" ..label="d3");
+      options.add(new DOption()..value="v4" ..label="d4");
+    }); // setUp
+
+    test('Select', (){
+      LSelect select = new LSelect("test")
+        ..required = true;
+      select.dOptionList = options;
+      expect(select.value, equals("v1"));
+      expect(select.valueDisplay, equals("d1"));
+      select.value = "v3";
+      expect(select.value, equals("v3"));
+      expect(select.valueDisplay, equals("d3"));
+    });
+
+    test('Lookup', (){
+      LLookup select = new LLookup("test")
+        ..required = true;
+      select.dOptionList = options;
+      expect(select.value, equals("v1"));
+      expect(select.valueDisplay, equals("d1"));
+      select.value = "v3";
+      expect(select.value, equals("v3"));
+      expect(select.valueDisplay, equals("d3"));
+    });
+
+    test('Picklist', (){
+      LPicklist select = new LPicklist("test")
+        ..required = true;
+      select.dOptionList = options;
+      expect(select.value, equals("v1"));
+      expect(select.valueDisplay, equals("d1"));
+      select.value = "v3";
+      expect(select.value, equals("v3"));
+      expect(select.valueDisplay, equals("d3"));
+    });
+
+  }); // SelectLookup
 
 } // main

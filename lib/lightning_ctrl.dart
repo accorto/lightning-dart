@@ -57,7 +57,7 @@ part 'src/ctrl/remote_logger.dart';
 part 'src/ctrl/router.dart';
 part 'src/ctrl/service.dart';
 part 'src/ctrl/service_analytics.dart';
-part 'src/ctrl/service_fk.dart';
+part 'src/ctrl/service_fk_cache.dart';
 part 'src/ctrl/service_tracker.dart';
 part 'src/ctrl/table_ctrl.dart';
 part 'src/ctrl/table_layout.dart';

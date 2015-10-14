@@ -44,8 +44,10 @@ class EditorUtil {
         editor = new LInputDuration.from(dataColumn, EditorI.TYPE_DURATION, idPrefix:idPrefix, inGrid:inGrid);
       else if (dataType == DataType.DURATIONHOUR)
         editor = new LInputDuration.from(dataColumn, EditorI.TYPE_DURATIONHOUR, idPrefix:idPrefix, inGrid:inGrid);
-      else if (dataType == DataType.EMAIL);
-      else if (dataType == DataType.FK);
+      else if (dataType == DataType.EMAIL)
+        editor = new LInput.from(dataColumn, EditorI.TYPE_EMAIL, idPrefix:idPrefix, inGrid:inGrid);
+      else if (dataType == DataType.FK)
+        editor = new LLookup.from(dataColumn, idPrefix:idPrefix, inGrid:inGrid);
       else if (dataType == DataType.GEO);
       else if (dataType == DataType.IM);
       else if (dataType == DataType.IMAGE);
@@ -55,7 +57,8 @@ class EditorUtil {
         editor = new LInputNumber.from(dataColumn, EditorI.TYPE_NUMBER, idPrefix:idPrefix, inGrid:inGrid);
       else if (dataType == DataType.PASSWORD)
         editor = new LInput.from(dataColumn, EditorI.TYPE_PASSWORD, idPrefix:idPrefix, inGrid:inGrid);
-      else if (dataType == DataType.PHONE);
+      else if (dataType == DataType.PHONE)
+        editor = new LInput.from(dataColumn, EditorI.TYPE_TEL, idPrefix:idPrefix, inGrid:inGrid);
       else if (dataType == DataType.PICK)
         editor = new LSelect.from(dataColumn, multiple:false, idPrefix:idPrefix, inGrid:inGrid);
       else if (dataType == DataType.PICKAUTO);
@@ -73,21 +76,24 @@ class EditorUtil {
         editor = new LInputNumber.from(dataColumn, EditorI.TYPE_NUMBER, idPrefix:idPrefix, inGrid:inGrid);
       else if (dataType == DataType.RATING);
       else if (dataType == DataType.TAG);
-      else if (dataType == DataType.TENANT);
+      else if (dataType == DataType.TENANT)
+        editor = new LLookup.from(dataColumn, idPrefix:idPrefix, inGrid:inGrid);
       else if (dataType == DataType.TEXT)
         editor = new LTextArea.from(dataColumn, idPrefix:idPrefix, inGrid:inGrid);
       else if (dataType == DataType.TIME)
         editor = new LInputDate.from(dataColumn, EditorI.TYPE_TIME, idPrefix:idPrefix, inGrid:inGrid);
       else if (dataType == DataType.TIMEZONE);
-      else if (dataType == DataType.URL);
-      else if (dataType == DataType.USER);
+      else if (dataType == DataType.URL)
+        editor = new LInput.from(dataColumn, EditorI.TYPE_URL, idPrefix:idPrefix, inGrid:inGrid);
+      else if (dataType == DataType.USER)
+        editor = new LLookup.from(dataColumn, idPrefix:idPrefix, inGrid:inGrid);
 
       // fallback
       if (editor == null)
         editor = new LInput.from(dataColumn, DataTypeUtil.getEditorType(dataType), idPrefix:idPrefix, inGrid:inGrid);
-    } // column
+    } // dataColumn
 
-    // editor fallback - text
+    // editor fallback (no dataColumn) - text
     if (editor == null) {
       editor = new LInput(name, EditorI.TYPE_TEXT, idPrefix:idPrefix, inGrid:inGrid);
       if (dataColumn != null) {
@@ -103,65 +109,6 @@ class EditorUtil {
     }
     return editor;
   } // createFromColumn
-
-  /**
-   * Create Editor of html input [type] with [name]
-   * (see also DataTypeUtil.createEditor)
-   */
-  static LEditor create(String name,
-      {String idPrefix,
-      String type : EditorI.TYPE_TEXT,
-      bool multiple: false,
-      bool inGrid: false}) {
-
-    if (type == EditorI.TYPE_CHECKBOX)
-      return new LCheckbox(name, idPrefix:idPrefix, inGrid:inGrid);
-
-    if (type == EditorI.TYPE_SELECT)
-      return new LSelect(name, idPrefix: idPrefix, multiple:multiple, inGrid:inGrid);
-//    if (type == EditorI.TYPE_SELECTAUTO)
-//      return new EditorSelectAuto(name, idPrefix: idPrefix, inGrid: inGrid);
-//    if (type == EditorI.TYPE_SELECTCHOICE)
-//      return new EditorSelectChoice(name, idPrefix: idPrefix, multiple: multiple, inGrid: inGrid);
-//    if (type == EditorI.TYPE_TAG)
-//      return new EditorTag(name, idPrefix: idPrefix, inGrid: inGrid);
-
-    if (type == EditorI.TYPE_TEXTAREA)
-      return new LTextArea(name, idPrefix:idPrefix, inGrid:inGrid);
-//    if (type == EditorI.TYPE_TIMEZONE)
-//      return new EditorTimezone(name, idPrefix: idPrefix, inGrid: inGrid);
-
-//    if (type == EditorI.TYPE_FILE)
-//      return new EditorFile(name, idPrefix: idPrefix, inGrid: inGrid);
-
-    if (EditorI.isDate(type))
-      return new LInputDate(name, type:type, idPrefix:idPrefix, inGrid:inGrid);
-
-//    if (type == EditorI.TYPE_RANGE)
-//      return new EditorRange(name, idPrefix: idPrefix, inGrid: inGrid);
-//    if (EditorI.isNumber(type))
-//      return new EditorNumber(name, idPrefix: idPrefix, type: type, inGrid: inGrid);
-
-//    if (type == EditorI.TYPE_ADDRESS)
-//      return new EditorAddress(name, idPrefix: idPrefix, type: type, inGrid: inGrid);
-
-    if (type == EditorI.TYPE_DURATION)
-      return new LInputDuration(name, idPrefix:idPrefix, inGrid:inGrid);
-
-//    if (type == EditorI.TYPE_FK)
-//      return new EditorFk(name, idPrefix: idPrefix, type: type, inGrid: inGrid);
-
-//    if (type == EditorI.TYPE_CODE)
-//      return new EditorCode(name, idPrefix: idPrefix, inGrid: inGrid);
-
-//    if (type == EditorI.TYPE_URL)
-//      return new EditorUrl(name, idPrefix: idPrefix, inGrid: inGrid);
-
-    if (type == EditorI.TYPE_SEARCH)
-      return new LInputSearch(name, idPrefix:idPrefix, inGrid:inGrid);
-
-    return new LInput(name, type, idPrefix:idPrefix, inGrid:inGrid);
-  } // create
 
 
   /// Create from Data Type
