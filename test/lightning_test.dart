@@ -72,7 +72,7 @@ void main() {
   }); // Workspace
 
   // Select/Lookups
-  group('SelectLookup', () {
+  group('SelectInterface', () {
     List<DOption> options = new List<DOption>();
     setUp((){
       options.add(new DOption()..value="v1" ..label="d1");

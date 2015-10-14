@@ -18,10 +18,13 @@ class LLookup
 
   /// slds-lookup - Initializes lookup | Required
   static const String C_LOOKUP = "slds-lookup";
+
   /// slds-lookup__menu - Initializes lookup results list container | Required
   static const String C_LOOKUP__MENU = "slds-lookup__menu";
+
   /// slds-lookup__list - Initializes lookup results list | Required
   static const String C_LOOKUP__LIST = "slds-lookup__list";
+
   /// slds-lookup__item - Results lsit item | Required
   static const String C_LOOKUP__ITEM = "slds-lookup__item";
 
@@ -38,10 +41,13 @@ class LLookup
 
   /// Form Element - lookup needs to be top element
   final LFormElement _formElement = new LFormElement();
+
   /// Form Element Input
   final InputElement input = new InputElement(type: EditorI.TYPE_TEXT);
+
   /// Search Icon
   final LIcon _icon = new LIconUtility(LIconUtility.SEARCH);
+
   /// Lookup form + menu
   final DivElement _lookupMenu = new DivElement()
     ..classes.add(C_LOOKUP__MENU)
@@ -68,21 +74,23 @@ class LLookup
    * [scope] single|multi
    */
   LLookup(String name, {String idPrefix,
-      String select: DATA_SELECT_SINGLE,
-      String scope: DATA_SCOPE_SINGLE,
-      bool typeahead: false,
-      bool this.inGrid:false}) {
+  String select: DATA_SELECT_SINGLE,
+  String scope: DATA_SCOPE_SINGLE,
+  bool typeahead: false,
+  bool this.inGrid:false}) {
     _initEditor(name, idPrefix, select, scope, typeahead);
-  } // LLookup
+  }
+
+  // LLookup
 
   LLookup.base(String name, {String idPrefix})
-    : this(name, idPrefix:idPrefix, typeahead: true);
+  : this(name, idPrefix:idPrefix, typeahead: true);
 
   LLookup.single(String name, {String idPrefix})
-    : this(name, idPrefix:idPrefix, typeahead: false);
+  : this(name, idPrefix:idPrefix, typeahead: false);
 
   LLookup.multi(String name, {String idPrefix})
-    : this(name, idPrefix:idPrefix, select:DATA_SELECT_MULTI, typeahead: false);
+  : this(name, idPrefix:idPrefix, select:DATA_SELECT_MULTI, typeahead: false);
 
   /// Lookup Editor
   LLookup.from(DataColumn dataColumn, {String idPrefix, bool this.inGrid:false}) {
@@ -104,7 +112,8 @@ class LLookup
     _formElement.id = createId(idPrefix, input.name);
     element.id = "${_formElement.id}-lookup";
 
-    if (typeahead) { // show input with search icon
+    if (typeahead) {
+      // show input with search icon
       input.onKeyUp.listen(onInputKeyUp);
       input.onFocus.listen((Event e) {
         _lookupMenu.classes.remove(LVisibility.C_HIDE);
@@ -119,7 +128,8 @@ class LLookup
         // _formElement._elementControl.insertBefore(_pillContainer, input);
         _formElement._elementControl.append(_pillContainer); // needs to be before input
         _formElement._elementControl.append(input);
-      } else { /// Multi
+      } else {
+        /// Multi
         _formElement.element.append(_pillContainer);
       }
     }
@@ -141,48 +151,63 @@ class LLookup
     element.attributes["data-scope"] = scope;
     element.attributes["dara-typeahead"] = typeahead.toString();
   }
+
   // data-select single|multi
   bool get multiple => element.attributes["data-select"] == DATA_SELECT_MULTI;
+
   // data-typeahead
   bool get typeahead => element.attributes["data-typeahead"] == "true";
+
   // data-scope single
   bool get singleScope => element.attributes["data-scope"] == "single";
 
   /// Editor Id
   String get id => input.id;
-  void set id (String newValue) {
+
+  void set id(String newValue) {
     _formElement.id = newValue;
     element.id = "${_formElement.id}-lookup";
   }
+
   void updateId(String idPrefix) {
     id = createId(idPrefix, name);
   }
 
   String get name => input.name;
+
   String get type => input.type;
 
   String get label => _formElement.label;
-  void set label (String newValue) {
+
+  void set label(String newValue) {
     _formElement.label = newValue;
   }
-  void set help (String newValue) {
+
+  void set help(String newValue) {
     _formElement.help = newValue;
   }
+
   String get help => _formElement.help;
-  void set hint (String newValue) {
+
+  void set hint(String newValue) {
     _formElement.hint = newValue;
   }
+
   String get hint => _formElement.hint;
 
   /// Small Editor/Label
-  void set small (bool newValue){}
+  void set small(bool newValue) {
+  }
 
-
-  String get value => input.value;
-  void set value (String newValue) {
+  /// Get Value from display
+  String get value {
+    String display = input.value;
+    return parse(display, true);
+  }
+  /// Set Value
+  void set value(String newValue) {
     validateOptions();
-    input.value = newValue;
-    // TODO validate
+    input.value = render(newValue, true);
   }
 
   /// Dependent On Changed
@@ -192,6 +217,20 @@ class LLookup
     if (serviceFk != null)
       onDependentOnChanged(dependentEntry);
   }
+  /// display -> value - sets validity
+  String parse(String display, bool setValidity) {
+    if (setValidity)
+      input.setCustomValidity("");
+    if (display == null || display.isEmpty)
+      return display;
+    for (LLookupItem item in _lookupItemList) {
+      if (item.label == display)
+        return item.value;
+    }
+    input.setCustomValidity("${lLookupInvalidInput()}=${display}");
+    _log.warning("parse ${name} NotFound ${display}");
+    return display;
+  } // parse
 
   /**
    * Rendered Value (different from value)
@@ -199,6 +238,7 @@ class LLookup
   String get valueDisplay => render(value, false);
   /// is the rendered [valueDisplay] different from the [value]
   bool get valueRendered => true;
+
   /// render [newValue]
   String render(String newValue, bool setValidity) {
     if (setValidity) {
@@ -207,9 +247,12 @@ class LLookup
     if (newValue == null || newValue.isEmpty) {
       return "";
     }
-    // TODO render
+    for (LLookupItem item in _lookupItemList) {
+      if (item.value == newValue)
+        return item.label;
+    }
     if (setValidity) {
-      input.setCustomValidity("Invalid Value: ${newValue}");
+      input.setCustomValidity("${lLookupInvalidValue()}=${newValue}");
     }
     return newValue;
   } // render
@@ -221,6 +264,9 @@ class LLookup
   bool get required => input.required;
   void set required (bool newValue) {
     input.required = newValue;
+    if (newValue && input.value.isEmpty && _lookupItemList.isNotEmpty) {
+      input.value = _lookupItemList.first.label;
+    }
   }
 
   bool get readOnly => input.readOnly;
@@ -460,6 +506,8 @@ class LLookup
   }
 
 
-  static String lLookupLabel() => Intl.message("Lookup", name: "lLookupLabel", args: []);
+  static String lLookupLabel() => Intl.message("Lookup", name: "lLookupLabel");
+  static String lLookupInvalidInput() => Intl.message("Invalid option", name: "lLookupInvalidInput");
+  static String lLookupInvalidValue() => Intl.message("Invalid value", name: "lLookupInvalidValue");
 
 } // LLookup

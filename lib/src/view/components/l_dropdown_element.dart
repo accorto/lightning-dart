@@ -95,10 +95,14 @@ class LDropdownElement
   }
 
 
-  bool get required => false;
+  bool get required => _required;
   void set required (bool newValue) {
-    // TOOD
+    _required = newValue;
+    if (newValue && _dropdownItemList.isNotEmpty && value == null) {
+      value = _dropdownItemList.first.value;
+    }
   }
+  bool _required = false;
   bool get multiple => false;
 
 
@@ -240,5 +244,17 @@ class LDropdownElement
         editorChange(name, selectedItem.value, null, selectedItem);
     }
   } // setValue
+
+  /// return display value or null if not found
+  String render(String newValue) {
+    if (newValue == null || newValue.isEmpty) {
+      return "";
+    }
+    for (LDropdownItem item in _dropdownItemList) {
+      if (item.value == newValue)
+        return item.label;
+    }
+    return null;
+  } // render
 
 } // LDropdownElement

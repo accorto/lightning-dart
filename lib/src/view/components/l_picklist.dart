@@ -128,6 +128,27 @@ class LPicklist
     }
   }
 
+  /**
+   * Rendered Value (different from value)
+   */
+  String get valueDisplay => render(value, false);
+  /// is the rendered [valueDisplay] different from the [value]
+  bool get valueRendered => true;
+
+  /// render [newValue]
+  String render(String newValue, bool setValidity) {
+    if (setValidity) {
+    //input.setCustomValidity("");
+    }
+    String display = _dropdown.render(newValue);
+    if (display != null)
+        return display;
+    if (setValidity) {
+    //input.setCustomValidity("${lLookupInvalidValue()}=${newValue}");
+    }
+    return newValue;
+  } // render
+
   /// Editor Change callback
   void onEditorChange(String name, String newValue, DEntry entry, var details) {
     if (details is ListItem) {
@@ -157,11 +178,10 @@ class LPicklist
     _button.disabled = newValue;
   }
 
-  bool get required => _required;
+  bool get required => _dropdown.required;
   void set required (bool newValue) {
-    _required = newValue; // don't make input required
+    _dropdown.required = newValue;
   }
-  bool _required = false;
 
   bool get spellcheck => false;
   void set spellcheck (bool newValue) { // ignore

@@ -47,8 +47,8 @@ class LInputDuration
    */
   @override
   String get value {
-    String vv = input.value;
-    return parse(vv, true);
+    String display = input.value;
+    return parse(display, true);
   } // get value
 
   /// Set new value
@@ -60,7 +60,7 @@ class LInputDuration
   /// is the value in hours (number)
   bool get isHour => _isHour;
 
-  /// user -> value - sets validity
+  /// display -> value - sets validity
   String parse(String userInput, bool setValidity) {
     if (setValidity)
       input.setCustomValidity("");
@@ -77,7 +77,7 @@ class LInputDuration
       return dd.asHours().toStringAsFixed(2); // 8/20
     }
     return dd.asXml();
-  } // parseDuration
+  } // parse
 
   /// get string value as duration
   DurationUtil parseValue(String newValue) {
