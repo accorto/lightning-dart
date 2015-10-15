@@ -200,17 +200,20 @@ class LLookup
 
   /// Get Value from display
   String get value {
-    String display = input.value;
-    return parse(display, true);
+    //String display = input.value;
+    //return parse(display, true);
+    return _value;
   }
   /// Set Value
   void set value(String newValue) {
+    _value = newValue;
     //validateOptions();
     render(newValue, true)
     .then((String display){
       input.value = display;
     });
   }
+  String _value = "";
 
   /// display -> value - sets validity
   String parse(String display, bool setValidity) {
@@ -267,7 +270,7 @@ class LLookup
   void set required (bool newValue) {
     input.required = newValue;
     if (newValue && input.value.isEmpty && lookupItemList.isNotEmpty) {
-      input.value = lookupItemList.first.label;
+      value = lookupItemList.first.value;
     }
   }
 
@@ -381,35 +384,54 @@ class LLookup
     String tvalue = telement.attributes[Html0.DATA_VALUE];
     _log.fine("onMenuKeyDown ${kc} ${tvalue}");
   }
+
+  /**
+   * Input Key Up
+   * ESC closes - if ALt/Shift/Meta - clear
+   * ENTER selects first
+   */
   void onInputKeyUp(KeyboardEvent evt) {
     int kc = evt.keyCode;
     String match = input.value;
     _log.fine("onInputKeyUp ${kc} ${match}");
     if (kc == KeyCode.ESC) {
-      showResults = false;
+      if (evt.ctrlKey || evt.altKey || evt.metaKey) {
+        _value = "";
+        input.value = "";
+        lookupUpdateList(false, false);
+      } else {
+        showResults = false;
+      }
+    } else if (kc == KeyCode.ENTER) {
+      lookupUpdateList(false, true);
     } else {
-      lookupUpdateList(false);
+      lookupUpdateList(false, false);
     }
-  }
+  } // onInputKeyUp
 
   /// update lookup list and display
-  void lookupUpdateList(bool showAll) {
+  int lookupUpdateList(bool showAll, bool selectFirst) {
     String restriction = input.value;
     RegExp exp = null;
     if (!showAll && restriction.isNotEmpty) {
       exp = LUtil.createRegExp(restriction);
     }
     int count = 0;
+    LLookupItem first = null;
     for (LLookupItem item in lookupItemList) {
       if (exp == null) {
         item.show = true;
         item.labelHighlightClear();
         //item.exampleUpdate();
+        if (first == null)
+          first = item;
         count++;
       }
       else if (item.labelHighlight(exp) || item.descriptionHighlight(exp)) {
         item.show = true;
         //item.exampleUpdate();
+        if (first == null)
+          first = item;
         count++;
       }
       else { // no match
@@ -421,9 +443,15 @@ class LLookup
     } else {
       input.setCustomValidity("");
     }
-    //doValidate();
+    doValidate();
     _log.fine("lookupUpdateList ${name} '${restriction}' ${count} of ${lookupItemList.length}");
-    showResults = true;
+    if (selectFirst && first != null) {
+      value = first.value;
+      showResults = false;
+    } else {
+      showResults = true;
+    }
+    return count;
   } // lookupUpdateList
 
   /**
@@ -442,12 +470,14 @@ class LLookup
     }
     // Input has aria-activedescendant attribute whose value is the id of the highlighted results list option, no value if nothing's highlighted in the list
     if (selectedItem == null) {
+      _value = "";
       input.value = "";
       input.attributes[Html0.DATA_VALUE] = "";
       input.attributes[Html0.ARIA_ACTIVEDECENDNT] = "";
       if (editorChange != null)
         editorChange(name, null, null, null);
     } else {
+      _value = selectedItem.value;
       input.value = selectedItem.label;
       input.attributes[Html0.DATA_VALUE] = selectedItem.value;
       input.attributes[Html0.ARIA_ACTIVEDECENDNT] = selectedItem.value;
@@ -505,6 +535,7 @@ class LLookup
   } // validateOptions
 
   void updateStatusValidationState() {
+    _formElement.updateStatusValidationState();
   }
 
 

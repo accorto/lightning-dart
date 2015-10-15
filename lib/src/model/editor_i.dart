@@ -490,17 +490,27 @@ abstract class EditorI {
     }
   } // onInputChange
 
-  /// Input Key Up
+  /**
+   * Input Key Up
+   * ESC - previous value - if ALt/Shift/Meta - clear
+   * ENTER - autoSubmit
+   */
   void onInputKeyUp(KeyboardEvent evt) {
     int kc = evt.keyCode;
     if (kc == KeyCode.ESC) {
       String newValue = null;
-      if (data != null) {
-        data.resetEntry(entry);
-        newValue = DataRecord.getEntryValue(entry);
-      }
-      if (newValue == null || newValue.isEmpty) {
-        newValue = defaultValue;
+      if (evt.ctrlKey || evt.altKey || evt.metaKey) {
+        if (data != null) {
+          data.resetEntry(entry);
+        }
+      } else {
+        if (data != null) {
+          data.resetEntry(entry);
+          newValue = DataRecord.getEntryValue(entry);
+        }
+        if (newValue == null || newValue.isEmpty) {
+          newValue = defaultValue;
+        }
       }
       _log.config("onInputKeyPress ${name}=${value} - ESC newValue=${newValue}");
       onInputChange(evt);

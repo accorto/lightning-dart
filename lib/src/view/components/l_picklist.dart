@@ -202,9 +202,6 @@ class LPicklist
   /// Validation Message from Input
   String get inputValidationMsg => null;
 
-  void updateStatusValidationState() {
-
-  }
 
   /// Get options
   List<OptionElement> get options => _dropdown.options;
