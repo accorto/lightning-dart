@@ -4705,5 +4705,10 @@ input[type=number]::-webkit-inner-spin-button.decimal {
 .text-success {
   color: #04844b;
   stroke: #04844b; }
+a.slds-button--icon-container,
+a.slds-button--icon-border,
+a.slds-button--icon-border-filled {
+  text-align: center;
+  padding-top: 10px; }
 
 /*# sourceMappingURL=lightningdart.css.map */

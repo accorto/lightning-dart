@@ -14,14 +14,12 @@ class WorbenchData extends Datasource {
 
   /// simulate server
   @override
-  Future<DisplayResponse> execute_ui({String info, bool setBusy:true}) {
-    Completer<DisplayResponse> completer = new Completer<DisplayResponse>();
+  Future<UI> uiFuture() {
+    Completer<UI> completer = new Completer<UI>();
 
     new Timer(new Duration(seconds: 2), (){
       _create();
-      DisplayResponse response = new DisplayResponse()
-        ..uiList.add(_ui);
-      completer.complete(response);
+      completer.complete(ui);
     });
 
     return completer.future;
@@ -68,7 +66,6 @@ class WorbenchData extends Datasource {
   static const String NAME =  "MyContact";
 
   UiUtilDemo uiu;
-  final UI _ui = new UI();
   final List<DRecord> _exampleList = new List<DRecord>();
 
   /**
@@ -80,8 +77,9 @@ class WorbenchData extends Datasource {
 
 
   void _create() {
-    uiu = new UiUtilDemo(_ui, exampleList:_exampleList);
-    _ui.uiId = uiu.nextId();
+    ui = new UI();
+    uiu = new UiUtilDemo(ui, exampleList:_exampleList);
+    ui.uiId = uiu.nextId();
     DTable table = new DTable()
       ..tableId = uiu.nextId()
       ..name = NAME

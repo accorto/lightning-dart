@@ -42,17 +42,19 @@ part 'src/apps/apps_menu.dart';
 part 'src/apps/apps_page.dart';
 
 part 'src/ctrl/datasource.dart';
+part 'src/ctrl/display_service.dart';
 part 'src/ctrl/fk_ctrl.dart';
 part 'src/ctrl/fk_dialog.dart';
 part 'src/ctrl/fk_service.dart';
 part 'src/ctrl/fk_service_request.dart';
+
 part 'src/ctrl/form_ctrl.dart';
-part 'src/ctrl/meta_cache.dart';
 part 'src/ctrl/object_ctrl.dart';
 part 'src/ctrl/object_edit.dart';
 part 'src/ctrl/object_filter.dart';
 part 'src/ctrl/object_filter_filter.dart';
 part 'src/ctrl/object_filter_sort.dart';
+
 part 'src/ctrl/record_ctrl.dart';
 part 'src/ctrl/record_ctrl_details.dart';
 part 'src/ctrl/record_ctrl_related.dart';
@@ -65,6 +67,7 @@ part 'src/ctrl/service_tracker.dart';
 part 'src/ctrl/table_ctrl.dart';
 part 'src/ctrl/table_layout.dart';
 part 'src/ctrl/timezone.dart';
+
 
 /**
  * Lightning Dart Controller main entry point
