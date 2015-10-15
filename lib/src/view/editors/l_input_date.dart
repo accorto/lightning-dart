@@ -83,7 +83,7 @@ class LInputDate extends LInput {
   /// Set new value
   @override
   void set value(String newValue) {
-    String display = render(newValue, true);
+    String display = renderSync(newValue, true);
     input.value = display;
     // check
     String x = value; // read back
@@ -116,7 +116,7 @@ class LInputDate extends LInput {
       } else {
         _valueOriginal = newValue;
       }
-      defaultValue = render(newValue, false); // variables;
+      defaultValue = renderSync(newValue, false); // variables;
     }
   } // valueOriginal
 
@@ -136,8 +136,7 @@ class LInputDate extends LInput {
   /**
    * Render [value] in ms for display or ""
    */
-  @override
-  String render(String valueMs, bool setValidity) {
+  String renderSync(String valueMs, bool setValidity) {
     if (setValidity)
       input.setCustomValidity("");
     if (_isEmpty(valueMs) || valueMs == "0")
@@ -157,6 +156,13 @@ class LInputDate extends LInput {
       return valueMs; // invalid
     }
     return display == null ? "" : display;
+  } // renderSync
+  /// render [newValue]
+  @override
+  Future<String> render(String newValue, bool setValidity) {
+    Completer<String> completer = new Completer<String>();
+    completer.complete(renderSync(newValue, setValidity));
+    return completer.future;
   } // render
 
   /// parse display [newValue] to ms or empty string

@@ -27,6 +27,7 @@ class FormCtrl extends LForm {
 
   static final Logger _log = new Logger("FormCtrl");
 
+
   /// The UI
   final UI ui;
   /// Data Columns
@@ -63,13 +64,8 @@ class FormCtrl extends LForm {
         dataColumns.add(dataColumn);
         if (dataColumn.isActivePanel) {
           LEditor editor = EditorUtil.createfromColumn(null, dataColumn, false,
-            idPrefix: element.id, data:data);
+              idPrefix: element.id, data:data);
           addEditor(editor, newRow:pc.isNewRow, width:pc.width, height:pc.height);
-          if (editor is LLookup) {
-            LLookup lookup = editor;
-            ServiceFk serviceFk = new ServiceFk(lookup);
-            lookup.serviceFk = serviceFk;
-          }
         }
       }
       count++;

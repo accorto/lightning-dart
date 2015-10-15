@@ -49,7 +49,7 @@ class LInputNumber
     input.pattern = "[0-9+-.,]*";
     //
     input.onBlur.listen((Event evt){
-      input.value = render(input.value, true);
+      input.value = renderSync(input.value, true);
     });
   } // initEditor
 
@@ -78,7 +78,7 @@ class LInputNumber
   /// Set new value
   @override
   void set value(String newValue) {
-    input.value = render(newValue, true);
+    input.value = renderSync(newValue, true);
   } // set value
 
   /// user -> value - sets validity
@@ -110,7 +110,7 @@ class LInputNumber
   @override
   String get valueDisplay {
     String inp = input.value;
-    return render(inp, true);
+    return renderSync(inp, true);
   }
   /// is the rendered [valueDisplay] different from the [value]
   @override
@@ -121,8 +121,7 @@ class LInputNumber
   /**
    * Render [value] for display
    */
-  @override
-  String render(String newValue, bool setValidity) {
+  String renderSync(String newValue, bool setValidity) {
     if (setValidity)
       input.setCustomValidity("");
     if (_isEmpty(newValue)) {
@@ -146,6 +145,13 @@ class LInputNumber
         input.setCustomValidity("${error}");
     }
     return newValue; // invalid
+  } // renderSync
+  /// render [newValue]
+  @override
+  Future<String> render(String newValue, bool setValidity) {
+    Completer<String> completer = new Completer<String>();
+    completer.complete(renderSync(newValue, setValidity));
+    return completer.future;
   } // render
 
   @override
@@ -154,7 +160,7 @@ class LInputNumber
   }
   @override
   void set defaultValue(String newValue) {
-    input.defaultValue = render(newValue, false);
+    input.defaultValue = renderSync(newValue, false);
   } // defaultValue
 
   /// maxlength ignored

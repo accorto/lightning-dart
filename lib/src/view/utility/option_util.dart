@@ -44,6 +44,15 @@ class OptionUtil {
     return doption;
   }
 
+  /// create DOption from FK
+  static DOption optionFromFk(DFK fk) {
+    DOption doption = new DOption()
+      ..id = fk.id
+      ..value = fk.urv
+      ..label = fk.drv;
+    return doption;
+  }
+
   /// create Option Element
   static OptionElement element(DOption option) {
     OptionElement element = new OptionElement()

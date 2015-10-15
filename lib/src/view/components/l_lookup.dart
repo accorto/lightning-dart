@@ -46,7 +46,7 @@ class LLookup
   final InputElement input = new InputElement(type: EditorI.TYPE_TEXT);
 
   /// Search Icon
-  final LIcon _icon = new LIconUtility(LIconUtility.SEARCH);
+  final LIcon icon = new LIconUtility(LIconUtility.SEARCH);
 
   /// Lookup form + menu
   final DivElement _lookupMenu = new DivElement()
@@ -58,14 +58,13 @@ class LLookup
     ..attributes[Html0.ROLE] = Html0.ROLE_PRESENTATION;
 
   /// Lookup Items
-  final List<LLookupItem> _lookupItemList = new List<LLookupItem>();
+  final List<LLookupItem> lookupItemList = new List<LLookupItem>();
 
   /// Pill Container
   DivElement _pillContainer;
 
   /// Displayed in Grid
   final bool inGrid;
-  ServiceFk serviceFk;
 
   /**
    * Lookup
@@ -102,7 +101,7 @@ class LLookup
   void _initEditor(String name, String idPrefix,
       String select, String scope, bool typeahead) {
     _setAttributes(select, scope, typeahead);
-    _formElement.createStandard(this, iconRight: _icon);
+    _formElement.createStandard(this, iconRight: icon);
     input
       ..attributes[Html0.ROLE] = Html0.ROLE_COMBOBOX
       ..attributes[Html0.ARIA_AUTOCOMPLETE] = Html0.ARIA_AUTOCOMPLETE_LIST
@@ -206,24 +205,20 @@ class LLookup
   }
   /// Set Value
   void set value(String newValue) {
-    validateOptions();
-    input.value = render(newValue, true);
+    //validateOptions();
+    render(newValue, true)
+    .then((String display){
+      input.value = display;
+    });
   }
 
-  /// Dependent On Changed
-  void onDependentOnChanged(DEntry dependentEntry) {
-    super.onDependentOnChanged(dependentEntry);
-    validateOptions();
-    if (serviceFk != null)
-      onDependentOnChanged(dependentEntry);
-  }
   /// display -> value - sets validity
   String parse(String display, bool setValidity) {
     if (setValidity)
       input.setCustomValidity("");
     if (display == null || display.isEmpty)
       return display;
-    for (LLookupItem item in _lookupItemList) {
+    for (LLookupItem item in lookupItemList) {
       if (item.label == display)
         return item.value;
     }
@@ -235,19 +230,26 @@ class LLookup
   /**
    * Rendered Value (different from value)
    */
-  String get valueDisplay => render(value, false);
+  String get valueDisplay => renderSync(value, false);
   /// is the rendered [valueDisplay] different from the [value]
   bool get valueRendered => true;
 
   /// render [newValue]
-  String render(String newValue, bool setValidity) {
+  @override
+  Future<String> render(String newValue, bool setValidity) {
+    Completer<String> completer = new Completer<String>();
+    completer.complete(renderSync(newValue, setValidity));
+    return completer.future;
+  } // render
+  /// render [newValue]
+  String renderSync(String newValue, bool setValidity) {
     if (setValidity) {
       input.setCustomValidity("");
     }
     if (newValue == null || newValue.isEmpty) {
       return "";
     }
-    for (LLookupItem item in _lookupItemList) {
+    for (LLookupItem item in lookupItemList) {
       if (item.value == newValue)
         return item.label;
     }
@@ -264,8 +266,8 @@ class LLookup
   bool get required => input.required;
   void set required (bool newValue) {
     input.required = newValue;
-    if (newValue && input.value.isEmpty && _lookupItemList.isNotEmpty) {
-      input.value = _lookupItemList.first.label;
+    if (newValue && input.value.isEmpty && lookupItemList.isNotEmpty) {
+      input.value = lookupItemList.first.label;
     }
   }
 
@@ -304,7 +306,7 @@ class LLookup
   /// Get options
   List<OptionElement> get options {
     List<OptionElement> list = new List<OptionElement>();
-    for (LLookupItem item in _lookupItemList) {
+    for (LLookupItem item in lookupItemList) {
       list.add(item.asOption());
     }
     return list;
@@ -322,7 +324,7 @@ class LLookup
   }
 
   /// Option Count
-  int get length => _lookupItemList.length;
+  int get length => lookupItemList.length;
 
   /// Selected count
   int get selectedCount {
@@ -334,7 +336,7 @@ class LLookup
   /// Get select option list
   List<SelectOption> get selectOptionList {
     List<SelectOption> retValue = new List<SelectOption>();
-    for (LLookupItem item in _lookupItemList) {
+    for (LLookupItem item in lookupItemList) {
       retValue.add(item.asSelectOption());
     }
     return retValue;
@@ -361,13 +363,13 @@ class LLookup
 
   /// Clear Items
   void clearOptions() {
-    _lookupItemList.clear();
+    lookupItemList.clear();
     _lookupList.children.clear();
   }
 
   /// add Lookup Item
   void addLookupItem(LLookupItem item) {
-    _lookupItemList.add(item);
+    lookupItemList.add(item);
     _lookupList.append(item.element);
     item.onClick.listen(onItemClick);
   }
@@ -398,7 +400,7 @@ class LLookup
       exp = LUtil.createRegExp(restriction);
     }
     int count = 0;
-    for (LLookupItem item in _lookupItemList) {
+    for (LLookupItem item in lookupItemList) {
       if (exp == null) {
         item.show = true;
         item.labelHighlightClear();
@@ -414,13 +416,13 @@ class LLookup
         item.show = false;
       }
     }
-    if (count == 0 && _lookupItemList.isNotEmpty) {
+    if (count == 0 && lookupItemList.isNotEmpty) {
       input.setCustomValidity("No matching options"); // TODO Trl
     } else {
       input.setCustomValidity("");
     }
     //doValidate();
-    _log.fine("lookupUpdateList ${name} '${restriction}' ${count} of ${_lookupItemList.length}");
+    _log.fine("lookupUpdateList ${name} '${restriction}' ${count} of ${lookupItemList.length}");
     showResults = true;
   } // lookupUpdateList
 
@@ -432,7 +434,7 @@ class LLookup
     Element telement = evt.target;
     String tvalue = telement.attributes[Html0.DATA_VALUE];
     LLookupItem selectedItem = null;
-    for (LLookupItem item in _lookupItemList) {
+    for (LLookupItem item in lookupItemList) {
       if (item.value == tvalue) {
         selectedItem = item;
         break;
@@ -454,7 +456,7 @@ class LLookup
         editorChange(name, selectedItem.value, null, selectedItem);
     }
     showResults = false;
-    for (LLookupItem item in _lookupItemList) { // remove restrictions
+    for (LLookupItem item in lookupItemList) { // remove restrictions
       item.show = true;
       item.labelHighlightClear();
     }

@@ -15,7 +15,7 @@ class LModal extends LComponent {
   static const String C_MODAL = "slds-modal";
   /// slds-fade-in-open - Allows the modal to be visible. | Required
   static const String C_FADE_IN_OPEN = "slds-fade-in-open";
-  /// slds-modal--large - Widens the modal to take more horizontal space
+  /// slds-modal--large - Widens the modal to take more horizontal space 90% 960/640
   static const String C_MODAL__LARGE = "slds-modal--large";
   /// slds-modal__container - Centers and sizes the modal horizontally and confines modal within viewport height | Required
   static const String C_MODAL__CONTAINER = "slds-modal__container";
@@ -34,6 +34,8 @@ class LModal extends LComponent {
   /// slds-modal-backdrop--open - Allows the backdrop to be visible. | Required
   static const String C_MODAL_BACKDROP__OPEN = "slds-modal-backdrop--open";
 
+  /// slds-modal--small default 50% - 90% max=550
+  static const String C_MODAL__SMALL = "slds-modal--small";
 
   static final Logger _log = new Logger("LModal");
 
@@ -79,14 +81,26 @@ class LModal extends LComponent {
   } // LModal
 
 
-  /// Large Modal
+  /// Large Modal - 90% 960/640 - default 50%
   bool get large => _dialog.classes.contains(C_MODAL__LARGE);
-  /// Large Modal
+  /// Large Modal - 90% 960/640 - default 50%
   void set large (bool newValue) {
-    if (newValue)
+    if (newValue) {
       _dialog.classes.add(C_MODAL__LARGE);
-    else
+      _dialog.classes.remove(C_MODAL__SMALL);
+    } else
       _dialog.classes.remove(C_MODAL__LARGE);
+  }
+
+  /// Small Modal - 90% max=550 - default 50%
+  bool get small => _dialog.classes.contains(C_MODAL__SMALL);
+  /// Small Modal - 90% max=550 - default 50%
+  void set small (bool newValue) {
+    if (newValue) {
+      _dialog.classes.add(C_MODAL__SMALL);
+      _dialog.classes.remove(C_MODAL__LARGE);
+    } else
+      _dialog.classes.remove(C_MODAL__SMALL);
   }
 
   /**

@@ -310,7 +310,7 @@ class LToast extends LNotification {
       _icon = LNotification.createDefaultIcon(color);
     }
     if (_icon != null) {
-      _icon.classes.addAll([LIcon.C_ICON, LIcon.C_ICON__SMALL, LMargin.C_RIGHT__X_SMALL]);
+      _icon.classes.addAll([LIcon.C_ICON, LIcon.C_ICON__SMALL, LMargin.C_RIGHT__X_SMALL, LGrid.C_GROW_NONE]);
     }
     build();
   } // LToast

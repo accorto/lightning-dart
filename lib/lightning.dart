@@ -99,7 +99,6 @@ part 'src/view/editors/l_select_i.dart';
 part 'src/view/editors/l_textarea.dart';
 part 'src/view/editors/select_data_list.dart';
 part 'src/view/editors/select_option.dart';
-part 'src/view/editors/service_fk.dart';
 
 part 'src/view/form/form_i.dart';
 part 'src/view/form/form_section.dart';

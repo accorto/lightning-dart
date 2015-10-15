@@ -175,10 +175,13 @@ abstract class EditorI {
   /**
    * Render [newValue] for display
    */
-  String render(String newValue, bool setValidity) {
+  Future<String> render(String newValue, bool setValidity) {
+    Completer<String> completer = new Completer<String>();
     if (DataUtil.isEmpty(newValue))
-      return "";
-    return contextReplace(newValue);
+      completer.complete("");
+    else
+      completer.complete(contextReplace(newValue));
+    return completer.future;
   }
   /// Replace context in value
   String contextReplace(String newValue) {
@@ -436,8 +439,12 @@ abstract class EditorI {
     if (theEntry != null) {
       if (theEntry.value != newValue) {
         data.updateEntry(theEntry, newValue); // updates changed, etc.
-        if (valueRendered)
-          theEntry.valueDisplay = render(newValue, false);
+        if (valueRendered) {
+          render(newValue, false)
+          .then((String display){
+            theEntry.valueDisplay = display;
+          });
+        }
         //_log.fine("updateData ${name}=${theEntry.value} - ${theEntry.valueDisplay}");
       }
     }

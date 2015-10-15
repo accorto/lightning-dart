@@ -271,41 +271,44 @@ class LTableRow implements FormI {
         String value = DataRecord.getEntryValue(entry);
         String align = _displayAlign(dataColumn);
 
-        LEditor editor = null;
         if (_editMode == LTable.EDIT_RO
             || (_editMode == LTable.EDIT_SEL && !selected)) {
-          String display = _displayRender(value, entry, dataColumn, editor);
-          addCellText(display, name:name, value:value, dataColumn:dataColumn);
+          if (entry != null && entry.hasValueDisplay()) {
+            addCellText(entry.valueDisplay, name:name, value:value, dataColumn:dataColumn);
+          } else if (value == null || value.isEmpty || dataColumn == null) {
+            addCellText(value, name:name, value:value, dataColumn:dataColumn);
+          } else {
+            LTableCell cell = addCellText("<${value}>", name:name, value:value, dataColumn:dataColumn);
+            EditorUtil.render(dataColumn, value)
+            .then((String display){
+              cell.cellElement.children.first.text = display;
+              if (entry != null) {
+                entry.valueDisplay = display;
+              }
+            });
+          }
         } else { // all, sel or field
-          editor = EditorUtil.createfromColumn(name, dataColumn, true,
+          LEditor editor = EditorUtil.createfromColumn(name, dataColumn, true,
             idPrefix:rowElement.id, data:data, entry:entry);
-          String display = _displayRender(value, entry, dataColumn, editor);
-          addCellEditor(editor, display, value, align, _editMode == LTable.EDIT_FIELD);
+          bool editModeField = _editMode == LTable.EDIT_FIELD;
+          if (editor.valueRendered && entry != null && entry.hasValueDisplay()) {
+            addCellEditor(editor, entry.valueDisplay, value, align, editModeField);
+          } else if (editor.valueRendered && value != null && value.isNotEmpty) {
+            LTableCell cell = addCellEditor(editor, "<${value}>", value, align, editModeField);
+            if (editModeField) {
+              editor.render(value, false)
+              .then((String display){
+                cell.cellElement.children.first.text = display;
+              });
+            }
+          } else {
+            addCellEditor(editor, value, value, align, editModeField);
+          }
         }
       }
     } // for all column names
   } // display
 
-  /// Render Value
-  String _displayRender(String dataValue, DEntry entry, DataColumn dataColumn, LEditor editor) {
-    if (dataValue == null || dataValue.isEmpty)
-      return dataValue;
-    if (entry != null && entry.hasValueDisplay())
-      return entry.valueDisplay;
-
-    if (editor != null) {
-      return editor.render(dataValue, false);
-    }
-    if (dataColumn != null) {
-      String valueDisplay = EditorUtil.render(dataColumn.tableColumn.dataType, dataValue);
-      if (valueDisplay != dataValue) {
-        if (entry != null)
-            entry.valueDisplay = valueDisplay;
-        return dataValue;
-      }
-    }
-    return dataValue;
-  } // displayRender
 
   /// Render Value
   String _displayAlign(DataColumn dataColumn) {

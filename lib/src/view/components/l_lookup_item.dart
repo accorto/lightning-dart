@@ -38,6 +38,10 @@ class LLookupItem extends ListItem {
   LLookupItem.fromSelectOption(SelectOption option)
     : this(option.option);
 
+  /// Lookup Item from FK
+  LLookupItem.fromFk(DFK dfk)
+    : this(OptionUtil.optionFromFk(dfk));
+
 
   /// On Click
   ElementStream<MouseEvent> get onClick => a.onClick;

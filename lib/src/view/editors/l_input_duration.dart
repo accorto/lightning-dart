@@ -38,7 +38,7 @@ class LInputDuration
       hint = _isHour ? lInputDurationHourHint() : lInputDurationHint();
     }
     input.onBlur.listen((Event evt){
-      input.value = render(input.value, true);
+      input.value = renderSync(input.value, true);
     });
   }
 
@@ -54,7 +54,7 @@ class LInputDuration
   /// Set new value
   @override
   void set value(String newValue) {
-    input.value = render(newValue, true);
+    input.value = renderSync(newValue, true);
   } // set value
 
   /// is the value in hours (number)
@@ -97,7 +97,7 @@ class LInputDuration
   @override
   String get valueDisplay {
     String inp = input.value;
-    return render(inp, true);
+    return renderSync(inp, true);
   }
   /// is the rendered [valueDisplay] different from the [value]
   @override
@@ -108,8 +108,7 @@ class LInputDuration
   /**
    * Render [value] for display
    */
-  @override
-  String render(String newValue, bool setValidity) {
+  String renderSync(String newValue, bool setValidity) {
     if (setValidity)
       input.setCustomValidity("");
     if (_isEmpty(newValue)) {
@@ -132,6 +131,13 @@ class LInputDuration
     }
     return dd.asString(); // user
   } // render
+  /// render [newValue]
+  @override
+  Future<String> render(String newValue, bool setValidity) {
+    Completer<String> completer = new Completer<String>();
+    completer.complete(renderSync(newValue, setValidity));
+    return completer.future;
+  } // render
 
 
   /// Is the value changed from original
@@ -151,7 +157,7 @@ class LInputDuration
   }
   @override
   void set defaultValue(String newValue) {
-    input.defaultValue = render(newValue, false);
+    input.defaultValue = renderSync(newValue, false);
   } // defaultValue
 
   /// maxlength ignored

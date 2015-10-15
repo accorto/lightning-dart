@@ -3343,13 +3343,18 @@ a.slds-button--inverse:focus {
   visibility: hidden;
   opacity: 0;
   -webkit-transition: opacity 0.1s linear, visibility 0.1s linear;
-          transition: opacity 0.1s linear, visibility 0.1s linear; }
+          transition: opacity 0.1s linear, visibility 0.1s linear;
+  margin-top: initial;
+  padding: initial; }
 .slds-lookup:hover .slds-lookup__menu.auto-visible,
 .slds-lookup:focus .slds-lookup__menu.auto-visible {
   visibility: visible;
   opacity: 1;
   -webkit-transition: opacity 0.1s linear, visibility 0.1s linear;
           transition: opacity 0.1s linear, visibility 0.1s linear; }
+.slds-modal--small .slds-modal__container {
+  width: 90%;
+  max-width: 550px; }
 .slds-m-top--xxx-small {
   margin-top: 0.125rem; }
 .slds-m-right--xxx-small {

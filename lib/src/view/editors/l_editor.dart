@@ -67,7 +67,10 @@ abstract class LEditor
       defaultValue = "";
     } else {
       _valueOriginal = newValue;
-      defaultValue = render(newValue, true); // variables;
+      render(newValue, true)
+      .then((String display){
+        defaultValue = display; // variables;
+      });
     }
   }
   String _valueOriginal;

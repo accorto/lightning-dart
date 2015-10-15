@@ -6,10 +6,16 @@
 
 part of lightning_dart;
 
+typedef LLookup CreateLookup(DataColumn dataColumn, String idPrefix, bool inGrid);
+
+
 /**
  * Editor Utilities
  */
 class EditorUtil {
+
+
+  static CreateLookup createLookupCall = createLookup;
 
   /**
    * Create Editor from column
@@ -47,7 +53,7 @@ class EditorUtil {
       else if (dataType == DataType.EMAIL)
         editor = new LInput.from(dataColumn, EditorI.TYPE_EMAIL, idPrefix:idPrefix, inGrid:inGrid);
       else if (dataType == DataType.FK)
-        editor = new LLookup.from(dataColumn, idPrefix:idPrefix, inGrid:inGrid);
+        editor = createLookupCall(dataColumn, idPrefix, inGrid);
       else if (dataType == DataType.GEO);
       else if (dataType == DataType.IM);
       else if (dataType == DataType.IMAGE);
@@ -77,7 +83,7 @@ class EditorUtil {
       else if (dataType == DataType.RATING);
       else if (dataType == DataType.TAG);
       else if (dataType == DataType.TENANT)
-        editor = new LLookup.from(dataColumn, idPrefix:idPrefix, inGrid:inGrid);
+        editor = createLookupCall(dataColumn, idPrefix, inGrid);
       else if (dataType == DataType.TEXT)
         editor = new LTextArea.from(dataColumn, idPrefix:idPrefix, inGrid:inGrid);
       else if (dataType == DataType.TIME)
@@ -86,7 +92,7 @@ class EditorUtil {
       else if (dataType == DataType.URL)
         editor = new LInput.from(dataColumn, EditorI.TYPE_URL, idPrefix:idPrefix, inGrid:inGrid);
       else if (dataType == DataType.USER)
-        editor = new LLookup.from(dataColumn, idPrefix:idPrefix, inGrid:inGrid);
+        editor = createLookupCall(dataColumn, idPrefix, inGrid);
 
       // fallback
       if (editor == null)
@@ -110,6 +116,10 @@ class EditorUtil {
     return editor;
   } // createFromColumn
 
+  /// create lookup
+  static LLookup createLookup(DataColumn dataColumn, String idPrefix, bool inGrid) {
+    return new LLookup.from(dataColumn, idPrefix:idPrefix, inGrid:inGrid);
+  }
 
   /// Create from Data Type
   static LEditor createFromDataType(DataType dataType,
@@ -126,17 +136,24 @@ class EditorUtil {
   }
 
   /// Render Value
-  static String render (DataType dataType, String value) {
-    if (dataType == null)
-      return value;
-    LEditor editor = _dataTypeEditorMap[dataType];
+  static Future<String> render (DataColumn dataColumn, String value) {
+    if (dataColumn == null || value == null || value.isEmpty) {
+      Completer<String> completer = new Completer<String>();
+      completer.complete(value);
+      return completer.future;
+    }
+    DataType dt = dataColumn.tableColumn.dataType;
+    String key = dt.toString();
+    if (dt == DataType.FK)
+      key = "${dataColumn.table.name}.${dataColumn.name}";
+    LEditor editor = _dataTypeEditorMap[key];
     if (editor == null) {
-      editor = createFromDataType(dataType);
-      _dataTypeEditorMap[dataType] = editor;
+      editor = createfromColumn(dataColumn.name, dataColumn, true);
+      _dataTypeEditorMap[key] = editor;
     }
     return editor.render(value, false);
   }
-  static Map<DataType,LEditor> _dataTypeEditorMap = new Map<DataType,LEditor>();
+  static Map<String,LEditor> _dataTypeEditorMap = new Map<String,LEditor>();
 
 
 } // EditorUtil

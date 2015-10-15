@@ -131,12 +131,18 @@ class LPicklist
   /**
    * Rendered Value (different from value)
    */
-  String get valueDisplay => render(value, false);
+  String get valueDisplay => renderSync(value, false);
   /// is the rendered [valueDisplay] different from the [value]
   bool get valueRendered => true;
 
   /// render [newValue]
-  String render(String newValue, bool setValidity) {
+  Future<String> render(String newValue, bool setValidity) {
+    Completer<String> completer = new Completer<String>();
+    completer.complete(renderSync(newValue, setValidity));
+    return completer.future;
+  } // render
+  /// render [newValue]
+  String renderSync(String newValue, bool setValidity) {
     if (setValidity) {
     //input.setCustomValidity("");
     }

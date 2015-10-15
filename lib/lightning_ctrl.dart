@@ -42,6 +42,10 @@ part 'src/apps/apps_menu.dart';
 part 'src/apps/apps_page.dart';
 
 part 'src/ctrl/datasource.dart';
+part 'src/ctrl/fk_ctrl.dart';
+part 'src/ctrl/fk_dialog.dart';
+part 'src/ctrl/fk_service.dart';
+part 'src/ctrl/fk_service_request.dart';
 part 'src/ctrl/form_ctrl.dart';
 part 'src/ctrl/meta_cache.dart';
 part 'src/ctrl/object_ctrl.dart';
@@ -57,7 +61,6 @@ part 'src/ctrl/remote_logger.dart';
 part 'src/ctrl/router.dart';
 part 'src/ctrl/service.dart';
 part 'src/ctrl/service_analytics.dart';
-part 'src/ctrl/service_fk_cache.dart';
 part 'src/ctrl/service_tracker.dart';
 part 'src/ctrl/table_ctrl.dart';
 part 'src/ctrl/table_layout.dart';
@@ -131,7 +134,8 @@ class LightningCtrl {
       test = ("true" == router.param(Router.P_TEST));
     }
     Service.init(serverUri, clientPrefix:clientPrefix, embedded:embedded, test:test);
-
+    // FK
+    EditorUtil.createLookupCall = FkCtrl.createLookup;
     //
     completer.complete(Future.wait(futures));
     return completer.future;
