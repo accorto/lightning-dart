@@ -67,7 +67,7 @@ class ObjectCtrl extends LComponent {
 
     datasource.recordSorting.sortExecuted = onRecordsSorted;
     _header.loading = true;
-    datasource.ui()
+    datasource.uiFuture()
     .then((UI ui) {
       _header.loading = false;
       String idPrefix = "oc-" + ui.tableName;
@@ -264,7 +264,7 @@ class ObjectCtrl extends LComponent {
    * UI Table
    */
   void _displayTable() {
-    _table = new TableCtrlUi(datasource.uiDirect, recordSorting:datasource.recordSorting,
+    _table = new TableCtrlUi(datasource.ui, recordSorting:datasource.recordSorting,
         idPrefix:id, editMode:LTable.EDIT_FIELD)
       ..bordered = true
       ..responsiveOverflow = true;
@@ -281,7 +281,7 @@ class ObjectCtrl extends LComponent {
    */
   void _displayCompact() {
     _cardCompact = new LCardCompact(id);
-    _cardCompact.setUi(datasource.uiDirect); // header
+    _cardCompact.setUi(datasource.ui); // header
     _cardCompact.addTableAction(AppsAction.createNew(onAppsActionNew));
     _cardCompact.addTableAction(AppsAction.createLayout(onAppsActionCompactLayout));
 
@@ -320,7 +320,7 @@ class ObjectCtrl extends LComponent {
     _log.config("onAppsActionNew ${tableName} ${value}");
     DRecord newRecord = new DataRecord(null).newRecord(datasource.tableDirect, null);
     //
-    ObjectEdit oe = new ObjectEdit(datasource.uiDirect);
+    ObjectEdit oe = new ObjectEdit(datasource.ui);
     oe.setRecord(newRecord, -1);
     oe.recordSaved = onRecordSaved;
     oe.modal.showInElement(element);
@@ -442,7 +442,7 @@ class ObjectCtrl extends LComponent {
   /// Switch to Record Edit mode
   void _switchRecordCtrl(DRecord record, String editMode) {
     if (recordCtrl == null) {
-      recordCtrl = new RecordCtrl(datasource.uiDirect);
+      recordCtrl = new RecordCtrl(datasource.ui);
       recordCtrl._details.recordSaved = onRecordSaved;
 
       // recordCtrl.element.classes.add(LMargin.C_TOP__X_LARGE);

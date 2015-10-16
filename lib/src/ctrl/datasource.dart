@@ -8,9 +8,10 @@ part of lightning_ctrl;
 
 
 /**
- * Datasource - Meta Data and Persistence Interface
+ * Datasource for table/object
+ * - Meta Data and Persistence Interface
  */
-abstract class Datasource
+class Datasource
     extends Service {
 
   static final Logger _log = new Logger("Datasource");
@@ -52,6 +53,8 @@ abstract class Datasource
   String queryFilterLogic = "";
   /// Server Find
   final List<DFilter> queryFilterFindList = new List<DFilter>();
+  /// ui direct - might be null
+  UI ui;
 
 
   /**
@@ -63,80 +66,29 @@ abstract class Datasource
   }
 
   /// Data Source Initialized
-  bool get initialized => _ui != null;
+  bool get initialized => ui != null;
 
-  /// Initialize and get ui
-  Future<UI> ui() {
+  /// Initialize and get/set ui
+  Future<UI> uiFuture() {
     Completer<UI> completer = new Completer<UI>();
-    // check cache
-    if (_ui == null) {
-      _ui = MetaCache.getUi(tableName: tableName);
-    }
-    // go to server
-    if (_ui == null) {
-      execute_ui()
-      .then((DisplayResponse response) {
-        for (UI ui in response.uiList) {
-          if (ui.tableName == tableName) {
-            _ui = ui;
-            _table = ui.table;
-            break;
-          }
-        }
-        if (_ui == null) {
-          completer.completeError("UI not found");
-          _log.warning("ui ${tableName}: - not found response: #${response.uiList.length} ${response.response.msg}");
-        } else {
-          completer.complete(_ui);
-        }
-      })
-      .catchError((Object error, StackTrace stackTrace){
-        completer.completeError(error, stackTrace); // 2nd
+    if (ui == null) {
+      if (UiService.instance == null) {
+        UiService.instance = new UiService(dataUri, uiUri);
+      }
+      UiService.instance.getUiFuture(tableName:tableName)
+      .then((UI ui){
+        this.ui = ui;
+        completer.complete(ui);
       });
     } else {
-      completer.complete(_ui);
+      completer.complete(ui);
     }
     return completer.future;
   }
-  /// ui direct - might be null
-  UI get uiDirect => _ui;
-  UI _ui;
 
   /// table direct - might be null
   DTable get tableDirect => _table;
   DTable _table;
-
-  /**
-   * Send UI Request to Server
-   */
-  Future<DisplayResponse> execute_ui({String info, bool setBusy:true}) {
-    DisplayRequest request = new DisplayRequest()
-      ..type = DisplayRequestType.GET;
-    UIInfo uiInfo = new UIInfo()
-      ..tableName = tableName;
-    request.displayList.add(uiInfo);
-    //
-    if (info == null)
-      info = "UI ${tableName}";
-    _log.config("execute_ui ${tableName}");
-    request.request = createCRequest(uiUri, info);
-    Completer<DisplayResponse> completer = new Completer<DisplayResponse>();
-
-    sendRequest(uiUri, request.writeToBuffer(), info, setBusy: setBusy)
-    .then((HttpRequest httpRequest) {
-      List<int> buffer = new Uint8List.view(httpRequest.response);
-      DisplayResponse response = new DisplayResponse.fromBuffer(buffer);
-      handleSuccess(info, response.response, buffer.length, setBusy: setBusy);
-      completer.complete(response);
-      MetaCache.update(response);
-    })
-    .catchError((Event error, StackTrace stackTrace) {
-      String message = handleError(uiUri, error, stackTrace);
-      completer.completeError(message); // 1st
-    });
-    return completer.future;
-  } // execute_ui
-
 
   /// Execute Sort
   bool sortExecute() {
@@ -276,8 +228,8 @@ abstract class Datasource
     // Context - windowId
     request.windowNo = list.windowNo.toString();
     // - AD_Window_ID|AD_Tab_ID
-    if (_ui.hasExternalKey())
-      request.uiExternalKey = _ui.externalKey;
+    if (ui.hasExternalKey())
+      request.uiExternalKey = ui.externalKey;
     // - Window Context (general context is on server)
     if (parentContext.isNotEmpty)
       request.contextList.addAll(parentContext);
@@ -323,8 +275,8 @@ abstract class Datasource
     // Context - windowId
     req.windowNo = list.windowNo.toString();
     // - AD_Window_ID|AD_Tab_ID
-    if (_ui.hasExternalKey())
-      req.uiExternalKey = _ui.externalKey;
+    if (ui.hasExternalKey())
+      req.uiExternalKey = ui.externalKey;
     // - AD_Field_ID
     req.fieldExternalKey = column.tempExternalKey; // = panelColumn.externalKey;
     if (!column.hasTempExternalKey()) {
@@ -389,8 +341,8 @@ abstract class Datasource
     // Context - windowId
     req.windowNo = windowNo.toString();
     // - AD_Window_ID|AD_Tab_ID
-    if (_ui.hasExternalKey())
-      req.uiExternalKey = _ui.externalKey;
+    if (ui.hasExternalKey())
+      req.uiExternalKey = ui.externalKey;
     // - AD_Field_ID req.fieldExternalKey = column.column.tempExternalKey;
     // - Window Context (general context is on server)
     if (parentContext.isNotEmpty)
@@ -417,11 +369,14 @@ abstract class Datasource
     .then((HttpRequest httpRequest) {
       List<int> buffer = new Uint8List.view(httpRequest.response);
       DataResponse response = new DataResponse.fromBuffer(buffer);
-      handleSuccess(info, response.response, buffer.length, setBusy: setBusy);
+      String details = handleSuccess(info, response.response, buffer.length, setBusy: setBusy);
+      ServiceTracker track = new ServiceTracker(response.response, info, details);
       completer.complete(response);
+      track.send();
     })
     .catchError((Event error, StackTrace stackTrace) {
       String message = handleError(dataUri, error, stackTrace);
+      _log.warning("execute_data ${tableName} ${message}");
       completer.completeError(message); // 1st
     });
     return completer.future;

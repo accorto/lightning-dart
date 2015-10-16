@@ -42,7 +42,6 @@ part 'src/apps/apps_menu.dart';
 part 'src/apps/apps_page.dart';
 
 part 'src/ctrl/datasource.dart';
-part 'src/ctrl/display_service.dart';
 part 'src/ctrl/fk_ctrl.dart';
 part 'src/ctrl/fk_dialog.dart';
 part 'src/ctrl/fk_service.dart';
@@ -67,6 +66,7 @@ part 'src/ctrl/service_tracker.dart';
 part 'src/ctrl/table_ctrl.dart';
 part 'src/ctrl/table_layout.dart';
 part 'src/ctrl/timezone.dart';
+part 'src/ctrl/ui_service.dart';
 
 
 /**

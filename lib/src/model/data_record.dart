@@ -153,6 +153,48 @@ class DataRecord {
     return null;
   } // columnValue
 
+  /**
+   * Get value (original) of entry
+   */
+  static String getEntryValue(DEntry dataEntry) {
+    if (dataEntry != null) {
+      String value = null;
+      if (dataEntry.hasValue())
+        value = dataEntry.value;
+      else if (dataEntry.hasValueOriginal()) {
+        value = dataEntry.valueOriginal;
+      }
+      if (value != NULLVALUE)
+        return value;
+    }
+    return null;
+  }
+
+  /**
+   * Set Entry [dataEntry] to new string [value].
+   * Update changed + original
+   * return true if changed
+   */
+  static bool setEntryValue (DEntry dataEntry, final String newValue) {
+    // set original if not set before
+    if (!dataEntry.hasValueOriginal()) {
+      if (dataEntry.hasValue())
+        dataEntry.valueOriginal = dataEntry.value;
+      else
+        dataEntry.valueOriginal = NULLVALUE;
+    }
+    // set input
+    String deValue = newValue;
+    if (deValue == null || deValue.isEmpty)
+      deValue = NULLVALUE;
+    dataEntry.value = deValue;
+    //
+    dataEntry.isChanged = dataEntry.value != dataEntry.valueOriginal;
+    return dataEntry.isChanged;
+  } // setEntryValue
+
+
+
   /// Null Value indicator (Dto.NULLVALUE)
   static const String NULLVALUE = "::NullValue::";
   /// Column Name IsActive
@@ -440,22 +482,7 @@ class DataRecord {
     return null;
   }
 
-  /**
-   * Get value (original) of entry
-   */
-  static String getEntryValue(DEntry dataEntry) {
-    if (dataEntry != null) {
-      String value = null;
-      if (dataEntry.hasValue())
-        value = dataEntry.value;
-      else if (dataEntry.hasValueOriginal()) {
-        value = dataEntry.valueOriginal;
-      }
-      if (value != NULLVALUE)
-        return value;
-    }
-    return null;
-  }
+
 
   /**
    * Set Entry [value] by column [id] or column [name] (key)
@@ -494,21 +521,7 @@ class DataRecord {
    * return true if changed
    */
   bool updateEntry (DEntry dataEntry, final String newValue) {
-    // set original if not set before
-    if (!dataEntry.hasValueOriginal()) {
-      if (dataEntry.hasValue())
-        dataEntry.valueOriginal = dataEntry.value;
-      else
-        dataEntry.valueOriginal = NULLVALUE;
-    }
-    // set input
-    String deValue = newValue;
-    if (deValue == null || deValue.isEmpty)
-      deValue = NULLVALUE;
-    dataEntry.value = deValue;
-    //
-    dataEntry.isChanged = dataEntry.value != dataEntry.valueOriginal;
-    if (dataEntry.isChanged)
+    if (setEntryValue(dataEntry, newValue))
       _record.isChanged = true;
     return dataEntry.isChanged;
   } // updateEntry
@@ -580,8 +593,7 @@ class DataRecord {
     if (onRecordChange != null) {
       if (entry == null && name != null && name.isNotEmpty) {
         entry = getEntry(null, name, true);
-        if (newValue != null)
-          entry.value = newValue;
+        updateEntry(entry, newValue);
       }
       onRecordChange(_record, entry, rowNo); // data list
     }

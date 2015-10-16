@@ -439,7 +439,7 @@ class LLookup
       }
     }
     if (count == 0 && lookupItemList.isNotEmpty) {
-      input.setCustomValidity("No matching options"); // TODO Trl
+      input.setCustomValidity(lLookupNoMatch());
     } else {
       input.setCustomValidity("");
     }
@@ -542,5 +542,7 @@ class LLookup
   static String lLookupLabel() => Intl.message("Lookup", name: "lLookupLabel");
   static String lLookupInvalidInput() => Intl.message("Invalid option", name: "lLookupInvalidInput");
   static String lLookupInvalidValue() => Intl.message("Invalid value", name: "lLookupInvalidValue");
+
+  static String lLookupNoMatch() => Intl.message("No matching options found", name: "lLookupNoMatch");
 
 } // LLookup

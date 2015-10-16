@@ -10,7 +10,10 @@ part of lightning_ctrl;
  * FK Service
  */
 class FkService
-  extends Service {
+    extends Service {
+
+  /// The Instance
+  static FkService instance;
 
   static final Logger _log = new Logger("FkService");
 
@@ -186,6 +189,7 @@ class FkService
     request.request = createCRequest(dataUri, info);
     sr.trxNo = request.request.trxNo;
 
+    _log.config("submit ${info}");
     sendRequest(dataUri, request.writeToBuffer(), info, setBusy:false)
     .then((HttpRequest httpRequest) {
       List<int> buffer = new Uint8List.view(httpRequest.response);
@@ -195,14 +199,14 @@ class FkService
       if (response.response.isSuccess) {
         _updateCache(sr, response.fksList, response.isFkComplete);
       } else {
-        _log.warning("submit ${response.response.msg}");
+        _log.warning("submit ${info} ${response.response.msg}");
         _updateCache(sr, new List<DFK>(), false);
       }
       track.send();
     })
     .catchError((Event error, StackTrace stackTrace) {
       String message = handleError(dataUri, error, stackTrace);
-      _log.warning("submit ${message}");
+      _log.warning("submit ${info} ${message}");
       _updateCache(sr, new List<DFK>(), false);
     });
   } // _submit

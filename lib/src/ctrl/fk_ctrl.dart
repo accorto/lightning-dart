@@ -12,9 +12,6 @@ part of lightning_ctrl;
 class FkCtrl
     extends LLookup {
 
-  /// FK Service
-  static FkService fkService;
-
   /// create fk lookup
   static LLookup createLookup(DataColumn dataColumn, String idPrefix, bool inGrid) {
     return new FkCtrl.from(dataColumn, idPrefix:idPrefix, inGrid:inGrid);
@@ -37,12 +34,13 @@ class FkCtrl
     if (parent != null && parent.isEmpty) {
       parents = parent.split(",");
     }
-    // Editor
-    icon.element.onClick.listen(onIconClick);
 
     // Init Data
-    if (fkService != null) {
-      List<DFK> complete = fkService.getFkList(tableName, null);
+    if (FkService.instance != null) {
+      // Editor
+      icon.element.onClick.listen(onIconClick);
+      // List
+      List<DFK> complete = FkService.instance.getFkList(tableName, null);
       if (complete != null) {
         for (DFK fk in complete) {
           LLookupItem item = new LLookupItem.fromFk(fk);
@@ -50,13 +48,13 @@ class FkCtrl
         }
         fkComplete = true;
       } else {
-        fkService.getFkListFuture(tableName, null, null, null)
+        FkService.instance.getFkListFuture(tableName, null, null, null)
         .then((List<DFK> fks) {
           for (DFK fk in fks) {
             LLookupItem item = new LLookupItem.fromFk(fk);
             addLookupItem(item);
           }
-          fkComplete = fkService.isComplete(tableName);
+          fkComplete = FkService.instance.isComplete(tableName);
         });
       }
     }
@@ -74,14 +72,14 @@ class FkCtrl
       completer.complete("");
     } else {
       bool found = false;
-      if (fkService != null) {
-        DFK fk = fkService.getFk(tableName, newValue);
+      if (FkService.instance != null) {
+        DFK fk = FkService.instance.getFk(tableName, newValue);
         if (fk != null) {
           completer.complete(fk.drv);
           found = true;
         }
         if (!found) {
-          fkService.getFkFuture(tableName, newValue)
+          FkService.instance.getFkFuture(tableName, newValue)
           .then((DFK fk2){
             if (fk2 != null)
               completer.complete(fk2.drv);
@@ -116,9 +114,12 @@ class FkCtrl
   /// On Icon Click
   void onIconClick(Event evt) {
     _log.config("onIconClick ${name}");
-    // TODO
+    if (_dialog == null) {
+      _dialog = new FkDialog(tableName, label, true);
+    }
+    _dialog.show();
   }
-
+  FkDialog _dialog;
 
 
 } // FkCtrl

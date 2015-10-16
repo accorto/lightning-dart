@@ -101,8 +101,8 @@ class LTable
   /**
    * Table
    */
-  LTable(String idPrefix, {bool this.optionRowSelect:true, RecordSorting this.recordSorting}) {
-    element.id = idPrefix == null || idPrefix.isEmpty ? LComponent.createId("table", null) : idPrefix;
+  LTable(String id, {bool this.optionRowSelect:true, RecordSorting this.recordSorting}) {
+    element.id = (id == null || id.isEmpty ? LComponent.createId("table", null) : id);
     if (recordSorting == null)
       this.recordSorting = new RecordSorting();
   }
