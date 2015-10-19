@@ -18,6 +18,11 @@ part of lightning_dart;
  * -or-
  *
  *    LightningCtrl.createPageSimple();
+ *
+ *  status
+ *  - busy: element(#wrap) has class "busy"
+ *  - process: element(#wrap) attributes data-success/data-detail
+ *
  */
 class PageSimple extends LComponent {
 

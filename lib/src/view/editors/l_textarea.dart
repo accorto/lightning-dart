@@ -22,14 +22,14 @@ class LTextArea extends LEditor with LFormElement {
   LTextArea(String name, {String idPrefix, bool this.inGrid:false}) {
     createStandard(this);
     input.name = name;
-    input.id = createId(idPrefix, name);
+    id = createId(idPrefix, name);
     _initEditor();
   }
 
   LTextArea.from(DataColumn dataColumn, {String idPrefix, bool this.inGrid:false}) {
     createStandard(this);
     input.name = dataColumn.name;
-    input.id = createId(idPrefix, input.name);
+    id = createId(idPrefix, input.name);
     //
     this.dataColumn = dataColumn;
     _initEditor();

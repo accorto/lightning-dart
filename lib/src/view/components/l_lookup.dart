@@ -108,8 +108,7 @@ class LLookup
       ..attributes[Html0.ARIA_EXPANED] = "false";
     _formElement.labelInputText = lLookupLabel();
     input.name = name;
-    _formElement.id = createId(idPrefix, input.name);
-    element.id = "${_formElement.id}-lookup";
+    id = createId(idPrefix, input.name);
 
     if (typeahead) {
       // show input with search icon
@@ -165,7 +164,8 @@ class LLookup
 
   void set id(String newValue) {
     _formElement.id = newValue;
-    element.id = "${_formElement.id}-lookup";
+    element.id = "${newValue}-lookup";
+    icon.element.id = "${newValue}-icon";
   }
 
   void updateId(String idPrefix) {

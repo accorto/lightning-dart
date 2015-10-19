@@ -39,7 +39,7 @@ class LSelect
   LSelect(String name, {String idPrefix, bool multiple:false, bool this.inGrid:false}) {
     createStandard(this);
     input.name = name;
-    input.id = createId(idPrefix, name);
+    id = createId(idPrefix, name);
     input.multiple = multiple;
     if (multiple && !inGrid)
       size = 2;
@@ -51,7 +51,7 @@ class LSelect
     createStandard(this);
     DColumn tableColumn = dataColumn.tableColumn;
     input.name = tableColumn.name;
-    input.id = createId(idPrefix, input.name);
+    id = createId(idPrefix, input.name);
     if (multiple != null) {
       input.multiple = multiple;
     } else {

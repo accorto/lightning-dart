@@ -8,6 +8,8 @@ part of lightning_dart;
 
 /**
  * Record Home
+ *
+ * header element has data-id/value/name (from record)
  */
 class LRecordHome extends LPageHeader {
 
@@ -85,6 +87,7 @@ class LRecordHome extends LPageHeader {
 
   /// Initialize Component Structure
   void _initComponent(bool withFollow) {
+    element.id = "rec-home"; // LComponent.createId("rec-home", null);
     // Header Row
     element.append(_header);
     // div .slds-col
@@ -140,9 +143,15 @@ class LRecordHome extends LPageHeader {
     _actionButtonGroup.add(btn);
   }
 
+  /// current record
   DRecord get record => _record;
+  /// set record and display
   void set record (DRecord newValue) {
     _record = newValue;
+    element.attributes[Html0.DATA_ID] = _record.recordId;
+    element.attributes[Html0.DATA_VALUE] = _record.urv;
+    element.attributes[Html0.DATA_LABEL] = _record.drv;
+    element.attributes[Html0.DATA_NAME] = _record.tableName;
     display();
   } // setData
   DRecord _record;

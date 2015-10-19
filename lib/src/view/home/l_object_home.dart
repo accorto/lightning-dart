@@ -18,7 +18,7 @@ class LObjectHome
   static const String VIEW_LAYOUT_CARDS = "cards";
   static const String VIEW_LAYOUT_COMPACT = "compact";
 
-  static const String ID = "oh";
+  static const String ID = "obj-home";
 
   /// Top Row - Icon - Title - Label - Follow - Actions
   final DivElement _header = new DivElement()
@@ -100,7 +100,7 @@ class LObjectHome
     _headerRightGrid.append(_viewWrapper);
 
     // Actions
-    _actionButtonGroup.id = "oh-action-group";
+    _actionButtonGroup.id = "obj-home-action-group";
     _actionButtonGroup.classes.add(LButton.C_BUTTON_SPACE_LEFT);
     _headerRightGrid.append(_actionButtonGroup.element);
 
