@@ -283,34 +283,40 @@ class RequestResponse {
   /**
    * HttpRequest Response
    */
-  RequestResponse (String trx, Event error, StackTrace stackTrace, {bool popup: false}) {
+  RequestResponse (String trx, Object error, StackTrace stackTrace, {bool popup: false}) {
     subject = "Cannot contact Server ${Service.serverUrl}${trx}";
-    if (error.target is HttpRequest) {
-      HttpRequest request = error.target;
-      try {
-        status = request.status;
-        statusText = request.statusText;
-        if (status != 0 || statusText.isNotEmpty)
-          subject = "${Service.serverUrl}${trx}: ${statusText} (${status})";
-      } catch (ex) {}
-
-      try {
-        type = request.responseType;
-        headers = request.responseHeaders;
-        message = request.responseText;
-      } catch (ex) {}
-
-      try {
-        if (type == "arraybuffer") {
-          Object response = request.response;
-          List<int> buffer = new Uint8List.view(response);
-          message = _getServerMsg(buffer);
+    if (error is Event) {
+      if (error.target is HttpRequest) {
+        HttpRequest request = error.target;
+        try {
+          status = request.status;
+          statusText = request.statusText;
+          if (status != 0 || statusText.isNotEmpty)
+            subject = "${Service.serverUrl}${trx}: ${statusText} (${status})";
+        } catch (ex) {
         }
-        else {
-        }
-      } catch (ex) {}
-    } // HttpRequest
 
+        try {
+          type = request.responseType;
+          headers = request.responseHeaders;
+          message = request.responseText;
+        } catch (ex) {
+        }
+
+        try {
+          if (type == "arraybuffer") {
+            Object response = request.response;
+            List<int> buffer = new Uint8List.view(response);
+            message = _getServerMsg(buffer);
+          }
+          else {
+          }
+        } catch (ex) {
+        }
+      } // HttpRequest
+    } else if (error != null) {
+      message = error.toString();
+    }
     if (popup)
       showPopup();
   } // RequestResponse

@@ -35,12 +35,27 @@ class UiUtil {
 
   /// current panel
   UIPanel _panel;
-
+  /// original Panels
+  List<UIPanelColumn> _origPanelColumns;
 
   /**
    * UI Construction Utility
    */
   UiUtil(UI this.ui) {
+  }
+
+  /**
+   * Reset panels + grid columns and save to original
+   */
+  void resetUi() {
+    _origPanelColumns = new List<UIPanelColumn>();
+    for (UIPanel panel in ui.panelList) {
+      for (UIPanelColumn pc in panel.panelColumnList) {
+        _origPanelColumns.add(pc);
+      }
+    }
+    ui.panelList.clear();
+    ui.gridColumnList.clear();
   }
 
   /// Set Table
@@ -79,12 +94,8 @@ class UiUtil {
     if (_panel == null)
       addPanel();
 
-    // panel
-    UIPanelColumn pc = new UIPanelColumn()
-      ..column = col
-      ..columnName = col.name;
-    if (col.hasColumnId())
-      pc.columnId = col.columnId;
+    // panel column
+    UIPanelColumn pc = _createPanelColumn(col);
     if (displayLogic != null && displayLogic.isNotEmpty)
       pc.displayLogic = displayLogic;
     pc.seqNo = (_panel.panelColumnList.length + 1);
@@ -100,6 +111,29 @@ class UiUtil {
     gc.seqNo = (ui.gridColumnList.length + 1);
     ui.gridColumnList.add(gc);
   } // addColumn
+
+  /// create/clone panel column
+  UIPanelColumn _createPanelColumn(DColumn col) {
+    UIPanelColumn pc = null;
+    String colName = col.name;
+    if (_origPanelColumns != null) {
+      for (UIPanelColumn pp in _origPanelColumns) {
+        if (pp.columnName == colName) {
+          pc = pp.clone();
+          break;
+        }
+      }
+    }
+
+    if (pc == null)
+      pc = new UIPanelColumn();
+    pc.column = col;
+    pc.columnName = colName;
+    if (col.hasColumnId())
+      pc.columnId = col.columnId;
+    return pc;
+  } // getPanelColumn
+
 
   /// add grid/panel column if missing
   void addIfMissing(String columnName) {

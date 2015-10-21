@@ -125,6 +125,14 @@ class FkService
   } // getFkFuture
 
   /**
+   * Add records to Cache
+   */
+  void addRecords (List<DRecord> records) {
+    for (DRecord record in records)
+      addRecord(record);
+  }
+
+    /**
    * Add/update to Cache
    */
   DFK addRecord (DRecord record) {
@@ -159,8 +167,12 @@ class FkService
    */
   bool _isSimilarRequestActive(FkServiceRequest sr) {
     for (FkServiceRequest req in _activeRequests) {
-      if (req == sr) {
-        return true;
+      if (req.tableName == sr.tableName) {
+        if (req.id == null) {
+          return true; // general query
+        }
+        if (req.id == sr.id)
+          return true; // exact match
       }
     }
     return false;
@@ -247,6 +259,7 @@ class FkService
     }
     //
     _activeRequests.remove(sr);
+    _log.config("updateCache ${sr.compareString}");
     _checkSimilarRequests(sr, fkList);
   } // updateCache
 
@@ -290,7 +303,7 @@ class FkService
     for (FkServiceRequest req in submitList) {
       _submit(req);
     }
-    _log.fine("checkSimilarRequests ${srTableName} serviced=${serviced} submitted=${submitList.length}"
+    _log.fine("checkSimilarRequests ${sr.compareString} serviced=${serviced} submitted=${submitList.length}"
         " - pending=${_pendingRequests.length} active=${_activeRequests.length}");
   } // checkSimilarRequests
 

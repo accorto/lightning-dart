@@ -46,7 +46,7 @@ class ObjectCtrl extends LComponent {
   /**
    * Object Controller
    */
-  ObjectCtrl(Datasource this.datasource, {String containerClass: LGrid.C_CONTAINER__FLUID}) {
+  ObjectCtrl(Datasource this.datasource, {String containerClass: LGrid.C_CONTAINER__FLUID, bool queryExecute:true}) {
     if (containerClass != null && containerClass.isNotEmpty) {
       element.classes.add(containerClass);
     }
@@ -79,6 +79,7 @@ class ObjectCtrl extends LComponent {
       }
 
       // TODO _header.filterList.addFilter()
+      if (queryExecute)
       _doQuery();
     });
   }

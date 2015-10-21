@@ -315,8 +315,15 @@ class LTable
   void setUi(UI ui) {
     _ui = ui;
     dataColumns.clear();
-    for (DColumn col in _ui.table.columnList) {
-      dataColumns.add(DataColumn.fromUi(_ui, col.name, tableColumn:col));
+
+    // Grid Columns
+    for (UIGridColumn gc in _ui.gridColumnList) {
+      dataColumns.add(DataColumn.fromUi(_ui, gc.columnName, gridColumn:gc));
+    }
+    if (dataColumns.isEmpty) { // table column fallback
+      for (DColumn col in _ui.table.columnList) {
+        dataColumns.add(DataColumn.fromUi(_ui, col.name, tableColumn:col));
+      }
     }
     LTableHeaderRow row = addHeadRow(true);
     for (DataColumn dataColumn in dataColumns) {
