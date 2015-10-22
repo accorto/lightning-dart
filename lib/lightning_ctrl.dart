@@ -111,7 +111,7 @@ class LightningCtrl {
    * optional [serverUri] to overwrite target
    */
   static Future<List<Future>> init({String serverUri: "/",
-      String clientPrefix: "ui/", bool embedded: false, bool test: false}) {
+      bool embedded: false, bool test: false}) {
 
     Completer<List<Future>> completer = new Completer<List<Future>>();
     List<Future> futures = new List<Future>();
@@ -136,7 +136,7 @@ class LightningCtrl {
     if (router.hasParam(Router.P_TEST)) {
       test = ("true" == router.param(Router.P_TEST));
     }
-    Service.init(serverUri, clientPrefix:clientPrefix, embedded:embedded, test:test);
+    Service.init(serverUri, embedded:embedded, test:test);
     // FK
     EditorUtil.createLookupCall = FkCtrl.createLookup;
     //

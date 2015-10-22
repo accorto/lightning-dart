@@ -31,8 +31,6 @@ class Service {
   static String clientId = "-";
   /** Server Url */
   static String serverUrl = "/";
-  /** Client (ui) Url on core */
-  static String clientUrl = "";
   /** Client Url prefix on core */
   static String clientPrefix = "";
   /** Trx No */
@@ -65,7 +63,7 @@ class Service {
    * Initialize Services - optional set [serverUri] when testing
    * e.g. "http://localhost:6666/" updating [serverUrl]
    */
-  static void init(String serverUri, {String clientPrefix: "ui/", bool embedded: false, bool test: false}) {
+  static void init(String serverUri, {bool embedded: false, bool test: false}) {
     _log = new Logger("Service");
     Service.clientPrefix = clientPrefix;
 
@@ -75,16 +73,11 @@ class Service {
     if (serverUri != null && serverUri.isNotEmpty) {
       if (url.contains("localhost")) {
         serverUrl = serverUri;
-        clientUrl = serverUri + clientPrefix;
         test = true;
       }
       if (embedded) {
         serverUrl = serverUri;
-        clientUrl = serverUri + clientPrefix;
       }
-    }
-    if (clientUrl.isEmpty && serverUrl != "/") {
-      clientUrl = serverUrl + clientPrefix;
     }
     devMode = test;
 
@@ -103,7 +96,7 @@ class Service {
     }
     //
     //devTimestamp = BizPage.wrap.attributes["data-timestamp"];
-    _log.info("href=${window.location.href} (${document.referrer}) serverUrl=${serverUrl} client=${clientUrl} query=${LightningCtrl.router.queryParams}");
+    _log.info("href=${window.location.href} (${document.referrer}) serverUrl=${serverUrl} query=${LightningCtrl.router.queryParams}");
   } // init
 
 
@@ -284,6 +277,8 @@ class RequestResponse {
    * HttpRequest Response
    */
   RequestResponse (String trx, Object error, StackTrace stackTrace, {bool popup: false}) {
+    status = 0;
+    statusText = "";
     subject = "Cannot contact Server ${Service.serverUrl}${trx}";
     if (error is Event) {
       if (error.target is HttpRequest) {

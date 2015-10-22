@@ -34,6 +34,7 @@ class LTab extends LComponent {
   /// slds-hide - Hide the tab panel | Required
   static const String C_HIDE = "slds-hide";
 
+  static final Logger _log = new Logger("LTab");
 
   /// Tab element
   final DivElement element = new DivElement();
@@ -115,10 +116,11 @@ class LTab extends LComponent {
     if (pos < 0 || pos >= _tablist.children.length)
       return false;
     //
+    _log.fine("selectTabByPos #${pos} - tablist=${_tablist.children.length}, elements=${element.children.length}");
     for (int i = 0; i < _tablist.children.length; i++) {
       LIElement li = _tablist.children[i];
       AnchorElement a = li.children.first;
-      Element content = element.children[i+1];
+      Element content = element.children[i+1]; // 0=_tabList
       if (pos == i) {
         li.classes.add(LVisibility.C_ACTIVE);
         a.tabIndex = 0;
