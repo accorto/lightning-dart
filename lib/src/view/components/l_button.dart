@@ -19,6 +19,8 @@ class LButton extends LComponent {
   static const String C_BUTTON__NEUTRAL = "slds-button--neutral";
   /// slds-button--brand - Creates the brand blue Salesforce style |
   static const String C_BUTTON__BRAND = "slds-button--brand";
+  /// slds-button--inverse - Creates the red button style |
+  static const String C_BUTTON__DESTRUCTIVE = "slds-button--destructive";
   /// slds-button--inverse - Creates the inverse style for dark backgrounds |
   static const String C_BUTTON__INVERSE = "slds-button--inverse";
   /// slds-button--icon-bare - Creates a button that looks like a plain icon |
@@ -31,8 +33,11 @@ class LButton extends LComponent {
   static const String C_BUTTON__ICON_BORDER_FILLED = "slds-button--icon-border-filled";
   /// slds-button--icon-small - Creates an icon button at the smaller 2 rem (32px) size |
   static const String C_BUTTON__ICON_SMALL = "slds-button--icon-small";
+  static const String C_BUTTON__ICON_X_SMALL = "slds-button--icon-x-small";
   /// slds-button--icon-more - Used for the style where only two icons are in a button |
   static const String C_BUTTON__ICON_MORE = "slds-button--icon-more";
+  /// Stretches buttons a full 100% width for small form factors
+  static const String C_MAX_SMALL_BUTTON__STRETCH = "slds-max-small-button--stretch";
   /// slds-button__icon - Sets the size and color of the icon inside a button |
   static const String C_BUTTON__ICON = "slds-button__icon";
   /// slds-button__icon--stateful - This makes the icon the same color as the text in the button |
@@ -42,7 +47,7 @@ class LButton extends LComponent {
   /// slds-button__icon--right - Puts the icon on the right side of the button |
   static const String C_BUTTON__ICON__RIGHT = "slds-button__icon--right";
   /// slds-button__icon--inverse - Gives a white icon color on a dark background |
-  static const String C_BUTTON__ICON__INVERSE = "slds-button__icon--inverse";
+  static const String C_BUTTON__ICON__INVERSE = "slds-button--icon--inverse"; // discrepancy
   /// slds-button__icon--x-small - Creates a .5rem (8px) size icon |
   static const String C_BUTTON__ICON__X_SMALL = "slds-button__icon--x-small";
   /// slds-button__icon--small - Creates a .75rem (12px) size icon |
@@ -54,7 +59,6 @@ class LButton extends LComponent {
   /// slds-button-space-left - adds space on the left of a button wrapped in a parent |
   static const String C_BUTTON_SPACE_LEFT = "slds-button-space-left";
 
-  static const String C_BUTTON__ICON_BORDER_SMALL = "slds-button--icon-border-small";
 
 
   /// Hint
@@ -211,7 +215,7 @@ class LButton extends LComponent {
   LButton.brand(String name, String label, {String idPrefix})
     : this(new ButtonElement(), name, label,
         buttonClasses: [C_BUTTON__BRAND], idPrefix:idPrefix);
-  /// Neutral Button with Icon
+  /// Brand Button with Icon
   LButton.brandIcon(String name, String label, LIcon icon, {bool iconLeft: false, String idPrefix})
     : this(new ButtonElement(), name, label,
         buttonClasses: [C_BUTTON__BRAND], icon:icon, iconLeft:iconLeft, idPrefix:idPrefix);
@@ -224,6 +228,15 @@ class LButton extends LComponent {
   LButton.inverse(String name, String label, {String idPrefix})
     : this(new ButtonElement(), name, label,
         buttonClasses: [C_BUTTON__INVERSE], idPrefix:idPrefix);
+
+  /// Destructive Button
+  LButton.destructive(String name, String label, {String idPrefix})
+    : this(new ButtonElement(), name, label,
+  buttonClasses: [C_BUTTON__DESTRUCTIVE], idPrefix:idPrefix);
+  /// Destructive Button with Icon
+  LButton.destructiveIcon(String name, String label, LIcon icon, {bool iconLeft: false, String idPrefix})
+    : this(new ButtonElement(), name, label,
+      buttonClasses: [C_BUTTON__DESTRUCTIVE], icon:icon, iconLeft:iconLeft, idPrefix:idPrefix);
 
 
   /// Icon Only - bare

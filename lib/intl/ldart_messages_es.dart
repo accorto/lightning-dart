@@ -6,7 +6,7 @@
  */
 
 library messages_es;
-//import 'package:intl/intl.dart';
+import 'package:intl/intl.dart';
 import 'package:intl/message_lookup_by_library.dart';
 
 final messages = new MessageLookup();
@@ -88,6 +88,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static filterOpNull() => "nulo";
 
+  static fkDialogTitle() => "Buscar";
+
   static lBreadcrumbText() => "Tú estás aquí";
 
   static lButtonGroupMore() => "Más";
@@ -96,7 +98,9 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static lDatePickerDropdownPrev() => "Ir al mes anterior";
 
-  static lFormReset() => "Restablecer";
+  static lFormError() => "Formulario de error";
+
+  static lFormReset() => "Reiniciar";
 
   static lFormSave() => "Guardar";
 
@@ -108,13 +112,21 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static lInputDateInvalidValue() => "valor inválido";
 
-  static lInputDurationHint() => "sin indicador, la duración es en horas - entrar con decimal o coma (1.5 = 1:30); ejemplo: 5d1h20m o 5d 1h 10";
+  static lInputDurationHint() => "sin indicador de introducir horas con decimal o coma (1.5 = 01:30); por ejemplo: 5d1h20m o 5d 1h 10";
+
+  static lInputDurationHourHint() => "horas con decimal o coma (1.5 = 1:30)";
 
   static lInputDurationInvalidInput() => "Entrada no válida para la duración";
 
   static lInputDurationInvalidValue() => "valor inválido";
 
+  static lLookupInvalidInput() => "Opción inválida";
+
+  static lLookupInvalidValue() => "valor inválido";
+
   static lLookupLabel() => "Buscar";
+
+  static lLookupNoMatch() => "No hay opciones de concordancia encontrados";
 
   static lModalCancel() => "Cancelar";
 
@@ -178,7 +190,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static lRecordCtrlRelated() => "Relacionada";
 
-  static lSpinnerWorking() => "trabajo";
+  static lSpinnerWorking() => "trabajando";
 
   static lTableColumnSortAsc() => "Orden ascendente";
 
@@ -189,6 +201,8 @@ class MessageLookup extends MessageLookupByLibrary {
   static lTableRowSelectRow() => "Seleccionar fila";
 
   static objectCtrl1Record() => "Un registro";
+
+  static objectCtrlBackList() => "Volver a la lista";
 
   static objectCtrlFilterDelete() => "Eliminar filtro?";
 
@@ -207,6 +221,8 @@ class MessageLookup extends MessageLookupByLibrary {
   static objectCtrlSortedBy() => "Ordenado por";
 
   static objectEditEdit() => "Editar";
+
+  static objectEditError() => "Error de comunicacion";
 
   static objectEditNew() => "Nueva";
 
@@ -242,7 +258,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static preferenceSaved() => "Preferencias guardados como Preferencias Globales";
 
-  static serviceComErrorButton() => "Recargar Página";
+  static serviceComErrorButton() => "Recargar página";
 
   static serviceComErrorMsg() => "Lo siento por esto - por favor intente de nuevo más tarde.";
 
@@ -301,10 +317,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "filterOpNotLike" : filterOpNotLike,
     "filterOpNotNull" : filterOpNotNull,
     "filterOpNull" : filterOpNull,
+    "fkDialogTitle" : fkDialogTitle,
     "lBreadcrumbText" : lBreadcrumbText,
     "lButtonGroupMore" : lButtonGroupMore,
     "lDatePickerDropdownNext" : lDatePickerDropdownNext,
     "lDatePickerDropdownPrev" : lDatePickerDropdownPrev,
+    "lFormError" : lFormError,
     "lFormReset" : lFormReset,
     "lFormSave" : lFormSave,
     "lInputDateInvalidInputDate" : lInputDateInvalidInputDate,
@@ -312,9 +330,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "lInputDateInvalidInputTime" : lInputDateInvalidInputTime,
     "lInputDateInvalidValue" : lInputDateInvalidValue,
     "lInputDurationHint" : lInputDurationHint,
+    "lInputDurationHourHint" : lInputDurationHourHint,
     "lInputDurationInvalidInput" : lInputDurationInvalidInput,
     "lInputDurationInvalidValue" : lInputDurationInvalidValue,
+    "lLookupInvalidInput" : lLookupInvalidInput,
+    "lLookupInvalidValue" : lLookupInvalidValue,
     "lLookupLabel" : lLookupLabel,
+    "lLookupNoMatch" : lLookupNoMatch,
     "lModalCancel" : lModalCancel,
     "lModalClose" : lModalClose,
     "lModalSave" : lModalSave,
@@ -352,6 +374,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "lTableRowSelectAll" : lTableRowSelectAll,
     "lTableRowSelectRow" : lTableRowSelectRow,
     "objectCtrl1Record" : objectCtrl1Record,
+    "objectCtrlBackList" : objectCtrlBackList,
     "objectCtrlFilterDelete" : objectCtrlFilterDelete,
     "objectCtrlFilterDeleteText" : objectCtrlFilterDeleteText,
     "objectCtrlFilterNew" : objectCtrlFilterNew,
@@ -361,6 +384,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "objectCtrlRecords" : objectCtrlRecords,
     "objectCtrlSortedBy" : objectCtrlSortedBy,
     "objectEditEdit" : objectEditEdit,
+    "objectEditError" : objectEditError,
     "objectEditNew" : objectEditNew,
     "objectFilter" : objectFilter,
     "objectFilterColumnName" : objectFilterColumnName,

@@ -159,7 +159,7 @@ class LTableRow implements FormI {
    * Add Button - no need to set classes
    */
   LTableCell addCellButton(LButton button) {
-    button.classes.addAll([LButton.C_BUTTON__ICON_BORDER_FILLED, LButton.C_BUTTON__ICON_BORDER_SMALL]);
+    button.classes.addAll([LButton.C_BUTTON__ICON_BORDER_FILLED, LButton.C_BUTTON__ICON_X_SMALL]);
     button.icon.classes.addAll([LButton.C_BUTTON__ICON, LButton.C_BUTTON__ICON__HINT, LButton.C_BUTTON__ICON__SMALL]);
 
     LTableCell tc = addCell(button.element, null, null, null, null);

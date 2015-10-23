@@ -28,7 +28,7 @@ class LTileGeneric extends LTile {
 
   /// Dropdown button
   final LButton _button = new LButton(new ButtonElement(), "action", null,
-    buttonClasses: [LButton.C_BUTTON__ICON_BORDER_FILLED, LButton.C_BUTTON__ICON_BORDER_SMALL, LGrid.C_SHRINK_NONE],
+    buttonClasses: [LButton.C_BUTTON__ICON_BORDER_FILLED, LButton.C_BUTTON__ICON_X_SMALL, LGrid.C_SHRINK_NONE],
     icon: new LIconUtility(LIconUtility.DOWN, color: LButton.C_BUTTON__ICON__HINT, size: LButton.C_BUTTON__ICON__SMALL),
     assistiveText: AppsAction.appsActions());
   /// Dropdown

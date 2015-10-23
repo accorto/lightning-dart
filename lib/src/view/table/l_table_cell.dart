@@ -47,7 +47,7 @@ class LTableActionCell extends LTableCell {
   /// create action button
   static LButton createButton(String idPrefix){
     return new LButton(new ButtonElement(), "action", null, idPrefix:idPrefix,
-      buttonClasses: [LButton.C_BUTTON__ICON_BORDER_FILLED, LButton.C_BUTTON__ICON_BORDER_SMALL],
+      buttonClasses: [LButton.C_BUTTON__ICON_BORDER_FILLED, LButton.C_BUTTON__ICON_X_SMALL],
       icon: new LIconUtility(LIconUtility.DOWN, color: LButton.C_BUTTON__ICON__HINT, size: LButton.C_BUTTON__ICON__SMALL),
       assistiveText: AppsAction.appsActions());
   }

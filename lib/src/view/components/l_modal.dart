@@ -15,7 +15,7 @@ class LModal extends LComponent {
   static const String C_MODAL = "slds-modal";
   /// slds-fade-in-open - Allows the modal to be visible. | Required
   static const String C_FADE_IN_OPEN = "slds-fade-in-open";
-  /// slds-modal--large - Widens the modal to take more horizontal space 90% 960/640
+  /// slds-modal--large - Widens the modal to take more horizontal space 90% min:640
   static const String C_MODAL__LARGE = "slds-modal--large";
   /// slds-modal__container - Centers and sizes the modal horizontally and confines modal within viewport height | Required
   static const String C_MODAL__CONTAINER = "slds-modal__container";

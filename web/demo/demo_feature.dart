@@ -142,7 +142,7 @@ abstract class DemoFeature extends LComponent {
       lc.style.width = "1024px";
       lc.style.border = "1px solid black";
       Element xc = tab.addTab("Fluid", name: "x");
-      xc.style.width = "100%";
+      xc.style.width = "calc(100% - 10px)";
       xc.style.border = "1px solid black";
 
       Element dc = tab.addTab("Source", name: "d");

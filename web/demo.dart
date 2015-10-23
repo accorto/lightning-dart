@@ -38,6 +38,7 @@ part 'demo/pageheaders.dart';
 part 'demo/picklists.dart';
 part 'demo/pills.dart';
 part 'demo/popovers.dart';
+part 'demo/publishers.dart';
 part 'demo/spinners.dart';
 part 'demo/tables.dart';
 part 'demo/tabs.dart';
@@ -127,6 +128,7 @@ class DemoPage extends AppsPage {
     add(new Picklists()..toc(toc));
     add(new Pills()..toc(toc));
     add(new Popovers()..toc(toc));
+    add(new Publishers()..toc(toc));
     add(new Spinners()..toc(toc));
     add(new Tabs()..toc(toc));
     add(new Tiles()..toc(toc));

@@ -19,7 +19,8 @@ class Forms2 extends DemoFeature {
   int columnCount = 1;
 
   LComponent get content {
-    CDiv div = new CDiv();
+    CDiv div = new CDiv()
+      ..classes.add(LMargin.C_HORIZONTAL__SMALL);
 
     FormCtrl form = new FormCtrl("formA", ui(columnCount));
     form.buildPanels();

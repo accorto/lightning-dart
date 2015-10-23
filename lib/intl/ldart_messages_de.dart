@@ -6,7 +6,7 @@
  */
 
 library messages_de;
-//import 'package:intl/intl.dart';
+import 'package:intl/intl.dart';
 import 'package:intl/message_lookup_by_library.dart';
 
 final messages = new MessageLookup();
@@ -86,7 +86,9 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static filterOpNotNull() => "nicht null";
 
-  static filterOpNull() => "nichtig";
+  static filterOpNull() => "Null";
+
+  static fkDialogTitle() => "Suche";
 
   static lBreadcrumbText() => "Sie sind hier";
 
@@ -95,6 +97,8 @@ class MessageLookup extends MessageLookupByLibrary {
   static lDatePickerDropdownNext() => "Zum nächsten Monat";
 
   static lDatePickerDropdownPrev() => "Zum Vormonat";
+
+  static lFormError() => "Formfehler";
 
   static lFormReset() => "Zurücksetzen";
 
@@ -108,15 +112,23 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static lInputDateInvalidValue() => "Ungültiger Wert";
 
-  static lInputDurationHint() => "ohne Blinker ist Zeit in Stunden - geben Sie mit Nachkommastellen oder Doppelpunkt (1,5 = 1,30); Beispiel: 5d1h20m oder 5d 1h 10";
+  static lInputDurationHint() => "ohne Blinker geben Sie Stunden mit Nachkommastellen oder Doppelpunkt (1,5 = 1:30); zB: 5d1h20m oder 5d 1h 10";
+
+  static lInputDurationHourHint() => "Stunden mit Nachkommastellen oder Doppelpunkt (1,5 = 1:30)";
 
   static lInputDurationInvalidInput() => "Ungültige Eingabe für Dauer";
 
   static lInputDurationInvalidValue() => "Ungültiger Wert";
 
+  static lLookupInvalidInput() => "Ungültige Option";
+
+  static lLookupInvalidValue() => "Ungültiger Wert";
+
   static lLookupLabel() => "Sieh nach oben";
 
-  static lModalCancel() => "Abbrechen";
+  static lLookupNoMatch() => "Keine passenden Optionen gefunden";
+
+  static lModalCancel() => "Absagen";
 
   static lModalClose() => "In der Nähe";
 
@@ -190,6 +202,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static objectCtrl1Record() => "Eine Rekord";
 
+  static objectCtrlBackList() => "Zurück zur Liste";
+
   static objectCtrlFilterDelete() => "Filter löschen?";
 
   static objectCtrlFilterDeleteText() => "Möchten Sie den aktuellen Filter löschen?";
@@ -207,6 +221,8 @@ class MessageLookup extends MessageLookupByLibrary {
   static objectCtrlSortedBy() => "Sortiert nach";
 
   static objectEditEdit() => "Redigieren";
+
+  static objectEditError() => "Kommunikationsfehler";
 
   static objectEditNew() => "Neue";
 
@@ -301,10 +317,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "filterOpNotLike" : filterOpNotLike,
     "filterOpNotNull" : filterOpNotNull,
     "filterOpNull" : filterOpNull,
+    "fkDialogTitle" : fkDialogTitle,
     "lBreadcrumbText" : lBreadcrumbText,
     "lButtonGroupMore" : lButtonGroupMore,
     "lDatePickerDropdownNext" : lDatePickerDropdownNext,
     "lDatePickerDropdownPrev" : lDatePickerDropdownPrev,
+    "lFormError" : lFormError,
     "lFormReset" : lFormReset,
     "lFormSave" : lFormSave,
     "lInputDateInvalidInputDate" : lInputDateInvalidInputDate,
@@ -312,9 +330,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "lInputDateInvalidInputTime" : lInputDateInvalidInputTime,
     "lInputDateInvalidValue" : lInputDateInvalidValue,
     "lInputDurationHint" : lInputDurationHint,
+    "lInputDurationHourHint" : lInputDurationHourHint,
     "lInputDurationInvalidInput" : lInputDurationInvalidInput,
     "lInputDurationInvalidValue" : lInputDurationInvalidValue,
+    "lLookupInvalidInput" : lLookupInvalidInput,
+    "lLookupInvalidValue" : lLookupInvalidValue,
     "lLookupLabel" : lLookupLabel,
+    "lLookupNoMatch" : lLookupNoMatch,
     "lModalCancel" : lModalCancel,
     "lModalClose" : lModalClose,
     "lModalSave" : lModalSave,
@@ -352,6 +374,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "lTableRowSelectAll" : lTableRowSelectAll,
     "lTableRowSelectRow" : lTableRowSelectRow,
     "objectCtrl1Record" : objectCtrl1Record,
+    "objectCtrlBackList" : objectCtrlBackList,
     "objectCtrlFilterDelete" : objectCtrlFilterDelete,
     "objectCtrlFilterDeleteText" : objectCtrlFilterDeleteText,
     "objectCtrlFilterNew" : objectCtrlFilterNew,
@@ -361,6 +384,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "objectCtrlRecords" : objectCtrlRecords,
     "objectCtrlSortedBy" : objectCtrlSortedBy,
     "objectEditEdit" : objectEditEdit,
+    "objectEditError" : objectEditError,
     "objectEditNew" : objectEditNew,
     "objectFilter" : objectFilter,
     "objectFilterColumnName" : objectFilterColumnName,

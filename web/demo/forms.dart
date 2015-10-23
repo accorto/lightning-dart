@@ -26,7 +26,7 @@ class Forms extends DemoFeature {
 
   LComponent get content {
     LForm form = new LForm.stacked("tf")
-      ..classes.add(LMargin.C_HORIZONTAL__MEDIUM)
+      ..classes.add(LMargin.C_HORIZONTAL__SMALL)
       ..formType = formType; // demo select
 
     LInput textInput = new LInput("text1", EditorI.TYPE_TEXT)

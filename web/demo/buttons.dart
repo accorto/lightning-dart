@@ -37,7 +37,8 @@ class Buttons extends DemoFeature {
     div.add(new LButton.brand("b31", "brand button"));
     div.add(new LButton.brand("b32", "brand disabled")..disabled = true);
     div.add(new LButton.brand("b33", "brand small")..small = true);
-    div.add(new LButton.brandAnchor("b21", "brand link"));
+    div.add(new LButton.brandAnchor("b34", "brand link"));
+    div.add(new LButton.brandIcon("b35", "icon brand button", new LIconUtility(LIconUtility.ADDUSER)));
 
     div.appendHrSmall();
     LBox box = new LBox()
@@ -49,46 +50,42 @@ class Buttons extends DemoFeature {
     box.add(new LButton.inverse("b43", "inverse small")..small = true);
 
     div.appendHrSmall();
-    div.add(new LButton.neutralIcon("b51", "neutral icon",
-      new LIconUtility(LIconUtility.DOWNLOAD)));
-    div.add(new LButton.neutralIcon("b52", "icon neutral",
-      new LIconUtility(LIconUtility.DOWNLOAD), iconLeft: true));
+    div.add(new LButton.neutralIcon("b51", "neutral icon", new LIconUtility(LIconUtility.DOWNLOAD)));
+    div.add(new LButton.neutralIcon("b52", "icon neutral", new LIconUtility(LIconUtility.DOWNLOAD), iconLeft: true));
     div.appendText(" Toggle Buttons: ");
     div.add(new LButtonStateful("b53"));
-    div.add(new LButtonIconStateful("b53", "stateful icon",
-      new LIconUtility(LIconUtility.LIKE)));
+    div.add(new LButtonIconStateful("b53", "stateful icon", new LIconUtility(LIconUtility.LIKE)));
 
-    div.append(new LButton.neutralIcon("b58", "hint icon",
-      new LIconUtility(LIconUtility.DOWNLOAD)).hintParent());
+    div.append(new LButton.neutralIcon("b58", "hint icon", new LIconUtility(LIconUtility.DOWNLOAD)).hintParent()
+      ..classes.addAll([LMargin.C_VERTICAL__SMALL, LPadding.C_AROUND__X_SMALL])
+      ..style.border = "1px dotted lightgray");
 
     div.appendHrSmall();
-    div.add(new LButton.iconBare("b61",
-      new LIconUtility(LIconUtility.SETTINGS), "bare"));
-    div.add(new LButton.iconContainer("b62",
-      new LIconUtility(LIconUtility.SETTINGS), "container"));
-    div.add(new LButton.iconBorder("b63",
-      new LIconUtility(LIconUtility.SETTINGS), "border"));
-    div.add(new LButton.iconBorderFilled("b64",
-      new LIconUtility(LIconUtility.SETTINGS), "border filled"));
-    div.add(new LButton.more("b65", null,
-      new LIconUtility(LIconUtility.SETTINGS), "more"));
-    div.add(new LButton.more("b66", "More",
-      new LIconUtility(LIconUtility.SETTINGS), "more"));
+    div.add(new LButton.iconBare("b61", new LIconUtility(LIconUtility.SETTINGS), "bare"));
+    div.add(new LButton.iconContainer("b62", new LIconUtility(LIconUtility.SETTINGS), "container"));
+    div.add(new LButton.iconBorder("b63", new LIconUtility(LIconUtility.SETTINGS), "border"));
+    div.add(new LButton.iconBorderFilled("b64", new LIconUtility(LIconUtility.SETTINGS), "border filled"));
+    div.add(new LButton.more("b65", null, new LIconUtility(LIconUtility.SETTINGS), "more"));
+    div.add(new LButton.more("b66", "More", new LIconUtility(LIconUtility.SETTINGS), "more"));
 
-    // TODO sizes
+    div.appendHrSmall();
+    div.add(new LButton.destructive("b71", "destructive button"));
+    div.add(new LButton.destructive("b72", "destructive disabled")..disabled = true);
+    div.add(new LButton.destructiveIcon("b73", "icon destructive", new LIconUtility(LIconUtility.BAN)));
 
     return div;
   }
 
   String get source {
     return '''
-    CDiv div = new CDiv();
+    CDiv div = new CDiv()
+      ..classes.add(LMargin.C_HORIZONTAL__MEDIUM);
 
     div.add(new LButton.base("b11", "base button"));
     div.add(new LButton.base("b12", "base disabled")..disabled = true);
     div.add(new LButton.base("b13", "base small")..small = true);
 
-    div.addHrSmall();
+    div.appendHrSmall();
     div.add(new LButton.neutral("b21", "neutral button"));
     div.add(new LButton.neutral("b22", "default disabled")..disabled = true);
     div.add(new LButton.neutral("b23", "neutral small")..small = true);
@@ -97,42 +94,45 @@ class Buttons extends DemoFeature {
     div.add(new LButton.neutralInput("b26", "neutral input"));
     div.add(new LButton.neutralInput("b27", "disabled input")..disabled = true);
 
-    div.addHrSmall();
+    div.appendHrSmall();
     div.add(new LButton.brand("b31", "brand button"));
     div.add(new LButton.brand("b32", "brand disabled")..disabled = true);
     div.add(new LButton.brand("b33", "brand small")..small = true);
-    div.add(new LButton.brandAnchor("b21", "brand link"));
+    div.add(new LButton.brandAnchor("b34", "brand link"));
+    div.add(new LButton.brandIcon("b35", "icon brand button", new LIconUtility(LIconUtility.ADDUSER)));
 
-    div.addHrSmall(); // TODO Inverse Background
-    div.add(new LButton.inverse("b41", "inverse button"));
-    div.add(new LButton.inverse("b42", "inverse disabled")..disabled = true);
-    div.add(new LButton.inverse("b43", "inverse small")..small = true);
+    div.appendHrSmall();
+    LBox box = new LBox()
+      ..small = true
+      ..themeAltInverse();
+    div.add(box);
+    box.add(new LButton.inverse("b41", "inverse button"));
+    box.add(new LButton.inverse("b42", "inverse disabled")..disabled = true);
+    box.add(new LButton.inverse("b43", "inverse small")..small = true);
 
-    div.addHrSmall();
-    div.add(new LButton.neutralIcon("b51", "neutral icon",
-      new LIconUtility("download")));
-    div.add(new LButton.neutralIcon("b52", "icon neutral",
-      new LIconUtility("download"), iconLeft: true));
+    div.appendHrSmall();
+    div.add(new LButton.neutralIcon("b51", "neutral icon", new LIconUtility(LIconUtility.DOWNLOAD)));
+    div.add(new LButton.neutralIcon("b52", "icon neutral", new LIconUtility(LIconUtility.DOWNLOAD), iconLeft: true));
+    div.appendText(" Toggle Buttons: ");
     div.add(new LButtonStateful("b53"));
-    div.add(new LButtonIconStateful("b53", "stateful icon",
-      new LIconUtility("like")));
+    div.add(new LButtonIconStateful("b53", "stateful icon", new LIconUtility(LIconUtility.LIKE)));
 
-    div.append(new LButton.neutralIcon("b58", "hint icon",
-      new LIconUtility(LIconUtility.DOWNLOAD)).hintParent());
+    div.append(new LButton.neutralIcon("b58", "hint icon", new LIconUtility(LIconUtility.DOWNLOAD)).hintParent()
+      ..classes.addAll([LMargin.C_VERTICAL__SMALL, LPadding.C_AROUND__X_SMALL])
+      ..style.border = "1px dotted lightgray");
 
-    div.addHrSmall();
-    div.add(new LButton.iconBare("b61",
-      new LIconUtility("settings"), "bare"));
-    div.add(new LButton.iconContainer("b62",
-      new LIconUtility("settings"), "container"));
-    div.add(new LButton.iconBorder("b63",
-      new LIconUtility("settings"), "border"));
-    div.add(new LButton.iconBorderFilled("b64",
-      new LIconUtility("settings"), "border filled"));
-    div.add(new LButton.more("b65", null,
-      new LIconUtility("settings"), "more"));
-    div.add(new LButton.more("b66", "More",
-      new LIconUtility("settings"), "more"));
+    div.appendHrSmall();
+    div.add(new LButton.iconBare("b61", new LIconUtility(LIconUtility.SETTINGS), "bare"));
+    div.add(new LButton.iconContainer("b62", new LIconUtility(LIconUtility.SETTINGS), "container"));
+    div.add(new LButton.iconBorder("b63", new LIconUtility(LIconUtility.SETTINGS), "border"));
+    div.add(new LButton.iconBorderFilled("b64", new LIconUtility(LIconUtility.SETTINGS), "border filled"));
+    div.add(new LButton.more("b65", null, new LIconUtility(LIconUtility.SETTINGS), "more"));
+    div.add(new LButton.more("b66", "More", new LIconUtility(LIconUtility.SETTINGS), "more"));
+
+    div.appendHrSmall();
+    div.add(new LButton.destructive("b71", "destructive button"));
+    div.add(new LButton.destructive("b72", "destructive disabled")..disabled = true);
+    div.add(new LButton.destructiveIcon("b73", "icon destructive", new LIconUtility(LIconUtility.BAN)));
 
     ''';
   }
