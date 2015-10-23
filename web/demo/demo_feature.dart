@@ -153,7 +153,7 @@ abstract class DemoFeature extends LComponent {
       dc.append(src);
 
       tab.onTabChanged.listen(onTabChanged); // init display on tab add
-      tab.selectTabByPos(3);
+      tab.selectTabByPos(3, false);
       // fluid
     }
   } // DemoFeature

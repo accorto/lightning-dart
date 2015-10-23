@@ -74,7 +74,7 @@ class RecordCtrl extends LComponent {
     //
     _leftTab.addTab(lRecordCtrlRelated(), name: "related", content:_related.element);
     _leftTab.addTab(lRecordCtrlDetails(), name: "details", content:_details.element);
-    _leftTab.selectTabByPos(1);
+    _leftTab.selectTabByPos(1, false);
   } // RecordCtrl
 
 
