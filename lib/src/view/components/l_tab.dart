@@ -97,7 +97,7 @@ class LTab extends LComponent {
     theContent.id = a.id + "-content";
     a.attributes[Html0.ARIA_CONTROLS] = theContent.id;
 
-    selectTabByPos(currentPos);
+    selectTabByPos(currentPos, false);
     return theContent;
   } // addTab
 
@@ -112,11 +112,12 @@ class LTab extends LComponent {
   /**
    * Select Tab By Position [pos] 0..x returns false if not found
    */
-  bool selectTabByPos(int pos) {
+  bool selectTabByPos(int pos, bool logIt) {
     if (pos < 0 || pos >= _tablist.children.length)
       return false;
     //
-    _log.fine("selectTabByPos #${pos} - tablist=${_tablist.children.length}, elements=${element.children.length}");
+    if (logIt)
+      _log.fine("selectTabByPos #${pos} - tablist=${_tablist.children.length}, elements=${element.children.length}");
     for (int i = 0; i < _tablist.children.length; i++) {
       LIElement li = _tablist.children[i];
       AnchorElement a = li.children.first;
@@ -153,7 +154,7 @@ class LTab extends LComponent {
       LIElement li = _tablist.children[i];
       String ref = li.attributes[Html0.DATA_NAME];
       if (ref == name) {
-        return selectTabByPos(i);
+        return selectTabByPos(i, true);
       }
     }
     return false;
@@ -168,7 +169,7 @@ class LTab extends LComponent {
       String index = a.attributes[Html0.DATA_VALUE];
       if (index != null && index.isNotEmpty) {
         int ii = int.parse(index, onError: (source){return -1;});
-        found = selectTabByPos(ii);
+        found = selectTabByPos(ii, true);
       }
       if (!found) {
         String name = a.attributes[Html0.DATA_NAME];
