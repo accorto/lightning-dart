@@ -52,7 +52,7 @@ class LTableRow implements FormI {
     rowElement.classes.add(cssClass);
     if (rowValue != null)
       rowElement.attributes[Html0.DATA_VALUE] = rowValue;
-    if (idPrefix != null)
+    if (idPrefix != null && idPrefix.isNotEmpty)
       rowElement.id = "${idPrefix}-${type}-${rowNo}";
 
     data = new DataRecord(onRecordChange);

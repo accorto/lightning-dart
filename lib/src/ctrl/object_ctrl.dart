@@ -25,21 +25,16 @@ class ObjectCtrl extends LComponent {
   static final Logger _log = new Logger("ObjectCtrl");
 
   /// Object / Table Element
-  final Element element = new Element.section()
-    ..id = "oc";
+  final Element element = new Element.section();
 
   /// Header
   LObjectHome _header;
-
   /// Content
-  final CDiv _content = new CDiv.article(id: "oc-c");
-
+  final CDiv _content = new CDiv.article();
   /// Record Control (single record view)
   RecordCtrl recordCtrl;
-
   /// Meta Data
   final Datasource datasource;
-
   /// Actual Data Records
   List<DRecord> _records;
 
@@ -47,11 +42,13 @@ class ObjectCtrl extends LComponent {
    * Object Controller
    */
   ObjectCtrl(Datasource this.datasource, {String containerClass: LGrid.C_CONTAINER__FLUID, bool queryExecute:true}) {
+    String idPrefix = "oc-" + datasource.tableName;
+    element.id = idPrefix;
+    _content.element.id = "${idPrefix}-content";
     if (containerClass != null && containerClass.isNotEmpty) {
       element.classes.add(containerClass);
     }
-    _header = new LObjectHome(datasource.recordSorting)
-      ..id = "oc-h";
+    _header = new LObjectHome(datasource.recordSorting, idPrefix:idPrefix);
     element.append(_header.element);
     element.append(_content.element);
 
@@ -70,8 +67,7 @@ class ObjectCtrl extends LComponent {
     datasource.uiFuture()
     .then((UI ui) {
       _header.loading = false;
-      String idPrefix = "oc-" + ui.tableName;
-      element.id = idPrefix;
+      element.attributes[Html0.DATA_VALUE] = ui.tableName;
       _header.setUi(ui);
       // actions
       if (!ui.isReadOnly) {
@@ -446,10 +442,8 @@ class ObjectCtrl extends LComponent {
       recordCtrl = new RecordCtrl(datasource.ui);
       recordCtrl._details.recordSaved = onRecordSaved;
 
-      // recordCtrl.element.classes.add(LMargin.C_TOP__X_LARGE);
-
       AnchorElement back = new AnchorElement(href: "#")
-        ..id = "${id}-ctrl-back"
+        ..id = "${id}-back"
         ..text = "${LUtil.ARROW_LEFT_D} ${objectCtrlBackList()}"
         ..tabIndex = -1;
       back.onClick.listen((Event evt){
@@ -457,6 +451,7 @@ class ObjectCtrl extends LComponent {
         showRecord = false;
       });
       _recordCtrlBack = new DivElement()
+        ..classes.add(LPadding.C_AROUND__XX_SMALL)
         ..append(back);
       element.parent.append(_recordCtrlBack);
       element.parent.append(recordCtrl.element);

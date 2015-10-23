@@ -230,7 +230,7 @@ class LModal extends LComponent {
       _addFooterCancel();
     if (actions != null) {
       for (AppsAction action in actions) {
-        LButton btn = action.asButton(true, buttonClasses: [LButton.C_BUTTON__NEUTRAL]);
+        LButton btn = action.asButton(true, buttonClasses: [LButton.C_BUTTON__NEUTRAL], idPrefix: id);
         btn.onClick.listen(onClickHideAndRemove);
         footer.append(btn.element);
       }

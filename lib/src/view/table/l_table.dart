@@ -64,6 +64,8 @@ class LTable
       return _wrapper;
     return _table;
   }
+  /// Table id (not wrapper)
+  String get id => _table.id;
   /// responsive wrapper
   DivElement _wrapper;
 
@@ -97,12 +99,14 @@ class LTable
   final bool optionRowSelect;
   /// Record Sort List
   RecordSorting recordSorting;
+  /// IdPrefix
+  final String idPrefix;
 
   /**
    * Table
    */
-  LTable(String id, {bool this.optionRowSelect:true, RecordSorting this.recordSorting}) {
-    element.id = (id == null || id.isEmpty ? LComponent.createId("table", null) : id);
+  LTable(String this.idPrefix, {bool this.optionRowSelect:true, RecordSorting this.recordSorting}) {
+    _table.id = LComponent.createId(idPrefix, "table");
     if (recordSorting == null)
       this.recordSorting = new RecordSorting();
   }
@@ -185,7 +189,7 @@ class LTable
       }
       row = _headerRow;
     } else {
-      row = new LTableRow(_thead.addRow(), _tbodyRows.length, id, null,
+      row = new LTableRow(_thead.addRow(), _tbodyRows.length, idPrefix, null,
         LText.C_TEXT_HEADING__LABEL, optionRowSelect, nameList, nameLabelMap, LTableRow.TYPE_HEAD, null, dataColumns);
     }
     _theadRows.add(row);
@@ -287,7 +291,7 @@ class LTable
   LTableRow addBodyRow({String rowValue}) {
     if (_tbody == null)
       _tbody = _table.createTBody();
-    LTableRow row = new LTableRow(_tbody.addRow(), _tbodyRows.length, id, rowValue,
+    LTableRow row = new LTableRow(_tbody.addRow(), _tbodyRows.length, idPrefix, rowValue,
         LButton.C_HINT_PARENT, optionRowSelect, nameList, nameLabelMap, LTableRow.TYPE_BODY, _rowActions, dataColumns);
     row.editMode = _editMode;
     _tbodyRows.add(row);
@@ -298,7 +302,7 @@ class LTable
   LTableRow addFootRow() {
     if (_tfoot == null)
       _tfoot = _table.createTFoot();
-    LTableRow row = new LTableRow(_tfoot.addRow(), _tfootRows.length, id, null,
+    LTableRow row = new LTableRow(_tfoot.addRow(), _tfootRows.length, idPrefix, null,
         LButton.C_HINT_PARENT, optionRowSelect, nameList, nameLabelMap, LTableRow.TYPE_FOOT, null, dataColumns);
     _tfootRows.add(row);
     return row;

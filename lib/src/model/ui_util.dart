@@ -56,6 +56,7 @@ class UiUtil {
     }
     ui.panelList.clear();
     ui.gridColumnList.clear();
+    ui.queryColumnList.clear();
   }
 
   /// Set Table

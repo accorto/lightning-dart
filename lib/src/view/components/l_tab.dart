@@ -168,7 +168,7 @@ class LTab extends LComponent {
       String index = a.attributes[Html0.DATA_VALUE];
       if (index != null && index.isNotEmpty) {
         int ii = int.parse(index, onError: (source){return -1;});
-        found= selectTabByPos(ii);
+        found = selectTabByPos(ii);
       }
       if (!found) {
         String name = a.attributes[Html0.DATA_NAME];

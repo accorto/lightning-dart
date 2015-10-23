@@ -42,13 +42,14 @@ class LRecordHome extends LPageHeader {
   /**
    * Record Home
    */
-  LRecordHome({bool withFollow:true}) {
-    _initComponent(withFollow);
+  LRecordHome({bool withFollow:true, String idPrefix}) {
+    _initComponent(withFollow, idPrefix);
   } // LRecordHome
 
   /// Record Home from UI
-  LRecordHome.from(UI this.ui, {LIcon icon, bool withFollow:true}) {
-    _initComponent(withFollow);
+  LRecordHome.from(UI this.ui, {LIcon icon, bool withFollow:true, String idPrefix}) {
+    _initComponent(withFollow, idPrefix);
+    element.attributes[Html0.DATA_VALUE] = ui.tableName;
     DTable table = ui.table;
     // image
     if (icon != null) {
@@ -86,8 +87,8 @@ class LRecordHome extends LPageHeader {
   } // LRecordHome.ui
 
   /// Initialize Component Structure
-  void _initComponent(bool withFollow) {
-    element.id = "rec-home"; // LComponent.createId("rec-home", null);
+  void _initComponent(bool withFollow, String idPrefix) {
+    element.id = LComponent.createId(idPrefix, "home");
     // Header Row
     element.append(_header);
     // div .slds-col
@@ -95,10 +96,12 @@ class LRecordHome extends LPageHeader {
     _header.append(_headerLeft);
     // Left: record type, title and follow button
     _headerLeft.append(_headerLeftMedia.element);
+    _headerLeftRecordType.id = "${idPrefix}-record-type";
     _headerLeftMedia.append(_headerLeftRecordType);
     DivElement leftGrid = new DivElement()
       ..classes.add(LGrid.C_GRID);
     _headerLeftMedia.append(leftGrid);
+    _headerLeftRecordTitle.id = "${idPrefix}-record-title";
     leftGrid.append(_headerLeftRecordTitle);
     if (withFollow) {
       DivElement followDiv = new DivElement()
@@ -139,7 +142,7 @@ class LRecordHome extends LPageHeader {
    * Add Actions
    */
   void addAction(AppsAction action) {
-    LButton btn = action.asButton(true);
+    LButton btn = action.asButton(true, idPrefix:id);
     _actionButtonGroup.add(btn);
   }
 

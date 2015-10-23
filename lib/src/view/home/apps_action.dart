@@ -107,8 +107,8 @@ class AppsAction {
 
 
   /// as Button - [createClick] to call [callback]
-  LButton asButton(bool createOnClick, {DataRecord data, List<String> buttonClasses}) {
-    LButton btn = new LButton(new ButtonElement(), value, label, icon:icon);
+  LButton asButton(bool createOnClick, {DataRecord data, List<String> buttonClasses, String idPrefix}) {
+    LButton btn = new LButton(new ButtonElement(), value, label, icon:icon, idPrefix:idPrefix);
     if (buttonClasses != null) {
       btn.classes.addAll(buttonClasses);
     }

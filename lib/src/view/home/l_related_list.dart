@@ -14,7 +14,7 @@ class LRelatedList extends LPageHeader {
   UI ui;
   DataRecord data;
 
-  LRelatedList(UI this.ui, DataRecord this.data) {
+  LRelatedList(UI this.ui) {
     // nav Breadcrumb
     // div Grid
     // - div left

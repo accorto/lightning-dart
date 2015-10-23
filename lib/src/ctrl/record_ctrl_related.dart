@@ -15,10 +15,20 @@ class RecordCtrlRelated extends LComponent {
 
   final UI ui;
 
+  List<RecordCtrlRelatedItem> _items = new List<RecordCtrlRelatedItem>();
 
+  /**
+   * Related Records Tab
+   */
   RecordCtrlRelated(UI this.ui) {
+    // id set via tab
 
-  }
+    for (UILink link in ui.linkList) {
+      RecordCtrlRelatedItem item = new RecordCtrlRelatedItem(link);
+      _items.add(item);
+      element.append(item.element);
+    }
+  } // RecordCtrlRelated
 
 
   /// Parent Record
@@ -30,7 +40,11 @@ class RecordCtrlRelated extends LComponent {
   } // setData
   DRecord _record;
 
+  /// init display
   void display() {
+    for (RecordCtrlRelatedItem item in _items) {
+      item.setParent(_record);
+    }
   }
 
-}
+} // RecordCtrlRelated

@@ -41,6 +41,7 @@ class RecordCtrl extends LComponent {
   LBreadcrumb _breadcrumb;
   /// Left Side (related/details)
   final LTab _leftTab = new LTab();
+  /// Related Tab
   RecordCtrlRelated _related;
   /// Form
   RecordCtrlDetails _details;
@@ -58,8 +59,7 @@ class RecordCtrl extends LComponent {
       element.classes.add(containerClass);
     }
     // Structure
-    _header = new LRecordHome.from(ui)
-      ..id = "rc-h";
+    _header = new LRecordHome.from(ui, idPrefix:idPrefix, withFollow:false);
     element.append(_header.element);
     //
     _breadcrumb = new LBreadcrumb(idPrefix:idPrefix);
@@ -70,7 +70,7 @@ class RecordCtrl extends LComponent {
     _related = new RecordCtrlRelated(ui);
 
     // form
-    _details = new RecordCtrlDetails(ui, id);
+    _details = new RecordCtrlDetails(ui);
     //
     _leftTab.addTab(lRecordCtrlRelated(), name: "related", content:_related.element);
     _leftTab.addTab(lRecordCtrlDetails(), name: "details", content:_details.element);

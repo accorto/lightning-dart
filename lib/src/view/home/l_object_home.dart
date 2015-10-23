@@ -18,8 +18,6 @@ class LObjectHome
   static const String VIEW_LAYOUT_CARDS = "cards";
   static const String VIEW_LAYOUT_COMPACT = "compact";
 
-  static const String ID = "obj-home";
-
   /// Top Row - Icon - Title - Label - Follow - Actions
   final DivElement _header = new DivElement()
     ..classes.addAll([LGrid.C_GRID, LGrid.C_WRAP, LGrid.C_GRID__ALIGN_SPREAD]);
@@ -34,14 +32,13 @@ class LObjectHome
 
   final DivElement _headerCenter = new DivElement()
     ..classes.addAll([LGrid.C_COL, LGrid.C_ALIGN_BOTTOM]);
-  final LInputSearch _headerFind = new LInputSearch("find", idPrefix:ID, withClearValue:true);
+  LInputSearch _headerFind;
 
   /// Top row right
   final DivElement _headerRight = new DivElement()
     ..classes.addAll([LGrid.C_COL, LGrid.C_NO_FLEX, LGrid.C_ALIGN_BOTTOM]);
-  final LDropdown _sort = new LDropdown.icon("sort", new LIconUtility(LIconUtility.SORT),
-      idPrefix:ID, assistiveText:lObjectHomeSort());
-  final LDropdown _viewLayout = new LDropdown.selectIcon(idPrefix:ID);
+  LDropdown _sort;
+  LDropdown _viewLayout;
   final LButtonGroup _actionButtonGroup = new LButtonGroup();
 
   final ParagraphElement _summary = new ParagraphElement()
@@ -49,11 +46,17 @@ class LObjectHome
 
   /// Record Sort
   final RecordSorting recordSorting;
+  final String idPrefix;
 
   /**
    * Object Home
    */
-  LObjectHome(RecordSorting this.recordSorting) {
+  LObjectHome(RecordSorting this.recordSorting, {String this.idPrefix}) {
+    if (idPrefix != null && idPrefix.isNotEmpty) {
+      element.id = "${idPrefix}-home";
+      _headerLeftRecordType.id = "${idPrefix}-record-type";
+      _actionButtonGroup.id = "${idPrefix}-action-group";
+    }
     // -- Header Row
     element.append(_header);
     // div .slds-col
@@ -68,6 +71,7 @@ class LObjectHome
     headerLeftGrid.append(filterList.lookup.element);
     headerLeftGrid.append(filterList.settings.element);
 
+    _headerFind = new LInputSearch("find", idPrefix:idPrefix, withClearValue:true);
     _headerFind.placeholder = lObjectHomeFind();
     _headerFind.maxWidth = "20rem";
     _headerCenter.append(_headerFind.element);
@@ -80,11 +84,14 @@ class LObjectHome
       ..classes.add(LGrid.C_GRID);
     _headerRight.append(_headerRightGrid);
     //
+    _sort = new LDropdown.icon("sort", new LIconUtility(LIconUtility.SORT),
+      idPrefix:idPrefix, assistiveText:lObjectHomeSort());
     if (recordSorting != null) {
       _sort.right = true;
       _headerRightGrid.append(_sort.element);
     }
     //
+    _viewLayout = new LDropdown.selectIcon(idPrefix:idPrefix);
     _viewLayout.right = true;
     _viewLayout.headingLabel = lObjectHomeLayoutDisplay();
     _viewLayout.dropdown.addDropdownItem(LDropdownItem.create(label: lObjectHomeLayoutTable(), value: VIEW_LAYOUT_TABLE,
@@ -100,7 +107,6 @@ class LObjectHome
     _headerRightGrid.append(_viewWrapper);
 
     // Actions
-    _actionButtonGroup.id = "obj-home-action-group";
     _actionButtonGroup.classes.add(LButton.C_BUTTON_SPACE_LEFT);
     _headerRightGrid.append(_actionButtonGroup.element);
 
@@ -133,7 +139,7 @@ class LObjectHome
    * Add Action
    */
   void addAction(AppsAction action) {
-    _actionButtonGroup.add(action.asButton(true));
+    _actionButtonGroup.add(action.asButton(true, idPrefix:idPrefix));
   }
   void setActionGroupLayout(int showCount) {
     _actionButtonGroup.layout(showCount);
