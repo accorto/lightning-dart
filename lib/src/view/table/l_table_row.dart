@@ -41,6 +41,10 @@ class LTableRow implements FormI {
   RecordDeleted recordDeleted;
   /// Editors
   List<LEditor> editors;
+  /// On Table Row Select Clicked
+  TableSelectClicked tableSelectClicked;
+
+  LabelElement _label;
 
   /**
    * [rowNo] absolute row number 0..x (in type)
@@ -61,13 +65,13 @@ class LTableRow implements FormI {
     if (rowSelect) {
       selectCb = new InputElement(type: "checkbox");
       String selectLabel = type == TYPE_HEAD ? LTable.lTableRowSelectAll() : "${LTable.lTableRowSelectRow()} ${rowNo + 1}";
-      LabelElement label = new LabelElement()
+      _label = new LabelElement()
         ..classes.add(LForm.C_CHECKBOX);
-      label.append(selectCb);
-      label.append(new SpanElement()
+      _label.append(selectCb);
+      _label.append(new SpanElement()
         ..classes.add(LForm.C_CHECKBOX__FAUX)
       );
-      label.append(new SpanElement()
+      _label.append(new SpanElement()
         ..classes.add(LForm.C_FORM_ELEMENT__LABEL)
         ..classes.add(LText.C_ASSISTIVE_TEXT)
         ..text = selectLabel
@@ -79,25 +83,19 @@ class LTableRow implements FormI {
       } else {
         selectCb.id = idPrefix + "-" + selectCb.name;
       }
-      label.htmlFor = selectCb.id;
+      _label.htmlFor = selectCb.id;
       // th/td
       if (type == TYPE_HEAD) {
         TableCellElement tc = new Element.th()
           ..classes.add(LTable.C_ROW_SELECT)
           ..attributes["scope"] = "col";
         rowElement.append(tc);
-        tc.append(label);
+        tc.append(_label);
       } else {
         TableCellElement tc = rowElement.addCell()
           ..classes.add(LTable.C_ROW_SELECT);
-        tc.append(label);
-        selectCb.onClick.listen((MouseEvent evt){
-          if (selectCb.checked) {
-            rowElement.classes.add(LTable.C_IS_SELECTED);
-          } else {
-            rowElement.classes.remove(LTable.C_IS_SELECTED);
-          }
-        });
+        tc.append(_label);
+        selectCb.onClick.listen(onSelectClick);
       }
     }
     if (rowActions != null && rowActions.isNotEmpty) {
@@ -105,6 +103,16 @@ class LTableRow implements FormI {
     }
   } // LTableRow
 
+  /// clicked on select
+  void onSelectClick(MouseEvent evt) {
+    if (selectCb.checked) {
+      rowElement.classes.add(LTable.C_IS_SELECTED);
+    } else {
+      rowElement.classes.remove(LTable.C_IS_SELECTED);
+    }
+    if (tableSelectClicked != null)
+      tableSelectClicked(data);
+  } // onSelectedClick
 
   /// Row Selected
   bool get selected => rowElement.classes.contains(LTable.C_IS_SELECTED);
@@ -325,8 +333,18 @@ class LTableRow implements FormI {
   /// Edit Mode
   void set editMode (String newValue) {
     _editMode = newValue;
-    if (record != null) {
-      display();
+    if (type == TYPE_HEAD) {
+      if (_label != null) {
+        if (_editMode == LTable.EDIT_SEL) {
+          _label.classes.add(LVisibility.C_HIDE);
+        } else {
+          _label.classes.remove(LVisibility.C_HIDE);
+        }
+      }
+    } else {
+      if (record != null) {
+        display();
+      }
     }
   }
   String _editMode = LTable.EDIT_RO;

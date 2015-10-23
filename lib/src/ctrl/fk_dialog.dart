@@ -39,9 +39,13 @@ class FkDialog {
       ..label = "Name";
     _editorName.input.onKeyUp.listen(onNameInputKeyUp);
     _form.addEditor(_editorName);
-    //
-    _table = new LTable(id);
     _modal.add(_form);
+    //
+    _table = new LTable(id)
+      ..responsiveOverflow = true
+      ..editMode = LTable.EDIT_SEL
+      ..tableSelectClicked = onTableSelectClicked;
+    _modal.add(_table);
     //
     _datasource = new Datasource(tableName, FkService.instance.dataUri, FkService.instance.uiUri);
     _datasource.uiFuture()
@@ -50,10 +54,8 @@ class FkDialog {
 
   /// Set UI
   void setUi(UI ui) {
-    _executeSearch();
-
-
-
+    _table.setUi(ui, fromQueryColumns:true);
+    _executeSearch(); // start query
   } // setUI
 
   // Name Input Change
@@ -70,9 +72,11 @@ class FkDialog {
   } // onNameInputKeyPress
 
 
+  /// Find in table
   void _executeFind() {
     String restriction = _editorName.value;
     _log.config("executeFind ${tableName} ${restriction}");
+    _table.findInTable(restriction);
   }
 
   void _executeSearch() {
@@ -91,7 +95,7 @@ class FkDialog {
     _datasource.query()
     .then((DataResponse response){
       _log.config("executeSearch end ${tableName} ${name}");
-
+      _table.setRecords(response.recordList);
     });
   } // executeSearch
 
@@ -101,6 +105,10 @@ class FkDialog {
     _modal.showInElement(AppsMain.modals);
   }
 
+  void onTableSelectClicked(DataRecord data) {
+    _log.config("onTableSelectClicked ${tableName} ${data}");
+
+  }
 
   static String fkDialogTitle() => Intl.message("Search", name: "fkDialogTitle");
 

@@ -9,6 +9,9 @@ part of lightning_dart;
 /// Sort Clicked
 typedef void TableSortClicked(String name, bool asc, MouseEvent evt);
 
+/// Select Clicked
+typedef void TableSelectClicked(DataRecord data);
+
 
 /**
  * Table
@@ -94,6 +97,8 @@ class LTable
   final List<DRecord> recordList = new List<DRecord>();
   /// Record action (click on drv)
   AppsActionTriggered recordAction;
+  /// Table Row Select callback
+  TableSelectClicked tableSelectClicked;
 
   /// Row Select
   final bool optionRowSelect;
@@ -190,8 +195,10 @@ class LTable
       row = _headerRow;
     } else {
       row = new LTableRow(_thead.addRow(), _tbodyRows.length, idPrefix, null,
-        LText.C_TEXT_HEADING__LABEL, optionRowSelect, nameList, nameLabelMap, LTableRow.TYPE_HEAD, null, dataColumns);
+        LText.C_TEXT_HEADING__LABEL, optionRowSelect, nameList, nameLabelMap,
+        LTableRow.TYPE_HEAD, null, dataColumns);
     }
+    row.editMode = _editMode;
     _theadRows.add(row);
     // add urv
     if (_ui != null) {
@@ -224,6 +231,16 @@ class LTable
       display();
     }
   } // onTableSortClicked
+
+  /**
+   * Table Row Selected Clicked
+   */
+  void onTableRowSelectClicked(DataRecord data) {
+    // _log.config("onTableRowSelectClicked ${data}");
+    if (tableSelectClicked != null) {
+      tableSelectClicked(data);
+    }
+  }
 
   /// Find In Table
   void findInTable(String findExpression) {
@@ -264,6 +281,9 @@ class LTable
   /// Set Edit Mode
   void set editMode (String newValue) {
     _editMode = newValue;
+    for (LTableRow row in _theadRows) {
+      row.editMode = newValue;
+    }
     for (LTableRow row in _tbodyRows) {
       row.editMode = newValue;
     }
@@ -292,8 +312,10 @@ class LTable
     if (_tbody == null)
       _tbody = _table.createTBody();
     LTableRow row = new LTableRow(_tbody.addRow(), _tbodyRows.length, idPrefix, rowValue,
-        LButton.C_HINT_PARENT, optionRowSelect, nameList, nameLabelMap, LTableRow.TYPE_BODY, _rowActions, dataColumns);
+        LButton.C_HINT_PARENT, optionRowSelect, nameList, nameLabelMap,
+        LTableRow.TYPE_BODY, _rowActions, dataColumns);
     row.editMode = _editMode;
+    row.tableSelectClicked = onTableRowSelectClicked;
     _tbodyRows.add(row);
     return row;
   }
@@ -303,7 +325,8 @@ class LTable
     if (_tfoot == null)
       _tfoot = _table.createTFoot();
     LTableRow row = new LTableRow(_tfoot.addRow(), _tfootRows.length, idPrefix, null,
-        LButton.C_HINT_PARENT, optionRowSelect, nameList, nameLabelMap, LTableRow.TYPE_FOOT, null, dataColumns);
+        LButton.C_HINT_PARENT, optionRowSelect, nameList, nameLabelMap,
+        LTableRow.TYPE_FOOT, null, dataColumns);
     _tfootRows.add(row);
     return row;
   }
@@ -316,15 +339,23 @@ class LTable
   }
 
   /// Set Header
-  void setUi(UI ui) {
+  void setUi(UI ui, {bool fromQueryColumns:false}) {
     _ui = ui;
     dataColumns.clear();
 
-    // Grid Columns
-    for (UIGridColumn gc in _ui.gridColumnList) {
-      dataColumns.add(DataColumn.fromUi(_ui, gc.columnName, gridColumn:gc));
+    if (fromQueryColumns) {
+      for (UIQueryColumn qc in ui.queryColumnList) {
+        dataColumns.add(DataColumn.fromUi(ui, qc.columnName));
+      }
     }
-    if (dataColumns.isEmpty) { // table column fallback
+    // Grid Columns
+    if (dataColumns.isEmpty) {
+      for (UIGridColumn gc in _ui.gridColumnList) {
+        dataColumns.add(DataColumn.fromUi(_ui, gc.columnName, gridColumn:gc));
+      }
+    }
+    // table column fallback
+    if (dataColumns.isEmpty) {
       for (DColumn col in _ui.table.columnList) {
         dataColumns.add(DataColumn.fromUi(_ui, col.name, tableColumn:col));
       }
