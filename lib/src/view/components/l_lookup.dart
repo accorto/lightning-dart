@@ -114,7 +114,8 @@ class LLookup
       // show input with search icon
       input.onKeyUp.listen(onInputKeyUp);
       input.onFocus.listen((Event e) {
-        _lookupMenu.classes.remove(LVisibility.C_HIDE);
+        if (!(readOnly || disabled))
+          _lookupMenu.classes.remove(LVisibility.C_HIDE);
       });
     } else {
       _pillContainer = new DivElement()
@@ -166,6 +167,7 @@ class LLookup
     _formElement.id = newValue;
     element.id = "${newValue}-lookup";
     icon.element.id = "${newValue}-icon";
+    _lookupMenu.attributes[Html0.DATA_NAME] = newValue;
   }
 
   void updateId(String idPrefix) {
@@ -277,11 +279,25 @@ class LLookup
   bool get readOnly => input.readOnly;
   void set readOnly (bool newValue) {
     input.readOnly = newValue;
+    if (input.readOnly || input.disabled) {
+      _lookupMenu.classes.remove(LVisibility.C_AUTO_VISIBLE);
+      _lookupMenu.classes.add(LVisibility.C_HIDE);
+    } else {
+      _lookupMenu.classes.add(LVisibility.C_AUTO_VISIBLE);
+      _lookupMenu.classes.remove(LVisibility.C_HIDE);
+    }
   }
 
   bool get disabled => input.disabled;
   void set disabled (bool newValue) {
     input.disabled = newValue;
+    if (input.readOnly || input.disabled) {
+      _lookupMenu.classes.remove(LVisibility.C_AUTO_VISIBLE);
+      _lookupMenu.classes.add(LVisibility.C_HIDE);
+    } else {
+      _lookupMenu.classes.add(LVisibility.C_AUTO_VISIBLE);
+      _lookupMenu.classes.remove(LVisibility.C_HIDE);
+    }
   }
 
   bool get spellcheck => input.spellcheck;
@@ -503,14 +519,20 @@ class LLookup
 
   /// Show Popup
   void set showResults (bool newValue) {
-    input.attributes[Html0.ARIA_EXPANED] = newValue.toString();
-    if (newValue) {
-      _lookupMenu.classes.remove(LVisibility.C_HIDE);
-    } else {
+    if (readOnly || disabled) {
+      input.attributes[Html0.ARIA_EXPANED] = "false";
       _lookupMenu.classes.add(LVisibility.C_HIDE);
-      new Timer(new Duration(seconds: 5), () { // focus somewhere else
+    } else {
+      input.attributes[Html0.ARIA_EXPANED] = newValue.toString();
+      if (newValue) {
         _lookupMenu.classes.remove(LVisibility.C_HIDE);
-      });
+      } else {
+        _lookupMenu.classes.add(LVisibility.C_HIDE);
+        new Timer(new Duration(seconds: 5), () {
+          // focus somewhere else
+          _lookupMenu.classes.remove(LVisibility.C_HIDE);
+        });
+      }
     }
   } // showResults
 

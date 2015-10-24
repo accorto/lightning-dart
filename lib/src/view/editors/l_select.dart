@@ -155,6 +155,10 @@ class LSelect
   void set readOnly (bool newValue) {
     _readOnly = newValue;
     input.disabled = _readOnly || _disabled;
+    if (_readOnly)
+      input.classes.add("read-only");
+    else
+      input.classes.remove("read-only");
   }
   bool _readOnly = false;
 

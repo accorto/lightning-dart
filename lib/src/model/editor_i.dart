@@ -453,6 +453,8 @@ abstract class EditorI {
 
   /// Clear Value
   void onClearValue(Event ignored) {
+    if (readOnly || disabled)
+      return;
     value = "";
     if (data != null && _entry != null) {
       data.updateEntry(_entry, "");
@@ -476,6 +478,8 @@ abstract class EditorI {
 
   /// Input changed
   void onInputChange(Event ignored){
+    if (readOnly)
+      return;
     doValidate();
     String theValue = value;
     _log.config("onInputChange ${name}=${theValue}");
@@ -493,6 +497,8 @@ abstract class EditorI {
    * ENTER - autoSubmit
    */
   void onInputKeyUp(KeyboardEvent evt) {
+    if (readOnly)
+      return;
     int kc = evt.keyCode;
     if (kc == KeyCode.ESC) {
       String newValue = null;
