@@ -242,21 +242,21 @@ class LFormElement {
    *
    *  or for cb --from--
    *    div       .from-element
-   *      label   .checkbox
-   *      input
-   *      span    .checkbox--faux
-   *      span    .form-element__label  (_labelSpan)
-   *      span    .form-element__help   (_hintSpan)
+   *      label   .checkbox               (_labelElement)
+   *        input
+   *        span    .checkbox--faux
+   *        span    .form-element__label  (_labelSpan)
+   *      span    .form-element__help     (_hintSpan)
    *  --to--
    *    div       .form-element
-   *      label   .checkbox
-   *      input
-   *      span    .checkbox--faux
-   *      span    .form-element__label  (_labelSpan)
-   *      div   (popup)
-   *        button
-   *        div .popover
-   *      span    .form-element__help   (_hintSpan)
+   *      label   .checkbox               (_labelElement)
+   *        input
+   *        span    .checkbox--faux
+   *        span    .form-element__label  (_labelSpan)
+   *        div   (popup)
+   *          button
+   *          div .popover
+   *      span    .form-element__help     (_hintSpan)
    */
   void set help (String newValue) {
     _help = newValue;
@@ -271,7 +271,8 @@ class LFormElement {
       _helpTip.showAbove(_helpButton); // shows button
 
       if (EditorI.isCheckbox(editor.type)) {
-        element.insertBefore(_helpTip.element, _hintSpan);
+      //  element.insertBefore(_helpTip.element, _hintSpan);
+        _labelElement.append(_helpTip.element);
       } else { // standard
         DivElement _helpLabel = new DivElement()
           ..classes.addAll([LForm.C_FORM_ELEMENT__LABEL, LMargin.C_BOTTOM__X_SMALL])
