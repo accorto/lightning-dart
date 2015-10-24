@@ -114,10 +114,12 @@ class FkCtrl
   /// On Icon Click
   void onIconClick(Event evt) {
     _log.config("onIconClick ${name}");
+    if (readOnly)
+      return;
     if (_dialog == null) {
-      _dialog = new FkDialog(tableName, label, true);
+      _dialog = FkDialog.getDialog(tableName);
     }
-    _dialog.show();
+    _dialog.show(this);
   }
   FkDialog _dialog;
 

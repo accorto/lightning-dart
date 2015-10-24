@@ -90,7 +90,7 @@ class UiUtil {
   }
 
   /// add column
-  void addColumn(DColumn col, {String displayLogic}) {
+  void addColumn(DColumn col, {String displayLogic, bool mandatory}) {
     ui.table.columnList.add(col);
     if (_panel == null)
       addPanel();
@@ -99,6 +99,8 @@ class UiUtil {
     UIPanelColumn pc = _createPanelColumn(col);
     if (displayLogic != null && displayLogic.isNotEmpty)
       pc.displayLogic = displayLogic;
+    if (mandatory != null)
+      pc.isMandatory = mandatory;
     pc.seqNo = (_panel.panelColumnList.length + 1);
     _panel.panelColumnList.add(pc);
 
@@ -137,16 +139,21 @@ class UiUtil {
 
 
   /// add grid/panel column if missing
-  void addIfMissing(String columnName) {
+  void addIfMissing(String columnName, {bool mandatory}) {
     // exists?
-    for (UIGridColumn gc in ui.gridColumnList) {
-      if (gc.columnName == columnName)
-        return; // exists
+    for (UIPanel panel in ui.panelList) {
+      for (UIPanelColumn pc in panel.panelColumnList) {
+        if (pc.columnName == columnName) {
+          if (mandatory != null)
+            pc.isMandatory = mandatory;
+          return; // exists (gc exists too)
+        }
+      }
     }
-    // find column
+    // find column + create
     for (DColumn col in ui.table.columnList) {
       if (col.name == columnName) {
-        addColumn(col);
+        addColumn(col, mandatory:mandatory);
         return;
       }
     }

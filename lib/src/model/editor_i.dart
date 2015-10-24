@@ -452,18 +452,15 @@ abstract class EditorI {
   } // updateData
 
   /// Clear Value
-  void clearValue() {
+  void onClearValue(Event ignored) {
     value = "";
-    doValidate();
     if (data != null && _entry != null) {
       data.updateEntry(_entry, "");
       if (valueRendered) {
-        _entry.valueDisplay = valueDisplay;
+        _entry.valueDisplay = "";
       }
     }
-    if (editorChange != null) {
-      editorChange(name, "", _entry, null);
-    }
+    onInputChange(ignored); // validates
   } // clearValue
 
 
@@ -478,7 +475,7 @@ abstract class EditorI {
   EditorChange editorChange;
 
   /// Input changed
-  void onInputChange(Event evt){
+  void onInputChange(Event ignored){
     doValidate();
     String theValue = value;
     _log.config("onInputChange ${name}=${theValue}");

@@ -285,7 +285,7 @@ class LModal extends LComponent {
   }
 
   /// Hide Modal
-  void onClickHideOnly(MouseEvent evt) {
+  void onClickHideOnly(MouseEvent ignored) {
     show = false;
   }
 

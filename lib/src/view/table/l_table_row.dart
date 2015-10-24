@@ -103,13 +103,14 @@ class LTableRow implements FormI {
     }
   } // LTableRow
 
-  /// clicked on select
+  /// clicked on selectCb
   void onSelectClick(MouseEvent evt) {
     if (selectCb.checked) {
       rowElement.classes.add(LTable.C_IS_SELECTED);
     } else {
       rowElement.classes.remove(LTable.C_IS_SELECTED);
     }
+    data.selected = selectCb.checked;
     if (tableSelectClicked != null)
       tableSelectClicked(data);
   } // onSelectedClick
@@ -123,10 +124,25 @@ class LTableRow implements FormI {
     } else {
       rowElement.classes.remove(LTable.C_IS_SELECTED);
     }
+    data.selected = newValue;
     if (selectCb != null)
       selectCb.checked = newValue;
   } // selected
 
+  /// clicked on something else than selectCb
+  void onRowSelectClick(MouseEvent evt) {
+    _log.fine("onRowSelectClick ${rowNo}");
+    evt.preventDefault();
+    evt.stopPropagation();
+    // update display + selectCb
+    if (selectCb != null) {
+      selected = !selectCb.checked; // toggle
+    } else {
+      selected = true;
+    }
+    if (tableSelectClicked != null)
+      tableSelectClicked(data);
+  }
 
   /**
    * Add Cell Text
@@ -149,6 +165,8 @@ class LTableRow implements FormI {
         evt.preventDefault();
         recordAction("record", record, null, null);
       });
+    } else if (_editMode == LTable.EDIT_SELECT_SINGLE || _editMode == LTable.EDIT_SELECT_MULTI) {
+      a.onClick.listen(onRowSelectClick);
     }
     return addCell(a, DataRecord.URV, record.urv, null, null)
       ..cellElement.attributes[Html0.ROLE] = Html0.ROLE_ROW;
@@ -280,6 +298,7 @@ class LTableRow implements FormI {
         String align = _displayAlign(dataColumn);
 
         if (_editMode == LTable.EDIT_RO
+            || _editMode == LTable.EDIT_SELECT_SINGLE || _editMode == LTable.EDIT_SELECT_MULTI
             || (_editMode == LTable.EDIT_SEL && !selected)) {
           if (entry != null && entry.hasValueDisplay()) {
             addCellText(entry.valueDisplay, name:name, value:value, dataColumn:dataColumn);
@@ -335,19 +354,24 @@ class LTableRow implements FormI {
     _editMode = newValue;
     if (type == TYPE_HEAD) {
       if (_label != null) {
-        if (_editMode == LTable.EDIT_SEL) {
+        if (_editMode == LTable.EDIT_SELECT_SINGLE) {
           _label.classes.add(LVisibility.C_HIDE);
         } else {
           _label.classes.remove(LVisibility.C_HIDE);
         }
       }
-    } else {
+    } else if (type == TYPE_BODY) {
+      if (_editMode == LTable.EDIT_SELECT_SINGLE || _editMode == LTable.EDIT_SELECT_MULTI) {
+        if (_rowClickSubscription == null)
+          _rowClickSubscription = rowElement.onClick.listen(onRowSelectClick);
+      }
       if (record != null) {
-        display();
+        display(); // update
       }
     }
   }
   String _editMode = LTable.EDIT_RO;
+  StreamSubscription<MouseEvent> _rowClickSubscription;
 
 
   /// find column by name or null

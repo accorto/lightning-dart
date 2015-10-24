@@ -64,9 +64,7 @@ class LFormElement {
     if (iconRight == null) {
       if (withClearValue) {
         iconRight = new LIconUtility(LIconUtility.CLEAR);
-        iconRight.element.onClick.listen((MouseEvent evt){
-          editor.clearValue();
-        });
+        iconRight.element.onClick.listen(editor.onClearValue);
       } else {
         iconRight = getIconRight();
       }

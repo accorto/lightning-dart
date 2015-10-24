@@ -9,7 +9,7 @@ part of lightning_dart;
 /// Sort Clicked
 typedef void TableSortClicked(String name, bool asc, MouseEvent evt);
 
-/// Select Clicked
+/// Select Clicked (select or unselect)
 typedef void TableSelectClicked(DataRecord data);
 
 
@@ -55,6 +55,10 @@ class LTable
   static const String EDIT_FIELD = "field";
   /// Table Edit Mode - Selected Rows
   static const String EDIT_SEL = "sel";
+  /// Table Edit Mode - R/O Select Multiple Rows
+  static const String EDIT_SELECT_MULTI = "roSelX";
+  /// Table Edit Mode - R/O Select Single Rows
+  static const String EDIT_SELECT_SINGLE = "roSel1";
   /// Table Edit Mode - All Rows
   static const String EDIT_ALL = "all";
 
@@ -236,19 +240,21 @@ class LTable
    * Table Row Selected Clicked
    */
   void onTableRowSelectClicked(DataRecord data) {
-    // _log.config("onTableRowSelectClicked ${data}");
+    // _log.config("onTableRowSelectClicked ${data.selected}");
     if (tableSelectClicked != null) {
       tableSelectClicked(data);
     }
   }
 
   /// Find In Table
-  void findInTable(String findExpression) {
+  int findInTable(String findExpression) {
+    int count = 0;
     RegExp regEx = LUtil.createRegExp(findExpression);
     if (regEx == null) {
       for (DRecord record in recordList) {
         record.clearIsMatchFind();
       }
+      count = recordList.length;
     } else {
       for (DRecord record in recordList) {
         bool match = false;
@@ -271,9 +277,12 @@ class LTable
           }
         }
         record.isMatchFind = match;
-      }
+        if (match)
+          count++;
+      } // for record
     }
     display();
+    return count;
   } // findInTable
 
   /// Table Edit Mode

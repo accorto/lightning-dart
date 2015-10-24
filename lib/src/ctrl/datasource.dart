@@ -104,12 +104,12 @@ class Datasource
 
 
   /// query
-  Future<DataResponse> query() {
+  Future<DataResponse> query({bool setBusy:true}) {
     Completer<DataResponse> completer = new Completer<DataResponse>();
     //
     DataRequest req = _createRequest(DataRequestType.QUERY);
     //
-    execute_data(req)
+    execute_data(req, setBusy:setBusy)
     .then((DataResponse response) {
       totalRows = response.totalRows;
       recordList = response.recordList;
@@ -127,7 +127,7 @@ class Datasource
     Completer<int> completer = new Completer<int>();
     DataRequest req = _createRequest(DataRequestType.QUERYCOUNT);
     //
-    execute_data(req)
+    execute_data(req, setBusy:false)
     .then((DataResponse response){
       completer.complete(response.totalRows);
     })
@@ -357,7 +357,7 @@ class Datasource
   /**
    * Send Data Request to Server
    */
-  Future<DataResponse> execute_data(DataRequest request, {String info, bool setBusy: true}) {
+  Future<DataResponse> execute_data(DataRequest request, {String info, bool setBusy:true}) {
     if (info == null) {
       info = "${request.type} ${request.tableName}";
     }

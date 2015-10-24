@@ -391,6 +391,9 @@ class LLookup
    * ENTER selects first
    */
   void onInputKeyUp(KeyboardEvent evt) {
+    if (readOnly) {
+      return;
+    }
     int kc = evt.keyCode;
     String match = input.value;
     _log.fine("onInputKeyUp ${kc} ${match}");
@@ -459,6 +462,10 @@ class LLookup
    */
   void onItemClick(MouseEvent evt) {
     evt.preventDefault();
+    if (readOnly) {
+      showResults = false;
+      return;
+    }
     Element telement = evt.target;
     String tvalue = telement.attributes[Html0.DATA_VALUE];
     LLookupItem selectedItem = null;

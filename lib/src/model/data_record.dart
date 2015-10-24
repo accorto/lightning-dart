@@ -579,13 +579,13 @@ class DataRecord {
    */
   void onEditorChange(String name, String newValue, DEntry entry, var details) {
     if (entry != null) {
-      String valueOriginal = entry.valueOriginal;
-      if (NULLVALUE == valueOriginal)
-        valueOriginal = "null";
-      String oldValue = entry.value;
-      if (NULLVALUE == oldValue)
-        oldValue = "null";
-      _log.fine("onEditorChange ${name} rowNo=${rowNo} value=${newValue} old=${oldValue} (orig=${valueOriginal})");
+      String valueOriginalD = entry.valueOriginal;
+      if (NULLVALUE == valueOriginalD)
+        valueOriginalD = "null";
+      String oldValueD = entry.value;
+      if (NULLVALUE == oldValueD)
+        oldValueD = "null";
+      _log.fine("onEditorChange ${name} rowNo=${rowNo} value=${newValue} old=${oldValueD} (orig=${valueOriginalD})");
     } else {
       _log.fine("onEditorChange ${name} rowNo=${rowNo} value=${newValue}");
     }
