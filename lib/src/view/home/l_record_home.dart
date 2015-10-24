@@ -75,7 +75,8 @@ class LRecordHome extends LPageHeader {
       for (UIQueryColumn qc in ui.queryColumnList) {
         String columnName = qc.columnName;
         String label = qc.columnLabel;
-        LRecordHomeDetail d = new LRecordHomeDetail(columnName, label, qc.column);
+        DataColumn dataColumn = new DataColumn(ui.table, qc.column, null, null);
+        LRecordHomeDetail d = new LRecordHomeDetail(columnName, label, dataColumn);
         _detailList.add(d);
         DivElement div = new DivElement()
           ..classes.add(LGrid.C_COL__PADDED)
@@ -184,10 +185,11 @@ class LRecordHomeDetail {
   final Element _dd = new Element.tag('dd');
 
   final String columnName;
-  final DColumn column;
+  final DataColumn dataColumn;
+  LEditor _editor;
 
   /// Record Home Detail
-  LRecordHomeDetail(String this.columnName, String label, DColumn this.column) {
+  LRecordHomeDetail(String this.columnName, String label, DataColumn this.dataColumn) {
     ParagraphElement p = new ParagraphElement()
       ..classes.add(LText.C_TEXT_HEADING__LABEL)
       ..classes.add(LText.C_TRUNCATE)
@@ -198,7 +200,9 @@ class LRecordHomeDetail {
     element.append(dt);
     _dd.attributes[Html0.DATA_NAME] = columnName;
     element.append(_dd);
-  }
+    //
+    _editor = EditorUtil.createfromColumn(columnName, dataColumn, true);
+  } // LRecordHomeDetail
 
   /// Display Value
   void display(DRecord record) {
@@ -226,14 +230,19 @@ class LRecordHomeDetail {
       ..classes.add(LText.C_TEXT_BODY__REGULAR)
       ..classes.add(LText.C_TRUNCATE);
     _dd.append(p);
-    if (value == null) {
+    if (value == null || value.isEmpty) {
       _dd.attributes[Html0.DATA_VALUE] = "";
     } else {
       _dd.attributes[Html0.DATA_VALUE] = value;
-      String display = value;
-      if (entry.hasValueDisplay())
-        display = entry.valueDisplay;
-      p.text = display;
+      // show value
+      p.text = value;
+      if (_editor.valueRendered) {
+        _editor.render(value, false)
+        .then((String display){
+          p.text = display;
+          entry.valueDisplay = display;
+        });
+      }
     }
   } // display
 

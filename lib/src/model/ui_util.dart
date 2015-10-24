@@ -198,8 +198,8 @@ class UiUtilDemo extends UiUtil {
 
 
   /// add column
-  void addColumn(DColumn col, {List<String> examples, String displayLogic}) {
-    super.addColumn(col, displayLogic:displayLogic);
+  void addColumn(DColumn col, {List<String> examples, String displayLogic, bool mandatory}) {
+    super.addColumn(col, displayLogic:displayLogic, mandatory:mandatory);
 
     // -- data
     if (exampleList != null && examples != null) {

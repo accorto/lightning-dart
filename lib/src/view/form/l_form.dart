@@ -391,7 +391,8 @@ class LForm
         }
       })
       .catchError((Event error, StackTrace stackTrace) {
-        formSubmitPost(null);
+        if (formSubmitPost != null)
+          formSubmitPost(null);
       });
     }
 
