@@ -34,7 +34,7 @@ class LModal extends LComponent {
   /// slds-modal-backdrop--open - Allows the backdrop to be visible. | Required
   static const String C_MODAL_BACKDROP__OPEN = "slds-modal-backdrop--open";
 
-  /// slds-modal--small default 50% - 90% max=550
+  /// slds-modal--small default 50% - 90% max=580
   static const String C_MODAL__SMALL = "slds-modal--small";
 
   static final Logger _log = new Logger("LModal");
