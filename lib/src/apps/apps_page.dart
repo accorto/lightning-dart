@@ -32,7 +32,7 @@ abstract class AppsPage extends LComponent {
   /**
    * Page element with Menu
    *
-   * the [icon] is best an action or utility icon - standard and custom items have a different size
+   * the [icon] is best an action or utility icon (no padding) - standard and custom items have a different size
    * if [externalHref] is provided, the user is redirected with the optional [target]
    *
    * the [name] is also the router name
@@ -53,7 +53,7 @@ abstract class AppsPage extends LComponent {
     } else { // internal
       menuEntry.href = "#" + id;
     }
-    // Icon
+    // Menu Icon
     icon.removeColor();
     icon.classes.addAll([LIcon.C_ICON, LIcon.C_ICON__SMALL]);
     // Menu

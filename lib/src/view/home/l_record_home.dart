@@ -46,14 +46,14 @@ class LRecordHome extends LPageHeader {
     _initComponent(withFollow, idPrefix);
   } // LRecordHome
 
-  /// Record Home from UI
-  LRecordHome.from(UI this.ui, {LIcon icon, bool withFollow:true, String idPrefix}) {
+  /// Record Home from UI [homeIcon] large with padding and color
+  LRecordHome.from(UI this.ui, {LIcon homeIcon, bool withFollow:true, String idPrefix}) {
     _initComponent(withFollow, idPrefix);
     element.attributes[Html0.DATA_VALUE] = ui.tableName;
     DTable table = ui.table;
     // image
-    if (icon != null) {
-      this.icon = icon;
+    if (homeIcon != null) {
+      this.icon = homeIcon;
     } else {
       String iconImage = table.iconImage;
       if (iconImage != null && iconImage.isNotEmpty) {
