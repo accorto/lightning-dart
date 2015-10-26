@@ -271,6 +271,7 @@ class LoginInfo extends GeneratedMessage {
     ..a(5, 'externalKey', PbFieldType.OS)
     ..a(6, 'ssoId', PbFieldType.OS)
     ..a(7, 'isRestOrSoap', PbFieldType.OB)
+    ..a(9, 'sfRefresh', PbFieldType.OS)
     ..a(10, 'sfSid', PbFieldType.OS)
     ..a(11, 'sfEndpoint', PbFieldType.OS)
     ..a(12, 'sfOrgId', PbFieldType.OS)
@@ -332,39 +333,44 @@ class LoginInfo extends GeneratedMessage {
   bool hasIsRestOrSoap() => $_has(6, 7);
   void clearIsRestOrSoap() => clearField(7);
 
-  String get sfSid => $_get(7, 10, '');
-  void set sfSid(String v) { $_setString(7, 10, v); }
-  bool hasSfSid() => $_has(7, 10);
+  String get sfRefresh => $_get(7, 9, '');
+  void set sfRefresh(String v) { $_setString(7, 9, v); }
+  bool hasSfRefresh() => $_has(7, 9);
+  void clearSfRefresh() => clearField(9);
+
+  String get sfSid => $_get(8, 10, '');
+  void set sfSid(String v) { $_setString(8, 10, v); }
+  bool hasSfSid() => $_has(8, 10);
   void clearSfSid() => clearField(10);
 
-  String get sfEndpoint => $_get(8, 11, '');
-  void set sfEndpoint(String v) { $_setString(8, 11, v); }
-  bool hasSfEndpoint() => $_has(8, 11);
+  String get sfEndpoint => $_get(9, 11, '');
+  void set sfEndpoint(String v) { $_setString(9, 11, v); }
+  bool hasSfEndpoint() => $_has(9, 11);
   void clearSfEndpoint() => clearField(11);
 
-  String get sfOrgId => $_get(9, 12, '');
-  void set sfOrgId(String v) { $_setString(9, 12, v); }
-  bool hasSfOrgId() => $_has(9, 12);
+  String get sfOrgId => $_get(10, 12, '');
+  void set sfOrgId(String v) { $_setString(10, 12, v); }
+  bool hasSfOrgId() => $_has(10, 12);
   void clearSfOrgId() => clearField(12);
 
-  String get sfUserId => $_get(10, 13, '');
-  void set sfUserId(String v) { $_setString(10, 13, v); }
-  bool hasSfUserId() => $_has(10, 13);
+  String get sfUserId => $_get(11, 13, '');
+  void set sfUserId(String v) { $_setString(11, 13, v); }
+  bool hasSfUserId() => $_has(11, 13);
   void clearSfUserId() => clearField(13);
 
-  String get sfUn => $_get(11, 14, '');
-  void set sfUn(String v) { $_setString(11, 14, v); }
-  bool hasSfUn() => $_has(11, 14);
+  String get sfUn => $_get(12, 14, '');
+  void set sfUn(String v) { $_setString(12, 14, v); }
+  bool hasSfUn() => $_has(12, 14);
   void clearSfUn() => clearField(14);
 
-  String get sfPw => $_get(12, 15, '');
-  void set sfPw(String v) { $_setString(12, 15, v); }
-  bool hasSfPw() => $_has(12, 15);
+  String get sfPw => $_get(13, 15, '');
+  void set sfPw(String v) { $_setString(13, 15, v); }
+  bool hasSfPw() => $_has(13, 15);
   void clearSfPw() => clearField(15);
 
-  String get token => $_get(13, 16, '');
-  void set token(String v) { $_setString(13, 16, v); }
-  bool hasToken() => $_has(13, 16);
+  String get token => $_get(14, 16, '');
+  void set token(String v) { $_setString(14, 16, v); }
+  bool hasToken() => $_has(14, 16);
   void clearToken() => clearField(16);
 }
 
@@ -804,6 +810,7 @@ const LoginInfo$json = const {
     const {'1': 'external_key', '3': 5, '4': 1, '5': 9},
     const {'1': 'sso_id', '3': 6, '4': 1, '5': 9},
     const {'1': 'is_rest_or_soap', '3': 7, '4': 1, '5': 8, '7': 'false'},
+    const {'1': 'sf_refresh', '3': 9, '4': 1, '5': 9},
     const {'1': 'sf_sid', '3': 10, '4': 1, '5': 9},
     const {'1': 'sf_endpoint', '3': 11, '4': 1, '5': 9},
     const {'1': 'sf_org_id', '3': 12, '4': 1, '5': 9},
