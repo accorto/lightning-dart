@@ -93,7 +93,10 @@ abstract class TableCtrl
 
   /// Add New Record at End
   DRecord addNewRecord() {
-    DRecord record = new DataRecord(null).newRecord(ui.table, null);
+    DataRecord data = new DataRecord(null)
+      ..table = ui.table;
+    DRecord parentRecord = null;
+    DRecord record = data.newRecord(parentRecord);
     recordList.add(record);
     return record;
   }

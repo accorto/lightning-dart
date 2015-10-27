@@ -60,7 +60,7 @@ class DataContext {
     for (Match m in _RECORD.allMatches(processedLogic)) {
       // _log.info("${m.input} start=${m.start} end=${m.end} groups=${m.groupCount}");
       String varName = m.input.substring(m.start+7, m.end);
-      String varValue = DataRecord.columnValue(data.record, varName);
+      String varValue = DataRecord.getColumnValue(data.record, varName);
       if (varValue == null) {
         if (nullResultOk)
           _log.config("contextReplace ${columnName} record=${varName} notFound - ${processedLogic}");
@@ -79,7 +79,7 @@ class DataContext {
     for (Match m in _PARENT.allMatches(processedLogic)) {
       // _log.info("${m.input} start=${m.start} end=${m.end} groups=${m.groupCount}");
       String varName = m.input.substring(m.start+7, m.end);
-      String varValue = DataRecord.columnValue(data.record.parent, varName);
+      String varValue = DataRecord.getColumnValue(data.record.parent, varName);
       if (varValue == null) {
         if (nullResultOk)
           _log.config("contextReplace ${columnName} parent=${varName} notFound - ${processedLogic}");
@@ -305,44 +305,50 @@ class DataContext {
 
   /**
    * Create [theRecord] as Javascript Map
-   * values also boolean, int, double, date.
+   * - with [stringValues] only string values
+   * or also boolean, int, double, date.
    * Passwords are not included
    */
-  static Map<String,dynamic> asJsMap(final DRecord record, final DTable table) {
+  static Map<String,dynamic> asJsMap(final DRecord record, final DTable table, {bool asStringValues:false}) {
     Map<String,Object> map = new Map<String,dynamic>();
     if (record == null || record.entryList.isEmpty) {
       return map;
     }
     for (DEntry entry in record.entryList) {
-      DColumn col = DataUtil.findColumn(table, entry.columnId, entry.columnName);
+      String columnName = entry.columnName;
+      DColumn col = DataUtil.findColumn(table, entry.columnId, columnName);
       DataType dt = col == null ? DataType.STRING : col.dataType;
       if (dt == DataType.PASSWORD)
         continue;
-      if (!entry.hasValue() || entry.value.isEmpty) {
-        map[entry.columnName] = null;
+      String value = DataRecord.getEntryValue(entry);
+      if (value == null || value.isEmpty) {
+        map[columnName] = null;
+      }
+      else if (asStringValues) {
+        map[columnName] = value;
       }
       else if (dt == DataType.BOOLEAN) {
-        map[entry.columnName] = entry.value == "true";
+        map[columnName] = value == "true";
       }
       else if (dt == DataType.INT)
-        map[entry.columnName] = int.parse(entry.value,
+        map[columnName] = int.parse(value,
             onError: (String value) {
                return 0;
             });
       else if (DataTypeUtil.isNumber(dt))
-        map[entry.columnName] = double.parse(entry.value,
+        map[columnName] = double.parse(value,
             (String value) {
               return 0.0;
             });
       else if (DataTypeUtil.isDate(dt)) {
-        int time = int.parse(entry.value,
+        int time = int.parse(value,
             onError: (String value) {
               return 0;
             });
-        map[entry.columnName] = new DateTime.fromMillisecondsSinceEpoch(time, isUtc: dt == DataType.DATE);
+        map[columnName] = new DateTime.fromMillisecondsSinceEpoch(time, isUtc: dt == DataType.DATE);
       }
       else {
-        map[entry.columnName] = entry.value;
+        map[columnName] = value;
       }
     }
     return map;

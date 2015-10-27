@@ -112,10 +112,10 @@ class RecordSorting {
     int cmp = 0;
     for (RecordSort sort in list) {
       String columnName = sort.sort.columnName;
-      String oneValue = columnName == DataRecord.URV ? one.drv : DataRecord.columnValue(one, columnName);
+      String oneValue = columnName == DataRecord.URV ? one.drv : DataRecord.getColumnValue(one, columnName);
       if (oneValue == null)
         oneValue = "";
-      String twoValue = columnName == DataRecord.URV ? two.drv : DataRecord.columnValue(two, columnName);
+      String twoValue = columnName == DataRecord.URV ? two.drv : DataRecord.getColumnValue(two, columnName);
       if (twoValue == null)
         twoValue = "";
       cmp = oneValue.compareTo(twoValue);

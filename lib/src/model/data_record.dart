@@ -133,20 +133,11 @@ class DataRecord {
   /**
    * Get columnName value as String or null if not found
    */
-  static String columnValue(DRecord record, String columnName) {
+  static String getColumnValue(DRecord record, String columnName) {
     if (columnName != null && record != null && record.entryList.isNotEmpty) {
       for (DEntry entry in record.entryList) {
         if (columnName == entry.columnName) {
-          String value = null;
-          if (entry.hasValue()) {
-            value = entry.value;
-          } else if (entry.hasValueOriginal()) {
-            value = entry.valueOriginal;
-          }
-          if (DataUtil.isEmpty(value)) {
-            return ""; // found but empty
-          }
-          return value;
+          return getEntryValue(entry);
         }
       }
     }
@@ -164,8 +155,10 @@ class DataRecord {
       else if (dataEntry.hasValueOriginal()) {
         value = dataEntry.valueOriginal;
       }
-      if (value != NULLVALUE)
-        return value;
+      if (DataUtil.isEmpty(value)) {
+        return ""; // found but empty
+      }
+      return value;
     }
     return null;
   }
@@ -244,12 +237,23 @@ class DataRecord {
       _record = new DRecord();
     else
       _record = value;
+    resetCached();
   }
   /// Get current record
   DRecord get record => _record;
 
+  /// reset cached values
+  void resetCached() {
+    _cacheRO = null;
+    _cacheActive = null;
+    _cacheProcessed = null;
+  }
+
   /**
-   * Record is read only (static + last calc) | !active
+   * Record is read only (static + last calc)
+   *    | table.readOnlyLogic
+   *    | !active | processes
+   *
    */
   bool get isReadOnly {
     if (_record != null) {
@@ -260,28 +264,45 @@ class DataRecord {
       if (_record.hasIsReadOnlyCalc() && _record.isReadOnlyCalc)
         return true;
     }
+    if (_table == null) {
+      _log.warning("isReadOnly - table not set");
+    } else if (_table.hasReadOnlyLogic()) {
+      if (_cacheRO == null || changed)
+        _cacheRO = DataContext.evaluateBool(_record, _table, _table.readOnlyLogic);
+      if (_cacheRO)
+        return true;
+    }
     return !isActive || isProcessed;
   } // isReadOnly
+  bool _cacheRO;
 
   /// Record active (default: true)
   bool get isActive {
-    DEntry entry = getEntry(null, C_ISACTIVE, false);
-    if (entry != null) {
-      if (entry.hasValue())
-        return entry.value == "true";
+    if (_cacheActive == null || changed) {
+      DEntry entry = getEntry(null, C_ISACTIVE, false);
+      if (entry == null) {
+        _cacheActive = true; // default
+      } else {
+        _cacheActive = getEntryValue(entry) == "true";
+      }
     }
-    return true;
+    return _cacheActive;
   } // isActive
+  bool _cacheActive;
 
   /// Record active (default: false)
   bool get isProcessed {
-    DEntry entry = getEntry(null, C_PROCESSED, false);
-    if (entry != null) {
-      if (entry.hasValue())
-        return entry.value == "true";
+    if (_cacheProcessed == null || changed) {
+      DEntry entry = getEntry(null, C_PROCESSED, false);
+      if (entry == null) {
+        _cacheProcessed = false; // default
+      } else {
+        _cacheProcessed = getEntryValue(entry) == "true";
+      }
     }
-    return false;
+    return _cacheProcessed;
   } // isProcessed
+  bool _cacheProcessed;
 
   /// Is the Record empty (no entities)
   bool get isEmpty => _record.entryList.isEmpty
@@ -324,42 +345,49 @@ class DataRecord {
   /**
    * Create new record based on column defaults
    * call DataService.recordNew
+   * - table must be set
    */
-  DRecord newRecord(DTable table, DRecord parentRecord) {
+  DRecord newRecord(DRecord parentRecord) {
     setRecord(null, -1); // create new
-    _record.tableId = table.tableId;
-    _record.tableName = table.name;
+    if (_table == null) {
+      _log.warning("newRecord - table not set");
+    } else {
+      _record.tableId = table.tableId;
+      _record.tableName = table.name;
+    }
     //
     if (parentRecord != null)
       _record.parent = parentRecord;
     DataRecord parentData = new DataRecord(null, value: parentRecord);
     // set defaults from table column
-    for (DColumn col in table.columnList) {
-      if (col.isParentKey) {
-        if (parentRecord == null) {
-          if (col.isMandatory)
-            _log.warning("newRecord(${table.name}) - no parent record");
-        } else {
-          DEntry parentEntry = parentData.getEntry(col.columnId, col.name, false);
-          if (parentEntry == null) {
-            _log.warning("newRecord(${table.name}) - no parent record entry ${col.name}");
+    if(_table != null) {
+      for (DColumn col in _table.columnList) {
+        if (col.isParentKey) {
+          if (parentRecord == null) {
+            if (col.isMandatory)
+              _log.warning("newRecord(${table.name}) - no parent record");
           } else {
-            DEntry entry = getEntry(col.columnId, col.name, true);
-            entry.value = parentEntry.value;
-            _log.config("newRecord(${table.name}).${col.name}=${entry.value}");
+            DEntry parentEntry = parentData.getEntry(col.columnId, col.name, false);
+            if (parentEntry == null) {
+              _log.warning("newRecord(${table.name}) - no parent record entry ${col.name}");
+            } else {
+              DEntry entry = getEntry(col.columnId, col.name, true);
+              entry.value = parentEntry.value;
+              _log.config("newRecord(${table.name}).${col.name}=${entry.value}");
+            }
           }
         }
-      }
-      else if (col.hasDefaultValue()) {
-        if (DataUtil.isStdColumn(col))
-          continue;
-        DEntry entry = getEntry(col.columnId, col.name, true);
-        entry.value = DataContext.contextReplace(this, col.defaultValue,
+        else if (col.hasDefaultValue()) {
+          if (DataUtil.isStdColumn(col))
+            continue;
+          DEntry entry = getEntry(col.columnId, col.name, true);
+          entry.value = DataContext.contextReplace(this, col.defaultValue,
           nullResultOk: true, emptyResultOk: true, columnName: col.name);
-      }
-      else if (col.name == C_ISACTIVE) {
-        DEntry entry = getEntry(col.columnId, col.name, true);
-        entry.value = "true";
+        }
+        else if (col.name == C_ISACTIVE) {
+          DEntry entry = getEntry(col.columnId, col.name, true);
+          entry.value = "true";
+        }
       }
     }
     // set as original (for reset)
@@ -367,19 +395,23 @@ class DataRecord {
     return _record;
   } // newRecord
 
-  /// copy record
-  DRecord copyRecord(DTable table, DRecord currentRecord) {
+  /// copy record - make sure that Table is set
+  DRecord copyRecord(DRecord currentRecord) {
     setRecord(null, -1);
     DataRecord currentData = new DataRecord(null, value: currentRecord);
-    for (DColumn col in table.columnList) {
-      if (!col.isCopied || DataUtil.isStdColumn(col))
-        continue;
-      String value = currentData.getValue(id: col.columnId, name: col.name);
-      if ((value == null || value.isEmpty) && col.hasDefaultValue())
-        value = col.defaultValue;
-      if (value != null && value.isNotEmpty) {
-        DEntry entry = getEntry(col.columnId, col.name, true);
-        entry.value = col.defaultValue;
+    if (_table == null) {
+      _log.warning("copyRecord - table not set");
+    } else {
+      for (DColumn col in _table.columnList) {
+        if (!col.isCopied || DataUtil.isStdColumn(col))
+          continue;
+        String value = currentData.getValue(id: col.columnId, name: col.name);
+        if ((value == null || value.isEmpty) && col.hasDefaultValue())
+          value = col.defaultValue;
+        if (value != null && value.isNotEmpty) {
+          DEntry entry = getEntry(col.columnId, col.name, true);
+          entry.value = col.defaultValue;
+        }
       }
     }
     return _record;
@@ -571,6 +603,7 @@ class DataRecord {
           dataEntry.clearValue();
       }
       dataEntry.isChanged = false;
+      resetCached();
     }
   } // resetEntry
 
@@ -606,6 +639,9 @@ class DataRecord {
 //    }
     return _table;
   }
+  void set table (DTable newValue) {
+    _table = newValue;
+  }
   DTable _table;
 
   /**
@@ -623,384 +659,6 @@ class DataRecord {
     }
     return context;
   } // asContext
-
-  /**
-   * Evaluate [logic] replacing variables with context value
-   */
-  String contextEvaluate(final String logic) {
-    if (logic == null || logic.isEmpty)
-      return logic;
-    //
-    // bool isBizLogic = logic.contains("record");
-    bool isCompiereLogic = logic.contains("@");
-
-    if (isCompiereLogic) {
-      //List<String> variables = contextParseVariables2(logic);
-      Map<String,String> context = getContext();
-      return contextParseReplaceVariables2(logic, context);
-    }
-    return logic;
-  } // contextEvaluate
-
-  /**
-   * Parse [logic] for @variable@ returning list of variables
-   */
-  List<String> contextParseVariables2(String logic) {
-    List<String> vars = new List<String>();
-    String inString = logic;
-    RegExp pattern = new RegExp(r'@');
-    int i = inString.indexOf(pattern);
-    while (i != -1 && i != inString.lastIndexOf(pattern)) {
-      inString = inString.substring(i+1); // remainder
-      int j = inString.indexOf(pattern);
-      if (j < 0) {
-        _log.warning("contextParseVariables2 No second tag logic=${logic}");
-        return vars;
-      } else {
-        String token = inString.substring(0, j);
-        int k = token.indexOf("|");
-        if (k >= 0) {
-          String fallback = token.substring(k+1);
-          token = token.substring(0, k);
-          _log.warning("contextParseVariables2 fallback=${fallback} token=${token} logic=${logic}");
-        }
-        vars.add(token);
-        inString = inString.substring(j);
-        i = inString.indexOf(pattern);
-      }
-    }
-    return vars;
-  } // contextParseVariables2
-
-  /**
-   * Parse [logic] and replace @variable@ returning updated String
-   */
-  String contextParseReplaceVariables2(final String logic, final Map<String,String> context) {
-    String inString = logic;
-    String outString = "";
-    RegExp pattern = new RegExp(r'@');
-    int i = inString.indexOf(pattern);
-    while (i != -1 && i != inString.lastIndexOf(pattern)) {
-      outString += inString.substring(0, i); // up to @
-      inString = inString.substring(i+1); // remainder
-      int j = inString.indexOf(pattern);
-      if (j < 0) {
-        _log.warning("contextParseReplaceVariables2 No second tag logic=${logic}");
-        return logic;
-      } else {
-        String token = inString.substring(0, j);
-        String fallback = null;
-        int k = token.indexOf("|");
-        if (k >= 0) {
-          fallback = token.substring(k+1);
-          token = token.substring(0, k);
-          _log.warning("contextParseReplaceVariables2 fallback=${fallback} token=${token} logic=${logic}");
-        }
-        // Value
-        String value = context[token];
-        if (value == null && fallback != null) {
-          value = context[fallback];
-        }
-        if (value == null) {
-          _log.warning("contextParseReplaceVariables2 NotFound ${token} fallback=${fallback}");
-        } else {
-          // Conversion
-          if (value == "true")
-            value = "Y";
-          else if (value == "false")
-            value = "N";
-          outString += value;
-        }
-        inString = inString.substring(j+1);
-        i = inString.indexOf(pattern);
-      }
-    }
-    outString += inString; // remainder
-    return outString;
-  } // contextParseVariables2
-
-  /**
-   * Create Context Map
-   */
-  Map<String, String> getContext() {
-    Map<String,String> context = new Map.from(clientContext);
-    context.addAll(asMap(_record.parent, true)); // parent context
-    context.addAll(asMap(_record, true));
-    return context;
-  }
-
-  /************************************
-   * Evaluate [logic] (not empty) - default false, e.g. record.IsApi
-   */
-  bool evaluateBool(final String logic) {
-    if (_record.entryList.isEmpty)
-      return false;
-    // indicators
-    bool isBizLogic = logic.contains("record");
-    bool isCompiereLogic = logic.contains("@");
-
-    if (!isBizLogic
-    && (clientContext.containsKey("ScriptType") // == "Compiere")
-    || isCompiereLogic)) {
-      Map<String,String> context = getContext();
-      return evaluateBool2(logic.trim(), context);
-    }
-
-    // https://www.dartlang.org/articles/js-dart-interop/
-    var biz = new JsObject(context['BizFabrik']);
-    if (logic.contains("record"))
-      biz.callMethod('set', ['record', getJsRecord()]);
-    if (logic.contains("parent") && _record.hasParent())
-      biz.callMethod('set', ['parent', getJsParent()]);
-    if (logic.contains("context"))
-      biz.callMethod('set', ['context', new JsObject.jsify(clientContext)]);
-    // var rr = biz['record'];
-    try {
-      Object retValue = biz.callMethod("evaluate", [logic]);
-      bool rr = retValue is bool ? retValue : "true" == retValue;
-      _log.finer("evaluateBool urv=${_record.urv} logic=${logic} = ${rr}");
-      return rr;
-    }
-    catch (e) {
-      _log.warning("evaluateBool ${e}: urv=${_record.urv} logoc=${logic}");
-    }
-    return false;
-  } // evaluate
-
-  /**
-   * Create [theRecord] as Map
-   * - with [stringValues] only string values
-   * or also boolean, int, double, date.
-   * Passwords are not included
-   */
-  Map<String,dynamic> asMap(DRecord theRecord, bool stringValues) {
-    Map<String,Object> map = new Map<String,dynamic>();
-    if (theRecord == null) {
-      return map;
-    }
-    for (DEntry entry in theRecord.entryList) {
-      DColumn col = DataUtil.findColumn(table, entry.columnId, entry.columnName);
-      DataType dt = col == null ? DataType.STRING : col.dataType;
-      if (dt == DataType.PASSWORD)
-        continue;
-      if (!entry.hasValue() || entry.value.isEmpty) {
-        map[entry.columnName] = null;
-      }
-      else if (stringValues) {
-        map[entry.columnName] = entry.value;
-      }
-      else if (dt == DataType.BOOLEAN) {
-        map[entry.columnName] = entry.value == "true";
-      }
-      else if (dt == DataType.INT)
-        map[entry.columnName] = int.parse(entry.value,
-        onError: (String value) {
-          return 0;
-        });
-      else if (DataTypeUtil.isNumber(dt))
-        map[entry.columnName] = double.parse(entry.value,
-            (String value) {
-          return 0.0;
-        });
-      else if (DataTypeUtil.isDate(dt)) {
-        int time = int.parse(entry.value,
-        onError: (String value) {
-          return 0;
-        });
-        map[entry.columnName] = new DateTime.fromMillisecondsSinceEpoch(time, isUtc: dt == DataType.DATE);
-      }
-      else
-        map[entry.columnName] = entry.value;
-    }
-    return map;
-  } // asMap
-
-  // convert record to JS Object
-  JsObject getJsRecord() {
-    Map map = asMap(_record, false);
-    return new JsObject.jsify(map);
-  } // getJsRecord
-
-  // convert parent to JS Object
-  JsObject getJsParent() {
-    Map parent = asMap(_record.parent, false);
-    return new JsObject.jsify(parent);
-  } // getJsParent
-
-  /**
-   * Evaluate [logic] based on "old" &| logic or false if error
-   */
-  bool evaluateBool2(final String logic, Map<String,String> context) {
-    // see Scripting2.java
-    StringTokenizer st = new StringTokenizer(logic, "&|", true);
-    int it = st.countTokens();
-    if (((it / 2) - ((it + 1) / 2)) == 0) { // only uneven arguments
-      _log.warning("evaluateBool2 Invalid format => ${logic}");
-      return false;
-    }
-    bool retValue = evaluateBool2Part(st.nextToken(), context);
-    while (st.hasMoreTokens()) {
-      String nextOp = st.nextToken().trim();
-      bool temp = evaluateBool2Part(st.nextToken(), context);
-      if (nextOp == "&") {
-        retValue = retValue && temp;
-      } else if (nextOp == "|") {
-        retValue = retValue || temp;
-      } else {
-        _log.warning("evaluateBool2 Invalid operand=${nextOp} => ${logic}");
-        return false;
-      }
-    } // hasMoreTokens
-    return retValue;
-  } // evaluateBool2
-
-  /**
-   * Evaluate [logic] based on "old" !=^>< comparison
-   */
-  bool evaluateBool2Part(final String logic, Map<String,String> context) {
-    StringTokenizer st = new StringTokenizer(logic.trim(), "!=^><", true);
-    // must be boolean expression
-    if (st.countTokens() == 1) {
-      return evaluateBool2Expression(logic, context);
-    }
-    if (st.countTokens() != 3) {
-      _log.warning("evaluateBool2Part Invalid format => ${logic}");
-      return false;
-    }
-    //  First Part
-    String first = st.nextToken().trim(); // get '@tag@'
-    String firstEval = first.trim();
-    if (first.indexOf('@') != -1) { // variable
-      first = first.replaceAll('@', ' ').trim(); // strip 'tag'
-      if (context.containsKey(first))
-        firstEval = context[first]; // replace with it's value
-      else {
-        //_log.warning("evaluateBool2Part ${first} not found in (${logic})");
-        firstEval = "";
-      }
-      if (firstEval == null) {
-        firstEval = "";
-      }
-    }
-    firstEval = firstEval.replaceAll('\'', ' ').replaceAll('"', ' ').trim(); // strip ' and "
-    //  Comparator
-    String operand = st.nextToken();
-    //  Second Part
-    String second = st.nextToken(); // get value
-    String secondEval = second.trim();
-    if (second.indexOf('@') != -1) { // variable
-      second = second.replaceAll('@', ' ').trim(); // strip tag
-      if (context.containsKey(second))
-        secondEval = context[second]; // replace with it's value
-      else {
-        //_log.warning("evaluateBool2Part ${second} not found in (${logic})");
-        secondEval = "";
-      }
-      if (secondEval == null) {
-        secondEval = "";
-      }
-    }
-    secondEval = secondEval.replaceAll('\'', ' ').replaceAll('"', ' ').trim(); // strip ' and "
-    //  Handling of ID compare (null => 0)
-    if (first.contains("_ID") && firstEval.isEmpty) {
-      firstEval = "0";
-    }
-    if (second.contains("_ID") && secondEval.isEmpty) {
-      secondEval = "0";
-    }
-    //  Logical Comparison
-    return evaluateBool2Tuple(firstEval, operand, secondEval);
-  } // evaluateBool2Part
-
-  /**
-   * Evaluate [operand] !=^><
-   */
-  bool evaluateBool2Tuple(final String value1, final String operand, final String value2) {
-    if ((value1 == null) || (operand == null) || (value2 == null)) {
-      return false;
-    }
-    double value1bd = double.parse(value1, (String value) {return null;});
-    double value2bd = double.parse(value2, (String value) {return null;});
-    //
-    if (operand == "=") {
-      // number
-      if (value1bd != null && value2bd != null) {
-        return value1bd.compareTo(value2bd) == 0;
-      }
-      // string
-      bool bb = evaluateBool2Values(value1, value2, true);
-      if (bb != null)
-        return bb;
-      return value1.compareTo(value2) == 0;
-    } else if (operand == "<") {
-      if ((value1bd != null) && (value2bd != null)) {
-        return value1bd.compareTo(value2bd) < 0;
-      }
-      return value1.compareTo(value2) < 0;
-    } else if (operand == ">") {
-      if ((value1bd != null) && (value2bd != null)) {
-        return value1bd.compareTo(value2bd) > 0;
-      }
-      return value1.compareTo(value2) > 0;
-    } else { // interpreted as not
-      // number
-      if ((value1bd != null) && (value2bd != null)) {
-        return value1bd.compareTo(value2bd) != 0;
-      }
-      // string
-      bool bb = evaluateBool2Values(value1, value2, false);
-      if (bb != null)
-        return bb;
-      return value1.compareTo(value2) != 0;
-    }
-  } // evaluateBool2Tuple
-
-  bool evaluateBool2Expression(final String logic, Map<String,String> context) {
-    String value = logic;
-    if (logic.contains("@")) {
-      String variable = value.replaceAll("@", "");
-      if (context.containsKey(variable))
-        value = context[variable];
-      else {
-        _log.warning("evaluateBool2Expression ${variable} not found in (${logic})");
-        return false;
-      }
-    }
-    if (value == null || value.isEmpty) {
-      _log.warning("evaluateBool2Expression ${logic} evaluated to Null");
-      return false;
-    }
-    value = value.toUpperCase();
-    if (value == "TRUE" || value == "T"
-    || value == "YES" || value == "Y" || value == "1") {
-      return true;
-    }
-    if (value == "FALSE" || value == "F"
-    || value == "NO" || value == "N" || value == "0") {
-      return false;
-    }
-    _log.warning("evaluateBool2Expression ${logic} not boolean");
-    return false;
-  } // evaluateBool2Expression
-
-  /**
-   * Compare Y|true and N|false
-   */
-  bool evaluateBool2Values(String value1, String value2, bool eq) {
-    if (value1 == "Y" || value2 == "true") {
-      if (value2 == "Y" || value2 == "true")
-        return eq;
-      if (value2 == "N" || value2 == "false")
-        return !eq;
-    } else if (value1 == "N" || value2 == "false") {
-      if (value2 == "Y" || value2 == "true")
-        return !eq;
-      if (value2 == "N" || value2 == "false")
-        return eq;
-    }
-    return null;
-  } // evaluateBool2Values
-
 
   @override
   String toString() {

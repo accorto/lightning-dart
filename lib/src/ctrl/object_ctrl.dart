@@ -315,7 +315,10 @@ class ObjectCtrl extends LComponent {
   /// Application Action New (if not table)
   void onAppsActionNew(String value, DRecord record, DEntry entry, var actionVar) {
     _log.config("onAppsActionNew ${tableName} ${value}");
-    DRecord newRecord = new DataRecord(null).newRecord(datasource.tableDirect, null);
+    DataRecord data = new DataRecord(null)
+      ..table = datasource.tableDirect;
+    DRecord parentRecord = null;
+    DRecord newRecord = data.newRecord(parentRecord);
     //
     ObjectEdit oe = new ObjectEdit(datasource.ui);
     oe.setRecord(newRecord, -1);

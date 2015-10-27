@@ -30,6 +30,10 @@ class FkCtrl
   FkCtrl.from(DataColumn dataColumn, {String idPrefix, bool inGrid:false})
       : super.from(dataColumn, idPrefix:idPrefix, inGrid:inGrid) {
     tableName = dataColumn.tableColumn.fkReference;
+    String restrictionSql = null;
+    if (dataColumn.tableColumn.hasRestrictionSql()) {
+      restrictionSql = dataColumn.tableColumn.restrictionSql;
+    }
     String parent = dataColumn.tableColumn.parentReference;
     if (parent != null && parent.isEmpty) {
       parents = parent.split(",");
@@ -40,7 +44,7 @@ class FkCtrl
       // Editor
       icon.element.onClick.listen(onIconClick);
       // List
-      List<DFK> complete = FkService.instance.getFkList(tableName, null);
+      List<DFK> complete = FkService.instance.getFkList(tableName, restrictionSql);
       if (complete != null) {
         for (DFK fk in complete) {
           LLookupItem item = new LLookupItem.fromFk(fk);
@@ -48,7 +52,7 @@ class FkCtrl
         }
         fkComplete = true;
       } else {
-        FkService.instance.getFkListFuture(tableName, null, null, null)
+        FkService.instance.getFkListFuture(tableName, restrictionSql, null, null)
         .then((List<DFK> fks) {
           for (DFK fk in fks) {
             LLookupItem item = new LLookupItem.fromFk(fk);

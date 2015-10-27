@@ -133,6 +133,7 @@ class DataColumn {
     if (tableColumn.isReadOnly || (uiPanelColumn != null && uiPanelColumn.isReadOnly))
       return true;
     if (data != null) {
+      data.table = table;
       if (data.isReadOnly)
         return true;
       if (isReadOnlyDynamic()) {

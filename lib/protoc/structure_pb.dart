@@ -104,6 +104,7 @@ class DTable extends GeneratedMessage {
     ..a(8, 'externalKey', PbFieldType.OS)
     ..a(9, 'isActive', PbFieldType.OB, true)
     ..pp(10, 'column', PbFieldType.PM, DColumn.$checkItem, DColumn.create)
+    ..a(11, 'readOnlyLogic', PbFieldType.OS)
     ..a(15, 'iconImage', PbFieldType.OS)
     ..a(20, 'isReadOnly', PbFieldType.OB)
     ..a(21, 'isNewRecordServer', PbFieldType.OB)
@@ -174,29 +175,34 @@ class DTable extends GeneratedMessage {
 
   List<DColumn> get columnList => $_get(9, 10, null);
 
-  String get iconImage => $_get(10, 15, '');
-  void set iconImage(String v) { $_setString(10, 15, v); }
-  bool hasIconImage() => $_has(10, 15);
+  String get readOnlyLogic => $_get(10, 11, '');
+  void set readOnlyLogic(String v) { $_setString(10, 11, v); }
+  bool hasReadOnlyLogic() => $_has(10, 11);
+  void clearReadOnlyLogic() => clearField(11);
+
+  String get iconImage => $_get(11, 15, '');
+  void set iconImage(String v) { $_setString(11, 15, v); }
+  bool hasIconImage() => $_has(11, 15);
   void clearIconImage() => clearField(15);
 
-  bool get isReadOnly => $_get(11, 20, false);
-  void set isReadOnly(bool v) { $_setBool(11, 20, v); }
-  bool hasIsReadOnly() => $_has(11, 20);
+  bool get isReadOnly => $_get(12, 20, false);
+  void set isReadOnly(bool v) { $_setBool(12, 20, v); }
+  bool hasIsReadOnly() => $_has(12, 20);
   void clearIsReadOnly() => clearField(20);
 
-  bool get isNewRecordServer => $_get(12, 21, false);
-  void set isNewRecordServer(bool v) { $_setBool(12, 21, v); }
-  bool hasIsNewRecordServer() => $_has(12, 21);
+  bool get isNewRecordServer => $_get(13, 21, false);
+  void set isNewRecordServer(bool v) { $_setBool(13, 21, v); }
+  bool hasIsNewRecordServer() => $_has(13, 21);
   void clearIsNewRecordServer() => clearField(21);
 
-  String get note => $_get(13, 26, '');
-  void set note(String v) { $_setString(13, 26, v); }
-  bool hasNote() => $_has(13, 26);
+  String get note => $_get(14, 26, '');
+  void set note(String v) { $_setString(14, 26, v); }
+  bool hasNote() => $_has(14, 26);
   void clearNote() => clearField(26);
 
-  String get updateFlag => $_get(14, 30, '');
-  void set updateFlag(String v) { $_setString(14, 30, v); }
-  bool hasUpdateFlag() => $_has(14, 30);
+  String get updateFlag => $_get(15, 30, '');
+  void set updateFlag(String v) { $_setString(15, 30, v); }
+  bool hasUpdateFlag() => $_has(15, 30);
   void clearUpdateFlag() => clearField(30);
 }
 
@@ -1022,6 +1028,7 @@ const DTable$json = const {
     const {'1': 'external_key', '3': 8, '4': 1, '5': 9},
     const {'1': 'is_active', '3': 9, '4': 1, '5': 8, '7': 'true'},
     const {'1': 'column', '3': 10, '4': 3, '5': 11, '6': '.DColumn'},
+    const {'1': 'read_only_logic', '3': 11, '4': 1, '5': 9},
     const {'1': 'icon_image', '3': 15, '4': 1, '5': 9},
     const {'1': 'is_read_only', '3': 20, '4': 1, '5': 8, '7': 'false'},
     const {'1': 'is_new_record_server', '3': 21, '4': 1, '5': 8, '7': 'false'},
