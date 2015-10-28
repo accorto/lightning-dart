@@ -47,7 +47,7 @@ class LSelect
   }
 
   /// Select Editor
-  LSelect.from(DataColumn dataColumn, {String idPrefix, bool multiple, bool this.inGrid:false}) {
+  LSelect.from(DataColumn dataColumn, {String idPrefix, bool multiple:false, bool this.inGrid:false}) {
     createStandard(this);
     DColumn tableColumn = dataColumn.tableColumn;
     input.name = tableColumn.name;
@@ -59,7 +59,7 @@ class LSelect
     }
     if (multiple && !inGrid)
       size = 2;
-    //
+    // Selection List
     if (tableColumn.pickValueList.isNotEmpty) {
       dOptionList = tableColumn.pickValueList;
     }
@@ -70,6 +70,18 @@ class LSelect
   /// Init Editor
   void _initEditor() {
     input.onChange.listen(onInputChange);
+    // Alternative display
+    if (dataColumn != null && dataColumn.tableColumn.pickValueList.isEmpty
+        && dataColumn.tableColumn.dataType == DataType.BOOLEAN) {
+      dOptionList = OptionUtil.optioneYesNo();
+      // make optional
+      if (dataColumn.uiPanelColumn != null
+        && dataColumn.uiPanelColumn.hasIsMandatory()
+        && !dataColumn.uiPanelColumn.isMandatory) {
+        dataColumn.tableColumn.clearIsMandatory();
+        required = false;
+      }
+    }
   }
 
   void updateId(String idPrefix) {

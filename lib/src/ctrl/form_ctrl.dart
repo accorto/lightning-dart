@@ -64,7 +64,7 @@ class FormCtrl extends LForm {
         dataColumns.add(dataColumn);
         if (dataColumn.isActivePanel) {
           LEditor editor = EditorUtil.createfromColumn(null, dataColumn, false,
-              idPrefix: element.id, data:data);
+              idPrefix: element.id, data:data, isAlternativeDisplay:pc.isAlternativeDisplay);
           addEditor(editor, newRow:pc.isNewRow, width:pc.width, height:pc.height);
         }
       }

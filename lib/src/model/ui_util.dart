@@ -90,7 +90,7 @@ class UiUtil {
   }
 
   /// add column
-  void addColumn(DColumn col, {String displayLogic, bool mandatory}) {
+  void addColumn(DColumn col, {String displayLogic, bool mandatory, bool isAlternativeDisplay}) {
     ui.table.columnList.add(col);
     if (_panel == null)
       addPanel();
@@ -101,6 +101,8 @@ class UiUtil {
       pc.displayLogic = displayLogic;
     if (mandatory != null)
       pc.isMandatory = mandatory;
+    if (isAlternativeDisplay != null)
+      pc.isAlternativeDisplay = isAlternativeDisplay;
     pc.seqNo = (_panel.panelColumnList.length + 1);
     _panel.panelColumnList.add(pc);
 
@@ -139,13 +141,15 @@ class UiUtil {
 
 
   /// add grid/panel column if missing
-  void addIfMissing(String columnName, {bool mandatory}) {
+  void addIfMissing(String columnName, {bool mandatory, bool isAlternativeDisplay}) {
     // exists?
     for (UIPanel panel in ui.panelList) {
       for (UIPanelColumn pc in panel.panelColumnList) {
         if (pc.columnName == columnName) {
           if (mandatory != null)
             pc.isMandatory = mandatory;
+          if (isAlternativeDisplay != null)
+            pc.isAlternativeDisplay = isAlternativeDisplay;
           return; // exists (gc exists too)
         }
       }
@@ -153,7 +157,7 @@ class UiUtil {
     // find column + create
     for (DColumn col in ui.table.columnList) {
       if (col.name == columnName) {
-        addColumn(col, mandatory:mandatory);
+        addColumn(col, mandatory:mandatory, isAlternativeDisplay:isAlternativeDisplay);
         return;
       }
     }
@@ -198,8 +202,8 @@ class UiUtilDemo extends UiUtil {
 
 
   /// add column
-  void addColumn(DColumn col, {List<String> examples, String displayLogic, bool mandatory}) {
-    super.addColumn(col, displayLogic:displayLogic, mandatory:mandatory);
+  void addColumn(DColumn col, {List<String> examples, String displayLogic, bool mandatory, bool isAlternativeDisplay}) {
+    super.addColumn(col, displayLogic:displayLogic, mandatory:mandatory, isAlternativeDisplay:isAlternativeDisplay);
 
     // -- data
     if (exampleList != null && examples != null) {

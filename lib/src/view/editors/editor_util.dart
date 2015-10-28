@@ -21,7 +21,7 @@ class EditorUtil {
    * Create Editor from column
    */
   static LEditor createfromColumn(String name, DataColumn dataColumn, bool inGrid,
-      {String idPrefix, DataRecord data, DEntry entry}) {
+      {String idPrefix, DataRecord data, DEntry entry, bool isAlternativeDisplay:false}) {
     LEditor editor = null;
     if (dataColumn != null) {
       name = dataColumn.name;
@@ -33,9 +33,12 @@ class EditorUtil {
         ;
       else if (dataType == DataType.AMOUNT)
         editor = new LInputNumber.from(dataColumn, EditorI.TYPE_NUMBER, idPrefix:idPrefix, inGrid:inGrid);
-      else if (dataType == DataType.BOOLEAN)
-        editor = new LCheckbox.from(dataColumn, idPrefix:idPrefix, inGrid:inGrid);
-      else if (dataType == DataType.CODE);
+      else if (dataType == DataType.BOOLEAN) {
+        if (isAlternativeDisplay)
+          editor = new LSelect.from(dataColumn, idPrefix:idPrefix, inGrid:inGrid);
+        else
+          editor = new LCheckbox.from(dataColumn, idPrefix:idPrefix, inGrid:inGrid);
+      } else if (dataType == DataType.CODE);
       else if (dataType == DataType.COLOR);
       else if (dataType == DataType.CURRENCY)
         editor = new LInputNumber.from(dataColumn, EditorI.TYPE_NUMBER, idPrefix:idPrefix, inGrid:inGrid);

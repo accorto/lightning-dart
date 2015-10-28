@@ -316,7 +316,7 @@ class LTableRow implements FormI {
           }
         } else { // all, sel or field
           LEditor editor = EditorUtil.createfromColumn(name, dataColumn, true,
-            idPrefix:rowElement.id, data:data, entry:entry);
+            idPrefix:rowElement.id, data:data, entry:entry); // no isAlternativeDisplay
           bool editModeField = _editMode == LTable.EDIT_FIELD;
           if (editor.valueRendered && entry != null && entry.hasValueDisplay()) {
             addCellEditor(editor, entry.valueDisplay, value, align, editModeField);

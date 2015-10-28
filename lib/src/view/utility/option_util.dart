@@ -69,4 +69,21 @@ class OptionUtil {
     return element;
   }
 
+  /// option list with yes/no
+  static List<DOption> optioneYesNo() {
+    List<DOption> retValue = new List<DOption>();
+    DOption doption = new DOption()
+      ..value = "true"
+      ..label = optionUtilYes();
+    retValue.add(doption);
+    doption = new DOption()
+      ..value = "false"
+      ..label = optionUtilNo();
+    retValue.add(doption);
+    return retValue;
+  }
+
+  static String optionUtilYes() => Intl.message("Yes", name: "optionUtilYes");
+  static String optionUtilNo() => Intl.message("No", name: "optionUtilNo");
+
 } // OptionUtil
