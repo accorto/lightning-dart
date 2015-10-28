@@ -281,12 +281,14 @@ class LForm
 
 
   /// Add Reset Button - use [formResetted] to listen to reset events
-  LButton addResetButton({String label}) {
+  LButton addResetButton({String label, String title}) {
     if (_buttonReset == null) {
       _buttonReset = new LButton.neutralIcon("reset",
           label == null ? lFormReset() : label,
           new LIconUtility(LIconUtility.UNDO), iconLeft:true, idPrefix:id)
         ..typeReset = false; // channel explicitly through onFormReset
+      if (title != null)
+        _buttonReset.title = title;
       _buttonReset.onClick.listen(onFormReset);
       if (buttonDiv == null)
         add(_buttonReset);
@@ -298,7 +300,7 @@ class LForm
   LButton _buttonReset;
 
   /// Add Save Button - use [formSubmitted] to listen to submit events
-  LButton addSaveButton({String label, String name:"save", LIcon icon, bool buttonSaveChangeOnly:true}) {
+  LButton addSaveButton({String label, String title, String name:"save", LIcon icon, bool buttonSaveChangeOnly:true}) {
     if (_buttonSave == null) {
       LIcon theIcon = icon;
       if (theIcon == null)
@@ -310,6 +312,8 @@ class LForm
           theIcon, iconLeft:true, idPrefix:id)
         ..typeSubmit = false; // channel explicitly through onFormSubmit
       _buttonSave.autofocus = true;
+      if (title != null)
+        _buttonSave.title = title;
       _buttonSave.onClick.listen(onFormSubmit);
       _buttonSaveChangeOnly = buttonSaveChangeOnly;
       if (buttonDiv == null)
