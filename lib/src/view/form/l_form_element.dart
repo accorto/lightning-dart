@@ -116,7 +116,7 @@ class LFormElement {
     if (_inputWrapper == null)
       _inputWrapper = _elementControl;
     _inputWrapper.append(_input);
-    _inputWrapper.append(_hintSpan); // __help
+    _elementControl.append(_hintSpan); // __help
   }
 
 
