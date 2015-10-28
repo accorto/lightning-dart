@@ -271,14 +271,18 @@ class LoginInfo extends GeneratedMessage {
     ..a(5, 'externalKey', PbFieldType.OS)
     ..a(6, 'ssoId', PbFieldType.OS)
     ..a(7, 'isRestOrSoap', PbFieldType.OB)
-    ..a(9, 'sfRefresh', PbFieldType.OS)
-    ..a(10, 'sfSid', PbFieldType.OS)
-    ..a(11, 'sfEndpoint', PbFieldType.OS)
-    ..a(12, 'sfOrgId', PbFieldType.OS)
-    ..a(13, 'sfUserId', PbFieldType.OS)
-    ..a(14, 'sfUn', PbFieldType.OS)
-    ..a(15, 'sfPw', PbFieldType.OS)
-    ..a(16, 'token', PbFieldType.OS)
+    ..a(8, 'redirect', PbFieldType.OS)
+    ..a(10, 'sfCode', PbFieldType.OS)
+    ..a(11, 'sfSid', PbFieldType.OS)
+    ..a(12, 'sfRefresh', PbFieldType.OS)
+    ..a(13, 'sfEndpoint', PbFieldType.OS)
+    ..a(14, 'sfOrgId', PbFieldType.OS)
+    ..a(15, 'sfUserId', PbFieldType.OS)
+    ..a(16, 'sfState', PbFieldType.OS)
+    ..a(17, 'sfClientId', PbFieldType.OS)
+    ..a(18, 'sfUn', PbFieldType.OS)
+    ..a(19, 'sfPw', PbFieldType.OS)
+    ..a(20, 'token', PbFieldType.OS)
     ..hasRequiredFields = false
   ;
 
@@ -333,45 +337,65 @@ class LoginInfo extends GeneratedMessage {
   bool hasIsRestOrSoap() => $_has(6, 7);
   void clearIsRestOrSoap() => clearField(7);
 
-  String get sfRefresh => $_get(7, 9, '');
-  void set sfRefresh(String v) { $_setString(7, 9, v); }
-  bool hasSfRefresh() => $_has(7, 9);
-  void clearSfRefresh() => clearField(9);
+  String get redirect => $_get(7, 8, '');
+  void set redirect(String v) { $_setString(7, 8, v); }
+  bool hasRedirect() => $_has(7, 8);
+  void clearRedirect() => clearField(8);
 
-  String get sfSid => $_get(8, 10, '');
-  void set sfSid(String v) { $_setString(8, 10, v); }
-  bool hasSfSid() => $_has(8, 10);
-  void clearSfSid() => clearField(10);
+  String get sfCode => $_get(8, 10, '');
+  void set sfCode(String v) { $_setString(8, 10, v); }
+  bool hasSfCode() => $_has(8, 10);
+  void clearSfCode() => clearField(10);
 
-  String get sfEndpoint => $_get(9, 11, '');
-  void set sfEndpoint(String v) { $_setString(9, 11, v); }
-  bool hasSfEndpoint() => $_has(9, 11);
-  void clearSfEndpoint() => clearField(11);
+  String get sfSid => $_get(9, 11, '');
+  void set sfSid(String v) { $_setString(9, 11, v); }
+  bool hasSfSid() => $_has(9, 11);
+  void clearSfSid() => clearField(11);
 
-  String get sfOrgId => $_get(10, 12, '');
-  void set sfOrgId(String v) { $_setString(10, 12, v); }
-  bool hasSfOrgId() => $_has(10, 12);
-  void clearSfOrgId() => clearField(12);
+  String get sfRefresh => $_get(10, 12, '');
+  void set sfRefresh(String v) { $_setString(10, 12, v); }
+  bool hasSfRefresh() => $_has(10, 12);
+  void clearSfRefresh() => clearField(12);
 
-  String get sfUserId => $_get(11, 13, '');
-  void set sfUserId(String v) { $_setString(11, 13, v); }
-  bool hasSfUserId() => $_has(11, 13);
-  void clearSfUserId() => clearField(13);
+  String get sfEndpoint => $_get(11, 13, '');
+  void set sfEndpoint(String v) { $_setString(11, 13, v); }
+  bool hasSfEndpoint() => $_has(11, 13);
+  void clearSfEndpoint() => clearField(13);
 
-  String get sfUn => $_get(12, 14, '');
-  void set sfUn(String v) { $_setString(12, 14, v); }
-  bool hasSfUn() => $_has(12, 14);
-  void clearSfUn() => clearField(14);
+  String get sfOrgId => $_get(12, 14, '');
+  void set sfOrgId(String v) { $_setString(12, 14, v); }
+  bool hasSfOrgId() => $_has(12, 14);
+  void clearSfOrgId() => clearField(14);
 
-  String get sfPw => $_get(13, 15, '');
-  void set sfPw(String v) { $_setString(13, 15, v); }
-  bool hasSfPw() => $_has(13, 15);
-  void clearSfPw() => clearField(15);
+  String get sfUserId => $_get(13, 15, '');
+  void set sfUserId(String v) { $_setString(13, 15, v); }
+  bool hasSfUserId() => $_has(13, 15);
+  void clearSfUserId() => clearField(15);
 
-  String get token => $_get(14, 16, '');
-  void set token(String v) { $_setString(14, 16, v); }
-  bool hasToken() => $_has(14, 16);
-  void clearToken() => clearField(16);
+  String get sfState => $_get(14, 16, '');
+  void set sfState(String v) { $_setString(14, 16, v); }
+  bool hasSfState() => $_has(14, 16);
+  void clearSfState() => clearField(16);
+
+  String get sfClientId => $_get(15, 17, '');
+  void set sfClientId(String v) { $_setString(15, 17, v); }
+  bool hasSfClientId() => $_has(15, 17);
+  void clearSfClientId() => clearField(17);
+
+  String get sfUn => $_get(16, 18, '');
+  void set sfUn(String v) { $_setString(16, 18, v); }
+  bool hasSfUn() => $_has(16, 18);
+  void clearSfUn() => clearField(18);
+
+  String get sfPw => $_get(17, 19, '');
+  void set sfPw(String v) { $_setString(17, 19, v); }
+  bool hasSfPw() => $_has(17, 19);
+  void clearSfPw() => clearField(19);
+
+  String get token => $_get(18, 20, '');
+  void set token(String v) { $_setString(18, 20, v); }
+  bool hasToken() => $_has(18, 20);
+  void clearToken() => clearField(20);
 }
 
 class _ReadonlyLoginInfo extends LoginInfo with ReadonlyMessageMixin {}
@@ -810,14 +834,18 @@ const LoginInfo$json = const {
     const {'1': 'external_key', '3': 5, '4': 1, '5': 9},
     const {'1': 'sso_id', '3': 6, '4': 1, '5': 9},
     const {'1': 'is_rest_or_soap', '3': 7, '4': 1, '5': 8, '7': 'false'},
-    const {'1': 'sf_refresh', '3': 9, '4': 1, '5': 9},
-    const {'1': 'sf_sid', '3': 10, '4': 1, '5': 9},
-    const {'1': 'sf_endpoint', '3': 11, '4': 1, '5': 9},
-    const {'1': 'sf_org_id', '3': 12, '4': 1, '5': 9},
-    const {'1': 'sf_user_id', '3': 13, '4': 1, '5': 9},
-    const {'1': 'sf_un', '3': 14, '4': 1, '5': 9},
-    const {'1': 'sf_pw', '3': 15, '4': 1, '5': 9},
-    const {'1': 'token', '3': 16, '4': 1, '5': 9},
+    const {'1': 'redirect', '3': 8, '4': 1, '5': 9},
+    const {'1': 'sf_code', '3': 10, '4': 1, '5': 9},
+    const {'1': 'sf_sid', '3': 11, '4': 1, '5': 9},
+    const {'1': 'sf_refresh', '3': 12, '4': 1, '5': 9},
+    const {'1': 'sf_endpoint', '3': 13, '4': 1, '5': 9},
+    const {'1': 'sf_org_id', '3': 14, '4': 1, '5': 9},
+    const {'1': 'sf_user_id', '3': 15, '4': 1, '5': 9},
+    const {'1': 'sf_state', '3': 16, '4': 1, '5': 9},
+    const {'1': 'sf_client_id', '3': 17, '4': 1, '5': 9},
+    const {'1': 'sf_un', '3': 18, '4': 1, '5': 9},
+    const {'1': 'sf_pw', '3': 19, '4': 1, '5': 9},
+    const {'1': 'token', '3': 20, '4': 1, '5': 9},
   ],
 };
 
