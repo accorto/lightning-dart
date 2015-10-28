@@ -89,7 +89,19 @@ class UiUtil {
     addPanel(name:name, columnCount:columnCount);
   }
 
-  /// add column
+  /**
+   * Add Data Column to Table
+   */
+  DColumn addDColumn(String name, String label, DataType dataType) {
+    DColumn col = new DColumn()
+      ..name = name
+      ..label = label
+      ..dataType = dataType;
+    table.columnList.add(col);
+    return col;
+  }
+
+  /// add existing column to UI
   void addColumn(DColumn col, {String displayLogic, bool mandatory, bool isAlternativeDisplay}) {
     ui.table.columnList.add(col);
     if (_panel == null)

@@ -59,7 +59,9 @@ class EditorUtil {
         editor = createLookupCall(dataColumn, idPrefix, inGrid);
       else if (dataType == DataType.GEO);
       else if (dataType == DataType.IM);
-      else if (dataType == DataType.IMAGE);
+      else if (dataType == DataType.IMAGE) {
+        editor = new LInputFile.from(dataColumn, idPrefix:idPrefix, inGrid:inGrid);
+      }
       else if (dataType == DataType.INT)
         editor = new LInputNumber.from(dataColumn, EditorI.TYPE_NUMBER, idPrefix:idPrefix, inGrid:inGrid);
       else if (dataType == DataType.NUMBER)

@@ -90,6 +90,8 @@ class DRecord extends GeneratedMessage {
     ..a(21, 'parent', PbFieldType.OM, DRecord.getDefault, DRecord.create)
     ..a(22, 'isGroupBy', PbFieldType.OB)
     ..pp(23, 'stat', PbFieldType.PM, DStatistics.$checkItem, DStatistics.create)
+    ..p(24, 'attachment', PbFieldType.PY)
+    ..p(25, 'attachmentName', PbFieldType.PS)
     ..hasRequiredFields = false
   ;
 
@@ -207,6 +209,10 @@ class DRecord extends GeneratedMessage {
   void clearIsGroupBy() => clearField(22);
 
   List<DStatistics> get statList => $_get(20, 23, null);
+
+  List<List<int>> get attachmentList => $_get(21, 24, null);
+
+  List<String> get attachmentNameList => $_get(22, 25, null);
 }
 
 class _ReadonlyDRecord extends DRecord with ReadonlyMessageMixin {}
@@ -730,6 +736,8 @@ const DRecord$json = const {
     const {'1': 'parent', '3': 21, '4': 1, '5': 11, '6': '.DRecord'},
     const {'1': 'is_group_by', '3': 22, '4': 1, '5': 8, '7': 'false'},
     const {'1': 'stat', '3': 23, '4': 3, '5': 11, '6': '.DStatistics'},
+    const {'1': 'attachment', '3': 24, '4': 3, '5': 12},
+    const {'1': 'attachment_name', '3': 25, '4': 3, '5': 9},
   ],
 };
 
