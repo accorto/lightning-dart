@@ -32,6 +32,8 @@ class FormCtrl extends LForm {
   final UI ui;
   /// Data Columns
   final List<DataColumn> dataColumns = new List<DataColumn>();
+  /// Processes
+  LButtonGroup processGroup;
 
   /**
    * Form Util
@@ -48,7 +50,7 @@ class FormCtrl extends LForm {
   /// Build form panels
   void buildPanels({bool addButtons:true, bool addProcesses:true, bool showSection1label:true}) {
     if (addProcesses && ui.processList.isNotEmpty) {
-      LButtonGroup processGroup = buildProcesses()
+      processGroup = buildProcesses()
         ..classes.add(LMargin.C_BOTTOM__SMALL);
       add(processGroup);
     }

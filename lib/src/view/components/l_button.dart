@@ -349,6 +349,13 @@ class LButton extends LComponent {
     element.title = newValue;
   }
 
+  /// Set href if Anchor
+  void set href (String newValue) {
+    if (element is AnchorElement) {
+      (element as AnchorElement).href = newValue;
+    }
+  }
+
   /// Button Size
   bool get small => element.classes.contains(C_BUTTON__SMALL);
   /// Button Size
