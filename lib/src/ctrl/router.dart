@@ -382,8 +382,13 @@ class Router {
   void updateWindow(String path, String title, {bool replace: false, bool clean: false}) {
     String thePath = cleanPath(path, addPrefix: true);
 
-    if (title != null && title.isNotEmpty)
-      document.title = title;
+    if (title != null && title.isNotEmpty) {
+      if (ClientEnv.session != null && ClientEnv.session.hasTenantName()) {
+        document.title = "${title} - ${ClientEnv.session.tenantName}";
+      } else {
+        document.title = title;
+      }
+    }
 
     if (replace) {
       if (clean) {

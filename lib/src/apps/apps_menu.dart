@@ -48,6 +48,11 @@ class AppsMenu extends LComponent {
   void set(AppsCtrl apps) {
     element.children.clear();
     _menuShow.title = apps.label;
+    if (ClientEnv.session != null) {
+      _menuShow.title = "${apps.label} - ${ClientEnv.session.tenantName}";
+    } else {
+      _menuShow.title = apps.label;
+    }
     element.append(_menuShow);
     // entries
     for (AppsPage pe in apps.pageList) {
