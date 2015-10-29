@@ -44,6 +44,10 @@ class ClientEnv {
   static DateFormat dateFormat_med;
   /// Date Format Long - Monday, January 1
   static DateFormat dateFormat_long;
+  /// Date Format Short - 1/2005
+  static DateFormat dateFormat_ym;
+  /// Date Format Short - 1/2005
+  static DateFormat dateFormat_yq;
   /// Time Format 01:01
   static DateFormat dateFormat_hm;
   /// Time Format 01:01:01
@@ -98,6 +102,8 @@ class ClientEnv {
     dateFormat_md = new DateFormat.Md(localeName);
     dateFormat_med = new DateFormat.MEd(localeName);
     dateFormat_long = new DateFormat.MMMMEEEEd(localeName);
+    dateFormat_ym = new DateFormat.yM(localeName);
+    dateFormat_yq = new DateFormat.yQQQ(localeName);
     dateFormat_hm = new DateFormat.Hm(localeName);
     dateFormat_hms = new DateFormat.Hms(localeName);
     dateFormat_ymd_hm = new DateFormat.yMd(localeName);
@@ -229,7 +235,7 @@ class ClientEnv {
       return "";
     return formatDate(new DateTime.fromMillisecondsSinceEpoch(ms, isUtc: true));
   }
-  /// Format Date
+  /// Format Date ymd
   static String formatDate(DateTime date) {
     if (date == null)
       return "";
@@ -239,6 +245,25 @@ class ClientEnv {
     return dateFormat_ymd.format(date);
   }
 
+  /// Format Date ym
+  static String formatMonth(DateTime date) {
+    if (date == null)
+      return "";
+    if (dateFormat_ym == null) {
+      return new DateFormat.yM().format(date);
+    }
+    return dateFormat_ym.format(date);
+  }
+
+  /// Format Date ym
+  static String formatQuarter(DateTime date) {
+    if (date == null)
+      return "";
+    if (dateFormat_yq == null) {
+      return new DateFormat.yQQQ().format(date);
+    }
+    return dateFormat_yq.format(date);
+  }
 
   /// Format Date Time
   static String formatDateTime64(Int64 ms) {
