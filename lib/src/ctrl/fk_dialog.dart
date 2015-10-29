@@ -79,7 +79,10 @@ class FkDialog {
     //
     _datasource = new Datasource(tableName, FkService.instance.dataUri, FkService.instance.uiUri);
     _datasource.uiFuture()
-    .then(setUi);
+    .then(setUi)
+    .catchError((error, stackTrace) {
+      _log.warning(idPrefix, error, stackTrace);
+    });
   } // FkDialog
 
   /// Set UI

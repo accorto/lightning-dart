@@ -79,6 +79,9 @@ class Datasource
       .then((UI ui){
         this.ui = ui;
         completer.complete(ui);
+      })
+      .catchError((error, stackTrace) {
+        completer.completeError(error, stackTrace);
       });
     } else {
       completer.complete(ui);

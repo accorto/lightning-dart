@@ -11,6 +11,8 @@ part of lightning_ctrl;
  */
 class RecordCtrlRelatedItem {
 
+  static final Logger _log = new Logger("RecordCtrlRelatedItem");
+
 
   Element get element {
     if (relatedList == null)
@@ -31,6 +33,9 @@ class RecordCtrlRelatedItem {
       .then((UI ui) {
         relatedList = new LRelatedList(ui);
         _element.replaceWith(relatedList.element); // switch
+      })
+      .catchError((error, stackTrace) {
+        _log.warning(link.toString(), error, stackTrace);
       });
     }
 

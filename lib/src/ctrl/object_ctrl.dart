@@ -77,8 +77,11 @@ class ObjectCtrl extends LComponent {
       // TODO _header.filterList.addFilter()
       if (queryExecute)
       _doQuery();
+    })
+    .catchError((error, stackTrace) {
+      _log.warning(idPrefix, error, stackTrace);
     });
-  }
+  } // ObjectCtrl
 
   // ObjectCtrl
 

@@ -57,7 +57,10 @@ class UiService
         if (ui != null)
           completer.complete(ui);
         else
-          completer.completeError(response.response.msg);
+          completer.completeError(new Exception(response.response.msg));
+      })
+      .catchError((error, stackTrace) {
+        completer.completeError(error, stackTrace);
       });
     }
     return completer.future;
@@ -87,7 +90,10 @@ class UiService
         if (table != null)
           completer.complete(table);
         else
-          completer.completeError(response.response.msg);
+          completer.completeError(new Exception(response.response.msg));
+      })
+      .catchError((error, stackTrace) {
+        completer.completeError(error, stackTrace);
       });
     }
     return completer.future;
@@ -129,14 +135,14 @@ class UiService
         completer.complete(response);
       } else {
         _log.warning("submit ${info} ${response.response.msg}");
-        completer.completeError(response.response.msg);
+        completer.completeError(new Exception(response.response.msg));
       }
       track.send();
     })
     .catchError((Event error, StackTrace stackTrace) {
       String message = handleError(uiUri, error, stackTrace);
       _log.warning("submit ${info} ${message}");
-      completer.completeError(message); // 1st
+      completer.completeError(error, stackTrace); // 1st
     });
     return completer.future;
   } // submit

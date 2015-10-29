@@ -59,6 +59,9 @@ class FkCtrl
             addLookupItem(item);
           }
           fkComplete = FkService.instance.isComplete(tableName);
+        })
+        .catchError((error, stackTrace){
+          _log.warning("from ${tableName}.${name}", error, stackTrace);
         });
       }
     }
@@ -89,6 +92,9 @@ class FkCtrl
               completer.complete(fk2.drv);
             else
               completer.complete("!${newValue}!");
+          })
+          .catchError((error, stackTrace) {
+            _log.warning("render ${tableName}.${name}", error, stackTrace);
           });
         }
       } else {

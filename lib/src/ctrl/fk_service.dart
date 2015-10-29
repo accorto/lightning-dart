@@ -59,6 +59,10 @@ class FkService
       String restrictionSql,
       String parentColumnName, String parentValue) {
     Completer<List<DFK>> completer = new Completer<List<DFK>>();
+    if (fkTableName == null || fkTableName.isEmpty) {
+      completer.completeError(new Exception("NoTable"));
+      return completer.future;
+    }
     FkServiceRequest sr = new FkServiceRequest()
       ..tableName = fkTableName
       ..restrictionSql = restrictionSql
@@ -95,15 +99,20 @@ class FkService
   Future<DFK> getFkFuture(String fkTableName,
       String id,
       {String parentColumnName, String parentValue}) {
-    assert (fkTableName != null && fkTableName.isNotEmpty);
-    assert (id != null && id.isNotEmpty);
-    //
     Completer<DFK> completer = new Completer<DFK>();
     // try cache (again)
     String key = "${fkTableName}${URV_ID}${id}";
     DFK fk = _map[key];
     if (fk != null) {
       completer.complete(fk);
+      return completer.future;
+    }
+    if (fkTableName == null || fkTableName.isEmpty) {
+      completer.completeError(new Exception("NoTable"));
+      return completer.future;
+    }
+    if (id == null || id.isEmpty) {
+      completer.completeError(new Exception("NoId"));
       return completer.future;
     }
     //
