@@ -80,6 +80,42 @@ class FkService
     return completer.future;
   } // getFkListFuture
 
+  /**
+   * Retrieve from server if necessary
+   */
+  Future<Map<String,String>> getFkMapFuture(String fkTableName) {
+    Completer<Map<String,String>> completer = new Completer<Map<String,String>>();
+    if (fkTableName == null || fkTableName.isEmpty) {
+      completer.complete(new Map<String,String>());
+      return completer.future;
+    }
+    List<DFK> list = getFkList(fkTableName, null);
+    if (list != null) {
+      Map<String,String> map = new Map<String,String>();
+      for (DFK fk in list) {
+        map[fk.id] = fk.drv;
+      }
+      completer.complete(map);
+    }
+    else {
+      getFkListFuture(fkTableName, null, null, null)
+      .then((List<DFK> list) {
+        Map<String, String> map = new Map<String, String>();
+        for (DFK fk in list) {
+          map[fk.id] = fk.drv;
+        }
+        completer.complete(map);
+      })
+      .catchError((error, stackTrace) {
+        completer.complete(new Map<String, String>());
+        _log.warning("getFkMapFuture ${fkTableName}", error, stackTrace);
+      });
+    }
+    return completer.future;
+  } // getFkMapFuture
+
+
+
   /// is the table complete
   bool isComplete(String tableName) {
     return _tableComplete.containsKey(tableName);
