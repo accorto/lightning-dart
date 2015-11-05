@@ -26,6 +26,8 @@ part of lightning_dart;
  */
 class PageSimple extends LComponent {
 
+  static final Logger _log = new Logger("PageSimple");
+
   /// Search for classes to find main element
   static final List<String> MAIN_CLASSES = [LGrid.C_CONTAINER, LGrid.C_CONTAINER__FLUID,
     LGrid.C_CONTAINER__LARGE, LGrid.C_CONTAINER__MEDIUM, LGrid.C_CONTAINER__SMALL, LGrid.C_GRID];
@@ -129,5 +131,30 @@ class PageSimple extends LComponent {
     element.attributes["data-success"] = dataSuccess == null ? "" : dataSuccess;
     element.attributes["data-detail"] = dataDetail == null ? "" : dataDetail;
   } // setStatus
+
+
+  /**
+   * Find IFrame and adjust height with optional [id] and optional [topMargin] in px
+   */
+  void iframeSize({String id, int topMargin}) {
+    IFrameElement iframe = null;
+    if (id != null) {
+      Element e = querySelector("#${id}");
+      if (e is IFrameElement)
+        iframe = e;
+    }
+    if (iframe == null) {
+      iframe = querySelector("iframe");
+    }
+    if (iframe == null) {
+      return;
+    }
+    num winHeight = window.innerHeight;
+    num newHeight = winHeight;
+    if (topMargin != null)
+      newHeight -= newHeight;
+    _log.info("iframeSize win=${winHeight} - top=${topMargin} = ${newHeight}");
+    iframe.height = "${newHeight}px";
+  } // iframeSize
 
 } // PageSimple
