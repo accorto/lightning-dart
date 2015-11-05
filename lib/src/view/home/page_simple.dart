@@ -132,29 +132,4 @@ class PageSimple extends LComponent {
     element.attributes["data-detail"] = dataDetail == null ? "" : dataDetail;
   } // setStatus
 
-
-  /**
-   * Find IFrame and adjust height with optional [id] and optional [topMargin] in px
-   */
-  void iframeSize({String id, int topMargin}) {
-    IFrameElement iframe = null;
-    if (id != null) {
-      Element e = querySelector("#${id}");
-      if (e is IFrameElement)
-        iframe = e;
-    }
-    if (iframe == null) {
-      iframe = querySelector("iframe");
-    }
-    if (iframe == null) {
-      return;
-    }
-    num winHeight = window.innerHeight;
-    num newHeight = winHeight;
-    if (topMargin != null)
-      newHeight -= newHeight;
-    _log.info("iframeSize win=${winHeight} - top=${topMargin} = ${newHeight}");
-    iframe.height = "${newHeight}px";
-  } // iframeSize
-
 } // PageSimple
