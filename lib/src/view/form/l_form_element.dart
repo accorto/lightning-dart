@@ -41,11 +41,13 @@ class LFormElement {
    *      div     .form-element__control
    *        input
    */
-  void createStandard(EditorI editor, {LIcon iconRight, LIcon iconLeft, bool withClearValue:false}) {
+  void createStandard(EditorI editor, {LIcon iconRight, LIcon iconLeft, bool withClearValue:false, bool inGrid:false}) {
     this.editor = editor;
     _input = editor.input;
-    _labelElement.classes.add(LForm.C_FORM_ELEMENT__LABEL);
-    element.append(_labelElement);
+    if (!inGrid) {
+      _labelElement.classes.add(LForm.C_FORM_ELEMENT__LABEL);
+      element.append(_labelElement);
+    }
     //
     _elementControl = new DivElement()
       ..classes.add(LForm.C_FORM_ELEMENT__CONTROL);

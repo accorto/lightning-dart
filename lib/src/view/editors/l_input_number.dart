@@ -81,6 +81,11 @@ class LInputNumber
     input.value = renderSync(newValue, true);
   } // set value
 
+  /// value as number or NaN
+  num get valueAsNumber {
+    return input.valueAsNumber;
+  }
+
   /// user -> value - sets validity
   String parse(String userInput, bool setValidity) {
     if (setValidity)

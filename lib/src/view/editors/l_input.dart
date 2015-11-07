@@ -27,7 +27,7 @@ class LInput
    * Input Editor
    */
   LInput(String name, String type, {String idPrefix, bool this.inGrid:false, bool withClearValue:false}) {
-    createStandard(this, withClearValue:withClearValue);
+    createStandard(this, withClearValue:withClearValue, inGrid:inGrid);
     input.name = name;
     input.id = createId(idPrefix, name);
     input.type = type;
@@ -40,7 +40,7 @@ class LInput
    * Input Editor
    */
   LInput.from(DataColumn dataColumn, String type, {String idPrefix, bool this.inGrid:false, bool withClearValue:false}) {
-    createStandard(this, withClearValue:withClearValue);
+    createStandard(this, withClearValue:withClearValue, inGrid:inGrid);
     input.name = dataColumn.name;
     input.id = createId(idPrefix, input.name);
     input.type = type;
