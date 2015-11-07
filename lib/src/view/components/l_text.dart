@@ -72,7 +72,7 @@ class LText {
  */
 class LSectionTitle {
 
-  /// The Element
+  /// The Section Container Element
   final Element element;
 
   /// Clickable Element
@@ -83,7 +83,10 @@ class LSectionTitle {
 
   /// Part of the Sections
   List<Element> _sectionParts = new List<Element> ();
+
   /**
+   * Section Title
+   * (need to add element and sectionElement)
    * element
    * - a
    * -- icon
