@@ -131,7 +131,7 @@ class DataRecord {
 //  } // infoDisplay
 
   /**
-   * Get columnName value as String or null if not found
+   * Get value as String for [columnName] or null if not found
    */
   static String getColumnValue(DRecord record, String columnName) {
     if (columnName != null && record != null && record.entryList.isNotEmpty) {
@@ -143,6 +143,21 @@ class DataRecord {
     }
     return null;
   } // columnValue
+
+  /**
+   * Get value as String for [columnName] or null if not found
+   */
+  static String getColumnValueFk(DFK fk, String columnName) {
+    if (columnName != null && fk != null && fk.entryList.isNotEmpty) {
+      for (DEntry entry in fk.entryList) {
+        if (columnName == entry.columnName) {
+          return getEntryValue(entry);
+        }
+      }
+    }
+    return null;
+  } // columnValueFk
+
 
   /**
    * Get value (original) of entry
@@ -161,7 +176,7 @@ class DataRecord {
       return value;
     }
     return null;
-  }
+  } // getEntryValue
 
   /**
    * Set Entry [dataEntry] to new string [value].

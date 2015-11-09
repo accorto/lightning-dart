@@ -476,6 +476,7 @@ class DFK extends GeneratedMessage {
     ..a(2, 'drv', PbFieldType.OS)
     ..a(3, 'urv', PbFieldType.OS)
     ..a(4, 'tableName', PbFieldType.OS)
+    ..pp(10, 'entry', PbFieldType.PM, DEntry.$checkItem, DEntry.create)
   ;
 
   DFK() : super();
@@ -513,6 +514,8 @@ class DFK extends GeneratedMessage {
   void set tableName(String v) { $_setString(3, 4, v); }
   bool hasTableName() => $_has(3, 4);
   void clearTableName() => clearField(4);
+
+  List<DEntry> get entryList => $_get(4, 10, null);
 }
 
 class _ReadonlyDFK extends DFK with ReadonlyMessageMixin {}
@@ -799,6 +802,7 @@ const DFK$json = const {
     const {'1': 'drv', '3': 2, '4': 1, '5': 9},
     const {'1': 'urv', '3': 3, '4': 1, '5': 9},
     const {'1': 'table_name', '3': 4, '4': 1, '5': 9},
+    const {'1': 'entry', '3': 10, '4': 3, '5': 11, '6': '.DEntry'},
   ],
 };
 

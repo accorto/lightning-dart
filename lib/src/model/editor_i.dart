@@ -659,6 +659,15 @@ abstract class EditorI {
   } // debugTitle
 
 
+  @override
+  String toString() {
+    if (_entry != null) {
+      String theValue = DataRecord.getEntryValue(_entry);
+      return "${name}=${theValue} changed=${_entry.isChanged}";
+    }
+    return "${name}=${value} changed=${changed}";
+  }
+
   static String editorValidateRequired() => Intl.message("Please provide a value", name: "editorValidateRequired");
   static String editorValidateTooLong() => Intl.message("Value too long", name: "editorValidateTooLong");
 

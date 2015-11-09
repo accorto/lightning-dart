@@ -21,8 +21,12 @@ class FkCtrl
 
   /// Fk Table
   String tableName;
+  String restrictionSql = null;
   List<String> parents;
+
+  List<DFK> fkCompleteList;
   bool fkComplete = false;
+  String lastDependentInfo;
 
   /**
    * Fk Editor
@@ -30,7 +34,6 @@ class FkCtrl
   FkCtrl.from(DataColumn dataColumn, {String idPrefix, bool inGrid:false})
       : super.from(dataColumn, idPrefix:idPrefix, inGrid:inGrid) {
     tableName = dataColumn.tableColumn.fkReference;
-    String restrictionSql = null;
     if (dataColumn.tableColumn.hasRestrictionSql()) {
       restrictionSql = dataColumn.tableColumn.restrictionSql;
     }
@@ -46,6 +49,7 @@ class FkCtrl
       // List
       List<DFK> complete = FkService.instance.getFkList(tableName, restrictionSql);
       if (complete != null) {
+        fkCompleteList = complete;
         for (DFK fk in complete) {
           LLookupItem item = new LLookupItem.fromFk(fk);
           addLookupItem(item);
@@ -59,6 +63,8 @@ class FkCtrl
             addLookupItem(item);
           }
           fkComplete = FkService.instance.isComplete(tableName);
+          if (fkComplete)
+            fkCompleteList = fks;
         })
         .catchError((error, stackTrace){
           _log.warning("from ${tableName}.${name}", error, stackTrace);
@@ -116,10 +122,46 @@ class FkCtrl
   /// Dependent On Changed
   void onDependentOnChanged(DEntry dependentEntry) {
     super.onDependentOnChanged(dependentEntry);
-    _log.config("onDependentOnChanged ${name} ${dependentEntry.columnName}");
-    // validateOptions();
-    // TODO
-  }
+    String dependentName = dependentEntry.columnName;
+    String dependentValue = DataRecord.getEntryValue(dependentEntry);
+    String dependentInfo = "${dependentName}=${dependentValue}";
+    if (dependentInfo == lastDependentInfo) {
+      _log.config("onDependentOnChanged ${name} ${dependentInfo} (same)");
+      return;
+    }
+    _log.config("onDependentOnChanged ${name} ${dependentInfo}");
+    lastDependentInfo = dependentInfo;
+    String lastValue = value;
+    clearOptions();
+
+    if (dependentValue == null || dependentValue.isEmpty) {
+      value = null;
+    } else if (fkCompleteList != null) {
+      for (DFK fk in fkCompleteList) {
+        String rv = DataRecord.getColumnValueFk(fk, dependentValue);
+        if (rv != null && rv == dependentValue) { // parent match
+          LLookupItem item = new LLookupItem.fromFk(fk);
+          addLookupItem(item);
+        }
+        _log.config("onDependentOnChanged ${name} match count=${lookupItemList.length}");
+      }
+      value = lastValue;
+    } else {
+      value = null; // different parent
+      FkService.instance.getFkListFuture(tableName, restrictionSql, dependentName, dependentValue)
+      .then((List<DFK> fks) {
+        for (DFK fk in fks) {
+          LLookupItem item = new LLookupItem.fromFk(fk);
+          addLookupItem(item);
+        }
+        _log.config("onDependentOnChanged ${name} query count=${lookupItemList.length}");
+      })
+      .catchError((error, stackTrace){
+        _log.warning("from ${tableName}.${name}", error, stackTrace);
+      });
+    }
+    // ?? validateOptions(); ??
+  } // onDependentOnChanged
 
   /// On Icon Click
   void onIconClick(Event evt) {
