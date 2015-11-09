@@ -131,21 +131,24 @@ class FkCtrl
     }
     _log.config("onDependentOnChanged ${name} ${dependentInfo}");
     lastDependentInfo = dependentInfo;
-    String lastValue = value;
+
+    // reset
     clearOptions();
+    value = null;
+    editorChange(name, null, null, null);
 
     if (dependentValue == null || dependentValue.isEmpty) {
-      value = null;
-    } else if (fkCompleteList != null) {
+      return;
+    }
+    if (fkCompleteList != null) {
       for (DFK fk in fkCompleteList) {
-        String rv = DataRecord.getColumnValueFk(fk, dependentValue);
+        String rv = DataRecord.getColumnValueFk(fk, dependentName);
         if (rv != null && rv == dependentValue) { // parent match
           LLookupItem item = new LLookupItem.fromFk(fk);
           addLookupItem(item);
         }
-        _log.config("onDependentOnChanged ${name} match count=${lookupItemList.length}");
       }
-      value = lastValue;
+      _log.fine("onDependentOnChanged ${name} match count=${lookupItemList.length}");
     } else {
       value = null; // different parent
       FkService.instance.getFkListFuture(tableName, restrictionSql, dependentName, dependentValue)
@@ -154,7 +157,7 @@ class FkCtrl
           LLookupItem item = new LLookupItem.fromFk(fk);
           addLookupItem(item);
         }
-        _log.config("onDependentOnChanged ${name} query count=${lookupItemList.length}");
+        _log.fine("onDependentOnChanged ${name} query count=${lookupItemList.length}");
       })
       .catchError((error, stackTrace){
         _log.warning("from ${tableName}.${name}", error, stackTrace);
