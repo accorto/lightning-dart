@@ -37,6 +37,7 @@ export 'lightning.dart';
 
 part 'src/apps/apps_ctrl.dart';
 part 'src/apps/apps_header.dart';
+part 'src/apps/apps_logout.dart';
 part 'src/apps/apps_main.dart';
 part 'src/apps/apps_menu.dart';
 part 'src/apps/apps_page.dart';

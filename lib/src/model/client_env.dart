@@ -193,6 +193,11 @@ class ClientEnv {
     }
   } // setSession
 
+  /// logout
+  static void logout() {
+    _session = null;
+  }
+
   /// User Name
   static String userName() {
     String name = _session.userFullName;
