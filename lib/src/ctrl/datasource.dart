@@ -344,7 +344,7 @@ class Datasource
     // Context - windowId
     req.windowNo = windowNo.toString();
     // - AD_Window_ID|AD_Tab_ID
-    if (ui.hasExternalKey())
+    if (ui != null && ui.hasExternalKey())
       req.uiExternalKey = ui.externalKey;
     // - AD_Field_ID req.fieldExternalKey = column.column.tempExternalKey;
     // - Window Context (general context is on server)

@@ -289,7 +289,7 @@ class LTableRow implements FormI {
     for (String name in nameList) {
       if (name == null)
         continue;
-      if (name == DataRecord.URV) {
+      if (name == DataRecord.URV || name == "Id") {
         addCellUrv(record, recordAction);
       } else {
         DataColumn dataColumn = findColumn(name);

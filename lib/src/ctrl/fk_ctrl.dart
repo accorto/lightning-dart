@@ -14,6 +14,10 @@ class FkCtrl
 
   /// create fk lookup
   static LLookup createLookup(DataColumn dataColumn, String idPrefix, bool inGrid) {
+    if (!dataColumn.tableColumn.hasFkReference()) {
+      _log.warning("createLookup ${dataColumn.name}: NoFkReference");
+      return null;
+    }
     return new FkCtrl.from(dataColumn, idPrefix:idPrefix, inGrid:inGrid);
   }
 
@@ -23,10 +27,11 @@ class FkCtrl
   String tableName;
   String restrictionSql = null;
   List<String> parents;
+  List<String> parentValues;
 
   List<DFK> fkCompleteList;
   bool fkComplete = false;
-  String lastDependentInfo;
+  String dependentInfo;
 
   /**
    * Fk Editor
@@ -38,8 +43,9 @@ class FkCtrl
       restrictionSql = dataColumn.tableColumn.restrictionSql;
     }
     String parent = dataColumn.tableColumn.parentReference;
-    if (parent != null && parent.isEmpty) {
+    if (parent != null && parent.isNotEmpty) {
       parents = parent.split(",");
+      parentValues = new List<String>.filled(parents.length, null);
     }
 
     // Init Data
@@ -124,13 +130,23 @@ class FkCtrl
     super.onDependentOnChanged(dependentEntry);
     String dependentName = dependentEntry.columnName;
     String dependentValue = DataRecord.getEntryValue(dependentEntry);
-    String dependentInfo = "${dependentName}=${dependentValue}";
-    if (dependentInfo == lastDependentInfo) {
-      _log.config("onDependentOnChanged ${name} ${dependentInfo} (same)");
+    String dependentInfoTemp = null;
+    for (int i = 0; i < parents.length; i++) {
+      if (parents[i] == dependentName) {
+        parentValues[i] = dependentValue;
+      }
+      if (dependentInfoTemp == null) {
+        dependentInfoTemp = "${parents[i]}=${parentValues[i]}";
+      } else {
+        dependentInfoTemp += "|${parents[i]}=${parentValues[i]}";
+      }
+    }
+    if (dependentInfoTemp == dependentInfo) {
+      _log.config("onDependentOnChanged ${name}: ${dependentInfoTemp} (same)");
       return;
     }
-    _log.config("onDependentOnChanged ${name} ${dependentInfo}");
-    lastDependentInfo = dependentInfo;
+    _log.config("onDependentOnChanged ${name}: ${dependentInfoTemp}");
+    dependentInfo = dependentInfoTemp;
 
     // reset
     clearOptions();
@@ -172,7 +188,7 @@ class FkCtrl
     if (readOnly)
       return;
     if (_dialog == null) {
-      _dialog = FkDialog.getDialog(tableName);
+      _dialog = FkDialog.getDialog(tableName, parents != null && parents.isNotEmpty);
     }
     _dialog.show(this);
   }

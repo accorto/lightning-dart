@@ -9,7 +9,7 @@ part of lightning_ctrl;
 /**
  * FK Search Dialog
  * - independent FK
- * TODO FK with (external) Parent value
+ * - FK with (external) Parent value
  * TODO dependent/multiple FK's - parent/child/..
  */
 class FkDialog {
@@ -17,10 +17,10 @@ class FkDialog {
   static final Logger _log = new Logger("FkDialog");
 
   /// Get Dialog
-  static FkDialog getDialog(String tableName) {
+  static FkDialog getDialog(String tableName, bool isDependent) {
     FkDialog d = _dialogs[tableName];
     if (d == null) {
-      d = new FkDialog(tableName);
+      d = new FkDialog(tableName, isDependent);
       _dialogs[tableName] = d;
     }
     return d;
@@ -39,6 +39,7 @@ class FkDialog {
   FkCtrl lookup;
   /// Fk Table
   final String tableName;
+  final bool isDependent;
 
   // Data Source
   Datasource _datasource;
@@ -51,7 +52,7 @@ class FkDialog {
   /**
    * Fk Search Dialog
    */
-  FkDialog(String this.tableName) {
+  FkDialog(String this.tableName, bool this.isDependent) {
     String idPrefix = "fk_${tableName}";
     _modal = new LModal(idPrefix);
     _modal.setHeader(fkDialogTitle()); // temp
@@ -88,7 +89,10 @@ class FkDialog {
   /// Set UI
   void setUi(UI ui) {
     _table.setUi(ui, fromQueryColumns:true);
-    _executeSearch(); // start query
+    _log.fine("setUi ${tableName}");
+    if (!isDependent) {
+      _executeSearch(); // start query
+    }
   } // setUI
 
   // Find Input Change
@@ -102,12 +106,12 @@ class FkDialog {
     } else {
       _executeFind();
     }
-  } // onNameInputKeyPress
+  } // onFindInputKeyUp
 
   void onFormRecordChange(DRecord record, DEntry columnChanged, int rowNo) {
     // clear value pressed
     _executeFind();
-  }
+  } // onFormRecordChange
 
   /// Find in table
   void _executeFind() {
@@ -115,12 +119,27 @@ class FkDialog {
     _log.config("executeFind ${tableName} ${restriction}");
     _matchedRows = _table.findInTable(restriction);
     _setStatus();
-  }
+  } // executeFind
 
   /// Go back to server
   void _executeSearch() {
     _datasource.queryFilterList.clear();
-    // parent restriction comes here
+    // parent restriction
+    if (lookup.parentValues != null && lookup.parentValues.isNotEmpty) {
+      _datasource.queryParentList.clear();
+      for (int i = 0; i < lookup.parents.length; i++) {
+        String columnName = lookup.parents[i];
+        String columnValue = lookup.parentValues[i];
+        if (columnValue == null)
+          continue;
+        DFilter filter = new DFilter()
+          ..columnName = columnName
+          ..operation = DOP.EQ
+          ..filterValue = columnValue
+          ..dataType = DataType.FK;
+        _datasource.queryParentList.add(filter);
+      }
+    } // parent restriction
 
     // name restriction
     _queryRestriction = _editorFind.value;
@@ -147,13 +166,17 @@ class FkDialog {
   } // executeSearch
 
 
-  /// Show
+  /// Show after setting parent values
   void show(FkCtrl lookup) {
     this.lookup = lookup;
     _modal.setHeader("${fkDialogTitle()} ${lookup.label}",icon: new LIconUtility(LIconUtility.SEARCH));
     _modal.showInElement(AppsMain.modals);
     _table.selectAll(false); // previous selection
-  }
+    //
+    if (lookup.parentValues != null && lookup.parentValues.isNotEmpty) {
+      _executeSearch();
+    }
+  } // show
 
   /// Select + close
   void onTableSelectClicked(DataRecord data) {
@@ -163,7 +186,7 @@ class FkDialog {
       lookup.onInputChange(null);
       _modal.onClickHideAndRemove(null); // fini
     }
-  }
+  } // onTableSelectClicked
 
   /// update status
   void _setStatus() {
@@ -181,6 +204,15 @@ class FkDialog {
         _status.text = "${_totalRows} records";
       } else {
         _status.text = "matched ${_matchedRows} of ${_totalRows} records";
+      }
+    } else if (_datasource.queryParentList.isNotEmpty) {
+      // total rows not applicable
+      if (_queriedRows == 0) {
+        _status.text = "No records of parent with '${_queryRestriction}' found";
+      } else if (_matchedRows == 0) {
+        _status.text = "None of queried ${_queriedRows} records with '${_queryRestriction}' matched restriction entered";
+      } else {
+        _status.text = "matched ${_matchedRows} records of queried ${_queriedRows} records with '${_queryRestriction}'";
       }
     } else {
       // query restriction
