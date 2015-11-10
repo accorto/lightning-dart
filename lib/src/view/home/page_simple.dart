@@ -58,7 +58,12 @@ class PageSimple
       element.classes.addAll([LGrid.C_GRID, LGrid.C_CONTAINER, LGrid.C_CONTAINER__FLUID]);
     }
     element.id = id;
-    element.parent.append(_statusElement);
+    // add status
+    if (element.parent == null) {
+      element.append(_statusElement);
+    } else {
+      element.parent.append(_statusElement);
+    }
   } // PageSimple
 
 
