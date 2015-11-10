@@ -24,7 +24,8 @@ part of lightning_dart;
  *  - process: element(#wrap) attributes data-success/data-detail
  *
  */
-class PageSimple extends LComponent {
+class PageSimple
+    extends LComponent {
 
   static final Logger _log = new Logger("PageSimple");
 
@@ -32,9 +33,17 @@ class PageSimple extends LComponent {
   static final List<String> MAIN_CLASSES = [LGrid.C_CONTAINER, LGrid.C_CONTAINER__FLUID,
     LGrid.C_CONTAINER__LARGE, LGrid.C_CONTAINER__MEDIUM, LGrid.C_CONTAINER__SMALL, LGrid.C_GRID];
 
+  static const String STATUS_ID_NONE = "status-none";
+  static const String STATUS_ID_BUSY = "status-busy";
+  static const String STATUS_ID_OK = "status-ok";
+  static const String STATUS_ID_ERROR = "status-error";
+
   /// Outer Page Element
   final Element element;
-
+  /// Status Element
+  final DivElement _statusElement = new DivElement()
+    ..style.display = "none"
+    ..id = STATUS_ID_NONE;
 
   /**
    * Simple Page
@@ -49,11 +58,13 @@ class PageSimple extends LComponent {
       element.classes.addAll([LGrid.C_GRID, LGrid.C_CONTAINER, LGrid.C_CONTAINER__FLUID]);
     }
     element.id = id;
+    element.parent.append(_statusElement);
   } // PageSimple
 
 
   /// Server Start (busy)
   void onServerStart(String trxName, String info) {
+    _statusElement.id = STATUS_ID_BUSY;
     setStatus(LTheme.C_THEME__ALT_INVERSE, new LIconUtility(LIconUtility.SPINNER), "... ${LSpinner.lSpinnerWorking()} ...", null, "busy", null);
     busy = true;
   }
@@ -64,6 +75,7 @@ class PageSimple extends LComponent {
       setStatusSuccess(response.msg, detail:response.info, dataDetail:dataDetail);
     else
       setStatusWarning(response.msg, detail:response.info, dataDetail:dataDetail);
+    _statusElement.id = STATUS_ID_OK;
   }
   /// Info Server Communication Error
   void onServerError(var error) {
@@ -84,6 +96,7 @@ class PageSimple extends LComponent {
       if (msg != null && msg.isNotEmpty)
         setStatusError(msg);
     }
+    _statusElement.id = STATUS_ID_ERROR;
   } // onServerError
 
   /// Info Status with (i)
@@ -130,6 +143,8 @@ class PageSimple extends LComponent {
     //
     element.attributes["data-success"] = dataSuccess == null ? "" : dataSuccess;
     element.attributes["data-detail"] = dataDetail == null ? "" : dataDetail;
+    //
+    _statusElement.text = "message=${message} \ndetail=${detail} \ndataSuccess=${dataSuccess} \ndataDetail=${dataDetail}";
   } // setStatus
 
 } // PageSimple

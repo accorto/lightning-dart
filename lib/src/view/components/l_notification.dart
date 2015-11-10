@@ -174,6 +174,11 @@ abstract class LNotification extends LComponent {
       ..removeProperty("top")
       ..removeProperty("left");
     show(parent, autohideSeconds:autohideSeconds);
+    // fit onto screen
+    if (element.getBoundingClientRect().width > window.innerWidth) {
+      // print("element=${element.getBoundingClientRect().width} - window=${window.innerWidth}");
+      element.style.left = "0";
+    }
   } // show
 
 } // LNotification

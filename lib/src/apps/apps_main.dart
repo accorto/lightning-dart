@@ -17,7 +17,8 @@ part of lightning_ctrl;
  *    LightningCtrl.createAppsMain();
  *
  */
-class AppsMain extends PageSimple {
+class AppsMain
+    extends PageSimple {
 
   static final Logger _log = new Logger("AppsMain");
 

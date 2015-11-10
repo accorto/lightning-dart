@@ -11,7 +11,7 @@ part of lightning_dart;
  */
 class LVisibility {
 
-  /// slds-hide - Hides an element from the page by setting display propery to none
+  /// slds-hide - Hides an element from the page by setting display property to none
   static const String C_HIDE = "slds-hide";
   /// slds-show - Shows the element by setting display property to block
   static const String C_SHOW = "slds-show";
