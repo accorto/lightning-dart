@@ -6,6 +6,9 @@ Intermediate Patches, Functionality improvements via +x prefix.
 ## trunk
 
 - 
+- #20 FK editor and dialog with parent values (e.g. contacct of account)
+- #19 File editor (upload)
+- layout fixes
 
 ## 0.10.1
 
