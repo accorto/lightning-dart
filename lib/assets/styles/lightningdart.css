@@ -4834,6 +4834,14 @@ input[type=number]::-webkit-inner-spin-button.decimal {
   .slds-section-title a:focus {
     outline: none;
     box-shadow: none; }
+.rotate-right {
+  -webkit-transform: rotate(90deg);
+      -ms-transform: rotate(90deg);
+          transform: rotate(90deg); }
+.rotate-left {
+  -webkit-transform: rotate(-90deg);
+      -ms-transform: rotate(-90deg);
+          transform: rotate(-90deg); }
 .slds-lookup .slds-lookup__menu.auto-visible {
   visibility: hidden;
   opacity: 0;

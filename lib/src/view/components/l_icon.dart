@@ -56,6 +56,12 @@ class LIcon {
   /// slds-icon__container--circle - Creates a circular icon shape |
   static const String C_ICON__CONTAINER__CIRCLE = "slds-icon__container--circle";
 
+  /// rotate icon right 90
+  static const String C_ROTATE_RIGHT = "rotate-right";
+  /// rotate icon left -90
+  static const String C_ROTATE_LEFT = "rotate-left";
+
+
   /// Prefix for asset references
   static const String HREF_PREFIX = "packages/lightning";
 
@@ -162,6 +168,8 @@ class LIcon {
    * [className] optional className, e.g. C_ICON
    * [size] optional C_ICON__TYNY/SMALL/MEDIUM/LARGE
    * [color] optional C_ICON_TEXT_DEFAULT/WARNING
+   * [addlCss] additional css classes
+   * [packagePrefix] package lib, e.g. HREF_PREFIX
    */
   LIcon(String linkName, String this.linkPrefix,
         String className, String size, String color,
@@ -486,6 +494,9 @@ class LIconAction extends LIcon {
 
   /**
    * Action Icon - [name] e.g. CIcon.ACTION_DESCRIPTION
+   * [size] optional C_ICON__TYNY/SMALL/MEDIUM/LARGE
+   * [colorOverride] optional overwrite C_ICON_TEXT_DEFAULT/WARNING
+   * [addlCss] additional css classes
    */
   LIconAction(String name, {String className: LIcon.C_ICON, String size,
         String colorOverride, List<String> addlCss})
@@ -596,6 +607,9 @@ class LIconStandard extends LIcon {
 
   /**
    * Standard Icon [linkName] e.g. CASE
+   * [size] optional C_ICON__TYNY/SMALL/MEDIUM/LARGE
+   * [colorOverride] optional overwrite C_ICON_TEXT_DEFAULT/WARNING
+   * [addlCss] additional css classes
    */
   LIconStandard(String linkName, {String className: LIcon.C_ICON, String size,
       String colorOverride, List<String> addlCss})
@@ -781,6 +795,9 @@ class LIconUtility extends LIcon {
 
   /**
    * Utility Icon with [linkName] like [ADD]
+   * [size] optional C_ICON__TYNY/SMALL/MEDIUM/LARGE
+   * [colorOverride] optional overwrite C_ICON_TEXT_DEFAULT/WARNING
+   * [addlCss] additional css classes
    */
   LIconUtility(String linkName, {String className:LIcon.C_ICON, String size,
       String color, List<String> addlCss})
@@ -906,6 +923,9 @@ class LIconCustom extends LIcon {
    * Custom Icon - [colorName] e.g. LIconCustom.CUSTOM_1
    * - color names are custom-1
    * - svg names are custom1
+   * [size] optional C_ICON__TYNY/SMALL/MEDIUM/LARGE
+   * [colorOverride] optional overwrite C_ICON_TEXT_DEFAULT/WARNING
+   * [addlCss] additional css classes
    */
   LIconCustom(String colorName, {String className: LIcon.C_ICON, String size,
       String colorOverride, List<String> addlCss})
@@ -957,6 +977,9 @@ class LIconDoctype extends LIcon {
 
   /**
    * Custom Icon - [name] e.g. LIconCustom.CUSTOM_1
+   * [size] optional C_ICON__TYNY/SMALL/MEDIUM/LARGE
+   * [colorOverride] optional overwrite C_ICON_TEXT_DEFAULT/WARNING
+   * [addlCss] additional css classes
    */
   LIconDoctype(String name, {String className: LIcon.C_ICON, String size,
       String colorOverride, List<String> addlCss})
