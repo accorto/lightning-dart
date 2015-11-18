@@ -37,9 +37,11 @@ class DataRecord {
         ..filterValue = value
         ..dataType = DataType.FK;
       if (value == null || value.isEmpty) {
-        _log.warning("getParentFilter ${tableName} link ${linkColumnName}=${value}");
+        _log.warning("getParentFilter ${tableName} "
+            "link ${linkColumnName}=${value}");
       }
-    } // (2) query
+    }
+    // (2) query
     else if (query.isNotEmpty) {
       List<String> parts = query.split("=");
       if (parts.length == 2) {
@@ -47,19 +49,22 @@ class DataRecord {
           ..columnName = parts[0]
           ..filterValue = parts[1]
           ..dataType = DataType.FK;
-      } else { // pass-though ?
+      } else {
+        // pass-though ?
         filter
           ..columnName = record.tableName
           ..operation = DOP.SQL;
         _log.warning("getParentFilter ${tableName} query ${query}");
       }
-    } // (3) deriving
+    }
+    // (3) deriving
     else {
       filter
         ..columnName = record.tableName + "_ID"
         ..filterValue = record.recordId
         ..dataType = DataType.FK;
-      _log.warning("getParentFilter ${tableName} NoQuery ${filter.columnName}=${filter.filterValue}");
+      _log.warning("getParentFilter ${tableName} "
+          "NoQuery ${filter.columnName}=${filter.filterValue}");
     }
     filter.filterDirectQuery = query;
     filter.isReadOnly = true;
@@ -183,9 +188,9 @@ class DataRecord {
    * Update changed + original
    * return true if changed
    */
-  static bool setEntryValue (DEntry dataEntry, final String newValue) {
+  static bool setEntryValue(DEntry dataEntry, final String newValue, {bool setOriginal:true}) {
     // set original if not set before
-    if (!dataEntry.hasValueOriginal()) {
+    if (setOriginal && !dataEntry.hasValueOriginal()) {
       if (dataEntry.hasValue())
         dataEntry.valueOriginal = dataEntry.value;
       else
@@ -201,7 +206,26 @@ class DataRecord {
     return dataEntry.isChanged;
   } // setEntryValue
 
-
+  /**
+   * Set [columnName] in [record] to [newValue]
+   * return true if changed
+   */
+  static bool setColumnValue(DRecord record, String columnName, String newValue) {
+    DEntry dataEntry = null;
+    for (DEntry entry in record.entryList) {
+      if (columnName == entry.columnName) {
+        dataEntry = entry;
+        break;
+      }
+    }
+    if (dataEntry == null) {
+      dataEntry = new DEntry()
+          ..columnName = columnName;
+      record.entryList.add(dataEntry);
+      record.isChanged = true;
+    }
+    return setEntryValue(dataEntry, newValue, setOriginal:false);
+  } // setColumnValue
 
   /// Null Value indicator (Dto.NULLVALUE)
   static const String NULLVALUE = "::NullValue::";
