@@ -130,12 +130,19 @@ class DataColumn {
    * Read Only [data] optional context
    */
   bool isReadOnly(DataRecord data) {
-    if (tableColumn.isReadOnly || (uiPanelColumn != null && uiPanelColumn.isReadOnly))
+    // new, required and empty - allow entry
+    if (data.isNew && isEmpty(data) && isMandatory(data)) {
+      return false;
+    }
+    if (tableColumn.isReadOnly
+        || (uiPanelColumn != null && uiPanelColumn.isReadOnly)) {
       return true;
+    }
     if (data != null) {
       data.table = table;
-      if (data.isReadOnly)
-        return true;
+      if (data.isReadOnly) {
+        return true; // record level
+      }
       if (isReadOnlyDynamic()) {
         bool result = DataContext.evaluateBool(data.record, table, uiPanelColumn.readOnlyLogic);
         _log.warning("isReadOnly ${tableColumn.name} ${result} - ${uiPanelColumn.readOnlyLogic}");
@@ -148,6 +155,13 @@ class DataColumn {
   /// is ReadOnly dynamic ?
   bool isReadOnlyDynamic() {
     return uiPanelColumn != null && uiPanelColumn.hasReadOnlyLogic() && uiPanelColumn.readOnlyLogic.isNotEmpty;
+  }
+
+  /// is the value empty
+  bool isEmpty(DataRecord data) {
+    DEntry entry = getEntry(data);
+    String value = DataRecord.getEntryValue(entry);
+    return value == null || value.isEmpty;
   }
 
   /**
