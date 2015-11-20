@@ -193,9 +193,9 @@ class LModal extends LComponent {
   } // setFooter
 
   /**
-   * Set Footer Buttons - returns save button
+   * Set Footer Cancel|Save Buttons - returns save button
    * [hideOnSave] hide+remove on Save
-   * [buttonCancel] hides+removes the dialog
+   * [addCancel] hides+removes the dialog
    */
   LButton addFooterButtons({String saveNameOverride, bool hideOnSave: true, bool addCancel: true}) {
     String saveLabel = saveNameOverride;
@@ -207,27 +207,29 @@ class LModal extends LComponent {
       buttonSave.onClick.listen(onClickHideAndRemove);
 
     if (addCancel) {
-      _addFooterCancel();
+      addFooterCancel();
     }
     footer.append(buttonSave.element);
     return buttonSave;
   } // setFooterButtons
 
   /// add Cancel to Footer
-  void _addFooterCancel() {
-    buttonCancel = new LButton(new ButtonElement(), "cancel", lModalCancel(), idPrefix: id,
-    buttonClasses: [LButton.C_BUTTON__NEUTRAL]);
-    buttonCancel.onClick.listen(onClickHideAndRemove);
-    footer.append(buttonCancel.element);
-    footer.classes.add(C_MODAL__FOOTER__DIRECTIONAL);
-  }
+  void addFooterCancel() {
+    if (buttonCancel == null) {
+      buttonCancel = new LButton(new ButtonElement(), "cancel", lModalCancel(), idPrefix: id,
+          buttonClasses: [LButton.C_BUTTON__NEUTRAL]);
+      buttonCancel.onClick.listen(onClickHideAndRemove);
+      footer.append(buttonCancel.element);
+      footer.classes.add(C_MODAL__FOOTER__DIRECTIONAL);
+    }
+  } // addFooterCancel
 
   /**
    * Set Footer Actions
    */
   void addFooterActions(List<AppsAction> actions, {bool addCancel:false}) {
     if (addCancel)
-      _addFooterCancel();
+      addFooterCancel();
     if (actions != null) {
       for (AppsAction action in actions) {
         LButton btn = action.asButton(true, buttonClasses: [LButton.C_BUTTON__NEUTRAL], idPrefix: id);
@@ -239,7 +241,7 @@ class LModal extends LComponent {
 
   /// Add Form Buttons + cancel to footer
   void addFooterFormButtons(LForm form) {
-    _addFooterCancel();
+    addFooterCancel();
 
     LButton reset = form.addResetButton();
     reset.element.id = "${id}-reset";
@@ -273,16 +275,47 @@ class LModal extends LComponent {
       _backdrop.classes.remove(C_MODAL_BACKDROP__OPEN);
     }
   }
-  /// Show Center
-  void showInComponent(LComponent parent) {
+
+  /// Show Center Screen - or left/below evt target
+  void showInComponent(LComponent parent, {MouseEvent evt}) {
     parent.append(element);
     show = true;
+    if (evt != null)
+      _position(evt);
   }
-  /// Show Center
-  void showInElement(Element parent) {
+
+  /// Show Center Screen - or left/below evt target
+  void showInElement(Element parent, {MouseEvent evt}) {
     parent.append(element);
     show = true;
+    if (evt != null)
+      _position(evt);
   }
+
+  /// Position left/below
+  void _position(MouseEvent evt) {
+    // normalize
+    _containerOffset = new Point(0, 0);
+    _container.style
+      ..top = "0px"
+      ..left = "0px";
+    Element target = evt.target;
+    if (target == null) {
+      return;
+    }
+    // container is full window height
+    Rectangle rectHeader = header.getBoundingClientRect();
+    Rectangle rectTarget = target.getBoundingClientRect();
+    // position left/below
+    num dx = -(rectHeader.left - rectTarget.left);
+    num dy = -(rectHeader.top - rectTarget.bottom);
+    _containerOffset = new Point(dx-5, dy+5);
+    _log.fine("offset=${_containerOffset}");
+    _container.style
+      ..top = "${_containerOffset.y}px"
+      ..left = "${_containerOffset.x}px";
+  } // _position
+
 
   /// Hide Modal
   void onClickHideOnly(MouseEvent ignored) {
@@ -295,7 +328,7 @@ class LModal extends LComponent {
     element.remove();
   }
 
-  /// Move start screen
+  /// Move start screen (based on center screen)
   Point _mouseDownPoint = null;
   Point _containerStart = null;
   /// Container start
