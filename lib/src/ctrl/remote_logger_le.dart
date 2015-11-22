@@ -87,7 +87,7 @@ class RemoteLoggerLe {
     else if (rec.level == Level.WARNING) {
       le.callMethod('warn', [logObject]);
     }
-    else if (rec.level == Level.SEVERE || record.level == Level.SHOUT) {
+    else if (rec.level == Level.SEVERE || rec.level == Level.SHOUT) {
       le.callMethod('error', [logObject]);
     }
     else {
