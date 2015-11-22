@@ -19,6 +19,7 @@ part "exampleWorkspaceData.dart";
 main() async {
 
   await LightningDart.init(); // client env
+  // await LightningCtrl.init(); // client env
 
   WorbenchData wbData = new WorbenchData();
 

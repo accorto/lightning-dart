@@ -35,7 +35,7 @@ class Timezone {
       completer.complete(true);
     })
     .catchError((error, stackTrace) {
-      _log.warning("loadTz for ${url}");
+      _log.warning("loadTz for ${url}"); // error=_XMLHttpRequestProgressEvent
       // Fallback
       url = "${FALLBACK_SERVER}timeZone";
       HttpRequest.getString(url)
@@ -45,7 +45,7 @@ class Timezone {
         completer.complete(true);
       })
       .catchError((error, stackTrace) {
-        _log.warning("loadTz for ${url}");
+        _log.warning("loadTz(2) for ${url}");
         // Stop waiting
         TZ.tzList.add(new TZ("{}"));
         completer.complete(false);

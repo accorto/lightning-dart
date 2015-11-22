@@ -157,6 +157,24 @@ class ClientEnv {
       map["dr"] = document.referrer;
   } // addToLogRecord
 
+  /// Log Context Info
+  static String logInfo(String prefix) {
+    if (session == null)
+      return "";
+    String retValue = prefix;
+    if (_session.hasSid())
+      retValue += " sid=${_session.sid}";
+    if (_session.hasTenantName())
+      retValue += " tenantName=${_session.tenantName}";
+    else if (_session.hasTenantId())
+      retValue += " tenantId=${_session.tenantId}";
+    if (_session.hasUserEmail())
+      retValue += " userEmail=${_session.userEmail}";
+    else if (_session.hasUserId())
+      retValue += " userId=${_session.userId}";
+    return retValue;
+  } // logInfo
+
   // logged in
   static bool isLoggedIn() {
     return _session != null && _session.sid != null && _session.sid.isNotEmpty;

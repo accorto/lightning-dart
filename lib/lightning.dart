@@ -32,6 +32,7 @@ import 'dart:convert';
 
 // Packages
 import 'package:logging/logging.dart';
+import 'package:stack_trace/stack_trace.dart';
 
 import 'package:intl/intl.dart';
 //import 'package:intl/intl_browser.dart';
@@ -156,24 +157,41 @@ class LightningDart {
    * Initialize Logging, Locale, Intl, Date
    */
   static Future<bool> init() {
-    // Initialize
+    // Initialize Logging
+    // print("hierarchicalLoggingEnabled=${hierarchicalLoggingEnabled} recordStackTraceAtLevel=${recordStackTraceAtLevel}");
     Logger.root.level = Level.ALL;
     // local Logger
-    Logger.root.onRecord.listen((LogRecord rec) {
-      print(LUtil.formatLog(rec));
-      if (rec.error != null) {
-        print(rec.error);
-      }
-      if (rec.stackTrace != null) {
-        // Trace t = new Trace.from(rec.stackTrace);
-        // print("_ ${t.toString()}");
-        print(rec.stackTrace);
-      }
-    });
-    //
+    Logger.root.onRecord.listen(onLogRecord);
     return ClientEnv.init(); // Locale, Intl, Date
   } // init
 
+  /**
+   * Local Log Record
+   */
+  static void onLogRecord(LogRecord rec) {
+    String logObject = LUtil.formatLog(rec);
+    if (rec.error != null) {
+      logObject += "\n  ${rec.error}";
+    }
+    if (rec.stackTrace != null) {
+      // logObject += "\n${rec.stackTrace}";
+      Trace t = new Trace.from(rec.stackTrace);
+      logObject += "\n${t}";
+    }
+
+    if (rec.level == Level.SHOUT)
+      window.console.error(logObject);
+    else if (rec.level == Level.SEVERE)
+      window.console.error(logObject);
+    else if (rec.level == Level.WARNING)
+      window.console.warn(logObject);
+    else if (rec.level == Level.INFO)
+      window.console.info(logObject);
+    else if (rec.level == Level.CONFIG)
+      window.console.debug(logObject);
+    else
+      window.console.log(logObject);
+  } // onLogRecord
 
   /**
    * Create Page (slds-grid)

@@ -29,27 +29,43 @@ class RemoteLogger {
 
 
   /**
-   * Logging Setup
+   * Remote (Error) Logging Setup
    */
   factory RemoteLogger() => _instance;
   static RemoteLogger _instance = new RemoteLogger._internal();
   RemoteLogger._internal() {
-    // Error Logger
-    Logger.root.onRecord.listen((LogRecord record) {
-      if (record.level.value >= Level.INFO.value) // info and higher
-        appsLogger(record);
-    });
+    le = RemoteLoggerLe.get();
+    if (le == null) {
+      window.console.info('log');
+      Logger.root.onRecord.listen((LogRecord record) {
+        if (record.level.value >= Level.INFO.value) { // info and higher
+          appsLogger(record);
+        }
+      });
+    } else {
+      window.console.info('le');
+      Logger.root.onRecord.listen((LogRecord record) {
+        if (record.level.value >= Level.INFO.value) { // info and higher
+          le.logRecord(record);
+        }
+      });
+    }
     // unload
     window.onUnload.listen((e){
       ServiceAnalytics.sendUnload();
     });
 
   } // RemoteLogger
+  RemoteLoggerLe le;
 
   /**
    * Publish to Log service of Apps Server
    */
   void appsMsg(String subject, String message) {
+    if (le != null) {
+      le.info("${subject}: ${message}");
+      return;
+    }
     var map = {
       "subject" : subject,
       "message" : message
@@ -90,7 +106,12 @@ class RemoteLogger {
       }
     }
     if (record.stackTrace != null) {
-      map["stack"] = record.stackTrace.toString();
+      if (record.stackTrace is StackTrace) {
+        Trace t = new Trace.from(record.stackTrace); // js
+        map["stack"] = t.toString();
+      } else {
+        map["stackString"] = record.stackTrace.toString();
+      }
     }
     // add context
     ClientEnv.addToLogRecord(map);
