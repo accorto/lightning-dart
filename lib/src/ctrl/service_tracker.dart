@@ -22,9 +22,11 @@ class ServiceTracker {
     return new Duration();
   }
 
-  /// format duration in sec
+  /// format duration
   static String formatDuration(SResponse response) {
-    return DurationUtil.formatDuration(getDuration(response));
+    Duration dur = getDuration(response);
+    // return DurationUtil.formatDuration(dur); // seconds
+    return "ms=${dur.inMilliseconds}";
   }
 
   /// Server Response

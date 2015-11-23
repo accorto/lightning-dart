@@ -177,7 +177,7 @@ class ServiceAnalytics {
    * Send Unload
    */
   static void sendUnload() {
-    Map<String, String> data = _createMap(null);
+    Map<String, dynamic> data = _createMap(null);
     data["utv"] = "unload"; // variable name
 
     data["dl"] = window.location.href; // document location
@@ -194,7 +194,7 @@ class ServiceAnalytics {
     data["ua"] = window.navigator.userAgent;
     //
     data["up"] = Service.upTime.toString(); // uptime
-    ClientEnv.addToLogRecord(data);
+    ClientEnv.addToLogMap(data);
     //
     String dataString = LUtil.toJsonString(data);
     String url = "${Service.serverUrl}${TRX}";
@@ -215,14 +215,14 @@ class ServiceAnalytics {
   }
 
   /// send map
-  static void _send(Map<String,String> data) {
+  static void _send(Map<String,dynamic> data) {
     if (!enabled || _sendWebLogErrors > 9) {
       return;
     }
     data["up"] = Service.upTime.inSeconds.toString(); // uptime
     print("analytics ${data}");
     data["upd"] = Service.upTime.toString(); // uptime
-    ClientEnv.addToLogRecord(data);
+    ClientEnv.addToLogMap(data);
     String dataString = LUtil.toJsonString(data);
 
     String url = "${Service.serverUrl}${TRX}";

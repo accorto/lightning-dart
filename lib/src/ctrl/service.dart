@@ -91,8 +91,9 @@ class Service {
     if (param != null && param.isNotEmpty) {
       clientId = param;
     } else {
-      Uuid uuid = new Uuid();
-      clientId = uuid.v1(); // time based
+      Random r = new Random(new DateTime.now().millisecondsSinceEpoch);
+      String s = r.nextInt(1<<32 -1).toRadixString(36) + r.nextInt(1<<32 -1).toRadixString(36);
+      clientId = s.substring(0,8); // single int is 6
     }
     //
     //devTimestamp = BizPage.wrap.attributes["data-timestamp"];
@@ -195,8 +196,8 @@ class Service {
    * Handle Success - send notifications, unlock ui
    */
   String handleSuccess(String subject, SResponse sresponse, int length, {bool setBusy: true}) {
-    sresponse.clientReceiptTime = new Int64(new DateTime.now().millisecondsSinceEpoch);
-    String details = "${sresponse.trxType}#${sresponse.trxNo} ${subject} ${ServiceTracker.formatDuration(sresponse)} ${ClientEnv.numberFormat_1.format(length/1024)}k";
+    sresponse.clientReceiptTime = new Int64(new DateTime.now().millisecondsSinceEpoch); // ${ClientEnv.numberFormat_1.format(length/1024)}k
+    String details = "${sresponse.trxType}=${sresponse.trxNo} ${subject} ${ServiceTracker.formatDuration(sresponse)} bytes=${length}";
     if (setBusy && onServerSuccess != null)
       onServerSuccess(sresponse, details);
     if (sendNotification != null) {

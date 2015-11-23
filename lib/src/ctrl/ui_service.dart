@@ -137,6 +137,7 @@ class UiService
         _log.warning("submit ${info} ${response.response.msg}");
         completer.completeError(new Exception(response.response.msg));
       }
+      _log.info("received ${details}");
       track.send();
     })
     .catchError((Event error, StackTrace stackTrace) {

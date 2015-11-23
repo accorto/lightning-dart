@@ -29,6 +29,7 @@ import 'dart:async';
 import 'dart:html';
 import 'dart:svg' as svg;
 import 'dart:convert';
+import 'dart:math';
 
 // Packages
 import 'package:logging/logging.dart';

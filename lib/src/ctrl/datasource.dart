@@ -375,6 +375,7 @@ class Datasource
       String details = handleSuccess(info, response.response, buffer.length, setBusy: setBusy);
       ServiceTracker track = new ServiceTracker(response.response, info, details);
       completer.complete(response);
+      _log.info("received ${details}");
       track.send();
     })
     .catchError((Event error, StackTrace stackTrace) {

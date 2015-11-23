@@ -136,10 +136,8 @@ class ClientEnv {
   /**
    * Add Context to Log
    */
-  static void addToLogRecord(Map<String,String> map) {
+  static void addToLogMap(Map<String,dynamic> map) {
     if (_session != null) {
-      if (_session.hasSid())
-        map["sid"] = _session.sid;
       if (_session.hasTenantName())
         map["tenantName"] = _session.tenantName;
       else if (_session.hasTenantId())
@@ -148,13 +146,15 @@ class ClientEnv {
         map["userEmail"] = _session.userEmail;
       else if (_session.hasUserId())
         map["userId"] = _session.userId;
+      if (_session.hasSid())
+        map["sid"] = _session.sid;
     }
-//    map["clientId"] = Service.clientId;
-    map["clientHref"] = window.location.href;
+    // map["clientId"] = Service.clientId;
+    // map["clientHref"] = window.location.href;
 
     // analytics
-    if (document.referrer != null && document.referrer.isNotEmpty)
-      map["dr"] = document.referrer;
+    // if (document.referrer != null && document.referrer.isNotEmpty)
+    //   map["dr"] = document.referrer;
   } // addToLogRecord
 
   /// Log Context Info

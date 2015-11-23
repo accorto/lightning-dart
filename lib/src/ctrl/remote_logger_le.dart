@@ -95,4 +95,30 @@ class RemoteLoggerLe {
     }
   } // logRecord
 
+  /*
+  7f82b99a-f33c-39b0-a30b-6012a3a6567a {"level":"TEST", "trace":"abc", "event":"my text 2"}
+
+  */
+
+
+
+  void send(Map<String,dynamic> data) {
+    String url = null;
+    String dataJson = JSON.encode(data);
+    Map<String,String> requestHeaders = new Map<String,String>();
+    HttpRequest
+    .request(url, method: 'POST', mimeType: 'application/json',
+        requestHeaders: requestHeaders, sendData: dataJson)
+    .then((HttpRequest response){
+      _sendWebLogErrors = 0;
+    })
+    .catchError((Event error, StackTrace stackTrace) {
+      _sendWebLogErrors++;
+    //  print(new RequestResponse(TRX, error, stackTrace, popup: false).toStringX()
+    //      + " (2) errors=${_sendWebLogErrors}");
+    });
+
+  }
+  int _sendWebLogErrors = 0;
+
 } // RemoteLoggerLe

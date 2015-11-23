@@ -20,13 +20,13 @@ library lightning_ctrl;
 import 'dart:html';
 import 'dart:js';
 import 'dart:async';
+import 'dart:math';
 import 'dart:convert';
 import 'dart:typed_data';
 
 // Packages
 import 'package:logging/logging.dart';
 import 'package:fixnum/fixnum.dart';
-import 'package:uuid/uuid.dart';
 import 'package:stack_trace/stack_trace.dart';
 
 import 'package:intl/intl.dart';
