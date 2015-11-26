@@ -40,6 +40,8 @@ class LFormElement {
    *      label   .form-element__label
    *      div     .form-element__control
    *        input
+   *        hint
+   * [inGrid] if true no label
    */
   void createStandard(EditorI editor, {LIcon iconRight, LIcon iconLeft, bool withClearValue:false, bool inGrid:false}) {
     this.editor = editor;
@@ -119,6 +121,12 @@ class LFormElement {
       _inputWrapper = _elementControl;
     _inputWrapper.append(_input);
     _elementControl.append(_hintSpan); // __help
+  }
+
+  /// remove hint
+  void removeHint() {
+    if(_hintSpan != null)
+      _hintSpan.remove();
   }
 
 
