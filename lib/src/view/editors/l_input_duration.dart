@@ -8,6 +8,8 @@ part of lightning_dart;
 
 /**
  * Duration Editor
+ * http://www.w3.org/TR/xmlschema11-2/#duration
+ * https://en.wikipedia.org/wiki/ISO_8601#Durations
  */
 class LInputDuration
     extends LInput {
@@ -43,7 +45,7 @@ class LInputDuration
   }
 
   /**
-   * Value
+   * Value (e.g. PT12H)
    */
   @override
   String get value {
@@ -56,6 +58,30 @@ class LInputDuration
   void set value(String newValue) {
     input.value = renderSync(newValue, true);
   } // set value
+
+  /// get Value as Duration
+  Duration get valueAsDuration {
+    String display = input.value;
+    DurationUtil du = DurationUtil.parse(display);
+    if (du != null)
+      return du.asDuration();
+    return new Duration();
+  }
+  /// set value - call also: updateData(..) or onInputChange(..)
+  void set valueAsDuration(Duration newValue) {
+    input.setCustomValidity("");
+    if (newValue == null) {
+      input.value = "";
+    } else {
+      DurationUtil dd = new DurationUtil.seconds(newValue.inSeconds);
+      if (_isHour) {
+        // return ClientEnv.numberFormat_2.format(dd.asHours()); // 8/20
+        input.value = dd.asHours().toStringAsFixed(2); // 8/20
+      } else {
+        input.value = dd.asString(); // user
+      }
+    }
+  }
 
   /// is the value in hours (number)
   bool get isHour => _isHour;

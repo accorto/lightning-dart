@@ -85,6 +85,18 @@ class LInputNumber
   num get valueAsNumber {
     return input.valueAsNumber;
   }
+  /// set value - call also: updateData(..) or onInputChange(..)
+  void set valueAsNumber(num newValue) {
+    input.setCustomValidity("");
+    if (newValue == null) {
+      input.value = "";
+    } else {
+      input.valueAsNumber = newValue;
+      if (newValue.isNaN || newValue.isInfinite) {
+        input.setCustomValidity("invalid");
+      }
+    }
+  }
 
   /// user -> value - sets validity
   String parse(String userInput, bool setValidity) {

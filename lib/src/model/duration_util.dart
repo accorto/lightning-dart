@@ -8,6 +8,8 @@ part of lightning_model;
 
 /**
  * Duration Management
+ * http://www.w3.org/TR/xmlschema11-2/#duration
+ * https://en.wikipedia.org/wiki/ISO_8601#Durations
  */
 class DurationUtil {
 
@@ -47,10 +49,12 @@ class DurationUtil {
       return new DurationUtil(!negative, years, months, days, hours, minutes, seconds);
     }
     // is it a number 1.0 1.5
-    double numberDouble = double.parse(unsigned, (String value) {return double.MIN_POSITIVE;});
-    if (numberDouble != double.MIN_POSITIVE) {
+    double numberDouble = double.parse(unsigned,
+        (String value) {return double.INFINITY;});
+    if (numberDouble != double.INFINITY) {
       hours = numberDouble.floor();
-      minutes = ((numberDouble - hours.toDouble()) * 60.0).floor();
+      minutes = ((numberDouble - hours.toDouble()) * SEC_MINUTES_D).floor();
+      seconds = ((numberDouble - hours.toDouble()) * SEC_HOURS_D).floor();
       return new DurationUtil(!negative, years, months, days, hours, minutes, seconds);
     }
 
@@ -86,10 +90,12 @@ class DurationUtil {
         return new DurationUtil(!negative, years, months, days, hours, minutes, seconds);
       }
       // is it a number 1.0 1.5
-      numberDouble = double.parse(unsigned, (String value) {return double.MIN_POSITIVE;});
+      numberDouble = double.parse(unsigned,
+          (String value) {return double.INFINITY;});
       if (numberDouble != double.MIN_POSITIVE) {
         hours = numberDouble.floor();
-        minutes = ((numberDouble - hours.toDouble()) * 60.0).floor();
+        minutes = ((numberDouble - hours.toDouble()) * SEC_MINUTES_D).floor();
+        seconds = ((numberDouble - hours.toDouble()) * SEC_HOURS_D).floor();
         return new DurationUtil(!negative, years, months, days, hours, minutes, seconds);
       }
     }
@@ -163,7 +169,7 @@ class DurationUtil {
     return new DurationUtil(!negative, years, months, days, hours, minutes, seconds);
   } // parse
 
-  /// format milliseconds
+  /// format mm:hh:ss
   static String formatDuration(Duration dur) {
     String twoDigits(int n) {
       if (n >= 10) return "$n";
@@ -187,23 +193,26 @@ class DurationUtil {
   } // formatDuration
 
 
-
   /** Day in Seconds 24h (86400). */
-  static final int SEC_DAYS = 60 * 60 * 24;
+  static const int SEC_DAYS = 60 * 60 * 24;
   /** Hour in Seconds (3600). */
-  static final int SEC_HOURS = 60 * 60;
+  static const int SEC_HOURS = 60 * 60;
   /** Minute in Seconds. */
-  static final int SEC_MINUTES = 60;
+  static const int SEC_MINUTES = 60;
   /** Month in Seconds 24h 30d. */
-  static final int SEC_MONTHS = 60 * 60 * 24 * 30;
+  static const int SEC_MONTHS = 60 * 60 * 24 * 30;
   /** Year in Seconds 24h 30d. (360) */
-  static final int SEC_YEARS = 60 * 60 * 24 * 30 * 12;
+  static const int SEC_YEARS = 60 * 60 * 24 * 30 * 12;
   /** Month in Days 30d. */
-  static final int DAY_MONTHS = 30;
+  static const int DAY_MONTHS = 30;
   /** Year in Days 30dx12 = 360 */
-  static final int DAY_YEARS = 30 * 12;
+  static const int DAY_YEARS = 30 * 12;
   /** When is an integer interpreted as minutes - 14h 15m */
-  static final int INTEGERISMINUTES = 15;
+  static const int INTEGERISMINUTES = 15;
+  /** Hour in Seconds (3600.0). */
+  static const double SEC_HOURS_D = 60.0 * 60.0;
+  /** Minute in Seconds. */
+  static const double SEC_MINUTES_D = 60.0;
 
   static final Logger _log = new Logger("BizDuration");
 
@@ -225,6 +234,7 @@ class DurationUtil {
 
   /**
    * Duration Second Constructor converts based on 360d year, 30d month, 24h day
+   * e.g. new DurationUtil.seconds(duration.inSeconds);
    */
   DurationUtil.seconds(int seconds) {
     int remaining = seconds;
@@ -267,7 +277,6 @@ class DurationUtil {
       _seconds = remaining;
     }
   } // BizDuration.seconds
-
 
   /**
    * Xml Duration Constructor
@@ -456,7 +465,10 @@ class DurationUtil {
   double asHours({int hoursPerDay: 8, int daysPerMonth: 20}) {
     double hours = _hours.toDouble();
     if (_minutes > 0) {
-      hours += (_minutes / 60);
+      hours += (_minutes / SEC_MINUTES);
+    }
+    if (_seconds > 0) {
+      hours += (_seconds / SEC_HOURS);
     }
     if (_days != 0) {
       hours += _days * hoursPerDay;
