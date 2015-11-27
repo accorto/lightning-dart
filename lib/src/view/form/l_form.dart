@@ -505,6 +505,15 @@ class LForm
     element.focus();
   } // focus
 
+  /// get editor with [columnName] or null
+  LEditor getEditor(String columnName) {
+    for (LEditor ed in editorList) {
+      if (ed.name == columnName)
+        return ed;
+    }
+    return null;
+  }
+
   // Trl
   static String lFormSave() => Intl.message("Save", name: "lFormSave");
   static String lFormReset() => Intl.message("Reset", name: "lFormReset");
