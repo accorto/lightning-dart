@@ -9,7 +9,8 @@ part of lightning_dart;
 /**
  * Dropdown Item
  */
-class LDropdownItem extends ListItem {
+class LDropdownItem
+    extends ListItem {
 
   /// Dropdown
   static LDropdownItem create({String value, String label, LIcon icon}) {
@@ -17,11 +18,18 @@ class LDropdownItem extends ListItem {
     return new LDropdownItem(option, rightIcon:icon);
   }
 
+  static LIcon createSelect() {
+    return new LIconUtility(
+        LIconUtility.CHECK, size: LIcon.C_ICON__X_SMALL,
+        color: LIcon.C_ICON_TEXT_DEFAULT,
+        addlCss: [LIcon.C_ICON__SELECTED, LMargin.C_RIGHT__SMALL]);
+  }
+
   /**
-   * Dropdown item [leftIcon] is used for selection
+   * Dropdown item (leftIcon is used for selection)
    */
-  LDropdownItem(DOption option, {LIcon leftIcon, LIcon rightIcon})
-    : super(option, leftIcon:leftIcon, rightIcon:rightIcon) {
+  LDropdownItem(DOption option, {LIcon rightIcon})
+    : super(option, leftIcon:createSelect(), rightIcon:rightIcon) {
 
     element
       ..classes.add(LDropdown.C_DROPDOWN__ITEM)
@@ -30,11 +38,17 @@ class LDropdownItem extends ListItem {
     a
       ..classes.add(LText.C_TRUNCATE)
       ..tabIndex = -1;
+
+    if (_rightIcon != null) {
+      _rightIcon.size = LIcon.C_ICON__X_SMALL;
+      _rightIcon.classes.addAll([LIcon.C_ICON_TEXT_DEFAULT,
+        LMargin.C_LEFT__SMALL, LGrid.C_SHRINK_NONE]);
+    }
   } // LDropdownItem
 
   /// Dropdown Item from List
   LDropdownItem.from(ListItem item)
-    : this(item.option, leftIcon:item.leftIcon, rightIcon:item.rightIcon);
+    : this(item.option, rightIcon:item.rightIcon);
 
   /// create drop-down from button - with left icon!
   LDropdownItem.fromButton(LButton button)
@@ -61,28 +75,17 @@ class LDropdownItem extends ListItem {
       element.classes.remove(LDropdown.C_HAS_DIVIDER);
   }
 
-  /**
-   * Create Link
-   */
-  @override
-  void _rebuild(RegExp exp) {
-    if (option.hasIsSelected()) {
-      if (option.isSelected) {
-        if (_selectedIcon == null) {
-          _selectedIcon = new LIconStandard(LIconStandard.TASK2, size: LIcon.C_ICON__SMALL)
-            ..classes.add(LDropdown.C_ICON__LEFT);
-        }
-        _leftIcon = _selectedIcon;
-      } else {
-        _leftIcon = null; // overwrite in selection mode
-      }
-    }
-    super._rebuild(exp);
-  }
-  LIcon _selectedIcon;
-
   /// Right Icon (left icon used for select)
   LIcon get icon => _rightIcon;
+
+
+  bool get hasIconRight => _rightIcon != null;
+  void set hasIconRight (bool newValue) { // NOP
+  }
+
+  bool get hasIconLeft => true;
+  void set hasIconLeft (bool newValue) { // NOP
+  }
 
 
   String toString() => "LDropdown[${option.value}]";

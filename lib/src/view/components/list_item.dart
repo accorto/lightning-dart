@@ -189,19 +189,31 @@ class ListItem extends SelectOption {
   /// Rebuild Link
   void _rebuild(RegExp exp) {
     a.children.clear();
-    // Icon l
+    ParagraphElement p = null;
+    // Icon left
     if (_leftIcon != null) {
-      a.append(_leftIcon.element);
+      p = new ParagraphElement()
+        ..classes.add(LText.C_TRUNCATE);
+      a.append(p);
+      p.append(_leftIcon.element);
     }
     // Label
     if (exp == null) {
-      a.appendText(option.label);
+      if (p == null) {
+        a.appendText(option.label);
+      } else {
+        p.appendText(option.label);
+      }
     } else {
       HtmlEscape esc = new HtmlEscape();
       String html = option.label.splitMapJoin(exp,
         onMatch:    (m) => "<b>${m.group(0)}</b>",
         onNonMatch: (n) => esc.convert(n));
-      a.appendHtml(html);
+      if (p == null) {
+        a.appendHtml(html);
+      } else {
+        p.appendHtml(html);
+      }
     }
     // Icon r
     if (_rightIcon != null) {

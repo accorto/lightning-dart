@@ -76,10 +76,11 @@ class PageSimple
   /// Info Server Communication Success (busy/msg)
   void onServerSuccess(SResponse response, String dataDetail) {
     busy = false;
-    if (response.isSuccess)
-      setStatusSuccess(response.msg, detail:response.info, dataDetail:dataDetail);
-    else
-      setStatusWarning(response.msg, detail:response.info, dataDetail:dataDetail);
+    if (response.isSuccess) {
+      setStatusSuccess(response.msg, detail: response.info, dataDetail: dataDetail);
+    } else {
+      setStatusWarning(response.msg, detail: response.info, dataDetail: dataDetail);
+    }
     _statusElement.id = STATUS_ID_OK;
   }
   /// Info Server Communication Error

@@ -339,14 +339,16 @@ class LForm
 
   /// Error Indicator
   LPopover addErrorIndicator() {
-    if (_error == null) {
+    if (_errorBtn == null) {
+      _errorBtn = new LButton.iconBare("formError", new LIconUtility(LIconUtility.ERROR), lFormError(), idPrefix: id);
+      _errorBtn.icon.classes.add(LText.C_TEXT_ERROR);
+      _errorBtn.classes.add(LVisibility.C_HIDE); // button hide
+      //
       _errorPop = new LPopover()
         ..headText = lFormError();
-      _error = new LButton.iconBare("formError", new LIconUtility(LIconUtility.ERROR), lFormError(), idPrefix: id);
-      _error.icon.classes.addAll([LText.C_TEXT_ERROR, LMargin.C_HORIZONTAL__LARGE]);
-      _errorPop.showAbove(_error, showOnClick:true, showOnHover:true);
-      // TODO _errorPop.wrapper.classes.add(LMargin.C_HORIZONTAL__X_SMALL);
-      _error.classes.add(LVisibility.C_HIDE); // button hide
+      _errorPop.showAbove(_errorBtn, showOnClick:true, showOnHover:true);
+      _errorPop.wrapper.classes.add(LMargin.C_HORIZONTAL__X_SMALL);
+      //
       if (buttonDiv == null)
         add(_errorPop);
       else
@@ -354,7 +356,7 @@ class LForm
     }
     return _errorPop;
   }
-  LButton _error;
+  LButton _errorBtn;
   LPopover _errorPop;
 
 
@@ -430,21 +432,21 @@ class LForm
       }
     }
     // show error indicator
-    if (_error != null) {
+    if (_errorBtn != null) {
       _errorPop.bodyLines = errors;
       if (valid)
-        _error.classes.add(LVisibility.C_HIDE); // button
+        _errorBtn.classes.add(LVisibility.C_HIDE); // button
       else
-        _error.classes.remove(LVisibility.C_HIDE);
+        _errorBtn.classes.remove(LVisibility.C_HIDE);
     }
     return valid;
   } // doValidate
 
   /// show error [message]
   void showError(String message) {
-    if (_error != null) {
+    if (_errorBtn != null) {
       _errorPop.bodyText = message;
-      _error.classes.remove(LVisibility.C_HIDE); // button
+      _errorBtn.classes.remove(LVisibility.C_HIDE); // button
     }
   }
 

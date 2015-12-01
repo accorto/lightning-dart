@@ -9,14 +9,19 @@ part of lightning_dart;
 /**
  * Dropdown with triggering button
  */
-class LDropdown extends LComponent {
+class LDropdown
+    extends LComponent {
 
   /// slds-dropdown - Initializes dropdown | Required
   static const String C_DROPDOWN = "slds-dropdown";
-  /// slds-dropdown-trigger - Initializes dropdown hover interactions | Required
+  /// slds-dropdown-trigger - Enables dropdown to show on hover | Required
   static const String C_DROPDOWN_TRIGGER = "slds-dropdown-trigger";
+  /// slds-dropdown-trigger--click - Modifier that enables dropdown to show on click
+  static const String C_DROPDOWN_TRIGGER__CLICK = "slds-dropdown-trigger--click";
   /// slds-dropdown__item - Initializes dropdown item | Required
   static const String C_DROPDOWN__ITEM = "slds-dropdown__item";
+  /// slds-dropdown--bottom - Positions dropdown to above target
+  static const String C_DROPDOWN__BOTTOM = "slds-dropdown--bottom";
   /// slds-dropdown--left - Positions dropdown to left side of target
   static const String C_DROPDOWN__LEFT = "slds-dropdown--left";
   /// slds-dropdown--right - Positions dropdown to right side of target
@@ -27,18 +32,43 @@ class LDropdown extends LComponent {
   static const String C_DROPDOWN__MEDIUM = "slds-dropdown--medium";
   /// slds-dropdown--large - Sets min-width of 25rem/400px
   static const String C_DROPDOWN__LARGE = "slds-dropdown--large";
-  /// slds-dropdown--nubbin-top - Applies triangle indicator pointing at content
-  static const String C_DROPDOWN__NUBBIN_TOP = "slds-dropdown--nubbin-top";
   /// slds-dropdown__header - Adds padding to area above dropdown menu list
   static const String C_DROPDOWN__HEADER = "slds-dropdown__header";
-  /// slds-has-icon - Lets dropdown item know how to position icon
-  static const String C_HAS_ICON = "slds-has-icon";
-  /// has-icon--left - Position icon in dropdown item to the left
-  static const String C_HAS_ICON__LEFT = "slds-has-icon--left";
-  /// has-icon--right - Position icon in dropdown item to the right
-  static const String C_HAS_ICON__RIGHT = "slds-has-icon--right";
+
+  /// slds-nubbin--top - Triangle that points upwards which is horizontally centered
+  static const String C_NUBBIN__TOP = "slds-nubbin--top";
+  /// slds-nubbin--top-left - Triangle that points upwards which is left aligned
+  static const String C_NUBBIN__TOP_LEFT = "slds-nubbin--top-left";
+  /// slds-nubbin--top-right - Triangle that points upwards which is right aligned
+  static const String C_NUBBIN__TOP_RIGHT = "slds-nubbin--top-right";
+  /// slds-nubbin--bottom - Triangle that points downwards which is horizontally centered
+  static const String C_NUBBIN__BOTTOM = "slds-nubbin--bottom";
+  /// slds-nubbin--bottom-left - Triangle that points downwards which is left aligned
+  static const String C_NUBBIN__BOTTOM_LEFT = "slds-nubbin--bottom-left";
+  /// slds-nubbin--bottom-right - Triangle that points downwards which is right aligned
+  static const String C_NUBBIN__BOTTOM_RIGHT = "slds-nubbin--bottom-right";
+
   /// slds-is-selected - Applies selected state to dropdown item
   static const String C_IS_SELECTED = "slds-is-selected";
+  /// slds-dropdown--nubbin-top - Applies triangle indicator pointing at content
+  static const String C_DROPDOWN__NUBBIN_TOP = "slds-dropdown--nubbin-top";
+  /// slds-has-icon - Lets dropdown item know how to position icon
+  static const String C_HAS_ICON = "slds-has-icon";
+  /// slds-has-icon--left - Position icon in dropdown item to the left
+  static const String C_HAS_ICON__LEFT = "slds-has-icon--left";
+  /// slds-has-icon--right - Position icon in dropdown item to the right
+  static const String C_HAS_ICON__RIGHT = "slds-has-icon--right";
+
+  /// slds-action-overflow--touch - Positions the Action overflow for touch to take up full screen
+  static const String C_ACTION_OVERFLOW__TOUCH = "slds-action-overflow--touch";
+  /// slds-action-overflow--touch__container - Pushes the menu to the bottom of the screen.
+  static const String C_ACTION_OVERFLOW__TOUCH__CONTAINER = "slds-action-overflow--touch__container";
+  /// slds-action-overflow--touch__content - Creates a scrolling area that is pushed down the screen by a third of the viewport height.
+  static const String C_ACTION_OVERFLOW__TOUCH__CONTENT = "slds-action-overflow--touch__content";
+  /// slds-action-overflow--touch__body - Draws the white menu.
+  static const String C_ACTION_OVERFLOW__TOUCH__BODY = "slds-action-overflow--touch__body";
+  /// slds-action-overflow--touch__footer - Creates the footer for the Cancel button.
+  static const String C_ACTION_OVERFLOW__TOUCH__FOOTER = "slds-action-overflow--touch__footer";
 
 
   static const String C_CLICK_TO_SHOW = "slds-click-to-show";
@@ -100,16 +130,16 @@ class LDropdown extends LComponent {
     element.append(dropdown.element);
   } // LDropdown
 
-  /// Settings Button+Dropdown
-  LDropdown.settings({String idPrefix})
+  /// Settings Icon Button + Dropdown
+  LDropdown.settings({String idPrefix, String text: "Settings"})
     : this(new LButton(new ButtonElement(), "settings", null,
         icon: new LIconUtility(LIconUtility.SETTINGS),
         buttonClasses: [LButton.C_BUTTON__ICON_CONTAINER],
-        assistiveText: "Settings",
+        assistiveText: text,
         idPrefix:idPrefix),
     idPrefix);
 
-  /// Icon Button+Dropdown
+  /// Icon Button + Dropdown
   LDropdown.icon (String name, LIcon icon, {String idPrefix, String assistiveText})
     : this(new LButton(new ButtonElement(), name, null,
         icon:icon,
@@ -118,15 +148,15 @@ class LDropdown extends LComponent {
         idPrefix:idPrefix),
     idPrefix);
 
-
-  LDropdown.action({String idPrefix})
+  /// More Button + Dropdown
+  LDropdown.action({String idPrefix, String text: "More"})
     : this(new LButton(new ButtonElement(), "more", null,
         buttonClasses: [LButton.C_BUTTON__ICON_BORDER_FILLED],
         icon: new LIconUtility(LIconUtility.DOWN),
-        assistiveText: "More",
+        assistiveText: text,
         idPrefix:idPrefix),
       idPrefix,
-      dropdownClasses: [LDropdown.C_DROPDOWN__RIGHT, LDropdown.C_DROPDOWN__ACTIONS]);
+      dropdownClasses: [C_DROPDOWN__RIGHT, C_DROPDOWN__ACTIONS]);
 
   /**
    * Select Dropdown
@@ -135,7 +165,7 @@ class LDropdown extends LComponent {
     : this(new LButton(new ButtonElement(), "select", null,
         buttonClasses: [LButton.C_BUTTON__ICON_MORE], idPrefix:idPrefix),
       idPrefix,
-      dropdownClasses: [LDropdown.C_DROPDOWN__SMALL]);
+      dropdownClasses: [C_DROPDOWN__SMALL]);
 
 
   /**

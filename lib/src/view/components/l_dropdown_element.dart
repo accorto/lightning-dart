@@ -172,7 +172,7 @@ class LDropdownElement
     _dropdownItemList.add(item);
     _dropdownList.append(item.element);
     item.onClick.listen(onItemClick);
-    item.hasIconLeft = _selectMode;
+    // item.hasIconLeft = _selectMode;
   }
 
   /// Selection (toggle) mode - update value
@@ -180,7 +180,7 @@ class LDropdownElement
   void set selectMode (bool newValue) {
     _selectMode = newValue;
     for (LDropdownItem item in _dropdownItemList) {
-      item.hasIconLeft = newValue;
+    //  item.hasIconLeft = newValue;
     }
   }
   bool _selectMode = false;

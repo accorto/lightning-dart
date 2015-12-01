@@ -19,26 +19,6 @@ abstract class LTile extends LComponent {
   static const String C_TILE__DETAIL = "slds-tile__detail";
   /// slds-tile__meta - Applies text color change
   static const String C_TILE__META = "slds-tile__meta";
-  /// slds-media - Layout helper that aligns image and text
-  static const String C_MEDIA = "slds-media";
-  /// slds-media__body - Layout helper
-  static const String C_MEDIA__BODY = "slds-media__body";
-  /// slds-truncate - Applies overflow truncation to tile detail items
-  static const String C_TRUNCATE = "slds-truncate";
-  /// slds-list--horizontal - Horizontally aligns list items
-  static const String C_LIST__HORIZONTAL = "slds-list--horizontal";
-  /// slds-has-dividers - Adds dotted dividers in a horizontal list
-  static const String C_HAS_DIVIDERS = "slds-has-dividers";
-  /// slds-list--vertical - Vertically aligns list items
-  static const String C_LIST__VERTICAL = "slds-list--vertical";
-  /// slds-grid - Initializes a grid layout
-  static const String C_GRID = "slds-grid";
-  /// slds-grid--align-spread - Spreads the elements on each end of the same axis
-  static const String C_GRID__ALIGN_SPREAD = "slds-grid--align-spread";
-  /// slds-has-flexi-truncate - Layout helper applied to a parent .slds-grid when .slds-truncate is within a flex element
-  static const String C_HAS_FLEXI_TRUNCATE = "slds-has-flexi-truncate";
-  /// slds-hint-parent - Highlights dimmed action overflow icons on tile hover
-  static const String C_HINT_PARENT = "slds-hint-parent";
 
   /// tile board
   static const String C_TILE__BOARD = "slds-tile--board";

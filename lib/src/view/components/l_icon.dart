@@ -56,6 +56,9 @@ class LIcon {
   /// slds-icon__container--circle - Creates a circular icon shape |
   static const String C_ICON__CONTAINER__CIRCLE = "slds-icon__container--circle";
 
+  /// slds-icon--selected - Creates icon when a user selects a .slds-dropdown__item
+  static const String C_ICON__SELECTED = "slds-icon--selected";
+
   /// rotate icon right 90
   static const String C_ROTATE_RIGHT = "rotate-right";
   /// rotate icon left -90
@@ -208,7 +211,7 @@ class LIcon {
   /// set [cssSize] - C_ICON__LARGE, C_ICON__SMALL, C_ICON__X_SMALL
   void set size (String cssSize) {
     element.classes.removeAll([C_ICON__LARGE, C_ICON__SMALL, C_ICON__X_SMALL]);
-    if (cssSize != null && cssSize.isEmpty)
+    if (cssSize != null && cssSize.isNotEmpty)
       element.classes.add(cssSize);
   }
 
