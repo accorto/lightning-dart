@@ -18,6 +18,7 @@ class LDropdownItem
     return new LDropdownItem(option, rightIcon:icon);
   }
 
+  /// create select icon
   static LIcon createSelect() {
     return new LIconUtility(
         LIconUtility.CHECK, size: LIcon.C_ICON__X_SMALL,
@@ -29,7 +30,7 @@ class LDropdownItem
    * Dropdown item (leftIcon is used for selection)
    */
   LDropdownItem(DOption option, {LIcon rightIcon})
-    : super(option, leftIcon:createSelect(), rightIcon:rightIcon) {
+    : super(option, rightIcon:rightIcon) {
 
     element
       ..classes.add(LDropdown.C_DROPDOWN__ITEM)
@@ -79,11 +80,19 @@ class LDropdownItem
   LIcon get icon => _rightIcon;
 
 
+  bool get selectMode => _leftIcon != null;
+  void set selectMode (bool newValue) {
+    if (newValue)
+      _leftIcon = createSelect();
+    else
+      _leftIcon = null;
+  }
+
   bool get hasIconRight => _rightIcon != null;
   void set hasIconRight (bool newValue) { // NOP
   }
 
-  bool get hasIconLeft => true;
+  bool get hasIconLeft => _leftIcon != null;
   void set hasIconLeft (bool newValue) { // NOP
   }
 

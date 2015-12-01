@@ -172,7 +172,7 @@ class LDropdownElement
     _dropdownItemList.add(item);
     _dropdownList.append(item.element);
     item.onClick.listen(onItemClick);
-    // item.hasIconLeft = _selectMode;
+    item.selectMode = _selectMode;
   }
 
   /// Selection (toggle) mode - update value
@@ -180,7 +180,7 @@ class LDropdownElement
   void set selectMode (bool newValue) {
     _selectMode = newValue;
     for (LDropdownItem item in _dropdownItemList) {
-    //  item.hasIconLeft = newValue;
+      item.selectMode = newValue;
     }
   }
   bool _selectMode = false;
@@ -194,7 +194,8 @@ class LDropdownElement
     String tvalue = telement.attributes[Html0.DATA_VALUE];
     while (tvalue == null && telement != null) {
       telement = telement.parent;
-      tvalue = telement.attributes[Html0.DATA_VALUE];
+      if (telement != null)
+        tvalue = telement.attributes[Html0.DATA_VALUE];
       if (telement is AnchorElement)
         break;
     }
