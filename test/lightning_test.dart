@@ -46,7 +46,7 @@ void main() {
     test('First Test', () {
       expect(page, isNotNull);
       expect(demoPage, isNotNull);
-      expect(demoPage.element.children.length, equals(32));
+      expect(demoPage.element.children.length, equals(31));
       print('first test');
     });
   }); // Components
