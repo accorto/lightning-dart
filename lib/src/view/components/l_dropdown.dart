@@ -131,11 +131,11 @@ class LDropdown
   } // LDropdown
 
   /// Settings Icon Button + Dropdown
-  LDropdown.settings({String idPrefix, String text: "Settings"})
+  LDropdown.settings({String idPrefix, String title: "Settings"})
     : this(new LButton(new ButtonElement(), "settings", null,
         icon: new LIconUtility(LIconUtility.SETTINGS),
         buttonClasses: [LButton.C_BUTTON__ICON_CONTAINER],
-        assistiveText: text,
+        assistiveText: title,
         idPrefix:idPrefix),
     idPrefix);
 
@@ -148,12 +148,12 @@ class LDropdown
         idPrefix:idPrefix),
     idPrefix);
 
-  /// More Button + Dropdown
-  LDropdown.action({String idPrefix, String text: "More"})
+  /// Action: More Button + Dropdown
+  LDropdown.action({String idPrefix, String title: "More"})
     : this(new LButton(new ButtonElement(), "more", null,
         buttonClasses: [LButton.C_BUTTON__ICON_BORDER_FILLED],
         icon: new LIconUtility(LIconUtility.DOWN),
-        assistiveText: text,
+        assistiveText: title,
         idPrefix:idPrefix),
       idPrefix,
       dropdownClasses: [C_DROPDOWN__RIGHT, C_DROPDOWN__ACTIONS]);

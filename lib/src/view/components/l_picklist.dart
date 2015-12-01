@@ -38,13 +38,13 @@ class LPicklist
   static const String C_PICKLIST__MULTI = "slds-picklist--multi";
 
   /// Picklist Element
-  final DivElement _pl = new DivElement()
+  final DivElement _plDiv = new DivElement()
     ..classes.add(C_PICKLIST);
-  /// Button Label
-  final SpanElement _buttonLabel = new SpanElement()
-    ..classes.add(LText.C_TRUNCATE);
   /// Button (proxy input)
-  LButton _button;
+  LButton _plButton;
+  /// Button Label
+  final SpanElement _plButtonLabel = new SpanElement()
+    ..classes.add(LText.C_TRUNCATE);
   /// The Dropdown
   LDropdownElement _dropdown;
 
@@ -69,34 +69,36 @@ class LPicklist
   }
   /// initialize
   void _initEditor(String name, String idPrefix) {
-    element.append(_pl);
-    _button = new LButton(new ButtonElement(), name, null, idPrefix:idPrefix,
-    buttonClasses: [LButton.C_BUTTON__NEUTRAL, C_PICKLIST__LABEL],
-    labelElement: _buttonLabel,
-    icon: new LIconUtility(LIconUtility.DOWN));
-    _button.element.attributes[Html0.ARIA_HASPOPUP] = "true";
-    _button.iconButton = false;
-    _button.onClick.listen(onButtonClick);
-    _pl.append(_button.element);
-    _buttonLabel.text = lPicklistSelectOption();
+    _plButton = new LButton(new ButtonElement(), name, null, idPrefix:idPrefix,
+      buttonClasses: [LButton.C_BUTTON__NEUTRAL, C_PICKLIST__LABEL],
+      labelElement: _plButtonLabel,
+      icon: new LIconUtility(LIconUtility.DOWN));
+    _plButton.element.attributes[Html0.ARIA_HASPOPUP] = "true";
+    _plButton.iconButton = false;
+    _plButton.onClick.listen(onButtonClick);
+    _plDiv.append(_plButton.element);
+    _plButtonLabel.text = lPicklistSelectOption();
+    //
     createStandard(this);
+    element.append(_plDiv);
     //
     _dropdown = new LDropdownElement(
         new DivElement()
           ..classes.addAll([LDropdown.C_DROPDOWN, LDropdown.C_DROPDOWN__LEFT,
-        LDropdown.C_DROPDOWN__SMALL, LDropdown.C_DROPDOWN__MENU]),
+            LDropdown.C_DROPDOWN__MENU]),
         name:name, idPrefix:id);
-    _pl.append(_dropdown.element);
+    _dropdown.selectMode = true;
+    _plDiv.append(_dropdown.element);
     //
     expanded = false;
     _dropdown.selectMode = true;
     _dropdown.editorChange = onEditorChange;
   } // initEditor
 
-  String get id => _button.id;
+  String get id => _plButton.id;
   void set id (String newValue) {
     if (newValue != null && newValue.isNotEmpty) {
-      _button.element.id = newValue;
+      _plButton.element.id = newValue;
     //  if (_labelElement != null)
     //    _labelElement.htmlFor = newValue;
     }
@@ -105,9 +107,9 @@ class LPicklist
     id = createId(idPrefix, name);
   }
 
-  String get name => _button.name;
+  String get name => _plButton.name;
   String get type => EditorI.TYPE_SELECT;
-  Element get input => _button.element;
+  Element get input => _plButton.element;
   bool get multiple => false;
 
   /// Small Editor/Label
@@ -126,9 +128,9 @@ class LPicklist
   /// Set Button - label
   void _setValue(ListItem item) {
     if (item != null && item.label != null && item.label.isNotEmpty) {
-      _buttonLabel.text = item.label;
+      _plButtonLabel.text = item.label;
     } else {
-      _buttonLabel.text = lPicklistSelectOption();
+      _plButtonLabel.text = lPicklistSelectOption();
     }
   }
 
@@ -178,14 +180,14 @@ class LPicklist
 
   /// base editor methods
 
-  bool get readOnly => _button.disabled;
+  bool get readOnly => _plButton.disabled;
   void set readOnly (bool newValue) {
-    _button.disabled = newValue;
+    _plButton.disabled = newValue;
   }
 
-  bool get disabled => _button.disabled;
+  bool get disabled => _plButton.disabled;
   void set disabled (bool newValue) {
-    _button.disabled = newValue;
+    _plButton.disabled = newValue;
   }
 
   bool get required => _dropdown.required;
@@ -252,10 +254,10 @@ class LPicklist
 
 
   /// PickList Expanded
-  bool get expanded => _pl.attributes[Html0.ARIA_EXPANED] == "true";
+  bool get expanded => _plDiv.attributes[Html0.ARIA_EXPANED] == "true";
   /// PickList Expanded
   void set expanded (bool newValue) {
-    _pl.attributes[Html0.ARIA_EXPANED] = newValue.toString();
+    _plDiv.attributes[Html0.ARIA_EXPANED] = newValue.toString();
     _dropdown.show = newValue;
   }
 
