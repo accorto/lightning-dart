@@ -26,6 +26,7 @@ class LPicklist
   /// slds-picklist__options - Custom select group of options | Required
   static const String C_PICKLIST__OPTIONS = "slds-picklist__options";
 
+  static const String C_PICKLIST__FLUID = "slds-picklist--fluid";
   static const String C_PICKLIST__OPTIONS__MULTI = "slds-picklist__options--multi";
 
   /// slds-picklist__item - Styles for items within the optiongroup | Required

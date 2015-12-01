@@ -17,11 +17,6 @@ class LDatepicker extends LInputDate {
   static const String C_DATEPICKER__FILTER = "slds-datepicker__filter";
   /// slds-datepicker__filter--month - Spaces out month filter | Required
   static const String C_DATEPICKER__FILTER__MONTH = "slds-datepicker__filter--month";
-  static const String C_DATEPICKER__FILTER__YEAR = "slds-datepicker__filter--year";
-
-  /// Table
-  static const String C_DATEPICKER__MONTH = "slds-datepicker__month";
-
   /// slds-day - Style for calendar days | Required
   static const String C_DAY = "slds-day";
   /// slds-is-today - Indicates today
@@ -35,8 +30,15 @@ class LDatepicker extends LInputDate {
   /// slds-disabled-text - Indicates days that are in previous/next months
   static const String C_DISABLED_TEXT = "slds-disabled-text";
 
+
+  /// Table marker
+  static const String C_DATEPICKER__MONTH = "datepicker__month";
+  /// Attribute
   static const String DATA_SELECTION = "data-selection";
+  /// Attribute value
   static const String DATA_SELECTION_SINGLE = "single";
+  static const String DATA_SELECTION_MULTI = "multi";
+  static const String DATA_SELECTION_TIME = "time";
 
   // Select Mode - Single (default)
   static const String MODE_SINGLE = "s";

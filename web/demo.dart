@@ -24,6 +24,7 @@ part 'demo/button_groups.dart';
 part 'demo/cards.dart';
 part 'demo/datepickers.dart';
 part 'demo/dropdowns.dart';
+part 'demo/feeds.dart';
 part 'demo/forms.dart';
 part 'demo/forms2.dart';
 part 'demo/forms_editor.dart';
@@ -44,7 +45,6 @@ part 'demo/tables.dart';
 part 'demo/tabs.dart';
 part 'demo/tiles.dart';
 part 'demo/trees.dart';
-part 'demo/tooltips.dart';
 
 part 'demo/themes.dart';
 
@@ -114,6 +114,7 @@ class DemoPage extends AppsPage {
     add(new Tables()..toc(toc));
     add(new Datepickers()..toc(toc));
     add(new Dropdowns()..toc(toc));
+    add(new Feeds()..toc(toc));
     add(new Forms()..toc(toc));
     add(new Forms2()..toc(toc));
     add(new FormsEditor()..toc(toc));
@@ -132,7 +133,6 @@ class DemoPage extends AppsPage {
     add(new Spinners()..toc(toc));
     add(new Tabs()..toc(toc));
     add(new Tiles()..toc(toc));
-    add(new Tooltips()..toc(toc));
     add(new Trees()..toc(toc));
 
     add(new Themes()..toc(toc));

@@ -38,6 +38,8 @@ class LText {
   /// slds-type-focus - Creates a faux link with interactions
   static const String C_TYPE_FOCUS = "slds-type-focus";
 
+  /// Form Section
+  static const String C_SECTION_TITLE__DIVIDER = "slds-section-title--divider";
 
 
   static const String C_SECTION_GROUP__IS_OPEN = "section-group--is-open";

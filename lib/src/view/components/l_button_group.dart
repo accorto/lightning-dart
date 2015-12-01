@@ -11,8 +11,13 @@ part of lightning_dart;
  */
 class LButtonGroup extends LComponent {
 
+  /// slds-button-group - Initializes a grouped set of buttons | Required
   static const String C_BUTTON_GROUP = "slds-button-group";
+  /// slds-button--last - Identifies the last button when wrapped in another element
   static const String C_BUTTON__LAST = "slds-button--last";
+  /// slds-toggle-visibility - Identifies the last icon button when it should be hidden when `[disabled]`
+  static const String C_TOGGLE_VISIBILITY = "slds-toggle-visibility";
+
 
   /// Button Group
   DivElement element = new DivElement()

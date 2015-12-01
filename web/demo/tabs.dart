@@ -13,7 +13,7 @@ class Tabs extends DemoFeature {
   devStatus: DemoFeature.STATUS_COMPLETE,
   hints: [],
   issues: [],
-  plans: []);
+  plans: ["overflow"]);
 
   LComponent get content {
 

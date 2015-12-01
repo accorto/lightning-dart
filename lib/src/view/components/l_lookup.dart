@@ -119,7 +119,7 @@ class LLookup
       });
     } else {
       _pillContainer = new DivElement()
-        ..classes.add(LPill.C_PILL_CONTAINER);
+        ..classes.add(LPill.C_PILL__CONTAINER);
 
       if (select == DATA_SELECT_SINGLE) {
         input.classes.add(LVisibility.C_HIDE);

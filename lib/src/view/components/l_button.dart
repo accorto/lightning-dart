@@ -9,60 +9,124 @@ part of lightning_dart;
 /**
  * Buttons
  */
-class LButton extends LComponent {
+class LButton
+    extends LComponent {
 
-  /// slds-button - Initializes a 2.25 rem (36px) height button | Required
+  /// slds-button - Initializes a 2.25rem (36px) height button | Required
   static const String C_BUTTON = "slds-button";
-  /// slds-button--small - Creates a smaller 2 rem (32px) button |
+  /// slds-button--small - Creates a smaller 2rem (32px) button
   static const String C_BUTTON__SMALL = "slds-button--small";
-  /// slds-button--neutral - Creates the gray border with white background default style |
+  /// slds-button--neutral - Creates the gray border with white background default style
   static const String C_BUTTON__NEUTRAL = "slds-button--neutral";
-  /// slds-button--brand - Creates the brand blue Salesforce style |
+  /// slds-button--brand - Creates the brand blue Salesforce style
   static const String C_BUTTON__BRAND = "slds-button--brand";
-  /// slds-button--inverse - Creates the red button style |
+  /// slds-button--destructive - Creates a red button style
   static const String C_BUTTON__DESTRUCTIVE = "slds-button--destructive";
-  /// slds-button--inverse - Creates the inverse style for dark backgrounds |
+  /// slds-button--inverse - Creates the inverse style for dark backgrounds
   static const String C_BUTTON__INVERSE = "slds-button--inverse";
-  /// slds-button--icon-bare - Creates a button that looks like a plain icon |
+  /// slds-button--icon-bare - Creates a button that looks like a plain icon
   static const String C_BUTTON__ICON_BARE = "slds-button--icon-bare";
-  /// slds-button--icon-container - Creates a button that looks like a plain icon |
+  /// slds-button--icon-container - Creates a button that looks like a plain icon
   static const String C_BUTTON__ICON_CONTAINER = "slds-button--icon-container";
-  /// slds-button--icon-border - Creates an icon button with a border |
+  /// slds-button--icon-border - Creates an icon button with a border
   static const String C_BUTTON__ICON_BORDER = "slds-button--icon-border";
-  /// slds-button--icon-border-filled - Creates an icon button with a border |
+  /// slds-button--icon-border-filled - Creates an icon button with a border
   static const String C_BUTTON__ICON_BORDER_FILLED = "slds-button--icon-border-filled";
-  /// slds-button--icon-small - Creates an icon button at the smaller 2 rem (32px) size |
+  /// slds-button--icon-small - Creates an icon button at the smaller 2rem (32px) size
   static const String C_BUTTON__ICON_SMALL = "slds-button--icon-small";
+  /// slds-button--icon-x-small - Creates an icon button at the smaller 1.25rem (20px) size
   static const String C_BUTTON__ICON_X_SMALL = "slds-button--icon-x-small";
-  /// slds-button--icon-more - Used for the style where only two icons are in a button |
+  /// slds-button--icon-more - Used for the style where only two icons are in a button
   static const String C_BUTTON__ICON_MORE = "slds-button--icon-more";
-  /// Stretches buttons a full 100% width for small form factors
+  /// slds-x-small-button--stacked - Stacking buttons with spacing for at least x-small breakpoint.
+  static const String C_X_SMALL_BUTTON__STACKED = "slds-x-small-button--stacked";
+  /// slds-small-button--stacked - Stacking buttons with spacing for at least small breakpoint.
+  static const String C_SMALL_BUTTON__STACKED = "slds-small-button--stacked";
+  /// slds-medium-button--stacked - Stacking buttons with spacing for at least medium breakpoint.
+  static const String C_MEDIUM_BUTTON__STACKED = "slds-medium-button--stacked";
+  /// slds-large-button--stacked - Stacking buttons with spacing for at least large breakpoint.
+  static const String C_LARGE_BUTTON__STACKED = "slds-large-button--stacked";
+  /// slds-x-small-buttons--stacked - Stacking buttons inside of this class with spacing for at least x-small breakpoint.
+  static const String C_X_SMALL_BUTTONS__STACKED = "slds-x-small-buttons--stacked";
+  /// slds-small-buttons--stacked - Stacking buttons inside of this class with spacing for at least small breakpoint.
+  static const String C_SMALL_BUTTONS__STACKED = "slds-small-buttons--stacked";
+  /// slds-medium-buttons--stacked - Stacking buttons inside of this class with spacing for at least medium breakpoint.
+  static const String C_MEDIUM_BUTTONS__STACKED = "slds-medium-buttons--stacked";
+  /// slds-large-buttons--stacked - Stacking buttons inside of this class with spacing for at least large breakpoint.
+  static const String C_LARGE_BUTTONS__STACKED = "slds-large-buttons--stacked";
+  /// slds-max-x-small-button--stacked - Stacking buttons with spacing for at most x-small breakpoint.
+  static const String C_MAX_X_SMALL_BUTTON__STACKED = "slds-max-x-small-button--stacked";
+  /// slds-max-small-button--stacked - Stacking buttons with spacing for at most small breakpoint.
+  static const String C_MAX_SMALL_BUTTON__STACKED = "slds-max-small-button--stacked";
+  /// slds-max-medium-button--stacked - Stacking buttons with spacing for at most medium breakpoint.
+  static const String C_MAX_MEDIUM_BUTTON__STACKED = "slds-max-medium-button--stacked";
+  /// slds-max-large-button--stacked - Stacking buttons with spacing for at most large breakpoint.
+  static const String C_MAX_LARGE_BUTTON__STACKED = "slds-max-large-button--stacked";
+  /// slds-max-x-small-buttons--stacked - Stacking buttons inside of this class with spacing for at most x-small breakpoint.
+  static const String C_MAX_X_SMALL_BUTTONS__STACKED = "slds-max-x-small-buttons--stacked";
+  /// slds-max-small-buttons--stacked - Stacking buttons inside of this class with spacing for at most small breakpoint.
+  static const String C_MAX_SMALL_BUTTONS__STACKED = "slds-max-small-buttons--stacked";
+  /// slds-max-medium-buttons--stacked - Stacking buttons inside of this class with spacing for at most medium breakpoint.
+  static const String C_MAX_MEDIUM_BUTTONS__STACKED = "slds-max-medium-buttons--stacked";
+  /// slds-max-large-buttons--stacked - Stacking buttons inside of this class with spacing for at most large breakpoint.
+  static const String C_MAX_LARGE_BUTTONS__STACKED = "slds-max-large-buttons--stacked";
+  /// slds-x-small-button--horizontal - Giving horizontal buttons spacing for at least x-small breakpoint.
+  static const String C_X_SMALL_BUTTON__HORIZONTAL = "slds-x-small-button--horizontal";
+  /// slds-small-button--horizontal - Giving horizontal buttons spacing for at least small breakpoint.
+  static const String C_SMALL_BUTTON__HORIZONTAL = "slds-small-button--horizontal";
+  /// slds-medium-button--horizontal - Giving horizontal buttons spacing for at least medium breakpoint.
+  static const String C_MEDIUM_BUTTON__HORIZONTAL = "slds-medium-button--horizontal";
+  /// slds-large-button--horizontal - Giving horizontal buttons spacing for at least large breakpoint.
+  static const String C_LARGE_BUTTON__HORIZONTAL = "slds-large-button--horizontal";
+  /// slds-x-small-buttons--horizontal - Giving horizontal buttons inside of this class spacing for at least x-small breakpoint.
+  static const String C_X_SMALL_BUTTONS__HORIZONTAL = "slds-x-small-buttons--horizontal";
+  /// slds-small-buttons--horizontal - Giving horizontal buttons inside of this class spacing for at least small breakpoint.
+  static const String C_SMALL_BUTTONS__HORIZONTAL = "slds-small-buttons--horizontal";
+  /// slds-medium-buttons--horizontal - Giving horizontal buttons inside of this class spacing for at least medium breakpoint.
+  static const String C_MEDIUM_BUTTONS__HORIZONTAL = "slds-medium-buttons--horizontal";
+  /// slds-large-buttons--horizontal - Giving horizontal buttons inside of this class spacing for at least large breakpoint.
+  static const String C_LARGE_BUTTONS__HORIZONTAL = "slds-large-buttons--horizontal";
+  /// slds-max-x-small-button--horizontal - Giving horizontal buttons spacing for at most x-small breakpoint.
+  static const String C_MAX_X_SMALL_BUTTON__HORIZONTAL = "slds-max-x-small-button--horizontal";
+  /// slds-max-small-button--horizontal - Giving horizontal buttons spacing for at most small breakpoint.
+  static const String C_MAX_SMALL_BUTTON__HORIZONTAL = "slds-max-small-button--horizontal";
+  /// slds-max-medium-button--horizontal - Giving horizontal buttons spacing for at most medium breakpoint.
+  static const String C_MAX_MEDIUM_BUTTON__HORIZONTAL = "slds-max-medium-button--horizontal";
+  /// slds-max-large-button--horizontal - Giving horizontal buttons spacing for at most large breakpoint.
+  static const String C_MAX_LARGE_BUTTON__HORIZONTAL = "slds-max-large-button--horizontal";
+  /// slds-max-x-small-buttons--horizontal - Giving horizontal buttons inside of this class spacing for at most x-small breakpoint.
+  static const String C_MAX_X_SMALL_BUTTONS__HORIZONTAL = "slds-max-x-small-buttons--horizontal";
+  /// slds-max-small-buttons--horizontal - Giving horizontal buttons inside of this class spacing for at most small breakpoint.
+  static const String C_MAX_SMALL_BUTTONS__HORIZONTAL = "slds-max-small-buttons--horizontal";
+  /// slds-max-medium-buttons--horizontal - Giving horizontal buttons inside of this class spacing for at most medium breakpoint.
+  static const String C_MAX_MEDIUM_BUTTONS__HORIZONTAL = "slds-max-medium-buttons--horizontal";
+  /// slds-max-large-buttons--horizontal - Giving horizontal buttons inside of this class spacing for at most large breakpoint.
+  static const String C_MAX_LARGE_BUTTONS__HORIZONTAL = "slds-max-large-buttons--horizontal";
+  /// slds-max-small-button--stretch - Stretches buttons a full 100% width for small form factors
   static const String C_MAX_SMALL_BUTTON__STRETCH = "slds-max-small-button--stretch";
-  /// slds-button__icon - Sets the size and color of the icon inside a button |
+  /// slds-max-small-buttons--stretch - A parent container that stretches buttons within it to 100% width.
+  static const String C_MAX_SMALL_BUTTONS__STRETCH = "slds-max-small-buttons--stretch";
+  /// slds-button__icon - Sets the size and color of the icon inside a button
   static const String C_BUTTON__ICON = "slds-button__icon";
-  /// slds-button__icon--stateful - This makes the icon the same color as the text in the button |
+  /// slds-button__icon--stateful - This makes the icon the same color as the text in the button
   static const String C_BUTTON__ICON__STATEFUL = "slds-button__icon--stateful";
-  /// slds-button__icon--left - Puts the icon on the left side of the button |
+  /// slds-button__icon--left - Puts the icon on the left side of the button
   static const String C_BUTTON__ICON__LEFT = "slds-button__icon--left";
-  /// slds-button__icon--right - Puts the icon on the right side of the button |
+  /// slds-button__icon--right - Puts the icon on the right side of the button
   static const String C_BUTTON__ICON__RIGHT = "slds-button__icon--right";
-  /// slds-button__icon--inverse - Gives a white icon color on a dark background |
-  static const String C_BUTTON__ICON__INVERSE = "slds-button--icon--inverse"; // discrepancy
-  /// slds-button__icon--x-small - Creates a .5rem (8px) size icon |
+  /// button__icon--inverse - Gives a white icon color on a dark background
+  static const String C_BUTTON__ICON__INVERSE = "button__icon--inverse";
+  /// slds-button__icon--x-small - Creates a .5rem (8px) size icon
   static const String C_BUTTON__ICON__X_SMALL = "slds-button__icon--x-small";
-  /// slds-button__icon--small - Creates a .75rem (12px) size icon |
+  /// slds-button__icon--small - Creates a .75rem (12px) size icon
   static const String C_BUTTON__ICON__SMALL = "slds-button__icon--small";
-  /// slds-button__icon--large - Creates a 1.5rem (24px) size icon |
+  /// slds-button__icon--large - Creates a 1.5rem (24px) size icon
   static const String C_BUTTON__ICON__LARGE = "slds-button__icon--large";
-  /// slds-button__icon--hint - Creates a grayed out icon until the parent is hovered |
+  /// slds-button__icon--hint - Creates a grayed out icon until the parent is hovered
   static const String C_BUTTON__ICON__HINT = "slds-button__icon--hint";
-  /// slds-button-space-left - adds space on the left of a button wrapped in a parent |
+  /// slds-button-space-left - Adds space on the left of a button wrapped in a parent
   static const String C_BUTTON_SPACE_LEFT = "slds-button-space-left";
 
-
-
-  /// Hint
-  static const String C_BUTTON__HINT = "slds-button--hint";
   /// Hint Wrapper
   static const String C_HINT_PARENT = "slds-hint-parent";
 

@@ -12,7 +12,8 @@ class Modals extends DemoFeature {
   : super("modals", "Modals",
   sldsStatus: DemoFeature.SLDS_PROTOTYPE,
   devStatus: DemoFeature.STATUS_COMPLETE,
-  hints: ["you can add html elements instead of simple text"],
+  hints: ["you can add html elements instead of simple text",
+    "you can drag modals (grap header)"],
   issues: [],
   plans: []);
 

@@ -32,9 +32,6 @@ class LForm
   static const String C_FORM_ELEMENT = "slds-form-element";
   /// slds-form-element__label - Initializes form element label | Required
   static const String C_FORM_ELEMENT__LABEL = "slds-form-element__label";
-  /// small label
-  static const String C_FORM_ELEMENT__LABEL__SMALL = "slds-form-element__label--small";
-  static const String C_FORM_ELEMENT__LABEL__TOP = "slds-form-element__label--top";
   /// slds-form-element__control - Initializes form element control | Required
   static const String C_FORM_ELEMENT__CONTROL = "slds-form-element__control";
   /// slds-input - Initializes text input | Required
@@ -57,32 +54,39 @@ class LForm
   static const String C_SELECT = "slds-select";
   /// slds-checkbox - Initializes checkbox | Required
   static const String C_CHECKBOX = "slds-checkbox";
-  /// slds-checkbox--faux - Creates a custom styled checkbox
+  /// slds-checkbox--faux - Creates a custom styled checkbox | Required
   static const String C_CHECKBOX__FAUX = "slds-checkbox--faux";
-  /// slds-radio - Initializes radio butotn | Required
+  /// slds-radio - Initializes radio button | Required
   static const String C_RADIO = "slds-radio";
-  /// slds-radio--faux - Creates a custom styled radio button
+  /// slds-radio--faux - Creates a custom styled radio button | Required
   static const String C_RADIO__FAUX = "slds-radio--faux";
-  /// slds-form--horizontal - Horizontally aligns form label and control on same line
+  /// slds-form--horizontal - Horizontally aligns a single form label and control on the same line
   static const String C_FORM__HORIZONTAL = "slds-form--horizontal";
   /// slds-form--stacked - Vertically aligns form label and control, provides spacing between form elements
   static const String C_FORM__STACKED = "slds-form--stacked";
-  /// slds-form--inline - horizontally align form elements on the same axis
+  /// slds-form--inline - horizontally align multiple form elements on the same axis
   static const String C_FORM__INLINE = "slds-form--inline";
-  /// slds-form--compound - Form consists that consists of form groups
+  /// slds-form--compound - Creates a form that consists of multiple form groups
   static const String C_FORM__COMPOUND = "slds-form--compound";
-  /// slds-form-element__row - Clears a row of form elements
+  /// slds-form-element__row - Use to create rows of form elements in a compound form
   static const String C_FORM_ELEMENT__ROW = "slds-form-element__row";
   /// slds-form--compound--horizontal - Layout modifier for compound forms
   static const String C_FORM__COMPOUND__HORIZONTAL = "slds-form--compound--horizontal";
 
+  /// top label (top 0)
+  static const String C_FORM_ELEMENT__LABEL__TOP = "slds-form-element__label--top";
+  /// marker only
+  static const String C_FORM_ELEMENT__LABEL__SMALL = "slds-form-element__label--small";
 
+  /// marker
   static const String C_FORM_ELEMENT__GROUP = "slds-form-element--group";
+  /// font-size 0.75rem
   static const String C_FORM_ELEMENT__HELPER = "slds-form-element--helper";
 
   static const String C_HAS_ERROR = "slds-has-error";
   static const String C_IS_REQUIRED = "slds-is-required";
 
+  /// Help Block
   static const String C_FORM_ELEMENT__HELP = "slds-form-element__help";
 
   static final List<String> FORMTYPES = [C_FORM__HORIZONTAL, C_FORM__STACKED, C_FORM__INLINE];
@@ -341,7 +345,7 @@ class LForm
       _error = new LButton.iconBare("formError", new LIconUtility(LIconUtility.ERROR), lFormError(), idPrefix: id);
       _error.icon.classes.addAll([LText.C_TEXT_ERROR, LMargin.C_HORIZONTAL__LARGE]);
       _errorPop.showAbove(_error, showOnClick:true, showOnHover:true);
-      _errorPop.wrapper.classes.add(LMargin.C_HORIZONTAL__X_SMALL);
+      // TODO _errorPop.wrapper.classes.add(LMargin.C_HORIZONTAL__X_SMALL);
       _error.classes.add(LVisibility.C_HIDE); // button hide
       if (buttonDiv == null)
         add(_errorPop);

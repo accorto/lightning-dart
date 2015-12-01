@@ -11,14 +11,19 @@ part of lightning_dart;
  */
 class LPill extends LComponent {
 
-  /// initializes pill - span
+  /// slds-pill - Initializes pill | Required
   static const String C_PILL = "slds-pill";
-  /// initializes pill label
+  /// slds-pill__label - Initializes pill label | Required
   static const String C_PILL__LABEL = "slds-pill__label";
-  /// Used in Lookup
+  /// slds-pill__icon - Initializes pill icon that sits to the left of the label | Required
+  static const String C_PILL__ICON = "slds-pill__icon";
+  /// slds-pill__remove - Initializes remove icon in pill that sits to the right of the label | Required
+  static const String C_PILL__REMOVE = "slds-pill__remove";
+  /// slds-pill__container - Container to hold pill(s) | Required
+  static const String C_PILL__CONTAINER = "slds-pill__container";
+  /// slds-pill--bare - Modifier that removes border and background from a pill
   static const String C_PILL__BARE = "slds-pill--bare";
 
-  static const String C_PILL_CONTAINER = "slds-pill-container";
 
 
   /// Pill Element
@@ -65,6 +70,7 @@ class LPill extends LComponent {
     if (onRemoveClick != null) {
       _remove = new LButton.iconBare("remove",
         new LIconUtility(LIconUtility.CLOSE), lPillRemove());
+      _remove.classes.add(C_PILL__REMOVE);
       _remove.onClick.listen(onRemoveClick);
       element.append(_remove.element);
     }
@@ -122,7 +128,7 @@ class LPill extends LComponent {
   /// rebuild content
   void _rebuild() {
     if (_icon != null) {
-      _icon.size = LIcon.C_ICON__SMALL;
+      _icon.classes.add(C_PILL__ICON);
       _content.append(_icon.element);
       _content.appendText(_label);
     } else if (_image != null) {

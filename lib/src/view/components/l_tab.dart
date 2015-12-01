@@ -14,25 +14,59 @@ class LTab extends LComponent {
 
   /// slds-tabs--default - Initializes default tabset | Required
   static const String C_TABS__DEFAULT = "slds-tabs--default";
+  /// slds-tabs--default__nav - Creates the container for the default tabs | Required
+  static const String C_TABS__DEFAULT__NAV = "slds-tabs--default__nav";
+  /// slds-tabs--default__item - Styles each list item as a single tab | Required
+  static const String C_TABS__DEFAULT__ITEM = "slds-tabs--default__item";
+  /// slds-tabs--default__link - Styles each <a> element in the <li> | Required
+  static const String C_TABS__DEFAULT__LINK = "slds-tabs--default__link";
+  /// slds-tabs--default__content - Styles each tab content wrapper | Required
+  static const String C_TABS__DEFAULT__CONTENT = "slds-tabs--default__content";
   /// slds-tabs--scoped - Initializes scoped tabset | Required
   static const String C_TABS__SCOPED = "slds-tabs--scoped";
-  /// slds-tabs--default__nav - Initializes default tablist | Required
-  static const String C_TABS__DEFAULT__NAV = "slds-tabs--default__nav";
-  /// slds-tabs--scoped__nav - Initializes scoped tablist | Required
+  /// slds-tabs--scoped__nav - Creates the container for the tabs | Required
   static const String C_TABS__SCOPED__NAV = "slds-tabs--scoped__nav";
-  /// slds-tabs__item - Styles tab items in tablist | Required
-  static const String C_TABS__ITEM = "slds-tabs__item";
-  /// slds-tabs__content - Styles tab content wrapper in tabset | Required
-  static const String C_TABS__CONTENT = "slds-tabs__content";
-  /// is-active - Applies the active state to a tab list item | Required
-  static const String C_IS_ACTIVE = "is-active";
-  /// slds-text-heading--label - Applies text styling to a tab list item | Required
-  static const String C_TEXT_HEADING__LABEL = "slds-text-heading--label";
-
+  /// slds-tabs--scoped__item - Styles each list item as a single tab | Required
+  static const String C_TABS__SCOPED__ITEM = "slds-tabs--scoped__item";
+  /// slds-tabs--scoped__link - Styles each <a> element in the <li> | Required
+  static const String C_TABS__SCOPED__LINK = "slds-tabs--scoped__link";
+  /// slds-tabs--scoped__content - Styles each tab content wrapper | Required
+  static const String C_TABS__SCOPED__CONTENT = "slds-tabs--scoped__content";
+  /// slds-tabs--path - Initializes default tabset | Required
+  static const String C_TABS__PATH = "slds-tabs--path";
+  /// slds-tabs--path__nav - Creates the container for the default tabs | Required
+  static const String C_TABS__PATH__NAV = "slds-tabs--path__nav";
+  /// slds-tabs--path__item - Styles each list item as a single tab | Required
+  static const String C_TABS__PATH__ITEM = "slds-tabs--path__item";
+  /// slds-tabs--path__link - Styles each <a> element in the <li> | Required
+  static const String C_TABS__PATH__LINK = "slds-tabs--path__link";
+  /// tabs--path__content - Styles each tab content wrapper | Required
+  static const String C_TABS__PATH__CONTENT = "tabs--path__content";
+  /// slds-tabs--path__stage - Contains the check mark when the stage is completed | Required
+  static const String C_TABS__PATH__STAGE = "slds-tabs--path__stage";
+  /// slds-tabs--path__title - Contains the name of the stage | Required
+  static const String C_TABS__PATH__TITLE = "slds-tabs--path__title";
+  /// slds-is-complete - Creates the completed stage of the sales path
+  static const String C_IS_COMPLETE = "slds-is-complete";
+  /// slds-is-current - Creates the current stage of the sales path
+  static const String C_IS_CURRENT = "slds-is-current";
+  /// slds-is-incomplete - Creates the incomplete stage of the sales path
+  static const String C_IS_INCOMPLETE = "slds-is-incomplete";
+  /// slds-is-active - Creates the active stage of the sales path
+  static const String C_IS_ACTIVE = "slds-is-active";
+  /// slds-tabs__item--overflow - Styles an overflow tab item
+  static const String C_TABS__ITEM__OVERFLOW = "slds-tabs__item--overflow";
+  /// slds-dropdown-trigger - Initializes tab item as menu | Required
+  static const String C_DROPDOWN_TRIGGER = "slds-dropdown-trigger";
+  /// slds-dropdown--overflow - Applies size settings on tab item menu | Required
+  static const String C_DROPDOWN__OVERFLOW = "slds-dropdown--overflow";
+  /// slds-active - Applies the active state to a tab list item | Required
+  static const String C_ACTIVE = "slds-active";
   /// slds-show - Shows the tab panel | Required
   static const String C_SHOW = "slds-show";
   /// slds-hide - Hide the tab panel | Required
   static const String C_HIDE = "slds-hide";
+
 
   static final Logger _log = new Logger("LTab");
 
@@ -67,7 +101,7 @@ class LTab extends LComponent {
     Element theContent = content;
     if (theContent == null)
       theContent = new DivElement();
-    theContent.classes.add(C_TABS__CONTENT);
+    theContent.classes.add(scoped ? C_TABS__SCOPED__CONTENT : C_TABS__DEFAULT__CONTENT);
     theContent.attributes[Html0.ROLE] = Html0.ROLE_TABPANEL;
     element.append(theContent);
 
@@ -78,10 +112,12 @@ class LTab extends LComponent {
       ..tabIndex = -1
       ..attributes[Html0.ARIA_SELECTED] = "false"
       ..attributes[Html0.DATA_VALUE] = _tablist.children.length.toString()
+      ..classes.add(scoped ? C_TABS__SCOPED__LINK : C_TABS__DEFAULT__LINK)
       ..text = label;
     a.onClick.listen(onTabClick);
     LIElement entry = new LIElement()
-      ..classes.addAll([C_TABS__ITEM, LText.C_TEXT_HEADING__LABEL])
+      ..classes.add(scoped ? C_TABS__SCOPED__ITEM : C_TABS__DEFAULT__ITEM)
+      ..classes.add(LText.C_TEXT_HEADING__LABEL)
       ..title = label
       ..attributes[Html0.ROLE] = Html0.ROLE_PRESENTATION;
     entry.append(a);

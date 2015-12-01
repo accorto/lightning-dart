@@ -50,7 +50,7 @@ class LDatePickerDropdown {
       icon: new LIconUtility(LIconUtility.RIGHT, className: LButton.C_BUTTON__ICON, size: LButton.C_BUTTON__ICON__SMALL),
       assistiveText: lDatePickerDropdownNext());
   final DivElement _year = new DivElement()
-    ..classes.addAll([LPicklist.C_PICKLIST, LDatepicker.C_DATEPICKER__FILTER__YEAR, LGrid.C_SHRINK_NONE]);
+    ..classes.addAll([LPicklist.C_PICKLIST, LPicklist.C_PICKLIST__FLUID, LGrid.C_SHRINK_NONE]);
 
   final SelectElement _yearSelect = new SelectElement()
     ..name = "year"

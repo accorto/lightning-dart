@@ -8,14 +8,17 @@ part of lightning_dart;
 
 /**
  * Modal Dialog
+ * - width: 50%, min: 20rem, max: 40rem
+ * - small: width: 90%, max: 580px
+ * - large: width: 90%, min: 40rem (if > 48em)
  */
 class LModal extends LComponent {
 
-  /// lds-modal - Positions the modal to stretch to page edges | Required
+  /// slds-modal - Positions the modal to stretch to page edges | Required
   static const String C_MODAL = "slds-modal";
   /// slds-fade-in-open - Allows the modal to be visible. | Required
   static const String C_FADE_IN_OPEN = "slds-fade-in-open";
-  /// slds-modal--large - Widens the modal to take more horizontal space 90% min:640
+  /// slds-modal--large - Widens the modal to take more horizontal space
   static const String C_MODAL__LARGE = "slds-modal--large";
   /// slds-modal__container - Centers and sizes the modal horizontally and confines modal within viewport height | Required
   static const String C_MODAL__CONTAINER = "slds-modal__container";
@@ -25,17 +28,30 @@ class LModal extends LComponent {
   static const String C_MODAL__CLOSE = "slds-modal__close";
   /// slds-modal__content - Creates the scrollable content area for the modal. | Required
   static const String C_MODAL__CONTENT = "slds-modal__content";
+  /// slds-modal__menu - Creates the shaded menu area for the modal. | Required
+  static const String C_MODAL__MENU = "slds-modal__menu";
   /// slds-modal__footer - Creates the Modal Footer container. | Required
   static const String C_MODAL__FOOTER = "slds-modal__footer";
   /// slds-modal__footer--directional - Makes buttons inside the footer spread to both left and right.
   static const String C_MODAL__FOOTER__DIRECTIONAL = "slds-modal__footer--directional";
+  /// slds-backdrop - Creates the shaded backdrop used behind the modal. | Required
+  static const String C_BACKDROP = "slds-backdrop";
   /// slds-modal-backdrop - Creates the shaded backdrop used behind the modal. | Required
   static const String C_MODAL_BACKDROP = "slds-modal-backdrop";
-  /// slds-modal-backdrop--open - Allows the backdrop to be visible. | Required
+  /// slds-backdrop--open - Allows the backdrop to be visible. | Required
+  static const String C_BACKDROP__OPEN = "slds-backdrop--open";
+  /// slds-modal-backdrop--open - Allows the backdrop to be visible.
   static const String C_MODAL_BACKDROP__OPEN = "slds-modal-backdrop--open";
+
+  /// slds-modal--prompt - Initializes Prompt style notification | Required
+  static const String C_MODAL__PROMPT = "slds-modal--prompt"; // notification
 
   /// slds-modal--small default 50% - 90% max=580
   static const String C_MODAL__SMALL = "slds-modal--small";
+
+  /// Modal Form (Touch) square header
+  static const String C_MODAL__FORM = "slds-modal--form";
+
 
   static final Logger _log = new Logger("LModal");
 

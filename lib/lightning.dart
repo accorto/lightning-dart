@@ -71,6 +71,7 @@ part 'src/view/components/l_picklist.dart';
 part 'src/view/components/l_picklist_multi.dart';
 part 'src/view/components/l_picklist_quick.dart';
 part 'src/view/components/l_pill.dart';
+part 'src/view/components/l_popbase.dart';
 part 'src/view/components/l_popover.dart';
 part 'src/view/components/l_scrollable.dart';
 part 'src/view/components/l_spinner.dart';

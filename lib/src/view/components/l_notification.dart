@@ -21,7 +21,10 @@ abstract class LNotification extends LComponent {
   static const String C_NOTIFY__ALERT = "slds-notify--alert";
   /// slds-notify__close - Positions close icon | Required
   static const String C_NOTIFY__CLOSE = "slds-notify__close";
+  /// slds-modal--prompt - Initializes Prompt style notification | Required
+  static const String C_MODAL__PROMPT = "slds-modal--prompt";
 
+  /// Marker
   static const String C_NOTIFY__CONTENT = "notify__content";
 
 

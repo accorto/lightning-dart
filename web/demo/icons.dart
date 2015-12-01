@@ -11,7 +11,8 @@ class Icons extends DemoFeature {
   Icons() : super("icons", "Icons",
   sldsStatus: DemoFeature.SLDS_PROTOTYPE,
   devStatus: DemoFeature.STATUS_COMPLETE,
-  hints: ["different sizes of utility/action and standard (assume border)"],
+  hints: ["standard/custom have 20px margin in 100x100 (assume colored background)",
+    "action/utility have minimal margin"],
   issues: [],
   plans: []);
 

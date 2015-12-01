@@ -23,6 +23,7 @@ class Themes extends DemoFeature {
     div.add(new LBox()..small = true ..text = "Small Box");
     div.add(new LBox()..xsmall = true ..text = "X Small Box");
 
+    div.appendHR();
     div.add(new LBox()..text = "Default Theme" ..themeDefault());
     div.add(new LBox()..text = "Shade Theme" ..themeShade());
     div.add(new LBox()..text = "Inverse Theme" ..themeInverse());
