@@ -170,6 +170,7 @@ class LModal extends LComponent {
     ParagraphElement p;
     if (tagLine != null)
       p = new ParagraphElement()
+        ..classes.add(LMargin.C_TOP__XX_SMALL)
         ..text = tagLine;
     setHeaderComponents(h2, p);
   } // setHeader
