@@ -46,4 +46,11 @@ class LLookupItem extends ListItem {
   /// On Click
   ElementStream<MouseEvent> get onClick => a.onClick;
 
+  /// Lookup as Pill
+  LPill asPill(void onRemoveClick(MouseEvent evt)) {
+    return new LPill(label, value, null, null,
+                         null, null, onRemoveClick);
+  }
+
+
 } // LLookupItem

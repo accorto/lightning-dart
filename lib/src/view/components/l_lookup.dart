@@ -7,7 +7,7 @@
 part of lightning_dart;
 
 /**
- * Lookup
+ * Base Lookup
  * - div .form-element
  * - div .lookup__menu
  *
@@ -21,13 +21,13 @@ class LLookup
 
   /// slds-lookup__menu - Initializes lookup results list container | Required
   static const String C_LOOKUP__MENU = "slds-lookup__menu";
-
   /// slds-lookup__list - Initializes lookup results list | Required
   static const String C_LOOKUP__LIST = "slds-lookup__list";
-
   /// slds-lookup__item - Results lsit item | Required
   static const String C_LOOKUP__ITEM = "slds-lookup__item";
 
+  /// selection
+  static const String C_HAS_SELECTION = "slds-has-selection";
 
   static final Logger _log = new Logger("LLookup");
 
@@ -60,9 +60,6 @@ class LLookup
   /// Lookup Items
   final List<LLookupItem> lookupItemList = new List<LLookupItem>();
 
-  /// Pill Container
-  DivElement _pillContainer;
-
   /// Displayed in Grid
   final bool inGrid;
 
@@ -73,34 +70,27 @@ class LLookup
    * [scope] single|multi
    */
   LLookup(String name, {String idPrefix,
-  String select: DATA_SELECT_SINGLE,
-  String scope: DATA_SCOPE_SINGLE,
-  bool typeahead: false,
-  bool this.inGrid:false}) {
-    _initEditor(name, idPrefix, select, scope, typeahead);
+      bool multiple: false,
+      bool singleScope: true,
+      bool typeahead: false,
+      bool this.inGrid:false}) {
+    _initEditor(name, idPrefix, multiple, singleScope, typeahead);
   }
 
-  // LLookup
-
+  // Base Lookup
   LLookup.base(String name, {String idPrefix})
-  : this(name, idPrefix:idPrefix, typeahead: true);
+    : this(name, idPrefix:idPrefix, typeahead: true);
 
-  LLookup.single(String name, {String idPrefix})
-  : this(name, idPrefix:idPrefix, typeahead: false);
-
-  LLookup.multi(String name, {String idPrefix})
-  : this(name, idPrefix:idPrefix, select:DATA_SELECT_MULTI, typeahead: false);
-
-  /// Lookup Editor
+  /// Base Lookup Editor
   LLookup.from(DataColumn dataColumn, {String idPrefix, bool this.inGrid:false}) {
-    _initEditor(dataColumn.name, idPrefix, DATA_SELECT_SINGLE, DATA_SCOPE_SINGLE, true);
+    _initEditor(dataColumn.name, idPrefix, false, true, true);
     this.dataColumn = dataColumn;
   }
 
   /// Init Lookup
-  void _initEditor(String name, String idPrefix,
-      String select, String scope, bool typeahead) {
-    _setAttributes(select, scope, typeahead);
+  void _initEditor(String name, String idPrefix, bool multiple, bool singleScope, bool typeahead) {
+    _setAttributes(multiple, singleScope, typeahead);
+    //
     _formElement.createStandard(this, iconRight: icon);
     input
       ..attributes[Html0.ROLE] = Html0.ROLE_COMBOBOX
@@ -110,28 +100,8 @@ class LLookup
     input.name = name;
     id = createId(idPrefix, input.name);
 
-    if (typeahead) {
-      // show input with search icon
-      input.onKeyUp.listen(onInputKeyUp);
-      input.onFocus.listen((Event e) {
-        if (!(readOnly || disabled))
-          _lookupMenu.classes.remove(LVisibility.C_HIDE);
-      });
-    } else {
-      _pillContainer = new DivElement()
-        ..classes.add(LPill.C_PILL__CONTAINER);
+    _initEditor2(multiple, singleScope, typeahead);
 
-      if (select == DATA_SELECT_SINGLE) {
-        input.classes.add(LVisibility.C_HIDE);
-        _pillContainer.classes.add(LVisibility.C_SHOW);
-        // _formElement._elementControl.insertBefore(_pillContainer, input);
-        _formElement._elementControl.append(_pillContainer); // needs to be before input
-        _formElement._elementControl.append(input);
-      } else {
-        /// Multi
-        _formElement.element.append(_pillContainer);
-      }
-    }
     // div .lookup
     // - div .form-element ... label...
     // - div .menu
@@ -142,21 +112,30 @@ class LLookup
     //
     _lookupMenu.classes.add(LVisibility.C_AUTO_VISIBLE);
     _lookupMenu.onKeyDown.listen(onMenuKeyDown);
+  } // initEditor
+
+  /// Init for Base Lookup
+  void _initEditor2(bool multiple, bool singleScope, bool typeahead) {
+    // show input with search icon
+    input.onKeyUp.listen(onInputKeyUp);
+    input.onFocus.listen((Event e) {
+      if (!(readOnly || disabled))
+        _lookupMenu.classes.remove(LVisibility.C_HIDE);
+    });
   }
 
-  /// Set Lookup Attributes
-  void _setAttributes(String select, String scope, bool typeahead) {
-    element.attributes["data-select"] = select;
-    element.attributes["data-scope"] = scope;
+
+    /// Set Lookup Attributes
+  void _setAttributes(bool multiple, bool singleScope, bool typeahead) {
+    element.attributes["data-select"] = multiple ? DATA_SELECT_MULTI : DATA_SELECT_SINGLE;
+    element.attributes["data-scope"] = DATA_SCOPE_SINGLE;
     element.attributes["dara-typeahead"] = typeahead.toString();
   }
 
   // data-select single|multi
   bool get multiple => element.attributes["data-select"] == DATA_SELECT_MULTI;
-
   // data-typeahead
   bool get typeahead => element.attributes["data-typeahead"] == "true";
-
   // data-scope single
   bool get singleScope => element.attributes["data-scope"] == "single";
 
@@ -419,7 +398,7 @@ class LLookup
         input.value = "";
         lookupUpdateList(false, false);
       } else {
-        showResults = false;
+        showDropdown = false;
       }
     } else if (kc == KeyCode.ENTER) {
       lookupUpdateList(false, true);
@@ -466,20 +445,20 @@ class LLookup
     _log.fine("lookupUpdateList ${name} '${restriction}' ${count} of ${lookupItemList.length}");
     if (selectFirst && first != null) {
       value = first.value;
-      showResults = false;
+      showDropdown = false;
     } else {
-      showResults = true;
+      showDropdown = true;
     }
     return count;
   } // lookupUpdateList
 
   /**
-   * Clicked on Item
+   * Clicked on Item (select)
    */
   void onItemClick(MouseEvent evt) {
     evt.preventDefault();
     if (readOnly) {
-      showResults = false;
+      showDropdown = false;
       return;
     }
     Element telement = evt.target;
@@ -497,6 +476,7 @@ class LLookup
       input.value = "";
       input.attributes[Html0.DATA_VALUE] = "";
       input.attributes[Html0.ARIA_ACTIVEDECENDNT] = "";
+      //
       if (editorChange != null)
         editorChange(name, null, null, null);
     } else {
@@ -504,11 +484,11 @@ class LLookup
       input.value = selectedItem.label;
       input.attributes[Html0.DATA_VALUE] = selectedItem.value;
       input.attributes[Html0.ARIA_ACTIVEDECENDNT] = selectedItem.value;
-
+      //
       if (editorChange != null)
         editorChange(name, selectedItem.value, null, selectedItem);
     }
-    showResults = false;
+    showDropdown = false;
     for (LLookupItem item in lookupItemList) { // remove restrictions
       item.show = true;
       item.labelHighlightClear();
@@ -518,7 +498,7 @@ class LLookup
 
 
   /// Show Popup
-  void set showResults (bool newValue) {
+  void set showDropdown (bool newValue) {
     if (readOnly || disabled) {
       input.attributes[Html0.ARIA_EXPANED] = "false";
       _lookupMenu.classes.add(LVisibility.C_HIDE);
@@ -534,7 +514,7 @@ class LLookup
         });
       }
     }
-  } // showResults
+  } // showDropdown
 
 
   void validateOptions() {

@@ -123,6 +123,25 @@ class LFormElement {
     _elementControl.append(_hintSpan); // __help
   }
 
+  /// Create Layout for Lookup Select (pill)
+  void createLookupSelect(DivElement pillContainer, LIcon icon, bool multiple) {
+    element.children.clear();
+    element.append(_labelElement);
+    // element control
+    _elementControl.children.clear();
+    _elementControl.classes.addAll([LForm.C_INPUT_HAS_ICON, LForm.C_INPUT_HAS_ICON__RIGHT]);
+    _elementControl.append(icon.element);
+    if (multiple) {
+      _elementControl.append(_input);
+      element.append(_elementControl);
+      element.append(pillContainer);
+    } else { // single
+      _elementControl.append(pillContainer);
+      _elementControl.append(_input);
+      element.append(_elementControl);
+    }
+  } // createLookup
+
   /// remove hint
   void removeHint() {
     if(_hintSpan != null)

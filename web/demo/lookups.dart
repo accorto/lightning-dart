@@ -11,8 +11,8 @@ class Lookups extends DemoFeature {
   Lookups() : super("lookups", "Lookups",
   sldsStatus: DemoFeature.SLDS_PROTOTYPE,
   devStatus: DemoFeature.STATUS_INITIAL,
-  hints: [],
-  issues: ["Single Select+Multi Lookup instable"],
+  hints: ["Same API as Select/Picklist"],
+  issues: [],
   plans: []);
 
 
@@ -27,13 +27,13 @@ class Lookups extends DemoFeature {
     form.addEditor(l1);
 
     form.append(new HRElement());
-    LLookup l2 = new LLookup.single("l2");
+    LLookup l2 = new LLookupSelect.single("l2");
     l2.label = "Single Select Lookup";
     l2.listItemList = generateListItems(10, iconLeft: true);
     form.addEditor(l2);
 
     form.append(new HRElement());
-    LLookup l3 = new LLookup.multi("l3");
+    LLookup l3 = new LLookupSelect.multi("l3");
     l3.label = "Multi Select Lookup";
     l3.listItemList = generateListItems(10, iconLeft: true);
     form.addEditor(l3);

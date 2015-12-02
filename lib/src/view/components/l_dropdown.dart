@@ -53,11 +53,11 @@ class LDropdown
   /// slds-dropdown--nubbin-top - Applies triangle indicator pointing at content
   static const String C_DROPDOWN__NUBBIN_TOP = "slds-dropdown--nubbin-top";
   /// slds-has-icon - Lets dropdown item know how to position icon
-  static const String C_HAS_ICON = "slds-has-icon";
+  //static const String C_HAS_ICON = "slds-has-icon";
   /// slds-has-icon--left - Position icon in dropdown item to the left
-  static const String C_HAS_ICON__LEFT = "slds-has-icon--left";
+  //static const String C_HAS_ICON__LEFT = "slds-has-icon--left";
   /// slds-has-icon--right - Position icon in dropdown item to the right
-  static const String C_HAS_ICON__RIGHT = "slds-has-icon--right";
+  //static const String C_HAS_ICON__RIGHT = "slds-has-icon--right";
 
   /// slds-action-overflow--touch - Positions the Action overflow for touch to take up full screen
   static const String C_ACTION_OVERFLOW__TOUCH = "slds-action-overflow--touch";

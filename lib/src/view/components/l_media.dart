@@ -15,20 +15,21 @@ class LMedia extends LComponent {
   static const String C_MEDIA = "slds-media";
   /// slds-media__figure - Defines the figure area | Required
   static const String C_MEDIA__FIGURE = "slds-media__figure";
+  /// icon/image right
   static const String C_MEDIA__FIGURE__REVERSE = "slds-media__figure--reverse";
   /// slds-media__body - Defines the body area | Required
   static const String C_MEDIA__BODY = "slds-media__body";
   /// slds-media--center - Aligns the content in the .slds-media__body to the middle of the .slds-media__figure
   static const String C_MEDIA__CENTER = "slds-media--center";
   /// slds-media--reverse - Reverses the media object so that the figure is on the right
-  static const String C_MEDIA__REVERSE = "slds-media--reverse";
+  //static const String C_MEDIA__REVERSE = "slds-media--reverse";
   /// slds-media--double - Allows you to add a figure on both the right and left sides
-  static const String C_MEDIA__DOUBLE = "slds-media--double";
+  //static const String C_MEDIA__DOUBLE = "slds-media--double";
   /// slds-media--responsive - .slds-media__figure and .slds-media__body stack on smaller screens
   static const String C_MEDIA__RESPONSIVE = "slds-media--responsive";
 
   /// Alternative Media Styles
-  static final List<String> MEDIA_STYLE = [C_MEDIA__CENTER, C_MEDIA__REVERSE, C_MEDIA__DOUBLE, C_MEDIA__RESPONSIVE];
+  static final List<String> MEDIA_STYLE = [C_MEDIA__CENTER, C_MEDIA__RESPONSIVE];
 
   /// Media Element
   final DivElement element = new DivElement()
@@ -98,12 +99,11 @@ class LMedia extends LComponent {
     if (_figureRight == null) {
       _figureRight = new DivElement()
         ..classes.addAll([C_MEDIA__FIGURE, C_MEDIA__FIGURE__REVERSE]);
-      element.insertBefore(_figureRight, body);
+      element.append(_figureRight);
     } else {
       _figureRight.children.clear();
     }
     if (img != null) {
-      element.classes.add(C_MEDIA__DOUBLE);
       _figureRight.append(img);
     }
   }
@@ -126,12 +126,11 @@ class LMedia extends LComponent {
     if (_figureRight == null) {
       _figureRight = new DivElement()
         ..classes.addAll([C_MEDIA__FIGURE, C_MEDIA__FIGURE__REVERSE]);
-      element.insertBefore(_figureRight, body);
+      element.append(_figureRight);
     } else {
       _figureRight.children.clear();
     }
     if (icon != null) {
-      element.classes.add(C_MEDIA__DOUBLE);
       _figureRight.append(icon.element);
     }
   }
@@ -143,11 +142,17 @@ class LMedia extends LComponent {
       element.classes.add(C_MEDIA__CENTER);
     }
   }
-  /// Reverse Style
+  /// Reverse Style (assumes no right icon/image)
   void set reverse (bool newValue) {
-    element.classes.removeAll(MEDIA_STYLE);
+    element.children.clear();
     if (newValue) {
-      element.classes.add(C_MEDIA__REVERSE);
+      element.append(body);
+      element.append(_figure);
+      _figure.classes.add(C_MEDIA__FIGURE__REVERSE);
+    } else {
+      element.append(_figure);
+      element.append(body);
+      _figure.classes.remove(C_MEDIA__FIGURE__REVERSE);
     }
   }
   /// Responsive

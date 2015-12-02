@@ -121,10 +121,10 @@ class DemoPage extends AppsPage {
     add(new Images()..toc(toc));
     add(new Lookups()..toc(toc));
     add(new Media()..toc(toc));
+    add(new Menus()..toc(toc));
     add(new Modals()..toc(toc));
     add(new Notifications()..toc(toc));
     add(new PageHeaders()..toc(toc));
-    add(new Menus()..toc(toc));
     add(new Pills()..toc(toc));
     add(new Popovers()..toc(toc));
     add(new Publishers()..toc(toc));

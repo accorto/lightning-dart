@@ -8,9 +8,14 @@ part of lightning_dart;
 
 
 /**
- * Multi Pick List - active/seqNo
+ * Multi Select / Pick List
+ * (two lists with add/remove up/down)
+ * - attributes: active, seqNo
+ *
+ * TODO: Draggable
  */
-class LPicklistMulti extends LComponent {
+class LPicklistMulti
+      extends LComponent {
 
   static const SELECTED_INDICATOR_SELECTED = "s";
   static const SELECTED_INDICATOR_ACTIVE = "a";
@@ -56,8 +61,9 @@ class LPicklistMulti extends LComponent {
     new LIconUtility(LIconUtility.DOWN),
     lPicklistMultiDown());
 
-
+  /// available
   final List<LPicklistMultiItem> _leftItems = new List<LPicklistMultiItem>();
+  /// selected
   final List<LPicklistMultiItem> _rightItems = new List<LPicklistMultiItem>();
 
   /// Selected indicator in Option
@@ -244,10 +250,6 @@ class LPicklistMulti extends LComponent {
   } // redisplay
 
 
-
-
-
-
   static String lPicklistMultiAdd() => Intl.message("Add", name: "lPicklistMultiAdd");
   static String lPicklistMultiRemove() => Intl.message("Remove", name: "lPicklistMultiRemove");
   static String lPicklistMultiUp() => Intl.message("Up", name: "lPicklistMultiUp");
@@ -266,8 +268,8 @@ class LPicklistMultiItem {
 
   /// List Item Element
   final LIElement element = new LIElement()
-    ..classes.addAll([LPicklist.C_PICKLIST__ITEM, LDropdown.C_HAS_ICON, LDropdown.C_HAS_ICON__LEFT])
-    ..draggable = true
+    ..classes.addAll([LPicklist.C_PICKLIST__ITEM])
+  //  ..draggable = true
     ..attributes[Html0.ROLE] = Html0.ROLE_OPTION
     ..attributes[Html0.ARIA_SELECTED] = "false"
     ..tabIndex = -1;

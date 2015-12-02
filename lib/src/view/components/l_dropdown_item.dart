@@ -88,15 +88,6 @@ class LDropdownItem
       _leftIcon = null;
   }
 
-  bool get hasIconRight => _rightIcon != null;
-  void set hasIconRight (bool newValue) { // NOP
-  }
-
-  bool get hasIconLeft => _leftIcon != null;
-  void set hasIconLeft (bool newValue) { // NOP
-  }
-
-
-  String toString() => "LDropdown[${option.value}]";
+  String toString() => "LDropdownItem[${option.value}]";
 
 } // LDropdownItem

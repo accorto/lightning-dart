@@ -85,7 +85,8 @@ class LPicklist
     _dropdown = new LDropdownElement(
         new DivElement()
           ..classes.addAll([LDropdown.C_DROPDOWN, LDropdown.C_DROPDOWN__LEFT,
-            LDropdown.C_DROPDOWN__MENU]),
+            LDropdown.C_DROPDOWN__MENU])
+          ..style.marginTop = "0",
         name:name, idPrefix:id);
     _dropdown.selectMode = true;
     _plDiv.append(_dropdown.element);

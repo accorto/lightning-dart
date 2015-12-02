@@ -3,10 +3,12 @@
 Version numbers are based on the Salesforce Lightning Design System (SLDS) css Framework version numbers. 
 Intermediate Patches, Functionality improvements via +x prefix.
 
-## trunk
+## 0.12.0
 
-- 
-- #20 FK editor and dialog with parent values (e.g. contacct of account)
+- lookup completed/stabilized
+- #25 Upgrade to SLDS 0.12.0
+- #27 (remote) logging enhancements
+- #20 FK editor and dialog with parent values (e.g. contact of account)
 - #19 File editor (upload)
 - layout fixes
 
