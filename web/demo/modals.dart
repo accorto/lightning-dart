@@ -30,6 +30,18 @@ class Modals extends DemoFeature {
       modal.showInComponent(div);
     });
     div.add(trigger);
+
+    // nested
+    LModal modal2 = new LModal("m2")
+      ..setHeader("The Second Modal", tagLine: "You can drag me!")
+      ..addContentText("Some Text to add - you can also add any components or elements")
+      ..addFooterButtons();
+    LButton trigger2 = new LButton.neutral("x2", "Second Modal")
+      ..classes.add(LMargin.C_TOP__MEDIUM);
+    trigger2.onClick.listen((MouseEvent evt){
+      modal2.showInComponent(div);
+    });
+    modal.add(trigger2);
     return div;
   }
 

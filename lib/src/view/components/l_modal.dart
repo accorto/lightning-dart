@@ -37,11 +37,11 @@ class LModal extends LComponent {
   /// slds-backdrop - Creates the shaded backdrop used behind the modal. | Required
   static const String C_BACKDROP = "slds-backdrop";
   /// slds-modal-backdrop - Creates the shaded backdrop used behind the modal. | Required
-  static const String C_MODAL_BACKDROP = "slds-modal-backdrop";
+  //static const String C_MODAL_BACKDROP = "slds-modal-backdrop";
   /// slds-backdrop--open - Allows the backdrop to be visible. | Required
   static const String C_BACKDROP__OPEN = "slds-backdrop--open";
   /// slds-modal-backdrop--open - Allows the backdrop to be visible.
-  static const String C_MODAL_BACKDROP__OPEN = "slds-modal-backdrop--open";
+  //static const String C_MODAL_BACKDROP__OPEN = "slds-modal-backdrop--open";
 
   /// slds-modal--prompt - Initializes Prompt style notification | Required
   static const String C_MODAL__PROMPT = "slds-modal--prompt"; // notification
@@ -54,6 +54,27 @@ class LModal extends LComponent {
 
 
   static final Logger _log = new Logger("LModal");
+
+  /// open modals
+  static List<LModal> _openModals = new List<LModal>();
+  /// adjust z-index of nested Modals
+  static void _nestedModal(LModal m) {
+    if (_openModals.isEmpty)
+      return;
+    int openModals = 0;
+    for (LModal modal in _openModals) {
+      if (modal == m)
+        continue;
+      if (modal.show)
+        openModals++;
+    }
+    _log.info("nestedModals count=${_openModals.length} open=${openModals}");
+    if (openModals > 0) {
+      m._backdrop.style.zIndex = "${9000+(openModals*2)}";
+      m._dialog.style.zIndex = "${9001+(openModals*2)}";
+    }
+  } // nestedModals
+
 
   /// Outer Element
   final DivElement element = new DivElement();
@@ -71,7 +92,7 @@ class LModal extends LComponent {
     ..classes.add(C_MODAL__FOOTER);
   /// The backdrop
   final DivElement _backdrop = new DivElement()
-    ..classes.add(C_MODAL_BACKDROP);
+    ..classes.add(C_BACKDROP);
 
   LButton buttonSave;
   LButton buttonCancel;
@@ -278,17 +299,20 @@ class LModal extends LComponent {
 
 
   /// Showing Modal
-  bool get show => _backdrop.classes.contains(C_MODAL_BACKDROP__OPEN);
+  bool get show => _backdrop.classes.contains(C_BACKDROP__OPEN);
   /// Show/Hide Modal
   void set show (bool newValue) {
     _dialog.attributes[Html0.ARIA_HIDDEN] = newValue ? "false" : "true";
     if (newValue) {
+      _nestedModal(this);
       _dialog.classes.add(C_FADE_IN_OPEN);
-      _backdrop.classes.add(C_MODAL_BACKDROP__OPEN);
+      _backdrop.classes.add(C_BACKDROP__OPEN);
       content.focus();
+      _openModals.add(this);
     } else {
       _dialog.classes.remove(C_FADE_IN_OPEN);
-      _backdrop.classes.remove(C_MODAL_BACKDROP__OPEN);
+      _backdrop.classes.remove(C_BACKDROP__OPEN);
+      _openModals.remove(this);
     }
   }
 

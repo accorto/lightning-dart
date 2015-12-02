@@ -5,6 +5,7 @@ Intermediate Patches, Functionality improvements via +x prefix.
 
 ## 0.12.0
 
+- #29 nested modals
 - lookup completed/stabilized
 - #25 Upgrade to SLDS 0.12.0
 - #27 (remote) logging enhancements

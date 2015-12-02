@@ -69,6 +69,7 @@ class RemoteLogger {
     return data;
   } // _logMap
 
+  /*
   static Map<String, dynamic> _pageMap () {
     Map<String, dynamic> data = new Map<String, String>();
     data['trace'] = Service.clientId;
@@ -95,7 +96,7 @@ class RemoteLogger {
       'do_not_track': nav.doNotTrack};
     data['platform'] = nav.platform;
     return data;
-  } // pageMap
+  } // pageMap */
 
 
   /**
