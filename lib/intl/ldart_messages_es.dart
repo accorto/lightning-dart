@@ -26,9 +26,9 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static appsActionLayout() => "Diseño";
 
-  static appsActionNew() => "Nueva";
+  static appsActionNew() => "Nuevo";
 
-  static appsActionNo() => "Sin";
+  static appsActionNo() => "No";
 
   static appsActionSave() => "Guardar";
 
@@ -36,7 +36,9 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static appsActionYes() => "Sí";
 
-  static appsActions() => "Acciones";
+  static appsActions() => "Comportamiento";
+
+  static appsLogoutLabel() => "Cerrar sesión";
 
   static appsMainHidePrevent() => "No se puede ocultar";
 
@@ -46,13 +48,13 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static editorValidateTooLong() => "Valor demasiado largo";
 
-  static filterOpBetween() => "entre";
+  static filterOpBetween() => "Entre";
 
-  static filterOpDateDay() => "jornada";
+  static filterOpDateDay() => "día";
 
   static filterOpDateLast() => "último";
 
-  static filterOpDateMonth() => "meses";
+  static filterOpDateMonth() => "mes";
 
   static filterOpDateNext() => "Siguiente";
 
@@ -62,7 +64,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static filterOpDateWeek() => "semana";
 
-  static filterOpDateYear() => "curso";
+  static filterOpDateYear() => "año";
 
   static filterOpEquals() => "es igual a";
 
@@ -87,6 +89,8 @@ class MessageLookup extends MessageLookupByLibrary {
   static filterOpNotNull() => "no nulo";
 
   static filterOpNull() => "nulo";
+
+  static fkDialogFind() => "Buscar en los registros -o- Buscar con nombre (entrar)";
 
   static fkDialogTitle() => "Buscar";
 
@@ -144,7 +148,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static lNotificationWarning() => "Advertencia";
 
-  static lObjectHomeFilter() => "Filtro";
+  static lObjectHomeFilter() => "Filtrar";
 
   static lObjectHomeFilterAll() => "Todos los registros";
 
@@ -168,7 +172,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static lObjectHomeSave() => "Guardar";
 
-  static lObjectHomeSort() => "Especie";
+  static lObjectHomeSort() => "Ordenar";
 
   static lPicklistMultiAdd() => "Añadir";
 
@@ -224,21 +228,21 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static objectEditError() => "Error de comunicacion";
 
-  static objectEditNew() => "Nueva";
+  static objectEditNew() => "Nuevo";
 
-  static objectFilter() => "Filtro";
+  static objectFilter() => "Filtrar";
 
   static objectFilterColumnName() => "Nombre de columna";
 
   static objectFilterDescription() => "Descripción";
 
-  static objectFilterFilter() => "Filtro";
+  static objectFilterFilter() => "Filtrar";
 
   static objectFilterName() => "Nombre";
 
   static objectFilterOperation() => "Operación";
 
-  static objectFilterSort() => "Especie";
+  static objectFilterSort() => "Ordenar";
 
   static objectFilterSortAsc() => "Ascendente";
 
@@ -251,6 +255,10 @@ class MessageLookup extends MessageLookupByLibrary {
   static objectFilterValueIn() => "En";
 
   static objectFilterValueTo() => "A";
+
+  static optionUtilNo() => "No";
+
+  static optionUtilYes() => "Sí";
 
   static preferenceGlobalSave() => "Guardar preferencias como Global";
 
@@ -292,6 +300,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "appsActionUp" : appsActionUp,
     "appsActionYes" : appsActionYes,
     "appsActions" : appsActions,
+    "appsLogoutLabel" : appsLogoutLabel,
     "appsMainHidePrevent" : appsMainHidePrevent,
     "appsMainShowPrevent" : appsMainShowPrevent,
     "editorValidateRequired" : editorValidateRequired,
@@ -317,6 +326,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "filterOpNotLike" : filterOpNotLike,
     "filterOpNotNull" : filterOpNotNull,
     "filterOpNull" : filterOpNull,
+    "fkDialogFind" : fkDialogFind,
     "fkDialogTitle" : fkDialogTitle,
     "lBreadcrumbText" : lBreadcrumbText,
     "lButtonGroupMore" : lButtonGroupMore,
@@ -399,6 +409,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "objectFilterValue" : objectFilterValue,
     "objectFilterValueIn" : objectFilterValueIn,
     "objectFilterValueTo" : objectFilterValueTo,
+    "optionUtilNo" : optionUtilNo,
+    "optionUtilYes" : optionUtilYes,
     "preferenceGlobalSave" : preferenceGlobalSave,
     "preferenceNothingToSave" : preferenceNothingToSave,
     "preferenceSaved" : preferenceSaved,

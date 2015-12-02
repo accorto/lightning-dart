@@ -14,7 +14,7 @@ final messages = new MessageLookup();
 class MessageLookup extends MessageLookupByLibrary {
 
   get localeName => 'de';
-  static appsAction() => "Handeln";
+  static appsAction() => "Aktion";
 
   static appsActionDelete() => "Löschen";
 
@@ -22,21 +22,23 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static appsActionDown() => "Nach unten";
 
-  static appsActionEdit() => "Redigieren";
+  static appsActionEdit() => "Bearbeiten";
 
   static appsActionLayout() => "Layout";
 
-  static appsActionNew() => "Neue";
+  static appsActionNew() => "Neu";
 
   static appsActionNo() => "Nein";
 
   static appsActionSave() => "sparen";
 
-  static appsActionUp() => "Herauf";
+  static appsActionUp() => "Oben";
 
   static appsActionYes() => "Ja";
 
   static appsActions() => "Aktionen";
+
+  static appsLogoutLabel() => "Abmelden";
 
   static appsMainHidePrevent() => "Kann nicht ausblenden";
 
@@ -88,6 +90,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static filterOpNull() => "Null";
 
+  static fkDialogFind() => "Finden Sie in Aufzeichnungen -oder- mit Namen suchen (Eingabe)";
+
   static fkDialogTitle() => "Suche";
 
   static lBreadcrumbText() => "Sie sind hier";
@@ -130,19 +134,19 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static lModalCancel() => "Absagen";
 
-  static lModalClose() => "In der Nähe";
+  static lModalClose() => "Nah dran";
 
   static lModalSave() => "sparen";
 
   static lNotificationAlert() => "Alert (Info)";
 
-  static lNotificationClose() => "In der Nähe";
+  static lNotificationClose() => "Nah dran";
 
-  static lNotificationError() => "Irrtum";
+  static lNotificationError() => "Fehler";
 
   static lNotificationSuccess() => "Erfolg";
 
-  static lNotificationWarning() => "Verwarnung";
+  static lNotificationWarning() => "Warnung";
 
   static lObjectHomeFilter() => "Filter";
 
@@ -176,15 +180,15 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static lPicklistMultiDown() => "Nach unten";
 
-  static lPicklistMultiRemove() => "Herausnehmen";
+  static lPicklistMultiRemove() => "Entfernen";
 
   static lPicklistMultiSelected() => "Ausgewählt";
 
-  static lPicklistMultiUp() => "Herauf";
+  static lPicklistMultiUp() => "Oben";
 
-  static lPicklistSelectOption() => "Wählen Sie eine Option";
+  static lPicklistSelectOption() => "Wähle eine Option";
 
-  static lPillRemove() => "Herausnehmen";
+  static lPillRemove() => "Entfernen";
 
   static lRecordCtrlDetails() => "Einzelheiten";
 
@@ -192,7 +196,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static lSpinnerWorking() => "Arbeiten";
 
-  static lTableColumnSortAsc() => "Ascending ordnen";
+  static lTableColumnSortAsc() => "Aufsteigend sortieren";
 
   static lTableColumnSortDec() => "Sortieren decending";
 
@@ -220,17 +224,17 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static objectCtrlSortedBy() => "Sortiert nach";
 
-  static objectEditEdit() => "Redigieren";
+  static objectEditEdit() => "Bearbeiten";
 
   static objectEditError() => "Kommunikationsfehler";
 
-  static objectEditNew() => "Neue";
+  static objectEditNew() => "Neu";
 
   static objectFilter() => "Filter";
 
   static objectFilterColumnName() => "Spaltenname";
 
-  static objectFilterDescription() => "Bezeichnung";
+  static objectFilterDescription() => "Beschreibung";
 
   static objectFilterFilter() => "Filter";
 
@@ -250,7 +254,11 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static objectFilterValueIn() => "Im";
 
-  static objectFilterValueTo() => "Bis";
+  static objectFilterValueTo() => "Nach";
+
+  static optionUtilNo() => "Nein";
+
+  static optionUtilYes() => "Ja";
 
   static preferenceGlobalSave() => "Einstellungen speichern Global";
 
@@ -292,6 +300,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "appsActionUp" : appsActionUp,
     "appsActionYes" : appsActionYes,
     "appsActions" : appsActions,
+    "appsLogoutLabel" : appsLogoutLabel,
     "appsMainHidePrevent" : appsMainHidePrevent,
     "appsMainShowPrevent" : appsMainShowPrevent,
     "editorValidateRequired" : editorValidateRequired,
@@ -317,6 +326,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "filterOpNotLike" : filterOpNotLike,
     "filterOpNotNull" : filterOpNotNull,
     "filterOpNull" : filterOpNull,
+    "fkDialogFind" : fkDialogFind,
     "fkDialogTitle" : fkDialogTitle,
     "lBreadcrumbText" : lBreadcrumbText,
     "lButtonGroupMore" : lButtonGroupMore,
@@ -399,6 +409,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "objectFilterValue" : objectFilterValue,
     "objectFilterValueIn" : objectFilterValueIn,
     "objectFilterValueTo" : objectFilterValueTo,
+    "optionUtilNo" : optionUtilNo,
+    "optionUtilYes" : optionUtilYes,
     "preferenceGlobalSave" : preferenceGlobalSave,
     "preferenceNothingToSave" : preferenceNothingToSave,
     "preferenceSaved" : preferenceSaved,

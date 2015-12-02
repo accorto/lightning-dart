@@ -14,7 +14,7 @@ final messages = new MessageLookup();
 class MessageLookup extends MessageLookupByLibrary {
 
   get localeName => 'fr';
-  static appsAction() => "Action";
+  static appsAction() => "action";
 
   static appsActionDelete() => "Effacer";
 
@@ -22,11 +22,11 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static appsActionDown() => "Vers le bas";
 
-  static appsActionEdit() => "Modifier";
+  static appsActionEdit() => "modifier";
 
   static appsActionLayout() => "Disposition";
 
-  static appsActionNew() => "Nouveau";
+  static appsActionNew() => "Neuf";
 
   static appsActionNo() => "Non";
 
@@ -36,7 +36,9 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static appsActionYes() => "Oui";
 
-  static appsActions() => "Actions";
+  static appsActions() => "Actes";
+
+  static appsLogoutLabel() => "Se déconnecter";
 
   static appsMainHidePrevent() => "Vous ne pouvez pas masquer";
 
@@ -46,7 +48,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static editorValidateTooLong() => "Valeur trop longtemps";
 
-  static filterOpBetween() => "entre";
+  static filterOpBetween() => "compris entre";
 
   static filterOpDateDay() => "jour";
 
@@ -64,7 +66,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static filterOpDateYear() => "an";
 
-  static filterOpEquals() => "égal à égal";
+  static filterOpEquals() => "égal";
 
   static filterOpGreater() => "plus grand";
 
@@ -87,6 +89,8 @@ class MessageLookup extends MessageLookupByLibrary {
   static filterOpNotNull() => "NOT NULL";
 
   static filterOpNull() => "nul";
+
+  static fkDialogFind() => "Trouver dans les dossiers -ou- Recherche avec le nom (entrée)";
 
   static fkDialogTitle() => "Recherche";
 
@@ -178,7 +182,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static lPicklistMultiRemove() => "Retirer";
 
-  static lPicklistMultiSelected() => "Sélectionné";
+  static lPicklistMultiSelected() => "Choisi";
 
   static lPicklistMultiUp() => "En haut";
 
@@ -188,11 +192,11 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static lRecordCtrlDetails() => "Détails";
 
-  static lRecordCtrlRelated() => "Connexes";
+  static lRecordCtrlRelated() => "en relation";
 
-  static lSpinnerWorking() => "de travail";
+  static lSpinnerWorking() => "travail";
 
-  static lTableColumnSortAsc() => "Trier en ordre croissant";
+  static lTableColumnSortAsc() => "Trier par ordre croissant";
 
   static lTableColumnSortDec() => "Trier decending";
 
@@ -220,11 +224,11 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static objectCtrlSortedBy() => "Trié par";
 
-  static objectEditEdit() => "Modifier";
+  static objectEditEdit() => "modifier";
 
   static objectEditError() => "Erreur de communication";
 
-  static objectEditNew() => "Nouveau";
+  static objectEditNew() => "Neuf";
 
   static objectFilter() => "Filtre";
 
@@ -240,7 +244,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static objectFilterSort() => "Trier";
 
-  static objectFilterSortAsc() => "Croissant";
+  static objectFilterSortAsc() => "Ascendant";
 
   static objectFilterSortColumnName() => "Nom de la colonne";
 
@@ -251,6 +255,10 @@ class MessageLookup extends MessageLookupByLibrary {
   static objectFilterValueIn() => "Dans";
 
   static objectFilterValueTo() => "À";
+
+  static optionUtilNo() => "Non";
+
+  static optionUtilYes() => "Oui";
 
   static preferenceGlobalSave() => "Enregistrer les préférences que Global";
 
@@ -292,6 +300,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "appsActionUp" : appsActionUp,
     "appsActionYes" : appsActionYes,
     "appsActions" : appsActions,
+    "appsLogoutLabel" : appsLogoutLabel,
     "appsMainHidePrevent" : appsMainHidePrevent,
     "appsMainShowPrevent" : appsMainShowPrevent,
     "editorValidateRequired" : editorValidateRequired,
@@ -317,6 +326,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "filterOpNotLike" : filterOpNotLike,
     "filterOpNotNull" : filterOpNotNull,
     "filterOpNull" : filterOpNull,
+    "fkDialogFind" : fkDialogFind,
     "fkDialogTitle" : fkDialogTitle,
     "lBreadcrumbText" : lBreadcrumbText,
     "lButtonGroupMore" : lButtonGroupMore,
@@ -399,6 +409,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "objectFilterValue" : objectFilterValue,
     "objectFilterValueIn" : objectFilterValueIn,
     "objectFilterValueTo" : objectFilterValueTo,
+    "optionUtilNo" : optionUtilNo,
+    "optionUtilYes" : optionUtilYes,
     "preferenceGlobalSave" : preferenceGlobalSave,
     "preferenceNothingToSave" : preferenceNothingToSave,
     "preferenceSaved" : preferenceSaved,
