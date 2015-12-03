@@ -31,11 +31,6 @@ class ClientEnv {
   /** System Session */
   static Session _session;
 
-  /// Expert Mode
-  static bool expertMode = false;
-  /// Use Html5 Editors
-  static bool html5 = true;
-
   /// Date Format Short - 1/1/2005
   static DateFormat dateFormat_ymd;
   /// Date Format Short -  1/1
@@ -66,6 +61,7 @@ class ClientEnv {
    */
   static Future<bool> init() {
     localeName = window.navigator.language;
+    Settings.init();
     Completer<bool> completer = new Completer<bool>();
     findSystemLocale()
     .then((String locale) {
@@ -189,7 +185,7 @@ class ClientEnv {
     ctx['isTenantSystem'] = value.isTenantSystem;
     ctx['isUserExpert'] = value.isUserExpert;
     if (value.hasIsUserExpert())
-      expertMode = value.isUserExpert;
+      Settings.set(Settings.EXPERT_MODE, value.isUserExpert);
 
     ctx['languageIsoCode'] = value.languageIsoCode;
     ctx['sid'] = value.sid;
@@ -332,86 +328,9 @@ class ClientEnv {
     return dateFormat_hm.format(time);
   }
 
-  /// Add Tab with Context
-//  static void addCtxTab(BsTab tab) {
-//    DivElement content = tab.addTab("ctx", "Context", iconClass: "icon-markup");
-//    MiniTable mt = new MiniTable(responsive: true);
-//    content.append(mt.element);
-//
-//    mt.addHeadings(["Key", "Value"]);
-//    List<String> keys = new List.from(ctx.keys);
-//    keys.sort((String one, String two){
-//      return one.compareTo(two);
-//    });
-//    for (String key in keys) {
-//      var value = ctx[key];
-//      String stringValue = value == null ? "null" : value.toString();
-//      mt.addRowData([key, stringValue]);
-//    }
-//  } // addTab
-
-  /// Add Tab with Context
-//  static void addSessionTab(BsTab tab) {
-//    DivElement content = tab.addTab("session", "Session", iconClass: "icon-crop2");
-//    MiniTable mt = new MiniTable(responsive: true);
-//    content.append(mt.element);
-//    // session
-//    mt.addHeadings(["Session", "Value"]);
-//    for (FieldInfo fi in _session.info_.fieldInfo.values) {
-//      if (sessionIgnore.contains(fi.name))
-//        continue;
-//      var value = _session.getField(fi.tagNumber);
-//      if (value != null) {
-//        mt.addRowData([fi.name, value.toString()]);
-//      }
-//    }
-//  } // addTab
-  static final List<String> sessionIgnore = ["context", "awsSecretKey", "tenantLogo"];
-
-  /// Add Tab with Environment
-//  static void addClientEnvTab(BsTab tab) {
-//    DivElement content = tab.addTab("cenv", "Client Env", iconClass: "icon-make-group");
-//    MiniTable mt = new MiniTable(responsive: true);
-//    content.append(mt.element);
-//
-//    mt.addRowHdrData("Locale", localeName);
-//    mt.addRowHdrData("Language", language);
-//    mt.addRowHdrData("Expert Mode", expertMode.toString());
-//    mt.addRowHdrData("Html5 Mode", html5.toString());
-//
-//    DateTime now = new DateTime.now();
-//    mt.addRowHdrData("Time Zone Browser", now.timeZoneName);
-//    mt.addRowHdrData("Time Zone Offset (min)", now.timeZoneOffset.inMinutes);
-//    if (timeZone == null)
-//      mt.addRowHdrData("TZ -", TzRef.alias(now.timeZoneName));
-//    else
-//      mt.addRowHdrData("TZ selected", ClientEnv.timeZone.id);
-//
-//    mt.addHeadings(["Format", "Pattern", "Example"]);
-//    _addClientEnvDate(mt, "ymd", dateFormat_ymd, now);
-//    _addClientEnvDate(mt, "md", dateFormat_md, now);
-//    _addClientEnvDate(mt, "med", dateFormat_med, now);
-//    _addClientEnvDate(mt, "long", dateFormat_long, now);
-//    _addClientEnvDate(mt, "hm", dateFormat_hm, now);
-//    _addClientEnvDate(mt, "hms", dateFormat_hms, now);
-//    _addClientEnvDate(mt, "ymd_hm", dateFormat_ymd_hm, now);
-//
-//    num number = 1234567.8912;
-//    _addClientEnvNum(mt, "int", numberFormat_int, number);
-//    _addClientEnvNum(mt, "int", numberFormat_2, number);
-//  }
-//  static void _addClientEnvDate(MiniTable mt, String name, DateFormat format, DateTime now) {
-//    if (format == null)
-//      mt.addRowData([name, "", ""]);
-//    else
-//      mt.addRowData([name, format.pattern, format.format(now)]);
-//  }
-//  static void _addClientEnvNum(MiniTable mt, String name, NumberFormat format, num number) {
-//    if (format == null)
-//      mt.addRowData([name, "", ""]);
-//    else
-//      mt.addRowData([name, format.toString(), format.format(number)]);
-//  }
+  /// Items in session to ignore
+  static final List<String> sessionConfidential = ["context", "awsSecretKey",
+    "tenantLogo", "customCss", "sfToken"];
 
   /**
    * Get Context Value

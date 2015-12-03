@@ -24,6 +24,7 @@ void main() {
     apps.add(new DemoFrame("phone", new LIconUtility(LIconUtility.PHONE_PORTRAIT), "Phone", 480));
     apps.add(new ExampleForm());
     apps.add(new ExampleWorkspace());
+    apps.add(new AppsSettings());
     apps.add(new SupportLink());
     page.set(apps);
   });

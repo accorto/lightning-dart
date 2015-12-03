@@ -29,6 +29,7 @@ import 'package:logging/logging.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:stack_trace/stack_trace.dart';
 
+import 'package:protobuf/protobuf.dart';
 import 'package:intl/intl.dart';
 
 
@@ -41,6 +42,8 @@ part 'src/apps/apps_logout.dart';
 part 'src/apps/apps_main.dart';
 part 'src/apps/apps_menu.dart';
 part 'src/apps/apps_page.dart';
+part 'src/apps/apps_settings.dart';
+part 'src/apps/apps_settings_tab.dart';
 
 part 'src/ctrl/datasource.dart';
 part 'src/ctrl/fk_ctrl.dart';

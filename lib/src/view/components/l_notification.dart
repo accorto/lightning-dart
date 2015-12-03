@@ -31,23 +31,23 @@ abstract class LNotification extends LComponent {
   /**
    * Create Default Icon for color/theme
    */
-  static LIcon createDefaultIcon(String color) {
+  static LIcon createDefaultIcon(String color, {bool setIconColor:false}) {
     if (color == LTheme.C_THEME__ALT_INVERSE) {
-      return new LIconUtility(LIconUtility.INFO);
+      return new LIconUtility(LIconUtility.INFO, color: setIconColor ? color : null);
     }
     else if (color == LTheme.C_THEME__SUCCESS) {
-      return new LIconUtility(LIconUtility.SUCCESS);
+      return new LIconUtility(LIconUtility.SUCCESS, color: setIconColor ? color : null);
     }
     else if (color == LTheme.C_THEME__WARNING) {
-      return new LIconUtility(LIconUtility.WARNING);
+      return new LIconUtility(LIconUtility.WARNING, color: setIconColor ? color : null);
     }
     else if (color == LTheme.C_THEME__ERROR) {
-      return new LIconUtility(LIconUtility.ERROR);
+      return new LIconUtility(LIconUtility.ERROR, color: setIconColor ? color : null);
     }
     else if (color == LTheme.C_THEME__OFFLINE) {
-      return new LIconUtility(LIconUtility.OFFLINE);
+      return new LIconUtility(LIconUtility.OFFLINE, color: setIconColor ? color : null);
     }
-    return new LIconUtility(LIconUtility.NOTIFICATION);
+    return new LIconUtility(LIconUtility.NOTIFICATION, color: setIconColor ? LIcon.C_ICON_TEXT_DEFAULT : null);
   }
 
 
@@ -183,6 +183,11 @@ abstract class LNotification extends LComponent {
       element.style.left = "0";
     }
   } // show
+
+  /// Hide Notification
+  void hide() {
+    element.remove();
+  }
 
 } // LNotification
 

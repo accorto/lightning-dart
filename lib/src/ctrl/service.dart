@@ -44,8 +44,6 @@ class Service {
   static bool devMode = false;
   /** Protocol Buffers Header */
   static Map<String, String> requestHeaders = new Map<String, String>();
-  /** Add Geo Location automatically */
-  static bool addGeo = false;
 
   /// Call when Server Start (busy)
   static ServerStart onServerStart;
@@ -227,26 +225,17 @@ class Service {
   } // handleError
 
 
-  /** Add Tab with Service Info
-  static void addServiceTab(BsTab tab) {
-    DivElement content = tab.addTab("srv", "Service", iconClass: "icon-power");
-    MiniTable mt = new MiniTable(responsive: true);
-    content.append(mt.element);
+  /** Add Geo Location automatically */
+  static bool get addGeo => _addGeo;
+  /// add geo info
+  static void set addGeo (bool newValue) {
+    _addGeo = false;
+    if (newValue) {
+      CGeo.get(null, retry: true);
+    }
+  }
+  static bool _addGeo = false;
 
-    mt.addRowHdrData("Started", startTime);
-    mt.addRowHdrData("Uptime", upTime);
-
-    mt.addRowHdrData("Server Url", serverUrl);
-    mt.addRowHdrData("Client Url", clientUrl);
-    mt.addRowHdrData("Client Href", window.location.href);
-    mt.addRowHdrData("Client Id", clientId);
-
-    mt.addRowHdrData("Dev Mode", devMode.toString());
-    mt.addRowHdrData("Timestamp", devTimestamp);
-    mt.addRowHdrData("Geo info", addGeo.toString());
-
-    mt.addRowHdrData("Client Transactions", trxNo);
-  } // addServiceTab */
 
 } // Service
 
@@ -424,6 +413,28 @@ class CGeo {
   /// API error
   static int _errorCode = null;
 
+  /// Last Position Info
+  static String get lastPosInfo {
+    String s = null;
+    if (lastPos != null && lastPos.coords != null) {
+      s = "lat= ${lastPos.coords.latitude} lon=${lastPos.coords.longitude}";
+      if (lastPos.coords.altitude != null)
+        s += " alt=${lastPos.coords.altitude}";
+      if (lastPos.coords.heading != null)
+        s += " dir=${lastPos.coords.heading}";
+      if (lastPos.coords.speed != null)
+        s += " speed=${lastPos.coords.speed}";
+    }
+    return s;
+  }
+
+  /// Last Position Info
+  static String get lastErrorInfo {
+    if (lastError == null)
+      return null;
+    return "${lastError.code}: ${lastError.message}";
+  }
+
   /**
    * Set CEnv lat/lon if supported and available
    */
@@ -454,8 +465,8 @@ class CGeo {
   /**
    * Get Geoposition and set (async)
    */
-  static void get(CEnv env) {
-    if (_errorCode != null) {
+  static void get(CEnv env, {bool retry:false}) {
+    if (_errorCode != null && !retry) {
       if (env != null)
         env.geoError = _errorCode;
       return;
@@ -491,10 +502,12 @@ class CGeo {
           _log.config("get error", error, stackTrace);
           _errorCode = -1;
         }
-        if (_errorCode != null)
-          env.geoError = _errorCode;
-        else if (lastError != null && lastError.code != null)
-          env.geoError = lastError.code;
+        if (env != null) {
+          if (_errorCode != null)
+            env.geoError = _errorCode;
+          else if (lastError != null && lastError.code != null)
+            env.geoError = lastError.code;
+        }
       });
     }
   } // get

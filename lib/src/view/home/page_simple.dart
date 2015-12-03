@@ -45,6 +45,9 @@ class PageSimple
     ..style.display = "none"
     ..id = STATUS_ID_NONE;
 
+  /// Status messages
+  static final List<StatusMessage> statusMessages = new List<StatusMessage>();
+
   /**
    * Simple Page
    * optional [classList] (if mot defined, container/fluid)
@@ -70,7 +73,7 @@ class PageSimple
   /// Server Start (busy)
   void onServerStart(String trxName, String info) {
     _statusElement.id = STATUS_ID_BUSY;
-    setStatus(LTheme.C_THEME__ALT_INVERSE, new LIconUtility(LIconUtility.SPINNER), "... ${LSpinner.lSpinnerWorking()} ...", null, "busy", null);
+    setStatus(StatusMessage.busy);
     busy = true;
   }
   /// Info Server Communication Success (busy/msg)
@@ -107,50 +110,118 @@ class PageSimple
 
   /// Info Status with (i)
   void setStatusInfo(String message, {String detail, String dataSuccess, String dataDetail}) {
-    setStatus(LTheme.C_THEME__SHADE, new LIconUtility(LIconUtility.INFO), message, detail, dataSuccess, dataDetail);
+    setStatus(new StatusMessage.info(message, detail, dataSuccess, dataDetail));
   }
   /// Success Status with check
   void setStatusSuccess(String message, {String detail, String dataSuccess: "true", String dataDetail}) {
-    setStatus(LTheme.C_THEME__SUCCESS, null, message, detail, dataSuccess, dataDetail);
+    setStatus(new StatusMessage.success(message, detail, dataSuccess, dataDetail));
   }
-  /// Warning Status with triange
+  /// Warning Status with triangle
   void setStatusWarning(String message, {String detail, String dataSuccess: "false", String dataDetail}) {
-    setStatus(LTheme.C_THEME__WARNING, null, message, detail,  dataSuccess, dataDetail);
+    setStatus(new StatusMessage.warning(message, detail,  dataSuccess, dataDetail));
   }
   /// Error Status with fire
   void setStatusError(String message, {String detail, String dataSuccess: "error", String dataDetail}) {
-    setStatus(LTheme.C_THEME__ERROR, null, message, detail, dataSuccess, dataDetail);
+    setStatus(new StatusMessage.error(message, detail, dataSuccess, dataDetail));
   }
   /// Default Status
   void setStatusDefault(String message, {String detail, String dataSuccess, String dataDetail}) {
-    setStatus(LTheme.C_THEME__SHADE, new LIconUtility(LIconUtility.ANNOUNCEMENT), message, detail, dataSuccess, dataDetail);
+    setStatus(new StatusMessage.announce(message, detail, dataSuccess, dataDetail));
   }
 
   /**
    * Clear/Empty Status
    */
   void setStatusClear() {
-    setStatus(null, null, null, null, null, null);
+    setStatus(null);
   }
 
   /**
-   * [color] theme color
-   * [dataSuccess] e.g. busy, true, false, error
+   * Show Status Message
    */
-  void setStatus(String color, LIcon icon, String message, String detail,
-      String dataSuccess, String dataDetail) {
+  void setStatus(StatusMessage sm) {
 
-    //if (detail != null && detail.isNotEmpty) {
-      LToast toast = new LToast(label:message, idPrefix:"status", icon:icon,
-        text:detail, addDefaultIcon: true,
-        color:color);
-      toast.showBottomRight(element, autohideSeconds:10);
-    //}
+    if (_statusToast != null) {
+      _statusToast.hide(); // hide previous
+    }
+    if (sm != null) {
+      if (sm.dataSuccess != StatusMessage._BUSY) {
+        statusMessages.add(sm);
+      }
+      _statusToast = new LToast(
+          label: sm.message, idPrefix: "status", icon: sm.icon,
+          text: sm.detail, addDefaultIcon: true, color: sm.color);
+      _statusToast.showBottomRight(element, autohideSeconds: 10);
+    }
     //
-    element.attributes["data-success"] = dataSuccess == null ? "" : dataSuccess;
-    element.attributes["data-detail"] = dataDetail == null ? "" : dataDetail;
+    element.attributes["data-success"] = (sm == null || sm.dataSuccess == null) ? "" : sm.dataSuccess;
+    element.attributes["data-detail"] = (sm == null || sm.dataDetail == null) ? "" : sm.dataDetail;
     //
-    _statusElement.text = "message=${message} \ndetail=${detail} \ndataSuccess=${dataSuccess} \ndataDetail=${dataDetail}";
+    _statusElement.text = (sm == null) ? ""
+        : "message=${sm.message} \ndetail=${sm.detail} \ndataSuccess=${sm.dataSuccess} \ndataDetail=${sm.dataDetail}";
   } // setStatus
+  /// Status Toast
+  LToast _statusToast;
 
 } // PageSimple
+
+/**
+ * Status Message
+ * [color] theme color
+ * [dataSuccess] e.g. busy, true, false, error
+ */
+class StatusMessage {
+
+  /// dataSuccess
+  static const String _BUSY = "busy";
+
+  String color;
+  LIcon icon;
+  String message;
+  String detail;
+  String dataSuccess;
+  String dataDetail;
+
+  /// Default/Detail constructor
+  StatusMessage(String this.color, LIcon this.icon, String this.message,
+                String this.detail, String this.dataSuccess, String this.dataDetail);
+
+  /// Info
+  StatusMessage.info(String this.message,
+                     String this.detail, String this.dataSuccess, String this.dataDetail) {
+    color = LTheme.C_THEME__SHADE;
+    icon = new LIconUtility(LIconUtility.INFO);
+  }
+
+  /// Announcement
+  StatusMessage.announce(String this.message,
+                             String this.detail, String this.dataSuccess, String this.dataDetail) {
+    color = LTheme.C_THEME__SHADE;
+    icon = new LIconUtility(LIconUtility.ANNOUNCEMENT);
+  }
+
+  /// Success Status with check
+  StatusMessage.success(String this.message,
+                     String this.detail, String this.dataSuccess, String this.dataDetail) {
+    color = LTheme.C_THEME__SUCCESS;
+  }
+
+  /// Warning Status with triangle
+  StatusMessage.warning(String this.message,
+                        String this.detail, String this.dataSuccess, String this.dataDetail) {
+    color = LTheme.C_THEME__WARNING;
+  }
+
+  /// Error Status with fire
+  StatusMessage.error(String this.message,
+                       String this.detail, String this.dataSuccess, String this.dataDetail) {
+    color = LTheme.C_THEME__ERROR;
+  }
+
+  /// Busy Status (working)
+  static StatusMessage busy = new StatusMessage(
+      LTheme.C_THEME__ALT_INVERSE, new LIconUtility(LIconUtility.SPINNER),
+      "... ${LSpinner.lSpinnerWorking()} ...",
+      null, _BUSY, null);
+
+} // StatusMessage

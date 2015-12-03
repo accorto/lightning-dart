@@ -309,7 +309,6 @@ class LForm
       LIcon theIcon = icon;
       if (theIcon == null)
         theIcon = new LIconUtility(LIconAction.CHECK);
-      theIcon.element.style.setProperty("fill", "white"); // TODO add style
       //
       _buttonSave = new LButton.brandIcon(name,
           label == null ? lFormSave() : label,

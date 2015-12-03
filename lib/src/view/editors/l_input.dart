@@ -19,7 +19,7 @@ class LInput
   final InputElement input = new InputElement();
 
   /// html5 Mode (date, number)
-  bool html5 = ClientEnv.html5; // default
+  bool html5 = Settings.getAsBool(Settings.NATIVE_HTML5); // default
   /// Editor in Grid
   final bool inGrid;
 

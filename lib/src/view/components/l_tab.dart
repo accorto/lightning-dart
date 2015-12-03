@@ -78,6 +78,9 @@ class LTab extends LComponent {
 
   final bool scoped;
 
+  /// List of tabs
+  final List<LTabContent> _contentList = new List<LTabContent>();
+
   /**
    * Tab
    */
@@ -93,48 +96,40 @@ class LTab extends LComponent {
     element.id = newValue;
   }
 
+  /**
+   * Add Tab
+   */
+  void addTabContent (LTabContent tab) {
+    tab._init(_tablist.children.length, scoped);
+    tab._a.onClick.listen(onTabClick);
+
+    _contentList.add(tab);
+    element.append(tab.element);
+    _tablist.append(tab._li);
+
+    // Name + id
+    if (tab.name != null && tab.name.isNotEmpty) {
+      tab._li.attributes[Html0.DATA_NAME] = tab.name;
+      tab._a.attributes[Html0.DATA_NAME] = tab.name;
+      tab.element.attributes[Html0.DATA_NAME] = tab.name;
+    }
+    tab._a.id = LComponent.createId(id, tab.name);
+    tab.element.id = tab._a.id + "-content";
+    tab._a.attributes[Html0.ARIA_CONTROLS] = tab.element.id;
+
+    selectTabByPos(currentPos, false);
+  } // addTabContent
 
   /**
    * Add Tab - returns content element
    */
   Element addTab (String label, {String name, String href, Element content}) {
-    Element theContent = content;
-    if (theContent == null)
-      theContent = new DivElement();
-    theContent.classes.add(scoped ? C_TABS__SCOPED__CONTENT : C_TABS__DEFAULT__CONTENT);
-    theContent.attributes[Html0.ROLE] = Html0.ROLE_TABPANEL;
-    element.append(theContent);
-
-    // Label
-    AnchorElement a = new AnchorElement()
-      ..href = href == null || href.isEmpty ? "#" : href
-      ..attributes[Html0.ROLE] = Html0.ROLE_TAB
-      ..tabIndex = -1
-      ..attributes[Html0.ARIA_SELECTED] = "false"
-      ..attributes[Html0.DATA_VALUE] = _tablist.children.length.toString()
-      ..classes.add(scoped ? C_TABS__SCOPED__LINK : C_TABS__DEFAULT__LINK)
-      ..text = label;
-    a.onClick.listen(onTabClick);
-    LIElement entry = new LIElement()
-      ..classes.add(scoped ? C_TABS__SCOPED__ITEM : C_TABS__DEFAULT__ITEM)
-      ..classes.add(LText.C_TEXT_HEADING__LABEL)
-      ..title = label
-      ..attributes[Html0.ROLE] = Html0.ROLE_PRESENTATION;
-    entry.append(a);
-    _tablist.append(entry);
-
-    // Name + id
-    if (name != null && name.isNotEmpty) {
-      entry.attributes[Html0.DATA_NAME] = name;
-      a.attributes[Html0.DATA_NAME] = name;
-      theContent.attributes[Html0.DATA_NAME] = name;
-    }
-    a.id = LComponent.createId(id, name);
-    theContent.id = a.id + "-content";
-    a.attributes[Html0.ARIA_CONTROLS] = theContent.id;
-
-    selectTabByPos(currentPos, false);
-    return theContent;
+    LTabContent tc = new LTabContent(name, label)
+        ..href = href;
+    if (content != null)
+      tc.element = content;
+    addTabContent(tc);
+    return tc.element;
   } // addTab
 
   /// Current position
@@ -149,11 +144,23 @@ class LTab extends LComponent {
    * Select Tab By Position [pos] 0..x returns false if not found
    */
   bool selectTabByPos(int pos, bool logIt) {
-    if (pos < 0 || pos >= _tablist.children.length)
+    if (pos < 0 || pos >= _contentList.length)
       return false;
     //
     if (logIt)
       _log.fine("selectTabByPos #${pos} - tablist=${_tablist.children.length}, elements=${element.children.length}");
+    int i = 0;
+    for (LTabContent tc in _contentList) {
+      if (pos == i) {
+        tc.active = true;
+        _currentContent = tc.element;
+        tc.showingNow();
+      } else {
+        tc.active = false;
+      }
+      i++;
+    }
+    /*
     for (int i = 0; i < _tablist.children.length; i++) {
       LIElement li = _tablist.children[i];
       AnchorElement a = li.children.first;
@@ -172,10 +179,11 @@ class LTab extends LComponent {
         content.classes.remove(LVisibility.C_SHOW);
         content.classes.add(LVisibility.C_HIDE);
       }
-    }
+    } */
     _currentPos = pos;
-    if (_sc != null)
-      _sc.add(this); // notify
+    if (_sc != null) {
+      _sc.add(this); // notify tabChanged
+    }
     return true;
   } // selectByPos
 
@@ -228,5 +236,79 @@ class LTab extends LComponent {
   }
   StreamController _sc;
 
-
 } // LTab
+
+
+/**
+ * Tab Content
+ */
+class LTabContent {
+
+  final String label;
+  final String name;
+
+  /// Tab Content
+  Element element = new DivElement();
+
+  /// internal Tab Header
+  final LIElement _li = new LIElement()
+    ..classes.add(LText.C_TEXT_HEADING__LABEL)
+    ..attributes[Html0.ROLE] = Html0.ROLE_PRESENTATION;
+
+  /// internal Tab Header Link
+  final AnchorElement _a = new AnchorElement()
+    ..href = "#"
+    ..attributes[Html0.ROLE] = Html0.ROLE_TAB
+    ..tabIndex = -1
+    ..attributes[Html0.ARIA_SELECTED] = "false";
+
+  /**
+   * Tab Content
+   */
+  LTabContent(String this.name, String this.label) {
+    _li.title = label;
+    _a.text = label;
+    _li.append(_a);
+  }
+
+  /// Initialize
+  void _init(int length, bool scoped) {
+    element.attributes[Html0.ROLE] = Html0.ROLE_TABPANEL;
+    element.classes.add(scoped ? LTab.C_TABS__SCOPED__CONTENT : LTab.C_TABS__DEFAULT__CONTENT);
+    _li.classes.add(scoped ? LTab.C_TABS__SCOPED__ITEM : LTab.C_TABS__DEFAULT__ITEM);
+    _a.classes.add(scoped ? LTab.C_TABS__SCOPED__LINK : LTab.C_TABS__DEFAULT__LINK);
+    _a.attributes[Html0.DATA_VALUE] = length.toString();
+  } // init
+
+  /// Set href
+  void set href (String newValue) {
+    if (newValue == null || newValue.isEmpty)
+      _a.href = "#";
+    else
+      _a.href = newValue;
+  }
+
+  /// active
+  bool get active => _li.classes.contains(LVisibility.C_ACTIVE);
+  /// active
+  void set active (bool newValue) {
+    if (newValue) {
+      _li.classes.add(LVisibility.C_ACTIVE);
+      _a.tabIndex = 0;
+      _a.attributes[Html0.ARIA_SELECTED] = "true";
+      element.classes.remove(LVisibility.C_HIDE);
+      element.classes.add(LVisibility.C_SHOW);
+    } else {
+      _li.classes.remove(LVisibility.C_ACTIVE);
+      _a.tabIndex = -1;
+      _a.attributes[Html0.ARIA_SELECTED] = "false";
+      element.classes.remove(LVisibility.C_SHOW);
+      element.classes.add(LVisibility.C_HIDE);
+    }
+  } // active
+
+  /// Showing Tab
+  void showingNow() {
+  }
+
+} // LTabI

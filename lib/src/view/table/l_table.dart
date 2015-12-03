@@ -444,25 +444,48 @@ class LTable
   }
 
   /**
-   * Add Body Row
+   * Add Plain Headings
    */
-  void addRowHdrData(String thText, String tdText) {
+  void addHeadings(List<String> thTexts) {
+    if (_thead == null)
+      _thead = _table.createTHead();
+    TableRowElement tr = _thead.addRow();
+    for (String thText in thTexts) {
+      Element th = new Element.th();
+      tr.append(th);
+      if (thText != null) {
+        th.text = thText;
+      }
+    }
+  } // addHeadings
+
+  /**
+   * Add Plain Body Row with header element and data element
+   */
+  void addRowHdrData(String thText, dynamic tdValue) {
     if (_tbody == null)
       _tbody = _table.createTBody();
     TableRowElement tr = _tbody.addRow();
 
     Element th = new Element.th();
-    tr.append(tr);
-    if (thText != null)
+    tr.append(th);
+    if (thText != null) {
       th.text = thText;
-
+    }
     TableCellElement td = tr.addCell();
-    if (tdText != null)
-      td.text = tdText;
+    if (tdValue != null) {
+      if (tdValue is String) {
+        td.text = tdValue;
+      } else if (tdValue is Element) {
+        td.append(tdValue);
+      } else {
+        td.text = tdValue.toString();
+      }
+    }
   } // addRowHdrData
 
   /**
-   * Add Body Row
+   * Add Plain Body Row with header element first
    */
   void addRowHdrDataList(String thText, List<String> tdTexts) {
     if (_tbody == null)
@@ -480,6 +503,28 @@ class LTable
         td.text = tdText;
     }
   } // addRowHdrDataList
+
+  /**
+   * Add Plain Body Row
+   */
+  void addRowDataList(List<dynamic> tdValues) {
+    if (_tbody == null)
+      _tbody = _table.createTBody();
+    TableRowElement tr = _tbody.addRow();
+
+    for (var tdValue in tdValues) {
+      TableCellElement td = tr.addCell();
+      if (tdValue != null) {
+        if (tdValue is String) {
+          td.text = tdValue;
+        } else if (tdValue is Element) {
+          td.append(tdValue);
+        } else {
+          td.text = tdValue.toString();
+        }
+      }
+    }
+  } // addRowDataList
 
 
   static String lTableRowSelectAll() => Intl.message("Select All", name: "lTableRowSelectAll", args: []);
