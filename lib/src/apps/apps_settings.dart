@@ -90,6 +90,13 @@ class AppSettingsEnvironment extends LTabContent {
     table.addRowHdrData("Geo Error", CGeo.lastErrorInfo);
     _geoBtn.label = appsStatusEnvironmentGeo();
     table.addRowHdrData("Geo Request", _geoBtn.element);
+    String geoHref = CGeo.lastPosHref;
+    if (geoHref != null) {
+      AnchorElement a = new AnchorElement(href: geoHref)
+        ..text = "link"
+        ..target = "_bkank";
+      table.addRowHdrData("Geo Link", a);
+    }
 
     table.addRowHdrData("Server Url", Service.serverUrl);
     // LightningCtrl.router.queryParams

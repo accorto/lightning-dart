@@ -417,7 +417,11 @@ class CGeo {
   static String get lastPosInfo {
     String s = null;
     if (lastPos != null && lastPos.coords != null) {
-      s = "lat= ${lastPos.coords.latitude} lon=${lastPos.coords.longitude}";
+      s = "-";
+      if (lastPos.coords.latitude != null)
+        s = "lat=${lastPos.coords.latitude}";
+      if (lastPos.coords.longitude != null)
+        s += " lon=${lastPos.coords.longitude}";
       if (lastPos.coords.altitude != null)
         s += " alt=${lastPos.coords.altitude}";
       if (lastPos.coords.heading != null)
@@ -426,6 +430,16 @@ class CGeo {
         s += " speed=${lastPos.coords.speed}";
     }
     return s;
+  }
+
+  /// Last Position href or null
+  static String get lastPosHref {
+    // https://www.google.com/maps/@37.467062,-122.2322836,16z
+    if (lastPos != null && lastPos.coords != null
+        && lastPos.coords.latitude != null && lastPos.coords.longitude != null) {
+      return "https://www.google.com/maps/@${lastPos.coords.latitude},${lastPos.coords.longitude}z";
+    }
+    return null;
   }
 
   /// Last Position Info
@@ -482,9 +496,9 @@ class CGeo {
           if (pos.coords == null) {
             _log.config("get noCoords ${pos}");
           } else {
-            _log.config("get lat=${pos.coords.latitude} lon=${pos.coords.longitude} alt=${pos.coords.altitude} dir=${lastPos.coords.heading} speed=${lastPos.coords.speed}");
             lastPos = pos;
             _errorCode = null;
+            _log.config("get ${lastPosInfo}");
             set(env);
           }
         }
