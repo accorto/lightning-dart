@@ -11,16 +11,80 @@ part of lightning_model;
  */
 class Settings {
 
-  /// Initialize
+  static const String PREFERENCE_PREFIX = "settings";
+  static const String VALUE_TRUE = "true";
+  static const String VALUE_FALSE = "false";
+
+  /**
+   * Initialize
+   * - called from [ClientEnv.init()] .. LightningDart.init()
+   */
   static void init() {
-    _init();
-    settingList.add(new SettingItem(NATIVE_HTML5, value: _valueNativeHtml5()));
-    settingList.add(new SettingItem(EXPERT_MODE));
+    if (settingList.isEmpty) {
+      add(NATIVE_HTML5, _valueNativeHtml5(),
+              label:"Native Html5", dataType: EditorI.TYPE_CHECKBOX);
+      add(EXPERT_MODE, VALUE_FALSE,
+              label:"Expert Mode", dataType: EditorI.TYPE_CHECKBOX);
+      add(GEO_ENABLED, VALUE_FALSE,
+              label:"Geo Location", dataType: EditorI.TYPE_CHECKBOX);
+    }
   } // init
+
+  /**
+   * Add Setting
+   */
+  static SettingItem add(String name, String value,
+                  {String label,
+                  String dataType: EditorI.TYPE_TEXT,
+                  bool userUpdatable: true}) {
+    SettingItem item = new SettingItem(name, value: value)
+      ..dataType = dataType
+      ..userUpdatable = userUpdatable;
+    if (label != null)
+      item.label = label;
+    Settings.settingList.add(item);
+    return item;
+  } // add
+
+  /**
+   * Add Setting - get Value from Preference
+   */
+  static SettingItem addFromPreference(String name, String defaultValue,
+                         {String label,
+                         String dataType: EditorI.TYPE_TEXT,
+                         bool userUpdatable: true}) {
+    String value = Preference.get(PREFERENCE_PREFIX, name, defaultValue);
+    return add(name, value, label:label, dataType:dataType, userUpdatable:userUpdatable);
+  }
+
+    /**
+   * Load from Preferences to original value
+   * (initially loaded from [Preference.init()])
+   */
+  static void load() {
+    for (SettingItem item in settingList) {
+      String value = Preference.get(PREFERENCE_PREFIX, item.name, null);
+      if (value != null) {
+        item.valueOriginal = value;
+      }
+    }
+  } // load
+
+  /**
+   * Store values to Preferences
+   */
+  static void save() {
+    for (SettingItem item in settingList) {
+      String value = item.value;
+      Preference.set(PREFERENCE_PREFIX, item.name, value);
+      item.valueOriginal = value;
+    }
+  } // save
+
 
   static const String NATIVE_HTML5 = "nativeHtml5";
   static const String EXPERT_MODE = "expertMode";
-
+  static const String GEO_ENABLED = "geoEnabled";
   /// original value - native Html5
   static String _valueNativeHtml5() {
     bool value = true;
@@ -28,24 +92,10 @@ class Settings {
     return value.toString();
   }
 
-  /// Not Updatable
-  static List<String> _NOT_UPDATABLE = [];
-  /// fill name label
-  static void _init() {
-    if (_nameLabelMap.isEmpty) {
-      _nameLabelMap[NATIVE_HTML5] = "Native Html5";
-      _nameTypeMap[NATIVE_HTML5] = EditorI.TYPE_CHECKBOX;
-      _nameLabelMap[EXPERT_MODE] = "Expert Mode";
-      _nameTypeMap[EXPERT_MODE] = EditorI.TYPE_CHECKBOX;
-    }
-  }
-  static Map<String, String> _nameLabelMap = new Map<String, String>();
-  static Map<String, String> _nameTypeMap = new Map<String, String>();
-
   /// Setting List
   static final List<SettingItem> settingList = new List<SettingItem>();
 
-  /// get Setting
+  /// get Setting with [name] or null
   static SettingItem setting(String name) {
     for (SettingItem si in settingList) {
       if (name == si.name)
@@ -54,7 +104,7 @@ class Settings {
     return null;
   }
 
-  /// get String value or null
+  /// get setting with [name] and return String value or null
   static String get(String name) {
     SettingItem si = setting(name);
     if (si != null)
@@ -62,15 +112,19 @@ class Settings {
     return null;
   }
 
-  /// set setting
-  static void set(String name, dynamic value) {
+  /// set setting with [name] and set [value]
+  static void set(String name, dynamic value, {bool saveToPreferences:false}) {
     SettingItem si = setting(name);
     if (si == null) {
       si = new SettingItem(name, value: value);
+      settingList.add(si);
     } else {
       si.value = value;
     }
-  }
+    if (saveToPreferences) {
+      si.save();
+    }
+  } // set
 
   /// get bool value or [defaultValue]
   static bool getAsBool(String name, {bool defaultValue:false}) {

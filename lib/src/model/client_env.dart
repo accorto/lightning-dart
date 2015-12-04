@@ -58,6 +58,7 @@ class ClientEnv {
 
   /**
    * Initialize locale, Intl, Date
+   * - called from LightningDart.init()
    */
   static Future<bool> init() {
     localeName = window.navigator.language;
@@ -185,7 +186,7 @@ class ClientEnv {
     ctx['isTenantSystem'] = value.isTenantSystem;
     ctx['isUserExpert'] = value.isUserExpert;
     if (value.hasIsUserExpert())
-      Settings.set(Settings.EXPERT_MODE, value.isUserExpert);
+      Settings.set(Settings.EXPERT_MODE, value.isUserExpert, saveToPreferences: true);
 
     ctx['languageIsoCode'] = value.languageIsoCode;
     ctx['sid'] = value.sid;

@@ -50,16 +50,20 @@ class AppSettingsTab extends LTabContent {
     element.append(_buttonDiv);
   } // showingNow
 
-
+  /// reload from local preferences
   void onResetClick(MouseEvent evt) {
+    Settings.load(); // updates value
     for (AppSettingsTabLine line in _lines) {
-      line.reset();
+      line.setEditorValue();
     }
   }
+
+  /// save to local preferences
   void onSaveClick(MouseEvent evt) {
     for (AppSettingsTabLine line in _lines) {
       line.save();
     }
+    Settings.save();
   }
 
 
@@ -75,17 +79,22 @@ class AppSettingsTabLine {
 
   final SettingItem setting;
 
+  /// Setting Tab Line
   AppSettingsTabLine(SettingItem this.setting) {
   } // AppSettingsTabLine
 
-  /// Editor + value
+  /// get/create Editor + set value
   InputElement get editor {
     _input = new InputElement(type:setting.dataType);
     setEditorValue();
+    if (!setting.userUpdatable) {
+      _input.disabled = true;
+    }
     return _input;
   }
   InputElement _input;
 
+  /// set editor value
   void setEditorValue() {
     if (setting.isBool)
       _input.checked = setting.valueAsBool();
@@ -103,16 +112,20 @@ class AppSettingsTabLine {
     setEditorValue();
   }
 
-  /// save
+  /// save value to setting (need to save to preference)
   void save() {
-    if (setting.isBool)
-      setting.value = _input.checked;
-    else if (setting.isInt)
-      setting.value = _input.valueAsNumber;
-    else if (setting.isNum)
-      setting.value = _input.valueAsNumber;
-    else
-      setting.value = _input.value;
+    if (setting.userUpdatable) {
+      if (setting.isBool)
+        setting.value = _input.checked;
+      else if (setting.isInt)
+        setting.value = _input.valueAsNumber;
+      else if (setting.isNum)
+        setting.value = _input.valueAsNumber;
+      else
+        setting.value = _input.value;
+    } else {
+      setEditorValue(); // ignore input
+    }
   } // save
 
 } // AppSettingsTabLine

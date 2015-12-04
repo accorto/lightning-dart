@@ -23,18 +23,13 @@ class SettingItem {
     if (value == null)
       _valueOriginal = null;
     else if (value is String)
-      _value = value;
+      _valueOriginal = value;
     else
-      _value = value.toString();
-    if (Settings._NOT_UPDATABLE.contains(name))
-      userUpdatable = false;
+      _valueOriginal = value.toString();
   }
 
   /// Setting Label
   String get label {
-    if (_label == null) {
-      _label = Settings._nameLabelMap[name];
-    }
     if (_label != null) {
       return _label;
     }
@@ -49,9 +44,6 @@ class SettingItem {
 
   /// Data Type (EditorI) or text
   String get dataType {
-    if (_dataType == null) {
-      _dataType = Settings._nameTypeMap[name];
-    }
     if (_dataType == null) {
       _dataType = EditorI.TYPE_TEXT;
     }
@@ -71,33 +63,44 @@ class SettingItem {
   }
   /// Set Value
   void set value(dynamic newValue) {
-    if (_valueOriginal == null) {
-      _valueOriginal = _value;
-    }
-    if (newValue == null)
+    if (newValue == null) {
       _value = null;
-    else if (newValue is String)
+    } else if (newValue is String) {
       _value = newValue;
-    else
+    } else {
       _value = newValue.toString();
-  }
+    }
+    // inform always (even if same value)
+    if (_onChange != null) {
+      _onChange.add(value);
+    }
+  } // set value
   String _value;
+
 
   /// Setting value
   String get valueOriginal => _valueOriginal;
+  /// Set Value original + set value to null
+  void set valueOriginal (String newValue) {
+    _valueOriginal = newValue;
+    _value = null;
+  }
   String _valueOriginal;
+
 
   /// value is null
   bool get isNull {
-    return _value == null;
+    return _value == null && _valueOriginal == null;
   }
   /// value is null or empty
   bool get isEmpty {
-    return _value == null || _value.isEmpty;
+    String vv = value;
+    return vv == null || vv.isEmpty;
   }
   /// value is not empty
   bool get isNotEmpty {
-    return _value != null && _value.isNotEmpty;
+    String vv = value;
+    return vv != null && vv.isNotEmpty;
   }
 
   bool get isBool {
@@ -112,8 +115,9 @@ class SettingItem {
 
   /// int or 0
   int valueAsInt({int defaultValue:0}) {
-    if (_value != null) {
-      return int.parse(_value, onError: (String v) {
+    String vv = value;
+    if (vv != null) {
+      return int.parse(vv, onError: (String v) {
         return defaultValue;
       });
     }
@@ -122,8 +126,9 @@ class SettingItem {
 
   /// num or 0.0
   num valueAsNum({num defaultValue:0.0}) {
-    if (_value != null) {
-      return double.parse(_value, (String v) {
+    String vv = value;
+    if (vv != null) {
+      return double.parse(vv, (String v) {
         return defaultValue;
       });
     }
@@ -132,30 +137,57 @@ class SettingItem {
 
   /// bool or false
   bool valueAsBool({bool defaultValue:false}) {
-    if (_value != null)
-      return _value == "true";
+    String vv = value;
+    if (vv != null)
+      return vv == Settings.VALUE_TRUE;
     return defaultValue;
   }
 
   /// changed
   bool get changed {
-    if (_valueOriginal != null) {
-      return _valueOriginal != _value;
+    if (_value != null) {
+      return _value != _valueOriginal;
     }
     return false;
   }
 
-  /// reset
+  /// Reset to original value
   void reset() {
-    _value = _valueOriginal;
+    if (_value != null) {
+      _value = null;
+      if (_onChange != null) {
+        _onChange.add(_valueOriginal);
+      }
+    }
   }
 
+  /// Save in Preference
+  void save() {
+    String vv = value;
+    Preference.set(Settings.PREFERENCE_PREFIX, name, vv);
+    _valueOriginal = vv;
+    _value = null;
 
-  String toString() {
-    if (_valueOriginal != null) {
-      return "${name}=${_value} (${_valueOriginal})";
+  }
+
+  /// on Value Change
+  Stream<String> get onChange {
+    if (_onChange == null) {
+      _onChange = new StreamController<String>();
     }
-    return "${name}=${_value}";
+    return _onChange.stream;
+  }
+  StreamController<String> _onChange;
+
+
+  /// info
+  String toString() {
+    if (_value == null) {
+      return "${name}=${_valueOriginal}";
+    } else if (_valueOriginal == null) {
+      return "${name}=${_value}";
+    }
+    return "${name}=${_value} (${_valueOriginal})";
   }
 
 } // SettingItem

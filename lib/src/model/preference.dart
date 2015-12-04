@@ -9,15 +9,17 @@ part of lightning_model;
 /**
  * User Preferences
  * hierarchy:
- * - name     System Level
- * - name.ui  UI specific
+ * - name     System Level - prefix
+ * - name.ui  UI specific  - prefix.key
  */
 class Preference {
 
-  static const String ICON = "icon-equalizer4";
   static final Logger _log = new Logger("Preferences");
 
-  /// initialize
+  /**
+   * Initialize
+   * - called from LightningCtrl.init()
+   */
   static Future<bool> init() {
     Completer<bool> completer = new Completer<bool>();
     if (_map == null) {
@@ -46,6 +48,7 @@ class Preference {
         .then((Map<String, String> map) {
           _map = map;
           _log.config("init #${_map.length}");
+          Settings.load();
           completer.complete(true);
         })
         .catchError((error, StackTrace stackTrace) {

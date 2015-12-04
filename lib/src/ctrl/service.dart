@@ -78,6 +78,11 @@ class Service {
       }
     }
     devMode = test;
+    //
+    SettingItem si = Settings.setting(Settings.GEO_ENABLED);
+    si.onChange.listen((String newValue) {
+      addGeo = (newValue == Settings.VALUE_TRUE);
+    });
 
     // Server request init
     trxNo = 0;
@@ -229,8 +234,8 @@ class Service {
   static bool get addGeo => _addGeo;
   /// add geo info
   static void set addGeo (bool newValue) {
-    _addGeo = false;
-    if (newValue) {
+    _addGeo = newValue;
+    if (_addGeo) {
       CGeo.get(null, retry: true);
     }
   }
@@ -406,6 +411,9 @@ class CGeo {
 
   static Logger _log = new Logger("CGeo");
 
+  /// Map URL Prefix for lat,lon - https://maps.googleapis.com/maps/api/staticmap?key=YOUR_API_KEY&center=
+  static String mapUrlPrefix = "https://www.google.com/maps?q=";
+
   /// last position
   static Geoposition lastPos;
   /// last error
@@ -432,12 +440,12 @@ class CGeo {
     return s;
   }
 
-  /// Last Position href or null
+  /// Last Position href with [mapUrlPrefix] or null
   static String get lastPosHref {
-    // https://www.google.com/maps/@37.467062,-122.2322836,16z
+    // https://www.google.com/maps/@37.467062,-122.2322836
     if (lastPos != null && lastPos.coords != null
         && lastPos.coords.latitude != null && lastPos.coords.longitude != null) {
-      return "https://www.google.com/maps/@${lastPos.coords.latitude},${lastPos.coords.longitude}z";
+      return "${mapUrlPrefix}${lastPos.coords.latitude},${lastPos.coords.longitude}";
     }
     return null;
   }
