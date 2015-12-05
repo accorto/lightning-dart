@@ -33,21 +33,27 @@ abstract class LNotification extends LComponent {
    */
   static LIcon createDefaultIcon(String color, {bool setIconColor:false}) {
     if (color == LTheme.C_THEME__ALT_INVERSE) {
-      return new LIconUtility(LIconUtility.INFO, color: setIconColor ? color : null);
+      return new LIconUtility(LIconUtility.INFO,
+          color: setIconColor ? color : null);
     }
     else if (color == LTheme.C_THEME__SUCCESS) {
-      return new LIconUtility(LIconUtility.SUCCESS, color: setIconColor ? color : null);
+      return new LIconUtility(LIconUtility.SUCCESS,
+          color: setIconColor ? LIcon.C_ICON_TEXT_SUCCESS : null);
     }
     else if (color == LTheme.C_THEME__WARNING) {
-      return new LIconUtility(LIconUtility.WARNING, color: setIconColor ? color : null);
+      return new LIconUtility(LIconUtility.WARNING,
+          color: setIconColor ? LIcon.C_ICON_TEXT_WARNING : null);
     }
     else if (color == LTheme.C_THEME__ERROR) {
-      return new LIconUtility(LIconUtility.ERROR, color: setIconColor ? color : null);
+      return new LIconUtility(LIconUtility.ERROR,
+          color: setIconColor ? LIcon.C_ICON_TEXT_ERROR : null);
     }
     else if (color == LTheme.C_THEME__OFFLINE) {
-      return new LIconUtility(LIconUtility.OFFLINE, color: setIconColor ? color : null);
+      return new LIconUtility(LIconUtility.OFFLINE,
+          color: setIconColor ? LIcon.C_ICON_TEXT_DEFAULT : null);
     }
-    return new LIconUtility(LIconUtility.NOTIFICATION, color: setIconColor ? LIcon.C_ICON_TEXT_DEFAULT : null);
+    return new LIconUtility(LIconUtility.NOTIFICATION,
+        color: setIconColor ? LIcon.C_ICON_TEXT_DEFAULT : null);
   }
 
 

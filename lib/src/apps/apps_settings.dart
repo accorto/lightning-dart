@@ -63,7 +63,7 @@ class AppSettingsEnvironment extends LTabContent {
     _geoBtn.onClick.listen(onGeoClick);
   }
 
-  // recreate
+  // recreate - refresh
   void showingNow() {
     element.children.clear();
     LTable table = new LTable(ID);
@@ -190,7 +190,7 @@ class AppSettingsMessages extends LTabContent {
     _clearBtn.onClick.listen(onClearClick);
   }
 
-  /// Recreate
+  /// recreate - refresh
   void showingNow() {
     element.children.clear();
     LTable table = new LTable(ID);
