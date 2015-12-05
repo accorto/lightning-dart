@@ -193,13 +193,11 @@ class LSelect
       if (input.options.isNotEmpty) {
         OptionElement oe = input.options.first;
         if (oe.value.isEmpty) {
-          if (newValue) {
+          if (newValue) { // required
             input.children.removeAt(0);
-            // required
           }
-        } else if (!newValue) {
+        } else if (!newValue) { // add optional
           input.children.insert(0, new OptionElement());
-          // optional
         }
       }
     }

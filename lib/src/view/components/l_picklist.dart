@@ -223,7 +223,6 @@ class LPicklist
   bool get required => _dropdown.required;
   void set required (bool newValue) {
     super.required = newValue; // UI - FormElement
-    _dropdown.required = newValue;
     String txt = _plButtonLabel.text;
     if (newValue) {
       if (txt == null || txt.isEmpty || txt == SPACE) {
@@ -234,7 +233,8 @@ class LPicklist
         _plButtonLabel.text = SPACE;
       }
     }
-  }
+    _dropdown.required = newValue; // if required sets first
+  } // required
 
   bool get spellcheck => false;
   void set spellcheck (bool newValue) { // ignore
