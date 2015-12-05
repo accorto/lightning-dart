@@ -97,12 +97,36 @@ class LDropdownElement
 
   bool get required => _required;
   void set required (bool newValue) {
+    if (newValue == _required)
+      return;
     _required = newValue;
-    if (newValue && _dropdownItemList.isNotEmpty && value == null) {
-      value = _dropdownItemList.first.value;
-    }
+    if (newValue) {
+      if (_optionalItem != null) {
+        _dropdownItemList.remove(_optionalItem);
+        _optionalItem.element.remove(); // from _dropdownList
+      }
+    } else {
+      if (_optionalItem == null) {
+        _optionalItem = new LDropdownItem(new DOption());
+        addDropdownItem(_optionalItem);
+        _dropdownItemList.remove(_optionalItem);
+        _optionalItem.element.remove(); // from _dropdownList
+      }
+      // add at right place
+      _dropdownItemList.insert(0, _optionalItem);
+      if (_dropdownList.children.isEmpty) {
+        _dropdownList.append(_optionalItem.element);
+      } else {
+        Element first = _dropdownList.children.first;
+        _dropdownList.insertBefore(_optionalItem.element, first);
+      }
+   }
+    //if (newValue && _dropdownItemList.isNotEmpty && value == null) {
+    //  value = _dropdownItemList.first.value;
+    //}
   }
-  bool _required = false;
+  LDropdownItem _optionalItem;
+  bool _required;
   bool get multiple => false;
 
 

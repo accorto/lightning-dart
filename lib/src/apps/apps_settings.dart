@@ -27,8 +27,8 @@ class AppsSettings
       new LIconUtility(LIconUtility.SETUP),
       appsSettingsLabel(), appsSettingsLabel()) {
 
-    _tab.addTabContent(_tabSettings);
     _tab.addTabContent(_tabMessages);
+    _tab.addTabContent(_tabSettings);
     _tab.addTabContent(_tabEnvironment);
   } // AppsSettings
 
@@ -69,59 +69,66 @@ class AppSettingsEnvironment extends LTabContent {
     LTable table = new LTable(ID);
     element.classes.add(LScrollable.C_SCROLLABLE__X);
     element.append(table.element);
+    /*
+    Element col = table.addColElement()
+      ..style.maxWidth = "100px";
+    col = table.addColElement()
+      ..style.maxWidth = "100px";
+    col = table.addColElement()
+      ..style.maxWidth = "100px";
+     */
+
+    table.addRowHdrDataList("Version", [LightningDart.VERSION, LightningDart.devTimestamp]);
 
     // General
-    table.addRowHdrData("Locale", ClientEnv.localeName);
-    table.addRowHdrData("Language", ClientEnv.language);
+    table.addRowHdrDataList("Locale/Language", [ClientEnv.localeName, ClientEnv.language]);
     DateTime now = new DateTime.now();
-    table.addRowHdrData("Time Zone Browser", now.timeZoneName);
-    table.addRowHdrData("Time Zone Offset (min)", now.timeZoneOffset.inMinutes);
+    table.addRowHdrDataList("Time Zone Browser", [now.timeZoneName, now.timeZoneOffset.inMinutes]);
     if (ClientEnv.timeZone == null)
-      table.addRowHdrData("TZ -", TzRef.alias(now.timeZoneName));
+      table.addRowHdrDataList("TZ -", [TzRef.alias(now.timeZoneName), null]);
     else
-      table.addRowHdrData("TZ selected", ClientEnv.timeZone.id);
+      table.addRowHdrDataList("TZ selected", [ClientEnv.timeZone.id, null]);
 
     // service
-    table.addRowHdrData("Start", ClientEnv.formatDateTime(Service.startTime));
-    table.addRowHdrData("Uptime", Service.upTime);
+    table.addRowHdrDataList("Start/Uptime", [ClientEnv.formatDateTime(Service.startTime), Service.upTime]);
+    // ClientEnv.windowNo;
 
-    table.addRowHdrData("Geo Enabled", Service.addGeo);
-    table.addRowHdrData("Geo Position", CGeo.lastPosInfo);
-    table.addRowHdrData("Geo Error", CGeo.lastErrorInfo);
     _geoBtn.label = appsStatusEnvironmentGeo();
-    table.addRowHdrData("Geo Request", _geoBtn.element);
+    table.addRowHdrDataList("Geo Enabled", [Service.addGeo,  _geoBtn.element], colSpan:1);
+    AnchorElement geoLink = null;
     String geoHref = CGeo.lastPosHref;
     if (geoHref != null) {
-      AnchorElement a = new AnchorElement(href: geoHref)
+      geoLink = new AnchorElement(href: geoHref)
         ..text = "link"
         ..target = "_bkank";
-      table.addRowHdrData("Geo Link", a);
     }
+    table.addRowHdrDataList("Geo Position", [CGeo.lastPosInfo, geoLink]);
+    table.addRowHdrDataList("Geo Error", [CGeo.lastErrorInfo], colSpan:2);
 
-    table.addRowHdrData("Server Url", Service.serverUrl);
+    table.addRowHdrDataList("Server Url", [Service.serverUrl], colSpan:2);
     // LightningCtrl.router.queryParams
-    table.addRowHdrData("Client Id", Service.clientId);
-    table.addRowHdrData("Client Trx", Service.trxNo);
+    table.addRowHdrDataList("Client Id/Trx", [Service.clientId, Service.trxNo]);
 
-    table.addRowHdrData("Dev Mode", Service.devMode);
-    table.addRowHdrData("Version ${LightningDart.VERSION}", LightningDart.devTimestamp);
+    table.addRowHdrDataList("Dev Mode", [Service.devMode]);
 
     Screen scr = window.screen;
-    table.addRowHdrData("screen", "w=${scr.width} h=${scr.height} d=${scr.pixelDepth}");
-    table.addRowHdrData("window", "w=${window.innerWidth} h=${window.innerHeight}");
+    table.addRowHdrDataList("screen", ["w=${scr.width} h=${scr.height} d=${scr.pixelDepth}"], colSpan:2);
+    table.addRowHdrDataList("window", ["w=${window.innerWidth} h=${window.innerHeight}"], colSpan:2);
     Navigator nav = window.navigator;
-    table.addRowHdrData("agent", nav.userAgent);
+    table.addRowHdrDataList("agent", [nav.userAgent], colSpan:2);
     // table.addRowHdrData("version", nav.appVersion);
-    table.addRowHdrData("cookie", "${nav.cookieEnabled} ${nav.doNotTrack == null ? "" : nav.doNotTrack}");
-    table.addRowHdrData("platform", nav.platform);
+    table.addRowHdrDataList("cookie", [nav.cookieEnabled, nav.doNotTrack == null ? "" : nav.doNotTrack]);
+    table.addRowHdrDataList("platform/vendor", [nav.platform, nav.vendor]);
+    table.addRowHdrDataList("mobile", [ClientEnv.isMobile, ClientEnv.isPhone]);
 
-    // Session
+
+    // -- Session
     table.addRowHdrData("", "");
     if (ClientEnv.session == null) {
-      table.addRowDataList([new Element.tag("strong")..text = "Not Logged In", ""]);
+      table.addRowDataList([new Element.tag("strong")..text = "Not Logged In", null, null]);
     } else {
       table.addRowDataList([new Element.tag("strong")..text = "Session",
-        new Element.tag("strong")..text = "Value"]);
+        new Element.tag("strong")..text = "Value", null]);
       List<FieldInfo> fiList = new List<FieldInfo>.from(ClientEnv.session.info_.fieldInfo.values);
       fiList.sort((FieldInfo one, FieldInfo two){
         return one.name.compareTo(two.name);
@@ -133,17 +140,17 @@ class AppSettingsEnvironment extends LTabContent {
         if (value != null) {
           if (ClientEnv.sessionConfidential.contains(fi.name))
             value = "-#${value.toString().length}-";
-          table.addRowHdrData(fi.name, value.toString());
+          table.addRowHdrData(fi.name, value.toString(), colSpan: 2);
         }
       }
     }
-    // Context
+    // -- Context
     table.addRowHdrData("", "");
     if (ClientEnv.ctx.isEmpty) {
-      table.addRowDataList([new Element.tag("strong")..text = "No Context", ""]);
+      table.addRowDataList([new Element.tag("strong")..text = "No Context", null, null]);
     } else {
       table.addRowDataList([new Element.tag("strong")..text = "Context",
-        new Element.tag("strong")..text = "Value"]);
+        new Element.tag("strong")..text = "Value", null]);
       List<String> keys = new List.from(ClientEnv.ctx.keys);
       keys.sort((String one, String two) {
         return one.compareTo(two);
@@ -151,7 +158,7 @@ class AppSettingsEnvironment extends LTabContent {
       for (String key in keys) {
         var value = ClientEnv.ctx[key];
         String stringValue = value == null ? "null" : value.toString();
-        table.addRowHdrData(key, stringValue);
+        table.addRowHdrData(key, stringValue, colSpan: 2);
       }
     }
   } // showingNow

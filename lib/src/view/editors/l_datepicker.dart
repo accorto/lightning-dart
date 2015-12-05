@@ -74,6 +74,10 @@ class LDatepicker extends LInputDate {
   @override
   String get type => EditorI.TYPE_DATE;
 
+  /// ignore html5 setting
+  void set html5 (bool ignored) {
+    super.html5 = false;
+  }
 
   /// Select Mode
   String get mode => mode;

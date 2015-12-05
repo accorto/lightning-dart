@@ -31,9 +31,20 @@ class LLookup
 
   static final Logger _log = new Logger("LLookup");
 
-  static const String DATA_SELECT_MULTI = "multi";
-  static const String DATA_SELECT_SINGLE = "single";
-  static const String DATA_SCOPE_SINGLE = "single";
+  /// data select attribute
+  static const String _DATA_SELECT = "data-select";
+  /// data select value
+  static const String _DATA_SELECT_MULTI = "multi";
+  /// data select value
+  static const String _DATA_SELECT_SINGLE = "single";
+
+  /// data scope attribute
+  static const String _DATA_SCOPE = "data-scope";
+  /// data scope value
+  static const String _DATA_SCOPE_SINGLE = "single";
+
+  /// data type ahead attribure (true/false)
+  static const String _DATA_TYPEAHEAD = "data-typeahead";
 
   /// Lookup form + menu
   final DivElement element = new DivElement()
@@ -110,7 +121,8 @@ class LLookup
     element.append(_lookupMenu);
     _lookupMenu.append(_lookupList);
     //
-    _lookupMenu.classes.add(LVisibility.C_AUTO_VISIBLE);
+    if (!html5)
+      _lookupMenu.classes.add(LVisibility.C_AUTO_VISIBLE);
     _lookupMenu.onKeyDown.listen(onMenuKeyDown);
   } // initEditor
 
@@ -127,17 +139,26 @@ class LLookup
 
     /// Set Lookup Attributes
   void _setAttributes(bool multiple, bool singleScope, bool typeahead) {
-    element.attributes["data-select"] = multiple ? DATA_SELECT_MULTI : DATA_SELECT_SINGLE;
-    element.attributes["data-scope"] = DATA_SCOPE_SINGLE;
-    element.attributes["dara-typeahead"] = typeahead.toString();
+    element.attributes[_DATA_SELECT] = multiple ? _DATA_SELECT_MULTI : _DATA_SELECT_SINGLE;
+    element.attributes[_DATA_SCOPE] = _DATA_SCOPE_SINGLE;
+    element.attributes[_DATA_TYPEAHEAD] = typeahead.toString();
   }
 
   // data-select single|multi
-  bool get multiple => element.attributes["data-select"] == DATA_SELECT_MULTI;
+  bool get multiple => element.attributes[_DATA_SELECT] == _DATA_SELECT_MULTI;
   // data-typeahead
-  bool get typeahead => element.attributes["data-typeahead"] == "true";
+  bool get typeahead => element.attributes[_DATA_TYPEAHEAD] == "true";
   // data-scope single
-  bool get singleScope => element.attributes["data-scope"] == "single";
+  bool get singleScope => element.attributes[_DATA_SCOPE] == _DATA_SCOPE_SINGLE;
+
+  /// html5
+  void set html5 (bool newValue) {
+    super.html5 = newValue;
+    if (newValue) { // mobile
+      _lookupMenu.classes.remove(LVisibility.C_AUTO_VISIBLE);
+    }
+  }
+
 
   /// Editor Id
   String get id => input.id;
@@ -262,6 +283,8 @@ class LLookup
       _lookupMenu.classes.remove(LVisibility.C_AUTO_VISIBLE);
       _lookupMenu.classes.add(LVisibility.C_HIDE);
     } else {
+      if (!html5)
+        _lookupMenu.classes.remove(LVisibility.C_AUTO_VISIBLE);
       _lookupMenu.classes.add(LVisibility.C_AUTO_VISIBLE);
       _lookupMenu.classes.remove(LVisibility.C_HIDE);
     }
@@ -274,6 +297,8 @@ class LLookup
       _lookupMenu.classes.remove(LVisibility.C_AUTO_VISIBLE);
       _lookupMenu.classes.add(LVisibility.C_HIDE);
     } else {
+      if (!html5)
+        _lookupMenu.classes.remove(LVisibility.C_AUTO_VISIBLE);
       _lookupMenu.classes.add(LVisibility.C_AUTO_VISIBLE);
       _lookupMenu.classes.remove(LVisibility.C_HIDE);
     }

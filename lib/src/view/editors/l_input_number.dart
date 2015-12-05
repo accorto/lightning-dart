@@ -61,6 +61,7 @@ class LInputNumber
     }
   } // initNumber
 
+  /// use number (stepper) or text
   void set html5 (bool newValue) {
     super.html5 = newValue;
     _initNumber();

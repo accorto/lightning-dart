@@ -14,7 +14,7 @@ typedef LLookup CreateLookup(DataColumn dataColumn, String idPrefix, bool inGrid
  */
 class EditorUtil {
 
-
+  /// Create Lookup
   static CreateLookup createLookupCall = createLookup;
 
   /**
@@ -22,83 +22,119 @@ class EditorUtil {
    */
   static LEditor createfromColumn(String name, DataColumn dataColumn, bool inGrid,
       {String idPrefix, DataRecord data, DEntry entry, bool isAlternativeDisplay:false}) {
+    bool html5 = Settings.getAsBool(Settings.NATIVE_HTML5);
     LEditor editor = null;
     if (dataColumn != null) {
       name = dataColumn.name;
       DataType dataType = dataColumn.tableColumn.dataType;
 
-      if (dataType == DataType.STRING)
-        editor = new LInput.from(dataColumn, EditorI.TYPE_TEXT, idPrefix:idPrefix, inGrid:inGrid);
-      else if (dataType == DataType.ADDRESS)
-        ;
-      else if (dataType == DataType.AMOUNT)
-        editor = new LInputNumber.from(dataColumn, EditorI.TYPE_NUMBER, idPrefix:idPrefix, inGrid:inGrid);
-      else if (dataType == DataType.BOOLEAN) {
-        if (isAlternativeDisplay)
-          editor = new LSelect.from(dataColumn, idPrefix:idPrefix, inGrid:inGrid);
-        else
-          editor = new LCheckbox.from(dataColumn, idPrefix:idPrefix, inGrid:inGrid);
-      } else if (dataType == DataType.CODE);
-      else if (dataType == DataType.COLOR);
-      else if (dataType == DataType.CURRENCY)
-        editor = new LInputNumber.from(dataColumn, EditorI.TYPE_NUMBER, idPrefix:idPrefix, inGrid:inGrid);
-      else if (dataType == DataType.DATA);
-      else if (dataType == DataType.DATE)
-        editor = new LInputDate.from(dataColumn, EditorI.TYPE_DATE, idPrefix:idPrefix, inGrid:inGrid);
-      else if (dataType == DataType.DATETIME)
-        editor = new LInputDate.from(dataColumn, EditorI.TYPE_DATETIME, idPrefix:idPrefix, inGrid:inGrid);
-      else if (dataType == DataType.DECIMAL)
-        editor = new LInputNumber.from(dataColumn, EditorI.TYPE_NUMBER, idPrefix:idPrefix, inGrid:inGrid);
-      else if (dataType == DataType.DURATION)
-        editor = new LInputDuration.from(dataColumn, EditorI.TYPE_DURATION, idPrefix:idPrefix, inGrid:inGrid);
-      else if (dataType == DataType.DURATIONHOUR)
-        editor = new LInputDuration.from(dataColumn, EditorI.TYPE_DURATIONHOUR, idPrefix:idPrefix, inGrid:inGrid);
-      else if (dataType == DataType.EMAIL)
-        editor = new LInput.from(dataColumn, EditorI.TYPE_EMAIL, idPrefix:idPrefix, inGrid:inGrid);
-      else if (dataType == DataType.FK)
-        editor = createLookupCall(dataColumn, idPrefix, inGrid);
-      else if (dataType == DataType.GEO);
-      else if (dataType == DataType.IM);
-      else if (dataType == DataType.IMAGE) {
-        editor = new LInputFile.from(dataColumn, idPrefix:idPrefix, inGrid:inGrid);
-      }
-      else if (dataType == DataType.INT)
-        editor = new LInputNumber.from(dataColumn, EditorI.TYPE_NUMBER, idPrefix:idPrefix, inGrid:inGrid);
-      else if (dataType == DataType.NUMBER)
-        editor = new LInputNumber.from(dataColumn, EditorI.TYPE_NUMBER, idPrefix:idPrefix, inGrid:inGrid);
-      else if (dataType == DataType.PASSWORD)
-        editor = new LInput.from(dataColumn, EditorI.TYPE_PASSWORD, idPrefix:idPrefix, inGrid:inGrid);
-      else if (dataType == DataType.PHONE)
-        editor = new LInput.from(dataColumn, EditorI.TYPE_TEL, idPrefix:idPrefix, inGrid:inGrid);
-      else if (dataType == DataType.PICK)
-        editor = new LSelect.from(dataColumn, multiple:false, idPrefix:idPrefix, inGrid:inGrid);
-      else if (dataType == DataType.PICKAUTO);
-      else if (dataType == DataType.PICKCHOICE) {
-        if (inGrid)
-          editor = new LSelect.from(dataColumn, idPrefix:idPrefix, inGrid:inGrid);
-      }
-      else if (dataType == DataType.PICKMULTI)
-        editor = new LSelect.from(dataColumn, multiple:true, idPrefix:idPrefix, inGrid:inGrid);
-      else if (dataType == DataType.PICKMULTICHOICE) {
-        if (inGrid)
-          editor = new LSelect.from(dataColumn, multiple:false, idPrefix:idPrefix, inGrid:inGrid);
-      }
-      else if (dataType == DataType.QUANTITY)
-        editor = new LInputNumber.from(dataColumn, EditorI.TYPE_NUMBER, idPrefix:idPrefix, inGrid:inGrid);
-      else if (dataType == DataType.RATING);
-      else if (dataType == DataType.TAG);
-      else if (dataType == DataType.TENANT)
-        editor = createLookupCall(dataColumn, idPrefix, inGrid);
-      else if (dataType == DataType.TEXT)
-        editor = new LTextArea.from(dataColumn, idPrefix:idPrefix, inGrid:inGrid);
-      else if (dataType == DataType.TIME)
-        editor = new LInputDate.from(dataColumn, EditorI.TYPE_TIME, idPrefix:idPrefix, inGrid:inGrid);
-      else if (dataType == DataType.TIMEZONE);
-      else if (dataType == DataType.URL)
-        editor = new LInput.from(dataColumn, EditorI.TYPE_URL, idPrefix:idPrefix, inGrid:inGrid);
-      else if (dataType == DataType.USER)
-        editor = createLookupCall(dataColumn, idPrefix, inGrid);
+      if (dataType == DataType.STRING) {
+        editor = new LInput.from(dataColumn,
+            EditorI.TYPE_TEXT, idPrefix: idPrefix, inGrid: inGrid);
+      } else if (dataType == DataType.ADDRESS) {
 
+      } else if (dataType == DataType.AMOUNT) {
+        editor = new LInputNumber.from(dataColumn,
+            EditorI.TYPE_NUMBER, idPrefix: idPrefix, inGrid: inGrid);
+      } else if (dataType == DataType.BOOLEAN) {
+        if (isAlternativeDisplay) {
+          if (html5) {
+            editor = new LSelect.from(dataColumn, multiple: false, idPrefix: idPrefix, inGrid: inGrid);
+          } else {
+            editor = new LPicklist.from(dataColumn, idPrefix: idPrefix, inGrid: inGrid);
+          }
+        } else {
+          editor = new LCheckbox.from(dataColumn, idPrefix: idPrefix, inGrid: inGrid);
+        }
+      } else if (dataType == DataType.CODE) {
+
+      } else if (dataType == DataType.COLOR) {
+
+      } else if (dataType == DataType.CURRENCY) {
+        editor = new LInputNumber.from(dataColumn,
+            EditorI.TYPE_NUMBER, idPrefix: idPrefix, inGrid: inGrid);
+      } else if (dataType == DataType.DATA) {
+
+      } else if (dataType == DataType.DATE) {
+        if (html5) {
+          editor = new LInputDate.from(dataColumn,
+              EditorI.TYPE_DATE, idPrefix: idPrefix, inGrid: inGrid);
+        } else {
+          editor = new LDatepicker.from(dataColumn,
+              EditorI.TYPE_DATE, idPrefix: idPrefix, inGrid: inGrid);
+        }
+      } else if (dataType == DataType.DATETIME) {
+        editor = new LInputDate.from(dataColumn,
+            EditorI.TYPE_DATETIME, idPrefix: idPrefix, inGrid: inGrid);
+      } else if (dataType == DataType.DECIMAL) {
+        editor = new LInputNumber.from(dataColumn,
+            EditorI.TYPE_NUMBER, idPrefix: idPrefix, inGrid: inGrid);
+      } else if (dataType == DataType.DURATION) {
+        editor = new LInputDuration.from(dataColumn,
+            EditorI.TYPE_DURATION, idPrefix: idPrefix, inGrid: inGrid);
+      } else if (dataType == DataType.DURATIONHOUR) {
+        editor = new LInputDuration.from(dataColumn,
+            EditorI.TYPE_DURATIONHOUR, idPrefix: idPrefix, inGrid: inGrid);
+      } else if (dataType == DataType.EMAIL) {
+        editor = new LInput.from(dataColumn,
+            EditorI.TYPE_EMAIL, idPrefix: idPrefix, inGrid: inGrid);
+      } else if (dataType == DataType.FK) {
+        editor = createLookupCall(dataColumn, idPrefix, inGrid);
+      } else if (dataType == DataType.GEO) {
+      } else if (dataType == DataType.IM) {
+      } else if (dataType == DataType.IMAGE) {
+        editor =
+        new LInputFile.from(dataColumn, idPrefix: idPrefix, inGrid: inGrid);
+      } else if (dataType == DataType.INT) {
+        editor = new LInputNumber.from(dataColumn,
+            EditorI.TYPE_NUMBER, idPrefix: idPrefix, inGrid: inGrid);
+      } else if (dataType == DataType.NUMBER) {
+        editor = new LInputNumber.from(dataColumn,
+            EditorI.TYPE_NUMBER, idPrefix: idPrefix, inGrid: inGrid);
+      } else if (dataType == DataType.PASSWORD) {
+        editor = new LInput.from(dataColumn,
+            EditorI.TYPE_PASSWORD, idPrefix: idPrefix, inGrid: inGrid);
+      } else if (dataType == DataType.PHONE) {
+        editor = new LInput.from(dataColumn,
+            EditorI.TYPE_TEL, idPrefix: idPrefix, inGrid: inGrid);
+      } else if (dataType == DataType.PICK) {
+        if (html5) {
+          editor = new LSelect.from(dataColumn, multiple: false, idPrefix: idPrefix, inGrid: inGrid);
+        } else {
+          editor = new LPicklist.from(dataColumn, idPrefix: idPrefix, inGrid: inGrid);
+        }
+      } else if (dataType == DataType.PICKAUTO) {
+      } else if (dataType == DataType.PICKCHOICE) {
+        if (inGrid)
+          editor = new LSelect.from(dataColumn, idPrefix:idPrefix, inGrid:inGrid);
+      } else if (dataType == DataType.PICKMULTI) {
+        editor = new LSelect.from(dataColumn, multiple: true, idPrefix: idPrefix, inGrid: inGrid);
+      } else if (dataType == DataType.PICKMULTICHOICE) {
+        if (inGrid) {
+          editor = new LSelect.from(dataColumn, multiple: false, idPrefix: idPrefix, inGrid: inGrid);
+        }
+      } else if (dataType == DataType.QUANTITY) {
+        editor = new LInputNumber.from(dataColumn,
+            EditorI.TYPE_NUMBER, idPrefix: idPrefix, inGrid: inGrid);
+      } else if (dataType == DataType.RATING) {
+
+      } else if (dataType == DataType.TAG) {
+
+      } else if (dataType == DataType.TENANT) {
+        editor = createLookupCall(dataColumn, idPrefix, inGrid);
+      } else if (dataType == DataType.TEXT) {
+        editor = new LTextArea.from(dataColumn, idPrefix: idPrefix, inGrid: inGrid);
+      } else if (dataType == DataType.TIME) {
+        editor = new LInputDate.from(dataColumn,
+            EditorI.TYPE_TIME, idPrefix: idPrefix, inGrid: inGrid);
+      } else if (dataType == DataType.TIMEZONE) {
+
+      } else if (dataType == DataType.URL) {
+        editor = new LInput.from(dataColumn,
+            EditorI.TYPE_URL, idPrefix: idPrefix, inGrid: inGrid);
+      } else if (dataType == DataType.USER) {
+        editor = createLookupCall(dataColumn, idPrefix, inGrid);
+      }
       // fallback
       if (editor == null)
         editor = new LInput.from(dataColumn, DataTypeUtil.getEditorType(dataType), idPrefix:idPrefix, inGrid:inGrid);

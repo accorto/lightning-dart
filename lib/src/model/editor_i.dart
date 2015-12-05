@@ -255,6 +255,15 @@ abstract class EditorI {
     input.focus();
   }
 
+
+  /// html5 Mode (date, number, ...)
+  bool get html5 => _html5;
+  void set html5 (bool newValue) {
+    _html5 = newValue;
+  }
+  bool _html5 = Settings.getAsBool(Settings.NATIVE_HTML5); // default
+
+
   /**
    * Set Column (info for specific editors)
    */

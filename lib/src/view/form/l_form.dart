@@ -519,6 +519,13 @@ class LForm
     return null;
   }
 
+  /// set html of editors
+  void set html5 (bool newValue) {
+    for (LEditor ed in editorList) {
+      ed.html5 = newValue;
+    }
+  }
+
   // Trl
   static String lFormSave() => Intl.message("Save", name: "lFormSave");
   static String lFormReset() => Intl.message("Reset", name: "lFormReset");

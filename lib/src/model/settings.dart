@@ -21,7 +21,7 @@ class Settings {
    */
   static void init() {
     if (settingList.isEmpty) {
-      add(NATIVE_HTML5, _valueNativeHtml5(),
+      add(NATIVE_HTML5, ClientEnv.isMobile.toString(),
               label:"Native Html5", dataType: EditorI.TYPE_CHECKBOX);
       add(EXPERT_MODE, VALUE_FALSE,
               label:"Expert Mode", dataType: EditorI.TYPE_CHECKBOX);
@@ -85,12 +85,6 @@ class Settings {
   static const String NATIVE_HTML5 = "nativeHtml5";
   static const String EXPERT_MODE = "expertMode";
   static const String GEO_ENABLED = "geoEnabled";
-  /// original value - native Html5
-  static String _valueNativeHtml5() {
-    bool value = true;
-
-    return value.toString();
-  }
 
   /// Setting List
   static final List<SettingItem> settingList = new List<SettingItem>();

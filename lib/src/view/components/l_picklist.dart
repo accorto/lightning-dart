@@ -37,6 +37,9 @@ class LPicklist
 
   static const String C_PICKLIST__MULTI = "slds-picklist--multi";
 
+
+  static const String SPACE = "\u00A0"; // nbsp
+
   /// Picklist Element
   final DivElement _plDiv = new DivElement()
     ..classes.add(C_PICKLIST);
@@ -60,19 +63,19 @@ class LPicklist
    * -- div .dropdown
    */
   LPicklist(String name, {String idPrefix, bool this.inGrid:false}) {
-    _initEditor(name, idPrefix);
+    _initEditor(name, idPrefix, null);
   } // LPicklist
 
   /// Picklist Editor
   LPicklist.from(DataColumn dataColumn, {String idPrefix, bool this.inGrid:false}) {
-    _initEditor(dataColumn.name, idPrefix);
+    _initEditor(dataColumn.name, idPrefix, dataColumn);
   }
   /// initialize
-  void _initEditor(String name, String idPrefix) {
+  void _initEditor(String name, String idPrefix, DataColumn dataColumn) {
     _plButton = new LButton(new ButtonElement(), name, null, idPrefix:idPrefix,
       buttonClasses: [LButton.C_BUTTON__NEUTRAL, C_PICKLIST__LABEL],
       labelElement: _plButtonLabel,
-      icon: new LIconUtility(LIconUtility.DOWN));
+      icon: new LIconUtility(LIconUtility.DOWN)); // seta id
     _plButton.element.attributes[Html0.ARIA_HASPOPUP] = "true";
     _plButton.iconButton = false;
     _plButton.onClick.listen(onButtonClick);
@@ -90,10 +93,32 @@ class LPicklist
         name:name, idPrefix:id);
     _dropdown.selectMode = true;
     _plDiv.append(_dropdown.element);
+
+    _plButton.element.style.width = "100%"; // C_Picklist_Label has width=15rem
+    _dropdown.element.style.width = "100%"; // C_Dropdown has width of 15rem
     //
     expanded = false;
     _dropdown.selectMode = true;
     _dropdown.editorChange = onEditorChange;
+
+    // Selection list
+    if (dataColumn != null) {
+      this.dataColumn = dataColumn;
+      DColumn tableColumn = dataColumn.tableColumn;
+      if (tableColumn.pickValueList.isNotEmpty) {
+        dOptionList = tableColumn.pickValueList;
+      } else if (dataColumn.tableColumn.dataType == DataType.BOOLEAN) {
+        // Alternative display
+        dOptionList = OptionUtil.optioneYesNo();
+        // make optional
+        if (dataColumn.uiPanelColumn != null
+            && dataColumn.uiPanelColumn.hasIsMandatory()
+            && !dataColumn.uiPanelColumn.isMandatory) {
+          dataColumn.tableColumn.clearIsMandatory();
+          required = false;
+        }
+      }
+    }
   } // initEditor
 
   String get id => _plButton.id;
@@ -130,8 +155,10 @@ class LPicklist
   void _setValue(ListItem item) {
     if (item != null && item.label != null && item.label.isNotEmpty) {
       _plButtonLabel.text = item.label;
-    } else {
+    } else if (required) {
       _plButtonLabel.text = lPicklistSelectOption();
+    } else {
+      _plButtonLabel.text = SPACE;
     }
   }
 
@@ -164,7 +191,9 @@ class LPicklist
 
   /// Editor Change callback
   void onEditorChange(String name, String newValue, DEntry entry, var details) {
-    if (details is ListItem) {
+    if (details == null) {
+      _setValue(null);
+    } else if (details is ListItem) {
       _setValue(details as ListItem);
     }
     if (!_settingValue && editorChange != null) {  // this is the actual editor
@@ -193,7 +222,18 @@ class LPicklist
 
   bool get required => _dropdown.required;
   void set required (bool newValue) {
+    super.required = newValue; // UI - FormElement
     _dropdown.required = newValue;
+    String txt = _plButtonLabel.text;
+    if (newValue) {
+      if (txt == null || txt.isEmpty || txt == SPACE) {
+        _plButtonLabel.text = lPicklistSelectOption();
+      }
+    } else {
+      if (txt == lPicklistSelectOption()) {
+        _plButtonLabel.text = SPACE;
+      }
+    }
   }
 
   bool get spellcheck => false;

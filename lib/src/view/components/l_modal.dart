@@ -68,7 +68,7 @@ class LModal extends LComponent {
       if (modal.show)
         openModals++;
     }
-    _log.info("nestedModals count=${_openModals.length} open=${openModals}");
+    _log.config("nestedModals count=${_openModals.length} open=${openModals}");
     if (openModals > 0) {
       m._backdrop.style.zIndex = "${9000+(openModals*2)}";
       m._dialog.style.zIndex = "${9001+(openModals*2)}";
@@ -109,6 +109,9 @@ class LModal extends LComponent {
     _container.append(footer);
     element.append(_backdrop);
     //
+    if (ClientEnv.isPhone) {
+      _container.style.width = "100%";
+    }
     // enter(parent) - over(+child) - move - out - leave
     header.onMouseEnter.listen(onHeaderMouseEnter);
     header.onMouseDown.listen(onHeaderMouseDown);

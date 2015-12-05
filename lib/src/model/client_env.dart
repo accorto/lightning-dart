@@ -124,6 +124,21 @@ class ClientEnv {
     numberFormat_2.maximumFractionDigits = 2;
   }
 
+  /// User Agent mobile (main only)
+  static bool get isMobile {
+    String ua = window.navigator.userAgent;
+    return ua.contains(_mobilePattern);
+  }
+  /// http://detectmobilebrowsers.com/
+  static RegExp _mobilePattern = new RegExp(r'(phone|pad|pod|android|mobile)', caseSensitive:false);
+  /// Phone (based on size)
+  static bool get isPhone {
+    // http://www.paintcodeapp.com/news/ultimate-guide-to-iphone-resolutions
+    String ua = window.navigator.userAgent;
+    return ua.contains(_phonePattern);
+  }
+  static RegExp _phonePattern = new RegExp(r'(phone|pod|android|mobile)', caseSensitive:false);
+
   /// Next Window Number
   static int get windowNo {
     return _windowNo++;

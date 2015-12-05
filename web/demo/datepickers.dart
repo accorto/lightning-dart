@@ -6,6 +6,9 @@
 
 part of lightning_dart.demo;
 
+/**
+ * Date Picker
+ */
 class Datepickers extends DemoFeature {
 
   Datepickers()

@@ -462,7 +462,7 @@ class LTable
   /**
    * Add Plain Body Row with header element and data element
    */
-  void addRowHdrData(String thText, dynamic tdValue) {
+  void addRowHdrData(String thText, dynamic tdValue, {int colSpan:0}) {
     if (_tbody == null)
       _tbody = _table.createTBody();
     TableRowElement tr = _tbody.addRow();
@@ -473,6 +473,12 @@ class LTable
       th.text = thText;
     }
     TableCellElement td = tr.addCell();
+    if (colSpan > 0) {
+      td.colSpan = colSpan;
+      td.style.whiteSpace = "normal"; // defaults to no-wrap
+      td.style.wordBreak = "break-word";
+      th.style.verticalAlign = "top";
+    }
     if (tdValue != null) {
       if (tdValue is String) {
         td.text = tdValue;
@@ -485,22 +491,37 @@ class LTable
   } // addRowHdrData
 
   /**
-   * Add Plain Body Row with header element first
+   * Add Plain Body Row with header text and values, colSpan for values
    */
-  void addRowHdrDataList(String thText, List<String> tdTexts) {
+  void addRowHdrDataList(String thText, List<dynamic> tdValues, {int colSpan:0}) {
     if (_tbody == null)
       _tbody = _table.createTBody();
     TableRowElement tr = _tbody.addRow();
 
     Element th = new Element.th();
-    tr.append(tr);
+    tr.append(th);
     if (thText != null)
       th.text = thText;
 
-    for (String tdText in tdTexts) {
+    for (dynamic tdValue in tdValues) {
       TableCellElement td = tr.addCell();
-      if (tdText != null)
-        td.text = tdText;
+      if (colSpan > 0) {
+        td.colSpan = colSpan;
+        td.style
+            ..whiteSpace = "normal" // defaults to no-wrap
+            ..wordBreak = "break-word"
+            ..verticalAlign = "top";
+        th.style.verticalAlign = "top";
+      }
+      if (tdValue != null) {
+        if (tdValue is String) {
+          td.text = tdValue;
+        } else if (tdValue is Element) {
+          td.append(tdValue);
+        } else {
+          td.text = tdValue.toString();
+        }
+      }
     }
   } // addRowHdrDataList
 
@@ -512,7 +533,7 @@ class LTable
       _tbody = _table.createTBody();
     TableRowElement tr = _tbody.addRow();
 
-    for (var tdValue in tdValues) {
+    for (dynamic tdValue in tdValues) {
       TableCellElement td = tr.addCell();
       if (tdValue != null) {
         if (tdValue is String) {
@@ -525,6 +546,13 @@ class LTable
       }
     }
   } // addRowDataList
+
+  /// Add col element to table
+  Element addColElement() {
+    Element col = new Element.tag("col");
+    _table.append(col);
+    return col;
+  }
 
 
   static String lTableRowSelectAll() => Intl.message("Select All", name: "lTableRowSelectAll", args: []);

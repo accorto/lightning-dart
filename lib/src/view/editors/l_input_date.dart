@@ -63,6 +63,7 @@ class LInputDate extends LInput {
     }
   } // initDate
 
+  /// use native calendar
   void set html5 (bool newValue) {
     super.html5 = newValue;
     _initDate(_type);

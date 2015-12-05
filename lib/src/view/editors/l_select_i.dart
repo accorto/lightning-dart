@@ -72,7 +72,7 @@ abstract class LSelectI {
       SelectOption so = new SelectOption(li.asDOption());
       addSelectOption(so);
     }
-    required = required; // optional
+    required = required == null ? true : required; // optional
   }
 
   /// Add Option List
@@ -81,7 +81,7 @@ abstract class LSelectI {
     for (DOption option in options) {
       addDOption(option);
     }
-    required = required; // optional
+    required = required == null ? true : required; // optional
   }
   /// Add DOption
   void addDOption(DOption option);

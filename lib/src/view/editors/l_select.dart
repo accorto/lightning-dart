@@ -70,6 +70,7 @@ class LSelect
   /// Init Editor
   void _initEditor() {
     input.onChange.listen(onInputChange);
+
     // Alternative display
     if (dataColumn != null && dataColumn.tableColumn.pickValueList.isEmpty
         && dataColumn.tableColumn.dataType == DataType.BOOLEAN) {
@@ -82,7 +83,7 @@ class LSelect
         required = false;
       }
     }
-  }
+  } // initEditor
 
   void updateId(String idPrefix) {
     id = createId(idPrefix, name);
