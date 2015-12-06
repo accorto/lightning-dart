@@ -11,11 +11,13 @@ class Tabs extends DemoFeature {
   Tabs() : super ("tabs", "Tabs",
   sldsStatus: DemoFeature.SLDS_PROTOTYPE,
   devStatus: DemoFeature.STATUS_COMPLETE,
-  hints: [],
+  hints: ["(Sales) Path has same API as Select"],
   issues: [],
   plans: ["overflow"]);
 
   LComponent get content {
+
+    CDiv div = new CDiv();
 
     LTab tab = new LTab(scoped: option1)
       ..classes.add(LMargin.C_HORIZONTAL__MEDIUM);
@@ -25,8 +27,22 @@ class Tabs extends DemoFeature {
     c2.text = "Two Content";
     DivElement c3 = tab.addTab("Three");
     c3.text = "Three Content";
+    div.add(tab);
 
-    return tab;
+    div.appendHR();
+    LPath path = new LPath("path")
+      ..label = "Sales Path";
+    List<DOption> options = new List<DOption>();
+    options.add(OptionUtil.option("contact", "Contacted"));
+    options.add(OptionUtil.option("open", "Open"));
+    options.add(OptionUtil.option("unqualified", "Unqualified", isDefault: true));
+    options.add(OptionUtil.option("nurturing", "Nurturing"));
+    options.add(OptionUtil.option("closed", "Closed"));
+    path.dOptionList = options;
+    path.element.classes.add(LMargin.C_HORIZONTAL__LARGE);
+    div.append(path.element);
+
+    return div;
   }
 
   String get source {
@@ -38,6 +54,17 @@ class Tabs extends DemoFeature {
     c2.text = "Two Content";
     DivElement c3 = tab.addTab("Three");
     c3.text = "Three Content";
+
+    LPath path = new LPath("path")
+      ..label = "Sales Path";
+    List<DOption> options = new List<DOption>();
+    options.add(OptionUtil.option("contact", "Contacted"));
+    options.add(OptionUtil.option("open", "Open"));
+    options.add(OptionUtil.option("unqualified", "Unqualified", isDefault: true));
+    options.add(OptionUtil.option("nurturing", "Nurturing"));
+    options.add(OptionUtil.option("closed", "Closed"));
+    path.dOptionList = options;
+
     ''';
   }
 

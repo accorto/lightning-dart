@@ -98,7 +98,9 @@ class EditorUtil {
         editor = new LInput.from(dataColumn,
             EditorI.TYPE_TEL, idPrefix: idPrefix, inGrid: inGrid);
       } else if (dataType == DataType.PICK) {
-        if (html5) {
+        if (isAlternativeDisplay && !inGrid) {
+          editor = new LPath.from(dataColumn, idPrefix: idPrefix);
+        } else if (html5) {
           editor = new LSelect.from(dataColumn, multiple: false, idPrefix: idPrefix, inGrid: inGrid);
         } else {
           editor = new LPicklist.from(dataColumn, idPrefix: idPrefix, inGrid: inGrid);

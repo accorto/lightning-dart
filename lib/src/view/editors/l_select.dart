@@ -151,7 +151,7 @@ class LSelect
     if (setValidity) {
       input.setCustomValidity("Invalid Value: ${newValue}");
     }
-    return newValue;
+    return "?${newValue}?";
   } // renderSync
 
 

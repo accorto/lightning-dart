@@ -75,7 +75,7 @@ abstract class LSelectI {
     required = required == null ? true : required; // optional
   }
 
-  /// Add Option List
+  /// Set Option List
   void set dOptionList(List<DOption> options) {
     clearOptions();
     for (DOption option in options) {

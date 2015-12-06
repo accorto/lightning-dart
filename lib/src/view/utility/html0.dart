@@ -122,4 +122,10 @@ class Html0 {
   static const String DATA_VALUE = "data-value";
 
 
+  /// Constant Value True
+  static const String V_TRUE = "true";
+  /// Constant Value False
+  static const String V_FALSE = "false";
+
+
 } // Html0

@@ -9,8 +9,10 @@ part of lightning_dart;
 /**
  * Tab Set
  * (maintains set of Element == may be changed to LComponent)
+ * (see LPath)
  */
-class LTab extends LComponent {
+class LTab
+    extends LComponent {
 
   /// slds-tabs--default - Initializes default tabset | Required
   static const String C_TABS__DEFAULT = "slds-tabs--default";

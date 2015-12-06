@@ -102,7 +102,8 @@ class UiUtil {
   }
 
   /// add existing column to UI
-  void addColumn(DColumn col, {String displayLogic, bool mandatory, bool isAlternativeDisplay}) {
+  void addColumn(DColumn col, {String displayLogic, bool mandatory,
+      bool isAlternativeDisplay, int width}) {
     ui.table.columnList.add(col);
     if (_panel == null)
       addPanel();
@@ -115,6 +116,8 @@ class UiUtil {
       pc.isMandatory = mandatory;
     if (isAlternativeDisplay != null)
       pc.isAlternativeDisplay = isAlternativeDisplay;
+    if (width != null)
+      pc.width = width;
     pc.seqNo = (_panel.panelColumnList.length + 1);
     _panel.panelColumnList.add(pc);
 
@@ -153,7 +156,8 @@ class UiUtil {
 
 
   /// add grid/panel column if missing
-  void addIfMissing(String columnName, {bool mandatory, bool isAlternativeDisplay}) {
+  void addIfMissing(String columnName, {bool mandatory, bool readOnly,
+      bool isAlternativeDisplay, int width}) {
     // exists?
     for (UIPanel panel in ui.panelList) {
       for (UIPanelColumn pc in panel.panelColumnList) {
@@ -162,6 +166,11 @@ class UiUtil {
             pc.isMandatory = mandatory;
           if (isAlternativeDisplay != null)
             pc.isAlternativeDisplay = isAlternativeDisplay;
+          if (width != null)
+            pc.width = width;
+          //
+          if (readOnly != null)
+            pc.column.isReadOnly = readOnly;
           return; // exists (gc exists too)
         }
       }
@@ -169,7 +178,10 @@ class UiUtil {
     // find column + create
     for (DColumn col in ui.table.columnList) {
       if (col.name == columnName) {
-        addColumn(col, mandatory:mandatory, isAlternativeDisplay:isAlternativeDisplay);
+        if (readOnly != null)
+          col.isReadOnly = readOnly;
+        addColumn(col, mandatory:mandatory,
+            isAlternativeDisplay:isAlternativeDisplay, width:width);
         return;
       }
     }
@@ -195,6 +207,17 @@ class UiUtil {
       ui.queryColumnList.add(qc);
     }
   } // addQueryColumn
+
+  /// get Column or null
+  DColumn getColumn(String columnName) {
+    if (table != null) {
+      for (DColumn col in table.columnList) {
+        if (col.name == columnName)
+          return col;
+      }
+    }
+    return null;
+  }
 
 } // UiUtil
 

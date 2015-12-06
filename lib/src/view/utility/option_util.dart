@@ -13,7 +13,7 @@ class OptionUtil {
 
   /// create DOption
   static DOption option(String value, String label, {
-      String id, bool selected, bool disabled}) {
+      String id, bool selected, bool disabled, bool isDefault, String title}) {
     DOption doption = new DOption();
     if (value != null)
       doption.value = value;
@@ -25,6 +25,10 @@ class OptionUtil {
       doption.isSelected = true;
     if (disabled != null && disabled)
       doption.isActive = false;
+    if (isDefault != null && isDefault)
+      doption.isDefault = true;
+    if (title != null)
+      doption.description = title;
     return doption;
   }
 
