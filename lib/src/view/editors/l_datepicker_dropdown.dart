@@ -208,7 +208,6 @@ class LDatePickerDropdown {
       dateString = target.attributes[Html0.DATA_VALUE];
     }
     if (dateString != null) {
-      _log.config("onCalClick ${dateString}");
       // de-select
       for (TableSectionElement tbody in _cal.tBodies) {
         for (TableRowElement tr in tbody.rows) {
@@ -219,13 +218,19 @@ class LDatePickerDropdown {
           }
         }
       }
+      DateTime clickDate = DataUtil.toDate(dateString, type: EditorI.TYPE_DATE);
+      String info = "onCalClick ${dateString} ${clickDate.toString().substring(0,10)} ${mode}";
+
       if (target is TableCellElement) {
         if (mode == LDatepicker.MODE_WEEK_FIRST || mode == LDatepicker.MODE_WEEK_LAST) {
-          _date = DataUtil.toDate(dateString, type: EditorI.TYPE_DATE);
-          while (_date.weekday != firstDayOfWeek)
+          _date = clickDate;
+          while (_date.weekday != firstDayOfWeek) {
             _date = _date.subtract(DAY);
-          _dateTo = _date.add(new Duration(days:6));
+          }
+          _dateTo = _date.add(new Duration(days: 6));
           _buildCalendar();
+          info += " => ${_date.toString().substring(0,10)} - ${_dateTo.toString().substring(0,10)}";
+          _log.config(info);
           if (editorChange != null) {
             if (mode == LDatepicker.MODE_WEEK_FIRST) {
               editorChange("date", _date.millisecondsSinceEpoch.toString(), null, _date);
@@ -233,15 +238,17 @@ class LDatePickerDropdown {
               editorChange("date", _dateTo.millisecondsSinceEpoch.toString(), null, _dateTo);
             }
           }
-          // } else if (mode == MODE_RANGE) {
+        } else if (mode == LDatepicker.MODE_RANGE) {
+          _log.config(info);
         } else { // single
           if (target.classes.contains(LDatepicker.C_DISABLED_TEXT)) {
             value = dateString;
           } else {
             target.classes.add(LDatepicker.C_IS_SELECTED);
             target.attributes[Html0.ARIA_SELECTED] = "true";
-            _date = DataUtil.toDate(dateString, type: EditorI.TYPE_DATE);
+            _date = clickDate;
           }
+          _log.config(info);
           if (editorChange != null) {
             editorChange("date", dateString, null, _date);
           }

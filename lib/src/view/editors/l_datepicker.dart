@@ -9,7 +9,8 @@ part of lightning_dart;
 /**
  * Date Picker
  */
-class LDatepicker extends LInputDate {
+class LDatepicker
+    extends LInputDate {
 
   /// slds-datepicker - Initializes datepicker | Required
   static const String C_DATEPICKER = "slds-datepicker";
@@ -49,6 +50,7 @@ class LDatepicker extends LInputDate {
   // Select Range - NIY
   static const String MODE_RANGE = "r";
 
+  static final Logger _log = new Logger("LDatepicker");
 
   /// Dropdown
   LDatePickerDropdown _dropdown;
@@ -127,9 +129,20 @@ class LDatepicker extends LInputDate {
 
   /// Dropdown Changed
   void onDropdownChange(String name, String newValue, DEntry entry, var details) {
-    value = newValue;
     _dropdown.show = false;
     _dropdown.element.remove();
-  }
+    if (readOnly) {
+      return;
+    }
+    value = newValue;
+    String theValue = value;
+    _log.config("onInputChange ${name}=${theValue}");
+    if (data != null && entry != null) {
+      data.updateEntry(entry, theValue);
+    }
+    if (editorChange != null) {
+      editorChange(name, theValue, entry, null);
+    }
+  } // onDropdownChange
 
 } // LDatePicker

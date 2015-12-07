@@ -9,7 +9,8 @@ part of lightning_dart;
 /**
  * Date Editor
  */
-class LInputDate extends LInput {
+class LInputDate
+    extends LInput {
 
   static final Logger _log = new Logger("LInputDate");
 
