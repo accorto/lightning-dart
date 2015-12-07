@@ -35,6 +35,7 @@ class Preference {
         .then((Map<String, String> map) {
           _map = map;
           _log.config("init0 #${_map.length}");
+          Settings.load(map:map);
           completer.complete(true);
         })
         .catchError((error, StackTrace stackTrace) {
@@ -48,7 +49,7 @@ class Preference {
         .then((Map<String, String> map) {
           _map = map;
           _log.config("init #${_map.length}");
-          Settings.load();
+          Settings.load(map:map);
           completer.complete(true);
         })
         .catchError((error, StackTrace stackTrace) {
@@ -120,22 +121,24 @@ class Preference {
   static void set(String name, String sub, String value) {
     if (_map == null) {
       init();
-    } else if (name != null && name.isNotEmpty) {
+    }
+    if (name != null && name.isNotEmpty) {
       String key = name;
       if (sub != null && sub.isNotEmpty)
         key = "${name}.${sub}";
       //
-      if (value == null || value.isEmpty)
+      if (value == null || value.isEmpty) {
         _map.remove(key);
-      else
+      } else {
         _map[key] = value;
+      }
       _log.finest("set ${key}=${value}");
       _save();
     }
   }
   // Save [name] with [value]
   static void setBool(String name, String sub, bool value) {
-    set(name, sub, value ? "true" : "false");
+    set(name, sub, value.toString());
   }
   // Save [name] with [value]
   static void setInt(String name, String sub, int value) {
@@ -163,7 +166,8 @@ class Preference {
   static void removeAll(String name) {
     if (_map == null) {
       init();
-    } else if (name != null && name.isNotEmpty) {
+    }
+    if (name != null && name.isNotEmpty) {
       List<String> toDelete = new List<String>();
       for (String key in _map.keys) {
         if (key.startsWith(name))
@@ -184,10 +188,12 @@ class Preference {
   static void clear() {
     if (_map == null) {
       init();
-    } else {
-      _map.clear();
-      _save();
     }
+    _pref.open()
+    .then((_) {
+      _pref.dbClear();
+      _map.clear();
+    });
   } // clear
 
   /**

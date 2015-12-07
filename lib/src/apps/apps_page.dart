@@ -64,6 +64,11 @@ abstract class AppsPage extends LComponent {
     // Router
     LightningCtrl.router.addRoute(name:name, path:path==null?name:path, title:title,
       defaultRoute:defaultRoute, enter:handleRouteEvents?onRouteEnter:routeHandler);
+
+    // Setting changes
+    AppsSettings.onChange.listen((bool saved){
+      rebuildUi();
+    });
   } // AppsPage
 
   /// Active
@@ -89,16 +94,23 @@ abstract class AppsPage extends LComponent {
     return false;
   }
 
+  /// prevent display (e.g. not logged in) - error or null
   String showPrevent() {
     _log.fine("showPrevent");
     return null;
   }
+  /// showing now
   void showingNow() {
     _log.config("showingNow");
   }
+  /// prevent navigation (e.g. not saved) - error or null
   String hidePrevent() {
     _log.fine("hidePrevent");
     return null;
+  }
+
+  /// rebuild ui (e.g. preferences changed)
+  void rebuildUi() {
   }
 
 } // AppsPage

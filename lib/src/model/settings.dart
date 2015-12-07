@@ -11,9 +11,17 @@ part of lightning_model;
  */
 class Settings {
 
+  static const String NATIVE_HTML5 = "nativeHtml5";
+  static const String MOBILE_UI = "mobileUI";
+  static const String EXPERT_MODE = "expertMode";
+  static const String GEO_ENABLED = "geoEnabled";
+
+
   static const String PREFERENCE_PREFIX = "settings";
   static const String VALUE_TRUE = "true";
   static const String VALUE_FALSE = "false";
+
+  static final Logger _log = new Logger("Settings");
 
   /**
    * Initialize
@@ -21,12 +29,14 @@ class Settings {
    */
   static void init() {
     if (settingList.isEmpty) {
+      add(MOBILE_UI, ClientEnv.isMobile.toString(),
+          label:"Mobile UI", dataType: EditorI.TYPE_CHECKBOX);
       add(NATIVE_HTML5, ClientEnv.isMobile.toString(),
-              label:"Native Html5", dataType: EditorI.TYPE_CHECKBOX);
-      add(EXPERT_MODE, VALUE_FALSE,
-              label:"Expert Mode", dataType: EditorI.TYPE_CHECKBOX);
+          label:"Native Html5", dataType: EditorI.TYPE_CHECKBOX);
       add(GEO_ENABLED, VALUE_FALSE,
-              label:"Geo Location", dataType: EditorI.TYPE_CHECKBOX);
+          label:"Geo Location", dataType: EditorI.TYPE_CHECKBOX);
+      add(EXPERT_MODE, VALUE_FALSE,
+          label:"Expert Mode", dataType: EditorI.TYPE_CHECKBOX);
     }
   } // init
 
@@ -61,13 +71,27 @@ class Settings {
    * Load from Preferences to original value
    * (initially loaded from [Preference.init()])
    */
-  static void load() {
+  static void load({Map<String, String> map}) {
+    int count = 0;
     for (SettingItem item in settingList) {
-      String value = Preference.get(PREFERENCE_PREFIX, item.name, null);
+      String name = item.name;
+      String value = null;
+      if (map != null) {
+        value = map[name];
+        if (value == null) {
+          name = "${PREFERENCE_PREFIX}.${item.name}";
+          value = map[name];
+        }
+      }
+      if (value == null) {
+        value = Preference.get(PREFERENCE_PREFIX, item.name, null);
+      }
       if (value != null) {
         item.valueOriginal = value;
+        count++;
       }
     }
+    _log.config("load #${count} of ${settingList.length}");
   } // load
 
   /**
@@ -79,12 +103,8 @@ class Settings {
       Preference.set(PREFERENCE_PREFIX, item.name, value);
       item.valueOriginal = value;
     }
+    _log.config("save #${settingList.length}");
   } // save
-
-
-  static const String NATIVE_HTML5 = "nativeHtml5";
-  static const String EXPERT_MODE = "expertMode";
-  static const String GEO_ENABLED = "geoEnabled";
 
   /// Setting List
   static final List<SettingItem> settingList = new List<SettingItem>();

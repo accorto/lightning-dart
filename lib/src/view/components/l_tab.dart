@@ -134,6 +134,16 @@ class LTab
     return tc.element;
   } // addTab
 
+  /// Clear Tabs
+  void clearTabs() {
+    _contentList.clear();
+    _tablist.children.clear();
+    element.children.clear();
+    element.append(_tablist);
+    _currentContent = null;
+    _currentPos = 0;
+  }
+
   /// Current position
   int get currentPos => _currentPos;
   int _currentPos = 0;
@@ -183,8 +193,8 @@ class LTab
       }
     } */
     _currentPos = pos;
-    if (_sc != null) {
-      _sc.add(this); // notify tabChanged
+    if (_onTabChanged != null) {
+      _onTabChanged.add(this); // stream tabChanged
     }
     return true;
   } // selectByPos
@@ -231,12 +241,12 @@ class LTab
 
   /// Tab Changed - use [currentContent] or [currentPos]
   Stream<LTab> get onTabChanged {
-    if (_sc == null) {
-      _sc = new StreamController();
+    if (_onTabChanged == null) {
+      _onTabChanged = new StreamController<LTab>.broadcast();
     }
-    return _sc.stream;
+    return _onTabChanged.stream;
   }
-  StreamController _sc;
+  StreamController<LTab> _onTabChanged;
 
 } // LTab
 

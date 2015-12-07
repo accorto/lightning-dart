@@ -9,7 +9,8 @@ part of lightning_ctrl;
 /**
  * Settings Tab
  */
-class AppSettingsTab extends LTabContent {
+class AppSettingsTab
+    extends LTabContent {
 
   static const String ID = "set";
 
@@ -56,6 +57,9 @@ class AppSettingsTab extends LTabContent {
     for (AppSettingsTabLine line in _lines) {
       line.setEditorValue();
     }
+    if (AppsSettings._onChange != null) {
+      AppsSettings._onChange.add(false);
+    }
   }
 
   /// save to local preferences
@@ -64,6 +68,9 @@ class AppSettingsTab extends LTabContent {
       line.save();
     }
     Settings.save();
+    if (AppsSettings._onChange != null) {
+      AppsSettings._onChange.add(true);
+    }
   }
 
 
@@ -84,15 +91,28 @@ class AppSettingsTabLine {
   } // AppSettingsTabLine
 
   /// get/create Editor + set value
-  InputElement get editor {
-    _input = new InputElement(type:setting.dataType);
+  Element get editor {
+    if (setting.isPick) {
+      _select = new SelectElement()
+          ..name = setting.name;
+      for (DOption option in setting.optionList) {
+        _select.append(new OptionElement(data: option.label, value: option.value));
+      }
+    } else {
+      _input = new InputElement(type: setting.dataType)
+          ..name = setting.name;
+    }
+    //
     setEditorValue();
     if (!setting.userUpdatable) {
       _input.disabled = true;
     }
-    return _input;
+    if (_select == null)
+      return _input;
+    return _select;
   }
   InputElement _input;
+  SelectElement _select;
 
   /// set editor value
   void setEditorValue() {
@@ -102,6 +122,8 @@ class AppSettingsTabLine {
       _input.valueAsNumber = setting.valueAsInt();
     else if (setting.isNum)
       _input.valueAsNumber = setting.valueAsNum();
+    else if (setting.isPick)
+      _select.value = setting.value;
     else
       _input.value = setting.value;
   }
@@ -121,6 +143,8 @@ class AppSettingsTabLine {
         setting.value = _input.valueAsNumber;
       else if (setting.isNum)
         setting.value = _input.valueAsNumber;
+      else if (setting.isPick)
+        setting.value = _select.value;
       else
         setting.value = _input.value;
     } else {

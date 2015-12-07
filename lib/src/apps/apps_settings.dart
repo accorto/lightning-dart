@@ -12,6 +12,16 @@ part of lightning_ctrl;
 class AppsSettings
     extends AppsPage {
 
+  /// on Setting Save(true) or Reset(false)
+  static Stream<bool> get onChange {
+    if (_onChange == null) {
+      _onChange = new StreamController<bool>.broadcast();
+    }
+    return _onChange.stream;
+  }
+  static StreamController<bool> _onChange;
+
+
   static const String ID = "setting";
 
   DivElement get element => _tab.element;
@@ -52,7 +62,8 @@ class AppsSettings
 /**
  * Environment Tab
  */
-class AppSettingsEnvironment extends LTabContent {
+class AppSettingsEnvironment
+    extends LTabContent {
 
   static const String ID = "env";
 
@@ -178,7 +189,8 @@ class AppSettingsEnvironment extends LTabContent {
 /**
  * Messages Tab
  */
-class AppSettingsMessages extends LTabContent {
+class AppSettingsMessages
+    extends LTabContent {
 
   static const String ID = "msg";
 

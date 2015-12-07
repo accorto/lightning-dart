@@ -7,7 +7,8 @@
 part of lightning_model;
 
 /**
- * Setting Item
+ * Setting Item.
+ * You can listen to changes via [onChange]
  */
 class SettingItem {
 
@@ -112,6 +113,9 @@ class SettingItem {
   bool get isNum {
     return dataType == EditorI.TYPE_NUMBER;
   }
+  bool get isPick {
+    return dataType == EditorI.TYPE_SELECT && optionList != null && optionList.isNotEmpty;
+  }
 
   /// int or 0
   int valueAsInt({int defaultValue:0}) {
@@ -173,11 +177,31 @@ class SettingItem {
   /// on Value Change
   Stream<String> get onChange {
     if (_onChange == null) {
-      _onChange = new StreamController<String>();
+      _onChange = new StreamController<String>.broadcast();
     }
     return _onChange.stream;
   }
   StreamController<String> _onChange;
+
+
+  /// Add Option Value/Label
+  void addOptionValue(final String value, final String label, {String description}) {
+    DOption option = new DOption()
+      ..value = value
+      ..label = label;
+    if (description != null && description.isNotEmpty)
+      option.description = description;
+    addOption(option);
+  }
+
+  /// Add Option
+  void addOption(final DOption option) {
+    if (optionList == null) {
+      optionList = new List<DOption>();
+    }
+    optionList.add(option);
+  }
+  List<DOption> optionList;
 
 
   /// info
