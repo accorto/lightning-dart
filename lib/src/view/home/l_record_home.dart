@@ -40,15 +40,20 @@ class LRecordHome extends LPageHeader {
   final List<LRecordHomeDetail> _detailList = new List<LRecordHomeDetail>();
 
   /**
-   * Record Home
+   * Record Home with optional button [followElement] and optional [centerElement] (grid column)
    */
-  LRecordHome({bool withFollow:true, String idPrefix}) {
-    _initComponent(withFollow, idPrefix);
+  LRecordHome({Element followElement, Element centerElement, bool wrap:false, String idPrefix}) {
+    _initComponent(followElement, centerElement, wrap, idPrefix);
   } // LRecordHome
 
-  /// Record Home from UI [homeIcon] large with padding and color
-  LRecordHome.from(UI this.ui, {LIcon homeIcon, bool withFollow:true, String idPrefix}) {
-    _initComponent(withFollow, idPrefix);
+  /// Record Home with Follow Button
+  LRecordHome.follow({String idPrefix}) {
+    _initComponent(followButton.element, null, false, idPrefix);
+  } // LRecordHome
+
+  /// Record Home from UI [homeIcon] large with padding and color with optional button [followElement] and optional [centerElement]
+  LRecordHome.from(UI this.ui, {LIcon homeIcon, Element followElement, Element centerElement, bool wrap:false, String idPrefix}) {
+    _initComponent(followElement, centerElement, wrap, idPrefix);
     element.attributes[Html0.DATA_VALUE] = ui.tableName;
     DTable table = ui.table;
     // image
@@ -88,7 +93,7 @@ class LRecordHome extends LPageHeader {
   } // LRecordHome.ui
 
   /// Initialize Component Structure
-  void _initComponent(bool withFollow, String idPrefix) {
+  void _initComponent(Element buttonElement, Element centerElement, bool wrap, String idPrefix) {
     element.id = LComponent.createId(idPrefix, "home");
     // Header Row
     element.append(_header);
@@ -104,15 +109,23 @@ class LRecordHome extends LPageHeader {
     _headerLeftMedia.append(leftGrid);
     _headerLeftRecordTitle.id = "${idPrefix}-record-title";
     leftGrid.append(_headerLeftRecordTitle);
-    if (withFollow) {
+    if (buttonElement != null) {
       DivElement followDiv = new DivElement()
         ..classes.addAll([LGrid.C_SHRINK_NONE, LGrid.C_ALIGN_BOTTOM]);
       leftGrid.append(followDiv);
-      followDiv.append(followButton.element);
+      followDiv.append(buttonElement);
+    }
+    if (centerElement != null) {
+      _header.append(centerElement);
     }
     // right - actions
     _header.append(_headerRight);
     _headerRight.append(_actionButtonGroup.element);
+    //
+    if (wrap) {
+      _header.classes.add(LGrid.C_WRAP);
+      _headerLeft.classes.remove(LGrid.C_HAS_FLEXI_TRUNCATE);
+    }
   } // initComponent
 
   /// Set Icon

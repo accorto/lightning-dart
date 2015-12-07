@@ -38,8 +38,6 @@ class LPicklist
   static const String C_PICKLIST__MULTI = "slds-picklist--multi";
 
 
-  static const String SPACE = "\u00A0"; // nbsp
-
   /// Picklist Element
   final DivElement _plDiv = new DivElement()
     ..classes.add(C_PICKLIST);
@@ -158,7 +156,7 @@ class LPicklist
     } else if (required) {
       _plButtonLabel.text = lPicklistSelectOption();
     } else {
-      _plButtonLabel.text = SPACE;
+      _plButtonLabel.text = Html0.SPACE_NB;
     }
   }
 
@@ -225,12 +223,12 @@ class LPicklist
     super.required = newValue; // UI - FormElement
     String txt = _plButtonLabel.text;
     if (newValue) {
-      if (txt == null || txt.isEmpty || txt == SPACE) {
+      if (txt == null || txt.isEmpty || txt == Html0.SPACE_NB) {
         _plButtonLabel.text = lPicklistSelectOption();
       }
     } else {
       if (txt == lPicklistSelectOption()) {
-        _plButtonLabel.text = SPACE;
+        _plButtonLabel.text = Html0.SPACE_NB;
       }
     }
     _dropdown.required = newValue; // if required sets first

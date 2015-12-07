@@ -166,11 +166,14 @@ class EditorUtil {
 
   /// Create from Data Type
   static LEditor createFromDataType(DataType dataType,
-      {String columnName:"internal", tableName:"internal", bool inGrid:true, String idPrefix,
+      {String columnName:"internal", tableName:"internal", String label,
+      bool inGrid:true, String idPrefix,
       DataRecord data, DEntry entry}) {
     DColumn column = new DColumn()
       ..name = columnName
       ..dataType = dataType;
+    if (label != null)
+      column.label = label;
     DTable table = new DTable()
       ..name = tableName
       ..columnList.add(column);

@@ -11,6 +11,9 @@ part of lightning_dart;
  */
 class Html0 {
 
+  /// Non breaking Space (unicode)
+  static const String SPACE_NB = "\u00A0"; // nbsp
+
   // http://www.w3.org/TR/2007/WD-xhtml-role-20071004/
   /// Attribute: role
   static const String ROLE = "role";
