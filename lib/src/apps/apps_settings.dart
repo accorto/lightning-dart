@@ -130,7 +130,7 @@ class AppSettingsEnvironment
     // table.addRowHdrData("version", nav.appVersion);
     table.addRowHdrDataList("cookie", [nav.cookieEnabled, nav.doNotTrack == null ? "" : nav.doNotTrack]);
     table.addRowHdrDataList("platform/vendor", [nav.platform, nav.vendor]);
-    table.addRowHdrDataList("mobile", [ClientEnv.isMobile, ClientEnv.isPhone]);
+    table.addRowHdrDataList("mobile", [ClientEnv.isMobileUserAgent, ClientEnv.isPhone]);
 
 
     // -- Session

@@ -23,57 +23,65 @@ class FormsEditor extends DemoFeature {
     LForm form = new LForm.stacked("tfe")
       ..classes.add(LMargin.C_HORIZONTAL__SMALL);
     form.setSection(new FormSection(2));
+    String marginClass = LMargin.C_TOP__X_SMALL;
 
     LInputSearch searchInput1 = new LInputSearch("search1")
       ..label = "Search Input 1"
       ..placeholder = "Search Placeholder";
-    form.addEditor(searchInput1);
+    form.addEditor(searchInput1, marginClass:marginClass);
 
     LInputSearch searchInput2 = new LInputSearch("search2", withClearValue: true)
       ..label = "Search Input with Clear"
       ..placeholder = "Search Placeholder";
-    form.addEditor(searchInput2);
+    form.addEditor(searchInput2, marginClass:marginClass);
 
     LInputDuration durationInput = new LInputDuration("duration")
       ..label = "Duration Input"
       ..placeholder = "Duration Placeholder";
-    form.addEditor(durationInput);
+    form.addEditor(durationInput, marginClass:marginClass);
 
-    LInputDuration durationInput2 = new LInputDuration("duration", type:EditorI.TYPE_DURATIONHOUR)
-      ..label = "Duration Hour Input"
-      ..placeholder = "Duration Hour Placeholder";
-    form.addEditor(durationInput2);
+    LInputDuration durationInput2 = new LInputDuration("duration2", type:EditorI.TYPE_DURATIONHOUR)
+      ..label = "Duration Hour Input (Browser mode)"
+      ..placeholder = "Duration Hour Placeholder"
+      ..mobileUi = false; // overwrite default/preferences
+    form.addEditor(durationInput2, marginClass:marginClass);
+
+    LInputDuration durationInput3 = new LInputDuration("duration3", type:EditorI.TYPE_DURATIONHOUR)
+      ..label = "Duration Hour Input (Mobile mode)"
+      ..placeholder = "Duration Hour Placeholder"
+      ..mobileUi = true; // overwrite default/preferences
+    form.addEditor(durationInput3, marginClass:marginClass);
 
     LInputNumber number1h = new LInputNumber("n1h")
       ..label = "Html5 Integer"
       ..placeholder = "Number Placeholder"
       ..decimalDigits = 0;
-    form.addEditor(number1h);
+    form.addEditor(number1h, marginClass:marginClass);
 
     LInputNumber number1 = new LInputNumber("n1")
       ..label = "Standard Integer"
       ..placeholder = "Number Placeholder"
       ..decimalDigits = 0
       ..html5 = false;
-    form.addEditor(number1);
+    form.addEditor(number1, marginClass:marginClass);
 
     LInputNumber number2h = new LInputNumber("n2h")
       ..label = "Html5 Number(2)"
       ..placeholder = "Number Placeholder"
       ..decimalDigits = 2;
-    form.addEditor(number2h);
+    form.addEditor(number2h, marginClass:marginClass);
 
     LInputNumber number2 = new LInputNumber("n2")
       ..label = "Standard Number(2)"
       ..placeholder = "Number Placeholder"
       ..decimalDigits = 2
       ..html5 = false;
-    form.addEditor(number2);
+    form.addEditor(number2, marginClass:marginClass);
 
     LInputRange rangeInput = new LInputRange("range")
       ..label = "Range Input 7 - 7 - 182"
       ..setMinStepMax(7, 7, 182);
-    form.addEditor(rangeInput);
+    form.addEditor(rangeInput, marginClass:marginClass);
     rangeInput.valueAsInt = 35;
 
     return form;

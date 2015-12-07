@@ -29,9 +29,9 @@ class Settings {
    */
   static void init() {
     if (settingList.isEmpty) {
-      add(MOBILE_UI, ClientEnv.isMobile.toString(),
+      add(MOBILE_UI, ClientEnv.isMobileUserAgent.toString(),
           label:"Mobile UI", dataType: EditorI.TYPE_CHECKBOX);
-      add(NATIVE_HTML5, ClientEnv.isMobile.toString(),
+      add(NATIVE_HTML5, ClientEnv.isMobileUserAgent.toString(),
           label:"Native Html5", dataType: EditorI.TYPE_CHECKBOX);
       add(GEO_ENABLED, VALUE_FALSE,
           label:"Geo Location", dataType: EditorI.TYPE_CHECKBOX);

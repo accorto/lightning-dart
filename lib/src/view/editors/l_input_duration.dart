@@ -16,8 +16,11 @@ class LInputDuration
 
   static final Logger _log = new Logger("LInputDuration");
 
+  static bool mobileUiDefault = Settings.getAsBool(Settings.MOBILE_UI);
+
   /// Type
   bool _isHour = false;
+  String _type;
 
   /**
    * Duration
@@ -35,17 +38,36 @@ class LInputDuration
   @override
   void _initEditor(String type) {
     super._initEditor(type);
+    _type = type;
     _isHour = (type == EditorI.TYPE_DURATIONHOUR);
-    if (hint == null) {
-      hint = _isHour ? lInputDurationHourHint() : lInputDurationHint();
-    }
+    mobileUi = mobileUiDefault;
     input.onBlur.listen((Event evt){
       input.value = renderSync(input.value, true);
     });
   }
 
+  bool get mobileUi => _mobileUi;
+  /// mobile ui if Hour use number
+  void set mobileUi (bool newValue) {
+    _mobileUi = newValue;
+    if (_isHour) {
+      if (_mobileUi) {
+        input.type = EditorI.TYPE_NUMBER;
+        input.step = "any";
+        hint = lInputDurationNumberHint();
+      } else {
+        input.type = _type;
+        hint = lInputDurationHourHint();
+      }
+    } else {
+      input.type = _type;
+      hint = lInputDurationHint();
+    }
+  }
+  bool _mobileUi;
+
   /**
-   * Value (e.g. PT12H)
+   * Value (e.g. PT12H ot 12.00)
    */
   @override
   String get value {
@@ -85,6 +107,7 @@ class LInputDuration
 
   /// is the value in hours (number)
   bool get isHour => _isHour;
+  String get type => _type;
 
   /// display -> value - sets validity
   String parse(String userInput, bool setValidity) {
@@ -196,8 +219,9 @@ class LInputDuration
   static String lInputDurationInvalidValue() => Intl.message("Invalid value", name: "lInputDurationInvalidValue");
   static String lInputDurationInvalidInput() => Intl.message("Invalid input for duration", name: "lInputDurationInvalidInput");
 
-  static String lInputDurationHint() => Intl.message("without indicator enter hours with decimal or colon (1.5 = 1:30); e.g.: 5d1h20m or 5d 1h 10", name: "lInputDurationHint");
-  static String lInputDurationHourHint() => Intl.message("hours with decimal or colon (1.5 = 1:30)", name: "lInputDurationHourHint");
+  static String lInputDurationHint() => Intl.message("hours with decimal or colon (1.5 = 1:30) -or- with indicator (5d1h20m or 5d 1h 10) -or- minutes (>=15)", name: "lInputDurationHint");
+  static String lInputDurationHourHint() => Intl.message("browser: hours with decimal or colon (1.5 = 1:30) or minutes (>=15)", name: "lInputDurationHourHint");
+  static String lInputDurationNumberHint() => Intl.message("mobile: hours with decimal (1.5) or minutes (>=15)", name: "lInputDurationNumberHint");
 
 
 } // LInputDuration

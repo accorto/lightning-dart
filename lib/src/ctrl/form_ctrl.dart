@@ -23,7 +23,8 @@ part of lightning_ctrl;
  *  - change no of column per panel
  *
  */
-class FormCtrl extends LForm {
+class FormCtrl
+    extends LForm {
 
   static final Logger _log = new Logger("FormCtrl");
 
@@ -34,6 +35,8 @@ class FormCtrl extends LForm {
   final List<DataColumn> dataColumns = new List<DataColumn>();
   /// Processes
   LButtonGroup processGroup;
+  /// editor margin class
+  String marginClass = null; // LMargin.C_TOP__X_SMALL;
 
   /**
    * Form Util
@@ -67,7 +70,7 @@ class FormCtrl extends LForm {
         if (dataColumn.isActivePanel) {
           LEditor editor = EditorUtil.createfromColumn(null, dataColumn, false,
               idPrefix: element.id, data:data, isAlternativeDisplay:pc.isAlternativeDisplay);
-          addEditor(editor, newRow:pc.isNewRow, width:pc.width, height:pc.height);
+          addEditor(editor, newRow:pc.isNewRow, width:pc.width, height:pc.height, marginClass:marginClass);
         }
       }
       count++;

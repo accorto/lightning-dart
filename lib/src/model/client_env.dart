@@ -125,7 +125,7 @@ class ClientEnv {
   }
 
   /// User Agent mobile (main only)
-  static bool get isMobile {
+  static bool get isMobileUserAgent {
     String ua = window.navigator.userAgent;
     return ua.contains(_mobilePattern);
   }

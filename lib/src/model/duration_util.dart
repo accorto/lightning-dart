@@ -53,8 +53,10 @@ class DurationUtil {
         (String value) {return double.INFINITY;});
     if (numberDouble != double.INFINITY) {
       hours = numberDouble.floor();
-      minutes = ((numberDouble - hours.toDouble()) * SEC_MINUTES_D).floor();
-      seconds = ((numberDouble - hours.toDouble()) * SEC_HOURS_D).floor();
+      num remaining = numberDouble - hours.toDouble();
+      minutes = (remaining * SEC_MINUTES_D).floor();
+      remaining -= minutes.toDouble() / SEC_MINUTES;
+      seconds = (remaining * SEC_HOURS_D).floor();
       return new DurationUtil(!negative, years, months, days, hours, minutes, seconds);
     }
 
@@ -478,6 +480,9 @@ class DurationUtil {
     }
     if (_years != 0) {
       hours += _years * 12 * hoursPerDay * daysPerMonth;
+    }
+    if (_signum < 0) {
+      return -hours;
     }
     return hours;
   }

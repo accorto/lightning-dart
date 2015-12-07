@@ -457,7 +457,7 @@ abstract class EditorI {
         //_log.fine("updateData ${name}=${theEntry.value} - ${theEntry.valueDisplay}");
       }
     }
-    debugTitle();
+    debugTitle(newValue);
   } // updateData
 
   /// Clear Value
@@ -573,14 +573,14 @@ abstract class EditorI {
   bool doValidate() {
     statusValid = true;
     statusText = "";
+    String vv = value;
     if (readOnly || disabled) {
-      updateStatus();
+      updateStatus(vv);
       return true;
     }
     if (isCheckbox(type) || isButton(type)) {
       return true;
     }
-    String vv = value;
     if (vv == null)
       vv = "";
     //
@@ -605,43 +605,43 @@ abstract class EditorI {
       statusText = "${editorValidateTooLong()}: ${vv.length} > ${m}";
     }
 
-    doValidateCustom();
-    updateStatus();
+    doValidateCustom(vv);
+    updateStatus(vv);
     return statusValid;
   } // doValidate
 
   /// For subclasses to overwrite [statusValid] and [statusText]
-  void doValidateCustom() {
+  void doValidateCustom(String newValue) {
   }
 
 
   /**
    * Update Status
    */
-  void updateStatus() {
+  void updateStatus(String newValue) {
     updateStatusValidationState();
-    changedSync();
+    changedSync(newValue);
   } // updateStatus
 
   /// Display Validation State
   void updateStatusValidationState();
 
   /// Sync changed indicator
-  void changedSync() {
+  void changedSync(String newValue) {
     // Change (form-control background)
     //if (showChange && changed)
     //  element.classes.add(Bootstrap.C_CHANGED); // on form-control
     //else
     //  element.classes.remove(Bootstrap.C_CHANGED);
-    debugTitle();
+    debugTitle(newValue);
   }
 
   /// set debugging info in title
-  void debugTitle() {
+  void debugTitle(String newValue) {
     StringBuffer sb = new StringBuffer();
     sb.write(name);
     sb.write("=");
-    String vv = value;
+    String vv = newValue;
     if (vv == null || vv.length < 60) {
       sb.write(vv);
     } else {
