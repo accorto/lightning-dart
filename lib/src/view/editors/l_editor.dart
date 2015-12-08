@@ -38,6 +38,12 @@ abstract class LEditor
     }
   } // show
 
+  /// Show/Hide Popup
+  void set showDropdown (bool newValue) {
+  }
+  /// Focus on Input
+  ElementStream<Event> get onFocus => input.onFocus;
+
   /// called by sub class
   String createId(String idPrefix, String name) {
     String theId = idPrefix;

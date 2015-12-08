@@ -95,7 +95,7 @@ class LDropdownElement
   }
 
 
-  bool get required => _required;
+  bool get required => _required == null ? false : _required;
   void set required (bool newValue) {
     _required = newValue;
     if (newValue) {

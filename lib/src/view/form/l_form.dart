@@ -186,7 +186,24 @@ class LForm
     }
     editor.data = _data;
     editor.entry = _data.getEntry(editor.id, editor.name, true, createDefault:editor.value);
-  }
+    editor.onFocus.listen(onEditorFocus); // close other dropdowns
+  } // addEditor
+
+  /// Editor Focused - close other editor dropdowns
+  void onEditorFocus(FocusEvent evt) {
+    String id = "";
+    if (evt != null) {
+      Element target = evt.target;
+      id = target.id;
+    }
+    for (LEditor ed in editorList) {
+      // _log.fine("onEditorFocus ${id} - ${ed.id}");
+      if (id != ed.id) {
+        ed.showDropdown = false;
+      }
+    }
+  } // onEditorFocus
+
 
   /**
    * Add AutoSubmit (on ENTER) - returns true if found
@@ -376,19 +393,22 @@ class LForm
 
   /// On Form Reset
   void onFormReset(Event evt) {
+    evt.preventDefault(); // resets to form default
     //_log.info("onFormReset");
-    evt.preventDefault(); // resets to default
+    onEditorFocus(null); // hide all dropdowns
     data.resetRecord(); // resets to original/default
-    if (formResetted != null)
+    if (formResetted != null) {
       formResetted();
+    }
     display();
     _debug("reset:");
-  }
+  } // onFormReset
 
   /// On Form Submit
   void onFormSubmit(Event evt) {
     evt.preventDefault(); // might be form or button event
     //_log.info("onFormSubmit - ${record}");
+    onEditorFocus(null); // hide all dropdowns
     bool valid = doValidate();
     if (formSubmitPre != null) {
       valid = formSubmitPre(valid); // inform/confirm
@@ -486,9 +506,8 @@ class LForm
           info += " ${entity.columnName}=${entity.value}";
       }
     }
-    if (_debugElement == null) {
-      _log.fine(info);
-    } else {
+    _log.fine(info);
+    if (_debugElement != null) {
       _debugElement.text = info;
     }
   }

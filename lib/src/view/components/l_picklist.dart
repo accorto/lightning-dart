@@ -95,7 +95,7 @@ class LPicklist
     _plButton.element.style.width = "100%"; // C_Picklist_Label has width=15rem
     _dropdown.element.style.width = "100%"; // C_Dropdown has width of 15rem
     //
-    expanded = false;
+    showDropdown = false;
     _dropdown.selectMode = true;
     _dropdown.editorChange = onEditorChange;
 
@@ -197,7 +197,7 @@ class LPicklist
     if (!_settingValue && editorChange != null) {  // this is the actual editor
       editorChange(name, newValue, entry, details);
     }
-    expanded =  false;
+    showDropdown = false;
   } // onEditorChange
 
 
@@ -288,14 +288,14 @@ class LPicklist
 
   /// Button clicked
   void onButtonClick(MouseEvent evt) {
-    expanded = !expanded; // toggle dropdown
+    showDropdown = !showDropdown; // toggle dropdown
   }
 
 
   /// PickList Expanded
-  bool get expanded => _plDiv.attributes[Html0.ARIA_EXPANED] == "true";
+  bool get showDropdown => _plDiv.attributes[Html0.ARIA_EXPANED] == "true";
   /// PickList Expanded
-  void set expanded (bool newValue) {
+  void set showDropdown (bool newValue) {
     _plDiv.attributes[Html0.ARIA_EXPANED] = newValue.toString();
     _dropdown.show = newValue;
   }

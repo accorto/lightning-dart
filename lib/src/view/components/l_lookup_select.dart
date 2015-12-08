@@ -31,12 +31,16 @@ class LLookupSelect extends LLookup {
     element.classes.add(LLookup.C_HAS_SELECTION);
     _pillContainer.classes.add(LVisibility.C_SHOW);
     _formElement.createLookupSelect(_pillContainer, icon, multiple); // update
-    if (multiple) {
-    } else {
-      input.classes.add(LVisibility.C_HIDE);
-    }
+
+    // toggle dropdown on click
+    _pillContainer.onClick.listen((Event evt) {
+      showDropdown = !_showDropdown;
+    });
+
   } // initEditor2
 
+  /// focus on pill container
+  ElementStream<Event> get onFocus => _pillContainer.onFocus;
 
   /**
    * Clicked on Item (select)
@@ -148,6 +152,7 @@ class LLookupSelect extends LLookup {
 
   /// pill remove clicked
   void onItemRemoveClick(MouseEvent evt) {
+    evt.stopPropagation();
     Element target = evt.target;
     String dataValue = target.attributes[Html0.DATA_VALUE];
     while (dataValue == null && target != null) {

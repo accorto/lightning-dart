@@ -101,7 +101,7 @@ class LDatepicker
   }
   int _firstDayOfWeek = DateTime.SUNDAY;
 
-  /// Field Clicked
+  /// Field Clicked - show dropdown
   void onInputClick(MouseEvent evt) {
     if (_dropdown == null) {
       _dropdown = new LDatePickerDropdown(id, _formatter, _firstDayOfWeek);
@@ -144,5 +144,11 @@ class LDatepicker
       editorChange(name, theValue, entry, null);
     }
   } // onDropdownChange
+
+  /// Show/Hide Popup
+  void set showDropdown (bool newValue) {
+    if (_dropdown != null)
+      _dropdown.show = newValue;
+  }
 
 } // LDatePicker

@@ -27,7 +27,12 @@ main() async {
       ..required = true)
     ..addEditor(new LCheckbox("cool")
       ..label = "Lightning Dart is Cool!")
+    /* html native select
     ..addEditor(new LSelect("interest")
+      ..label = "Interest Area"
+      ..listText = ["Lightning Dart", "Accorto", "Time+Expense", "Gantt"])
+    */
+    ..addEditor(new LPicklist("interest")
       ..label = "Interest Area"
       ..listText = ["Lightning Dart", "Accorto", "Time+Expense", "Gantt"])
     ..addEditor(new LTextArea("comments")

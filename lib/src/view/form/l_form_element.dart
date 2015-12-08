@@ -131,6 +131,7 @@ class LFormElement {
     _elementControl.children.clear();
     _elementControl.classes.addAll([LForm.C_INPUT_HAS_ICON, LForm.C_INPUT_HAS_ICON__RIGHT]);
     _elementControl.append(icon.element);
+    /*
     if (multiple) {
       _elementControl.append(_input);
       element.append(_elementControl);
@@ -139,7 +140,9 @@ class LFormElement {
       _elementControl.append(pillContainer);
       _elementControl.append(_input);
       element.append(_elementControl);
-    }
+    } */
+    _elementControl.append(pillContainer);
+    element.append(_elementControl);
   } // createLookup
 
   /// remove hint
