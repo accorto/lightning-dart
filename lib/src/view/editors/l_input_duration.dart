@@ -16,8 +16,6 @@ class LInputDuration
 
   static final Logger _log = new Logger("LInputDuration");
 
-  static bool mobileUiDefault = Settings.getAsBool(Settings.MOBILE_UI);
-
   /// Type
   bool _isHour = false;
   String _type;
@@ -40,7 +38,7 @@ class LInputDuration
     super._initEditor(type);
     _type = type;
     _isHour = (type == EditorI.TYPE_DURATIONHOUR);
-    mobileUi = mobileUiDefault;
+    mobileUi = Settings.getAsBool(Settings.MOBILE_UI);;
     input.onBlur.listen((Event evt){
       input.value = renderSync(input.value, true);
     });

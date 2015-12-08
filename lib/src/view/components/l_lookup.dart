@@ -73,6 +73,7 @@ class LLookup
 
   /// Displayed in Grid
   final bool inGrid;
+  bool isMobileUi = Settings.getAsBool(Settings.MOBILE_UI);
 
   /**
    * Lookup
@@ -121,8 +122,10 @@ class LLookup
     element.append(_lookupMenu);
     _lookupMenu.append(_lookupList);
     //
-    if (!html5)
+    showDropdown = false;
+    if (!isMobileUi) {
       _lookupMenu.classes.add(LVisibility.C_AUTO_VISIBLE);
+    }
     _lookupMenu.onKeyDown.listen(onMenuKeyDown);
   } // initEditor
 
@@ -130,14 +133,17 @@ class LLookup
   void _initEditor2(bool multiple, bool singleScope, bool typeahead) {
     // show input with search icon
     input.onKeyUp.listen(onInputKeyUp);
+    //
     input.onFocus.listen((Event e) {
-      if (!(readOnly || disabled))
-        _lookupMenu.classes.remove(LVisibility.C_HIDE);
+      if (isMobileUi || readOnly || disabled)
+        return;
+      _lookupMenu.classes.add(LVisibility.C_AUTO_VISIBLE);
+      _lookupMenu.classes.remove(LVisibility.C_HIDE);
     });
-  }
+  } // initEditor
 
 
-    /// Set Lookup Attributes
+  /// Set Lookup Attributes
   void _setAttributes(bool multiple, bool singleScope, bool typeahead) {
     element.attributes[_DATA_SELECT] = multiple ? _DATA_SELECT_MULTI : _DATA_SELECT_SINGLE;
     element.attributes[_DATA_SCOPE] = _DATA_SCOPE_SINGLE;
@@ -154,11 +160,12 @@ class LLookup
   /// html5
   void set html5 (bool newValue) {
     super.html5 = newValue;
-    if (newValue) { // mobile
+    isMobileUi = Settings.getAsBool(Settings.MOBILE_UI);
+    if (isMobileUi) {
       _lookupMenu.classes.remove(LVisibility.C_AUTO_VISIBLE);
+      showDropdown = false;
     }
   }
-
 
   /// Editor Id
   String get id => input.id;
@@ -282,10 +289,10 @@ class LLookup
     if (input.readOnly || input.disabled) {
       _lookupMenu.classes.remove(LVisibility.C_AUTO_VISIBLE);
       _lookupMenu.classes.add(LVisibility.C_HIDE);
+      showDropdown = false;
     } else {
-      if (!html5)
-        _lookupMenu.classes.remove(LVisibility.C_AUTO_VISIBLE);
-      _lookupMenu.classes.add(LVisibility.C_AUTO_VISIBLE);
+      if (!isMobileUi)
+        _lookupMenu.classes.add(LVisibility.C_AUTO_VISIBLE);
       _lookupMenu.classes.remove(LVisibility.C_HIDE);
     }
   }
@@ -296,10 +303,10 @@ class LLookup
     if (input.readOnly || input.disabled) {
       _lookupMenu.classes.remove(LVisibility.C_AUTO_VISIBLE);
       _lookupMenu.classes.add(LVisibility.C_HIDE);
+      showDropdown = false;
     } else {
-      if (!html5)
-        _lookupMenu.classes.remove(LVisibility.C_AUTO_VISIBLE);
-      _lookupMenu.classes.add(LVisibility.C_AUTO_VISIBLE);
+      if (!isMobileUi)
+        _lookupMenu.classes.add(LVisibility.C_AUTO_VISIBLE);
       _lookupMenu.classes.remove(LVisibility.C_HIDE);
     }
   }

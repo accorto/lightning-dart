@@ -37,10 +37,12 @@ class LTableCell {
 
 } // LTableCell
 
+
 /**
  * Table Action Cell (head/tbody)
  */
-class LTableActionCell extends LTableCell {
+class LTableActionCell
+    extends LTableCell {
 
   static final Logger _log = new Logger("LTableActionCell");
 
@@ -64,27 +66,30 @@ class LTableActionCell extends LTableCell {
   /**
    * Action Table Cell
    */
-  LTableActionCell(TableCellElement element, LButton button, DataColumn dataColumn)
+  LTableActionCell(TableCellElement element, LButton button, DataColumn dataColumn,
+      {String dropdownDirection:LDropdown.C_DROPDOWN__RIGHT})
       : super(element, button.element, "action", null, null, null, dataColumn) {
     this.button = button;
     cellElement.classes.add(LTable.C_ROW_ACTION);
     dropdown = new LDropdown(button, button.id,
-      dropdownClasses: [LDropdown.C_DROPDOWN__RIGHT, LDropdown.C_DROPDOWN__ACTIONS]);
+      dropdownClasses: [dropdownDirection, LDropdown.C_DROPDOWN__ACTIONS]);
     cellElement.append(dropdown.element);
     dropdown.dropdown.editorChange = onActionChange;
   } // LTableActionCell
 
   /// Add Action
-  void addAction(AppsAction action) {
+  void addAction(AppsAction action, {DRecord reference}) {
     _actions.add(action);
     LDropdownItem item = action.asDropdown(false);
     if (row != null)
       item.reference = row.record;
+    if (reference != null)
+      item.reference = reference;
     dropdown.dropdown.addDropdownItem(item);
   }
 
   /// Dropdown Row Action Change
-  void onActionChange(String name, String actionName, DEntry entry, LDropdownItem details) {
+  void onActionChange(String name, String actionName, DEntry entry, LDropdownItem item) {
     // see LCardCompact
     AppsAction action = null;
     for (AppsAction aa in _actions) {
@@ -99,8 +104,8 @@ class LTableActionCell extends LTableCell {
       _log.info("onActionChange ${action.value} - no callback");
     } else {
       DRecord record = null;
-      if (details.reference is DRecord)
-        record = details.reference as DRecord;
+      if (item.reference is DRecord)
+        record = item.reference as DRecord;
       if (record == null && row != null)
         record = row.record;
       if (record != null) {

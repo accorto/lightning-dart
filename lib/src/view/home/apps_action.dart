@@ -22,6 +22,7 @@ class AppsAction {
   static const String SAVE = "save";
   static const String DELETE = "delete";
   static const String DELETE_SELECTED = "deleteSelected";
+  static const String RESET = "reset";
 
   static const String LAYOUT = "layout";
 
@@ -51,6 +52,16 @@ class AppsAction {
   static AppsAction createEdit(AppsActionTriggered callback) {
     return new AppsAction(EDIT, appsActionEdit(), callback)
       ..icon = new LIconUtility(LIconUtility.EDIT);
+  }
+  /// Standard Save Action
+  static AppsAction createSave(AppsActionTriggered callback) {
+    return new AppsAction(SAVE, appsActionSave(), callback)
+      ..icon = new LIconUtility(LIconUtility.CHECK);
+  }
+  /// Standard Reset Action
+  static AppsAction createReset(AppsActionTriggered callback) {
+    return new AppsAction(RESET, appsActionReset(), callback)
+      ..icon = new LIconUtility(LIconUtility.UNDO);
   }
 
   /// Standard Layout Action
@@ -147,6 +158,7 @@ class AppsAction {
   static String appsActionNew() => Intl.message("New", name: "appsActionNew");
   static String appsActionEdit() => Intl.message("Edit", name: "appsActionEdit");
   static String appsActionSave() => Intl.message("Save", name: "appsActionSave");
+  static String appsActionReset() => Intl.message("Reset", name: "appsActionReset");
   static String appsActionDelete() => Intl.message("Delete", name: "appsActionDelete");
   static String appsActionDeleteSelected() => Intl.message("Delete Selected", name: "appsActionDeleteSelected");
 

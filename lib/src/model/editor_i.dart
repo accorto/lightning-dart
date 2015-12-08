@@ -533,12 +533,16 @@ abstract class EditorI {
         autoSubmit(evt);
       } else {
         evt.preventDefault();
-        // TODO move focus to next
+        focusNextInput();
       }
     } else {
       onInputChange(evt);
     }
   } // onInputKeyPress
+  /// focus next slds-input element within form
+  bool focusNextInput() {
+    return false;
+  }
 
   /**
    * Reset

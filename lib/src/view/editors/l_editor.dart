@@ -18,13 +18,15 @@ abstract class LEditor
 
   /// Get Form Element -- via with LFormElement or own
   Element get element;
+
   /// Editor in Grid
   bool get inGrid;
 
   /// Showing
   bool get show => !element.classes.contains(LVisibility.C_HIDE);
+
   /// Show/Hide
-  void set show (bool newValue) {
+  void set show(bool newValue) {
     if (newValue) {
       element.classes.remove(LVisibility.C_HIDE);
       if (inGrid)
@@ -48,11 +50,12 @@ abstract class LEditor
   }
 
   /// Small Editor/Label
-  void set small (bool newValue);
+  void set small(bool newValue);
 
 
   /// return true if [newValue] is null, empty or nullValue
   bool _isEmpty(String newValue) => DataUtil.isEmpty(newValue);
+
   /// return true if [newValue] is null, empty or nullValue
   bool _isNotEmpty(String newValue) => DataUtil.isNotEmpty(newValue);
 
@@ -60,19 +63,21 @@ abstract class LEditor
    * Original Value (creates als default value)
    */
   String get valueOriginal => _valueOriginal;
+
   /// Set Original value
-  void set valueOriginal (String newValue) {
+  void set valueOriginal(String newValue) {
     if (_isEmpty(newValue)) {
       _valueOriginal = "";
       defaultValue = "";
     } else {
       _valueOriginal = newValue;
       render(newValue, true)
-      .then((String display){
+          .then((String display) {
         defaultValue = display; // variables;
       });
     }
   }
+
   String _valueOriginal;
 
   /// Is the value changed from original
@@ -94,10 +99,85 @@ abstract class LEditor
 
   /// get Data List Id
   String get listId => null;
-  /// get Data List Id
-  void set listId (String newValue){}
-  /// Set Data List
-  void set list (SelectDataList dl){}
 
+  /// get Data List Id
+  void set listId(String newValue) {
+  }
+
+  /// Set Data List
+  void set list(SelectDataList dl) {
+  }
+
+  /// focus next slds-input element within form
+  bool focusNextInput() {
+    return focusNextInputParent(_getFormElement(input), input);
+  }
+  /// focus next slds-input element within parent
+  static bool focusNextInputParent(Element parent, Element e) {
+    if (parent == null)
+      return false;
+    ElementList<Element> list = parent.querySelectorAll(
+        ".${LForm.C_INPUT}, .${LForm.C_SELECT}, .${LForm.C_TEXTAREA}"); // lookup?
+    if (list.isEmpty)
+      return false;
+    int index = list.indexOf(e) + 1;
+    if (index >= list.length) {
+      return false; // last
+    }
+    Element target = list[index];
+    // is it visible?
+    while (!_canFocus(target)) {
+      index++;
+      if (index < list.length) {
+        target = list[index];
+      } else {
+        target = null;
+        break;
+      }
+    }
+    if (target != null) {
+      target.focus();
+      return true;
+    }
+    return false;
+  } // focusNextInput
+
+  /// can focus for input
+  static bool _canFocus(Element element) {
+    if (element == null || element.clientHeight == 0)
+      return false;
+    if (element is InputElement) {
+      if (element.readOnly || element.disabled)
+        return false;
+    } else if (element is SelectElement) {
+      if (element.disabled)
+        return false;
+    } else if (element is TextAreaElement) {
+      if (element.readOnly || element.disabled)
+        return false;
+    }
+    return true;
+  } // canFocus
+
+  static Element _getFormElement(Element e) {
+    if (e is InputElement) {
+      return e.form;
+    } else if (e is SelectElement) {
+      return e.form;
+    } else if (e is TextAreaElement) {
+      return e.form;
+    }
+    Element f = e.parent;
+    while (f != null) {
+      if (f is FormElement)
+        return f;
+      if (f.classes.contains(LForm.C_FORM__HORIZONTAL)
+          || f.classes.contains(LForm.C_FORM__STACKED)
+          || f.classes.contains(LForm.C_FORM__INLINE))
+        return f;
+      f = f.parent;
+    }
+    return null;
+  }
 
 } // LEditor

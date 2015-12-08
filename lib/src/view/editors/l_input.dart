@@ -62,7 +62,7 @@ class LInput
     }
     // stepper
     // if (EditorI.isDate(type) || type == EditorI.TYPE_NUMBER)
-    if (type == EditorI.TYPE_NUMBER) {
+    if (type == EditorI.TYPE_NUMBER) { // onClick=stepper onChange=+key onInput=+wheel
       input.onClick.listen(onInputChange);
     }
   } // initializeEditor

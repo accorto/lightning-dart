@@ -14,6 +14,10 @@ class LInputDate
 
   static final Logger _log = new Logger("LInputDate");
 
+  /// Min width of date editor
+  static const String MIN_WIDTH = "150px";
+  /// Min width of html5 date editor
+  static const String MIN_WIDTH_HTML5 = "190px";
 
   /// The Icon
   final LIcon _iconRight = new LIconUtility(LIconUtility.EVENT);
