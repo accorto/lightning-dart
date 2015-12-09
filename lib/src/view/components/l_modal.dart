@@ -111,6 +111,7 @@ class LModal extends LComponent {
     //
     if (ClientEnv.isPhone) {
       _container.style.width = "100%";
+      _container.style.margin = "0 auto";
     }
     // enter(parent) - over(+child) - move - out - leave
     header.onMouseEnter.listen(onHeaderMouseEnter);
