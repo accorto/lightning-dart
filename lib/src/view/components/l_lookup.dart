@@ -103,7 +103,7 @@ class LLookup
   void _initEditor(String name, String idPrefix, bool multiple, bool singleScope, bool typeahead) {
     _setAttributes(multiple, singleScope, typeahead);
     //
-    _formElement.createStandard(this, iconRight: icon);
+    _formElement.createStandard(this, iconRight: icon, inGrid:inGrid);
     input
       ..attributes[Html0.ROLE] = Html0.ROLE_COMBOBOX
       ..attributes[Html0.ARIA_AUTOCOMPLETE] = Html0.ARIA_AUTOCOMPLETE_LIST
