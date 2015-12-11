@@ -60,16 +60,48 @@ class LPath
     id = createId(idPrefix, name);
   }
 
+  /// Fix/restrict the with - via setValue (or reset)
+  void fixWidth() { // assuming that value is set after display
+    // fieldset -- has correct width
+    // - grid (row)
+    // -- col padded (parent)
+    // --- form element
+    Element parent = element.parent; // where to fix width
+    Element fieldset = null;
+    if (parent != null) {
+      if (parent.parent != null)
+        fieldset = parent.parent.parent; // where to get with from
+    }
+    if (fieldset != null) {
+      parent.style.width = "0"; // to get correct width
+      num clientWidth = fieldset.clientWidth; // get with w/o path
+      //_log.config("fixWidth client=${clientWidth}");
+      if (clientWidth > 0) {
+        parent.style.width = "${clientWidth}px";
+      } else {
+        parent.style.removeProperty("width");
+      }
+    } else if (parent != null) {
+      parent.style.removeProperty("width");
+    }
+  } // fixWidth
+
+
   /// get value
   String get value => _value;
   /// set value
   void set value (String newValue) {
+    fixWidth();
     bool found = false;
     for (LPathItem item in _itemList) {
       if (item.value == newValue) {
         item.stage = LPathItemStage.CURRENT;
         item.active = false;
         found = true;
+        if (!item.optionDisplayed) {
+          item.optionDisplayed = true; // override to display
+          rebuildPath();
+        }
       } else if (found) {
         item.stage = LPathItemStage.INCOMPLETE;
         item.active = setActive;
@@ -241,15 +273,30 @@ class LPath
   void addDOption(DOption option) {
     LPathItem item = new LPathItem(option, onPathChange);
     _itemList.add(item);
-    _nav.append(item.element);
+    if (item.optionDisplayed) {
+      _nav.append(item.element); // don't show inactive
+    } // cannot hide as the > will not render correctly
   }
 
   /// Add Option
   void addSelectOption(SelectOption so) {
     LPathItem item = new LPathItem(so.option, onPathChange, so:so);
     _itemList.add(item);
-    _nav.append(item.element);
+    if (item.optionDisplayed) {
+      _nav.append(item.element); // don't show inactive
+    }
   }
+
+  /// rebuild path ul > li
+  void rebuildPath() {
+    _nav.children.clear();
+    for (LPathItem item in _itemList) {
+      if (item.optionDisplayed) {
+        _nav.append(item.element);
+      }
+    }
+  } // rebuildPath
+
 
   /// Path Selected - callback - onInputChange
   void onPathChange(DOption option) {
@@ -276,7 +323,6 @@ typedef void PathChange(DOption option);
 
 /**
  * Path Item
- * (does not show inactive)
  */
 class LPathItem {
 
@@ -350,9 +396,6 @@ class LPathItem {
   }
   /// Set Stage
   void set stage (LPathItemStage newValue) {
-    if (!option.isActive) {
-      element.classes.add(LVisibility.C_HIDE); // hide inactive
-    }
     element.classes.removeAll([LTab.C_IS_COMPLETE, LTab.C_IS_CURRENT, LTab.C_IS_INCOMPLETE]);
     if (newValue == LPathItemStage.COMPLETE) {
       element.classes.add(LTab.C_IS_COMPLETE);
@@ -363,13 +406,24 @@ class LPathItem {
       _a.attributes[Html0.ARIA_SELECTED] = Html0.V_TRUE;
       _a.tabIndex = 0;
     // option.isSelected = true;
-      element.classes.remove(LVisibility.C_HIDE); // always show
     } else {
       element.classes.add(LTab.C_IS_INCOMPLETE);
       _a.attributes[Html0.ARIA_SELECTED] = Html0.V_FALSE;
       _a.tabIndex = -1;
     }
   }
+
+  /// option is displayed (active or overwrite)
+  bool get optionDisplayed {
+    if (_optionActive == null)
+      return !option.hasIsActive() || option.isActive;
+    return _optionActive;
+  }
+  /// overwrite if displayed
+  void set optionDisplayed (bool newValue) {
+    _optionActive = newValue;
+  }
+  bool _optionActive;
 
   /// Element Active
   bool get active {

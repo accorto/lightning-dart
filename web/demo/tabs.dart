@@ -30,17 +30,34 @@ class Tabs extends DemoFeature {
     div.add(tab);
 
     div.appendHR();
-    LPath path = new LPath("path")
-      ..label = "Sales Path";
     List<DOption> options = new List<DOption>();
     options.add(OptionUtil.option("contact", "Contacted"));
     options.add(OptionUtil.option("open", "Open"));
     options.add(OptionUtil.option("unqualified", "Unqualified", isDefault: true));
     options.add(OptionUtil.option("nurturing", "Nurturing"));
     options.add(OptionUtil.option("closed", "Closed"));
+    /* Quick + easy
+    LPath path = new LPath("path")
+      ..label = "Sales Path";
     path.dOptionList = options;
     path.element.classes.add(LMargin.C_HORIZONTAL__LARGE);
     div.append(path.element);
+    */
+    DColumn column = new DColumn()
+      ..name = "path"
+      ..label = "Sales Path"
+      ..dataType = DataType.PICK
+      ..pickValueList.addAll(options);
+    DTable table = new DTable()
+      ..name = "test"
+      ..columnList.add(column);
+    DataColumn dataColumn = new DataColumn(table,column,null,null);
+    LEditor pathEditor = EditorUtil.createfromColumn("path", dataColumn, false, isAlternativeDisplay: true);
+    LForm form = new LForm.stacked("form-path");
+    FormSection formSection = new FormSection(1);
+    form.setSection(formSection);
+    form.addEditor(pathEditor);
+    div.add(form);
 
     return div;
   }
