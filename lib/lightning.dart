@@ -226,7 +226,7 @@ class LightningDart {
       }
       main = new PageSimple(e, id, classList:classList);
     }
-    _log.info("createPageSimple ${id} version=${VERSION} timestamp=${devTimestamp}");
+    _log.info("createPageSimple ${id} version=${VERSION} ts=${devTimestamp}");
     return main;
   } // createPageSimple
 

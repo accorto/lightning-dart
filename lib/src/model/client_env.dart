@@ -83,7 +83,18 @@ class ClientEnv {
     })
     .then((_){
       initializeFormats();
-      _log.info("locale=${localeName} language=${language} ${dateFormat_ymd.pattern} ${dateFormat_hms.pattern} - ${dateFormat_ymd_hm.pattern}");
+      Screen scr = window.screen;
+      Navigator nav = window.navigator;
+      // second log
+      _log.info("locale=${localeName} language=${language} nav_lang=${nav.language}"
+          " formats=[${dateFormat_ymd.pattern} - ${dateFormat_hms.pattern} - ${dateFormat_ymd_hm.pattern}]"
+          " screen=${scr.width}x${scr.height}_${scr.pixelDepth}"
+          " window=${window.innerWidth}x${window.innerHeight}"
+          " platform=${nav.platform}"
+          " cookie=${nav.cookieEnabled} doNotTrack=${nav.doNotTrack}"
+          " browser=${nav.appName} nav_version=${nav.appVersion}"
+      // 'ua': nav.userAgent
+      );
       completer.complete(true);
     })
     .catchError((error, stackTrace) {
@@ -148,7 +159,7 @@ class ClientEnv {
   /**
    * Add Context to Log
    */
-  static void addToLogMap(Map<String,dynamic> map) {
+  static void logInfoMap(Map<String,dynamic> map) {
     if (_session != null) {
       if (_session.hasTenantName())
         map["tenantName"] = _session.tenantName;

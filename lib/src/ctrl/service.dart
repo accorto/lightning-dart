@@ -98,9 +98,9 @@ class Service {
       String s = r.nextInt(1<<32 -1).toRadixString(36) + r.nextInt(1<<32 -1).toRadixString(36);
       clientId = s.substring(0,8); // single int is 6
     }
-    //
-    //devTimestamp = BizPage.wrap.attributes["data-timestamp"];
-    _log.info("href=${window.location.href} (${document.referrer}) serverUrl=${serverUrl} query=${LightningCtrl.router.queryParams}");
+
+    // first log
+    _log.info("href=${window.location.href} referrer=${document.referrer} serverUrl=${serverUrl} query=${LightningCtrl.router.queryParams}");
   } // init
 
 

@@ -194,7 +194,8 @@ class ServiceAnalytics {
     data["ua"] = window.navigator.userAgent;
     //
     data["up"] = Service.upTime.toString(); // uptime
-    ClientEnv.addToLogMap(data);
+    data["clientId"] = Service.clientId;
+    ClientEnv.logInfoMap(data);
     //
     String dataString = LUtil.toJsonString(data);
     String url = "${Service.serverUrl}${TRX}";
@@ -222,7 +223,8 @@ class ServiceAnalytics {
     data["up"] = Service.upTime.inSeconds.toString(); // uptime
     print("analytics ${data}");
     data["upd"] = Service.upTime.toString(); // uptime
-    ClientEnv.addToLogMap(data);
+    data["clientId"] = Service.clientId;
+    ClientEnv.logInfoMap(data);
     String dataString = LUtil.toJsonString(data);
 
     String url = "${Service.serverUrl}${TRX}";

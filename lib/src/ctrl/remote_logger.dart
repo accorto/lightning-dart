@@ -21,10 +21,9 @@ class RemoteLogger {
 
   /**
    * Log Record to Map
-   */
-  static Map<String,dynamic> _logMap(LogRecord rec) {
+   *
+  static Map<String,dynamic> _formatMap(LogRecord rec) {
     Map<String, dynamic> data = new Map<String, dynamic>();
-    data['trace'] = Service.clientId;
     data['level'] = rec.level.toString();
     data['logger'] = rec.loggerName;
     data['event'] = rec.message;
@@ -65,9 +64,53 @@ class RemoteLogger {
     data["time"] = rec.time.millisecondsSinceEpoch;
     //
     // add context
-    ClientEnv.addToLogMap(data);
+    data['clientId'] = Service.clientId;
+    ClientEnv.logInfoMap(data);
     return data;
-  } // _logMap
+  } // _formatMap */
+
+  /**
+   * Log Record to String
+   */
+  static String _format(LogRecord rec) {
+    // log local time
+    String s = "${rec.time} ${rec.level} ${rec.loggerName} ${rec.message}";
+    // error
+    if (rec.error != null) {
+      s += " error=${rec.error}";
+      if (rec.error is StackTrace) {
+        try {
+          Trace t = new Trace.from(rec.error); // js
+          s += " errorStack=${t}";
+        } catch (ex) {}
+      }
+      if (rec.error is Event) {
+        Event evt = rec.error as Event;
+        if (evt.target is HttpRequest) {
+          HttpRequest request = evt.target;
+          try {
+            s += " errorText=${request.responseText}";
+          } catch (ex) {}
+          try {
+            s += " errorStatus=${request.statusText}";
+          } catch (ex) {}
+        }
+      }
+    }
+    if (rec.stackTrace != null) {
+      if (rec.stackTrace is StackTrace) {
+        Trace t = new Trace.from(rec.stackTrace); // js
+        s += " stack=${t}";
+      } else {
+        s += " stackString=${rec.stackTrace}";
+      }
+    }
+
+    // add context
+    s += ClientEnv.logInfo(" ");
+    s += " clientId=${Service.clientId}";
+    return s;
+  }
 
   /*
   static Map<String, dynamic> _pageMap () {
@@ -98,7 +141,6 @@ class RemoteLogger {
     return data;
   } // pageMap */
 
-
   /**
    * Send Message to Logging service
    */
@@ -106,72 +148,64 @@ class RemoteLogger {
     _instance.appsMsg(subject, message);
   }
 
-
   /**
    * Remote (Error) Logging Setup
    */
   factory RemoteLogger() => _instance;
   static RemoteLogger _instance = new RemoteLogger._internal();
   RemoteLogger._internal() {
-    le = RemoteLoggerLe.get();
-    if (le == null) {
-      window.console.info('log');
-      Logger.root.onRecord.listen((LogRecord record) {
-        if (record.level.value >= Level.INFO.value) { // info and higher
-          appsLogger(record);
-        }
-      });
-    } else {
-      window.console.info('le');
-      Logger.root.onRecord.listen((LogRecord record) {
-        if (record.level.value >= Level.INFO.value) { // info and higher
-          le.logRecord(record);
-        }
-      });
-    }
+    Logger.root.onRecord.listen((LogRecord record) {
+      if (record.level.value >= Level.INFO.value) { // info and higher
+        appsLogger(record);
+      }
+    });
     // unload
     window.onUnload.listen((e){
       ServiceAnalytics.sendUnload();
     });
-
   } // RemoteLogger
-  RemoteLoggerLe le;
 
   /**
    * Publish to Log service of Apps Server
    */
   void appsMsg(String subject, String message) {
-    if (le != null) {
-      le.info("${subject}: ${message}");
-      return;
-    }
     var map = {
       "subject" : subject,
       "message" : message
     };
-    sendWebLog(map);
+    sendWebLogMap(map);
   } // appsMsg
 
-  /// log record
+  /// Publish [record] to /webLog
   void appsLogger(LogRecord record) {
-    Map<String, dynamic> map = _logMap(record);
+    // Map<String, dynamic> data = _formatMap(record);
+    String dataString = _format(record);
     // send
     try {
-      sendWebLog(map);
+      sendWebLog(dataString);
     } catch (error, stackTrace) {
       print(new RequestResponse(TRX, error, stackTrace, popup: false).toStringX()
       + " (1) errors=${_sendWebLogErrors}");
     }
   } // appsLogger
 
-
   /// Publish [data] to /webLog
-  void sendWebLog(Map<String,String> data) {
+  void sendWebLogMap(Map<String, dynamic> data) {
+    String dataString = LUtil.toJsonString(data);
+    // send
+    try {
+      sendWebLog(dataString);
+    } catch (error, stackTrace) {
+      print(new RequestResponse(TRX, error, stackTrace, popup: false).toStringX()
+          + " (1) errors=${_sendWebLogErrors}");
+    }
+  }
+
+  /// Publish [dataString] to /webLog
+  void sendWebLog(String dataString) {
     if (!enabled || _sendWebLogErrors > 9) {
       return;
     }
-    String dataString = LUtil.toJsonString(data);
-
     String url = "${Service.serverUrl}${TRX}";
     HttpRequest
     .request(url, method: 'POST', sendData: dataString)
@@ -185,20 +219,5 @@ class RemoteLogger {
     });
   } // toWebLog
   int _sendWebLogErrors = 0;
-
-  /**
-   * Publish to SNS
-   * https://github.com/aws/aws-sdk-js
-   * https://sdk.amazonaws.com/js/aws-sdk-2.0.0-rc13.js
-   * https://sdk.amazonaws.com/js/aws-sdk-2.0.0-rc13.min.js
-   * http://www.slideshare.net/AmazonWebServices/writing-javascript-applications-with-the-aws-sdk-tls303-aws-reinvent-2013-28869340
-   */
-  void toSns(String subject, String message) {
-    // http://docs.aws.amazon.com/sns/latest/api/API_Publish.html
-    // AWS.config.update({accessKeyId: 'akid', secretAccessKey: 'secret'});
-    // AWS.config.region = 'us-west-1';
-    // http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/frames.html#!AWS/SNS.html
-    // var aws = new JsObject(context['AWS']);
-  }
 
 } // RemoteLogger

@@ -64,7 +64,6 @@ part 'src/ctrl/record_ctrl_related.dart';
 part 'src/ctrl/record_ctrl_related_item.dart';
 
 part 'src/ctrl/remote_logger.dart';
-part 'src/ctrl/remote_logger_le.dart';
 part 'src/ctrl/router.dart';
 part 'src/ctrl/service.dart';
 part 'src/ctrl/service_analytics.dart';
@@ -225,8 +224,8 @@ class LightningCtrl {
     Service.onServerStart = main.onServerStart;
     Service.onServerSuccess = main.onServerSuccess;
     Service.onServerError = main.onServerError;
-
-    _log.info("createAppsMain ${id} version=${LightningDart.VERSION} timestamp=${LightningDart.devTimestamp}");
+    // third log
+    _log.info("createAppsMain ${id} version=${LightningDart.VERSION} ts=${LightningDart.devTimestamp}");
     return main;
   } // createAppsMain
 
