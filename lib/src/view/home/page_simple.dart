@@ -151,7 +151,7 @@ class PageSimple
       _statusToast = new LToast(
           label: sm.message, idPrefix: "status", icon: sm.icon,
           text: sm.detail, addDefaultIcon: true, color: sm.color);
-      _statusToast.showBottomRight(element, autohideSeconds: 10);
+      _statusToast.showBottomRight(element, autohideSeconds: 10, onWindow: true);
     }
     //
     element.attributes["data-success"] = (sm == null || sm.dataSuccess == null) ? "" : sm.dataSuccess;
@@ -186,33 +186,33 @@ class StatusMessage {
   StatusMessage(String this.color, LIcon this.icon, String this.message,
                 String this.detail, String this.dataSuccess, String this.dataDetail);
 
-  /// Info
+  /// Info (dark blue)
   StatusMessage.info(String this.message,
                      String this.detail, String this.dataSuccess, String this.dataDetail) {
-    color = LTheme.C_THEME__SHADE;
+    color = LTheme.C_THEME__ALT_INVERSE;
     icon = new LIconUtility(LIconUtility.INFO);
   }
 
-  /// Announcement
+  /// Announcement (pale blue)
   StatusMessage.announce(String this.message,
                              String this.detail, String this.dataSuccess, String this.dataDetail) {
-    color = LTheme.C_THEME__SHADE;
+    color = LTheme.C_THEME__INVERSE_TEXT;
     icon = new LIconUtility(LIconUtility.ANNOUNCEMENT);
   }
 
-  /// Success Status with check
+  /// Success Status with check (green)
   StatusMessage.success(String this.message,
                      String this.detail, String this.dataSuccess, String this.dataDetail) {
     color = LTheme.C_THEME__SUCCESS;
   }
 
-  /// Warning Status with triangle
+  /// Warning Status with triangle (yellow)
   StatusMessage.warning(String this.message,
                         String this.detail, String this.dataSuccess, String this.dataDetail) {
     color = LTheme.C_THEME__WARNING;
   }
 
-  /// Error Status with fire
+  /// Error Status with (-)
   StatusMessage.error(String this.message,
                        String this.detail, String this.dataSuccess, String this.dataDetail) {
     color = LTheme.C_THEME__ERROR;

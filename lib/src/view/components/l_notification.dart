@@ -173,9 +173,9 @@ abstract class LNotification extends LComponent {
   } // show
 
   /**
-   * Show Bottom Right
+   * Show Bottom Right in parent or window
    */
-  void showBottomRight (Element parent, {int autohideSeconds}) {
+  void showBottomRight (Element parent, {int autohideSeconds, bool onWindow:true}) {
     element.style
       ..position = "absolute"
       ..bottom = "0"
@@ -183,8 +183,19 @@ abstract class LNotification extends LComponent {
       ..removeProperty("top")
       ..removeProperty("left");
     show(parent, autohideSeconds:autohideSeconds);
+
+    Rectangle thisRect = element.getBoundingClientRect();
+    if (onWindow) {
+      int winH = window.innerHeight;
+      int winScrollY = window.scrollY;
+      int top = winH - thisRect.height + winScrollY - 10; // margin
+      element.style
+        ..top = "${top}px"
+        ..removeProperty("bottom");
+    }
     // fit onto screen
-    if (element.getBoundingClientRect().width > window.innerWidth) {
+    int winW = window.innerWidth;
+    if (thisRect.width > winW) {
       // print("element=${element.getBoundingClientRect().width} - window=${window.innerWidth}");
       element.style.left = "0";
     }
@@ -352,6 +363,7 @@ class LToast extends LNotification {
       text:text, contentElements:contentElements, assistiveText:assistiveText, addDefaultIcon:addDefaultIcon,
       inContainer:inContainer, color:LTheme.C_THEME__WARNING);
 
+  /// red background
   LToast.error({String label, List<Element> headingElements, String idPrefix, LIcon icon,
       String text, List<Element> contentElements, String assistiveText, bool addDefaultIcon: true,
       bool inContainer: false})
@@ -359,6 +371,7 @@ class LToast extends LNotification {
       text:text, contentElements:contentElements, assistiveText:assistiveText, addDefaultIcon:addDefaultIcon,
       inContainer:inContainer, color:LTheme.C_THEME__ERROR);
 
+  /// brown background
   LToast.offline({String label, List<Element> headingElements, String idPrefix, LIcon icon,
       String text, List<Element> contentElements, String assistiveText, bool addDefaultIcon: true,
       bool inContainer: false})
@@ -366,7 +379,7 @@ class LToast extends LNotification {
       text:text, contentElements:contentElements, assistiveText:assistiveText, addDefaultIcon:addDefaultIcon,
       inContainer:inContainer, color:LTheme.C_THEME__OFFLINE);
 
-  /// blue background
+  /// dark blue background
   LToast.info({String label, List<Element> headingElements, String idPrefix, LIcon icon,
       String text, List<Element> contentElements, String assistiveText, bool addDefaultIcon: true,
       bool inContainer: false})
@@ -374,7 +387,7 @@ class LToast extends LNotification {
       text:text, contentElements:contentElements, assistiveText:assistiveText, addDefaultIcon:addDefaultIcon,
       inContainer:inContainer, color:LTheme.C_THEME__ALT_INVERSE);
 
-  /// blue background
+  /// pale blue background
   LToast.notification({String label, List<Element> headingElements, String idPrefix, LIcon icon,
       String text, List<Element> contentElements, String assistiveText, bool addDefaultIcon: true,
       bool inContainer: false})

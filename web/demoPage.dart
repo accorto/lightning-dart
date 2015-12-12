@@ -15,7 +15,7 @@ void main() {
   .then((_) {
 
     PageSimple page = LightningDart.createPageSimple();
-    page.add(new DemoPage("demo", new LIconUtility(LIconUtility.DESKTOP), "Demo"));
+    page.add(new DemoPage("demo", new LIconUtility(LIconUtility.DESKTOP), "Demo", page));
 
   });
 

@@ -19,7 +19,7 @@ void main() {
     AppsCtrl apps = new AppsCtrl("ldart", "Lightning Dart Demo",
       imageSrc: "packages/lightning/assets/images/LightningDartLogo.svg");
     apps.add(intro);
-    apps.add(new DemoPage("desktop", new LIconUtility(LIconUtility.DESKTOP), "Desktop"));
+    apps.add(new DemoPage("desktop", new LIconUtility(LIconUtility.DESKTOP), "Desktop", page));
     apps.add(new DemoFrame("tablet", new LIconUtility(LIconUtility.TABLET_PORTRAIT), "Tablet", 768));
     apps.add(new DemoFrame("phone", new LIconUtility(LIconUtility.PHONE_PORTRAIT), "Phone", 480));
     apps.add(new ExampleForm());

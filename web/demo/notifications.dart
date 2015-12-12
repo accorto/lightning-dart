@@ -8,7 +8,9 @@ part of lightning_dart.demo;
 
 class Notifications extends DemoFeature {
 
-  Notifications() : super ("notifications", "Notifications",
+  final PageSimple wrap;
+
+  Notifications(PageSimple this.wrap) : super ("notifications", "Notifications",
   sldsStatus: DemoFeature.SLDS_PROTOTYPE,
   devStatus: DemoFeature.STATUS_COMPLETE,
   hints: ["click x to dismiss"],
@@ -29,6 +31,7 @@ class Notifications extends DemoFeature {
     div.add(new LAlert.error(label: "Base Error Alert"));
     div.add(new LAlert.offline(label: "Base Offline Alert"));
 
+    div.appendHR();
     div.add(new LToast(label: "Base Toast"));
     div.add(new LToast.notification(label: "Base Notification Toast"));
     div.add(new LToast.info(label: "Base Info Toast"));
@@ -43,6 +46,22 @@ class Notifications extends DemoFeature {
         new ParagraphElement()..text = "with even more Detail"
       ]));
     div.add(new LToast.offline(label: "Base Offline Toast", text: "More info here"));
+
+    div.appendHR();
+    LButton btnInfo = new LButton.neutral("nb", "Status Info Toast")
+      ..classes.add(LMargin.C_LEFT__SMALL)
+      ..onClick.listen((Event evt){
+        StatusMessage sm = new StatusMessage.info("Status Info Message", "Info details", "true", "data details");
+        wrap.setStatus(sm);
+      });
+    div.add(btnInfo);
+    LButton btnSuccess = new LButton.neutral("nb", "Status Success Toast")
+      ..classes.add(LMargin.C_LEFT__SMALL)
+      ..onClick.listen((Event evt){
+        StatusMessage sm = new StatusMessage.success("Status Success Message", "Success details", "true", "data details");
+        wrap.setStatus(sm);
+      });
+    div.add(btnSuccess);
     return div;
   }
 

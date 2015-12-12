@@ -77,7 +77,7 @@ class DemoPage extends AppsPage {
 
   Element element = new DivElement();
 
-  DemoPage(String id, LIcon icon, String label)
+  DemoPage(String id, LIcon icon, String label, PageSimple wrap)
       : super(id, id, icon, label, "Lightning Dart Component Demo ${label}") {
     DivElement hdr = new DivElement()
       ..classes.addAll([LTheme.C_BOX, LTheme.C_THEME__SHADE]);
@@ -123,7 +123,7 @@ class DemoPage extends AppsPage {
     add(new Media()..toc(toc));
     add(new Menus()..toc(toc));
     add(new Modals()..toc(toc));
-    add(new Notifications()..toc(toc));
+    add(new Notifications(wrap)..toc(toc));
     add(new PageHeaders()..toc(toc));
     add(new Pills()..toc(toc));
     add(new Popovers()..toc(toc));

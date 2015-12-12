@@ -39,7 +39,7 @@ void main() {
     setUp(() async {
       await LightningDart.init();
       page = LightningDart.createPageSimple();
-      demoPage = new DemoPage("demo", new LIconUtility(LIconUtility.DESKTOP), "Demo");
+      demoPage = new DemoPage("demo", new LIconUtility(LIconUtility.DESKTOP), "Demo", null);
       page.add(demoPage);
     });
 
