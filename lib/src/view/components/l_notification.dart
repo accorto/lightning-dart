@@ -185,8 +185,8 @@ abstract class LNotification extends LComponent {
     show(parent, autohideSeconds:autohideSeconds);
 
     Rectangle thisRect = element.getBoundingClientRect();
+    int winH = window.innerHeight;
     if (onWindow) {
-      int winH = window.innerHeight;
       int winScrollY = window.scrollY;
       int top = winH - thisRect.height + winScrollY - 10; // margin
       element.style
@@ -198,7 +198,11 @@ abstract class LNotification extends LComponent {
     if (thisRect.width > winW) {
       // print("element=${element.getBoundingClientRect().width} - window=${window.innerWidth}");
       element.style.left = "0";
+      notify.style.minWidth = "inherit";
+    } else {
+      notify.style.removeProperty("min-width");
     }
+    // print("win=${winW}x${winH} rect=${element.getBoundingClientRect()}");
   } // show
 
   /// Hide Notification
