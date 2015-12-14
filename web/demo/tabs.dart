@@ -36,13 +36,19 @@ class Tabs extends DemoFeature {
     options.add(OptionUtil.option("unqualified", "Unqualified", isDefault: true));
     options.add(OptionUtil.option("nurturing", "Nurturing"));
     options.add(OptionUtil.option("closed", "Closed"));
-    /* Quick + easy
+    // Quick + easy
     LPath path = new LPath("path")
       ..label = "Sales Path";
     path.dOptionList = options;
-    path.element.classes.add(LMargin.C_HORIZONTAL__LARGE);
-    div.append(path.element);
-    */
+    //path.element.classes.add(LMargin.C_HORIZONTAL__LARGE);
+    //div.append(path.element);
+    div.append(new DivElement()
+      ..classes.add(LMargin.C_HORIZONTAL__LARGE)
+      ..style.width = "300px"
+      ..append(path.element));
+
+    //
+    div.appendHR();
     DColumn column = new DColumn()
       ..name = "path"
       ..label = "Sales Path"
