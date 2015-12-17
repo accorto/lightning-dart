@@ -165,9 +165,9 @@ class DataRecord {
 
 
   /**
-   * Get value (original) of entry
+   * Get value (original) of entry - if [returnEmpty] returns "" for null
    */
-  static String getEntryValue(DEntry dataEntry) {
+  static String getEntryValue(DEntry dataEntry, {bool returnEmpty:true}) {
     if (dataEntry != null) {
       String value = null;
       if (dataEntry.hasValue())
@@ -176,7 +176,9 @@ class DataRecord {
         value = dataEntry.valueOriginal;
       }
       if (DataUtil.isEmpty(value)) {
-        return ""; // found but empty
+        if (returnEmpty)
+          return ""; // found but empty
+        return null;
       }
       return value;
     }
