@@ -8,6 +8,7 @@ Intermediate Patches, Functionality improvements via +x prefix.
 - #29 (Sales) Path 
 - #31 Default Editor based on Platform
 - #30 Messages-Settings-Environment Tab
+- lookup enhancements
 
 ## 0.12.0
 

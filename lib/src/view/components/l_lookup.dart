@@ -132,7 +132,11 @@ class LLookup
     input.onKeyUp.listen(onInputKeyUp);
     // toggle dropdown on click
     input.onClick.listen((Event evt) {
-      showDropdown = !_showDropdown;
+      if (readOnly || disabled) {
+        showDropdown = false;
+      } else {
+        showDropdown = !_showDropdown;
+      }
     });
   } // initEditor
 
@@ -392,7 +396,7 @@ class LLookup
    * ENTER selects first
    */
   void onInputKeyUp(KeyboardEvent evt) {
-    if (readOnly) {
+    if (readOnly || disabled) {
       return;
     }
     int kc = evt.keyCode;
@@ -463,7 +467,7 @@ class LLookup
    */
   void onItemClick(MouseEvent evt) {
     evt.preventDefault(); // a
-    if (readOnly) {
+    if (readOnly || disabled) {
       showDropdown = false;
       return;
     }

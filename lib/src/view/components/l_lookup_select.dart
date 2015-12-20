@@ -33,7 +33,11 @@ class LLookupSelect extends LLookup {
 
     // toggle dropdown on click
     _pillContainer.onClick.listen((Event evt) {
-      showDropdown = !_showDropdown;
+      if (readOnly || disabled) {
+        showDropdown = false;
+      } else {
+        showDropdown = !_showDropdown;
+      }
     });
 
   } // initEditor2
@@ -46,7 +50,7 @@ class LLookupSelect extends LLookup {
    */
   void onItemClick(MouseEvent evt) {
     evt.preventDefault();
-    if (readOnly) {
+    if (readOnly || disabled) {
       showDropdown = false;
       return;
     }
@@ -145,15 +149,32 @@ class LLookupSelect extends LLookup {
   void _updateContainer() {
     _pillContainer.children.clear();
     for (LPill pill in _pillList) {
+      pill.readOnly = readOnly || disabled;
       _pillContainer.append(pill.element);
     }
     // show search icon
-    if (_pillList.isEmpty) {
+    if (readOnly || disabled) {
+      element.classes.add(LLookup.C_HAS_SELECTION); // don't show icon
+    } else if (_pillList.isEmpty) {
       element.classes.remove(LLookup.C_HAS_SELECTION);
     } else {
       element.classes.add(LLookup.C_HAS_SELECTION);
     }
   }
+
+
+  /// read only
+  void set readOnly (bool newValue) {
+    super.readOnly = newValue;
+    _updateContainer();
+  }
+
+  /// diaabled
+  void set disabled (bool newValue) {
+    super.disabled = newValue;
+    _updateContainer();
+  }
+
 
   /// pill remove clicked
   void onItemRemoveClick(MouseEvent evt) {

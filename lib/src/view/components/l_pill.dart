@@ -125,6 +125,19 @@ class LPill extends LComponent {
     }
   }
 
+  /// Read only
+  void set readOnly (bool newValue) {
+    _readOnly = newValue;
+    if (_remove != null) {
+      if (_readOnly) {
+        _remove.classes.add(LVisibility.C_HIDE);
+      } else {
+        _remove.classes.remove(LVisibility.C_HIDE);
+      }
+    }
+  }
+  bool _readOnly;
+
   /// rebuild content
   void _rebuild() {
     if (_icon != null) {
