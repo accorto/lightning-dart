@@ -18,17 +18,17 @@ class LLookupSelect extends LLookup {
 
 
   /// Single Lookup
-  LLookupSelect.single(String name, {String idPrefix})
-      : super(name, idPrefix:idPrefix, typeahead: false);
+  LLookupSelect.single(String name, {String idPrefix, bool inGrid:false})
+      : super(name, idPrefix:idPrefix, multiple:false, typeahead: false, inGrid:inGrid);
 
   /// Multi Lookup
-  LLookupSelect.multi(String name, {String idPrefix})
-      : super(name, idPrefix:idPrefix, multiple:true, typeahead: false);
+  LLookupSelect.multi(String name, {String idPrefix, bool inGrid:false})
+      : super(name, idPrefix:idPrefix, multiple:true, typeahead: false, inGrid:inGrid);
 
 
   /// Init for Select Lookup
   void _initEditor2(bool multiple, bool singleScope, bool typeahead) {
-    element.classes.add(LLookup.C_HAS_SELECTION);
+    //  element.classes.add(LLookup.C_HAS_SELECTION); // display bug - does not show icon
     _pillContainer.classes.add(LVisibility.C_SHOW);
     _formElement.createLookupSelect(_pillContainer, icon, multiple); // update
 
