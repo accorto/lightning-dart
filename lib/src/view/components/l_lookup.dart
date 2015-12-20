@@ -69,7 +69,7 @@ class LLookup
     ..attributes[Html0.ROLE] = Html0.ROLE_PRESENTATION;
 
   /// Lookup Items
-  final List<LLookupItem> lookupItemList = new List<LLookupItem>();
+  final List<LLookupItem> _lookupItemList = new List<LLookupItem>();
 
   /// Displayed in Grid
   final bool inGrid;
@@ -214,7 +214,7 @@ class LLookup
       input.setCustomValidity("");
     if (display == null || display.isEmpty)
       return display;
-    for (LLookupItem item in lookupItemList) {
+    for (LLookupItem item in _lookupItemList) {
       if (item.label == display)
         return item.value;
     }
@@ -245,7 +245,7 @@ class LLookup
     if (newValue == null || newValue.isEmpty) {
       return "";
     }
-    for (LLookupItem item in lookupItemList) {
+    for (LLookupItem item in _lookupItemList) {
       if (item.value == newValue)
         return item.label;
     }
@@ -262,8 +262,8 @@ class LLookup
   bool get required => input.required;
   void set required (bool newValue) {
     input.required = newValue;
-    if (newValue && input.value.isEmpty && lookupItemList.isNotEmpty) {
-      value = lookupItemList.first.value;
+    if (newValue && input.value.isEmpty && _lookupItemList.isNotEmpty) {
+      value = _lookupItemList.first.value;
     }
   }
 
@@ -308,7 +308,7 @@ class LLookup
   /// Get options
   List<OptionElement> get options {
     List<OptionElement> list = new List<OptionElement>();
-    for (LLookupItem item in lookupItemList) {
+    for (LLookupItem item in _lookupItemList) {
       list.add(item.asOption());
     }
     return list;
@@ -326,7 +326,7 @@ class LLookup
   }
 
   /// Option Count
-  int get length => lookupItemList.length;
+  int get length => _lookupItemList.length;
 
   /// Selected count
   int get selectedCount {
@@ -338,7 +338,7 @@ class LLookup
   /// Get select option list
   List<SelectOption> get selectOptionList {
     List<SelectOption> retValue = new List<SelectOption>();
-    for (LLookupItem item in lookupItemList) {
+    for (LLookupItem item in _lookupItemList) {
       retValue.add(item.asSelectOption());
     }
     return retValue;
@@ -356,22 +356,24 @@ class LLookup
   }
 
   /// Set Lookup Items
-  void set lookupItems (List<LLookupItem> itemList) {
+  void set lookupItemList (List<LLookupItem> itemList) {
     clearOptions();
     for (LLookupItem item in itemList) {
       addLookupItem(item);
     }
   }
+  /// Get Lookup Items
+  List<LLookupItem> get lookupItemList => _lookupItemList;
 
   /// Clear Items
   void clearOptions() {
-    lookupItemList.clear();
+    _lookupItemList.clear();
     _lookupList.children.clear();
   }
 
   /// add Lookup Item
   void addLookupItem(LLookupItem item) {
-    lookupItemList.add(item);
+    _lookupItemList.add(item);
     _lookupList.append(item.element);
     item.onClick.listen(onItemClick);
   }
@@ -420,7 +422,7 @@ class LLookup
     }
     int count = 0;
     LLookupItem first = null;
-    for (LLookupItem item in lookupItemList) {
+    for (LLookupItem item in _lookupItemList) {
       if (exp == null) {
         item.show = true;
         item.labelHighlightClear();
@@ -440,13 +442,13 @@ class LLookup
         item.show = false;
       }
     }
-    if (count == 0 && lookupItemList.isNotEmpty) {
+    if (count == 0 && _lookupItemList.isNotEmpty) {
       input.setCustomValidity(lLookupNoMatch());
     } else {
       input.setCustomValidity("");
     }
     doValidate();
-    _log.fine("lookupUpdateList ${name} '${restriction}' ${count} of ${lookupItemList.length}");
+    _log.fine("lookupUpdateList ${name} '${restriction}' ${count} of ${_lookupItemList.length}");
     if (selectFirst && first != null) {
       value = first.value;
       showDropdown = false;
@@ -468,7 +470,7 @@ class LLookup
     Element telement = evt.target;
     String tvalue = telement.attributes[Html0.DATA_VALUE];
     LLookupItem selectedItem = null;
-    for (LLookupItem item in lookupItemList) {
+    for (LLookupItem item in _lookupItemList) {
       if (item.value == tvalue) {
         selectedItem = item;
         break;
@@ -493,7 +495,7 @@ class LLookup
         editorChange(name, selectedItem.value, null, selectedItem);
     }
     showDropdown = false;
-    for (LLookupItem item in lookupItemList) { // remove restrictions
+    for (LLookupItem item in _lookupItemList) { // remove restrictions
       item.show = true;
       item.labelHighlightClear();
     }

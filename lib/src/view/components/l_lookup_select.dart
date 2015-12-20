@@ -28,7 +28,6 @@ class LLookupSelect extends LLookup {
 
   /// Init for Select Lookup
   void _initEditor2(bool multiple, bool singleScope, bool typeahead) {
-    //  element.classes.add(LLookup.C_HAS_SELECTION); // display bug - does not show icon
     _pillContainer.classes.add(LVisibility.C_SHOW);
     _formElement.createLookupSelect(_pillContainer, icon, multiple); // update
 
@@ -54,7 +53,7 @@ class LLookupSelect extends LLookup {
     Element telement = evt.target;
     String tvalue = telement.attributes[Html0.DATA_VALUE];
     LLookupItem selectedItem = null;
-    for (LLookupItem item in lookupItemList) {
+    for (LLookupItem item in _lookupItemList) {
       if (item.value == tvalue) {
         selectedItem = item;
         break;
@@ -89,7 +88,7 @@ class LLookupSelect extends LLookup {
       editorChange(name, vv, null, selectedItem);
     }
     showDropdown = false;
-    for (LLookupItem item in lookupItemList) { // remove restrictions
+    for (LLookupItem item in _lookupItemList) { // remove restrictions
       item.show = true;
       item.labelHighlightClear();
     }
@@ -115,7 +114,7 @@ class LLookupSelect extends LLookup {
       for (String vv in values) {
         LLookupItem item = null;
         if (vv.isNotEmpty) {
-          for (LLookupItem ii in lookupItemList) {
+          for (LLookupItem ii in _lookupItemList) {
             if (ii.value == newValue) {
               item = ii;
               break;
@@ -148,6 +147,12 @@ class LLookupSelect extends LLookup {
     for (LPill pill in _pillList) {
       _pillContainer.append(pill.element);
     }
+    // show search icon
+    if (_pillList.isEmpty) {
+      element.classes.remove(LLookup.C_HAS_SELECTION);
+    } else {
+      element.classes.add(LLookup.C_HAS_SELECTION);
+    }
   }
 
   /// pill remove clicked
@@ -171,6 +176,9 @@ class LLookupSelect extends LLookup {
       }
       if (found) {
         _updateContainer();
+        if (editorChange != null) {
+          editorChange(name, value, null, null);
+        }
       }
     }
   } // onItemRemoveClick
