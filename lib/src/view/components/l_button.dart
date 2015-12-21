@@ -572,15 +572,11 @@ class LButton
 
 /**
  * (Toggle) Button with multiple states
- * TODO: same API as Checkbox
  */
-class LButtonStateful extends LComponent {
+class LButtonStateful
+    extends LButton {
 
   static final Logger _log = new Logger("LButtonStateful");
-
-  /// The Button
-  final ButtonElement element = new ButtonElement()
-    ..classes.add(LButton.C_BUTTON);
 
   final List<LButtonStatefulState> states = new List<LButtonStatefulState>();
 
@@ -588,23 +584,22 @@ class LButtonStateful extends LComponent {
    * Toggle Button with [name] (default Follow)
    * if [onButtonClick] is provided, it will be called after state change
    */
-  LButtonStateful(String name, {String idPrefix,
-      String textNotSelected: "Follow",
-      String textSelected: "Following",
-      String textSelectedFocus: "Unfollow",
-      void onButtonClick(MouseEvent evt)}) {
-    element.name = name;
-    element.id = LComponent.createId(idPrefix, name);
+  LButtonStateful(String name,
+        LButtonStatefulState notSelectedState,
+        LButtonStatefulState selectedState,
+        LButtonStatefulState selectedFocusState,
+        {String idPrefix, void onButtonClick(MouseEvent evt)})
+      : super(new ButtonElement(), name, null, idPrefix: idPrefix) {
 
     element.classes.add(LButton.C_BUTTON__NEUTRAL);
     element.classes.add(LButton.C_NOT_SELECTED);
     element.setAttribute(Html0.ARIA_LIVE, Html0.ARIA_LIVE_ASSERTIVE);
     //
-    addState(new LButtonStatefulState(new LIconUtility(LIconUtility.ADD), textNotSelected, LText.C_TEXT_NOT_SELECTED));
-    addState(new LButtonStatefulState(new LIconUtility(LIconUtility.CHECK), textSelected, LText.C_TEXT_SELECTED));
-    addState(new LButtonStatefulState(new LIconUtility(LIconUtility.CLOSE), textSelectedFocus, LText.C_TEXT_SELECTED_FOCUS));
+    addState(notSelectedState);
+    addState(selectedState);
+    addState(selectedFocusState);
 
-    element.onClick.listen((MouseEvent evt){
+    element.onClick.listen((MouseEvent evt) {
       bool newState = toggle();
       _log.fine("${name} selected=${newState}");
       if (onButtonClick != null)
@@ -612,10 +607,52 @@ class LButtonStateful extends LComponent {
     });
   } // LButtonStateful
 
-  /// Button name
-  String get name => element.name;
-  /// Button id
-  String get id => element.id;
+  /**
+   * Follow Toggle Button
+   */
+  LButtonStateful.follow(String name, {String idPrefix,
+        String notSelected:"Follow",
+        String selected:"Following",
+        String selectedFocus:"Unfollow",
+        void onButtonClick(MouseEvent evt)})
+    : this (name,
+      new LButtonStatefulState(new LIconUtility(LIconUtility.ADD),
+          notSelected, LText.C_TEXT_NOT_SELECTED),
+      new LButtonStatefulState(new LIconUtility(LIconUtility.CHECK),
+          selected, LText.C_TEXT_SELECTED),
+      new LButtonStatefulState(new LIconUtility(LIconUtility.CLOSE),
+          selectedFocus, LText.C_TEXT_SELECTED_FOCUS),
+      idPrefix:idPrefix, onButtonClick:onButtonClick);
+
+  /// Selected Toggle Button
+  LButtonStateful.select(String name, {
+      String notSelected:"Not Selected",
+      String selected:"Selected",
+      String selectedFocus:"Unselect",
+      String idPrefix, void onButtonClick(MouseEvent evt)})
+    : this (name,
+      new LButtonStatefulState(new LIconUtility(LIconUtility.CLEAR),
+          notSelected, LText.C_TEXT_NOT_SELECTED),
+      new LButtonStatefulState(new LIconUtility(LIconUtility.SUCCESS),
+          selected, LText.C_TEXT_SELECTED),
+      new LButtonStatefulState(new LIconUtility(LIconUtility.CLOSE),
+          selectedFocus, LText.C_TEXT_SELECTED_FOCUS),
+      idPrefix:idPrefix, onButtonClick:onButtonClick);
+
+  /// Edit/ReadOnly Toggle Button
+  LButtonStateful.edit(String name, {
+      String notSelected:"Readonly",
+      String selected:"Edit",
+      String selectedFocus:"Protect",
+      String idPrefix, void onButtonClick(MouseEvent evt)})
+    : this (name,
+      new LButtonStatefulState(new LIconUtility(LIconUtility.LOCK),
+          notSelected, LText.C_TEXT_NOT_SELECTED),
+      new LButtonStatefulState(new LIconUtility(LIconUtility.EDIT),
+          selected, LText.C_TEXT_SELECTED),
+      new LButtonStatefulState(new LIconUtility(LIconUtility.CLOSE),
+          selectedFocus, LText.C_TEXT_SELECTED_FOCUS),
+      idPrefix:idPrefix, onButtonClick:onButtonClick);
 
   /// add State
   void addState(LButtonStatefulState state) {
@@ -639,17 +676,12 @@ class LButtonStateful extends LComponent {
       element.classes.remove(LButton.C_IS_SELECTED);
     }
   } // set selected
+
   /// toggle state - return new state
   bool toggle() {
     bool newState = !selected;
     selected = newState;
     return newState;
-  }
-
-
-  bool get disabled => element.disabled;
-  void set disabled(bool newValue) {
-    element.disabled = newValue;
   }
 
 } // LButtonStateful
@@ -672,32 +704,21 @@ class LButtonStatefulState {
 
 /**
  * Stateful Button Icon
- * TODO: Same API as Checkbox
  */
-class LButtonIconStateful extends LComponent {
+class LButtonStatefulIcon
+    extends LButton {
 
   static final Logger _log = new Logger("LButtonIconStateful");
-
-
-  final ButtonElement element = new ButtonElement()
-    ..classes.addAll([LButton.C_BUTTON, LButton.C_BUTTON__ICON_BORDER]);
-
-  final SpanElement _span = new SpanElement()
-    ..classes.add(LText.C_ASSISTIVE_TEXT);
 
   /**
    * Stateful Icon
    */
-  LButtonIconStateful(String name, String assistiveText, LIcon icon, {String idPrefix,
-      void onButtonClick(MouseEvent evt)}) {
-    icon.classes.clear();
-    icon.classes.add(LButton.C_BUTTON__ICON);
-    element.append(icon.element);
-    //
-    if (assistiveText != null)
-      _span.text = assistiveText;
-    element.append(_span);
-    //
+  LButtonStatefulIcon(String name, String assistiveText, LIcon icon,
+        {String idPrefix, void onButtonClick(MouseEvent evt)})
+    : super(new ButtonElement(), name, null,
+        buttonClasses:[LButton.C_BUTTON__ICON_BORDER],
+        idPrefix:idPrefix, icon:icon, assistiveText:assistiveText) {
+
     element.onClick.listen((MouseEvent evt){
       bool newState = toggle();
       _log.fine("${name} selected=${newState}");
@@ -705,7 +726,7 @@ class LButtonIconStateful extends LComponent {
         onButtonClick(evt);
     });
     selected = false;
-  } // LButtonIconStateful
+  } // LButtonStatefulIcon
 
 
   bool get selected => element.classes.contains(LButton.C_IS_SELECTED);
@@ -719,6 +740,7 @@ class LButtonIconStateful extends LComponent {
       element.classes.remove(LButton.C_IS_SELECTED);
     }
   } // set selected
+
   /// toggle state - return new state
   bool toggle() {
     bool newState = !selected;
@@ -726,11 +748,4 @@ class LButtonIconStateful extends LComponent {
     return newState;
   }
 
-
-  bool get disabled => element.disabled;
-  void set disabled(bool newValue) {
-    element.disabled = newValue;
-  }
-
-
-} // LButtonIconStateful
+} // LButtonStatefulIcon

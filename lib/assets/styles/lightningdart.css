@@ -6204,5 +6204,7 @@ input[type=number]::-webkit-inner-spin-button.decimal {
   overflow: auto; }
 .slds-tabs--path__title {
   padding-left: 0.15rem; }
+.slds-button {
+  white-space: nowrap; }
 
 /*# sourceMappingURL=lightningdart.css.map */

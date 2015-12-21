@@ -9,6 +9,7 @@ Intermediate Patches, Functionality improvements via +x prefix.
 - #31 Default Editor based on Platform
 - #30 Messages-Settings-Environment Tab
 - lookup enhancements
+- stateful button improvements
 
 ## 0.12.0
 

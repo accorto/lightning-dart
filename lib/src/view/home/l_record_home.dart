@@ -28,7 +28,7 @@ class LRecordHome extends LPageHeader {
   final HeadingElement _headerLeftRecordTitle = new HeadingElement.h1()
     ..classes.addAll([LText.C_TEXT_HEADING__MEDIUM, LMargin.C_RIGHT__SMALL, LText.C_TRUNCATE, LGrid.C_ALIGN_MIDDLE]);
   // Follow Button
-  final LButtonStateful followButton = new LButtonStateful("follow");
+  final LButton followButton;
 
   /// Top row
   final DivElement _headerRight = new DivElement()
@@ -40,20 +40,23 @@ class LRecordHome extends LPageHeader {
   final List<LRecordHomeDetail> _detailList = new List<LRecordHomeDetail>();
 
   /**
-   * Record Home with optional button [followElement] and optional [centerElement] (grid column)
+   * Record Home with optional button [followElement]
+   * and optional [centerElement] (grid column)
    */
-  LRecordHome({Element followElement, Element centerElement, bool wrap:false, String idPrefix}) {
-    _initComponent(followElement, centerElement, wrap, idPrefix);
+  LRecordHome({LButton this.followButton, Element centerElement, bool wrap:false, String idPrefix}) {
+    _initComponent(centerElement, wrap, idPrefix);
   } // LRecordHome
 
   /// Record Home with Follow Button
-  LRecordHome.follow({String idPrefix}) {
-    _initComponent(followButton.element, null, false, idPrefix);
-  } // LRecordHome
+  LRecordHome.follow({String idPrefix})
+      : this(followButton: new LButtonStateful.follow("follow"), idPrefix: idPrefix);
 
-  /// Record Home from UI [homeIcon] large with padding and color with optional button [followElement] and optional [centerElement]
-  LRecordHome.from(UI this.ui, {LIcon homeIcon, Element followElement, Element centerElement, bool wrap:false, String idPrefix}) {
-    _initComponent(followElement, centerElement, wrap, idPrefix);
+  /**
+   * Record Home from UI [homeIcon] large with padding and color
+   * with optional button [followElement] and optional [centerElement]
+   */
+  LRecordHome.from(UI this.ui, {LIcon homeIcon, LButton this.followButton, Element centerElement, bool wrap:false, String idPrefix}) {
+    _initComponent(centerElement, wrap, idPrefix);
     element.attributes[Html0.DATA_VALUE] = ui.tableName;
     DTable table = ui.table;
     // image
@@ -93,7 +96,7 @@ class LRecordHome extends LPageHeader {
   } // LRecordHome.ui
 
   /// Initialize Component Structure
-  void _initComponent(Element buttonElement, Element centerElement, bool wrap, String idPrefix) {
+  void _initComponent(Element centerElement, bool wrap, String idPrefix) {
     element.id = LComponent.createId(idPrefix, "home");
     // Header Row
     element.append(_header);
@@ -109,13 +112,14 @@ class LRecordHome extends LPageHeader {
     _headerLeftMedia.append(leftGrid);
     _headerLeftRecordTitle.id = "${idPrefix}-record-title";
     leftGrid.append(_headerLeftRecordTitle);
-    if (buttonElement != null) {
+    if (followButton != null) {
       DivElement followDiv = new DivElement()
         ..classes.addAll([LGrid.C_SHRINK_NONE, LGrid.C_ALIGN_BOTTOM]);
       leftGrid.append(followDiv);
-      followDiv.append(buttonElement);
+      followDiv.append(followButton.element);
     }
     if (centerElement != null) {
+      centerElement.classes.addAll([LGrid.C_COL, LGrid.C_NO_FLEX, LGrid.C_ALIGN_BOTTOM, LMargin.C_RIGHT__SMALL]);
       _header.append(centerElement);
     }
     // right - actions
@@ -125,11 +129,13 @@ class LRecordHome extends LPageHeader {
     if (wrap) {
       _header.classes.add(LGrid.C_WRAP);
       _headerLeft.classes.remove(LGrid.C_HAS_FLEXI_TRUNCATE);
+      _header.style.justifyContent = "flex-end";
     }
   } // initComponent
 
   /// Set Icon
   void set icon (LIcon icon) {
+    icon.size = LIcon.C_ICON__LARGE;
     _headerLeftMedia.setIcon(icon);
   }
   /// Record Type Text
@@ -158,6 +164,15 @@ class LRecordHome extends LPageHeader {
   void addAction(AppsAction action) {
     LButton btn = action.asButton(true, idPrefix:id);
     _actionButtonGroup.add(btn);
+  }
+
+  /// Show Action Group Buttons
+  void set showActions (bool newValue) {
+    if (newValue) {
+      _actionButtonGroup.classes.add(LVisibility.C_HIDE);
+    } else {
+      _actionButtonGroup.classes.remove(LVisibility.C_HIDE);
+    }
   }
 
   /// current record

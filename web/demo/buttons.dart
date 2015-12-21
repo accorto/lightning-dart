@@ -53,8 +53,8 @@ class Buttons extends DemoFeature {
     div.add(new LButton.neutralIcon("b51", "neutral icon", new LIconUtility(LIconUtility.DOWNLOAD)));
     div.add(new LButton.neutralIcon("b52", "icon neutral", new LIconUtility(LIconUtility.DOWNLOAD), iconLeft: true));
     div.appendText(" Toggle Buttons: ");
-    div.add(new LButtonStateful("b53"));
-    div.add(new LButtonIconStateful("b53", "stateful icon", new LIconUtility(LIconUtility.LIKE)));
+    div.add(new LButtonStateful.follow("b53"));
+    div.add(new LButtonStatefulIcon("b53", "stateful icon", new LIconUtility(LIconUtility.LIKE)));
 
     div.append(new LButton.neutralIcon("b58", "hint icon", new LIconUtility(LIconUtility.DOWNLOAD)).hintParent()
       ..classes.addAll([LMargin.C_VERTICAL__SMALL, LPadding.C_AROUND__X_SMALL])
@@ -115,7 +115,7 @@ class Buttons extends DemoFeature {
     div.add(new LButton.neutralIcon("b52", "icon neutral", new LIconUtility(LIconUtility.DOWNLOAD), iconLeft: true));
     div.appendText(" Toggle Buttons: ");
     div.add(new LButtonStateful("b53"));
-    div.add(new LButtonIconStateful("b53", "stateful icon", new LIconUtility(LIconUtility.LIKE)));
+    div.add(new LButtonStatefulIcon("b53", "stateful icon", new LIconUtility(LIconUtility.LIKE)));
 
     div.append(new LButton.neutralIcon("b58", "hint icon", new LIconUtility(LIconUtility.DOWNLOAD)).hintParent()
       ..classes.addAll([LMargin.C_VERTICAL__SMALL, LPadding.C_AROUND__X_SMALL])

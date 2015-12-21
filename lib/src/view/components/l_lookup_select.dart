@@ -145,6 +145,15 @@ class LLookupSelect extends LLookup {
     _updateContainer();
   } // addSelectedItem
 
+  /// set border Color
+  void set borderColor (String newValue) {
+    if (newValue == null || newValue.isEmpty) {
+      _pillContainer.style.removeProperty("border-color");
+    } else {
+      _pillContainer.style.borderColor = newValue;
+    }
+  }
+
   /// display pills
   void _updateContainer() {
     _pillContainer.children.clear();

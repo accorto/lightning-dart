@@ -307,7 +307,14 @@ class LLookup
   /// Validation Message from Input
   String get inputValidationMsg => input.validationMessage;
 
-
+  /// set border Color
+  void set borderColor (String newValue) {
+    if (newValue == null || newValue.isEmpty) {
+      input.style.removeProperty("border-color");
+    } else {
+      input.style.borderColor = newValue;
+    }
+  }
 
   /// Get options
   List<OptionElement> get options {
