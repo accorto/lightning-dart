@@ -13,33 +13,32 @@ part of lightning_dart;
  */
 class LText {
 
-  /// slds-text-body--regular - Creates the 14px regular body copy
+  /// slds-text-body--regular: Creates the 14px regular body copy - This is the base body font size and is rarely needed
   static const String C_TEXT_BODY__REGULAR = "slds-text-body--regular";
-  /// slds-text-body--small - Creates 12px copy
+  /// slds-text-body--small: Creates a more pale-colored 12px copy - Typically used as supportive text
   static const String C_TEXT_BODY__SMALL = "slds-text-body--small";
-  /// slds-text-heading--large - Very large 32px heading
+  /// slds-text-heading--large (Any heading): Very large 32px heading - These are rarely used in the app and are reserved for extremely large text to showcase data (such as totals or stats).
   static const String C_TEXT_HEADING__LARGE = "slds-text-heading--large";
-  /// slds-text-heading--medium - Large 24px heading
+  /// slds-text-heading--medium (Any heading): Large 24px heading - Typically the largest heading on a page
   static const String C_TEXT_HEADING__MEDIUM = "slds-text-heading--medium";
-  /// slds-text-heading--small - Smaller 18px heading
+  /// slds-text-heading--small (Any heading): Smaller 18px heading - Used for smaller content areas such as list sections or card titles
   static const String C_TEXT_HEADING__SMALL = "slds-text-heading--small";
-  /// slds-text-heading--label - All caps 12px heading
+  /// slds-text-heading--label (Any heading): All caps 12px heading - Usually labels small content areas like table columns and list sections
   static const String C_TEXT_HEADING__LABEL = "slds-text-heading--label";
-  /// slds-text-longform - Adds default spacing and list styling within a wrapper
+  /// slds-text-longform (div): Adds default spacing and list styling within a wrapper - Our application framework removes default text styling. This adds in margins to large areas
   static const String C_TEXT_LONGFORM = "slds-text-longform";
-  /// slds-text-align--left - Aligns text left
+  /// slds-text-align--left (Any text): Aligns text left
   static const String C_TEXT_ALIGN__LEFT = "slds-text-align--left";
-  /// slds-text-align--center - Aligns text center
+  /// slds-text-align--center (Any text): Aligns text center
   static const String C_TEXT_ALIGN__CENTER = "slds-text-align--center";
-  /// slds-text-align--right - Aligns text right
+  /// slds-text-align--right (Any text): Aligns text right
   static const String C_TEXT_ALIGN__RIGHT = "slds-text-align--right";
-  /// slds-section-title - Interactive titles with icons that open and close sections
+  /// slds-section-title: Interactive titles with icons that open and close sections - These are typically on a form
   static const String C_SECTION_TITLE = "slds-section-title";
-  /// slds-type-focus - Creates a faux link with interactions
-  static const String C_TYPE_FOCUS = "slds-type-focus";
-
-  /// Form Section
+  /// slds-section-title--divider: Titles that also act as a divider - These are typically on a form
   static const String C_SECTION_TITLE__DIVIDER = "slds-section-title--divider";
+  /// slds-type-focus (container): Creates a faux link with interactions - This is used when an actual anchor element can not be used. For example — when a heading and button are next to each other and both need the text underline
+  static const String C_TYPE_FOCUS = "slds-type-focus";
 
 
   static const String C_SECTION_GROUP__IS_OPEN = "section-group--is-open";

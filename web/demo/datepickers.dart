@@ -31,12 +31,13 @@ class Datepickers extends DemoFeature {
     form.addEditor(dp);
 
     LInputDate id1 = new LInputDate("id1")
-      ..label = "Date Input Html5 (falls back if not supported)";
+      ..label = "Date Input Html5 (falls back if not supported)"
+      ..html5 = true;
     id1.value = null;
     form.addEditor(id1);
 
     LInputDate id2 = new LInputDate("id2")
-      ..label = "Date Input"
+      ..label = "Date Input (plain)"
       ..html5 = false;
     id2.value = null;
     form.addEditor(id2);

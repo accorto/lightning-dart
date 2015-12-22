@@ -28,50 +28,53 @@ typedef void FormResetted ();
 class LForm
     extends LComponent implements FormI {
 
-  /// slds-form-element - Initializes form element | Required
+  /// slds-form-element (div): Initializes form element
   static const String C_FORM_ELEMENT = "slds-form-element";
-  /// slds-form-element__label - Initializes form element label | Required
+  /// slds-form-element__label (div): Initializes form element label
   static const String C_FORM_ELEMENT__LABEL = "slds-form-element__label";
-  /// slds-form-element__control - Initializes form element control | Required
+  /// slds-form-element__control (div): Initializes form element control - Control can contain an <input>, <textarea>, <select>
   static const String C_FORM_ELEMENT__CONTROL = "slds-form-element__control";
-  /// slds-input - Initializes text input | Required
+  /// slds-input (input): Initializes text input
   static const String C_INPUT = "slds-input";
-  /// slds-input--small - Applies styles for a smaller text input
+  /// slds-input--small (slds-input): Applies styles for a smaller text input
   static const String C_INPUT__SMALL = "slds-input--small";
-  /// slds-input--bare - Removes background and border from text input
+  /// slds-input--bare (slds-input): Removes background and border from text input
   static const String C_INPUT__BARE = "slds-input--bare";
-  /// slds-input-has-icon - Lets text input know how to position .slds-input__icon
+  /// slds-input-has-icon (div around <input): Lets text input know how to position .slds-input__icon - The <div> contains both the <svg> and the <input>
   static const String C_INPUT_HAS_ICON = "slds-input-has-icon";
-  /// slds-input__icon - Hook for .slds-input-has-icon
+  /// slds-input__icon (svg): Hook for .slds-input-has-icon
   static const String C_INPUT__ICON = "slds-input__icon";
-  /// slds-input-has-icon--left - Positions .slds-input__icon to the left of the text input
+  /// slds-input-has-icon--left (slds-input-has-icon): Positions .slds-input__icon to the left of the text input
   static const String C_INPUT_HAS_ICON__LEFT = "slds-input-has-icon--left";
-  /// slds-input-has-icon--right - Positions .slds-input__icon to the right of the text input
+  /// slds-input-has-icon--right (slds-input-has-icon): Positions .slds-input__icon to the right of the text input
   static const String C_INPUT_HAS_ICON__RIGHT = "slds-input-has-icon--right";
-  /// slds-textarea - Initializes textarea | Required
+  /// slds-textarea (textarea): Initializes textarea
   static const String C_TEXTAREA = "slds-textarea";
-  /// slds-select - Initializes select | Required
+  /// slds-select (select): Initializes select
   static const String C_SELECT = "slds-select";
-  /// slds-checkbox - Initializes checkbox | Required
+  /// slds-checkbox (label): Initializes checkbox - Label wraps the faux checkbox and text, <input> requires [type=checkbox]
   static const String C_CHECKBOX = "slds-checkbox";
-  /// slds-checkbox--faux - Creates a custom styled checkbox | Required
+  /// slds-checkbox--faux (span): Creates a custom styled checkbox - Apply to <span> inside .slds-checkbox
   static const String C_CHECKBOX__FAUX = "slds-checkbox--faux";
-  /// slds-radio - Initializes radio button | Required
+  /// slds-radio (label): Initializes radio button - Label wraps the faux radio and text, <input> requires [type=radio]
   static const String C_RADIO = "slds-radio";
-  /// slds-radio--faux - Creates a custom styled radio button | Required
+  /// slds-radio--faux (span): Creates a custom styled radio button - Apply to <span> inside .slds-radio
   static const String C_RADIO__FAUX = "slds-radio--faux";
-  /// slds-form--horizontal - Horizontally aligns a single form label and control on the same line
+  /// slds-form--horizontal (form): Horizontally aligns a single form label and control on the same line
   static const String C_FORM__HORIZONTAL = "slds-form--horizontal";
-  /// slds-form--stacked - Vertically aligns form label and control, provides spacing between form elements
+  /// slds-form--stacked (form): Vertically aligns form label and control, provides spacing between form elements - This is the default
   static const String C_FORM__STACKED = "slds-form--stacked";
-  /// slds-form--inline - horizontally align multiple form elements on the same axis
+  /// slds-form--inline (form): horizontally align multiple form elements on the same axis
   static const String C_FORM__INLINE = "slds-form--inline";
-  /// slds-form--compound - Creates a form that consists of multiple form groups
+  /// slds-form--compound (form): Creates a form that consists of multiple form groups - Groups are placed in fieldsets and small labels are used for inputs
   static const String C_FORM__COMPOUND = "slds-form--compound";
-  /// slds-form-element__row - Use to create rows of form elements in a compound form
+  /// slds-form-element__row (div): Use to create rows of form elements in a compound form - Wrap form elements in this class
   static const String C_FORM_ELEMENT__ROW = "slds-form-element__row";
-  /// slds-form--compound--horizontal - Layout modifier for compound forms
+  /// slds-form--compound--horizontal (slds-form--compound): Layout modifier for compound forms - Positions form labels to the left of the form control
   static const String C_FORM__COMPOUND__HORIZONTAL = "slds-form--compound--horizontal";
+
+  /// select container
+  static const String C_SELECT_CONTAINER = "slds-select_container";
 
   /// top label (top 0)
   static const String C_FORM_ELEMENT__LABEL__TOP = "slds-form-element__label--top";

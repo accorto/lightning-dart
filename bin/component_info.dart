@@ -68,6 +68,7 @@ void processLine3(String line) {
   print("  static const String C_${variable} = \"${cssClass}\";");
 }
 
+
 void processMap(String line) {
   if (line.contains('":')) {
     String varName = line;
@@ -83,3 +84,4 @@ void processMap(String line) {
 
   }
 }
+

@@ -3,8 +3,9 @@
 Version numbers are based on the Salesforce Lightning Design System (SLDS) css Framework version numbers. 
 Intermediate Patches, Functionality improvements via +x prefix.
 
-## Trunk
+## 0.12.1
 
+- #33 upgrade to SLDS 0.12.1
 - #29 (Sales) Path 
 - #31 Default Editor based on Platform
 - #30 Messages-Settings-Environment Tab

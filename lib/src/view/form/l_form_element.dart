@@ -56,12 +56,13 @@ class LFormElement {
     element.append(_elementControl);
 
     // input
-    if (_input is InputElement)
+    if (_input is InputElement) {
       _input.classes.add(LForm.C_INPUT);
-    else if (_input is TextAreaElement)
+    } else if (_input is TextAreaElement) {
       _input.classes.add(LForm.C_TEXTAREA);
-    else if (_input is SelectElement)
+    } else if (_input is SelectElement) {
       _input.classes.add(LForm.C_SELECT);
+    }
 
     _inputWrapper = null;
     // right side (clear or icon)
@@ -106,6 +107,7 @@ class LFormElement {
     createStandardLeftElement();
   } // createStandard
 
+  /// create standard element
   void createStandardLeftElement() {
     Element left = getLeftElement();
     if (left != null) {
@@ -117,9 +119,17 @@ class LFormElement {
       _inputWrapper.classes.add(LForm.C_INPUT_HAS_PREFIX__LEFT);
       _inputWrapper.append(left);
     }
-    if (_inputWrapper == null)
+    if (_inputWrapper == null) {
       _inputWrapper = _elementControl;
-    _inputWrapper.append(_input);
+    }
+    if (_input is SelectElement) { // add select wrapper
+      DivElement wrapper = new DivElement()
+        ..classes.add(LForm.C_SELECT_CONTAINER)
+        ..append(_input);
+      _inputWrapper.append(wrapper);
+    } else {
+      _inputWrapper.append(_input);
+    }
     _elementControl.append(_hintSpan); // __help
   }
 

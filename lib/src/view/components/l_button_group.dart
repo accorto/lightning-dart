@@ -39,7 +39,7 @@ class LButtonGroup extends LComponent {
   LButtonGroup({bool this.inverse: false}) {
     _more.classes.add(inverse ? LButton.C_BUTTON__ICON_BORDER : LButton.C_BUTTON__ICON_BORDER_FILLED);
     if (inverse) {
-      _more.icon.classes.add(LButton.C_BUTTON__ICON__INVERSE);
+      _more.icon.classes.add(LButton.C_BUTTON__ICON_INVERSE);
     }
     _more.onClick.listen((MouseEvent evt) {
       _more.element.classes.toggle(LVisibility.C_ACTIVE);

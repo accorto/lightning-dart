@@ -10,11 +10,11 @@ part of lightning_dart;
 /// Floats
 class LFloat {
 
-  /// slds-float--left - Pulls element from document flow and floats left
+  /// slds-float--left: Pulls element from document flow and floats left. Text and other elements wrap around it.
   static const String C_FLOAT__LEFT = "slds-float--left";
-  /// slds-float--right - Pulls element from document flow and floats right
+  /// slds-float--right: Pulls element from document flow and floats right. Text and other elements wrap around it.
   static const String C_FLOAT__RIGHT = "slds-float--right";
-  /// slds-clearfix - Contains floats
+  /// slds-clearfix: Contains floats and stops wrapping of elements following it. - Applies to parent of floats
   static const String C_CLEARFIX = "slds-clearfix";
 
 } // LFloat
@@ -212,16 +212,14 @@ class LPadding {
 } // LPadding
 
 
-
+/**
+ * Truncation
+ */
 class LTruncate {
 
-  /// slds-truncate - Creates truncated text
+  /// slds-truncate (any element): Creates truncated text - Truncation will occur at the parent width if a width is not specified
   static const String C_TRUNCATE = "slds-truncate";
-  /// slds-has-flexi-truncate - Allows truncation in nested flexbox containers
+  /// slds-has-flexi-truncate (.slds-col--padded): Allows truncation in nested flexbox containers - This class is placed on a parent element that contains a flexbox element containing .slds-truncate. For example — for a media object that is nested in a grid column and contains truncation — the grid column would require this class.
   static const String C_HAS_FLEXI_TRUNCATE = "slds-has-flexi-truncate";
-
-
-  static const String C_COL = "slds-col";
-  static const String C_COL__PADDED = "slds-col--padded";
 
 }

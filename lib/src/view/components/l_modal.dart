@@ -158,7 +158,7 @@ class LModal extends LComponent {
     LButton buttonClose = new LButton(new ButtonElement(), "close", null, idPrefix: id,
         buttonClasses: [C_MODAL__CLOSE],
         icon: new LIconAction("close", className: LButton.C_BUTTON__ICON,
-          colorOverride: LButton.C_BUTTON__ICON__INVERSE, size: LButton.C_BUTTON__ICON__LARGE),
+          colorOverride: LButton.C_BUTTON__ICON_INVERSE, size: LButton.C_BUTTON__ICON__LARGE),
         assistiveText: lModalClose());
     buttonClose.onClick.listen(onClickHideAndRemove);
     header.append(buttonClose.element);

@@ -11,9 +11,9 @@ part of lightning_dart;
  */
 class LScrollable extends LComponent {
 
-  /// slds-scrollable--x - Forces element to scroll horizontally when content exceeds elements width | Required
+  /// slds-scrollable--x (surrounding div): Forces element to scroll horizontally when content exceeds elements width
   static const String C_SCROLLABLE__X = "slds-scrollable--x";
-  /// slds-scrollable--y - Forces element to scroll vertically when content exceeds elements height | Required
+  /// slds-scrollable--y (surrounding div): Forces element to scroll vertically when content exceeds elements height
   static const String C_SCROLLABLE__Y = "slds-scrollable--y";
 
   /// Scollable
