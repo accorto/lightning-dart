@@ -601,10 +601,12 @@ class LButtonStateful
     addState(selectedFocusState);
 
     element.onClick.listen((MouseEvent evt) {
-      bool newState = toggle();
-      _log.fine("${name} selected=${newState}");
-      if (onButtonClick != null)
-        onButtonClick(evt);
+      if (!disabled) {
+        bool newState = toggle();
+        _log.fine("${name} selected=${newState}");
+        if (onButtonClick != null)
+          onButtonClick(evt);
+      }
     });
   } // LButtonStateful
 
@@ -640,18 +642,18 @@ class LButtonStateful
           selectedFocus, LText.C_TEXT_SELECTED_FOCUS),
       idPrefix:idPrefix, onButtonClick:onButtonClick);
 
-  /// Edit/ReadOnly Toggle Button
-  LButtonStateful.edit(String name, {
-      String notSelected:"Readonly",
-      String selected:"Edit",
-      String selectedFocus:"Protect",
+  /// Edit/View Toggle Button
+  LButtonStateful.view(String name, {
+      String notSelected:"Edit",
+      String selected:"View",
+      String selectedFocus:"Read/Write",
       String idPrefix, void onButtonClick(MouseEvent evt)})
     : this (name,
-      new LButtonStatefulState(new LIconUtility(LIconUtility.LOCK),
-          notSelected, LText.C_TEXT_NOT_SELECTED),
       new LButtonStatefulState(new LIconUtility(LIconUtility.EDIT),
+          notSelected, LText.C_TEXT_NOT_SELECTED),
+      new LButtonStatefulState(new LIconUtility(LIconUtility.LOCK),
           selected, LText.C_TEXT_SELECTED),
-      new LButtonStatefulState(new LIconUtility(LIconUtility.CLOSE),
+      new LButtonStatefulState(new LIconUtility(LIconUtility.UNLOCK),
           selectedFocus, LText.C_TEXT_SELECTED_FOCUS),
       idPrefix:idPrefix, onButtonClick:onButtonClick);
 
@@ -721,10 +723,12 @@ class LButtonStatefulIcon
         idPrefix:idPrefix, icon:icon, assistiveText:assistiveText) {
 
     element.onClick.listen((MouseEvent evt){
-      bool newState = toggle();
-      _log.fine("${name} selected=${newState}");
-      if (onButtonClick != null)
-        onButtonClick(evt);
+      if (!disabled) {
+        bool newState = toggle();
+        _log.fine("${name} selected=${newState}");
+        if (onButtonClick != null)
+          onButtonClick(evt);
+      }
     });
     selected = false;
   } // LButtonStatefulIcon
