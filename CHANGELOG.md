@@ -3,7 +3,12 @@
 Version numbers are based on the Salesforce Lightning Design System (SLDS) css Framework version numbers. 
 Intermediate Patches, Functionality improvements via +x prefix.
 
-## 0.12.1
+## head
+
+- AppsAction disabled support
+
+
+## 0.12.1 (2015-12-21)
 
 - #33 upgrade to SLDS 0.12.1
 - #29 (Sales) Path 

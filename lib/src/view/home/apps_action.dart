@@ -116,40 +116,60 @@ class AppsAction {
   String get value => option.value;
   String get label => option.label;
 
+  /// disabled
+  bool get disabled => _disabled;
+  /// set disabled
+  void set disabled (bool newValue) {
+    _disabled = newValue;
+    if (_btn != null) {
+      _btn.disabled = _disabled;
+    }
+    if (_item != null) {
+      _item.disabled = _disabled;
+    }
+  }
+  bool _disabled = false;
 
   /// as Button - [createClick] to call [callback]
   LButton asButton(bool createOnClick, {DataRecord data, List<String> buttonClasses, String idPrefix}) {
-    LButton btn = new LButton(new ButtonElement(), value, label, icon:icon, idPrefix:idPrefix);
+    _btn = new LButton(new ButtonElement(), value, label, icon:icon, idPrefix:idPrefix);
     if (buttonClasses != null) {
-      btn.classes.addAll(buttonClasses);
+      _btn.classes.addAll(buttonClasses);
     }
+    _btn.disabled = _disabled;
     if (createOnClick && callback != null) {
-      btn.onClick.listen((MouseEvent evt){
-        if (data != null)
-          callback(value, data.record, null, actionVar);
-        else
-          callback(value, null, null, actionVar);
+      _btn.onClick.listen((MouseEvent evt){
+        if (!disabled) {
+          if (data != null)
+            callback(value, data.record, null, actionVar);
+          else
+            callback(value, null, null, actionVar);
+        }
       });
     }
-    return btn;
-  }
+    return _btn;
+  } // asButton
+  LButton _btn;
 
   /// as Dropdown Item
   LDropdownItem asDropdown(bool createOnClick) {
     LIcon theIcon = null;
     if (icon != null)
       theIcon = icon.copy();
-    LDropdownItem item = new LDropdownItem(option, rightIcon:theIcon);
+    _item = new LDropdownItem(option, rightIcon:theIcon);
+    _item.disabled = _disabled;
     if (createOnClick && callback != null) {
-      item.onClick.listen((MouseEvent evt){
-        callback(value, null, null, actionVar);
+      _item.onClick.listen((MouseEvent evt){
         evt.stopImmediatePropagation();
         evt.preventDefault();
+        if (!disabled) {
+          callback(value, null, null, actionVar);
+        }
       });
     }
-    return item;
-  }
-
+    return _item;
+  } // adDropdown
+  LDropdownItem _item;
 
 
   static String appsAction() => Intl.message("Action", name: "appsAction");
