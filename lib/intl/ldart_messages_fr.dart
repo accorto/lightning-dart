@@ -14,415 +14,154 @@ final messages = new MessageLookup();
 class MessageLookup extends MessageLookupByLibrary {
 
   get localeName => 'fr';
-  static appsAction() => "action";
-
-  static appsActionDelete() => "Effacer";
-
-  static appsActionDeleteSelected() => "Supprimer sélectionnée";
-
-  static appsActionDown() => "Vers le bas";
-
-  static appsActionEdit() => "modifier";
-
-  static appsActionLayout() => "Disposition";
-
-  static appsActionNew() => "Neuf";
-
-  static appsActionNo() => "Non";
-
-  static appsActionSave() => "sauvegarder";
-
-  static appsActionUp() => "En haut";
-
-  static appsActionYes() => "Oui";
-
-  static appsActions() => "Actes";
-
-  static appsLogoutLabel() => "Se déconnecter";
-
-  static appsMainHidePrevent() => "Vous ne pouvez pas masquer";
-
-  static appsMainShowPrevent() => "Ne peut pas montrer";
-
-  static editorValidateRequired() => "S&#39;il vous plaît fournir une valeur";
-
-  static editorValidateTooLong() => "Valeur trop longtemps";
-
-  static filterOpBetween() => "compris entre";
-
-  static filterOpDateDay() => "jour";
-
-  static filterOpDateLast() => "dernier";
-
-  static filterOpDateMonth() => "mois";
-
-  static filterOpDateNext() => "Suivant";
-
-  static filterOpDateQuarter() => "trimestre";
-
-  static filterOpDateThis() => "ce";
-
-  static filterOpDateWeek() => "semaine";
-
-  static filterOpDateYear() => "an";
-
-  static filterOpEquals() => "égal";
-
-  static filterOpGreater() => "plus grand";
-
-  static filterOpGreaterEquals() => "plus ou égaux";
-
-  static filterOpIn() => "dans";
-
-  static filterOpLess() => "Moins";
-
-  static filterOpLessEquals() => "moins ou égaux";
-
-  static filterOpLike() => "aimer";
-
-  static filterOpNotEquals() => "pas égaux";
-
-  static filterOpNotIn() => "pas dedans";
-
-  static filterOpNotLike() => "pas comme";
-
-  static filterOpNotNull() => "NOT NULL";
-
-  static filterOpNull() => "nul";
-
-  static fkDialogFind() => "Trouver dans les dossiers -ou- Recherche avec le nom (entrée)";
-
-  static fkDialogTitle() => "Recherche";
-
-  static lBreadcrumbText() => "Tu es là";
-
-  static lButtonGroupMore() => "Plus";
-
-  static lDatePickerDropdownNext() => "Aller au mois prochain";
-
-  static lDatePickerDropdownPrev() => "Aller au mois précédent";
-
-  static lFormError() => "Formulaire erreur";
-
-  static lFormReset() => "Réinitialiser";
-
-  static lFormSave() => "sauvegarder";
-
-  static lInputDateInvalidInputDate() => "Entrée non valide pour la date";
-
-  static lInputDateInvalidInputDateTime() => "Entrée non valide pour le temps de la date";
-
-  static lInputDateInvalidInputTime() => "Entrée non valide pour le temps";
-
-  static lInputDateInvalidValue() => "valeur invalide";
-
-  static lInputDurationHint() => "sans indicateur entrer les heures avec décimale ou du côlon (1,5 = 1:30); par exemple: 5d1h20m ou 5d 1h 10";
-
-  static lInputDurationHourHint() => "heures avec décimale ou du côlon (1,5 = 1:30)";
-
-  static lInputDurationInvalidInput() => "Entrée non valide pour la durée";
-
-  static lInputDurationInvalidValue() => "valeur invalide";
-
-  static lLookupInvalidInput() => "Option non valide";
-
-  static lLookupInvalidValue() => "valeur invalide";
-
-  static lLookupLabel() => "Chercher";
-
-  static lLookupNoMatch() => "Aucune des options de ciblage trouvés";
-
-  static lModalCancel() => "Annuler";
-
-  static lModalClose() => "Fermer";
-
-  static lModalSave() => "sauvegarder";
-
-  static lNotificationAlert() => "Alerte (Info)";
-
-  static lNotificationClose() => "Fermer";
-
-  static lNotificationError() => "Erreur";
-
-  static lNotificationSuccess() => "Succès";
-
-  static lNotificationWarning() => "Attention";
-
-  static lObjectHomeFilter() => "Filtre";
-
-  static lObjectHomeFilterAll() => "Tous les dossiers";
-
-  static lObjectHomeFilterRecent() => "Récemment Vu";
-
-  static lObjectHomeFind() => "Retrouvez dans Voir";
-
-  static lObjectHomeLayoutCards() => "Cartes";
-
-  static lObjectHomeLayoutCompact() => "Liste Compact";
-
-  static lObjectHomeLayoutDisplay() => "Afficher comme";
-
-  static lObjectHomeLayoutTable() => "Table";
-
-  static lObjectHomeLookupFindInList() => "Retrouvez dans Liste de filtres";
-
-  static lObjectHomeLookupList() => "Liste de filtres";
-
-  static lObjectHomeLookupMore() => "Plus";
-
-  static lObjectHomeSave() => "sauvegarder";
-
-  static lObjectHomeSort() => "Trier";
-
-  static lPicklistMultiAdd() => "Ajouter";
-
-  static lPicklistMultiAvailable() => "Disponible";
-
-  static lPicklistMultiDown() => "Vers le bas";
-
-  static lPicklistMultiRemove() => "Retirer";
-
-  static lPicklistMultiSelected() => "Choisi";
-
-  static lPicklistMultiUp() => "En haut";
-
-  static lPicklistSelectOption() => "Choisir une option";
-
-  static lPillRemove() => "Retirer";
-
-  static lRecordCtrlDetails() => "Détails";
-
-  static lRecordCtrlRelated() => "en relation";
-
-  static lSpinnerWorking() => "travail";
-
-  static lTableColumnSortAsc() => "Trier par ordre croissant";
-
-  static lTableColumnSortDec() => "Trier decending";
-
-  static lTableRowSelectAll() => "Sélectionner tout";
-
-  static lTableRowSelectRow() => "Sélectionner la ligne";
-
-  static objectCtrl1Record() => "Un enregistrement";
-
-  static objectCtrlBackList() => "Retour à la liste";
-
-  static objectCtrlFilterDelete() => "Supprimer le filtre?";
-
-  static objectCtrlFilterDeleteText() => "Voulez-vous supprimer le filtre actuel?";
-
-  static objectCtrlFilterNew() => "Créer un nouveau filtre?";
-
-  static objectCtrlFilterNewText() => "Le déposant actuelle ne peut pas être changé. Vous WNAT pour créer un nouveau filtre?";
-
-  static objectCtrlNoRecordInfo() => "Aucun enregistrement à afficher - changer Trier ou créer de nouveaux";
-
-  static objectCtrlNoRecords() => "Aucun enregistrement";
-
-  static objectCtrlRecords() => "dossiers";
-
-  static objectCtrlSortedBy() => "Trié par";
-
-  static objectEditEdit() => "modifier";
-
-  static objectEditError() => "Erreur de communication";
-
-  static objectEditNew() => "Neuf";
-
-  static objectFilter() => "Filtre";
-
-  static objectFilterColumnName() => "Nom de la colonne";
-
-  static objectFilterDescription() => "Description";
-
-  static objectFilterFilter() => "Filtre";
-
-  static objectFilterName() => "Nom";
-
-  static objectFilterOperation() => "Opération";
-
-  static objectFilterSort() => "Trier";
-
-  static objectFilterSortAsc() => "Ascendant";
-
-  static objectFilterSortColumnName() => "Nom de la colonne";
-
-  static objectFilterSortGrp() => "Par groupe";
-
-  static objectFilterValue() => "Valeur";
-
-  static objectFilterValueIn() => "Dans";
-
-  static objectFilterValueTo() => "À";
-
-  static optionUtilNo() => "Non";
-
-  static optionUtilYes() => "Oui";
-
-  static preferenceGlobalSave() => "Enregistrer les préférences que Global";
-
-  static preferenceNothingToSave() => "Rien à sauver";
-
-  static preferenceSaved() => "Préférences enregistrés en tant que Global Preferences";
-
-  static serviceComErrorButton() => "Recharger la page";
-
-  static serviceComErrorMsg() => "Désolé à ce sujet - s&#39;il vous plaît réessayer plus tard.";
-
-  static serviceComErrorTitle() => "Erreur de communication";
-
-  static tableCtrlDelete1Record() => "Supprimer enregistrement en cours";
-
-  static tableCtrlDelete1RecordText() => "Voulez-vous supprimer l&#39;enregistrement en cours?";
-
-  static tableCtrlDeleteRecords() => "Supprimer les enregistrements sélectionnés?";
-
-  static tableCtrlDeleteRecordsText() => "Voulez-vous supprimer les enregistrements sélectionnés?";
-
   static tableCtrlRecords(count) => "{count, pluriel, = 0 {} = aucun enregistrement 1 {${count}} autres records {${count}}} dossiers";
 
-  static tableLayout() => "Tableau Disposition";
-
-  static tableLayoutColumns() => "Colonnes";
-
-
-  final messages = const {
-    "appsAction" : appsAction,
-    "appsActionDelete" : appsActionDelete,
-    "appsActionDeleteSelected" : appsActionDeleteSelected,
-    "appsActionDown" : appsActionDown,
-    "appsActionEdit" : appsActionEdit,
-    "appsActionLayout" : appsActionLayout,
-    "appsActionNew" : appsActionNew,
-    "appsActionNo" : appsActionNo,
-    "appsActionSave" : appsActionSave,
-    "appsActionUp" : appsActionUp,
-    "appsActionYes" : appsActionYes,
-    "appsActions" : appsActions,
-    "appsLogoutLabel" : appsLogoutLabel,
-    "appsMainHidePrevent" : appsMainHidePrevent,
-    "appsMainShowPrevent" : appsMainShowPrevent,
-    "editorValidateRequired" : editorValidateRequired,
-    "editorValidateTooLong" : editorValidateTooLong,
-    "filterOpBetween" : filterOpBetween,
-    "filterOpDateDay" : filterOpDateDay,
-    "filterOpDateLast" : filterOpDateLast,
-    "filterOpDateMonth" : filterOpDateMonth,
-    "filterOpDateNext" : filterOpDateNext,
-    "filterOpDateQuarter" : filterOpDateQuarter,
-    "filterOpDateThis" : filterOpDateThis,
-    "filterOpDateWeek" : filterOpDateWeek,
-    "filterOpDateYear" : filterOpDateYear,
-    "filterOpEquals" : filterOpEquals,
-    "filterOpGreater" : filterOpGreater,
-    "filterOpGreaterEquals" : filterOpGreaterEquals,
-    "filterOpIn" : filterOpIn,
-    "filterOpLess" : filterOpLess,
-    "filterOpLessEquals" : filterOpLessEquals,
-    "filterOpLike" : filterOpLike,
-    "filterOpNotEquals" : filterOpNotEquals,
-    "filterOpNotIn" : filterOpNotIn,
-    "filterOpNotLike" : filterOpNotLike,
-    "filterOpNotNull" : filterOpNotNull,
-    "filterOpNull" : filterOpNull,
-    "fkDialogFind" : fkDialogFind,
-    "fkDialogTitle" : fkDialogTitle,
-    "lBreadcrumbText" : lBreadcrumbText,
-    "lButtonGroupMore" : lButtonGroupMore,
-    "lDatePickerDropdownNext" : lDatePickerDropdownNext,
-    "lDatePickerDropdownPrev" : lDatePickerDropdownPrev,
-    "lFormError" : lFormError,
-    "lFormReset" : lFormReset,
-    "lFormSave" : lFormSave,
-    "lInputDateInvalidInputDate" : lInputDateInvalidInputDate,
-    "lInputDateInvalidInputDateTime" : lInputDateInvalidInputDateTime,
-    "lInputDateInvalidInputTime" : lInputDateInvalidInputTime,
-    "lInputDateInvalidValue" : lInputDateInvalidValue,
-    "lInputDurationHint" : lInputDurationHint,
-    "lInputDurationHourHint" : lInputDurationHourHint,
-    "lInputDurationInvalidInput" : lInputDurationInvalidInput,
-    "lInputDurationInvalidValue" : lInputDurationInvalidValue,
-    "lLookupInvalidInput" : lLookupInvalidInput,
-    "lLookupInvalidValue" : lLookupInvalidValue,
-    "lLookupLabel" : lLookupLabel,
-    "lLookupNoMatch" : lLookupNoMatch,
-    "lModalCancel" : lModalCancel,
-    "lModalClose" : lModalClose,
-    "lModalSave" : lModalSave,
-    "lNotificationAlert" : lNotificationAlert,
-    "lNotificationClose" : lNotificationClose,
-    "lNotificationError" : lNotificationError,
-    "lNotificationSuccess" : lNotificationSuccess,
-    "lNotificationWarning" : lNotificationWarning,
-    "lObjectHomeFilter" : lObjectHomeFilter,
-    "lObjectHomeFilterAll" : lObjectHomeFilterAll,
-    "lObjectHomeFilterRecent" : lObjectHomeFilterRecent,
-    "lObjectHomeFind" : lObjectHomeFind,
-    "lObjectHomeLayoutCards" : lObjectHomeLayoutCards,
-    "lObjectHomeLayoutCompact" : lObjectHomeLayoutCompact,
-    "lObjectHomeLayoutDisplay" : lObjectHomeLayoutDisplay,
-    "lObjectHomeLayoutTable" : lObjectHomeLayoutTable,
-    "lObjectHomeLookupFindInList" : lObjectHomeLookupFindInList,
-    "lObjectHomeLookupList" : lObjectHomeLookupList,
-    "lObjectHomeLookupMore" : lObjectHomeLookupMore,
-    "lObjectHomeSave" : lObjectHomeSave,
-    "lObjectHomeSort" : lObjectHomeSort,
-    "lPicklistMultiAdd" : lPicklistMultiAdd,
-    "lPicklistMultiAvailable" : lPicklistMultiAvailable,
-    "lPicklistMultiDown" : lPicklistMultiDown,
-    "lPicklistMultiRemove" : lPicklistMultiRemove,
-    "lPicklistMultiSelected" : lPicklistMultiSelected,
-    "lPicklistMultiUp" : lPicklistMultiUp,
-    "lPicklistSelectOption" : lPicklistSelectOption,
-    "lPillRemove" : lPillRemove,
-    "lRecordCtrlDetails" : lRecordCtrlDetails,
-    "lRecordCtrlRelated" : lRecordCtrlRelated,
-    "lSpinnerWorking" : lSpinnerWorking,
-    "lTableColumnSortAsc" : lTableColumnSortAsc,
-    "lTableColumnSortDec" : lTableColumnSortDec,
-    "lTableRowSelectAll" : lTableRowSelectAll,
-    "lTableRowSelectRow" : lTableRowSelectRow,
-    "objectCtrl1Record" : objectCtrl1Record,
-    "objectCtrlBackList" : objectCtrlBackList,
-    "objectCtrlFilterDelete" : objectCtrlFilterDelete,
-    "objectCtrlFilterDeleteText" : objectCtrlFilterDeleteText,
-    "objectCtrlFilterNew" : objectCtrlFilterNew,
-    "objectCtrlFilterNewText" : objectCtrlFilterNewText,
-    "objectCtrlNoRecordInfo" : objectCtrlNoRecordInfo,
-    "objectCtrlNoRecords" : objectCtrlNoRecords,
-    "objectCtrlRecords" : objectCtrlRecords,
-    "objectCtrlSortedBy" : objectCtrlSortedBy,
-    "objectEditEdit" : objectEditEdit,
-    "objectEditError" : objectEditError,
-    "objectEditNew" : objectEditNew,
-    "objectFilter" : objectFilter,
-    "objectFilterColumnName" : objectFilterColumnName,
-    "objectFilterDescription" : objectFilterDescription,
-    "objectFilterFilter" : objectFilterFilter,
-    "objectFilterName" : objectFilterName,
-    "objectFilterOperation" : objectFilterOperation,
-    "objectFilterSort" : objectFilterSort,
-    "objectFilterSortAsc" : objectFilterSortAsc,
-    "objectFilterSortColumnName" : objectFilterSortColumnName,
-    "objectFilterSortGrp" : objectFilterSortGrp,
-    "objectFilterValue" : objectFilterValue,
-    "objectFilterValueIn" : objectFilterValueIn,
-    "objectFilterValueTo" : objectFilterValueTo,
-    "optionUtilNo" : optionUtilNo,
-    "optionUtilYes" : optionUtilYes,
-    "preferenceGlobalSave" : preferenceGlobalSave,
-    "preferenceNothingToSave" : preferenceNothingToSave,
-    "preferenceSaved" : preferenceSaved,
-    "serviceComErrorButton" : serviceComErrorButton,
-    "serviceComErrorMsg" : serviceComErrorMsg,
-    "serviceComErrorTitle" : serviceComErrorTitle,
-    "tableCtrlDelete1Record" : tableCtrlDelete1Record,
-    "tableCtrlDelete1RecordText" : tableCtrlDelete1RecordText,
-    "tableCtrlDeleteRecords" : tableCtrlDeleteRecords,
-    "tableCtrlDeleteRecordsText" : tableCtrlDeleteRecordsText,
+  final messages = _notInlinedMessages(_notInlinedMessages);
+  static _notInlinedMessages(_) => {
+    "appsAction" : MessageLookupByLibrary.simpleMessage("action"),
+    "appsActionDelete" : MessageLookupByLibrary.simpleMessage("Effacer"),
+    "appsActionDeleteSelected" : MessageLookupByLibrary.simpleMessage("Supprimer la sélection"),
+    "appsActionDown" : MessageLookupByLibrary.simpleMessage("En bas"),
+    "appsActionEdit" : MessageLookupByLibrary.simpleMessage("modifier"),
+    "appsActionLayout" : MessageLookupByLibrary.simpleMessage("Disposition"),
+    "appsActionNew" : MessageLookupByLibrary.simpleMessage("Nouveau"),
+    "appsActionNo" : MessageLookupByLibrary.simpleMessage("Non"),
+    "appsActionReset" : MessageLookupByLibrary.simpleMessage("Réinitialiser"),
+    "appsActionSave" : MessageLookupByLibrary.simpleMessage("Conserver"),
+    "appsActionUp" : MessageLookupByLibrary.simpleMessage("En haut"),
+    "appsActionYes" : MessageLookupByLibrary.simpleMessage("Oui"),
+    "appsActions" : MessageLookupByLibrary.simpleMessage("actes"),
+    "appsLogoutLabel" : MessageLookupByLibrary.simpleMessage("Se déconnecter"),
+    "appsMainHidePrevent" : MessageLookupByLibrary.simpleMessage("Vous ne pouvez pas masquer"),
+    "appsMainShowPrevent" : MessageLookupByLibrary.simpleMessage("Ne peut pas montrer"),
+    "appsSettingsLabel" : MessageLookupByLibrary.simpleMessage("Paramètres"),
+    "appsSettingsTabLabel" : MessageLookupByLibrary.simpleMessage("Paramètres"),
+    "appsStatusEnvironmentGeo" : MessageLookupByLibrary.simpleMessage("Mise à jour Geo Infos"),
+    "appsStatusEnvironmentLabel" : MessageLookupByLibrary.simpleMessage("Environnement"),
+    "appsStatusMessagesClear" : MessageLookupByLibrary.simpleMessage("Effacer les messages"),
+    "appsStatusMessagesLabel" : MessageLookupByLibrary.simpleMessage("messages"),
+    "appsStatusMessagesNone" : MessageLookupByLibrary.simpleMessage("Pas de Messages"),
+    "editorValidateRequired" : MessageLookupByLibrary.simpleMessage("S&#39;il vous plaît fournir une valeur"),
+    "editorValidateTooLong" : MessageLookupByLibrary.simpleMessage("Valeur trop longtemps"),
+    "filterOpBetween" : MessageLookupByLibrary.simpleMessage("compris entre"),
+    "filterOpDateDay" : MessageLookupByLibrary.simpleMessage("jour"),
+    "filterOpDateLast" : MessageLookupByLibrary.simpleMessage("dernière"),
+    "filterOpDateMonth" : MessageLookupByLibrary.simpleMessage("mois"),
+    "filterOpDateNext" : MessageLookupByLibrary.simpleMessage("prochaine"),
+    "filterOpDateQuarter" : MessageLookupByLibrary.simpleMessage("trimestre"),
+    "filterOpDateThis" : MessageLookupByLibrary.simpleMessage("ce"),
+    "filterOpDateWeek" : MessageLookupByLibrary.simpleMessage("semaine"),
+    "filterOpDateYear" : MessageLookupByLibrary.simpleMessage("an"),
+    "filterOpEquals" : MessageLookupByLibrary.simpleMessage("égal"),
+    "filterOpGreater" : MessageLookupByLibrary.simpleMessage("plus grand"),
+    "filterOpGreaterEquals" : MessageLookupByLibrary.simpleMessage("plus ou égaux"),
+    "filterOpIn" : MessageLookupByLibrary.simpleMessage("dans"),
+    "filterOpLess" : MessageLookupByLibrary.simpleMessage("Moins"),
+    "filterOpLessEquals" : MessageLookupByLibrary.simpleMessage("moins ou égaux"),
+    "filterOpLike" : MessageLookupByLibrary.simpleMessage("aimer"),
+    "filterOpNotEquals" : MessageLookupByLibrary.simpleMessage("pas égaux"),
+    "filterOpNotIn" : MessageLookupByLibrary.simpleMessage("pas dedans"),
+    "filterOpNotLike" : MessageLookupByLibrary.simpleMessage("pas comme"),
+    "filterOpNotNull" : MessageLookupByLibrary.simpleMessage("NOT NULL"),
+    "filterOpNull" : MessageLookupByLibrary.simpleMessage("nul"),
+    "fkDialogFind" : MessageLookupByLibrary.simpleMessage("Trouver dans les dossiers -ou- Recherche avec le nom (entrée)"),
+    "fkDialogTitle" : MessageLookupByLibrary.simpleMessage("Recherche"),
+    "lBreadcrumbText" : MessageLookupByLibrary.simpleMessage("Tu es là"),
+    "lButtonGroupMore" : MessageLookupByLibrary.simpleMessage("Plus"),
+    "lDatePickerDropdownNext" : MessageLookupByLibrary.simpleMessage("Aller au mois prochain"),
+    "lDatePickerDropdownPrev" : MessageLookupByLibrary.simpleMessage("Aller au mois précédent"),
+    "lFormError" : MessageLookupByLibrary.simpleMessage("Formulaire erreur"),
+    "lFormReset" : MessageLookupByLibrary.simpleMessage("Réinitialiser"),
+    "lFormSave" : MessageLookupByLibrary.simpleMessage("Conserver"),
+    "lInputDateInvalidInputDate" : MessageLookupByLibrary.simpleMessage("Entrée non valide pour la date"),
+    "lInputDateInvalidInputDateTime" : MessageLookupByLibrary.simpleMessage("Entrée non valide pour le temps de la date"),
+    "lInputDateInvalidInputTime" : MessageLookupByLibrary.simpleMessage("Entrée non valide pour le temps"),
+    "lInputDateInvalidValue" : MessageLookupByLibrary.simpleMessage("valeur invalide"),
+    "lInputDurationHint" : MessageLookupByLibrary.simpleMessage("heures avec décimale ou du côlon (1,5 = 1h30) -ou- avec indicateur (5d1h20m ou 1h 5d 10) minutes -ou- (&gt; = 15)"),
+    "lInputDurationHourHint" : MessageLookupByLibrary.simpleMessage("navigateur: heures avec décimale ou du côlon (1,5 = 1:30 minutes) ou (&gt; = 15)"),
+    "lInputDurationInvalidInput" : MessageLookupByLibrary.simpleMessage("Entrée non valide pour la durée"),
+    "lInputDurationInvalidValue" : MessageLookupByLibrary.simpleMessage("valeur invalide"),
+    "lInputDurationNumberHint" : MessageLookupByLibrary.simpleMessage("mobiles: heures avec décimal (1,5) ou les minutes (&gt; = 15)"),
+    "lLookupInvalidInput" : MessageLookupByLibrary.simpleMessage("Option non valide"),
+    "lLookupInvalidValue" : MessageLookupByLibrary.simpleMessage("valeur invalide"),
+    "lLookupLabel" : MessageLookupByLibrary.simpleMessage("Chercher"),
+    "lLookupNoMatch" : MessageLookupByLibrary.simpleMessage("Aucune des options de ciblage trouvés"),
+    "lModalCancel" : MessageLookupByLibrary.simpleMessage("Annuler"),
+    "lModalClose" : MessageLookupByLibrary.simpleMessage("Près"),
+    "lModalSave" : MessageLookupByLibrary.simpleMessage("Conserver"),
+    "lNotificationAlert" : MessageLookupByLibrary.simpleMessage("Alerte (Info)"),
+    "lNotificationClose" : MessageLookupByLibrary.simpleMessage("Près"),
+    "lNotificationError" : MessageLookupByLibrary.simpleMessage("Erreur"),
+    "lNotificationSuccess" : MessageLookupByLibrary.simpleMessage("Succès"),
+    "lNotificationWarning" : MessageLookupByLibrary.simpleMessage("Attention"),
+    "lObjectHomeFilter" : MessageLookupByLibrary.simpleMessage("Filtre"),
+    "lObjectHomeFilterAll" : MessageLookupByLibrary.simpleMessage("Tous les dossiers"),
+    "lObjectHomeFilterRecent" : MessageLookupByLibrary.simpleMessage("Récemment Vu"),
+    "lObjectHomeFind" : MessageLookupByLibrary.simpleMessage("Retrouvez dans Voir"),
+    "lObjectHomeLayoutCards" : MessageLookupByLibrary.simpleMessage("Cartes"),
+    "lObjectHomeLayoutCompact" : MessageLookupByLibrary.simpleMessage("Liste Compact"),
+    "lObjectHomeLayoutDisplay" : MessageLookupByLibrary.simpleMessage("Afficher en tant que"),
+    "lObjectHomeLayoutTable" : MessageLookupByLibrary.simpleMessage("Table"),
+    "lObjectHomeLookupFindInList" : MessageLookupByLibrary.simpleMessage("Retrouvez dans Liste de filtres"),
+    "lObjectHomeLookupList" : MessageLookupByLibrary.simpleMessage("Liste de filtres"),
+    "lObjectHomeLookupMore" : MessageLookupByLibrary.simpleMessage("Plus"),
+    "lObjectHomeSave" : MessageLookupByLibrary.simpleMessage("Conserver"),
+    "lObjectHomeSort" : MessageLookupByLibrary.simpleMessage("Trier"),
+    "lPicklistMultiAdd" : MessageLookupByLibrary.simpleMessage("Ajouter"),
+    "lPicklistMultiAvailable" : MessageLookupByLibrary.simpleMessage("Disponible"),
+    "lPicklistMultiDown" : MessageLookupByLibrary.simpleMessage("En bas"),
+    "lPicklistMultiRemove" : MessageLookupByLibrary.simpleMessage("enlever"),
+    "lPicklistMultiSelected" : MessageLookupByLibrary.simpleMessage("Choisi"),
+    "lPicklistMultiUp" : MessageLookupByLibrary.simpleMessage("En haut"),
+    "lPicklistSelectOption" : MessageLookupByLibrary.simpleMessage("Choisi une option"),
+    "lPillRemove" : MessageLookupByLibrary.simpleMessage("enlever"),
+    "lRecordCtrlDetails" : MessageLookupByLibrary.simpleMessage("Détails"),
+    "lRecordCtrlRelated" : MessageLookupByLibrary.simpleMessage("en relation"),
+    "lSpinnerWorking" : MessageLookupByLibrary.simpleMessage("travailler"),
+    "lTableColumnSortAsc" : MessageLookupByLibrary.simpleMessage("Trier par ordre croissant"),
+    "lTableColumnSortDec" : MessageLookupByLibrary.simpleMessage("Trier decending"),
+    "lTableRowSelectAll" : MessageLookupByLibrary.simpleMessage("Sélectionner tout"),
+    "lTableRowSelectRow" : MessageLookupByLibrary.simpleMessage("Sélectionner la ligne"),
+    "objectCtrl1Record" : MessageLookupByLibrary.simpleMessage("Un enregistrement"),
+    "objectCtrlBackList" : MessageLookupByLibrary.simpleMessage("Retour à la liste"),
+    "objectCtrlFilterDelete" : MessageLookupByLibrary.simpleMessage("Supprimer le filtre?"),
+    "objectCtrlFilterDeleteText" : MessageLookupByLibrary.simpleMessage("Voulez-vous supprimer le filtre actuel?"),
+    "objectCtrlFilterNew" : MessageLookupByLibrary.simpleMessage("Créer un nouveau filtre?"),
+    "objectCtrlFilterNewText" : MessageLookupByLibrary.simpleMessage("Le déposant actuelle ne peut pas être changé. Vous WNAT pour créer un nouveau filtre?"),
+    "objectCtrlNoRecordInfo" : MessageLookupByLibrary.simpleMessage("Aucun enregistrement à afficher - changer Trier ou créer de nouveaux"),
+    "objectCtrlNoRecords" : MessageLookupByLibrary.simpleMessage("Aucun enregistrement"),
+    "objectCtrlRecords" : MessageLookupByLibrary.simpleMessage("Enregistrements"),
+    "objectCtrlSortedBy" : MessageLookupByLibrary.simpleMessage("Trié par"),
+    "objectEditEdit" : MessageLookupByLibrary.simpleMessage("modifier"),
+    "objectEditError" : MessageLookupByLibrary.simpleMessage("Erreur de communication"),
+    "objectEditNew" : MessageLookupByLibrary.simpleMessage("Nouveau"),
+    "objectFilter" : MessageLookupByLibrary.simpleMessage("Filtre"),
+    "objectFilterColumnName" : MessageLookupByLibrary.simpleMessage("Nom de la colonne"),
+    "objectFilterDescription" : MessageLookupByLibrary.simpleMessage("Description"),
+    "objectFilterFilter" : MessageLookupByLibrary.simpleMessage("Filtre"),
+    "objectFilterName" : MessageLookupByLibrary.simpleMessage("prénom"),
+    "objectFilterOperation" : MessageLookupByLibrary.simpleMessage("Opération"),
+    "objectFilterSort" : MessageLookupByLibrary.simpleMessage("Trier"),
+    "objectFilterSortAsc" : MessageLookupByLibrary.simpleMessage("Ascendant"),
+    "objectFilterSortColumnName" : MessageLookupByLibrary.simpleMessage("Nom de la colonne"),
+    "objectFilterSortGrp" : MessageLookupByLibrary.simpleMessage("Par groupe"),
+    "objectFilterValue" : MessageLookupByLibrary.simpleMessage("Valeur"),
+    "objectFilterValueIn" : MessageLookupByLibrary.simpleMessage("Dans"),
+    "objectFilterValueTo" : MessageLookupByLibrary.simpleMessage("À"),
+    "optionUtilNo" : MessageLookupByLibrary.simpleMessage("Non"),
+    "optionUtilYes" : MessageLookupByLibrary.simpleMessage("Oui"),
+    "preferenceGlobalSave" : MessageLookupByLibrary.simpleMessage("Enregistrer les préférences que Global"),
+    "preferenceNothingToSave" : MessageLookupByLibrary.simpleMessage("Rien à sauver"),
+    "preferenceSaved" : MessageLookupByLibrary.simpleMessage("Préférences enregistrés en tant que Global Preferences"),
+    "serviceComErrorButton" : MessageLookupByLibrary.simpleMessage("Recharger la page"),
+    "serviceComErrorMsg" : MessageLookupByLibrary.simpleMessage("Désolé à ce sujet - s&#39;il vous plaît réessayer plus tard."),
+    "serviceComErrorTitle" : MessageLookupByLibrary.simpleMessage("Erreur de communication"),
+    "tableCtrlDelete1Record" : MessageLookupByLibrary.simpleMessage("Supprimer enregistrement en cours"),
+    "tableCtrlDelete1RecordText" : MessageLookupByLibrary.simpleMessage("Voulez-vous supprimer l&#39;enregistrement en cours?"),
+    "tableCtrlDeleteRecords" : MessageLookupByLibrary.simpleMessage("Supprimer les enregistrements sélectionnés?"),
+    "tableCtrlDeleteRecordsText" : MessageLookupByLibrary.simpleMessage("Voulez-vous supprimer les enregistrements sélectionnés?"),
     "tableCtrlRecords" : tableCtrlRecords,
-    "tableLayout" : tableLayout,
-    "tableLayoutColumns" : tableLayoutColumns
+    "tableLayout" : MessageLookupByLibrary.simpleMessage("Tableau Disposition"),
+    "tableLayoutColumns" : MessageLookupByLibrary.simpleMessage("Colonnes")
   };
 }
