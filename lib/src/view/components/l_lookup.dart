@@ -90,8 +90,8 @@ class LLookup
   }
 
   // Base Lookup
-  LLookup.base(String name, {String idPrefix})
-    : this(name, idPrefix:idPrefix, typeahead: true);
+  LLookup.base(String name, {String idPrefix, bool inGrid:false})
+    : this(name, idPrefix:idPrefix, multiple:false, singleScope:true, typeahead: true, inGrid:inGrid);
 
   /// Base Lookup Editor
   LLookup.from(DataColumn dataColumn, {String idPrefix, bool this.inGrid:false}) {
@@ -295,6 +295,11 @@ class LLookup
   bool get autofocus => input.autofocus;
   void set autofocus (bool newValue) {
     input.autofocus = newValue;
+  }
+
+  String get placeholder => input.placeholder;
+  void set placeholder (String newValue) {
+    input.placeholder = newValue;
   }
 
   String get title => _formElement.title;
