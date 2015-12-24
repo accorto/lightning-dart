@@ -93,9 +93,9 @@ class LLookup
   LLookup.base(String name, {String idPrefix, bool inGrid:false})
     : this(name, idPrefix:idPrefix, multiple:false, singleScope:true, typeahead: true, inGrid:inGrid);
 
-  /// Base Lookup Editor
-  LLookup.from(DataColumn dataColumn, {String idPrefix, bool this.inGrid:false}) {
-    _initEditor(dataColumn.name, idPrefix, false, true, true);
+  /// Lookup Editor
+  LLookup.from(DataColumn dataColumn, {String idPrefix, bool multiple:false, bool singleScope: true, bool typeahead: true, bool this.inGrid:false}) {
+    _initEditor(dataColumn.name, idPrefix, multiple, singleScope, typeahead);
     this.dataColumn = dataColumn;
   }
 

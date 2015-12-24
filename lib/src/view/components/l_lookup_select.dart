@@ -21,9 +21,21 @@ class LLookupSelect extends LLookup {
   LLookupSelect.single(String name, {String idPrefix, bool inGrid:false})
       : super(name, idPrefix:idPrefix, multiple:false, typeahead: false, inGrid:inGrid);
 
+  /// Single Lookup
+  LLookupSelect.singleFrom(DataColumn dataColumn, {String idPrefix, bool inGrid:false})
+      : super(dataColumn.name, idPrefix:idPrefix, multiple:false, typeahead: false, inGrid:inGrid) {
+    this.dataColumn = dataColumn;
+  }
+
   /// Multi Lookup
   LLookupSelect.multi(String name, {String idPrefix, bool inGrid:false})
       : super(name, idPrefix:idPrefix, multiple:true, typeahead: false, inGrid:inGrid);
+
+  /// Multi Lookup
+  LLookupSelect.multiFrom(DataColumn dataColumn, {String idPrefix, bool inGrid:false})
+      : super(dataColumn.name, idPrefix:idPrefix, multiple:true, typeahead: false, inGrid:inGrid) {
+    this.dataColumn = dataColumn;
+  }
 
 
   /// Init for Select Lookup
