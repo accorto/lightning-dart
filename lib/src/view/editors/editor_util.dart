@@ -29,71 +29,76 @@ class EditorUtil {
       DataType dataType = dataColumn.tableColumn.dataType;
 
       if (dataType == DataType.STRING) {
-        editor = new LInput.from(dataColumn,
-            EditorI.TYPE_TEXT, idPrefix: idPrefix, inGrid: inGrid);
+        editor = new LInput.from(dataColumn, EditorI.TYPE_TEXT,
+            idPrefix: idPrefix, inGrid: inGrid);
       } else if (dataType == DataType.ADDRESS) {
-
+        // TODO address editor
       } else if (dataType == DataType.AMOUNT) {
-        editor = new LInputNumber.from(dataColumn,
-            EditorI.TYPE_NUMBER, idPrefix: idPrefix, inGrid: inGrid);
+        editor = new LInputNumber.from(dataColumn, EditorI.TYPE_NUMBER,
+            idPrefix: idPrefix, inGrid: inGrid);
       } else if (dataType == DataType.BOOLEAN) {
         if (isAlternativeDisplay) {
           if (html5) {
-            editor = new LSelect.from(dataColumn, multiple: false, idPrefix: idPrefix, inGrid: inGrid);
+            editor = new LSelect.from(dataColumn, multiple: false,
+                idPrefix: idPrefix, inGrid: inGrid);
           } else {
-            editor = new LPicklist.from(dataColumn, idPrefix: idPrefix, inGrid: inGrid);
+            editor = new LPicklist.from(dataColumn,
+                idPrefix: idPrefix, inGrid: inGrid);
           }
         } else {
-          editor = new LCheckbox.from(dataColumn, idPrefix: idPrefix, inGrid: inGrid);
+          editor = new LCheckbox.from(dataColumn,
+              idPrefix: idPrefix, inGrid: inGrid);
         }
       } else if (dataType == DataType.CODE) {
 
       } else if (dataType == DataType.COLOR) {
-
+        editor = new LInputColor.from(dataColumn,
+            idPrefix: idPrefix, inGrid: inGrid);
       } else if (dataType == DataType.CURRENCY) {
-        editor = new LInputNumber.from(dataColumn,
-            EditorI.TYPE_NUMBER, idPrefix: idPrefix, inGrid: inGrid);
+        editor = new LInputNumber.from(dataColumn, EditorI.TYPE_NUMBER,
+            idPrefix: idPrefix, inGrid: inGrid);
       } else if (dataType == DataType.DATA) {
-
+        // TODO data editor
       } else if (dataType == DataType.DATE) {
         if (html5) {
-          editor = new LInputDate.from(dataColumn,
-              EditorI.TYPE_DATE, idPrefix: idPrefix, inGrid: inGrid);
+          editor = new LInputDate.from(dataColumn, EditorI.TYPE_DATE,
+              idPrefix: idPrefix, inGrid: inGrid);
         } else {
-          editor = new LDatepicker.from(dataColumn,
-              EditorI.TYPE_DATE, idPrefix: idPrefix, inGrid: inGrid);
+          editor = new LDatepicker.from(dataColumn, EditorI.TYPE_DATE,
+              idPrefix: idPrefix, inGrid: inGrid);
         }
       } else if (dataType == DataType.DATETIME) {
-        editor = new LInputDate.from(dataColumn,
-            EditorI.TYPE_DATETIME, idPrefix: idPrefix, inGrid: inGrid);
+        editor = new LInputDate.from(dataColumn, EditorI.TYPE_DATETIME,
+            idPrefix: idPrefix, inGrid: inGrid);
       } else if (dataType == DataType.DECIMAL) {
-        editor = new LInputNumber.from(dataColumn,
-            EditorI.TYPE_NUMBER, idPrefix: idPrefix, inGrid: inGrid);
+        editor = new LInputNumber.from(dataColumn, EditorI.TYPE_NUMBER,
+            idPrefix: idPrefix, inGrid: inGrid);
       } else if (dataType == DataType.DURATION) {
-        editor = new LInputDuration.from(dataColumn,
-            EditorI.TYPE_DURATION, idPrefix: idPrefix, inGrid: inGrid);
+        editor = new LInputDuration.from(dataColumn, EditorI.TYPE_DURATION,
+            idPrefix: idPrefix, inGrid: inGrid);
       } else if (dataType == DataType.DURATIONHOUR) {
-        editor = new LInputDuration.from(dataColumn,
-            EditorI.TYPE_DURATIONHOUR, idPrefix: idPrefix, inGrid: inGrid);
+        editor = new LInputDuration.from(dataColumn, EditorI.TYPE_DURATIONHOUR,
+            idPrefix: idPrefix, inGrid: inGrid);
       } else if (dataType == DataType.EMAIL) {
-        editor = new LInput.from(dataColumn,
-            EditorI.TYPE_EMAIL, idPrefix: idPrefix, inGrid: inGrid);
+        editor = new LInput.from(dataColumn, EditorI.TYPE_EMAIL,
+            idPrefix: idPrefix, inGrid: inGrid);
       } else if (dataType == DataType.FK) {
         editor = createLookupCall(dataColumn, idPrefix, inGrid);
       } else if (dataType == DataType.GEO) {
+        // TODO geo editor
       } else if (dataType == DataType.IM) {
+        // TODO im editor
       } else if (dataType == DataType.IMAGE) {
-        editor =
-        new LInputFile.from(dataColumn, idPrefix: idPrefix, inGrid: inGrid);
+        editor = new LInputFile.from(dataColumn, idPrefix: idPrefix, inGrid: inGrid);
       } else if (dataType == DataType.INT) {
-        editor = new LInputNumber.from(dataColumn,
-            EditorI.TYPE_NUMBER, idPrefix: idPrefix, inGrid: inGrid);
+        editor = new LInputNumber.from(dataColumn, EditorI.TYPE_NUMBER,
+            idPrefix: idPrefix, inGrid: inGrid);
       } else if (dataType == DataType.NUMBER) {
-        editor = new LInputNumber.from(dataColumn,
-            EditorI.TYPE_NUMBER, idPrefix: idPrefix, inGrid: inGrid);
+        editor = new LInputNumber.from(dataColumn, EditorI.TYPE_NUMBER,
+            idPrefix: idPrefix, inGrid: inGrid);
       } else if (dataType == DataType.PASSWORD) {
-        editor = new LInput.from(dataColumn,
-            EditorI.TYPE_PASSWORD, idPrefix: idPrefix, inGrid: inGrid);
+        editor = new LInput.from(dataColumn, EditorI.TYPE_PASSWORD,
+            idPrefix: idPrefix, inGrid: inGrid);
       } else if (dataType == DataType.PHONE) {
         editor = new LInput.from(dataColumn,
             EditorI.TYPE_TEL, idPrefix: idPrefix, inGrid: inGrid);
@@ -101,39 +106,44 @@ class EditorUtil {
         if (isAlternativeDisplay && !inGrid) {
           editor = new LPath.from(dataColumn, idPrefix: idPrefix);
         } else if (html5) {
-          editor = new LSelect.from(dataColumn, multiple: false, idPrefix: idPrefix, inGrid: inGrid);
+          editor = new LSelect.from(dataColumn, multiple: false,
+              idPrefix: idPrefix, inGrid: inGrid);
         } else {
-          editor = new LPicklist.from(dataColumn, idPrefix: idPrefix, inGrid: inGrid);
+          editor = new LPicklist.from(dataColumn,
+              idPrefix: idPrefix, inGrid: inGrid);
         }
       } else if (dataType == DataType.PICKAUTO) {
+        editor = new LLookup.from(dataColumn,
+            idPrefix: idPrefix, inGrid: inGrid);
       } else if (dataType == DataType.PICKCHOICE) {
-        if (inGrid)
-          editor = new LSelect.from(dataColumn, idPrefix:idPrefix, inGrid:inGrid);
+        editor = new LSelect.from(dataColumn,
+            idPrefix: idPrefix, inGrid: inGrid);
       } else if (dataType == DataType.PICKMULTI) {
-        editor = new LSelect.from(dataColumn, multiple: true, idPrefix: idPrefix, inGrid: inGrid);
+        editor = new LSelect.from(dataColumn, multiple: true,
+            idPrefix: idPrefix, inGrid: inGrid);
       } else if (dataType == DataType.PICKMULTICHOICE) {
-        if (inGrid) {
-          editor = new LSelect.from(dataColumn, multiple: false, idPrefix: idPrefix, inGrid: inGrid);
-        }
+        editor = new LSelect.from(dataColumn, multiple: false,
+            idPrefix: idPrefix, inGrid: inGrid);
       } else if (dataType == DataType.QUANTITY) {
-        editor = new LInputNumber.from(dataColumn,
-            EditorI.TYPE_NUMBER, idPrefix: idPrefix, inGrid: inGrid);
+        editor = new LInputNumber.from(dataColumn, EditorI.TYPE_NUMBER,
+            idPrefix: idPrefix, inGrid: inGrid);
       } else if (dataType == DataType.RATING) {
-
+        // TODO rating editor
       } else if (dataType == DataType.TAG) {
-
+        editor = new LLookupSelect.multiFrom(dataColumn, idPrefix: idPrefix, inGrid: inGrid);
       } else if (dataType == DataType.TENANT) {
         editor = createLookupCall(dataColumn, idPrefix, inGrid);
       } else if (dataType == DataType.TEXT) {
-        editor = new LTextArea.from(dataColumn, idPrefix: idPrefix, inGrid: inGrid);
+        editor = new LTextArea.from(dataColumn,
+            idPrefix: idPrefix, inGrid: inGrid);
       } else if (dataType == DataType.TIME) {
-        editor = new LInputDate.from(dataColumn,
-            EditorI.TYPE_TIME, idPrefix: idPrefix, inGrid: inGrid);
+        editor = new LInputDate.from(dataColumn, EditorI.TYPE_TIME,
+            idPrefix: idPrefix, inGrid: inGrid);
       } else if (dataType == DataType.TIMEZONE) {
-
+        // TODO timezone editor
       } else if (dataType == DataType.URL) {
-        editor = new LInput.from(dataColumn,
-            EditorI.TYPE_URL, idPrefix: idPrefix, inGrid: inGrid);
+        editor = new LInput.from(dataColumn, EditorI.TYPE_URL,
+            idPrefix: idPrefix, inGrid: inGrid);
       } else if (dataType == DataType.USER) {
         editor = createLookupCall(dataColumn, idPrefix, inGrid);
       }
@@ -144,7 +154,8 @@ class EditorUtil {
 
     // editor fallback (no dataColumn) - text
     if (editor == null) {
-      editor = new LInput(name, EditorI.TYPE_TEXT, idPrefix:idPrefix, inGrid:inGrid);
+      editor = new LInput(name, EditorI.TYPE_TEXT,
+          idPrefix:idPrefix, inGrid:inGrid);
       if (dataColumn != null) {
         editor.dataColumn = dataColumn;
       }

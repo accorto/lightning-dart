@@ -92,6 +92,7 @@ part 'src/view/editors/l_datepicker.dart';
 part 'src/view/editors/l_datepicker_dropdown.dart';
 part 'src/view/editors/l_editor.dart';
 part 'src/view/editors/l_input.dart';
+part 'src/view/editors/l_input_color.dart';
 part 'src/view/editors/l_input_date.dart';
 part 'src/view/editors/l_input_duration.dart';
 part 'src/view/editors/l_input_file.dart';

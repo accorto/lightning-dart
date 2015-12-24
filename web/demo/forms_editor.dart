@@ -84,6 +84,10 @@ class FormsEditor extends DemoFeature {
     form.addEditor(rangeInput, marginClass:marginClass);
     rangeInput.valueAsInt = 35;
 
+    LInputColor colorInput = new LInputColor("color")
+      ..label = "Color";
+    form.addEditor(colorInput, marginClass:marginClass);
+
     return form;
   }
 
