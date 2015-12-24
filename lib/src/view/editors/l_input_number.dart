@@ -61,9 +61,13 @@ class LInputNumber
     }
   } // initNumber
 
-  /// use number (stepper) or text
+  /// use number (stepper) or text - always true if int
   void set html5 (bool newValue) {
-    super.html5 = newValue;
+    if (dataType == DataType.INT) {
+      super.html5 = true;
+    } else {
+      super.html5 = newValue;
+    }
     _initNumber();
   }
 
