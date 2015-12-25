@@ -5,6 +5,8 @@ Intermediate Patches, Functionality improvements via +x prefix.
 
 ## head
 
+- #34 color editor
+- #17 timezone editor
 - AppsAction disabled support
 
 
