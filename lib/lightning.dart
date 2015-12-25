@@ -62,6 +62,7 @@ part 'src/view/components/l_list.dart';
 part 'src/view/components/l_lookup.dart';
 part 'src/view/components/l_lookup_item.dart';
 part 'src/view/components/l_lookup_select.dart';
+part 'src/view/components/l_lookup_timezone.dart';
 part 'src/view/components/l_media.dart';
 part 'src/view/components/l_modal.dart';
 part 'src/view/components/l_motion.dart';

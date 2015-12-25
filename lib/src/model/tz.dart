@@ -16,7 +16,38 @@ class TZ {
 
 
   /// List of Json TimeZones
-  static List tzList;
+  static List tzListJson; // loaded from Timezone.init()
+
+  /// Timezone List
+  static List<TZ> get tzList {
+    if (_tzList == null) {
+      if (tzListJson == null) {
+        return null;
+      }
+      _tzList = new List<TZ>();
+      for (var tzJson in tzListJson) {
+        TZ tz = new TZ(tzJson);
+        _tzList.add(tz);
+      }
+    }
+    return _tzList;
+  }
+  static List<TZ> _tzList;
+
+  /// Map id-label
+  static Map<String,String> get tzMap {
+    if (_tzMap == null) {
+      if (tzList == null) {
+        return null;
+      }
+      _tzMap = new Map<String,String>();
+      for (TZ tz in tzList) {
+        _tzMap[tz.id] = tz.label;
+      }
+    }
+    return _tzMap;
+  }
+  static Map<String,String> _tzMap;
 
   /// find time zones with same offset (now)
   static List<TZ> findTimeZones() {
@@ -27,9 +58,9 @@ class TZ {
     }
     DateTime now = new DateTime.now();
     int offset = now.timeZoneOffset.inMilliseconds;
-    for (var tzJson in tzList) {
-      if (tzJson["o"] == offset) {
-        list.add(new TZ(tzJson));
+    for (TZ tz in tzList) {
+      if (tz.offset == offset) {
+        list.add(tz);
       }
     }
     return list;
@@ -41,9 +72,9 @@ class TZ {
       _log.warning("findTimeZone - NoTzList");
       return null;
     }
-    for (var tzJson in tzList) {
-      if (tzJson["id"] == tzId) {
-        return new TZ(tzJson);
+    for (TZ tz in tzList) {
+      if (tz.id == tzId) {
+        return tz;
       }
     }
     return null;
@@ -86,13 +117,19 @@ class TZ {
     return ClientEnv.dateFormat_hm.format(dt.subtract(delta));
   }
 
-  /// update Example
-  //@override
-  //void exampleUpdate() {
-  //  example = timeString(EditorTimezone._now);
-  //}
+  /// Label
+  String get label => "${id} (${name})";
 
-  toString() => json.toString();
+  /// TZ as Option
+  DOption asOption() {
+    DOption option = new DOption()
+      ..value = id
+      ..label = label;
+    return option;
+  }
+
+  String toString() => json.toString();
+
 } // TZ
 
 
@@ -107,7 +144,7 @@ class TzRef {
   /// Get TimeZone - check alias
   static String alias (String tzName) {
     if (tzName == null || tzName.isEmpty)
-      return tzName;
+      return null;
     //
     if (_refs.isEmpty)
       _buildTzRef();
@@ -115,7 +152,7 @@ class TzRef {
       if (ref.aliasList.contains(tzName))
         return ref.tzId;
     }
-    return tzName;
+    return null;
   }
 
   /// Get TimeZone - check offset

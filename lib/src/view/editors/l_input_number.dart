@@ -231,7 +231,7 @@ class LInputNumber
     if (_currencySelect.options.length == 1) {
       _currencySelect.disabled = true;
     }
-    createStandardLeftElement();
+    createStandardLeftElement(null);
     // set width (3rem - 5px)
     num width = _currencySelect.getBoundingClientRect().width;
     // set input width: calc(100% - 3rem); margin-left: 3rem

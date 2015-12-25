@@ -14,15 +14,14 @@ class Timezone {
   static final Logger _log = new Logger("Timezone");
 
   /// Fallback to get time zones
-  static final String FALLBACK_SERVER = "http://quando.bizquando.com/";
-
+  static const String FALLBACK_SERVER = "http://quando.bizquando.com/";
 
   /**
    * Load Time Zones
    */
   static Future<bool> init(bool onlyIfEmpty) {
     Completer<bool> completer = new Completer<bool>();
-    if (onlyIfEmpty && TZ.tzList != null && TZ.tzList.isNotEmpty) {
+    if (onlyIfEmpty && TZ.tzListJson != null && TZ.tzListJson.isNotEmpty) {
       completer.complete(true);
       return completer.future;
     }
@@ -30,8 +29,8 @@ class Timezone {
     String url = "${Service.serverUrl}timeZone";
     HttpRequest.getString(url)
     .then((String jsonText) {
-      TZ.tzList = JSON.decode(jsonText);
-      _log.config("loadTz #${TZ.tzList.length}");
+      TZ.tzListJson = JSON.decode(jsonText);
+      _log.config("loadTz #${TZ.tzListJson.length}");
       completer.complete(true);
     })
     .catchError((error, stackTrace) {
@@ -40,14 +39,14 @@ class Timezone {
       url = "${FALLBACK_SERVER}timeZone";
       HttpRequest.getString(url)
       .then((String jsonText) {
-        TZ.tzList = JSON.decode(jsonText);
-        _log.config("loadTz #${TZ.tzList.length}");
+        TZ.tzListJson = JSON.decode(jsonText);
+        _log.config("loadTz #${TZ.tzListJson.length}");
         completer.complete(true);
       })
       .catchError((error, stackTrace) {
         _log.warning("loadTz(2) for ${url}");
         // Stop waiting
-        TZ.tzList.add(new TZ("{}"));
+        TZ.tzListJson.add(new TZ("{}"));
         completer.complete(false);
       });
     });

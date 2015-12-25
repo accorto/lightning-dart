@@ -13,7 +13,8 @@ part of lightning_dart;
  * -- icon / text / icon
  * Used in [LLookup], [LDropdown], [LPicklist] via [LLookupItem], [LDropdownItem]
  */
-class ListItem extends SelectOption {
+class ListItem
+    extends SelectOption {
 
   /// A Href No Op
   static const String VOID = "javascript:void(0)";

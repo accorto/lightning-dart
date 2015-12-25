@@ -140,7 +140,8 @@ class EditorUtil {
         editor = new LInputDate.from(dataColumn, EditorI.TYPE_TIME,
             idPrefix: idPrefix, inGrid: inGrid);
       } else if (dataType == DataType.TIMEZONE) {
-        // TODO timezone editor
+        editor = new LLookupTimezone.from(dataColumn,
+            idPrefix: idPrefix, inGrid: inGrid);
       } else if (dataType == DataType.URL) {
         editor = new LInput.from(dataColumn, EditorI.TYPE_URL,
             idPrefix: idPrefix, inGrid: inGrid);

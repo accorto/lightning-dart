@@ -10,7 +10,8 @@ part of lightning_dart;
  * Lookup Item
  * - li > a|span
  */
-class LLookupItem extends ListItem {
+class LLookupItem
+    extends ListItem {
 
   /**
    * Lookup Option

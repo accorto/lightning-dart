@@ -130,7 +130,6 @@ class LightningCtrl {
     new RemoteLogger();
     futures.add(LightningDart.init()); // ClientEnv, Locale Intl, Date
     futures.add(Preference.init());
-    futures.add(Timezone.init(false));
 
     router.loadConfig();
     bool embedded = false;
@@ -142,6 +141,7 @@ class LightningCtrl {
       test = ("true" == router.param(Router.P_TEST));
     }
     Service.init(serverUri, embedded:embedded, test:test);
+    futures.add(Timezone.init(false)); // requires server url
     // FK
     EditorUtil.createLookupCall = FkCtrl.createLookup;
     //

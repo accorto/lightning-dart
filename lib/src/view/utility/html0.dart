@@ -61,6 +61,7 @@ class Html0 {
   /// Aria Attribute role Value
   static const String ROLE_MENUITEMRADIO = "menuitemradio";
 
+  /// http://www.w3.org/TR/wai-aria/states_and_properties
   /// Aria Attribute role Value
   static const String ROLE_ROW = "row";
   /// Aria Attribute role Value
@@ -91,6 +92,8 @@ class Html0 {
   static const String ARIA_LABEL = "aria-label";
   /// Attribute Aria
   static const String ARIA_DISABLED = "aria-disabled";
+  /// Attribute Aria
+  static const String ARIA_READONLY = "aria-readonly";
   /// Attribute Aria
   static const String ARIA_HIDDEN = "aria-hidden";
   /// Attribute Aria

@@ -9,7 +9,8 @@ part of lightning_dart;
 /**
  * Select Lookup (Pill)
  */
-class LLookupSelect extends LLookup {
+class LLookupSelect
+    extends LLookup {
 
   /// Pill Container
   final DivElement _pillContainer = new DivElement()
@@ -166,15 +167,18 @@ class LLookupSelect extends LLookup {
     }
   }
 
-  /// display pills
+  /// display pills - readonly/disabled
   void _updateContainer() {
     _pillContainer.children.clear();
+    _pillContainer.attributes[Html0.ARIA_READONLY] = readOnly.toString();
+    _pillContainer.attributes[Html0.ARIA_DISABLED] = disabled.toString();
+    bool ro = (readOnly || disabled);
     for (LPill pill in _pillList) {
-      pill.readOnly = readOnly || disabled;
+      pill.readOnly = ro;
       _pillContainer.append(pill.element);
     }
     // show search icon
-    if (readOnly || disabled) {
+    if (ro) {
       element.classes.add(LLookup.C_HAS_SELECTION); // don't show icon
     } else if (_pillList.isEmpty) {
       element.classes.remove(LLookup.C_HAS_SELECTION);

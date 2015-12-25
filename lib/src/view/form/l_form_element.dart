@@ -43,7 +43,9 @@ class LFormElement {
    *        hint
    * [inGrid] if true no label
    */
-  void createStandard(EditorI editor, {LIcon iconRight, LIcon iconLeft, bool withClearValue:false, bool inGrid:false}) {
+  void createStandard(EditorI editor, {LIcon iconLeft, LIcon iconRight,
+      Element leftElement,
+      bool withClearValue:false, bool inGrid:false}) {
     this.editor = editor;
     _input = editor.input;
     if (!inGrid) {
@@ -67,11 +69,18 @@ class LFormElement {
     _inputWrapper = null;
     // right side (clear or icon)
     if (iconRight == null) {
-      if (withClearValue) {
+      iconRight = getIconRight();
+    }
+    LIcon iconClear = null;
+    if (withClearValue) {
+      if (iconRight == null) {
         iconRight = new LIconUtility(LIconUtility.CLEAR);
         iconRight.element.onClick.listen(editor.onClearValue);
       } else {
-        iconRight = getIconRight();
+        iconClear = new LIconUtility(LIconUtility.CLEAR);
+        iconClear.classes.clear();
+        iconClear.classes.addAll([LForm.C_INPUT__ICON, LForm.C_INPUT__ICON2, LIcon.C_ICON_TEXT_DEFAULT]);
+        iconClear.element.onClick.listen(editor.onClearValue);
       }
     }
     if (iconRight != null) {
@@ -81,13 +90,15 @@ class LFormElement {
       _elementControl.append(_inputWrapper);
       iconRight.classes.clear();
       iconRight.classes.addAll([LForm.C_INPUT__ICON, LIcon.C_ICON_TEXT_DEFAULT]);
+      if (iconClear != null) {
+        _inputWrapper.classes.add(LForm.C_INPUT_HAS_ICON__RIGHT2);
+        _inputWrapper.append(iconClear.element);
+      }
       _inputWrapper.append(iconRight.element);
     }
     // left side
     if (iconLeft == null) {
       iconLeft = getIconLeft();
-      if (iconLeft == null && withClearValue)
-        iconLeft = getIconRight();
     }
     if (iconLeft != null) {
       if (_inputWrapper == null) {
@@ -104,12 +115,15 @@ class LFormElement {
         iconLeft.element.style.right = "inherit";
       }
     }
-    createStandardLeftElement();
+    createStandardLeftElement(leftElement);
   } // createStandard
 
-  /// create standard element
-  void createStandardLeftElement() {
-    Element left = getLeftElement();
+  /// create left element (before the field)
+  void createStandardLeftElement(Element leftElement) {
+    Element left = leftElement;
+    if (left == null) {
+      left = getLeftElement();
+    }
     if (left != null) {
       if (_inputWrapper == null) {
         _inputWrapper = new DivElement();

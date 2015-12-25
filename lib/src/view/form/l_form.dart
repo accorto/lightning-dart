@@ -99,9 +99,17 @@ class LForm
   static const String C_INPUT__PREFIX = "slds-input__prefix";
   /// slds-input-has-icon - Lets text input know how to position .slds-input__prefix
   static const String C_INPUT_HAS_PREFIX = "slds-input-has-prefix";
-  /// slds-input-has-icon--left - Positions .slds-input__prefix to the left of the text input
+
+  /// Second right icon (clear)
+  static const String C_INPUT_HAS_ICON__RIGHT2 = "slds-input-has-icon--right2";
+  static const String C_INPUT__ICON2 = "slds-input__icon2";
+
+
+  /// before the field
   static const String C_INPUT_HAS_PREFIX__LEFT = "slds-input-has-prefix--left";
-  /// slds-input-has-icon--right - Positions .slds-input__prefix to the right of the text input
+  /// in the field
+  static const String C_INPUT_HAS_PREFIX__START = "slds-input-has-prefix--start";
+  /// after the field
   static const String C_INPUT_HAS_PREFIX__RIGHT = "slds-input-has-prefix--right";
 
   static final Logger _log = new Logger("LForm");

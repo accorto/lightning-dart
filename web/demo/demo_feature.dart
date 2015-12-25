@@ -217,10 +217,12 @@ abstract class DemoFeature extends LComponent {
 
   //option changed
   void optionChanged() {
-    _theContent.element.remove();
+  //  _theContent.element.remove();
     _theContent = content; // new
-    if (_theCurrentElement != null)
+    if (_theCurrentElement != null) {
+      _theCurrentElement.children.clear();
       _theCurrentElement.append(_theContent.element);
+    }
   }
 
 
