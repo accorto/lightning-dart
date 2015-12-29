@@ -12,6 +12,9 @@ part of lightning_dart;
 class LInputColor
     extends LInput {
 
+  /// default editor as background color
+  static bool defaultBackground = true;
+
   static const String WHITE = "#ffffff";
   static const String BLACK = "#000000";
 
@@ -34,7 +37,7 @@ class LInputColor
   /// init color
   void _initEditor(String type) {
     pattern = "#[a-f0-9]{6}";
-    background = true;
+    background = defaultBackground;
   }
 
   /// set value

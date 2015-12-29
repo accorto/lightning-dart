@@ -22,7 +22,9 @@ class AppsAction {
   static const String SAVE = "save";
   static const String DELETE = "delete";
   static const String DELETE_SELECTED = "deleteSelected";
+  /// reset/undo
   static const String RESET = "reset";
+  static const String REFRESH = "refresh";
 
   static const String LAYOUT = "layout";
 
@@ -58,10 +60,16 @@ class AppsAction {
     return new AppsAction(SAVE, appsActionSave(), callback)
       ..icon = new LIconUtility(LIconUtility.CHECK);
   }
+
   /// Standard Reset Action
   static AppsAction createReset(AppsActionTriggered callback) {
     return new AppsAction(RESET, appsActionReset(), callback)
       ..icon = new LIconUtility(LIconUtility.UNDO);
+  }
+  /// Standard Refresh Action
+  static AppsAction createRefresh(AppsActionTriggered callback) {
+    return new AppsAction(REFRESH, appsActionRefresh(), callback)
+      ..icon = new LIconUtility(LIconUtility.REFRESH);
   }
 
   /// Standard Layout Action
@@ -131,7 +139,10 @@ class AppsAction {
   bool _disabled = false;
 
   /// as Button - [createClick] to call [callback]
-  LButton asButton(bool createOnClick, {DataRecord data, List<String> buttonClasses, String idPrefix}) {
+  LButton asButton(bool createOnClick, {DataRecord data, List<String> buttonClasses, String idPrefix, bool recreate:false}) {
+    if (_btn != null && !recreate) {
+      return _btn;
+    }
     _btn = new LButton(new ButtonElement(), value, label, icon:icon, idPrefix:idPrefix);
     if (buttonClasses != null) {
       _btn.classes.addAll(buttonClasses);
@@ -152,7 +163,10 @@ class AppsAction {
   LButton _btn;
 
   /// as Dropdown Item
-  LDropdownItem asDropdown(bool createOnClick) {
+  LDropdownItem asDropdown(bool createOnClick, {bool recreate:false}) {
+    if (_item != null && !recreate) {
+      return _item;
+    }
     LIcon theIcon = null;
     if (icon != null)
       theIcon = icon.copy();
@@ -179,6 +193,7 @@ class AppsAction {
   static String appsActionEdit() => Intl.message("Edit", name: "appsActionEdit");
   static String appsActionSave() => Intl.message("Save", name: "appsActionSave");
   static String appsActionReset() => Intl.message("Reset", name: "appsActionReset");
+  static String appsActionRefresh() => Intl.message("Refresh", name: "appsActionRefresh");
   static String appsActionDelete() => Intl.message("Delete", name: "appsActionDelete");
   static String appsActionDeleteSelected() => Intl.message("Delete Selected", name: "appsActionDeleteSelected");
 

@@ -54,7 +54,7 @@ class LInputNumber
   } // initEditor
 
   void _initNumber() {
-    if (html5) {
+    if (html5 || dataType == DataType.INT) {
       input.type = EditorI.TYPE_NUMBER;
     } else {
       input.type = EditorI.TYPE_TEXT;
@@ -63,11 +63,7 @@ class LInputNumber
 
   /// use number (stepper) or text - always true if int
   void set html5 (bool newValue) {
-    if (dataType == DataType.INT) {
-      super.html5 = true;
-    } else {
-      super.html5 = newValue;
-    }
+    super.html5 = newValue;
     _initNumber();
   }
 

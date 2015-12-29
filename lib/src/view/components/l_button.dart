@@ -146,7 +146,7 @@ class LButton
   /// Optional Button Icon
   LIcon _icon;
   /// Icon left
-  bool _iconLeft;
+  bool _iconLeft = false;
   /// true = button icon is 1rem gray - false = icon is 2rem white
   bool _iconButton = true;
   /// Optional Assistive Text Element
@@ -397,6 +397,8 @@ class LButton
     _icon = newValue;
     _rebuild();
   }
+  /// Button Icon Left
+  bool get iconLeft => _iconLeft;
 
   /// Assistive Text
   String get assistiveText => _assistiveText;

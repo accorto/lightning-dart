@@ -51,7 +51,7 @@ class LDropdownItem
   LDropdownItem.from(ListItem item)
     : this(item.option, rightIcon:item.rightIcon);
 
-  /// create drop-down from button - with left icon!
+  /// create drop-down from button - with right icon!
   LDropdownItem.fromButton(LButton button)
     : this(button.asDOption(),
       rightIcon:button.icon == null ? null : button.icon.copy());

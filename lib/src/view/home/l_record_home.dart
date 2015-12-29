@@ -11,7 +11,8 @@ part of lightning_dart;
  *
  * header element has data-id/value/name (from record)
  */
-class LRecordHome extends LPageHeader {
+class LRecordHome
+    extends LPageHeader {
 
   /// Top Row - Icon - Title - Label - Follow - Actions
   final DivElement _header = new DivElement()
@@ -162,8 +163,7 @@ class LRecordHome extends LPageHeader {
    * Add Actions
    */
   void addAction(AppsAction action) {
-    LButton btn = action.asButton(true, idPrefix:id);
-    _actionButtonGroup.add(btn);
+    _actionButtonGroup.addAction(action, id);
   }
 
   /// Show Action Group Buttons
@@ -173,6 +173,11 @@ class LRecordHome extends LPageHeader {
     } else {
       _actionButtonGroup.classes.remove(LVisibility.C_HIDE);
     }
+  }
+
+  /// Action Group Show Count
+  void actionGroupLayout(int showCount) {
+    _actionButtonGroup.layout(showCount);
   }
 
   /// current record

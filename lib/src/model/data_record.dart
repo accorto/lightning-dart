@@ -150,6 +150,19 @@ class DataRecord {
   } // columnValue
 
   /**
+   * Set Value as Int or default value (null)
+   */
+  static int getColumnValueAsInt(DRecord record, String columnName, {int defaultValue}) {
+    String ss = getColumnValue(record, columnName);
+    if (ss != null && ss.isNotEmpty) {
+      return int.parse(ss, onError: (String s){
+        return defaultValue;
+      });
+    }
+    return defaultValue;
+  } // columnValue
+
+  /**
    * Get value as String for [columnName] or null if not found
    */
   static String getColumnValueFk(DFK fk, String columnName) {
@@ -362,7 +375,7 @@ class DataRecord {
     _record.isSelected = newValue;
   }
 
-  /// Changed
+  /// Changed see [checkChanged]
   bool get changed => _record.hasIsChanged() && _record.isChanged;
   /// Check if record is changed
   bool checkChanged() {

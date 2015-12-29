@@ -25,7 +25,8 @@ class LButtonGroup extends LComponent {
     ..setAttribute(Html0.ROLE, Html0.ROLE_GROUP);
 
   /// all buttons in group
-  List<LButton> _buttonList = new List<LButton>();
+  final List<AppsAction> _actionList = new List<AppsAction>();
+  final List<LButton> _buttonList = new List<LButton>();
   /// More Button
   final LButton _more = new LButton(new ButtonElement(), "more", null,
       icon: new LIconUtility(LIconUtility.DOWN),
@@ -58,6 +59,15 @@ class LButtonGroup extends LComponent {
       element.append(button.element);
   }
 
+  /// add and attach action (as button)
+  void addAction(AppsAction action, String idPrefix, {bool append: true}) {
+    LButton button = action.asButton(true, idPrefix:id); // always create button
+    button.classes.add(inverse ? LButton.C_BUTTON__INVERSE : LButton.C_BUTTON__NEUTRAL);
+    _actionList.add(action);
+    if (append)
+      element.append(button.element);
+  }
+
   /// Buttons
   List<LButton> get buttonList => _buttonList;
 
@@ -65,14 +75,25 @@ class LButtonGroup extends LComponent {
   void layout(int showCount) {
     element.children.clear();
     List<LDropdownItem> dropdownItems = new List<LDropdownItem>();
-    for (int i = 0; i < _buttonList.length; i++) {
-      LButton button = _buttonList[i];
-      button.classes.remove(C_BUTTON__LAST);
-      if (showCount == 0 || i < showCount) {
+    int items = 0;
+
+    for (AppsAction action in _actionList) {
+      items++;
+      if (showCount == 0 || items <= showCount) {
+        LButton button = action._btn;
+        button.classes.remove(C_BUTTON__LAST);
         element.append(button.element);
-        if (i+1 == showCount) {
-        //  button.element.classes.add(C_BUTTON__LAST);
-        }
+      } else {
+        LDropdownItem ddi = action.asDropdown(true);
+        dropdownItems.add(ddi);
+      }
+    } // for all actions
+
+    for (LButton button in _buttonList) {
+      items++;
+      if (showCount == 0 || items <= showCount) {
+        button.classes.remove(C_BUTTON__LAST);
+        element.append(button.element);
       } else {
         LDropdownItem ddi = new LDropdownItem.fromButton(button);
         ddi.onClick.listen((Event evt) {
@@ -80,7 +101,9 @@ class LButtonGroup extends LComponent {
         });
         dropdownItems.add(ddi);
       }
-    }
+    } // for all buttons
+
+    // add dropdown
     if (dropdownItems.isEmpty) {
       _more.disabled = true;
       element.classes.remove(LDropdown.C_DROPDOWN_TRIGGER);
