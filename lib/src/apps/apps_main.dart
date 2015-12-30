@@ -35,7 +35,7 @@ class AppsMain
   final AppsMenu _menu = new AppsMenu();
   /// Small Menu
   final DivElement _menuSmall = new DivElement()
-    ..classes.addAll([LGrid.C_COL, LVisibility.C_HIDE, "apps-menu-small"]);
+    ..classes.addAll([LGrid.C_COL, LGrid.C_GROW_NONE , LVisibility.C_HIDE, "apps-menu-small"]);
   /// Content
   final DivElement _content = new DivElement()
     ..id = "a-content";

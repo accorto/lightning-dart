@@ -8,6 +8,7 @@ part of lightning_dart;
 
 /**
  * Color Editor
+ * (Browser support: FF, Chrome - http://caniuse.com/#feat=input-color)
  */
 class LInputColor
     extends LInput {
