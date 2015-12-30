@@ -36,9 +36,12 @@ class LInputColor
 
   /// init color
   void _initEditor(String type) {
+    super._initEditor(type);
+    //
     pattern = "#[a-f0-9]{6}";
-    background = defaultBackground;
-  }
+    background = defaultBackground; // if empty shows black :-(
+    // onClick (old value) - onInput - onChange
+  } // initEditor
 
   /// set value
   void set value (String newValue) {

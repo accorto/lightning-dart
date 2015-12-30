@@ -127,7 +127,7 @@ class Router {
   void loadConfig() {
     // LINIT={cname: "accorto", loadDiv: "quando", fluid: "true", clearWrap: "false", addHeader: "false", addNav: "false"};
     JsObject config = context['LINIT'];
-    if (config != null) {
+    if (config != null && queryParams != null) {
       if (!queryParams.containsKey(P_CNAME) && config.hasProperty(P_CNAME)) {
         queryParams[P_CNAME] = config[P_CNAME];
       }

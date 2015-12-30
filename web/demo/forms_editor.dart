@@ -55,27 +55,29 @@ class FormsEditor extends DemoFeature {
     LInputNumber number1h = new LInputNumber("n1h")
       ..label = "Html5 Integer"
       ..placeholder = "Number Placeholder"
-      ..decimalDigits = 0;
+      ..decimalDigits = 0
+      ..html5 = true;
     form.addEditor(number1h, marginClass:marginClass);
 
     LInputNumber number1 = new LInputNumber("n1")
       ..label = "Standard Integer"
       ..placeholder = "Number Placeholder"
-      ..decimalDigits = 0
-      ..html5 = false;
+      ..html5 = false
+      ..decimalDigits = 0;
     form.addEditor(number1, marginClass:marginClass);
 
     LInputNumber number2h = new LInputNumber("n2h")
       ..label = "Html5 Number(2)"
       ..placeholder = "Number Placeholder"
+      ..html5 = true
       ..decimalDigits = 2;
     form.addEditor(number2h, marginClass:marginClass);
 
     LInputNumber number2 = new LInputNumber("n2")
       ..label = "Standard Number(2)"
       ..placeholder = "Number Placeholder"
-      ..decimalDigits = 2
-      ..html5 = false;
+      ..html5 = false
+      ..decimalDigits = 2;
     form.addEditor(number2, marginClass:marginClass);
 
     LInputRange rangeInput = new LInputRange("range")

@@ -50,8 +50,10 @@ class LLookupTimezone
     if (TZ.tzList == null || TZ.tzList.isEmpty) {
       _waitSeconds++;
       _log.info("initTz -waiting- ${_waitSeconds}");
-      if (_waitSeconds < 20) {
+      if (_waitSeconds < 10) {
         new Timer(new Duration(seconds: _waitSeconds), _initTz);
+      } else {
+        addLookupItem(new LLookupTimezoneItem(TZ.fallback));
       }
       return;
     }
@@ -74,14 +76,19 @@ class LLookupTimezone
     String tzName = dt.timeZoneName;
     String theValue = tzName;
     String alias = TzRef.alias(tzName); // try first
-    if (alias != null && TZ.tzMap.containsKey(alias)) {
-      theValue = alias;
+    if (TZ.tzMap == null) {
+      if (alias != null)
+        theValue = alias;
     } else {
-      alias = TzRef.offset(dt.timeZoneOffset, tzName); // second
       if (alias != null && TZ.tzMap.containsKey(alias)) {
         theValue = alias;
-      } else if (TZ.tzMap.containsKey(tzName)) {
-        theValue = tzName;
+      } else {
+        alias = TzRef.offset(dt.timeZoneOffset, tzName); // second
+        if (alias != null && TZ.tzMap.containsKey(alias)) {
+          theValue = alias;
+        } else if (TZ.tzMap.containsKey(tzName)) {
+          theValue = tzName;
+        }
       }
     }
     value = theValue;

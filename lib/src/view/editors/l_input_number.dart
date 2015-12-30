@@ -47,7 +47,11 @@ class LInputNumber
     input.classes.add(LText.C_TEXT_ALIGN__RIGHT);
     // pattern
     input.pattern = "[0-9+-.,]*";
-    //
+
+    // stepper - onClick=stepper onChange=+key onInput=+wheel
+    // input.onChange.listen(onInputChange); (in super)
+
+    // blur - render value
     input.onBlur.listen((Event evt){
       input.value = renderSync(input.value, true);
     });

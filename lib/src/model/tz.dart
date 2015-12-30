@@ -7,8 +7,9 @@
 part of lightning_model;
 
 
-/** **
+/**
  * Time Zone Entry
+ * {"id":"America/Los_Angeles","name":"Pacific Standard Time","s":-28800000,"d":-25200000,"o":-28800000}
  */
 class TZ {
 
@@ -34,7 +35,7 @@ class TZ {
   }
   static List<TZ> _tzList;
 
-  /// Map id-label
+  /// Map id-label - or null
   static Map<String,String> get tzMap {
     if (_tzMap == null) {
       if (tzList == null) {
@@ -80,9 +81,22 @@ class TZ {
     return null;
   } // findTimeZone
 
-
   /// Local Offset
   static Duration localOffset = new DateTime.now().timeZoneOffset;
+
+  /// Fallback
+  static TZ get fallback {
+    DateTime now = new DateTime.now();
+    var data = {};
+    data["id"] = now.timeZoneName;
+    data["name"] = "default";
+    int offsetMs = now.timeZoneOffset.inMilliseconds;
+    data["s"] = offsetMs;
+    data["d"] = offsetMs;
+    data["o"] = offsetMs;
+    return new TZ(data);
+  }
+
 
   // source
   var json;

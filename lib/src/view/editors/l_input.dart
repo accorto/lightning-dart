@@ -47,7 +47,7 @@ class LInput
     _initEditor(type);
   } // LInput
 
-  /// initialize listeners with original type
+  /// initialize listeners with original type - listen to onChange - onKeyUp
   void _initEditor(String type) {
     if (type == EditorI.TYPE_PASSWORD) {
       input.autocomplete = "off"; // https://html.spec.whatwg.org/multipage/forms.html#autofill
@@ -56,14 +56,10 @@ class LInput
     }
     /// Changes
     input.onChange.listen(onInputChange);
+
     /// not a button, checkbox, ..
     if (!EditorI.TYPES_NOLABEL.contains(type)) {
       input.onKeyUp.listen(onInputKeyUp);
-    }
-    // stepper
-    // if (EditorI.isDate(type) || type == EditorI.TYPE_NUMBER)
-    if (type == EditorI.TYPE_NUMBER) { // onClick=stepper onChange=+key onInput=+wheel
-      input.onClick.listen(onInputChange);
     }
   } // initializeEditor
 
