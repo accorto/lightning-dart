@@ -10,7 +10,7 @@ part of lightning_ctrl;
 typedef bool RouteEventHandler(RouterPath path);
 
 /**
- * Application Router
+ * Application Router [LightningCtrl.router]
  * Handles query parameters
  * and hierarchical path, e.g. /key/value/key2/value2
  * path could be direct or as  #key/value/key2/value2

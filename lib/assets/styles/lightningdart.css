@@ -6099,6 +6099,16 @@ a.slds-button--inverse:focus {
       background-color: #1589ee; }
   .apps-menu.expaned {
     max-width: 12rem; }
+.apps-menu-small {
+  width: 0.5rem; }
+  .apps-menu-small .apps-menu-btn {
+    position: absolute;
+    top: 2rem;
+    left: 0;
+    width: 0.5rem;
+    height: 1.5rem;
+    background-color: #16325c;
+    border-radius: 0.125rem; }
 .busy-backdrop {
   -webkit-transition-duration: 0.4s;
           transition-duration: 0.4s;

@@ -31,8 +31,11 @@ class AppsMain
 
   /// Head
   final AppsHeader _header = new AppsHeader();
-  /// Menu
+  /// Menu Full Size
   final AppsMenu _menu = new AppsMenu();
+  /// Small Menu
+  final DivElement _menuSmall = new DivElement()
+    ..classes.addAll([LGrid.C_COL, LVisibility.C_HIDE, "apps-menu-small"]);
   /// Content
   final DivElement _content = new DivElement()
     ..id = "a-content";
@@ -63,11 +66,18 @@ class AppsMain
       ..append(_content)
       ..append(_footer.element);
 
+    // Small Menu
+    DivElement smallBtn = new DivElement()
+      ..classes.add("apps-menu-btn");
+    _menuSmall.append(smallBtn);
+    smallBtn.onClick.listen(onSmallMenuClick);
+
     // Main grid
     DivElement mainGrid = new DivElement()
       ..classes.add(LGrid.C_GRID)
       ..id = "a-main"
       ..append(_menu.element) // left
+      ..append(_menuSmall)
       ..append(rightSide);
     //
     element.classes.remove(LGrid.C_GRID);
@@ -218,9 +228,21 @@ class AppsMain
     _header.element.classes.toggle(LVisibility.C_HIDE, !show);
   } // showHeader
 
-  /// Show Menu
+  /// Show Full Menu Bar
   void showMenuBar(bool show) {
     _menu.element.classes.toggle(LVisibility.C_HIDE, !show);
+    _menuSmall.classes.add(LVisibility.C_HIDE);
+  }
+
+  /// click on Small Menu Bar
+  void onSmallMenuClick(Event evt) {
+    showMenuBarSmall(false);
+  }
+
+  /// Show Small Menu Bar
+  void showMenuBarSmall(bool show) {
+    _menuSmall.classes.toggle(LVisibility.C_HIDE, !show);
+    _menu.element.classes.toggle(LVisibility.C_HIDE, show);
   }
 
 
