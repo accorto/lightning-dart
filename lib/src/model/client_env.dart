@@ -35,6 +35,8 @@ class ClientEnv {
   static DateFormat dateFormat_ymd;
   /// Date Format Short -  1/1
   static DateFormat dateFormat_md;
+  /// Date Format Short -  1/1 01:01
+  static DateFormat dateFormat_md_hm;
   /// Date Format - Mon 1/1
   static DateFormat dateFormat_med;
   /// Date Format Long - Monday, January 1
@@ -108,6 +110,7 @@ class ClientEnv {
   static void initializeFormats() {
     dateFormat_ymd = new DateFormat.yMd(localeName);
     dateFormat_md = new DateFormat.Md(localeName);
+    dateFormat_md_hm = new DateFormat.Md(localeName);
     dateFormat_med = new DateFormat.MEd(localeName);
     dateFormat_long = new DateFormat.MMMMEEEEd(localeName);
     dateFormat_ym = new DateFormat.yM(localeName);
@@ -120,8 +123,10 @@ class ClientEnv {
         dateFormat_hm = new DateFormat("K:mm a", localeName);
         dateFormat_hms = new DateFormat("K:mm:ss a", localeName);
         dateFormat_ymd_hm.addPattern("K:mm a");
+        dateFormat_md_hm.addPattern("K:mm a");
       } else {
         dateFormat_ymd_hm.add_Hm();
+        dateFormat_md_hm.add_Hm();
       }
     }
     numberFormat_int = new NumberFormat("#,###,##0", localeName);

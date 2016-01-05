@@ -355,10 +355,35 @@ class LModal extends LComponent {
     num dx = -(rectHeader.left - rectTarget.left);
     num dy = -(rectHeader.top - rectTarget.bottom);
     _containerOffset = new Point(dx-5, dy+5);
-    _log.fine("offset=${_containerOffset}");
     _container.style
       ..top = "${_containerOffset.y}px"
       ..left = "${_containerOffset.x}px";
+    //_log.fine("offset=${_containerOffset} ${window.innerWidth}x${window.innerHeight}");
+
+    // fit on screen?
+    bool needsAdjustment = false;
+    rectHeader = header.getBoundingClientRect();
+    num endX = rectHeader.left + rectHeader.width;
+    num deltaX = window.innerWidth - endX; //
+    if (deltaX < 0) {
+      dx += deltaX;
+      needsAdjustment = true;
+    }
+    Rectangle rectContent = content.element.getBoundingClientRect();
+    Rectangle rectFooter = footer.getBoundingClientRect();
+    num endY = rectHeader.top + rectHeader.height + rectContent.height + rectFooter.height;
+    num deltaY = window.innerHeight - endY; // bottom space
+    if (deltaY < 0) {
+      dy += deltaY;
+      needsAdjustment = true;
+    }
+    if (needsAdjustment) {
+      _containerOffset = new Point(dx-5, dy);
+      //_log.fine("offset2=${_containerOffset}");
+      _container.style
+        ..top = "${_containerOffset.y}px"
+        ..left = "${_containerOffset.x}px";
+    }
   } // _position
 
 
@@ -390,14 +415,16 @@ class LModal extends LComponent {
     header.classes.remove("grab");
     header.classes.add("grabbing");
   }
+  /// Move delta
   void onHeaderMouseMove(MouseEvent evt) {
     if (_mouseDownPoint != null) {
       Point delta = evt.screen - _mouseDownPoint;
       _containerOffset = new Point(_containerStart.x + delta.x, _containerStart.y + delta.y);
-      // _log.fine("onHeaderMouseMove delta=${delta} start=${_containerStart} - offset=${_containerOffset}");
+      //_log.fine("onHeaderMouseMove delta=${delta} start=${_containerStart} - offset=${_containerOffset}");
       _container.style
         ..top = "${_containerOffset.y}px"
         ..left = "${_containerOffset.x}px";
+      //_log.fine("onHeaderMouseMove ${_container.getBoundingClientRect()} ${_containerOffset}  ${window.innerWidth}x${window.innerHeight}");
     }
   }
   void onHeaderMouseUp(MouseEvent evt) {
