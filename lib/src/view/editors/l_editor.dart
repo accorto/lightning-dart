@@ -28,11 +28,13 @@ abstract class LEditor
   /// Show/Hide
   void set show(bool newValue) {
     if (newValue) {
-      element.classes.remove(LVisibility.C_HIDE);
+      // element.classes.remove(LVisibility.C_HIDE); // not specific enough
+      element.style.removeProperty("display");
       if (inGrid)
         input.classes.remove(LVisibility.C_HIDE);
     } else {
-      element.classes.add(LVisibility.C_HIDE);
+      // element.classes.add(LVisibility.C_HIDE);
+      element.style.display = "none";
       if (inGrid)
         input.classes.add(LVisibility.C_HIDE);
     }
