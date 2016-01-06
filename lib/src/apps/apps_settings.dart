@@ -7,7 +7,7 @@
 part of lightning_ctrl;
 
 /**
- * Apps Settings
+ * Apps Settings Page with tabs
  */
 class AppsSettings
     extends AppsPage {
@@ -131,6 +131,8 @@ class AppSettingsEnvironment
     table.addRowHdrDataList("cookie", [nav.cookieEnabled, nav.doNotTrack == null ? "" : nav.doNotTrack]);
     table.addRowHdrDataList("platform/vendor", [nav.platform, nav.vendor]);
     table.addRowHdrDataList("mobile/phone", [ClientEnv.isMobileUserAgent, ClientEnv.isPhone]);
+
+    table.addRowHdrDataList("iframe", [ClientEnv.inIFrame, "page=${window.pageXOffset}/${window.pageYOffset} scroll=${window.scrollX}/${window.scrollY}"]);
 
 
     // -- Session

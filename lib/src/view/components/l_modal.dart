@@ -6,13 +6,17 @@
 
 part of lightning_dart;
 
+/// Modal Close/Cancel Function
+typedef void ModalClose();
+
 /**
  * Modal Dialog
  * - width: 50%, min: 20rem, max: 40rem
  * - small: width: 90%, max: 580px
  * - large: width: 90%, min: 40rem (if > 48em)
  */
-class LModal extends LComponent {
+class LModal
+    extends LComponent {
 
   /// slds-modal - Positions the modal to stretch to page edges | Required
   static const String C_MODAL = "slds-modal";
@@ -94,8 +98,12 @@ class LModal extends LComponent {
   final DivElement _backdrop = new DivElement()
     ..classes.add(C_BACKDROP);
 
+  /// Save button
   LButton buttonSave;
+  /// Cancel button
   LButton buttonCancel;
+  /// Callback when close or cancel
+  ModalClose onModalClose;
 
   /**
    * Modal Dialog
@@ -160,14 +168,19 @@ class LModal extends LComponent {
         icon: new LIconAction("close", className: LButton.C_BUTTON__ICON,
           colorOverride: LButton.C_BUTTON__ICON_INVERSE, size: LButton.C_BUTTON__ICON__LARGE),
         assistiveText: lModalClose());
-    buttonClose.onClick.listen(onClickHideAndRemove);
+    buttonClose.onClick.listen(onClickCancel);
     header.append(buttonClose.element);
   }
   /// Set header
   void setHeader(String title, {String tagLine, LIcon icon}) {
     HeadingElement h2 = new HeadingElement.h2();
     if (icon != null) {
-      icon.classes.addAll([LIcon.C_ICON_TEXT_DEFAULT, LIcon.C_ICON__SMALL, LMargin.C_RIGHT__SMALL]);
+      if (icon.linkPrefix.contains("utility")) {
+        icon.classes.add(LIcon.C_ICON_TEXT_DEFAULT);
+      } else if (icon.linkPrefix.contains("action")) {
+        icon.element.style.padding = "0.25rem";
+      }
+      icon.classes.addAll([LIcon.C_ICON__SMALL, LMargin.C_RIGHT__SMALL]);
       h2.append(icon.element);
     }
     h2.appendText(title);
@@ -239,28 +252,32 @@ class LModal extends LComponent {
    * [hideOnSave] hide+remove on Save
    * [addCancel] hides+removes the dialog
    */
-  LButton addFooterButtons({String saveNameOverride, bool hideOnSave: true, bool addCancel: true}) {
-    String saveLabel = saveNameOverride;
+  LButton addFooterButtons({String saveLabelOverride, bool hideOnSave: true,
+      bool addCancel: true, String cancelLabelOverride}) {
+    String saveLabel = saveLabelOverride;
     if (saveLabel == null || saveLabel.isEmpty)
       saveLabel = lModalSave();
     buttonSave = new LButton(new ButtonElement(), "save", saveLabel, idPrefix: id,
       buttonClasses: [LButton.C_BUTTON__NEUTRAL, LButton.C_BUTTON__BRAND]);
     if (hideOnSave)
-      buttonSave.onClick.listen(onClickHideAndRemove);
+      buttonSave.onClick.listen(onClickRemove);
 
     if (addCancel) {
-      addFooterCancel();
+      addFooterCancel(cancelLabel: cancelLabelOverride);
     }
     footer.append(buttonSave.element);
     return buttonSave;
   } // setFooterButtons
 
-  /// add Cancel to Footer
-  void addFooterCancel() {
+  /// add Cancel to Footer with optional [cancelLablel] override
+  void addFooterCancel({String cancelLabel}) {
     if (buttonCancel == null) {
-      buttonCancel = new LButton(new ButtonElement(), "cancel", lModalCancel(), idPrefix: id,
+      String label = cancelLabel;
+      if (label == null || label.isEmpty)
+        label = lModalCancel();
+      buttonCancel = new LButton(new ButtonElement(), "cancel", label, idPrefix: id,
           buttonClasses: [LButton.C_BUTTON__NEUTRAL]);
-      buttonCancel.onClick.listen(onClickHideAndRemove);
+      buttonCancel.onClick.listen(onClickCancel);
       footer.append(buttonCancel.element);
       footer.classes.add(C_MODAL__FOOTER__DIRECTIONAL);
     }
@@ -269,13 +286,15 @@ class LModal extends LComponent {
   /**
    * Set Footer Actions
    */
-  void addFooterActions(List<AppsAction> actions, {bool addCancel:false}) {
-    if (addCancel)
-      addFooterCancel();
+  void addFooterActions(List<AppsAction> actions,
+      {bool addCancel:false, String cancelLabelOverride}) {
+    if (addCancel) {
+      addFooterCancel(cancelLabel:cancelLabelOverride);
+    }
     if (actions != null) {
       for (AppsAction action in actions) {
         LButton btn = action.asButton(true, buttonClasses: [LButton.C_BUTTON__NEUTRAL], idPrefix: id);
-        btn.onClick.listen(onClickHideAndRemove);
+        btn.onClick.listen(onClickRemove);
         footer.append(btn.element);
       }
     }
@@ -386,14 +405,16 @@ class LModal extends LComponent {
     }
   } // _position
 
-
-  /// Hide Modal
-  void onClickHideOnly(MouseEvent ignored) {
+  /// Hide and Remove Modal
+  void onClickCancel(MouseEvent ignored) {
     show = false;
+    element.remove();
+    if (onModalClose != null)
+      onModalClose();
   }
 
   /// Hide and Remove Modal
-  void onClickHideAndRemove(MouseEvent ignored) {
+  void onClickRemove(MouseEvent ignored) {
     show = false;
     element.remove();
   }
@@ -463,18 +484,20 @@ class LConfirmation extends LModal {
    * - content [text] optional [contentElements]
    * - footer [actions]
    */
-  LConfirmation(String idPrefix, {String label, LIcon icon, String tagLine, Element tagLineElement,
-      String text, List<Element> contentElements,
-      List<AppsAction> actions, bool addCancel:false}) : super(idPrefix) {
-    // Heading
-    HeadingElement h2 = new HeadingElement.h2();
-    if (label != null)
-      h2.text = label;
-    if (tagLine != null && tagLine.isNotEmpty && tagLineElement == null) {
-      tagLineElement = new ParagraphElement()
-        ..text = tagLine;
-    }
-    setHeaderComponents(h2, tagLineElement);
+  LConfirmation(String idPrefix, {
+      String title,
+      String tagLine,
+      LIcon icon, // default ?
+      Element tagLineElement,
+      String text,
+      List<Element> contentElements,
+      List<AppsAction> actions,
+      bool addCancel:false,
+      String cancelLabelOverride})
+      : super(idPrefix) {
+    LIcon theIcon = icon == null ? new LIconAction(LIconAction.QUESTION_POST_ACTION) : icon;
+    setHeader(title, tagLine:tagLine, icon:theIcon);
+
     // Content
     if (text != null && text.isNotEmpty) {
       ParagraphElement p = new ParagraphElement()
@@ -485,8 +508,10 @@ class LConfirmation extends LModal {
       for (Element e in contentElements)
         append(e);
     }
+
     // Footer
-    addFooterActions(actions, addCancel:addCancel);
+    addFooterActions(actions,
+        addCancel:addCancel, cancelLabelOverride:cancelLabelOverride);
   } // LConfirmation
 
 } // LConfirmation

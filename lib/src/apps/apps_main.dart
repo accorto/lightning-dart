@@ -61,6 +61,7 @@ class AppsMain
     // Right Side
     DivElement rightSide = new DivElement()
       ..classes.add(LGrid.C_COL)
+      ..classes.add(LSizing.C_SIZE__1_OF_1)
       ..id = "a-right"
       ..append(_header.element)
       ..append(_content)
@@ -86,6 +87,12 @@ class AppsMain
     //
     AppsPage.routeHandler = onRouteEnter;
     LightningCtrl.router.fallbackHandler = onRouteEnter;
+
+    // Within IFrame
+    if (ClientEnv.inIFrame) {
+      num width = window.innerWidth; // + margin
+      element.style.maxWidth = "${width}px";
+    }
   } // AppsMain
 
   /**

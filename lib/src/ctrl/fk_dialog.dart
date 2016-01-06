@@ -184,7 +184,7 @@ class FkDialog {
     if (lookup != null && data.selected && data.recordId.isNotEmpty) {
       lookup.value = data.recordId;
       lookup.onInputChange(null);
-      _modal.onClickHideAndRemove(null); // fini
+      _modal.onClickRemove(null); // fini
     }
   } // onTableSelectClicked
 

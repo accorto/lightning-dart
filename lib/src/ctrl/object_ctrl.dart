@@ -110,9 +110,11 @@ class ObjectCtrl extends LComponent {
     _log.config("onFilterChange ${tableName} ${newValue} ${filter}");
     if (newValue != AppsAction.NEW && (filter == LObjectHomeFilter.RECENT || filter == LObjectHomeFilter.ALL)) {
       AppsAction filterNew = AppsAction.createYes(onFilterNewConfirmed);
-      LConfirmation conf = new LConfirmation("fn", label: objectCtrlFilterNew(),
-      text:objectCtrlFilterNewText(),
-      actions:[filterNew], addCancel: true);
+      LConfirmation conf = new LConfirmation("fn",
+          title: objectCtrlFilterNew(),
+          text: objectCtrlFilterNewText(),
+          actions:[filterNew],
+          addCancel: true);
       conf.showInElement(element);
       return;
     }
@@ -124,9 +126,12 @@ class ObjectCtrl extends LComponent {
         ..append(li);
       AppsAction filterDelete = AppsAction.createYes(onFilterDeleteConfirmed)
         ..actionVar = query;
-      LConfirmation conf = new LConfirmation("fn", label: objectCtrlFilterDelete(),
-      text:objectCtrlFilterDeleteText(), contentElements:[ul],
-      actions:[filterDelete], addCancel: true);
+      LConfirmation conf = new LConfirmation("fn",
+          title: objectCtrlFilterDelete(),
+          text: objectCtrlFilterDeleteText(),
+          contentElements:[ul],
+          actions:[filterDelete],
+          addCancel: true);
       conf.showInElement(element);
       return;
     }
@@ -384,9 +389,12 @@ class ObjectCtrl extends LComponent {
         ..append(li);
       AppsAction deleteYes = AppsAction.createYes(onAppsActionDeleteConfirmed)
         ..actionVar = record;
-      LConfirmation conf = new LConfirmation("ds", label:TableCtrl.tableCtrlDelete1Record(),
-        text:TableCtrl.tableCtrlDelete1RecordText(), contentElements:[ul],
-        actions:[deleteYes], addCancel: true);
+      LConfirmation conf = new LConfirmation("ds",
+          title: TableCtrl.tableCtrlDelete1Record(),
+          text:TableCtrl.tableCtrlDelete1RecordText(),
+          contentElements:[ul],
+          actions:[deleteYes],
+          addCancel: true);
       conf.showInElement(element);
     }
   } // onAppsActionDelete
@@ -416,9 +424,12 @@ class ObjectCtrl extends LComponent {
       }
       AppsAction deleteYes = AppsAction.createYes(onAppsActionDeleteSelectedConfirmed)
         ..actionVar = records;
-      LConfirmation conf = new LConfirmation("ds", label: TableCtrl.tableCtrlDeleteRecords(),
-        text:TableCtrl.tableCtrlDeleteRecordsText(), contentElements:[ul],
-        actions:[deleteYes], addCancel: true);
+      LConfirmation conf = new LConfirmation("ds",
+          title: TableCtrl.tableCtrlDeleteRecords(),
+          text: TableCtrl.tableCtrlDeleteRecordsText(),
+          contentElements:[ul],
+          actions:[deleteYes],
+          addCancel: true);
       conf.showInElement(element);
     }
   }

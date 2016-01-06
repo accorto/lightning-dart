@@ -506,7 +506,7 @@ class LIconAction extends LIcon {
   LIconAction(String name, {String className: LIcon.C_ICON, String size,
         String colorOverride, List<String> addlCss})
     : super(name, LIcon.SPRITE_ACTION, className, size,
-        colorOverride == null ? "${C_ICON_ACTION_}${name}" : colorOverride,
+        colorOverride == null ? "${C_ICON_ACTION_}${name.replaceAll("_","-")}" : colorOverride,
         addlCss, LIcon.HREF_PREFIX);
 
 
@@ -619,7 +619,7 @@ class LIconStandard extends LIcon {
   LIconStandard(String linkName, {String className: LIcon.C_ICON, String size,
       String colorOverride, List<String> addlCss})
     : super(linkName, LIcon.SPRITE_STANDARD, size, className,
-        colorOverride == null ? "${C_ICON_STANDARD_}${linkName}" : colorOverride,
+        colorOverride == null ? "${C_ICON_STANDARD_}${linkName.replaceAll("_","-")}" : colorOverride,
         addlCss, LIcon.HREF_PREFIX);
 
 } // LIconStandard

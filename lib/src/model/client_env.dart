@@ -155,6 +155,15 @@ class ClientEnv {
   }
   static RegExp _phonePattern = new RegExp(r'(phone|pod|android|mobile)', caseSensitive:false);
 
+  /// is this in an iframe
+  static bool get inIFrame {
+    try {
+      return window.top != window.self;
+    } catch (ex) {
+      return true;
+    }
+  }
+
   /// Next Window Number
   static int get windowNo {
     return _windowNo++;

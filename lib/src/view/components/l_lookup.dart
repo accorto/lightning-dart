@@ -72,8 +72,8 @@ class LLookup
 
   /// Lookup Items
   final List<LLookupItem> _lookupItemList = new List<LLookupItem>();
-  /// Value - Item Map
-  Map<String, LLookupItem> _lookupItemMap;
+  // Value - Item Map
+  //Map<String, LLookupItem> _lookupItemMap;
 
   /// Displayed in Grid
   final bool inGrid;

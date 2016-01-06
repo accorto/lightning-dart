@@ -122,9 +122,12 @@ abstract class TableCtrl
         ..append(li);
       AppsAction deleteYes = AppsAction.createYes(onAppsActionDeleteConfirmed)
         ..actionVar = record;
-      LConfirmation conf = new LConfirmation("tds", label: tableCtrlDelete1Record(),
-        text:tableCtrlDelete1RecordText(), contentElements:[ul],
-        actions:[deleteYes], addCancel: true);
+      LConfirmation conf = new LConfirmation("tds",
+          title: tableCtrlDelete1Record(),
+          text: tableCtrlDelete1RecordText(),
+          contentElements:[ul],
+          actions:[deleteYes],
+          addCancel: true);
       conf.showInElement(element);
     }
   } // onAppsActionDelete
@@ -164,9 +167,12 @@ abstract class TableCtrl
       }
       AppsAction deleteYes = AppsAction.createYes(onAppsActionDeleteSelectedConfirmed)
         ..actionVar = records;
-      LConfirmation conf = new LConfirmation("tdm", label: tableCtrlDeleteRecords(),
-        text:tableCtrlDeleteRecordsText(), contentElements:[ul],
-        actions:[deleteYes], addCancel: true);
+      LConfirmation conf = new LConfirmation("tdm",
+          title: tableCtrlDeleteRecords(),
+          text: tableCtrlDeleteRecordsText(),
+          contentElements:[ul],
+          actions:[deleteYes],
+          addCancel: true);
       conf.showInElement(element);
     }
   }

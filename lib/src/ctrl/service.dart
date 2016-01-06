@@ -387,7 +387,7 @@ class RequestResponse {
     modal.append(p);
     //
     if (reload) {
-      LButton reload = modal.addFooterButtons(saveNameOverride:serviceComErrorButton(), addCancel:false);
+      LButton reload = modal.addFooterButtons(saveLabelOverride:serviceComErrorButton(), addCancel:false);
       reload.onClick.listen((e){
         window.location.reload();
       });
