@@ -490,6 +490,7 @@ class LConfirmation extends LModal {
       LIcon icon, // default ?
       Element tagLineElement,
       String text,
+      List<String> textList,
       List<Element> contentElements,
       List<AppsAction> actions,
       bool addCancel:false,
@@ -503,6 +504,13 @@ class LConfirmation extends LModal {
       ParagraphElement p = new ParagraphElement()
         ..text = text;
       append(p);
+    }
+    if (textList != null && textList.isNotEmpty) {
+      for (String tt in textList) {
+        ParagraphElement p = new ParagraphElement()
+          ..text = tt;
+        append(p);
+      }
     }
     if (contentElements != null) {
       for (Element e in contentElements)
