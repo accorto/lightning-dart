@@ -8,9 +8,9 @@ part of lightning_dart;
 
 /**
  * Form Submitted [valid] form validated
- * return true if continue
+ * return error message or null
  */
-typedef bool FormSubmitPre (bool valid);
+typedef String FormSubmitPre (bool valid);
 
 /**
  * Form submitted and operation completed [response] is null if error
@@ -422,7 +422,10 @@ class LForm
     onEditorFocus(null); // hide all dropdowns
     bool valid = doValidate();
     if (formSubmitPre != null) {
-      valid = formSubmitPre(valid); // inform/confirm
+      String error = formSubmitPre(valid); // inform/confirm
+      if (error != null) {
+        valid = doValidate(errorMessage: error);
+      }
     }
     _debug("onFormSubmit valid=${valid}:");
 
@@ -449,9 +452,13 @@ class LForm
   } // onFormSubmit
 
   /// Validate Form and display errors
-  bool doValidate() {
+  bool doValidate({String errorMessage}) {
     bool valid = true;
     List<String> errors = new List<String>();
+    if (errorMessage != null && errorMessage.isNotEmpty) {
+      errors.add(errorMessage);
+      valid = false;
+    }
     for (LEditor editor in editorList) {
       if (!editor.doValidate()) { // validation
         valid = false;
