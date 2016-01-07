@@ -87,12 +87,6 @@ class AppsMain
     //
     AppsPage.routeHandler = onRouteEnter;
     LightningCtrl.router.fallbackHandler = onRouteEnter;
-
-    // Within IFrame
-    if (ClientEnv.inIFrame) {
-      num width = window.innerWidth; // + margin
-      element.style.maxWidth = "${width}px";
-    }
   } // AppsMain
 
   /**
