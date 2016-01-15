@@ -197,44 +197,52 @@ class ListItem
         p.appendHtml(html);
       }
     }
+    // Description
+    String description = option.description;
+    if (description != null && description.isNotEmpty) {
+      Element descriptionElement = new Element.tag("small")
+        ..classes.add("description");
+      if (exp == null) {
+        descriptionElement.text = description;
+      } else {
+        HtmlEscape esc = new HtmlEscape();
+        String html = description.splitMapJoin(exp,
+            onMatch:    (m) => "<b>${m.group(0)}</b>",
+            onNonMatch: (n) => esc.convert(n));
+        descriptionElement.appendHtml(html);
+      }
+      if (p == null) {
+        a.append(descriptionElement);
+      } else {
+        p.append(descriptionElement);
+      }
+    }
     // Icon r
     if (_rightIcon != null) {
       a.append(_rightIcon.element);
     }
   } // rebuild
 
-  /// return true if [exp] matches [label]
+  /// return true if [exp] matches option label or description
   bool labelHighlight(RegExp exp) {
     if (option.label.contains(exp)) {
       _rebuild(exp);
       return true;
-    } else { // no match
-      _rebuild(null);
-      return false;
+    } else if (option.description != null) {
+      if (option.description.contains(exp)) {
+        _rebuild(exp);
+        return true;
+      }
     }
+    // no match
+    _rebuild(null);
+    return false;
   } // labelHighlight
 
   /// clear highlight
   void labelHighlightClear() {
     _rebuild(null);
   }
-
-  /// return true if [exp] matches [descriptionl]
-  bool descriptionHighlight(RegExp exp) {
-  //  if (_description == null)
-      return false;
-  /*  if (_descriptionText.contains(exp)) {
-      String html = _descriptionText.splitMapJoin((exp),
-      onMatch:    (m) => "<b>${m.group(0)}</b>",
-      onNonMatch: (n) => n);
-      _description.innerHtml = html;
-      _highlighted = true;
-      return true;
-    } else {
-      _description.text = _descriptionText;
-      return false;
-    } */
-  } // descriptionHighlight
 
   /// Conversion to Option
   OptionElement asOption() {

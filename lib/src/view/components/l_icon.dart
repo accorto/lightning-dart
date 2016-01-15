@@ -193,6 +193,7 @@ class LIcon {
       element.classes.addAll(addlCss);
     }
     element.setAttributeNS(null, Html0.ARIA_HIDDEN, "true");
+    element.setAttributeNS(null, Html0.ROLE, Html0.ROLE_IMG);
     element.append(_use);
     this.linkName = linkName;
     //
@@ -209,6 +210,38 @@ class LIcon {
   /// svg element classes
   CssClassSet get classes => element.classes;
 
+  /// Set Title
+  void set title (String newValue) {
+    svg.TitleElement title = new svg.TitleElement()
+      ..text = newValue;
+    // element.insertBefore(title, _use); // must be first
+    _use.append(title); // works here but not on element
+    //
+    title.id = LComponent.createId(null, null, autoPrefixId: "svg-t");
+    element.setAttributeNS(null, Html0.ARIA_LABELLEDBY, title.id);
+  }
+
+  /// Set Description (after setting [title])
+  void set description (String newValue) {
+    svg.DescElement desc = new svg.DescElement()
+      ..text = newValue;
+    element.insertBefore(desc, _use);
+    //
+    desc.id = LComponent.createId(null, null, autoPrefixId: "svg-d");
+    element.setAttributeNS(null, Html0.ARIA_DESCRIBEDBY, desc.id);
+  }
+
+  /// Set Link
+  void set href (String newValue) {
+    // <a xlink:href="http://example.com" tabindex="0" role="link">
+    AnchorElement a = new AnchorElement()
+      ..tabIndex = null
+      ..attributes[Html0.ROLE] = Html0.ROLE_LINK;
+    a.setAttributeNS("link", "href", newValue);
+    // _use.remove();
+    a.append(_use);
+    element.append(a);
+  }
 
   /// set [cssSize] - C_ICON__LARGE, C_ICON__SMALL, C_ICON__X_SMALL
   void set size (String cssSize) {

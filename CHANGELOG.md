@@ -8,7 +8,9 @@ Intermediate Patches, Functionality improvements via +x prefix.
 - #34 color editor
 - #17 timezone editor
 - AppsAction disabled support
-
+- icon title, description, link
+- lookup enhancements
+- apps header
 
 ## 0.12.1 (2015-12-21)
 

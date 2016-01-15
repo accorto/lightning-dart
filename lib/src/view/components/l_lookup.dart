@@ -144,15 +144,17 @@ class LLookup
     // show input with search icon
     input.onKeyUp.listen(onInputKeyUp);
     // toggle dropdown on click
-    input.onClick.listen((Event evt) {
-      if (readOnly || disabled) {
-        showDropdown = false;
-      } else {
-        showDropdown = !_showDropdown;
-      }
-    });
+    _formElement._elementControl.onClick.listen(onClickInput);
   } // initEditor
 
+  /// On Click on Input or Icon
+  void onClickInput(Event evt) {
+    if (readOnly || disabled) {
+      showDropdown = false;
+    } else {
+      showDropdown = !_showDropdown;
+    }
+  }
 
   /// Set Lookup Attributes
   void _setAttributes(bool multiple, bool singleScope, bool typeahead) {
@@ -216,6 +218,9 @@ class LLookup
   /// Set Value
   void set value(String newValue) {
     _value = newValue;
+    if (_valueItem != null) {
+      _valueItem.selected = false;
+    }
     _valueItem = null;
     //validateOptions();
     render(newValue, true)
@@ -266,8 +271,9 @@ class LLookup
     }
     for (LLookupItem item in _lookupItemList) {
       if (item.value == newValue) {
-        if (setValidity)
+        if (setValidity) {
           _valueItem = item;
+        }
         return item.label;
       }
     }
@@ -469,7 +475,7 @@ class LLookup
           first = item;
         count++;
       }
-      else if (item.labelHighlight(exp) || item.descriptionHighlight(exp)) {
+      else if (item.labelHighlight(exp)) {
         item.show = true;
         //item.exampleUpdate();
         if (first == null)
@@ -508,6 +514,13 @@ class LLookup
     }
     Element telement = evt.target;
     String tvalue = telement.attributes[Html0.DATA_VALUE];
+    if (tvalue == null) {
+      telement = telement.parent; // click on description
+      tvalue = telement.attributes[Html0.DATA_VALUE];
+    }
+    if (_valueItem != null) {
+      _valueItem.selected = false;
+    }
     _valueItem = null;
     for (LLookupItem item in _lookupItemList) {
       if (item.value == tvalue) {
@@ -535,13 +548,7 @@ class LLookup
       }
     }
     showDropdown = false;
-    for (LLookupItem item in _lookupItemList) { // remove restrictions
-      item.show = true;
-      item.labelHighlightClear();
-    }
   } // onItemClick
-
-
 
   /// Show/Hide Popup
   void set showDropdown (bool newValue) {
@@ -552,11 +559,25 @@ class LLookup
     input.attributes[Html0.ARIA_EXPANED] = newValue.toString();
     if (newValue) {
       _lookupMenu.classes.remove(LVisibility.C_HIDE);
+      if (_valueItem != null) {
+        _valueItem.selected = true;
+        _valueItem.element.scrollIntoView();
+      }
     } else {
       _lookupMenu.classes.add(LVisibility.C_HIDE);
+      _itemsClearRestriction();
     }
   } // showDropdown
   bool _showDropdown = false;
+
+  /// remove restrictions (show/highlight/selected)
+  void _itemsClearRestriction() {
+    for (LLookupItem item in _lookupItemList) {
+      item.show = true;
+      item.labelHighlightClear();
+      item.selected = false;
+    }
+  }
 
 
   void validateOptions() {

@@ -11,7 +11,7 @@ part of lightning_dart;
  * - li > a|span
  */
 class LLookupItem
-    extends ListItem {
+    extends ListItem { // extends SelectOption (based on DOption)
 
   /**
    * Lookup Option

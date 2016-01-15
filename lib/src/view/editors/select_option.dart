@@ -56,6 +56,7 @@ class SelectOption {
     option.id = newValue;
     oe.id = newValue;
   }
+
   /// Get Label
   String get label => option.label;
   /// Label
@@ -63,6 +64,18 @@ class SelectOption {
     option.label = newValue;
     oe.label = newValue;
   }
+
+  /// Description
+  String get description => option.description;
+
+  /// Label with (description)
+  String get labelDescription {
+    if (option.hasDescription()) {
+      return "${option.label} (${option.description})";
+    }
+    return option.label;
+  }
+
   /// Get Value
   String get value => option.value;
   /// Value

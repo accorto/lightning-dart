@@ -6204,7 +6204,7 @@ a.slds-button--inverse:focus {
   top: 25%;
   color: #9faab5; }
 .slds-input-has-dock {
-  padding-left: 6rem; }
+  padding-left: 6.25rem; }
 .slds-input-has-icon--right2 .slds-input__icon2 {
   right: 2.5rem; }
 .slds-input-has-icon--right2 .slds-input,
@@ -6259,6 +6259,14 @@ input[type=number]::-webkit-inner-spin-button.decimal {
   opacity: 1;
   -webkit-transition: opacity 0.1s linear, visibility 0.1s linear;
           transition: opacity 0.1s linear, visibility 0.1s linear; }
+.slds-lookup__item.slds-is-selected {
+  box-shadow: #0070d2 0 0 0 1px inset;
+  background-color: #f0f8fc; }
+  .slds-lookup__item.slds-is-selected:hover, .slds-lookup__item.slds-is-selected:focus {
+    box-shadow: #1589ee 0 -2px 0 inset, #1589ee 0 0 0 1px inset; }
+.slds-lookup__item .description {
+  margin-left: 0.25rem;
+  overflow: hidden; }
 .slds-pill__container[aria-disabled="true"] {
   background-color: #e0e5ee;
   border-color: #a8b7c7;

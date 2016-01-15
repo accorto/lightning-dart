@@ -35,6 +35,8 @@ class Html0 {
   static const String ROLE_SECONDARY = "secondary";
   /// Attribute role Value
   static const String ROLE_SEEALSO = "seealso";
+  /// Attribute role Value
+  static const String ROLE_LINK = "link";
 
   // http://www.w3.org/TR/wai-aria/roles
   // http://www.w3.org/TR/wai-aria/rdf_model.svg
@@ -60,6 +62,8 @@ class Html0 {
   static const String ROLE_MENUITEMCHECKBOX = "menuitemcheckbox";
   /// Aria Attribute role Value
   static const String ROLE_MENUITEMRADIO = "menuitemradio";
+  /// Aria Attribute role Value  https://www.w3.org/TR/wai-aria/roles#img
+  static const String ROLE_IMG = "img";
 
   /// http://www.w3.org/TR/wai-aria/states_and_properties
   /// Aria Attribute role Value
@@ -84,8 +88,10 @@ class Html0 {
   static const String ROLE_GRIDCELL = "gridcell";
 
 
-  /// Attribute Aria Labelled By (id)
+  /// Attribute Aria Labelled By (id) https://www.w3.org/TR/wai-aria/states_and_properties#aria-labelledby
   static const String ARIA_LABELLEDBY = "aria-labelledby";
+  /// Attribute Aria Described By (id) https://www.w3.org/TR/wai-aria/states_and_properties#aria-describedby
+  static const String ARIA_DESCRIBEDBY = "aria-describedby";
   /// Attribute Aria Controls (id)
   static const String ARIA_CONTROLS = "aria-controls";
   /// Attribute Aria Label

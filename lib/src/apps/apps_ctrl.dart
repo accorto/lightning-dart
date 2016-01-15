@@ -15,12 +15,22 @@ class AppsCtrl {
 
   /// Apps Name
   final String name;
-  /// Apps Label
-  final String label;
 
+  // Header Icon/Image
+  LIcon icon;
+  String imageSrc;
 
-  final LIcon icon;
-  final String imageSrc;
+  /// Apps Title/Label
+  String label;
+  String labelSub;
+
+  /// Info
+  String info;
+  /// Help Url
+  String helpUrl;
+
+  /// Additional Header Element
+  Element additionalHeader;
 
   /// Apps Pages
   final List<AppsPage> pageList = new List<AppsPage>();
@@ -36,5 +46,7 @@ class AppsCtrl {
   void add(AppsPage page) {
     pageList.add(page);
   }
+
+
 
 } // AppsCtrl

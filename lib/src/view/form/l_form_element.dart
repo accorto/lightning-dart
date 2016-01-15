@@ -74,10 +74,12 @@ class LFormElement {
     LIcon iconClear = null;
     if (withClearValue) {
       if (iconRight == null) {
-        iconRight = new LIconUtility(LIconUtility.CLEAR);
+        iconRight = new LIconUtility(LIconUtility.CLEAR)
+          ..title = lFormElementClear();
         iconRight.element.onClick.listen(editor.onClearValue);
       } else {
-        iconClear = new LIconUtility(LIconUtility.CLEAR);
+        iconClear = new LIconUtility(LIconUtility.CLEAR)
+          ..title = lFormElementClear();
         iconClear.classes.clear();
         iconClear.classes.addAll([LForm.C_INPUT__ICON, LForm.C_INPUT__ICON2, LIcon.C_ICON_TEXT_DEFAULT]);
         iconClear.element.onClick.listen(editor.onClearValue);
@@ -410,5 +412,9 @@ class LFormElement {
   LIcon getIconLeft() => null;
   /// Left Element (called early in constructor)
   Element getLeftElement() => null;
+
+  /// trl
+  static String lFormElementClear() => Intl.message("Clear Value", name: "lFormElementClear");
+
 
 } // LFormElement

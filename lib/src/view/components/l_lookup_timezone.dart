@@ -21,7 +21,8 @@ class LLookupTimezone
 
 
   /// Search Icon
-  final LIcon icon = new LIconUtility(LIconUtility.LOCATION);
+  final LIcon icon = new LIconUtility(LIconUtility.LOCATION)
+    ..title = lLookupTimezoneDefault();
 
   DivElement _dock = new DivElement()
     ..classes.add(C_INPUT__DOCK)
@@ -155,6 +156,7 @@ class LLookupTimezone
 
   //
   static String lLookupTimezoneTimeTitle() => Intl.message("Time in selected Timezone", name: "lLookupTimezoneTimeTitle");
+  static String lLookupTimezoneDefault() => Intl.message("Default Timezone", name: "lLookupTimezoneDefault");
 
 } // LLookupTimezone
 

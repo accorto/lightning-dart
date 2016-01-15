@@ -44,15 +44,8 @@ class LLookupSelect
     _pillContainer.classes.add(LVisibility.C_SHOW);
     _formElement.createLookupSelect(_pillContainer, icon, multiple); // update
 
-    // toggle dropdown on click
-    _pillContainer.onClick.listen((Event evt) {
-      if (readOnly || disabled) {
-        showDropdown = false;
-      } else {
-        showDropdown = !_showDropdown;
-      }
-    });
-
+    // toggle dropdown on click incl _pillContainer
+    _formElement._elementControl.onClick.listen(onClickInput);
   } // initEditor2
 
   /// focus on pill container

@@ -132,13 +132,16 @@ class TZ {
   }
 
   /// Label
-  String get label => "${id} (${name})";
+  String get label => id.replaceAll("_", " ");
+  /// Label with (description)
+  String get labelDescription => "${label} (${name})";
 
   /// TZ as Option
   DOption asOption() {
     DOption option = new DOption()
       ..value = id
-      ..label = label;
+      ..label = label
+      ..description = name;
     return option;
   }
 
