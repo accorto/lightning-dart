@@ -211,7 +211,7 @@ class LObjectHomeFilterLookup {
         //item.exampleUpdate();
         count++;
       }
-      else if (item.labelHighlight(exp) || item.descriptionHighlight(exp)) {
+      else if (item.labelHighlight(exp)) {
         item.show = true;
         //item.exampleUpdate();
         count++;
