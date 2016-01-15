@@ -27,10 +27,11 @@ class AppsMenu extends LComponent {
     ..id = "a-menu";
 
   /// Show Button
-  AnchorElement _menuShow = new AnchorElement(href: "#")
+  final AnchorElement _menuShow = new AnchorElement(href: "#")
     ..classes.add(AppsMenu.C_APPS_MENU_SHOW)
     ..id = "a-menu-show";
-
+  /// Help Link
+  AnchorElement _menuHelp;
 
   /// Left Side Menu
   AppsMenu() {
@@ -48,16 +49,27 @@ class AppsMenu extends LComponent {
   void set(AppsCtrl apps) {
     element.children.clear();
     _menuShow.title = apps.label;
-    if (ClientEnv.session != null) {
-      _menuShow.title = "${apps.label} - ${ClientEnv.session.tenantName}";
-    } else {
+    if (ClientEnv.session == null) {
       _menuShow.title = apps.label;
+    } else {
+      _menuShow.title = "${apps.label} - ${ClientEnv.session.tenantName}";
     }
     element.append(_menuShow);
     // entries
     for (AppsPage pe in apps.pageList) {
       element.append(pe.menuEntry);
     }
+    // help
+    if (_menuHelp == null && apps.helpUrl != null && apps.helpUrl.isNotEmpty) {
+      _menuHelp = new AnchorElement(href: apps.helpUrl)
+        ..classes.add(AppsMenu.C_APPS_MENU_ENTRY)
+        ..id = "a-menu-help"
+        ..target = "help";
+      LIcon helpIcon = new LIconUtility(LIconUtility.HELP, size: LIcon.C_ICON__SMALL);
+      _menuHelp.append(helpIcon.element);
+      _menuHelp.append(new SpanElement()..text = appsMenuHelp());
+    }
+    element.append(_menuHelp);
   } // set
 
   /**
@@ -71,6 +83,8 @@ class AppsMenu extends LComponent {
       element.classes.remove(_C_EXPANDED);
     }
   }
+
+  static String appsMenuHelp() => Intl.message("Help", name: "appsMenuHelp");
 
 } // AppsMenu
 
