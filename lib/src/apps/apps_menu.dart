@@ -69,7 +69,8 @@ class AppsMenu extends LComponent {
       _menuHelp.append(helpIcon.element);
       _menuHelp.append(new SpanElement()..text = appsMenuHelp());
     }
-    element.append(_menuHelp);
+    if (_menuHelp != null)
+      element.append(_menuHelp);
   } // set
 
   /**

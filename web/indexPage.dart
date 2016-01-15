@@ -11,13 +11,16 @@ import "demo.dart";
  */
 void main() {
 
-  LightningDart.init() // client env
+  // LightningDart.init() // client env
+  LightningCtrl.init(serverUri: "https://psa.bizfabrik.net/") // server env
   .then((_) {
     IntroPage intro = new IntroPage();
     //
     AppsMain page = LightningCtrl.createAppsMain();
     AppsCtrl apps = new AppsCtrl("ldart", "Lightning Dart Demo",
-      imageSrc: "packages/lightning/assets/images/LightningDartLogo.svg");
+      imageSrc: "packages/lightning/assets/images/LightningDartLogo.svg")
+      ..info = "Lightning Experience in Dart"
+      ..helpUrl = "http://lightning.accorto.com";
     apps.add(intro);
     apps.add(new DemoPage("desktop", new LIconUtility(LIconUtility.DESKTOP), "Desktop", page));
     apps.add(new DemoFrame("tablet", new LIconUtility(LIconUtility.TABLET_PORTRAIT), "Tablet", 768));
@@ -25,7 +28,7 @@ void main() {
     apps.add(new ExampleForm());
     apps.add(new ExampleWorkspace());
     apps.add(new AppsSettings());
-    apps.add(new SupportLink());
+    //apps.add(new SupportLink());
     page.set(apps);
   });
 
