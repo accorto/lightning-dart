@@ -590,7 +590,7 @@ class RouterPath {
   void setRoute(Route route, {String value, Map<String,String> map}) {
     _route = route;
     _value = value;
-    this.map = null;
+    this.map = map;
   }
 
   /**
@@ -654,8 +654,12 @@ class RouterPath {
     return null;
   } // get
 
+
+  String get routeName => _route == null ? null : _route.name;
+  String get routePath => _route == null ? null : _route.path;
+
   /**
-   * Get Path
+   * Get full Path
    */
   String toPath() {
     StringBuffer sb = new StringBuffer();

@@ -150,7 +150,7 @@ class AppsMain
       }
     }
 
-    String name = path.toString();
+    String name = path.routeName;
     AppsPage page = null;
     for (AppsPage pe in _currentApps.pageList) {
       if (pe.name == name) {

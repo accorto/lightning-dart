@@ -196,7 +196,7 @@ class AppSettingsMessages
 
   static const String ID = "msg";
 
-  LButton _clearBtn = new LButton.neutral("clear", "clear", idPrefix: ID);
+  LButton _clearBtn = new LButton.neutral("clear", "-", idPrefix: ID);
 
   /// Messages
   AppSettingsMessages() : super(ID, appsStatusMessagesLabel()) {
