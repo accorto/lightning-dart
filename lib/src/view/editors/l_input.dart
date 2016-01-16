@@ -50,9 +50,11 @@ class LInput
   /// initialize listeners with original type - listen to onChange - onKeyUp
   void _initEditor(String type) {
     if (type == EditorI.TYPE_PASSWORD) {
-      input.autocomplete = "off"; // https://html.spec.whatwg.org/multipage/forms.html#autofill
-      input.attributes["autocapitalize"] = "off";
-      input.attributes["autocorrect"] = "off";
+      autocomplete = false;
+      autocapitalize = "none";
+      autocorrect = false;
+    } else if (type == EditorI.TYPE_EMAIL) {
+      autocapitalize = "none";
     }
     /// Changes
     input.onChange.listen(onInputChange);
@@ -115,6 +117,26 @@ class LInput
   void set autofocus (bool newValue) {
     input.autofocus = newValue;
   }
+
+  /// https://html.spec.whatwg.org/multipage/forms.html#autofill
+  bool get autocomplete => input.autocomplete == "on";
+  /// https://www.w3.org/wiki/HTML/Elements/input/text
+  void set autocomplete (bool newValue) {
+    input.autocomplete = newValue ? "on" : "off";
+  }
+
+  /// https://developer.apple.com/library/iad/documentation/AppleApplications/Reference/SafariHTMLRef/Articles/Attributes.html#//apple_ref/doc/uid/TP40008058-SW1
+  bool get autocorrect => input.attributes["autocorrect"] == "on";
+  void set autocorrect (bool newValue) {
+    input.attributes["autocorrect"] = newValue ? "on" : "off";
+  }
+
+  String get autocapitalize => input.attributes["autocapitalize"];
+  /// none|sentences|words|characters
+  void set autocapitalize (String newValue) {
+    input.attributes["autocapitalize"] = newValue;
+  }
+
 
   /// Validation
 

@@ -367,11 +367,21 @@ class LForm
   LButton _buttonSave;
   bool _buttonSaveChangeOnly = true;
 
+  /// Add Save button as Submit
+  LButton addSubmitButton() {
+    if (_buttonSave == null) {
+      return addSaveButton(label: lFormSubmit(), icon: new LIconUtility(LIconUtility.CONNECTED_APPS));
+    }
+    _buttonSave.label = lFormSubmit();
+    _buttonSave.icon = new LIconUtility(LIconUtility.CONNECTED_APPS);
+    return _buttonSave;
+  }
 
   /// Error Indicator
   LPopover addErrorIndicator() {
     if (_errorBtn == null) {
-      _errorBtn = new LButton.iconBare("formError", new LIconUtility(LIconUtility.ERROR), lFormError(), idPrefix: id);
+      _errorBtn = new LButton.iconBare("formError",
+          new LIconUtility(LIconUtility.ERROR), lFormError(), idPrefix: id);
       _errorBtn.icon.classes.add(LText.C_TEXT_ERROR);
       _errorBtn.classes.add(LVisibility.C_HIDE); // button hide
       //
@@ -569,6 +579,7 @@ class LForm
 
   // Trl
   static String lFormSave() => Intl.message("Save", name: "lFormSave");
+  static String lFormSubmit() => Intl.message("Submit", name: "lFormSubmit");
   static String lFormReset() => Intl.message("Reset", name: "lFormReset");
   static String lFormError() => Intl.message("Form Error", name: "lFormError");
 
