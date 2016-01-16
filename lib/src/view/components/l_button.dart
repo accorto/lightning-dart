@@ -254,8 +254,10 @@ class LButton
     : this(new ButtonElement(), name, label,
         buttonClasses: [C_BUTTON__NEUTRAL], idPrefix:idPrefix);
   /// Neutral Anchor
-  LButton.neutralAnchor(String name, String label, {String href, String idPrefix})
-    : this(new AnchorElement(href:(href == null ? "#" : href)), name, label,
+  LButton.neutralAnchor(String name, String label,
+      {String href, String target:"_blank", String idPrefix})
+    : this(new AnchorElement(href:(href == null ? "#" : href)) ..target = target,
+        name, label,
         buttonClasses: [C_BUTTON__NEUTRAL], idPrefix:idPrefix);
   /// Neutral Input Button
   LButton.neutralInput(String name, String label, {String idPrefix})
@@ -263,12 +265,15 @@ class LButton
         buttonClasses: [C_BUTTON__NEUTRAL], idPrefix:idPrefix);
 
   /// Neutral Button with Icon
-  LButton.neutralIcon(String name, String label, LIcon icon, {bool iconLeft: false, String idPrefix})
+  LButton.neutralIcon(String name, String label, LIcon icon,
+      {bool iconLeft: false, String idPrefix})
     : this(new ButtonElement(), name, label,
         buttonClasses: [C_BUTTON__NEUTRAL], icon:icon, iconLeft:iconLeft, idPrefix:idPrefix);
   /// Neutral Anchor
-  LButton.neutralAnchorIcon(String name, String label, LIcon icon, {String href, bool iconLeft: false, String idPrefix})
-    : this(new AnchorElement(href:(href == null ? "#" : href)), name, label,
+  LButton.neutralAnchorIcon(String name, String label, LIcon icon,
+      {String href, String target:"_blank", bool iconLeft: false, String idPrefix})
+    : this(new AnchorElement(href:(href == null ? "#" : href)) ..target = target,
+        name, label,
         buttonClasses: [C_BUTTON__NEUTRAL], icon:icon, iconLeft:iconLeft, idPrefix:idPrefix);
 
   /// (Neutral) Icon Button with More
@@ -285,8 +290,10 @@ class LButton
     : this(new ButtonElement(), name, label,
         buttonClasses: [C_BUTTON__BRAND], icon:icon, iconLeft:iconLeft, idPrefix:idPrefix);
   /// Brand Button
-  LButton.brandAnchor(String name, String label, {String href, String idPrefix})
-    : this(new AnchorElement(href: (href == null ? "#" : href)), name, label,
+  LButton.brandAnchor(String name, String label,
+      {String href, String target:"_blank", String idPrefix})
+    : this(new AnchorElement(href: (href == null ? "#" : href)) ..target = target,
+        name, label,
         buttonClasses: [C_BUTTON__BRAND], idPrefix:idPrefix);
 
   /// Inverse Button
