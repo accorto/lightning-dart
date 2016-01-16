@@ -462,8 +462,9 @@ abstract class EditorI {
 
   /// Clear Value
   void onClearValue(Event ignored) {
-    if (readOnly || disabled)
+    if (readOnly || disabled) {
       return;
+    }
     value = "";
     if (data != null && _entry != null) {
       data.updateEntry(_entry, "");

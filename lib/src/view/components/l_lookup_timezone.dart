@@ -58,14 +58,15 @@ class LLookupTimezone
       }
       return;
     }
+    // add time zones
     for (TZ tz in TZ.tzList) {
       addLookupItem(new LLookupTimezoneItem(tz));
     }
-    onDefaultClick(null);
-    _formElement._inputWrapper.insertBefore(_dock, input);
 
-    // start clock
+    // show + start clock
+    _formElement._inputWrapper.insertBefore(_dock, input);
     clockRun = !inGrid && !disabled && !readOnly;
+    onDefaultClick(null); // default TZ
   } // initTz
   int _waitSeconds = 0;
 
@@ -73,6 +74,9 @@ class LLookupTimezone
    * Set Default TZ
     */
   void onDefaultClick(MouseEvent ignored) {
+    if (readOnly || disabled) {
+      return;
+    }
     DateTime dt = new DateTime.now();
     String tzName = dt.timeZoneName;
     String theValue = tzName;
