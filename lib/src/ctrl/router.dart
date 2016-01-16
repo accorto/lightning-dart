@@ -160,6 +160,7 @@ class Router {
 
   /**
    * Start listening (call route(null) to go to url)
+   * - Called By AppsMain.set(AppsCtrl)
    */
   RouterPath start() {
     if (_hashChangeSubscription == null) {

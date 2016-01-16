@@ -90,7 +90,7 @@ class AppsMain
   } // AppsMain
 
   /**
-   * Set Application
+   * Set Application + start router
    */
   void set(AppsCtrl apps) {
     if (_currentPage != null) {
