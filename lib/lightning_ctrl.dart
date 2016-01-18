@@ -132,7 +132,6 @@ class LightningCtrl {
     futures.add(Preference.init());
 
     router.loadConfig();
-    bool embedded = false;
     if (router.hasParam(Router.P_SERVERURI)) {
       serverUri = router.param(Router.P_SERVERURI);
       embedded = true;

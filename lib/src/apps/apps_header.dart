@@ -29,8 +29,12 @@ class AppsHeader extends LComponent {
       left.append(apps.icon.element);
     }
     else if (apps.imageSrc != null) {
-      LImage img = new LImage.srcMedium(apps.imageSrc, apps.label, circle: false);
-      left.append(img.element);
+      ImageElement img = new ImageElement(src: apps.imageSrc)
+        ..style.maxHeight = "52px" // same height as Title+Sub
+        ..style.maxWidth = "300px"
+        ..alt = apps.label
+        ..title = apps.label;
+      left.append(img);
     }
 
     // Title
