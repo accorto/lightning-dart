@@ -158,9 +158,9 @@ class Router {
       if (!queryParams.containsKey(P_TEST) && config.hasProperty(P_TEST)) {
         queryParams[P_TEST] = config[P_TEST];
       }
-      if (!ClientEnv.testMode) {
-        ClientEnv.testMode = queryParams[P_TEST] == "true";
-      }
+    }
+    if (!ClientEnv.testMode) {
+      ClientEnv.testMode = queryParams[P_TEST] == "true";
     }
   } // loadConfig
   /// Embedded - use ServerUti
