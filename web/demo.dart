@@ -165,7 +165,7 @@ class ExampleForm extends AppsPage {
 
   final IFrameElement element = new IFrameElement();
 
-  ExampleForm() : super ("form", "form", formIcon, "Form", "Lightning Dart Form Exmaple") {
+  ExampleForm() : super ("form", "form", formIcon, "Form", "Lightning Dart Form Example") {
     element
       ..src = "exampleForm.html"
       ..width = "100%"
@@ -184,7 +184,7 @@ class ExampleWorkspace extends AppsPage {
 
   Element element = new DivElement();
 
-  ExampleWorkspace() : super ("wb", "wb", formIcon, "Workspace", "Lightning Dart Workspace Exmaple") {
+  ExampleWorkspace() : super ("wb", "wb", formIcon, "Workspace", "Lightning Dart Workspace Example") {
     WorbenchData wbData = new WorbenchData();
     ObjectCtrl ctrl = new ObjectCtrl(wbData);
     element.append(ctrl.element);
