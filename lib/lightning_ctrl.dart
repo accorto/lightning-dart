@@ -115,8 +115,7 @@ class LightningCtrl {
    * Initialize Logging, Locale, Intl, Date
    * optional [serverUri] to overwrite target
    */
-  static Future<List<Future>> init({String serverUri: "/",
-      bool embedded: false, bool test: false}) {
+  static Future<List<Future>> init({String serverUri: "/"}) {
 
     Completer<List<Future>> completer = new Completer<List<Future>>();
     List<Future> futures = new List<Future>();
@@ -131,15 +130,11 @@ class LightningCtrl {
     futures.add(LightningDart.init()); // ClientEnv, Locale Intl, Date
     futures.add(Preference.init());
 
-    router.loadConfig();
+    bool embedded = router.embedded;
     if (router.hasParam(Router.P_SERVERURI)) {
       serverUri = router.param(Router.P_SERVERURI);
-      embedded = true;
     }
-    if (router.hasParam(Router.P_TEST)) {
-      test = ("true" == router.param(Router.P_TEST));
-    }
-    Service.init(serverUri, embedded:embedded, test:test);
+    Service.init(serverUri, embedded:embedded);
     futures.add(Timezone.init(false)); // requires server url
     // FK
     EditorUtil.createLookupCall = FkCtrl.createLookup;
@@ -161,21 +156,16 @@ class LightningCtrl {
       id = router.param(Router.P_LOADDIV);
     }
     if (router.hasParam(Router.P_CLEARCONTAINER)) {
-      clearContainer = "true" == router.param(Router.P_CLEARCONTAINER);
+      clearContainer = router.param(Router.P_CLEARCONTAINER) == "true";
     }
-    /*
-    if (router.hasParam(Router.P_FLUID)) {
-      fluid = "true" == router.param(Router.P_FLUID);
-    }
-    if (router.hasParam(Router.P_ADDHEADER)) {
+
+    PageSimple page = LightningDart.createPageSimple(id:id, clearContainer:clearContainer, classList:classList);
+    /* if (router.hasParam(Router.P_ADDHEADER)) {
       addHeader = "true" == router.param(Router.P_ADDHEADER);
     }
     if (router.hasParam(Router.P_ADDNAV)) {
       addNav = "true" == router.param(Router.P_ADDNAV);
-    }
-    */
-
-    PageSimple page = LightningDart.createPageSimple(id:id, clearContainer:clearContainer, classList:classList);
+    } */
     Service.onServerStart = page.onServerStart;
     Service.onServerSuccess = page.onServerSuccess;
     Service.onServerError = page.onServerError;
@@ -195,29 +185,37 @@ class LightningCtrl {
       id = router.param(Router.P_LOADDIV);
     }
     if (router.hasParam(Router.P_CLEARCONTAINER)) {
-      clearContainer = "true" == router.param(Router.P_CLEARCONTAINER);
+      clearContainer = router.param(Router.P_CLEARCONTAINER) == "true";
     }
     // Top Level Main
-    Element e = querySelector("#${id}");
-    if (e == null) {
+    Element loadDiv = querySelector("#${id}");
+    if (loadDiv == null) {
       for (String cls in PageSimple.MAIN_CLASSES) {
-        e = querySelector(".${cls}");
-        if (e != null) {
+        loadDiv = querySelector(".${cls}");
+        if (loadDiv != null) {
           break;
         }
       }
     }
     AppsMain main = null;
-    if (e == null) {
+    if (loadDiv == null) {
       Element body = document.body; // querySelector("body");
       main = new AppsMain(new DivElement(), id, classList:classList);
       body.append(main.element);
     } else {
-      LightningDart.devTimestamp = e.attributes["data-timestamp"];
+      LightningDart.devTimestamp = loadDiv.attributes["data-timestamp"];
       if (clearContainer) {
-        e.children.clear();
+        loadDiv.children.clear();
       }
-      main = new AppsMain(e, id, classList:classList);
+      main = new AppsMain(loadDiv, id, classList:classList);
+    }
+    if (router.hasParam(Router.P_ADDHEADER)) {
+      if (router.param(Router.P_ADDHEADER) != "true")
+        main.showHeader(false);
+    }
+    if (router.hasParam(Router.P_ADDNAV)) {
+      if (router.param(Router.P_ADDNAV) != "true")
+        main.showMenuBar(false);
     }
     //
     Service.onServerStart = main.onServerStart;

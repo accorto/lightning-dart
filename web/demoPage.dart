@@ -11,7 +11,7 @@ import "demo.dart";
  */
 void main() {
 
-  LightningCtrl.init(serverUri: "https://psa.bizfabrik.net/", embedded: true) // server env
+  LightningCtrl.init() // server env
   .then((_) {
 
     PageSimple page = LightningDart.createPageSimple();

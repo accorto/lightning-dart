@@ -120,8 +120,6 @@ class AppSettingsEnvironment
     // LightningCtrl.router.queryParams
     table.addRowHdrDataList("Client Id/Trx", [Service.clientId, Service.trxNo]);
 
-    table.addRowHdrDataList("Dev Mode", [Service.devMode]);
-
     Screen scr = window.screen;
     table.addRowHdrDataList("screen", ["w=${scr.width} h=${scr.height} d=${scr.pixelDepth}"], colSpan:2);
     table.addRowHdrDataList("window", ["w=${window.innerWidth} h=${window.innerHeight}"], colSpan:2);
@@ -130,8 +128,9 @@ class AppSettingsEnvironment
     // table.addRowHdrData("version", nav.appVersion);
     table.addRowHdrDataList("cookie", [nav.cookieEnabled, nav.doNotTrack == null ? "" : nav.doNotTrack]);
     table.addRowHdrDataList("platform/vendor", [nav.platform, nav.vendor]);
-    table.addRowHdrDataList("mobile/phone", [ClientEnv.isMobileUserAgent, ClientEnv.isPhone]);
 
+    table.addRowHdrDataList("mobile/phone", [ClientEnv.isMobileUserAgent, ClientEnv.isPhone]);
+    table.addRowHdrDataList("Test Mode", [ClientEnv.testMode]);
     table.addRowHdrDataList("iframe", [ClientEnv.inIFrame, "page=${window.pageXOffset}/${window.pageYOffset} scroll=${window.scrollX}/${window.scrollY}"]);
 
 

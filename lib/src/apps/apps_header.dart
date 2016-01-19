@@ -42,12 +42,14 @@ class AppsHeader extends LComponent {
       ..classes.add(LGrid.C_COL__PADDED);
     element.append(center);
     HeadingElement h1 = new HeadingElement.h1()
+      ..id = "a-label"
       ..classes.add(LText.C_TEXT_HEADING__MEDIUM)
       ..text = apps.label;
     center.append(h1);
     document.title = apps.label;
     if (apps.labelSub != null) {
       DivElement sub = new DivElement()
+        ..id = "a-label-sub"
         ..classes.add(LText.C_TEXT_HEADING__SMALL)
         ..text = apps.labelSub;
       center.append(sub);
@@ -56,15 +58,31 @@ class AppsHeader extends LComponent {
     // Info
     if (apps.info != null && apps.info.isNotEmpty) {
       DivElement right = new DivElement()
+        ..id = "a-info"
         ..classes.add(LGrid.C_COL);
       element.append(right);
+      // add break after LF or ". "
       List<String> parts = apps.info.split("\n");
       for (String part in parts) {
-        if (right.children.isNotEmpty) {
-          right.append(new Element.br());
+        List<String> parts2 = part.split("\. ");
+        for (String part2 in parts2) {
+          if (part2.isEmpty)
+            continue;
+          if (right.children.isNotEmpty) {
+            right.append(new Element.br());
+          }
+          if (parts2.length > 2) {
+            if (part2.endsWith("."))
+              right.append(new SpanElement()
+                ..text = part2);
+            else
+              right.append(new SpanElement()
+                ..text = "${part2}.");
+          } else {
+            right.append(new SpanElement()
+              ..text = part2);
+          }
         }
-        right.append(new SpanElement()
-          ..text = part);
       }
     }
 

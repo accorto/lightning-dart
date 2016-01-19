@@ -12,7 +12,7 @@ import "demo.dart";
 void main() {
 
   // LightningDart.init() // client env
-  LightningCtrl.init(serverUri: "https://psa.bizfabrik.net/", embedded: true) // server env
+  LightningCtrl.init() // server env
   .then((_) {
     IntroPage intro = new IntroPage();
     //

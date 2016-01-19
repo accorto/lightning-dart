@@ -6109,6 +6109,15 @@ a.slds-button--inverse:focus {
     height: 1.5rem;
     background-color: #16325c;
     border-radius: 0.125rem; }
+.status-info {
+  white-space: nowrap;
+  font-size: xx-small;
+  color: transparent;
+  overflow: hidden; }
+.status-test {
+  white-space: nowrap;
+  font-size: xx-small;
+  overflow: hidden; }
 .busy-backdrop {
   -webkit-transition-duration: 0.4s;
           transition-duration: 0.4s;

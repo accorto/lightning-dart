@@ -40,8 +40,6 @@ class Service {
   /// Uptime (duration)
   static Duration get upTime => new DateTime.now().difference(startTime);
 
-  /** Development Mode */
-  static bool devMode = false;
   /** Protocol Buffers Header */
   static Map<String, String> requestHeaders = new Map<String, String>();
 
@@ -61,7 +59,7 @@ class Service {
    * Initialize Services - optional set [serverUri] when testing
    * e.g. "http://localhost:6666/" updating [serverUrl]
    */
-  static void init(String serverUri, {bool embedded: false, bool test: false}) {
+  static void init(String serverUri, {bool embedded: false}) {
     _log = new Logger("Service");
     Service.clientPrefix = clientPrefix;
 
@@ -71,13 +69,12 @@ class Service {
     if (serverUri != null && serverUri.isNotEmpty) {
       if (url.contains("localhost")) {
         serverUrl = serverUri;
-        test = true;
+        ClientEnv.testMode = true;
       }
       if (embedded) {
         serverUrl = serverUri;
       }
     }
-    devMode = test;
     //
     SettingItem si = Settings.setting(Settings.GEO_ENABLED);
     si.onChange.listen((String newValue) {
@@ -119,7 +116,7 @@ class Service {
       ..locale = ClientEnv.localeName
       ..timeZone = now.timeZoneName // initial guess
       ..timeZoneUtcOffset = now.timeZoneOffset.inMinutes
-      ..isDevMode = devMode;
+      ..isDevMode = ClientEnv.testMode;
     // geo
     try {
       if (addGeo || withGeo) {

@@ -141,7 +141,7 @@ class AppsMain
   } // onMenuClick
 
   /// On Route Enter - return false for external or not found
-  bool onRouteEnter(RouterPath path) {
+  bool onRouteEnter(final RouterPath path) {
     if (_currentPage != null) {
       String error = _currentPage.hidePrevent();
       if (error != null) {
@@ -160,11 +160,11 @@ class AppsMain
       }
     }
     if (page == null) {
-      _log.info("onRouteEnter NotFound path=${path} name=${name}");
+      _log.info("onRouteEnter NotFound name=${name} path=${path.toPath()}");
       return false;
     }
 
-    _log.info("onRouteEnter path=${path} name=${name}");
+    _log.info("onRouteEnter name=${name} path=${path.toPath()}");
     String error = page.showPrevent();
     if (error != null) {
       showError(appsMainShowPrevent(), page.label, error);

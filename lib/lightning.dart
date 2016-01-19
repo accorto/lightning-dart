@@ -207,26 +207,26 @@ class LightningDart {
   static PageSimple createPageSimple({String id: "wrap",
     bool clearContainer: true, List<String> classList}) {
     // Top Level Main
-    Element e = querySelector("#${id}");
-    if (e == null) {
+    Element loadDiv = querySelector("#${id}");
+    if (loadDiv == null) {
       for (String cls in PageSimple.MAIN_CLASSES) {
-        e = querySelector(".${cls}");
-        if (e != null) {
+        loadDiv = querySelector(".${cls}");
+        if (loadDiv != null) {
           break;
         }
       }
     }
     PageSimple main = null;
-    if (e == null) {
+    if (loadDiv == null) {
       Element body = document.body; // querySelector("body");
       main = new PageSimple(new DivElement(), id, classList:classList);
       body.append(main.element);
     } else {
-      devTimestamp = e.attributes["data-timestamp"];
+      devTimestamp = loadDiv.attributes["data-timestamp"];
       if (clearContainer) {
-        e.children.clear();
+        loadDiv.children.clear();
       }
-      main = new PageSimple(e, id, classList:classList);
+      main = new PageSimple(loadDiv, id, classList:classList);
     }
     _log.info("createPageSimple ${id} version=${VERSION} ts=${devTimestamp}");
     return main;

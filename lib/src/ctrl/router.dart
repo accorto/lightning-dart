@@ -17,15 +17,19 @@ typedef bool RouteEventHandler(RouterPath path);
  */
 class Router {
 
-  // (Javascript) Parameter
+  /// (Javascript LINIT) Parameter
   static const String P_SERVERURI = "serverUri";
   static const String P_CNAME = "cname";
+  /// loadDiv - id
   static const String P_LOADDIV = "loadDiv";
-  static const String P_FLUID = "fluid";
+  /// clear container - true|(false)
   static const String P_CLEARCONTAINER = "clearContainer";
+  /// add header - (true)|false
   static const String P_ADDHEADER = "addHeader";
+  /// clear container - (true)|false
   static const String P_ADDNAV = "addNav";
   static const String P_THEME = "theme";
+  /// test mode - true|(false)
   static const String P_TEST = "test";
 
   /**
@@ -116,18 +120,20 @@ class Router {
     // Parameters
     queryParams = queryParamsFrom(search);
     Map<String, String> hashParams = queryParamsFrom(hash);
-    if (hashParams.length > 0)
+    if (hashParams.length > 0) {
       queryParams.addAll(hashParams);
+    }
+    _loadConfig();
     // paths
     //List<String> pp = RouterPath.getPathElements(path+hash);
     // _log.log(Level.INFO, "baseUrl=${_baseUrl} paths=${pp} params=${queryParams}");
   } // init
 
   /// load Javascript Config - query parameters overwrite!
-  void loadConfig() {
-    // LINIT={cname: "accorto", loadDiv: "quando", fluid: "true", clearWrap: "false", addHeader: "false", addNav: "false"};
+  void _loadConfig() {
+    // LINIT={cname: "accorto", serverUri: "https://accorto.bizquando.com/", loadDiv: "quando", clearContainer: "true", addHeader: "false", addNav: "false", test: "false"};
     JsObject config = context['LINIT'];
-    if (config != null && queryParams != null) {
+    if (config != null) {
       if (!queryParams.containsKey(P_CNAME) && config.hasProperty(P_CNAME)) {
         queryParams[P_CNAME] = config[P_CNAME];
       }
@@ -136,9 +142,6 @@ class Router {
       }
       if (!queryParams.containsKey(P_LOADDIV) && config.hasProperty(P_LOADDIV)) {
         queryParams[P_LOADDIV] = config[P_LOADDIV];
-      }
-      if (!queryParams.containsKey(P_FLUID) && config.hasProperty(P_FLUID)) {
-        queryParams[P_FLUID] = config[P_FLUID];
       }
       if (!queryParams.containsKey(P_CLEARCONTAINER) && config.hasProperty(P_CLEARCONTAINER)) {
         queryParams[P_CLEARCONTAINER] = config[P_CLEARCONTAINER];
@@ -155,8 +158,14 @@ class Router {
       if (!queryParams.containsKey(P_TEST) && config.hasProperty(P_TEST)) {
         queryParams[P_TEST] = config[P_TEST];
       }
+      if (!ClientEnv.testMode) {
+        ClientEnv.testMode = queryParams[P_TEST] == "true";
+      }
     }
   } // loadConfig
+  /// Embedded - use ServerUti
+  bool get embedded => context['LINIT'] != null;
+
 
   /**
    * Start listening (call route(null) to go to url)
@@ -194,7 +203,7 @@ class Router {
         routerPath.setRoutePath(route, paths: pp);
       }
     }
-    _log.info("start path=${routerPath}");
+    _log.info("start path=${routerPath.toPath()}");
     return routerPath;
   } // start
 
@@ -439,6 +448,14 @@ class Router {
     if (recent == null)
       return "#";
     return hrefFromTableId(recent.recentType, recent.recordId);
+  }
+
+  String toString() {
+    return "Router useHash=${useHash} initialHref=${initialHref} "
+        " baseUrl=${_baseUrl} queryParam=${queryParams}"
+        " currentPath=${_currentPath}" // currentPathTime=${_currentPathTime}""
+        " routes=#${_routeList.length}"
+        " [${routerPath}]";
   }
 
 
@@ -701,6 +718,8 @@ class RouterPath {
     });
   } // toPath
 
-  String toString() => toPath();
+  String toString() {
+    return "RouterPath [${_route}] value=${_value} map=${map}";
+  }
 
 } // RouterPath

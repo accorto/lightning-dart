@@ -473,6 +473,7 @@ abstract class EditorI {
       }
     }
     onInputChange(ignored); // validates
+    input.focus();
   } // clearValue
 
 

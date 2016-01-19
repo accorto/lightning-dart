@@ -23,6 +23,10 @@ part of lightning_dart;
  *  - busy: element(#wrap) has class "busy"
  *  - process: element(#wrap) attributes data-success/data-detail
  *
+ * Testing:
+ * element .status-info (hidden at document end) or .status-test changes the id
+ * - status-none, status-busy, status-ok, status-error
+ * containing last status details
  */
 class PageSimple
     extends LComponent {
@@ -42,8 +46,8 @@ class PageSimple
   final Element element;
   /// Status Element
   final DivElement _statusElement = new DivElement()
-    ..style.display = "none"
-    ..id = STATUS_ID_NONE;
+    ..id = STATUS_ID_NONE
+    ..text = ".";
 
   /// Status messages
   static final List<StatusMessage> statusMessages = new List<StatusMessage>();
@@ -67,7 +71,9 @@ class PageSimple
     } else {
       element.parent.append(_statusElement);
     }
-  } // PageSimple
+    // Status
+    _statusElement.classes.add(ClientEnv.testMode ? "status-test" : "status-info");
+} // PageSimple
 
 
   /// Server Start (busy)
@@ -157,8 +163,8 @@ class PageSimple
     element.attributes["data-success"] = (sm == null || sm.dataSuccess == null) ? "" : sm.dataSuccess;
     element.attributes["data-detail"] = (sm == null || sm.dataDetail == null) ? "" : sm.dataDetail;
     //
-    _statusElement.text = (sm == null) ? ""
-        : "message=${sm.message} \ndetail=${sm.detail} \ndataSuccess=${sm.dataSuccess} \ndataDetail=${sm.dataDetail}";
+    _statusElement.text = (sm == null) ? "."
+        : "${sm.message}; \ndetail=${sm.detail}; \ndataSuccess=${sm.dataSuccess}; \ndataDetail=${sm.dataDetail};";
   } // setStatus
   /// Status Toast
   LToast _statusToast;

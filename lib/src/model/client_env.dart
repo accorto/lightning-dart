@@ -26,6 +26,9 @@ class ClientEnv {
   /** Time Zone */
   static TZ timeZone;
 
+  /** Development/Test Mode */
+  static bool testMode = false;
+
   /// Client Context (Session)
   static final Map<String, dynamic> ctx = new Map<String, dynamic>();
   /** System Session */
