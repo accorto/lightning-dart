@@ -21,6 +21,8 @@ class FormSection
   final int columnCount;
   /// Editors
   List<LEditor> _editors = new List<LEditor>();
+  /// Actual Columns used
+  int _columnsUsed = 0;
 
   /// Form Section
   FormSection(int this.columnCount, {bool open:true, String label})
@@ -41,22 +43,34 @@ class FormSection
   }
 
   /// add editor
-  void addEditor (LEditor editor, Element formElement, bool newRow, int width, int height) {
+  void addEditor (LEditor editor, Element formElement, bool newRow,
+      int width, bool fillRemainingRow, int height) {
     _editors.add(editor);
     if (columnCount > 0) {
+      int remaining = columnCount - (_columnsUsed % columnCount);
       if (newRow && sectionElement.children.isNotEmpty) {
         DivElement div = new DivElement()
           ..classes.addAll([LGrid.C_GRID, LGrid.C_WRAP]); // new section
         formElement.append(div);
         addSectionElement(div); // sets _sectionElement
+        _columnsUsed = 0;
       }
+      // default size 100%
       DivElement div = new DivElement()
         ..classes.addAll([LGrid.C_COL__PADDED, LGrid.C_GROW_NONE, LSizing.C_SIZE__1_OF_1])
         ..append(editor.element);
-      if (columnCount > 1 && columnCount != width) {
-        div.classes.add(LSizing.sizeMediumXofY(width, columnCount));
+      if (columnCount > 1 && columnCount != width) { // for medium or up
+        int theWidth = width;
+        if (fillRemainingRow != null && fillRemainingRow) {
+          theWidth = remaining;
+        }
+        div.classes.add(LSizing.sizeMediumXofY(theWidth, columnCount));
+        _columnsUsed += theWidth;
+      } else {
+        _columnsUsed++;
       }
       sectionElement.append(div);
+      // print("addElditor ${editor.name} used=${_columnsUsed} - ${remaining}");
     } else {
       sectionElement.append(editor.element);
     }

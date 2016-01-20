@@ -181,9 +181,11 @@ class LForm
   FormSection _section;
   List<FormSection> _sections;
 
-
-  /// Add Editor (to current section)
-  void addEditor (LEditor editor, {bool newRow:false, int width:1, int height:1,
+  /**
+   * Add Editor (to current section)
+   */
+  void addEditor (LEditor editor, {bool newRow:false,
+      int width:1, bool fillRemainingRow, int height:1,
       String marginClass}) {
     if (marginClass != null && marginClass.isNotEmpty) {
       editor.element.classes.add(marginClass);
@@ -193,7 +195,7 @@ class LForm
     if (_section == null) {
       element.append(editor.element);
     } else {
-      _section.addEditor(editor, element, newRow, width, height);
+      _section.addEditor(editor, element, newRow, width, fillRemainingRow, height);
     }
     editor.data = _data;
     editor.entry = _data.getEntry(editor.id, editor.name, true, createDefault:editor.value);
