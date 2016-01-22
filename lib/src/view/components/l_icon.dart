@@ -71,29 +71,15 @@ class LIcon {
   static const String HREF_PREFIX = "packages/lightning";
 
   static const String SPRITE_ACTION =
-      "/assets/icons/action-sprite/svg/symbols.svg#"; // announcement
+      "/assets/icons/action-sprite/svg/symbols.svg"; // announcement
   static const String SPRITE_CUSTOM =
-      "/assets/icons/custom-sprite/svg/symbols.svg#"; // custom1
+      "/assets/icons/custom-sprite/svg/symbols.svg"; // custom1
   static const String SPRITE_DOCTYPE =
-      "/assets/icons/doctype-sprite/svg/symbols.svg#"; // attachment
+      "/assets/icons/doctype-sprite/svg/symbols.svg"; // attachment
   static const String SPRITE_STANDARD =
-      "/assets/icons/standard-sprite/svg/symbols.svg#"; // account
+      "/assets/icons/standard-sprite/svg/symbols.svg"; // account
   static const String SPRITE_UTILITY =
-      "/assets/icons/utility-sprite/svg/symbols.svg#"; // 3dots
-
-
-  /// Create Img vs. use
-  static bool createImg() {
-    if (_createImg == null) {
-      _createImg = !document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#BasicStructure", "1.1");
-      if (_createImg) {
-        window.alert("Browser not capable displaying SVG - images not displayed");
-      }
-    }
-    return _createImg;
-  }
-  static bool _createImg;
-
+      "/assets/icons/utility-sprite/svg/symbols.svg"; // 3dots
 
 
   /**
@@ -174,7 +160,7 @@ class LIcon {
    * [size] optional C_ICON__TYNY/SMALL/MEDIUM/LARGE
    * [color] optional C_ICON_TEXT_DEFAULT/WARNING
    * [addlCss] additional css classes
-   * [packagePrefix] package lib, e.g. HREF_PREFIX
+   * [packagePrefix] package lib, e.g. [HREF_PREFIX] - packages/lightning
    */
   LIcon(String linkName, String this.linkPrefix,
         String className, String size, String color,
@@ -194,10 +180,12 @@ class LIcon {
     }
     element.setAttributeNS(null, Html0.ARIA_HIDDEN, "true");
     element.setAttributeNS(null, Html0.ROLE, Html0.ROLE_IMG);
-    element.append(_use);
     this.linkName = linkName;
     //
-    if (createImg()) {
+    element.append(_use);
+    if (SvgUtil.createImg() // no svg support
+        || SvgUtil.createDirect()) {
+      SvgUtil.svgDirect(element, "${packagePrefix}${linkPrefix}", linkName);
     }
   } // LIcon
 
@@ -255,7 +243,7 @@ class LIcon {
   /// Set Link (Icon) Name and use reference
   void set linkName (String newValue) {
     _linkName = newValue;
-    _use.href.baseVal = "${packagePrefix}${linkPrefix}${_linkName}";
+    _use.href.baseVal = "${packagePrefix}${linkPrefix}#${_linkName}";
   }
   /// Link name
   String _linkName;

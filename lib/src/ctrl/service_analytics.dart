@@ -200,7 +200,10 @@ class ServiceAnalytics {
     String dataString = LUtil.toJsonString(data);
     String url = "${Service.serverUrl}${TRX}";
     if (enabled) {
-      window.navigator.sendBeacon(url, dataString);
+      try {
+        window.navigator.sendBeacon(url, dataString);
+      } catch (exception) {
+      }
     }
   } // sendUnload
 

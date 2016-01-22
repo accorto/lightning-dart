@@ -415,4 +415,10 @@ class ClientEnv {
     return null;
   }
 
+  /// running on IE
+  static bool get isIE {
+    String ua = window.navigator.userAgent;
+    return ua.contains(new RegExp(r'Edge|Trident|MSIE'));
+  }
+
 } // ClientEnv

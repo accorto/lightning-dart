@@ -30,6 +30,7 @@ import 'dart:html';
 import 'dart:svg' as svg;
 import 'dart:convert';
 import 'dart:math';
+//import 'dart:collection';
 
 // Packages
 import 'package:logging/logging.dart';
@@ -128,6 +129,7 @@ part 'src/view/home/page_simple.dart';
 part 'src/view/utility/html0.dart';
 part 'src/view/utility/l_util.dart';
 part 'src/view/utility/option_util.dart';
+part 'src/view/utility/svg_util.dart';
 
 /**
  * Lightning Dart main entry point

@@ -121,17 +121,18 @@ class AppSettingsEnvironment
     table.addRowHdrDataList("Client Id/Trx", [Service.clientId, Service.trxNo]);
 
     Screen scr = window.screen;
-    table.addRowHdrDataList("screen", ["w=${scr.width} h=${scr.height} d=${scr.pixelDepth}"], colSpan:2);
-    table.addRowHdrDataList("window", ["w=${window.innerWidth} h=${window.innerHeight}"], colSpan:2);
+    table.addRowHdrDataList("Screen", ["w=${scr.width} h=${scr.height} d=${scr.pixelDepth}"], colSpan:2);
+    table.addRowHdrDataList("Window", ["w=${window.innerWidth} h=${window.innerHeight}"], colSpan:2);
     Navigator nav = window.navigator;
-    table.addRowHdrDataList("agent", [nav.userAgent], colSpan:2);
+    table.addRowHdrDataList("Agent", [nav.userAgent], colSpan:2);
     // table.addRowHdrData("version", nav.appVersion);
-    table.addRowHdrDataList("cookie", [nav.cookieEnabled, nav.doNotTrack == null ? "" : nav.doNotTrack]);
-    table.addRowHdrDataList("platform/vendor", [nav.platform, nav.vendor]);
+    table.addRowHdrDataList("Cookie", [nav.cookieEnabled, nav.doNotTrack == null ? "" : nav.doNotTrack]);
+    table.addRowHdrDataList("Platform/Vendor", [nav.platform, nav.vendor]);
 
-    table.addRowHdrDataList("mobile/phone", [ClientEnv.isMobileUserAgent, ClientEnv.isPhone]);
-    table.addRowHdrDataList("Test Mode", [ClientEnv.testMode]);
-    table.addRowHdrDataList("iframe", [ClientEnv.inIFrame, "page=${window.pageXOffset}/${window.pageYOffset} scroll=${window.scrollX}/${window.scrollY}"]);
+    table.addRowHdrDataList("Mobile / Phone", [ClientEnv.isMobileUserAgent, ClientEnv.isPhone]);
+    table.addRowHdrDataList("Test Mode / IE", [ClientEnv.testMode, ClientEnv.isIE]);
+    table.addRowHdrDataList("Svg img/direct", [SvgUtil.createImg(), SvgUtil.createDirect()]);
+    table.addRowHdrDataList("Iframe", [ClientEnv.inIFrame, "page=${window.pageXOffset}/${window.pageYOffset} scroll=${window.scrollX}/${window.scrollY}"]);
 
 
     // -- Session

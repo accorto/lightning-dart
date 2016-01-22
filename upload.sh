@@ -33,6 +33,8 @@ cat build/web/demo.html | grep $TS
 TARGET=/Users/jorg/Documents/Accorto/gh-pages/lightning-dart/
 cp -R build/web/* ${TARGET}
 
+#exit 0;
+
 # Model
 export IN="/Users/jorg/Library/Application Support/VisualParadigm/ws/teamwork_client/projects/lightning-dart/lightning-dart.vpp"
 export OUT=/Users/jorg/Documents/Accorto/gh-pages/lightning-dart/model
