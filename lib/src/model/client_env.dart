@@ -415,10 +415,26 @@ class ClientEnv {
     return null;
   }
 
-  /// running on IE
+  /// running on IE or Edge
   static bool get isIE {
-    String ua = window.navigator.userAgent;
-    return ua.contains(new RegExp(r'Edge|Trident|MSIE'));
+    if (_isIE11 == null) {
+      String ua = window.navigator.userAgent;
+      _isIE = ua.contains(new RegExp(r'Edge|Trident|MSIE'));
+      _log.fine("isIE");
+    }
+    return _isIE;
   }
+  static bool _isIE;
+  /// running IE 11 or older
+  static bool get isIE11 {
+    if (_isIE11 == null) {
+      String ua = window.navigator.userAgent;
+      _isIE11 = ua.contains(new RegExp(r'Trident|MSIE'));
+      _log.fine("isIE11");
+    }
+    return _isIE11;
+  }
+  static bool _isIE11;
+
 
 } // ClientEnv

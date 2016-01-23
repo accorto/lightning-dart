@@ -50,15 +50,15 @@ class LInputDuration
     _mobileUi = newValue;
     if (_isHour) {
       if (_mobileUi) {
-        input.type = EditorI.TYPE_NUMBER;
+        input.type = _validateType(EditorI.TYPE_NUMBER);
         input.step = "any";
         hint = lInputDurationNumberHint();
       } else {
-        input.type = _type;
+        input.type = _validateType(_type);
         hint = lInputDurationHourHint();
       }
     } else {
-      input.type = _type;
+      input.type = _validateType(_type);
       hint = lInputDurationHint();
     }
   }

@@ -231,8 +231,7 @@ class ServiceAnalytics {
     String dataString = LUtil.toJsonString(data);
 
     String url = "${Service.serverUrl}${TRX}";
-    HttpRequest
-    .request(url, method: 'POST', sendData: dataString)
+    HttpRequest.request(url, method: 'POST', sendData: dataString)
     .then((HttpRequest response){
       _sendWebLogErrors = 0;
     })

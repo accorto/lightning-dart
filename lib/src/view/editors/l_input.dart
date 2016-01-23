@@ -15,6 +15,7 @@ class LInput
   /// Logger
   static final Logger _log = new Logger("LInput");
 
+
   /// Input Element
   final InputElement input = new InputElement();
 
@@ -28,7 +29,7 @@ class LInput
     createStandard(this, withClearValue:withClearValue, inGrid:inGrid);
     input.name = name;
     input.id = createId(idPrefix, name);
-    input.type = type;
+    input.type = _validateType(type);
     //
     hint = null;
     _initEditor(type);
@@ -41,11 +42,24 @@ class LInput
     createStandard(this, withClearValue:withClearValue, inGrid:inGrid);
     input.name = dataColumn.name;
     input.id = createId(idPrefix, input.name);
-    input.type = type;
+    input.type = _validateType(type);
 
     this.column = dataColumn; // base values
     _initEditor(type);
   } // LInput
+
+  /// check type
+  String _validateType (String requestedType) {
+    if (ClientEnv.isIE11) {
+      if (EditorI.TYPES_HTML.contains(requestedType)
+          || EditorI.TYPES_HTML5_IE.contains(requestedType)) {
+        return requestedType;
+      }
+      return EditorI.TYPE_TEXT;
+    }
+    // other browsers don't fail if unsupported type is used
+    return requestedType;
+  }
 
   /// initialize listeners with original type - listen to onChange - onKeyUp
   void _initEditor(String type) {

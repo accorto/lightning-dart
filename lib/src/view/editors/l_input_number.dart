@@ -59,7 +59,7 @@ class LInputNumber
 
   void _initNumber() {
     if (html5 || dataType == DataType.INT) {
-      input.type = EditorI.TYPE_NUMBER;
+      input.type = _validateType(EditorI.TYPE_NUMBER);
     } else {
       input.type = EditorI.TYPE_TEXT;
     }

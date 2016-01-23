@@ -61,9 +61,9 @@ class SvgUtil {
 
   /// process symbol request
   static void _svgDirectProcess(String symbolSvgUrl) {
-    _log.fine(symbolSvgUrl);
     HttpRequest.getString(symbolSvgUrl)
-        .then((String svgSymbolCode){
+    .then((String svgSymbolCode){
+      _log.fine("received ${symbolSvgUrl}");
       Element e = new DivElement()
         ..setInnerHtml(svgSymbolCode, treeSanitizer: NodeTreeSanitizer.trusted);
       Element sym = e.children.first;
@@ -71,6 +71,7 @@ class SvgUtil {
 
       // existing requests
       List<SvgUtilDirect> list = _requestMap[symbolSvgUrl];
+      _log.fine("requests=${list.length}");
       for (SvgUtilDirect dir in list) {
         svgDirectUpdate(dir.svgElement, sym, dir.symbolName);
       }
@@ -90,8 +91,8 @@ class SvgUtil {
       String viewBox = sym.getAttribute("viewBox"); // as text
       svgElement.setAttribute("viewBox", viewBox);
       //
-      svgElement.children.clear(); // remove use
-      Element clone = sym.firstChild.clone(true);
+      svgElement.children.clear();                // remove use
+      Element clone = sym.firstChild.clone(true); // add path
       svgElement.append(clone);
     }
   } // svgDirectUpdate

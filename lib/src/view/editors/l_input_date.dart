@@ -8,6 +8,10 @@ part of lightning_dart;
 
 /**
  * Date Editor
+ * Html5 Support:
+ * - Chrome, Edge iOS
+ * - NOT: IE, FF, Safari
+ * http://caniuse.com/#search=date
  */
 class LInputDate
     extends LInput {
@@ -49,7 +53,7 @@ class LInputDate
   /// Init Date
   void _initDate(String type) {
     if (html5) {
-      input.type = type;
+      input.type = _validateType(_type);
     } else {
       input.type = EditorI.TYPE_TEXT;
     }
@@ -209,7 +213,7 @@ class LInputDate
       input.type = EditorI.TYPE_TEXT; // don't show dd/mm/yyyy when empty
     } else {
       if (html5)
-        input.type = _type;
+        input.type = _validateType(_type);
     }
   }
 

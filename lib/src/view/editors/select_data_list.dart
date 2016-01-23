@@ -8,6 +8,9 @@ part of lightning_dart;
 
 /**
  * DataList Element
+ * Support
+ * - IE, FF, Chrome
+ * - NOT: Safari
  */
 class SelectDataList {
 

@@ -94,6 +94,14 @@ abstract class EditorI {
   /// Input type tag
   static const String TYPE_TAG = "tag";
 
+  /// (old) Html Types
+  static final List<String> TYPES_HTML = [TYPE_BUTTON, TYPE_CHECKBOX, TYPE_FILE, TYPE_HIDDEN,
+    TYPE_IMAGE, TYPE_PASSWORD, TYPE_RADIO, TYPE_RESET, TYPE_SUBMIT, TYPE_TEXT];
+
+  /// IE 11 type Support - partially: number - not: date, color
+  static final List<String> TYPES_HTML5_IE = [TYPE_EMAIL, TYPE_URL, TYPE_NUMBER, TYPE_RANGE, TYPE_SEARCH, TYPE_TEL, TYPE_URL];
+
+
   /// button types
   static final List<String> TYPES_BUTTON = [TYPE_BUTTON, TYPE_RESET, TYPE_SUBMIT, TYPE_IMAGE];
   /// No Label List

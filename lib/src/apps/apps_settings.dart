@@ -130,9 +130,10 @@ class AppSettingsEnvironment
     table.addRowHdrDataList("Platform/Vendor", [nav.platform, nav.vendor]);
 
     table.addRowHdrDataList("Mobile / Phone", [ClientEnv.isMobileUserAgent, ClientEnv.isPhone]);
-    table.addRowHdrDataList("Test Mode / IE", [ClientEnv.testMode, ClientEnv.isIE]);
+    table.addRowHdrDataList("Edge|IE / IE11", [ClientEnv.isIE, ClientEnv.isIE11]);
     table.addRowHdrDataList("Svg img/direct", [SvgUtil.createImg(), SvgUtil.createDirect()]);
     table.addRowHdrDataList("Iframe", [ClientEnv.inIFrame, "page=${window.pageXOffset}/${window.pageYOffset} scroll=${window.scrollX}/${window.scrollY}"]);
+    table.addRowHdrDataList("Test Mode", [ClientEnv.testMode]);
 
 
     // -- Session

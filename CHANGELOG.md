@@ -5,6 +5,8 @@ Intermediate Patches, Functionality improvements via +x prefix.
 
 ## head
 
+- #36 ie type restrictions
+- #35 svg compatibility edge/ie
 - #34 color editor
 - #17 timezone editor
 - AppsAction disabled support
