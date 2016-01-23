@@ -57,26 +57,28 @@ class DataUtil {
 
 
   /// Date - converted or null - [utc] true for Date - false for Date/Time (i.e. converts to local)
-  static DateTime toDate(String valueMs, {String type: EditorI.TYPE_DATETIME}) {
+  static DateTime toDate(String valueMs, {String type: EditorI.TYPE_DATETIME, bool isUtc}) {
+    if (isUtc == null)
+      isUtc = type == EditorI.TYPE_DATE;
     if (isNotEmpty(valueMs)) {
       int ms = int.parse(valueMs, onError: (String value) {
         return parseDateVariable(value, type);
       });
       if (ms != 0)
-        return new DateTime.fromMillisecondsSinceEpoch(ms, isUtc: type == EditorI.TYPE_DATE);
+        return new DateTime.fromMillisecondsSinceEpoch(ms, isUtc: isUtc);
     }
     return null;
   }
 
 
   /// Date - 2014-11-16 or ""
-  static String asDateString(String valueMs, bool html5) {
+  static String asDateString(String valueMs, bool html5, bool isUtc) {
     if (isNotEmpty(valueMs)) {
       int ms = int.parse(valueMs, onError: (String value) {
         return parseDateVariable(value, EditorI.TYPE_DATE);
       });
       if (ms != 0) {
-        DateTime date = new DateTime.fromMillisecondsSinceEpoch(ms, isUtc: true);
+        DateTime date = new DateTime.fromMillisecondsSinceEpoch(ms, isUtc: isUtc);
         if (html5) {
           return date.toIso8601String().substring(0, 10);
         }
@@ -86,17 +88,21 @@ class DataUtil {
     return "";
   }
   /// Date - 2014-11-16 or ""
-  static DateTime asDate(String valueDisplay, bool html5) {
+  static DateTime asDate(String valueDisplay, bool html5, bool isUtc) {
     if (isEmpty(valueDisplay)) {
       return null;
     }
     try {
       if (html5) {
         DateTime dt = DateTime.parse(valueDisplay); // local
-        return dt.add(dt.timeZoneOffset);
+        if (isUtc)
+          return dt.add(dt.timeZoneOffset);
+        return dt;
       } else {
         DateTime dt = ClientEnv.dateFormat_ymd.parseLoose(valueDisplay, false);
-        return dt.add(dt.timeZoneOffset);
+        if (isUtc)
+          return dt.add(dt.timeZoneOffset);
+        return dt;
       }
     } catch (ex) {
       _log.warning("asDate ${valueDisplay}", ex);
@@ -104,18 +110,20 @@ class DataUtil {
     return null;
   }
   /// Date - 2014-11-16 or ""
-  static String asDateMs(String valueDisplay, bool html5) {
+  static String asDateMs(String valueDisplay, bool html5, bool isUtc) {
     if (isEmpty(valueDisplay)) {
       return "";
     }
     try {
       if (html5) {
         DateTime dt = DateTime.parse(valueDisplay); // local
-        dt = dt.add(dt.timeZoneOffset);
+        if (isUtc)
+          dt = dt.add(dt.timeZoneOffset);
         return dt.millisecondsSinceEpoch.toString();
       } else {
         DateTime dt = ClientEnv.dateFormat_ymd.parseLoose(valueDisplay, false);
-        dt = dt.add(dt.timeZoneOffset);
+        if (isUtc)
+          dt = dt.add(dt.timeZoneOffset);
         return dt.millisecondsSinceEpoch.toString();
       }
     } catch (ex) {
@@ -126,13 +134,13 @@ class DataUtil {
 
 
   /// DateTime - 2014-11-16T15:25:33 or ""
-  static String asDateTimeString(String valueMs, bool html5) {
+  static String asDateTimeString(String valueMs, bool html5, {bool isUtc: false}) {
     if (isNotEmpty(valueMs)) {
       int ms = int.parse(valueMs, onError: (String value) {
         return parseDateVariable(value, EditorI.TYPE_DATETIME);
       });
       if (ms != 0) {
-        DateTime date = new DateTime.fromMillisecondsSinceEpoch(ms, isUtc: false);
+        DateTime date = new DateTime.fromMillisecondsSinceEpoch(ms, isUtc: isUtc);
         if (html5) {
           return date.toIso8601String().substring(0, 19);
           // cut off ms
@@ -142,7 +150,7 @@ class DataUtil {
     }
     return "";
   }
-  /// DateTime - 2014-11-16T15:25:33 or ""
+  /// DateTime - 2014-11-16T15:25:33 or "" (local)
   static DateTime asDateTime(String valueDisplay, bool html5) {
     if (isEmpty(valueDisplay)) {
       return null;
@@ -157,7 +165,7 @@ class DataUtil {
       _log.warning("asDateTime ${valueDisplay}", ex);
     }
   }
-  /// DateTime - 2014-11-16T15:25:33 or ""
+  /// DateTime - 2014-11-16T15:25:33 or "" (local)
   static String asDateTimeMs(String valueDisplay, bool html5) {
     if (isEmpty(valueDisplay)) {
       return "";

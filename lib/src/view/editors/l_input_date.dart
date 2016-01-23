@@ -70,6 +70,7 @@ class LInputDate
       _invalidInput = lInputDateInvalidInputDate();
       _type = EditorI.TYPE_DATE;
     }
+    isUtc = type == EditorI.TYPE_DATE;
   } // initDate
 
   /// use native calendar
@@ -77,6 +78,9 @@ class LInputDate
     super.html5 = newValue;
     _initDate(_type);
   }
+
+  /// use Utc - true for Date
+  bool isUtc = true;
 
   @override
   LIcon getIconRight() => _iconRight;
@@ -99,11 +103,11 @@ class LInputDate
     String x = value; // read back
     if (newValue != null && newValue != x) {
       if (type == EditorI.TYPE_DATE) {
-        _log.config("setValue ${name}=${newValue} <> ${x} -- ${DataUtil.asDateString(newValue, html5)} display=${display}");
+        _log.config("setValue ${name}=${newValue} <> ${x} -- ${DataUtil.asDateString(newValue, html5, isUtc)} <> display=${display} html5=${html5} utc=${isUtc}");
       } else if (type == EditorI.TYPE_DATETIME) {
-        _log.config("setValue ${name}=${newValue} <> ${x} -- ${DataUtil.asDateTimeString(newValue, html5)} display=${display}");
+        _log.config("setValue ${name}=${newValue} <> ${x} -- ${DataUtil.asDateTimeString(newValue, html5)} <> display=${display} ${html5 ? 'html5' : ''}");
       } else if (type == EditorI.TYPE_TIME) {
-        _log.config("setValue ${name}=${newValue} <> ${x} -- ${DataUtil.asTimeString(newValue, data, html5)} display=${display}");
+        _log.config("setValue ${name}=${newValue} <> ${x} -- ${DataUtil.asTimeString(newValue, data, html5)} <> display=${display} ${html5 ? 'html5' : ''}");
       }
       //  updateData(x); // actual parsed value
     }
@@ -153,7 +157,7 @@ class LInputDate
       return "";
     String display = null;
     if (type == EditorI.TYPE_DATE) {
-      display = DataUtil.asDateString(valueMs, html5); // UTC
+      display = DataUtil.asDateString(valueMs, html5, isUtc); // UTC
     } else if (type == EditorI.TYPE_DATETIME) {
       display = DataUtil.asDateTimeString(valueMs, html5); // local
     } else if (type == EditorI.TYPE_TIME) {
@@ -183,7 +187,7 @@ class LInputDate
       return "";
     DateTime dt = null;
     if (type == EditorI.TYPE_DATE) {
-      dt = DataUtil.asDate(newValue, html5); // UTC
+      dt = DataUtil.asDate(newValue, html5, isUtc); // UTC
     } else if (type == EditorI.TYPE_DATETIME) {
       dt = DataUtil.asDateTime(newValue, html5); // local
     } else if (type == EditorI.TYPE_TIME) {
