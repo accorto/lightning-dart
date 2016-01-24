@@ -9,7 +9,8 @@ part of lightning_dart;
 /**
  * Checkbox (handles input + presentation)
  */
-class LCheckbox extends LEditor with LFormElement {
+class LCheckbox
+    extends LEditor with LFormElement {
 
   /// The input
   final InputElement input = new InputElement()
@@ -69,6 +70,22 @@ class LCheckbox extends LEditor with LFormElement {
     input.defaultValue = newValue;
   }
 
+  bool get isValueRenderElement => true;
+
+  /// render the value
+  Element getValueRenderElement(String theValue) {
+    if (theValue != null && theValue.isNotEmpty) {
+      if ("true" == theValue) {
+        return new LIconUtility(LIconUtility.CHECK, size: LIcon.C_ICON__X_SMALL,
+            color: LIcon.C_ICON_TEXT_SUCCESS)
+            .element;
+      }
+      return new LIconUtility(LIconUtility.CLOSE, size: LIcon.C_ICON__X_SMALL,
+          color: LIcon.C_ICON_TEXT_ERROR)
+          .element;
+    }
+    return new DivElement();
+  }
 
   /// base editor methods
 

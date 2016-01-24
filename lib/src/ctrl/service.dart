@@ -25,6 +25,7 @@ typedef void SendNotification(ServiceResponse level, String subject, String info
  */
 class Service {
 
+
   /** Product Name */
   static String productName = "Accorto";
   /** Client UUID */
@@ -51,6 +52,11 @@ class Service {
   static ServerError onServerError;
   /// Send/Create notification
   static SendNotification sendNotification;
+
+  /// default data service
+  static final String TRX_DATA = "webData";
+  /// default ui service
+  static final String TRX_UI = "webDisplay";
 
   /// Logger
   static Logger _log;

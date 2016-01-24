@@ -58,7 +58,7 @@ void main() {
 
     setUp(() async {
       await LightningDart.init(); // client env
-      WorbenchData wbData = new WorbenchData();
+      WorkspaceData wbData = new WorkspaceData();
       ctrl = new ObjectCtrl(wbData);
       page = LightningDart.createPageSimple();
       page.element.classes.add(LGrid.C_WRAP);

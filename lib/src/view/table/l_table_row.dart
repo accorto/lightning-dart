@@ -17,6 +17,20 @@ class LTableRow implements FormI {
   static const String TYPE_BODY = "B";
   static const String TYPE_FOOT = "F";
 
+  /// Get Render Editor
+  static LEditor _getRenderEditor(DataColumn dataColumn) {
+    String key = "${dataColumn.table.name}.${dataColumn.name}";
+    LEditor editor = _renderEditorMap[key];
+    if (editor == null) {
+      editor =  EditorUtil.createfromColumn(dataColumn.name,
+          dataColumn, true, idPrefix:"table-${dataColumn.table.name}");
+      _renderEditorMap[key] = editor;
+    }
+    return editor;
+  }
+  static Map<String, LEditor> _renderEditorMap = new Map<String, LEditor>();
+
+
   /// Table Row
   final TableRowElement rowElement;
   /// Row Type
@@ -43,7 +57,7 @@ class LTableRow implements FormI {
   List<LEditor> editors;
   /// On Table Row Select Clicked
   TableSelectClicked tableSelectClicked;
-
+  /// row select
   LabelElement _label;
 
   /**
@@ -150,10 +164,10 @@ class LTableRow implements FormI {
    */
   LTableCell addCellText(String display,
       {String name, String value, String align, DataColumn dataColumn}) {
-    SpanElement span = new SpanElement()
+    DivElement div = new DivElement()
       ..classes.add(LText.C_TRUNCATE)
       ..text = display == null ? "" : display;
-    return addCell(span, name, value, align, dataColumn);
+    return addCell(div, name, value, align, dataColumn);
   }
 
   /// Add Link
@@ -200,10 +214,13 @@ class LTableRow implements FormI {
     editors.add(editor);
 
     if (editModeField) {
-      SpanElement span = new SpanElement()
+      if (editor.isValueRenderElement) {
+        return addCell(editor.getValueRenderElement(value), editor.name, value, align, editor.dataColumn);
+      }
+      DivElement div = new DivElement()
         ..classes.add(LText.C_TRUNCATE)
         ..text = display == null ? "" : display;
-      return addCell(span, editor.name, value, align, editor.dataColumn);
+      return addCell(div, editor.name, value, align, editor.dataColumn);
     }
     return addCell(editor.input, null, null, align, editor.dataColumn);
   }
@@ -300,6 +317,10 @@ class LTableRow implements FormI {
         if (_editMode == LTable.EDIT_RO
             || _editMode == LTable.EDIT_SELECT_SINGLE || _editMode == LTable.EDIT_SELECT_MULTI
             || (_editMode == LTable.EDIT_SEL && !selected)) {
+          if (dataColumn.isValueRenderElement) {
+            LEditor editor = _getRenderEditor(dataColumn);
+            addCell(editor.getValueRenderElement(value), name, value, align, dataColumn);
+          } else
           if (entry != null && entry.hasValueDisplay()) {
             addCellText(entry.valueDisplay, name:name, value:value, dataColumn:dataColumn);
           } else if (value == null || value.isEmpty || dataColumn == null) {
@@ -312,20 +333,31 @@ class LTableRow implements FormI {
               if (entry != null) {
                 entry.valueDisplay = display;
               }
+            })
+            .catchError((error, stackTrace){
+              cell.cellElement.children.first.text = "${error}";
             });
           }
         } else { // all, sel or field
           LEditor editor = EditorUtil.createfromColumn(name, dataColumn, true,
             idPrefix:rowElement.id, data:data, entry:entry); // no isAlternativeDisplay
           bool editModeField = _editMode == LTable.EDIT_FIELD;
-          if (editor.valueRendered && entry != null && entry.hasValueDisplay()) {
+          if (editor.isValueRenderElement) {
+            addCellEditor(editor, value, value, align, editModeField);
+          } else if (editor.isValueDisplay && entry != null && entry.hasValueDisplay()) {
             addCellEditor(editor, entry.valueDisplay, value, align, editModeField);
-          } else if (editor.valueRendered && value != null && value.isNotEmpty) {
+          } else if (editor.isValueDisplay && value != null && value.isNotEmpty) {
             LTableCell cell = addCellEditor(editor, "<${value}>", value, align, editModeField);
             if (editModeField) {
               editor.render(value, false)
               .then((String display){
                 cell.cellElement.children.first.text = display;
+                if (entry != null) {
+                  entry.valueDisplay = display;
+                }
+              })
+              .catchError((error, stackTrace){
+                cell.cellElement.children.first.text = "${error}";
               });
             }
           } else {
@@ -335,7 +367,6 @@ class LTableRow implements FormI {
       }
     } // for all column names
   } // display
-
 
   /// Render Value
   String _displayAlign(DataColumn dataColumn) {

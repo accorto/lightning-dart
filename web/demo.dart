@@ -185,7 +185,7 @@ class ExampleWorkspace extends AppsPage {
   Element element = new DivElement();
 
   ExampleWorkspace() : super ("wb", "wb", formIcon, "Workspace", "Lightning Dart Workspace Example") {
-    WorbenchData wbData = new WorbenchData();
+    WorkspaceData wbData = new WorkspaceData();
     ObjectCtrl ctrl = new ObjectCtrl(wbData);
     element.append(ctrl.element);
   } // ExampleWorkspace

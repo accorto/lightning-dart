@@ -218,6 +218,23 @@ class DataColumn {
     return null;
   }
 
+  /// rendered in an Element
+  bool get isValueRenderElement {
+    DataType dataType = tableColumn.dataType;
+    return dataType == DataType.BOOLEAN
+        || dataType == DataType.IMAGE
+        || dataType == DataType.COLOR;
+  }
+
+  /// tableName.columnName
+  String toString() {
+    if (tableColumn == null)
+      return "DataColumn[-]";
+    if (table == null)
+      return "DataColumn[${tableColumn.name}]";
+    return "DataColumn[${table.name}.${tableColumn.name}]";
+  }
+
   /// Get Data Entry for this Column if exists
   DEntry getEntry(DataRecord data) => data.getEntry(tableColumn.columnId, tableColumn.name, false);
   /// Get Data Entry Statistics for this Column if exists

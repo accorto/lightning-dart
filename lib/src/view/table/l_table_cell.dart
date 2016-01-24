@@ -32,7 +32,8 @@ class LTableCell {
       cellElement.attributes[Html0.DATA_LABEL] = label;
     if (value != null)
       cellElement.attributes[Html0.DATA_VALUE] = value;
-    cellElement.append(content);
+    if (content != null)
+      cellElement.append(content);
   } // LTableCell
 
 } // LTableCell

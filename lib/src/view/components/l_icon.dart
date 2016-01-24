@@ -82,6 +82,9 @@ class LIcon {
       "/assets/icons/utility-sprite/svg/symbols.svg"; // 3dots
 
 
+  /// IconSpec RegExp
+  static final RegExp regExpIconSpec = new RegExp(r'^(action|standard|utility|custom|doctype)');
+
   /**
    * Create Icon from [iconSpec] xx|yy|zz
    * where xx is action|standard|utility|custom|doctype

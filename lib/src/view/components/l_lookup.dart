@@ -251,7 +251,7 @@ class LLookup
    */
   String get valueDisplay => renderSync(value, false);
   /// is the rendered [valueDisplay] different from the [value]
-  bool get valueRendered => true;
+  bool get isValueDisplay => true;
 
   /// render [newValue]
   @override

@@ -37,6 +37,13 @@ class LInputFile extends LInput {
     input.style.color = "grey"; // file name
   }
 
+  /// This input element accepts a filename, which may only be programmatically set to the empty string
+  void set value (String newValue) {
+    if (value == null || value.isEmpty) {
+      input.value = "";
+    }
+  }
+
   /// get accept
   String get accept => input.accept;
   /// set Accept

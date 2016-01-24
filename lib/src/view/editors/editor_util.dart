@@ -89,7 +89,7 @@ class EditorUtil {
       } else if (dataType == DataType.IM) {
         // TODO im editor
       } else if (dataType == DataType.IMAGE) {
-        editor = new LInputFile.from(dataColumn, idPrefix: idPrefix, inGrid: inGrid);
+        editor = new LInputImage.from(dataColumn, idPrefix: idPrefix, inGrid: inGrid);
       } else if (dataType == DataType.INT) {
         editor = new LInputNumber.from(dataColumn, EditorI.TYPE_NUMBER,
             idPrefix: idPrefix, inGrid: inGrid);

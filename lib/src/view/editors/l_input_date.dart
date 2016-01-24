@@ -143,7 +143,7 @@ class LInputDate
   }
   /// is the rendered [valueDisplay] different from the [value]
   @override
-  bool get valueRendered {
+  bool get isValueDisplay {
     return true;
   }
 

@@ -539,8 +539,7 @@ class DataUtil {
   static DColumn findColumn(DTable table, String columnId, String columnName) {
     if (table != null) {
       for (DColumn col in table.columnList) {
-        if ((columnId != null && columnId == col.columnId)
-            || (columnName != null && columnName == col.name))
+        if (columnId == col.columnId || columnName == col.name)
           return col;
       }
     }

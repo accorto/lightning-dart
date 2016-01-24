@@ -115,7 +115,11 @@ class LObjectHome
 
   /// Object Home from UI
   void setUi(UI ui) {
-    recordType = ui.table.label + "s"; // TODO plural
+    if (ui.hasLabel()) { // // TODO plural
+      recordType = ui.label + "s";
+    } else {
+      recordType = ui.table.label + "s";
+    }
     // sort columns
     if (recordSorting != null) {
       _sort.dropdown.clearOptions();
@@ -126,6 +130,14 @@ class LObjectHome
       _sort.dropdown.editorChange = onSortChange;
     }
   } // setUi
+
+  /// fatal load
+  void setUiFail(String error) {
+    loading = false;
+    element.children.clear();
+    element.append(new DivElement()
+      ..text = error);
+  }
 
   /// Sort
   void onSortChange(String name, String newValue, DEntry entry, var details) {

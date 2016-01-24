@@ -14,14 +14,23 @@ class FkCtrl
 
   /// create fk lookup
   static LLookup createLookup(DataColumn dataColumn, String idPrefix, bool inGrid) {
-    if (!dataColumn.tableColumn.hasFkReference()) {
-      _log.warning("createLookup ${dataColumn.name}: NoFkReference");
-      return null;
+    if (dataColumn.tableColumn.hasFkReference()) {
+      return new FkCtrl.from(dataColumn, idPrefix: idPrefix, inGrid: inGrid);
     }
-    return new FkCtrl.from(dataColumn, idPrefix:idPrefix, inGrid:inGrid);
+    String columnName = dataColumn.tableColumn.name;
+    if (columnName.contains(_regExpId)) {
+      return new FkCtrl.from(dataColumn, idPrefix: idPrefix, inGrid: inGrid);
+    }
+    _log.warning("createLookup ${dataColumn.name}: NoFkReference");
+    return null;
   }
 
   static final Logger _log = new Logger("FkCtrl");
+
+  /// ends with _ID
+  static final RegExp _regExpId = new RegExp(r'_ID$');
+  /// starts with Parent
+  static final RegExp _regExpParent = new RegExp(r'^Parent');
 
   /// Fk Table
   String tableName;
@@ -38,7 +47,14 @@ class FkCtrl
    */
   FkCtrl.from(DataColumn dataColumn, {String idPrefix, bool inGrid:false})
       : super.from(dataColumn, idPrefix:idPrefix, inGrid:inGrid) {
-    tableName = dataColumn.tableColumn.fkReference;
+    if (dataColumn.tableColumn.hasFkReference()) {
+      tableName = dataColumn.tableColumn.fkReference;
+    } else {
+      String columnName = dataColumn.tableColumn.name;
+      columnName = columnName.replaceAll(_regExpId, "");
+      tableName = columnName.replaceAll(_regExpParent, "");
+      dataColumn.tableColumn.fkReference = tableName; // speed up
+    }
     if (dataColumn.tableColumn.hasRestrictionSql()) {
       restrictionSql = dataColumn.tableColumn.restrictionSql;
     }
@@ -107,6 +123,7 @@ class FkCtrl
           })
           .catchError((error, stackTrace) {
             _log.warning("render ${tableName}.${name}", error, stackTrace);
+            completer.completeError(error, stackTrace);
           });
         }
       } else {
@@ -117,8 +134,10 @@ class FkCtrl
             break;
           }
         }
-        if (!found && setValidity) {
-          input.setCustomValidity("${LLookup.lLookupInvalidValue()}=${newValue}");
+        if (!found) {
+          completer.completeError("~~${newValue}~~");
+          if (setValidity)
+            input.setCustomValidity("${LLookup.lLookupInvalidValue()}=${newValue}");
         }
       } // no fkService
     } // not empty

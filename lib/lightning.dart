@@ -98,6 +98,7 @@ part 'src/view/editors/l_input_color.dart';
 part 'src/view/editors/l_input_date.dart';
 part 'src/view/editors/l_input_duration.dart';
 part 'src/view/editors/l_input_file.dart';
+part 'src/view/editors/l_input_image.dart';
 part 'src/view/editors/l_input_number.dart';
 part 'src/view/editors/l_input_range.dart';
 part 'src/view/editors/l_input_search.dart';

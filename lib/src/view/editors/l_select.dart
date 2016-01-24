@@ -129,7 +129,7 @@ class LSelect
    */
   String get valueDisplay => renderSync(value, false);
   /// is the rendered [valueDisplay] different from the [value]
-  bool get valueRendered => true;
+  bool get isValueDisplay => true;
   /// render [newValue]
   Future<String> render(String newValue, bool setValidity) {
     Completer<String> completer = new Completer<String>();

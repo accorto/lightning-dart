@@ -106,17 +106,17 @@ class UiService
   Future<DisplayResponse> _submit(String uiId, String uiName, String tableName) {
     DisplayRequest request = new DisplayRequest()
       ..type = DisplayRequestType.GET;
-    String info = "fk";
+    String info = "ui";
     UIInfo uiInfo = new UIInfo();
     if (uiId != null && uiId.isNotEmpty) {
       uiInfo.uiId = uiId;
-      info = "fk_ui_${uiId}";
+      info = "ui_id_${uiId}";
     } else if (uiName != null && uiName.isNotEmpty) {
       uiInfo.uiName = uiName;
-      info = "fk_ui_${uiName}";
+      info = "ui_${uiName}";
     } else if (tableName != null) {
       uiInfo.tableName = tableName;
-      info = "fk_t_${tableName}";
+      info = "ui_table_${tableName}";
     }
     request.displayList.add(uiInfo);
 
@@ -151,11 +151,11 @@ class UiService
 
   /// update cache from response
   void update(DisplayResponse response) {
-    for (UI ui in response.uiList) {
-      updateUi(ui);
-    }
     for (DTable table in response.tableList) {
       updateTable(table);
+    }
+    for (UI ui in response.uiList) {
+      updateUi(ui);
     }
   } // update
 
@@ -183,17 +183,26 @@ class UiService
       _uiList.add(ui);
     }
     // table
-    found = false;
-    for (int i = 0; i < _tableList.length; i++) {
-      DTable cache = _tableList[i];
-      if (ui.table.name == cache.name) {
-        _tableList[i] = ui.table; // replace
-        found = true;
-        break;
+    if (ui.hasTable()) {
+      found = false;
+      for (int i = 0; i < _tableList.length; i++) {
+        DTable cache = _tableList[i];
+        if (ui.table.name == cache.name) {
+          _tableList[i] = ui.table; // replace
+          found = true;
+          break;
+        }
       }
-    }
-    if (!found) {
-      _tableList.add(ui.table);
+      if (!found) {
+        _tableList.add(ui.table);
+      }
+    } else {
+      for (DTable table in _tableList) {
+        if (ui.tableId == table.tableId || ui.tableName == table.name) {
+          ui.table = table;
+          break;
+        }
+      }
     }
   } // updateUi
 

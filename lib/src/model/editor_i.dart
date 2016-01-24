@@ -178,7 +178,12 @@ abstract class EditorI {
    */
   String get valueDisplay => value;
   /// is the rendered [valueDisplay] different from the [value]
-  bool get valueRendered => false;
+  bool get isValueDisplay => false;
+
+  /// rendered in an Element - see also DataColumn.isValueRenderElement
+  bool get isValueRenderElement => false;
+  /// render the value
+  Element getValueRenderElement(String theValue) => null;
 
   /**
    * Render [newValue] for display
@@ -456,7 +461,7 @@ abstract class EditorI {
     if (theEntry != null) {
       if (theEntry.value != newValue) {
         data.updateEntry(theEntry, newValue); // updates changed, etc.
-        if (valueRendered) {
+        if (isValueDisplay) {
           render(newValue, false)
           .then((String display){
             theEntry.valueDisplay = display;
@@ -476,7 +481,7 @@ abstract class EditorI {
     value = "";
     if (data != null && _entry != null) {
       data.updateEntry(_entry, "");
-      if (valueRendered) {
+      if (isValueDisplay) {
         _entry.valueDisplay = "";
       }
     }

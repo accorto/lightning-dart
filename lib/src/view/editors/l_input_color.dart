@@ -71,4 +71,18 @@ class LInputColor
   }
   bool _background = true;
 
+  /// render Element
+  bool get isValueRenderElement => true;
+
+  /// render the value
+  Element getValueRenderElement(String theValue) {
+    DivElement div = new DivElement()
+      ..classes.add(LText.C_TRUNCATE);
+    if (theValue != null && theValue.isNotEmpty) {
+      div.style.backgroundColor = theValue;
+      div.text = theValue;
+    }
+    return div;
+  }
+
 } // LInputColor

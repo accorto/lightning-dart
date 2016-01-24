@@ -269,7 +269,7 @@ class LRecordHomeDetail {
       _dd.attributes[Html0.DATA_VALUE] = value;
       // show value
       p.text = value;
-      if (_editor.valueRendered) {
+      if (_editor.isValueDisplay) {
         _editor.render(value, false)
         .then((String display){
           p.text = display;

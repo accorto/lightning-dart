@@ -360,7 +360,8 @@ class LTable
     // Grid Columns
     if (dataColumns.isEmpty) {
       for (UIGridColumn gc in _ui.gridColumnList) {
-        dataColumns.add(DataColumn.fromUi(_ui, gc.columnName, gridColumn:gc));
+        dataColumns.add(DataColumn.fromUi(_ui,
+            gc.columnName, columnId: gc.columnId, gridColumn:gc));
       }
     }
     // table column fallback

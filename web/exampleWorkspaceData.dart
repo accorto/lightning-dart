@@ -7,9 +7,9 @@
 part of lightning.exampleWorkspace;
 
 /**
- * Data Structure for Workbench
+ * Data Structure for Workspace
  */
-class WorbenchData extends Datasource {
+class WorkspaceData extends Datasource {
 
 
   /// simulate server
@@ -69,9 +69,9 @@ class WorbenchData extends Datasource {
   final List<DRecord> _exampleList = new List<DRecord>();
 
   /**
-   *
+   * Workspace Demo Data
    */
-  WorbenchData()
+  WorkspaceData()
     : super (NAME, "dummy", "dummy") {
   } // WorkbenchData
 
@@ -138,4 +138,4 @@ class WorbenchData extends Datasource {
   } // create
 
 
-} // WorkbenchData
+} // WorkspaceData
