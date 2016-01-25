@@ -43,11 +43,11 @@ void main() {
       page.add(demoPage);
     });
 
-    test('First Test', () {
+    test('Components Test', () {
       expect(page, isNotNull);
       expect(demoPage, isNotNull);
-      expect(demoPage.element.children.length, equals(31));
-      print('first test');
+      expect(demoPage.element.children.length, equals(32));
+      print('components test');
     });
   }); // Components
 
@@ -65,11 +65,11 @@ void main() {
       page.add(ctrl);
     }); // setUp
 
-    test('Second Test', () {
+    test('Children Test', () {
       expect(page, isNotNull);
       expect(ctrl, isNotNull);
       expect(ctrl.element.children.length, equals(2));
-      print('second test');
+      print('children test');
     });
   }); // Workspace
 
