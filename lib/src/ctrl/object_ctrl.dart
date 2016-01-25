@@ -90,10 +90,11 @@ class ObjectCtrl extends LComponent {
   String get tableName => datasource.tableName;
 
   /// Find in Table
-  void onFindEditorChange(String name, String newValue, DEntry entry, var details) {
-    _log.config("onFindEditorChange ${tableName} ${newValue}");
+  void onFindEditorChange(String name, String findString, DEntry entry, var details) {
     if (_table != null) {
-      _table.findInTable(newValue);
+      int count = _table.findInTable(findString);
+      _log.config("onFindEditorChange ${tableName} '${findString}' #${count}");
+      _displaySummary(findString: findString, findCount: count);
     }
   }
 
@@ -178,6 +179,7 @@ class ObjectCtrl extends LComponent {
     String filter = _header.filterList.filterValue;
     _log.config("doQuery ${tableName} ${filter}");
     _content.loading = true;
+    _header.summary = "${objectCtrlQuerying()} ...";
     datasource.query()
     .then((DataResponse response) {
       _content.loading = false;
@@ -196,13 +198,13 @@ class ObjectCtrl extends LComponent {
   void _display() {
     _content.clear();
     if (_records == null || _records.isEmpty) {
-      _header.summary = objectCtrlNoRecords();
       DivElement div = new DivElement()
         ..classes.addAll([LTheme.C_THEME__SHADE, LText.C_TEXT_ALIGN__CENTER])
         ..style.lineHeight = "200px"
         ..style.verticalAlign = "middle"
         ..text = objectCtrlNoRecordInfo();
       _content.append(div);
+      _displaySummary();
     } else {
       String viewLayout = _header.viewLayout;
       _table = null; // reset
@@ -214,20 +216,7 @@ class ObjectCtrl extends LComponent {
       } else /* if (viewLayout == LObjectHome.VIEW_LAYOUT_TABLE) */ {
         _displayTable();
       }
-      // Summary
-      if (_records.length == 1) {
-        _header.summary = objectCtrl1Record();
-      } else if (datasource.recordSorting.isEmpty) {
-        _header.summary = "${_records.length} ${objectCtrlRecords()}";
-      } else {
-        String info = "${_records.length} ${objectCtrlRecords()} ${LUtil.DOT_SPACE} ${objectCtrlSortedBy()}";
-        String prefix = " ";
-        for (RecordSort sort in datasource.recordSorting.list) {
-          info += prefix + sort.columnLabel + (sort.isAscending ? LUtil.SORT_ASC : LUtil.SORT_DESC);
-          prefix = LUtil.DOT_SPACE;
-        }
-        _header.summary = info;
-      }
+      _displaySummary();
     }
     if (recordCtrl != null) {
       DRecord oldRecord = recordCtrl.record;
@@ -254,6 +243,31 @@ class ObjectCtrl extends LComponent {
     }
   } // display
 
+  /// display summary
+  void _displaySummary({String findString, int findCount}) {
+    if (_records == null || _records.isEmpty) {
+      _header.summary = objectCtrlNoRecords();
+    } else if (_records.length == 1) {
+      _header.summary = objectCtrl1Record();
+    } else if (datasource.recordSorting.isEmpty) {
+      String info = "${_records.length} ${objectCtrlRecords()}";
+      if (findString != null && findString.isNotEmpty) {
+        info += " (${findCount} ${objectCtrlMatching()} '${findString}')";
+      }
+      _header.summary = info;
+    } else {
+      String info = "${_records.length} ${objectCtrlRecords()} ${LUtil.DOT_SPACE} ${objectCtrlSortedBy()}";
+      String prefix = " ";
+      for (RecordSort sort in datasource.recordSorting.list) {
+        info += prefix + sort.columnLabel + (sort.isAscending ? LUtil.SORT_ASC : LUtil.SORT_DESC);
+        prefix = LUtil.DOT_SPACE;
+      }
+      if (findString != null && findString.isNotEmpty) {
+        info += " (${findCount} ${objectCtrlMatching()} '${findString}')";
+      }
+      _header.summary = info;
+    }
+  } // displaySummary
 
   /// Display Table Sort Info
   void onRecordsSorted(bool sortedLocally) {
@@ -501,6 +515,9 @@ class ObjectCtrl extends LComponent {
     _log.config("onAppsActionCompactLayout ${tableName} ${value}");
   }
 
+
+  static String objectCtrlQuerying() => Intl.message("Querying", name: "objectCtrlQuerying");
+  static String objectCtrlMatching() => Intl.message("matching", name: "objectCtrlMatching");
 
   static String objectCtrlNoRecords() => Intl.message("No records", name: "objectCtrlNoRecords");
   static String objectCtrlNoRecordInfo() => Intl.message("No records to display - change Filter or create New", name: "objectCtrlNoRecordInfo");

@@ -11,14 +11,16 @@ part of lightning_ctrl;
  */
 class RecordCtrlDetails extends FormCtrl {
 
-
   /// Detail View
   RecordCtrlDetails(UI ui)
       : super(ui.tableName, ui, idPrefix:"rc") {
+
     buttonDiv = new DivElement()
-//    ..classes.add(LMargin.C_VERTICAL__MEDIUM)
+      ..classes.add(LMargin.C_VERTICAL__MEDIUM)
       ..classes.add(LModal.C_MODAL__FOOTER);
+
     buildPanels();
+    //
     append(buttonDiv);
     element.classes.add(LMargin.C_HORIZONTAL__LARGE);
   } // RecordCtrlDetails

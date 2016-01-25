@@ -104,8 +104,10 @@ class LDropdownElement
         _optionalItem.element.remove(); // from _dropdownList
       }
       // select first if null
-      if (_dropdownItemList.isNotEmpty && (value == null || value.isEmpty)) {
-        value = _dropdownItemList.first.value;
+      String oldValue = value;
+      if (_dropdownItemList.isNotEmpty && (oldValue == null || oldValue.isEmpty)) {
+        LDropdownItem selectedItem = _dropdownItemList.first;
+        value = selectedItem.value;
       }
     } else {
       if (_optionalItem == null) {
@@ -252,20 +254,29 @@ class LDropdownElement
   }
   /// Set Selected Value (and inform parent)
   void set value (String newValue) {
+    String oldValue = value;
+    if (oldValue == null)
+      oldValue = "";
+    String theValue = newValue == null ? "" : newValue;
     LDropdownItem selectedItem = null;
     for (LDropdownItem item in _dropdownItemList) {
-      if (item.value == newValue) {
+      if (item.value == theValue) {
         item.selected = true;
         selectedItem = item;
       } else {
         item.selected = false;
       }
     }
-    if (editorChange != null) {
-      if (selectedItem == null)
-        editorChange(name, null, null, null);
-      else
-        editorChange(name, selectedItem.value, null, selectedItem);
+    if (selectedItem == null) {
+      _log.fine("setValue ${name}=${newValue} - NotFound #${_dropdownItemList.length}");
+    }
+    if (oldValue != theValue) {
+      if (editorChange != null) { // required for dropdown
+        if (selectedItem == null)
+          editorChange(name, null, null, null);
+        else
+          editorChange(name, selectedItem.value, null, selectedItem);
+      }
     }
   } // setValue
 

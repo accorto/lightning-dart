@@ -213,11 +213,7 @@ class FkService
   bool _isSimilarRequestActive(FkServiceRequest sr) {
     for (FkServiceRequest req in _activeRequests) {
       if (req.tableName == sr.tableName) {
-        if (req.id == null) {
-          return true; // general query
-        }
-        if (req.id == sr.id)
-          return true; // exact match
+        return true; // general query
       }
     }
     return false;
@@ -254,17 +250,17 @@ class FkService
       String details = handleSuccess(info, response.response, buffer.length, setBusy:false);
       ServiceTracker track = new ServiceTracker(response.response, info, details);
       if (response.response.isSuccess) {
+        _log.info("received ${details}");
         _updateCache(sr, response.fksList, response.isFkComplete);
       } else {
-        _log.warning("submit ${info} ${response.response.msg}");
+        _log.warning("received ${details} - ${response.response.msg}");
         _updateCache(sr, new List<DFK>(), false);
       }
-      _log.info("received ${details}");
       track.send();
     })
     .catchError((Event error, StackTrace stackTrace) {
       String message = handleError(dataUri, error, stackTrace);
-      _log.warning("submit ${info} ${message}");
+      _log.warning("submit error ${info} ${message}");
       _updateCache(sr, new List<DFK>(), false);
     });
   } // _submit

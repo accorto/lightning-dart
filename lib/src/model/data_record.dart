@@ -319,7 +319,7 @@ class DataRecord {
         return true;
     }
     if (_table == null) {
-      _log.warning("isReadOnly - table not set");
+      _log.warning("isReadOnly #${rowNo} - table not set");
     } else if (_table.hasReadOnlyLogic()) {
       if (_cacheRO == null || changed)
         _cacheRO = DataContext.evaluateBool(_record, _table, _table.readOnlyLogic);
@@ -404,7 +404,7 @@ class DataRecord {
   DRecord newRecord(DRecord parentRecord) {
     setRecord(null, -1); // create new
     if (_table == null) {
-      _log.warning("newRecord - table not set");
+      _log.warning("newRecord #${rowNo} - table not set");
     } else {
       _record.tableId = table.tableId;
       _record.tableName = table.name;
@@ -419,15 +419,15 @@ class DataRecord {
         if (col.isParentKey) {
           if (parentRecord == null) {
             if (col.isMandatory)
-              _log.warning("newRecord(${table.name}) - no parent record");
+              _log.warning("newRecord #${rowNo} (${table.name}) - no parent record");
           } else {
             DEntry parentEntry = parentData.getEntry(col.columnId, col.name, false);
             if (parentEntry == null) {
-              _log.warning("newRecord(${table.name}) - no parent record entry ${col.name}");
+              _log.warning("newRecord #${rowNo} (${table.name}) - no parent record entry ${col.name}");
             } else {
               DEntry entry = getEntry(col.columnId, col.name, true);
               entry.value = parentEntry.value;
-              _log.config("newRecord(${table.name}).${col.name}=${entry.value}");
+              _log.config("newRecord #${rowNo} (${table.name}).${col.name}=${entry.value}");
             }
           }
         }
@@ -454,7 +454,7 @@ class DataRecord {
     setRecord(null, -1);
     DataRecord currentData = new DataRecord(null, value: currentRecord);
     if (_table == null) {
-      _log.warning("copyRecord - table not set");
+      _log.warning("copyRecord #${rowNo} - table not set");
     } else {
       for (DColumn col in _table.columnList) {
         if (!col.isCopied || DataUtil.isStdColumn(col))
@@ -672,9 +672,9 @@ class DataRecord {
       String oldValueD = entry.value;
       if (NULLVALUE == oldValueD)
         oldValueD = "null";
-      _log.fine("onEditorChange ${name} rowNo=${rowNo} value=${newValue} old=${oldValueD} (orig=${valueOriginalD})");
+      _log.fine("onEditorChange #${rowNo} ${name} rowNo=${rowNo} value=${newValue} old=${oldValueD} (orig=${valueOriginalD})");
     } else {
-      _log.fine("onEditorChange ${name} rowNo=${rowNo} value=${newValue}");
+      _log.fine("onEditorChange #${rowNo} ${name} rowNo=${rowNo} value=${newValue}");
     }
     // data list - controller
     if (onRecordChange != null) {

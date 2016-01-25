@@ -54,7 +54,7 @@ class LInputColor
     } else {
       input.value = newValue;
     }
-    _log.fine("${name} value=${input.value} (${newValue})");
+    //_log.fine("${name} value=${input.value} (${newValue})");
   }
 
   /// Color is a background Color
@@ -63,7 +63,7 @@ class LInputColor
   void set background (bool newValue) {
     _background = newValue;
     String vv = input.value; // default is black
-    _log.fine("${name} background=${_background} ${vv}");
+    //_log.fine("${name} background=${_background} ${vv}");
     defaultValue = _background ? WHITE : BLACK;
     if (vv.isEmpty || vv == BLACK) {
       input.value = defaultValue;

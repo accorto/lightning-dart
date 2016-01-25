@@ -143,6 +143,16 @@ class LTableRow implements FormI {
       selectCb.checked = newValue;
   } // selected
 
+  /// Row is displayed
+  bool get show => !rowElement.classes.contains(LVisibility.C_HIDE);
+  /// Show/Hide Row
+  void set show (bool newValue) {
+    if (newValue)
+      rowElement.classes.remove(LVisibility.C_HIDE);
+    else
+      rowElement.classes.add(LVisibility.C_HIDE);
+  }
+
   /// clicked on something else than selectCb
   void onRowSelectClick(MouseEvent evt) {
     _log.fine("onRowSelectClick ${rowNo}");

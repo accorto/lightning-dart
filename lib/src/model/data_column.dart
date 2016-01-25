@@ -32,10 +32,10 @@ class DataColumn {
   static DataColumn fromUi (UI ui, String columnName, {String columnId,
       DColumn tableColumn, UIPanelColumn panelColumn, UIGridColumn gridColumn}) {
     DColumn column = tableColumn;
-    if (column == null) {
+    if (column == null || !column.hasName()) {
       column = DataUtil.findColumn(ui.table, columnId, columnName);
     }
-    //
+    // Panel Column
     UIPanelColumn pc = panelColumn;
     if (pc == null) {
       for (UIPanel panel in ui.panelList) {
@@ -53,7 +53,7 @@ class DataColumn {
     if (pc != null && !pc.hasColumn()) {
       pc.column = column;
     }
-    //
+    // Grid Column
     UIGridColumn gc = gridColumn;
     if (gc == null) {
       for (UIGridColumn pp in ui.gridColumnList) {
@@ -92,13 +92,18 @@ class DataColumn {
 
   /// Label
   String get label {
-    // String overwrite = labelOverwrite;
-    // if (overwrite != null)
-    //   return overwrite;
-    return tableColumn.label;
+    if (tableColumn.hasLabel()) {
+      return tableColumn.label;
+    }
+    // Panel Column Label
+    String pc = labelPanelColumn;
+    if (pc != null) {
+      return pc;
+    }
+    return tableColumn.name; // fallback
   }
-  // Label overwrite or null
-  String get labelOverwrite {
+  // Panel Column Label
+  String get labelPanelColumn {
     if (uiPanelColumn != null && uiPanelColumn.hasLabel() && uiPanelColumn.label.isNotEmpty)
       return uiPanelColumn.label;
     return null;

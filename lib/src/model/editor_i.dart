@@ -295,6 +295,9 @@ abstract class EditorI {
       help = helpText;
     }
 
+    if (tableColumn.hasDefaultValue())
+      defaultValue = tableColumn.defaultValue; // for mandatory
+
     if (tableColumn.hasIsMandatory())
       required = tableColumn.isMandatory;
     if (tableColumn.hasIsReadOnly())
@@ -302,9 +305,6 @@ abstract class EditorI {
 
     if (tableColumn.hasColumnSize() && tableColumn.columnSize > 0)
       maxlength = tableColumn.columnSize;
-    if (tableColumn.hasDefaultValue())
-      defaultValue = tableColumn.defaultValue;
-
     if (tableColumn.hasFormatMask())
       pattern = tableColumn.formatMask;
 

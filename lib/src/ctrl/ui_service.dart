@@ -133,11 +133,11 @@ class UiService
       if (response.response.isSuccess) {
         update(response); // update before complete
         completer.complete(response);
+        _log.info("received ${details}");
       } else {
-        _log.warning("submit ${info} ${response.response.msg}");
+        _log.warning("submit ${details} - ${response.response.msg}");
         completer.completeError(new Exception(response.response.msg));
       }
-      _log.info("received ${details}");
       track.send();
     })
     .catchError((Event error, StackTrace stackTrace) {

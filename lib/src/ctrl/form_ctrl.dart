@@ -65,7 +65,8 @@ class FormCtrl
       section.showLabel = count > 0 || showSection1label;
       setSection(section);
       for (UIPanelColumn pc in panel.panelColumnList) {
-        DataColumn dataColumn = DataColumn.fromUi(ui, pc.columnName, tableColumn:pc.column, panelColumn:pc);
+        DataColumn dataColumn = DataColumn.fromUi(ui, pc.columnName,
+            tableColumn:pc.column, panelColumn:pc, columnId:pc.columnId);
         dataColumns.add(dataColumn);
         if (dataColumn.isActivePanel) {
           LEditor editor = EditorUtil.createfromColumn(null, dataColumn, false,

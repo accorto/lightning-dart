@@ -25,10 +25,12 @@ part "exampleWorkspaceLogin.dart";
  */
 main() async {
 
+  PageSimple page = null;
   Datasource dataSource = null;
   if (dataSource == null) {
     LightningCtrl.init()
     .then((_){
+      page = LightningCtrl.createPageSimple();
       return WorkspaceLogin.login();
     })
     .then((LoginResponse login){
@@ -39,28 +41,29 @@ main() async {
       } else {
         print(login.response.msg);
       }
-      start(dataSource);
+      start(page, dataSource);
     })
     .catchError((error, stackTrace){
       print(error);
       print(stackTrace);
-      start(dataSource);
+      start(page, dataSource);
     });
   } else {
     await LightningDart.init(); // client env
-    start(dataSource);
+    page = LightningDart.createPageSimple();
+    start(page, dataSource);
   }
 } // main
 
 /**
  * Start Apps
  */
-void start(Datasource dataSource) {
-  if (dataSource == null)
+void start(PageSimple page, Datasource dataSource) {
+  if (dataSource == null) {
     dataSource = new WorkspaceData();
+  }
   ObjectCtrl ctrl = new ObjectCtrl(dataSource);
 
-  PageSimple page = LightningDart.createPageSimple();
   page.element.classes.add(LGrid.C_WRAP);
   page.add(ctrl);
 }

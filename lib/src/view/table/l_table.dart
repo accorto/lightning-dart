@@ -103,6 +103,8 @@ class LTable
   AppsActionTriggered recordAction;
   /// Table Row Select callback
   TableSelectClicked tableSelectClicked;
+  /// Row List set is display
+  List<LTableRow> _rowList = new List<LTableRow>();
 
   /// Row Select
   final bool optionRowSelect;
@@ -247,18 +249,19 @@ class LTable
   }
 
   /// Find In Table
-  int findInTable(String findExpression) {
+  int findInTable(String findString) {
     int count = 0;
-    RegExp regEx = LUtil.createRegExp(findExpression);
+    RegExp regEx = LUtil.createRegExp(findString);
     if (regEx == null) {
-      for (DRecord record in recordList) {
-        record.clearIsMatchFind();
+      for (LTableRow row in _rowList) {
+        row.record.clearIsMatchFind();
+        row.show = true;
       }
       count = recordList.length;
     } else {
-      for (DRecord record in recordList) {
+      for (LTableRow row in _rowList) {
         bool match = false;
-        for (DEntry entry in record.entryList) {
+        for (DEntry entry in row.record.entryList) {
           if (entry.hasValueDisplay()) {
             if (entry.valueDisplay.contains(regEx)) {
               match = true;
@@ -276,12 +279,12 @@ class LTable
             }
           }
         }
-        record.isMatchFind = match;
+        row.record.isMatchFind = match;
+        row.show = match;
         if (match)
           count++;
       } // for record
     }
-    display();
     return count;
   } // findInTable
 
@@ -415,11 +418,11 @@ class LTable
       _tbodyRows.clear();
     }
     int i = 0;
+    _rowList.clear();
     for (DRecord record in recordList) {
-      if (record.hasIsMatchFind() && !record.isMatchFind)
-        continue;
       LTableRow row = addBodyRow(rowValue: record.recordId);
       row.setRecord(record, i++, recordAction:recordAction);
+      _rowList.add(row);
     }
   } // display
 

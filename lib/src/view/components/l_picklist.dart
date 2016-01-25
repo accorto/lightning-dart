@@ -97,7 +97,6 @@ class LPicklist
     //
     showDropdown = false;
     _dropdown.selectMode = true;
-    _dropdown.editorChange = onEditorChange;
 
     // Selection list
     if (dataColumn != null) {
@@ -117,6 +116,7 @@ class LPicklist
         }
       }
     }
+    _dropdown.editorChange = onEditorChange; // after init
   } // initEditor
 
   String get id => _plButton.id;
@@ -201,9 +201,11 @@ class LPicklist
   } // onEditorChange
 
 
-  String get defaultValue => null; // not supported
+  String get defaultValue => _defaultValue;
   void set defaultValue (String newValue) {
+    _defaultValue = newValue;
   }
+  String _defaultValue;
 
 
   /// base editor methods
@@ -229,6 +231,12 @@ class LPicklist
     } else {
       if (txt == lPicklistSelectOption()) {
         _plButtonLabel.text = Html0.SPACE_NB;
+      }
+    }
+    if (newValue && defaultValue != null) {
+      String vv = value;
+      if (vv == null || value.isEmpty) {
+        value = defaultValue;
       }
     }
     _dropdown.required = newValue; // if required sets first

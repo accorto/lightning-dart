@@ -100,7 +100,7 @@ class LInput
 
     if (dataColumn.tableColumn.hasValFrom())
       min = dataColumn.tableColumn.valFrom;
-   if (dataColumn.tableColumn.hasValTo())
+    if (dataColumn.tableColumn.hasValTo())
       max = dataColumn.tableColumn.valTo;
   }
 
