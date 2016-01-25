@@ -521,19 +521,22 @@ class LForm
   }
 
   // add trace field/info
-  void showTrace() {
+  void showTrace({String info: "Trace"}) {
     if (_debugElement == null) {
       _debugElement = new DivElement()
         ..classes.addAll([LTheme.C_BOX, LMargin.C_TOP__SMALL, LTheme.C_THEME__ALERT_TEXTURE]);
       form.append(_debugElement);
-      _debugElement.text = "Trace: Enter your email and press Subscribe to test :-)";
+      _debugElement.text = info;
     }
   }
   void _debug(String info) {
     for (DEntry entity in data.record.entryList) {
       if (entity.hasValue()) {
-        if (entity.value != DataRecord.NULLVALUE)
+        if (entity.value != DataRecord.NULLVALUE) {
           info += " ${entity.columnName}=${entity.value}";
+          if (entity.hasValueDisplay())
+            info += "(${entity.valueDisplay})";
+        }
       }
     }
     _log.fine(info);

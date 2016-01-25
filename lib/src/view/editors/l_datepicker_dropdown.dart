@@ -71,13 +71,14 @@ class LDatePickerDropdown {
   int _yearFirst = 1915;
   int _yearLast = 2045;
 
+  final String name;
   final DateFormat dateFormat;
   final int firstDayOfWeek;
 
   /**
    * Date Picker Dropdown
    */
-  LDatePickerDropdown(String idPrefix, DateFormat this.dateFormat, int this.firstDayOfWeek) {
+  LDatePickerDropdown(String this.name, String idPrefix, DateFormat this.dateFormat, int this.firstDayOfWeek) {
     element.append(_grid);
     _grid.append(_month);
     _month.append(_monthPrev);
@@ -120,7 +121,8 @@ class LDatePickerDropdown {
 
   /// Select Mode
   String mode = LDatepicker.MODE_SINGLE;
-
+  /// Utc
+  bool isUtc = true;
 
   /// Set Date in ms
   void set value (String newValue) {
@@ -218,8 +220,8 @@ class LDatePickerDropdown {
           }
         }
       }
-      DateTime clickDate = DataUtil.toDate(dateString, type: EditorI.TYPE_DATE);
-      String info = "onCalClick ${dateString} ${clickDate.toString().substring(0,10)} ${mode}";
+      DateTime clickDate = DataUtil.toDate(dateString, type: EditorI.TYPE_DATE, isUtc: isUtc);
+      String info = "onCalClick ${dateString} ${clickDate} ${mode} utc=${isUtc}";
 
       if (target is TableCellElement) {
         if (mode == LDatepicker.MODE_WEEK_FIRST || mode == LDatepicker.MODE_WEEK_LAST) {
@@ -233,9 +235,9 @@ class LDatePickerDropdown {
           _log.config(info);
           if (editorChange != null) {
             if (mode == LDatepicker.MODE_WEEK_FIRST) {
-              editorChange("date", _date.millisecondsSinceEpoch.toString(), null, _date);
+              editorChange(name, _date.millisecondsSinceEpoch.toString(), null, _date);
             } else {
-              editorChange("date", _dateTo.millisecondsSinceEpoch.toString(), null, _dateTo);
+              editorChange(name, _dateTo.millisecondsSinceEpoch.toString(), null, _dateTo);
             }
           }
         } else if (mode == LDatepicker.MODE_RANGE) {
@@ -250,7 +252,7 @@ class LDatePickerDropdown {
           }
           _log.config(info);
           if (editorChange != null) {
-            editorChange("date", dateString, null, _date);
+            editorChange(name, dateString, null, _date);
           }
         } // single
       } // table cell

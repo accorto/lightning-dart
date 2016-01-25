@@ -75,8 +75,14 @@ class IntroPage extends AppsPage {
  */
 class DemoPage extends AppsPage {
 
+  /// The Element
   Element element = new DivElement();
 
+  final LCheckbox _onlySelectedCb = new LCheckbox("onlySelected")
+    ..label = "Show only selected components";
+  final List<DemoFeature> _featureList = new List<DemoFeature>();
+
+  /// Demo Page
   DemoPage(String id, LIcon icon, String label, PageSimple wrap)
       : super(id, id, icon, label, "Lightning Dart Component Demo ${label}") {
     DivElement hdr = new DivElement()
@@ -102,39 +108,71 @@ class DemoPage extends AppsPage {
     Element toc = new Element.nav()
       ..classes.addAll([LGrid.C_GRID, LGrid.C_WRAP]);
     element.append(toc);
+    //
+    _onlySelectedCb.element.classes.add(LMargin.C_AROUND__SMALL);
+    element.append(_onlySelectedCb.element);
+    _onlySelectedCb.element.onClick.listen(onClickOnlySelected);
 
     /* Individual parts */
-    add(new ActivityTimeline()..toc(toc));
-    add(new Badges()..toc(toc));
-    add(new Breadcrumbs()..toc(toc));
-    add(new Buttons()..toc(toc));
-    add(new ButtonGroups()..toc(toc));
-    add(new Cards()..toc(toc));
-    add(new Tables()..toc(toc));
-    add(new Datepickers()..toc(toc));
-    add(new Feeds()..toc(toc));
-    add(new Forms()..toc(toc));
-    add(new Forms2()..toc(toc));
-    add(new FormsEditor()..toc(toc));
-    add(new GridSystem()..toc(toc));
-    add(new Icons()..toc(toc));
-    add(new Images()..toc(toc));
-    add(new Lookups()..toc(toc));
-    add(new Media()..toc(toc));
-    add(new Menus()..toc(toc));
-    add(new Modals()..toc(toc));
-    add(new Notifications(wrap)..toc(toc));
-    add(new PageHeaders()..toc(toc));
-    add(new Pills()..toc(toc));
-    add(new Popovers()..toc(toc));
-    add(new Publishers()..toc(toc));
-    add(new Spinners()..toc(toc));
-    add(new Tabs()..toc(toc));
-    add(new Tiles()..toc(toc));
-    add(new Trees()..toc(toc));
+    _addFeature(new ActivityTimeline()..toc(toc, onlySelectedHide));
+    _addFeature(new Badges()..toc(toc, onlySelectedHide));
+    _addFeature(new Breadcrumbs()..toc(toc, onlySelectedHide));
+    _addFeature(new Buttons()..toc(toc, onlySelectedHide));
+    _addFeature(new ButtonGroups()..toc(toc, onlySelectedHide));
+    _addFeature(new Cards()..toc(toc, onlySelectedHide));
+    _addFeature(new Tables()..toc(toc, onlySelectedHide));
+    _addFeature(new Datepickers()..toc(toc, onlySelectedHide));
+    _addFeature(new Feeds()..toc(toc, onlySelectedHide));
+    _addFeature(new Forms()..toc(toc, onlySelectedHide));
+    _addFeature(new Forms2()..toc(toc, onlySelectedHide));
+    _addFeature(new FormsEditor()..toc(toc, onlySelectedHide));
+    _addFeature(new GridSystem()..toc(toc, onlySelectedHide));
+    _addFeature(new Icons()..toc(toc, onlySelectedHide));
+    _addFeature(new Images()..toc(toc, onlySelectedHide));
+    _addFeature(new Lookups()..toc(toc, onlySelectedHide));
+    _addFeature(new Media()..toc(toc, onlySelectedHide));
+    _addFeature(new Menus()..toc(toc, onlySelectedHide));
+    _addFeature(new Modals()..toc(toc, onlySelectedHide));
+    _addFeature(new Notifications(wrap)..toc(toc, onlySelectedHide));
+    _addFeature(new PageHeaders()..toc(toc, onlySelectedHide));
+    _addFeature(new Pills()..toc(toc, onlySelectedHide));
+    _addFeature(new Popovers()..toc(toc, onlySelectedHide));
+    _addFeature(new Publishers()..toc(toc, onlySelectedHide));
+    _addFeature(new Spinners()..toc(toc, onlySelectedHide));
+    _addFeature(new Tabs()..toc(toc, onlySelectedHide));
+    _addFeature(new Tiles()..toc(toc, onlySelectedHide));
+    _addFeature(new Trees()..toc(toc, onlySelectedHide));
 
-    add(new Themes()..toc(toc));
+    _addFeature(new Themes()..toc(toc, onlySelectedHide));
   }
+
+  void _addFeature(DemoFeature feature) {
+    _featureList.add(feature);
+    add(feature);
+  }
+
+  /// Click on Selected Cb
+  void onClickOnlySelected(Event evt) {
+    onlySelected = _onlySelectedCb.checked;
+  }
+  /// Show obny Selected
+  bool get onlySelected => _onlySelectedCb.checked;
+  /// Show only Selected
+  void set onlySelected(bool newValue) {
+    _onlySelectedCb.checked = newValue;
+    for (DemoFeature feature in _featureList) {
+      feature.show = !newValue;
+    }
+  }
+  /// hide all if only selected
+  void onlySelectedHide() {
+    if (onlySelected) {
+      for (DemoFeature feature in _featureList) {
+        feature.show = false;
+      }
+    }
+  }
+
 } // Demo Page
 
 

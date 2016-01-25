@@ -65,6 +65,13 @@ class LCheckbox
     input.checked = newValue == "true";
   }
 
+  /// direct access
+  bool get checked => input.checked;
+  /// direct access
+  void set checked (bool newValue) {
+    input.checked = newValue;
+  }
+
   String get defaultValue => input.defaultValue;
   void set defaultValue (String newValue) {
     input.defaultValue = newValue;

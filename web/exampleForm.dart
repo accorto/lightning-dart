@@ -39,7 +39,7 @@ main() async {
       ..label = "Comments")
       ..addResetButton()
       ..addSaveButton(label: "Subscribe", icon: new LIconUtility(LIconUtility.EMAIL));
-  form.showTrace(); // shows detail info
+  form.showTrace(info: "Trace: Enter your email and press Subscribe to test :-)"); // shows detail info
   // The Card
   LCard card = new LCard("exCard")
     ..setHeader(new LIconAction(LIconAction.RECORD), "Sign up for Lightning Dart Updates")

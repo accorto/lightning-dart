@@ -20,54 +20,59 @@ class Datepickers extends DemoFeature {
   plans: ["date ranges"]);
 
   LComponent get content {
-    LForm form = new LForm.stacked("datePick")
+    LForm form = new LForm.stacked("date-form")
       ..classes.add(LMargin.C_HORIZONTAL__MEDIUM);
 
-    LDatepicker dp = new LDatepicker("date")
+    LDatepicker dp = new LDatepicker("date-pick")
       ..label = "Date Picker";
     if (optionWeekSelect)
       dp.mode = LDatepicker.MODE_WEEK_FIRST;
     dp.value = null;
     form.addEditor(dp);
 
-    LInputDate id1 = new LInputDate("id1")
+    LInputDate id1 = new LInputDate("date-html")
       ..label = "Date Input Html5 (falls back if not supported)"
       ..html5 = true;
     id1.value = null;
     form.addEditor(id1);
 
-    LInputDate id2 = new LInputDate("id2")
+    LInputDate id2 = new LInputDate("date-plain")
       ..label = "Date Input (plain)"
       ..html5 = false;
     id2.value = null;
     form.addEditor(id2);
 
-    form.element.style.height = "300px"; // initial test
+    form.showTrace();
     return form;
   }
 
 
   String get source {
     return '''
-    LForm form = new LForm.stacked("datePick");
+    LForm form = new LForm.stacked("date-form")
+      ..classes.add(LMargin.C_HORIZONTAL__MEDIUM);
 
-    LDatepicker dp = new LDatepicker("date")
+    LDatepicker dp = new LDatepicker("date-pick")
       ..label = "Date Picker";
     if (optionWeekSelect)
       dp.mode = LDatepicker.MODE_WEEK_FIRST;
     dp.value = null;
     form.addEditor(dp);
 
-    LInputDate id1 = new LInputDate("id1")
-      ..label = "Date Input Html5 (falls back if not supported)";
+    LInputDate id1 = new LInputDate("date-html")
+      ..label = "Date Input Html5 (falls back if not supported)"
+      ..html5 = true;
     id1.value = null;
     form.addEditor(id1);
 
-    LInputDate id2 = new LInputDate("id2")
-      ..label = "Date Input"
+    LInputDate id2 = new LInputDate("date-plain")
+      ..label = "Date Input (plain)"
       ..html5 = false;
     id2.value = null;
     form.addEditor(id2);
+
+    form.showTrace();
+    return form;
     ''';
   }
 

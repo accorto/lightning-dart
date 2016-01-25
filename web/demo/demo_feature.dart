@@ -9,7 +9,8 @@ part of lightning_dart.demo;
 /**
  * Demo Feature Mgt
  */
-abstract class DemoFeature extends LComponent {
+abstract class DemoFeature
+    extends LComponent {
 
 
   static const String SLDS_DEV_READY = "dev ready";
@@ -159,11 +160,13 @@ abstract class DemoFeature extends LComponent {
   } // DemoFeature
 
   /// Link to Feature
-  void toc(Element toc) {
+  void toc(Element toc, void onlySelectedHide()) {
     AnchorElement a = new AnchorElement(href: "#${id}")
       ..text = label;
     a.onClick.listen((MouseEvent evt){
       evt.preventDefault();
+      onlySelectedHide();
+      show = true;
       element.scrollIntoView(ScrollAlignment.TOP);
     });
     //
@@ -174,6 +177,7 @@ abstract class DemoFeature extends LComponent {
     toc.append(col);
   }
 
+  /// create link to SLDS
   AnchorElement createSldsLink() {
     String path = sldsPath;
     if (path == null)

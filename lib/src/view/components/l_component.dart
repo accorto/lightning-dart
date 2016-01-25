@@ -177,6 +177,13 @@ abstract class LComponent {
     element.tabIndex = tabIndex;
   }
 
+  /// Showing
+  bool get show => !element.classes.contains(LVisibility.C_HIDE);
+  /// Show Component
+  void set show(bool newValue) {
+    element.classes.toggle(LVisibility.C_HIDE, !newValue);
+  }
+
 } // LComponent
 
 

@@ -230,6 +230,13 @@ abstract class LPopbase
 
   /// Showing
   bool get show => !pop.classes.contains(LVisibility.C_HIDE);
+  /// Show pop
+  void set show (bool newValue) {
+    if (newValue)
+      _show();
+    else
+      hide();
+  }
 
   /// hide
   void hide() {

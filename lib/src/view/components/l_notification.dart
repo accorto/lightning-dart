@@ -147,7 +147,7 @@ abstract class LNotification extends LComponent {
   }
 
   /// show
-  void show (Element parent, {int autohideSeconds}) {
+  void showIn (Element parent, {int autohideSeconds}) {
     parent.append(element);
     if (autohideSeconds != null && autohideSeconds > 0) {
       new Timer(new Duration(seconds: autohideSeconds), (){
@@ -169,7 +169,7 @@ abstract class LNotification extends LComponent {
       ..left = "${left}px"
       ..removeProperty("right")
       ..removeProperty("bottom");
-    show(parent, autohideSeconds:autohideSeconds);
+    showIn(parent, autohideSeconds:autohideSeconds);
   } // show
 
   /**
@@ -182,7 +182,7 @@ abstract class LNotification extends LComponent {
       ..right = "0"
       ..removeProperty("top")
       ..removeProperty("left");
-    show(parent, autohideSeconds:autohideSeconds);
+    showIn(parent, autohideSeconds:autohideSeconds);
 
     Rectangle thisRect = element.getBoundingClientRect();
     int winH = window.innerHeight;

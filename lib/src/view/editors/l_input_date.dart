@@ -37,11 +37,13 @@ class LInputDate
    */
   LInputDate(String name, {String type:EditorI.TYPE_DATE, String idPrefix, bool inGrid:false})
       : super(name, type, idPrefix:idPrefix, inGrid:inGrid) {
+    _type = type;
     _initDate(type);
   }
 
   LInputDate.from(DataColumn dataColumn, String type, {String idPrefix, bool inGrid:false})
       : super.from(dataColumn, type, idPrefix:idPrefix, inGrid:inGrid) {
+    _type = type;
     _initDate(type);
   }
 
@@ -70,7 +72,7 @@ class LInputDate
       _invalidInput = lInputDateInvalidInputDate();
       _type = EditorI.TYPE_DATE;
     }
-    isUtc = type == EditorI.TYPE_DATE;
+    isUtc = _type == EditorI.TYPE_DATE;
   } // initDate
 
   /// use native calendar
@@ -184,7 +186,7 @@ class LInputDate
     if (setValidity)
       input.setCustomValidity("");
     if (_isEmpty(newValue))
-      return "";
+      return ""; // incomplete date string
     DateTime dt = null;
     if (type == EditorI.TYPE_DATE) {
       dt = DataUtil.asDate(newValue, html5, isUtc); // UTC

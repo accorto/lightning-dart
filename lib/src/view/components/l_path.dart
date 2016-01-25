@@ -308,6 +308,7 @@ class LPath
     _log.config("onPathChange ${name}=${theValue}");
     if (data != null && entry != null) {
       data.updateEntry(entry, theValue);
+      valueDisplayUpdate();
     }
     if (editorChange != null) {
       editorChange(name, theValue, entry, null);

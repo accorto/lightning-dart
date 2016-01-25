@@ -180,6 +180,18 @@ abstract class EditorI {
   /// is the rendered [valueDisplay] different from the [value]
   bool get isValueDisplay => false;
 
+  /// update valueDisplay
+  void valueDisplayUpdate() {
+    if (isValueDisplay && _entry != null) {
+      String vv = valueDisplay;
+      if (vv == null || vv.isEmpty) {
+        _entry.clearValueDisplay();
+      } else {
+        _entry.valueDisplay = vv;
+      }
+    }
+  }
+
   /// rendered in an Element - see also DataColumn.isValueRenderElement
   bool get isValueRenderElement => false;
   /// render the value
@@ -445,6 +457,7 @@ abstract class EditorI {
       if (theValue == DataRecord.NULLVALUE)
         theValue = null;
       value = theValue == null ? "" : theValue;
+      valueDisplayUpdate();
     }
     // dynamic context
     if (_dataColumn != null) {
@@ -461,12 +474,7 @@ abstract class EditorI {
     if (theEntry != null) {
       if (theEntry.value != newValue) {
         data.updateEntry(theEntry, newValue); // updates changed, etc.
-        if (isValueDisplay) {
-          render(newValue, false)
-          .then((String display){
-            theEntry.valueDisplay = display;
-          });
-        }
+        valueDisplayUpdate();
         //_log.fine("updateData ${name}=${theEntry.value} - ${theEntry.valueDisplay}");
       }
     }
@@ -481,9 +489,7 @@ abstract class EditorI {
     value = "";
     if (data != null && _entry != null) {
       data.updateEntry(_entry, "");
-      if (isValueDisplay) {
-        _entry.valueDisplay = "";
-      }
+      valueDisplayUpdate();
     }
     onInputChange(ignored); // validates
     input.focus();
@@ -509,6 +515,7 @@ abstract class EditorI {
     _log.config("onInputChange ${name}=${theValue}");
     if (data != null && _entry != null) {
       data.updateEntry(_entry, theValue);
+      valueDisplayUpdate();
     }
     if (editorChange != null) {
       editorChange(name, theValue, _entry, null);

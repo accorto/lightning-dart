@@ -59,7 +59,7 @@ class LDatepicker
    * Date Input
    */
   LDatepicker(String name, {String idPrefix, bool inGrid:false})
-    : super(name, type:EditorI.TYPE_TEXT, idPrefix:idPrefix, inGrid:inGrid);
+    : super(name, type:EditorI.TYPE_DATE, idPrefix:idPrefix, inGrid:inGrid);
 
   LDatepicker.from(DataColumn dataColumn, String type, {String idPrefix, bool inGrid:false})
     : super.from(dataColumn, type, idPrefix:idPrefix, inGrid:inGrid);
@@ -79,6 +79,12 @@ class LDatepicker
   /// ignore html5 setting
   void set html5 (bool ignored) {
     super.html5 = false;
+  }
+
+  /// set value - hide dropdown
+  void set value(String newValue) {
+    super.value = newValue;
+    showDropdown = false;
   }
 
   /// Select Mode
@@ -104,7 +110,8 @@ class LDatepicker
   /// Field Clicked - show dropdown
   void onInputClick(MouseEvent evt) {
     if (_dropdown == null) {
-      _dropdown = new LDatePickerDropdown(id, _formatter, _firstDayOfWeek);
+      _dropdown = new LDatePickerDropdown(name, id, _formatter, _firstDayOfWeek);
+      _dropdown.isUtc = isUtc;
       _dropdown.editorChange = onDropdownChange;
       _dropdown.show = false;
     }
@@ -128,7 +135,7 @@ class LDatepicker
   } // onInputClicked
 
   /// Dropdown Changed
-  void onDropdownChange(String name, String newValue, DEntry entry, var details) {
+  void onDropdownChange(String name, String newValue, DEntry ignored, var details) {
     _dropdown.show = false;
     _dropdown.element.remove();
     if (readOnly) {
@@ -139,6 +146,7 @@ class LDatepicker
     _log.config("onInputChange ${name}=${theValue}");
     if (data != null && entry != null) {
       data.updateEntry(entry, theValue);
+      valueDisplayUpdate();
     }
     if (editorChange != null) {
       editorChange(name, theValue, entry, null);
