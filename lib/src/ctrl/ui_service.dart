@@ -198,7 +198,8 @@ class UiService
       }
     } else {
       for (DTable table in _tableList) {
-        if (ui.tableId == table.tableId || ui.tableName == table.name) {
+        if ((ui.hasTableId() && ui.tableId == table.tableId)
+            || ui.tableName == table.name) {
           ui.table = table;
           break;
         }

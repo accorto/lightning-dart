@@ -214,7 +214,7 @@ class LTable
   } // addHeadRow
   LTableHeaderRow _headerRow;
 
-  /// Table Sort
+  /// Table Sort = shift - multiple
   void onTableSortClicked(String name, bool asc, MouseEvent evt) {
     bool shiftMeta = (evt.shiftKey || evt.metaKey);
     _log.config("onTableSortClicked ${name} ${asc} shiftMeta=${shiftMeta}");
@@ -232,10 +232,14 @@ class LTable
       sort.setLabelFrom(_ui.table);
     }
     recordSorting.add(sort);
-    if (recordSorting.sort()) { // sortLocal
+    //
+    loading = true;
+    bool sortLocal = recordSorting.sort();
+    if (sortLocal == null) { // not sorted locally nor server
       recordSorting.sortList(recordList);
       display();
     }
+    loading = false;
   } // onTableSortClicked
 
   /**

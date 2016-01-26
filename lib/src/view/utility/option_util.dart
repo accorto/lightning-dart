@@ -52,7 +52,7 @@ class OptionUtil {
   static DOption optionFromFk(DFK fk) {
     DOption doption = new DOption()
       ..id = fk.id
-      ..value = fk.urv
+      ..value = fk.id // fk.urv
       ..label = fk.drv;
     return doption;
   }

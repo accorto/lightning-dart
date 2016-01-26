@@ -280,7 +280,7 @@ class LLookup
     if (setValidity) {
       input.setCustomValidity("${lLookupInvalidValue()}=${newValue}");
     }
-    return newValue;
+    return "<${newValue}>";
   } // render
 
   String get defaultValue => null; // ignore

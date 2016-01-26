@@ -252,7 +252,7 @@ class LDropdownElement
     }
     return null;
   }
-  /// Set Selected Value (and inform parent)
+  /// Set Selected Value (and inform parent) - LPickList|LDropdown
   void set value (String newValue) {
     String oldValue = value;
     if (oldValue == null)

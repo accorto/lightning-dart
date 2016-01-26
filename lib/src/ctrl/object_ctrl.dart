@@ -62,7 +62,7 @@ class ObjectCtrl extends LComponent {
 
     _content.element.style.minHeight = "100px";
 
-    datasource.recordSorting.sortExecuted = onRecordsSorted;
+    datasource.recordSorting.sortResult = onRecordsSortResult;
     _header.loading = true;
     datasource.uiFuture()
     .then((UI ui) {
@@ -270,7 +270,7 @@ class ObjectCtrl extends LComponent {
   } // displaySummary
 
   /// Display Table Sort Info
-  void onRecordsSorted(bool sortedLocally) {
+  void onRecordsSortResult(bool sortedLocally) {
     if (sortedLocally) {
       display(datasource.recordList);
     } else {

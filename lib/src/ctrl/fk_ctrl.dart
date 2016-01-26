@@ -116,10 +116,20 @@ class FkCtrl
         if (!found) {
           FkService.instance.getFkFuture(tableName, newValue)
           .then((DFK fk2){
-            if (fk2 != null)
+            if (fk2 != null) {
               completer.complete(fk2.drv);
-            else
-              completer.complete("!${newValue}!");
+              if (entry != null) {
+                if (entry.hasValue()) {
+                  if (entry.value == fk2.id) {
+                    entry.valueDisplay = fk2.drv;
+                  }
+                } else if (entry.valueOriginal == fk2.id) {
+                  entry.valueDisplay = fk2.drv;
+                }
+              }
+            } else {
+              completer.complete("!!${newValue}!!");
+            }
           })
           .catchError((error, stackTrace) {
             _log.warning("render ${tableName}.${name}", error, stackTrace);
@@ -143,6 +153,21 @@ class FkCtrl
     } // not empty
     return completer.future;
   } // render
+
+  /// update display value
+  void valueDisplayUpdate() {
+    if (entry != null) {
+      String vv = value;
+      if (vv == null || vv.isEmpty) {
+        entry.clearValueDisplay();
+      } else {
+        String dd = renderSync(vv, false);
+        if (!dd.startsWith("<")) {
+          entry.valueDisplay = vv;
+        }
+      }
+    }
+  }
 
   /// Dependent On Changed
   void onDependentOnChanged(DEntry dependentEntry) {

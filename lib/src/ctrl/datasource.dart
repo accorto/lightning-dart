@@ -93,16 +93,14 @@ class Datasource
   DTable get tableDirect => _table;
   DTable _table;
 
-  /// Execute Sort
+  /// Execute Sort locally if possible
   bool sortExecute() {
-    bool sortLocal = true;
     // local sort
     if (totalRows == recordList.length) {
       recordSorting.sortList(recordList);
-    } else {
-      sortLocal = false;
+      return true;
     }
-    return sortLocal;
+    return false;
   }
 
 

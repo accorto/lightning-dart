@@ -100,7 +100,6 @@ class LPicklist
 
     // Selection list
     if (dataColumn != null) {
-      this.dataColumn = dataColumn;
       DColumn tableColumn = dataColumn.tableColumn;
       if (tableColumn.pickValueList.isNotEmpty) {
         dOptionList = tableColumn.pickValueList;
@@ -115,6 +114,8 @@ class LPicklist
           required = false;
         }
       }
+      // set required, value, etc.
+      this.dataColumn = dataColumn;
     }
     _dropdown.editorChange = onEditorChange; // after init
   } // initEditor

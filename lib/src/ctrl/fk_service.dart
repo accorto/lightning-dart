@@ -251,24 +251,25 @@ class FkService
       ServiceTracker track = new ServiceTracker(response.response, info, details);
       if (response.response.isSuccess) {
         _log.info("received ${details}");
-        _updateCache(sr, response.fksList, response.isFkComplete);
+        _updateCache(sr, response.fksList, response.isFkComplete, null);
       } else {
         _log.warning("received ${details} - ${response.response.msg}");
-        _updateCache(sr, new List<DFK>(), false);
+        _updateCache(sr, new List<DFK>(), false, response.response.msg);
       }
       track.send();
     })
     .catchError((Event error, StackTrace stackTrace) {
       String message = handleError(dataUri, error, stackTrace);
       _log.warning("submit error ${info} ${message}");
-      _updateCache(sr, new List<DFK>(), false);
+      _updateCache(sr, new List<DFK>(), false, message);
     });
   } // _submit
 
   /**
    * Update Cache - callback from submit
    */
-  void _updateCache(FkServiceRequest sr, List<DFK> fkList, bool fkComplete) {
+  void _updateCache(FkServiceRequest sr, List<DFK> fkList,
+      bool fkComplete, String errorMessage) {
     // update cache
     for (DFK fk in fkList) {
       if (!fk.hasTableName())
@@ -299,14 +300,13 @@ class FkService
     if (sr.completerList != null) {
       sr.completerList.complete(fkList);
     }
-    //
     _activeRequests.remove(sr);
-    _log.config("updateCache ${sr.compareString}");
-    _checkSimilarRequests(sr, fkList);
+    _log.config("updateCache ${sr.compareString} #${fkList.length} complete=${fkComplete}");
+    _checkSimilarRequests(sr, fkList, errorMessage);
   } // updateCache
 
   /// Check similar requests for completed [sr]
-  void _checkSimilarRequests(FkServiceRequest sr, List<DFK> fkList) {
+  void _checkSimilarRequests(FkServiceRequest sr, List<DFK> fkList, String errorMessage) {
     String srTableName = sr.tableName;
     //String srCompareString = sr.compareString;
     //
@@ -327,7 +327,15 @@ class FkService
           DFK fk = getFk(req.tableName, req.id); // do we have it in cache now
           if (fk == null) {
             if (_checkNoSameRequest(req.tableName, req.id, submitList)) {
-              submitList.add(req); // re-issue
+              if (errorMessage == null) {
+                submitList.add(req); // re-issue
+              } else {
+                fk = new DFK()
+                  ..id = sr.id
+                  ..drv = "NotFound=${req.tableName}${URV_ID}${req.id}"
+                  ..urv = "#";
+                req.completer.complete(fk);
+              }
             } else {
               newPendingRequests.add(req); // copy
             }

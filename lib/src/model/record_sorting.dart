@@ -10,7 +10,7 @@ part of lightning_model;
 typedef bool SortExecute();
 
 /// Sort was executed locally or needs to go to server
-typedef void SortExecuted(bool sortedLocally);
+typedef void SortResult(bool sortedLocally);
 
 /**
  * Record Sorting - maintains Record Sort Info
@@ -32,7 +32,7 @@ class RecordSorting {
   /// Execute Sorting
   SortExecute sortExecute;
   /// Execute Sorting
-  SortExecuted sortExecuted;
+  SortResult sortResult;
 
   /// Record Sort List
   RecordSorting();
@@ -83,17 +83,17 @@ class RecordSorting {
 
   /// Execute Sort
   bool sort() {
-    bool sortedLocally = true;
+    bool sortedLocally = null;
     if (list.isEmpty) {
       _log.info("sort - no entries");
       sortedLocally = true; // no need
     } else {
       if (sortExecute != null) {
-        sortedLocally = sortExecute();
+        sortedLocally = sortExecute(); // data source
       }
     }
-    if (sortExecuted != null) {
-      sortExecuted(sortedLocally);
+    if (sortResult != null && sortedLocally != null) {
+      sortResult(sortedLocally);
     }
     return sortedLocally;
   }

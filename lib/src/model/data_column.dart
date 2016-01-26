@@ -31,6 +31,11 @@ class DataColumn {
   /// create data column from ui with optional pre-populated values
   static DataColumn fromUi (UI ui, String columnName, {String columnId,
       DColumn tableColumn, UIPanelColumn panelColumn, UIGridColumn gridColumn}) {
+    if (columnName != null && columnName.isEmpty)
+      columnName = null; // for compare
+    if (columnId != null && columnId.isEmpty)
+      columnId = null;
+    // Column
     DColumn column = tableColumn;
     if (column == null || !column.hasName()) {
       column = DataUtil.findColumn(ui.table, columnId, columnName);
@@ -40,7 +45,7 @@ class DataColumn {
     if (pc == null) {
       for (UIPanel panel in ui.panelList) {
         for (UIPanelColumn pp in panel.panelColumnList) {
-          if (pp.columnName == columnName) {
+          if (pp.columnId == columnId || pp.columnName == columnName) {
             pc = pp;
             break;
           }
@@ -57,7 +62,7 @@ class DataColumn {
     UIGridColumn gc = gridColumn;
     if (gc == null) {
       for (UIGridColumn pp in ui.gridColumnList) {
-        if (pp.columnName == columnName) {
+        if (pp.columnId == columnId || pp.columnName == columnName) {
           gc = pp;
           break;
         }
