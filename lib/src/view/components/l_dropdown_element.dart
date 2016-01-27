@@ -267,7 +267,7 @@ class LDropdownElement
         item.selected = false;
       }
     }
-    if (selectedItem == null) {
+    if (selectedItem == null && theValue.isNotEmpty) {
       _log.fine("setValue ${name}=${newValue} - NotFound #${_dropdownItemList.length}");
     }
     if (oldValue != theValue) {
@@ -291,5 +291,9 @@ class LDropdownElement
     }
     return null;
   } // render
+
+  String toString() {
+    return "DropdownElement[${name} #${_dropdownItemList.length}]";
+  }
 
 } // LDropdownElement

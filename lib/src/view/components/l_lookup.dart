@@ -611,6 +611,15 @@ class LLookup
   }
 
 
+  String toString() {
+    String theValue = entry == null ? value : DataRecord.getEntryValue(entry);
+    bool theChange = entry == null ? changed : entry.isChanged;
+    int size = 0;
+    if (dataColumn != null && dataColumn.tableColumn != null)
+      size = dataColumn.tableColumn.pickListSize;
+    return "LLookup[${name}=${theValue} changed=${theChange} #${_lookupItemList.length}(${size})]";
+  }
+
   static String lLookupLabel() => Intl.message("Lookup", name: "lLookupLabel");
   static String lLookupInvalidInput() => Intl.message("Invalid option", name: "lLookupInvalidInput");
   static String lLookupInvalidValue() => Intl.message("Invalid value", name: "lLookupInvalidValue");

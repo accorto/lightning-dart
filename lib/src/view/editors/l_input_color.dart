@@ -85,4 +85,23 @@ class LInputColor
     return div;
   }
 
+  /// set readOnly via disabled of color
+  void set readOnly(bool newValue) {
+    input.readOnly = newValue; // does not prevent click
+    if (type == EditorI.TYPE_COLOR)
+      input.disabled = newValue;
+  }
+
+  bool get disabled => _disabled;
+  void set disabled(bool newValue) {
+    _disabled = newValue;
+    if (type == EditorI.TYPE_COLOR)
+      input.disabled = _disabled || readOnly;
+    else
+      input.disabled = newValue;
+  }
+  bool _disabled = false;
+
+
+
 } // LInputColor

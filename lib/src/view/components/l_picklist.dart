@@ -309,6 +309,20 @@ class LPicklist
     _dropdown.show = newValue;
   }
 
+
+  @override
+  String toString() {
+    String theValue = entry == null ? value : DataRecord.getEntryValue(entry);
+    bool theChange = entry == null ? changed : entry.isChanged;
+    int length = 0;
+    if (_dropdown != null)
+      length = _dropdown.length;
+    int size = 0;
+    if (dataColumn != null && dataColumn.tableColumn != null)
+      size = dataColumn.tableColumn.pickListSize;
+    return "LPicklist[${name}=${theValue} changed=${theChange} #${length}(${size})]";
+  }
+
   // Trl
   static String lPicklistSelectOption() => Intl.message("Select an Option", name: "lPicklistSelectOption");
 

@@ -698,9 +698,9 @@ abstract class EditorI {
   String toString() {
     if (_entry != null) {
       String theValue = DataRecord.getEntryValue(_entry);
-      return "${name}=${theValue} changed=${_entry.isChanged}";
+      return "EditorI[${name}=${theValue} ${type} changed=${_entry.isChanged}]";
     }
-    return "${name}=${value} changed=${changed}";
+    return "EditorI[${name}=${value} ${type} changed=${changed}]";
   }
 
   static String editorValidateRequired() => Intl.message("Please provide a value", name: "editorValidateRequired");

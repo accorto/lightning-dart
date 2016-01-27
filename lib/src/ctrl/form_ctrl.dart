@@ -136,10 +136,16 @@ class FormCtrl
     for (UIProcess process in ui.processList) {
       if (process.name == name || process.processId == processId) {
         uiProcess = process;
+        if (name == null)
+          name = process.name;
         break;
       }
     }
-    _log.info("onClickProcess ${uiProcess}");
+    if (data.isReadOnly) {
+      _log.info("onClickProcess ${name} found=${uiProcess != null} readOnly");
+      return;
+    }
+    _log.info("onClickProcess ${name} found=${uiProcess != null}");
   } // onClickProcess
 
 } // FormCtrl

@@ -200,4 +200,13 @@ class LInput
     input.attributes["list"] = dl.id;
   }
 
+  @override
+  String toString() {
+    if (entry != null) {
+      String theValue = DataRecord.getEntryValue(entry);
+      return "LInput[${name}=${theValue} ${type} changed=${entry.isChanged}]";
+    }
+    return "LInput[${name}=${value} ${type} changed=${changed}]";
+  }
+
 } // LInput

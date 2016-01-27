@@ -98,13 +98,16 @@ class LCheckbox
 
   bool get readOnly => input.readOnly;
   void set readOnly (bool newValue) {
-    input.readOnly = newValue;
-  }
-
-  bool get disabled => input.disabled;
-  void set disabled (bool newValue) {
+    input.readOnly = newValue; // does not prevent click
     input.disabled = newValue;
   }
+
+  bool get disabled => _disabled;
+  void set disabled (bool newValue) {
+    _disabled = newValue;
+    input.disabled = _disabled || readOnly;
+  }
+  bool _disabled = false;
 
   @override
   void set required (bool newValue) {

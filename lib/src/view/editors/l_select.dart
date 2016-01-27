@@ -361,4 +361,11 @@ class LSelect
     return true; // disabled
   } // validate option
 
+  String toString() {
+    int size = 0;
+    if (dataColumn != null && dataColumn.tableColumn != null)
+      size = dataColumn.tableColumn.pickListSize;
+    return "LSelect[${name}=${input.value} #${input.size}(${size})]";
+  }
+
 } // LSelect

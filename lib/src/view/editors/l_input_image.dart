@@ -12,8 +12,11 @@ part of lightning_dart;
  */
 class LInputImage extends LInput {
 
+  static final Logger _log = new Logger("LInputImage");
+
   /// IconSpec RegExp
   static final RegExp regExpImage = new RegExp(r'^(http|data:)');
+  static final RegExp regExpImage2 = new RegExp(r'\.(png|jpg|gif|svg)$');
 
 
   /// File Input
@@ -28,7 +31,9 @@ class LInputImage extends LInput {
 
   /// Init editor
   _initEditor(String type) {
-    super._initEditor(type);
+    // super._initEditor(type);
+    input.style.maxHeight = "2.5rem";
+    input.onClick.listen(onInputClick);
   }
 
   /// value is rendered
@@ -38,7 +43,7 @@ class LInputImage extends LInput {
   Element getValueRenderElement(String theValue) {
     if (theValue != null && theValue.isNotEmpty) {
       // image
-      if (theValue.contains(regExpImage)) {
+      if (theValue.contains(regExpImage) || theValue.contains(regExpImage2)) {
         ImageElement img = new ImageElement(src: theValue);
         return img;
       }
@@ -56,5 +61,27 @@ class LInputImage extends LInput {
 
     return new DivElement();
   }
+
+  /// In input click
+  void onInputClick(MouseEvent evt) {
+    evt.preventDefault(); // =submit
+    _log.config("onInputClick ${name}");
+    if (readOnly || disabled)
+      return;
+
+  }
+
+  /// set readOnly via disabled
+  void set readOnly(bool newValue) {
+    input.readOnly = newValue; // does not prevent click
+    input.disabled = newValue;
+  }
+
+  bool get disabled => _disabled;
+  void set disabled(bool newValue) {
+    _disabled = newValue;
+    input.disabled = _disabled || readOnly;
+  }
+  bool _disabled = false;
 
 } // LInputImage

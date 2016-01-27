@@ -209,6 +209,8 @@ class LDropdown
     header.append(_dropdownHeading);
   } // search
 
+  /// button name
+  String get name => button.name;
 
   /// left aligned  |=
   bool get left => dropdown.left;
@@ -297,6 +299,14 @@ class LDropdown
     }
     if (editorChange != null) // if this were an EditorI
       editorChange(name, newValue, ignored, details);
+  }
+
+  @override
+  String toString() {
+    int length = 0;
+    if (dropdown != null)
+      length = dropdown.length;
+    return "LDropdown[${name}=${value} #${length}]";
   }
 
 } // LDropdown
