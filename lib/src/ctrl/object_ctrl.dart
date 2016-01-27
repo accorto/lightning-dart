@@ -20,7 +20,8 @@ part of lightning_ctrl;
  *    - click: RecordCtrl
  *    - action: Edit/Delete
  */
-class ObjectCtrl extends LComponent {
+class ObjectCtrl
+    extends LComponent {
 
   static final Logger _log = new Logger("ObjectCtrl");
 
@@ -35,21 +36,24 @@ class ObjectCtrl extends LComponent {
   RecordCtrl recordCtrl;
   /// Meta Data
   final Datasource datasource;
-  /// Actual Data Records
-  List<DRecord> _records;
 
   /**
    * Object Controller
    */
-  ObjectCtrl(Datasource this.datasource, {String containerClass: LGrid.C_CONTAINER__FLUID, bool queryExecute:true}) {
+  ObjectCtrl(Datasource this.datasource,
+      {String containerClass: LGrid.C_CONTAINER__FLUID,
+      bool queryExecute:true}) {
     String idPrefix = "oc-" + datasource.tableName;
     element.id = idPrefix;
-    _content.element.id = "${idPrefix}-content";
     if (containerClass != null && containerClass.isNotEmpty) {
       element.classes.add(containerClass);
     }
-    _header = new LObjectHome(datasource.recordSorting, idPrefix:idPrefix);
+    // Header
+    _header = new LObjectHome(onSortClicked, idPrefix:idPrefix);
     element.append(_header.element);
+    // Content
+    _content.element.id = "${idPrefix}-content";
+    _content.element.style.minHeight = "100px";
     element.append(_content.element);
 
     // layout change table/..
@@ -60,16 +64,17 @@ class ObjectCtrl extends LComponent {
     _header.filterList.settings.dropdown.editorChange = onFilterChange;
     _header.filterList.filterSelectionChange = onFilterSelectionChange;
 
-    _content.element.style.minHeight = "100px";
-
-    datasource.recordSorting.sortResult = onRecordsSortResult;
+    // load UI
     _header.loading = true;
     datasource.uiFuture()
     .then((UI ui) {
       _header.loading = false;
       element.attributes[Html0.DATA_VALUE] = ui.tableName;
+      UiUtil.validate(ui);
       _header.setUi(ui);
       // actions
+      _header.addAction(AppsAction.createRefresh(onAppsActionRefresh)
+        ..showLabel = false);
       if (!ui.isReadOnly) {
         _header.addAction(AppsAction.createNew(onAppsActionNew));
       }
@@ -82,6 +87,8 @@ class ObjectCtrl extends LComponent {
       _log.warning(idPrefix, error, stackTrace);
       _header.setUiFail("${error}");
     });
+
+
   } // ObjectCtrl
 
   // ObjectCtrl
@@ -101,7 +108,7 @@ class ObjectCtrl extends LComponent {
   /// Editor Change callback
   void onViewLayoutChange(String name, String newValue, DEntry ignored, var details) {
     _log.config("onViewLayoutChange ${tableName} ${newValue}");
-    _display();
+    display();
   }
 
   /// Filter Change
@@ -183,21 +190,14 @@ class ObjectCtrl extends LComponent {
     datasource.query()
     .then((DataResponse response) {
       _content.loading = false;
-      display(response.recordList);
+      display();
     });
   } // doQuery
 
-
-  /// Display Items
-  void display(List<DRecord> records) {
-    _records = records;
-    _display();
-  }
-
   // display
-  void _display() {
+  void display() {
     _content.clear();
-    if (_records == null || _records.isEmpty) {
+    if (datasource.recordList == null || datasource.recordList.isEmpty) {
       DivElement div = new DivElement()
         ..classes.addAll([LTheme.C_THEME__SHADE, LText.C_TEXT_ALIGN__CENTER])
         ..style.lineHeight = "200px"
@@ -207,13 +207,19 @@ class ObjectCtrl extends LComponent {
       _displaySummary();
     } else {
       String viewLayout = _header.viewLayout;
-      _table = null; // reset
-      _cardCompact = null;
       if (viewLayout == LObjectHome.VIEW_LAYOUT_COMPACT) {
+        if (_table != null)
+          _table.element.remove();
         _displayCompact();
-        //} else if (viewLayout == LObjectHome.VIEW_LAYOUT_CARDS) {
-        //  _displayCards();
+      /* } else if (viewLayout == LObjectHome.VIEW_LAYOUT_CARDS) {
+        if (_table != null)
+          _table.element.remove();
+        if (_cardCompact != null)
+          _cardCompact.element.remove();
+        _displayCards(); */
       } else /* if (viewLayout == LObjectHome.VIEW_LAYOUT_TABLE) */ {
+        if (_cardCompact != null)
+          _cardCompact.element.remove();
         _displayTable();
       }
       _displaySummary();
@@ -221,7 +227,7 @@ class ObjectCtrl extends LComponent {
     if (recordCtrl != null) {
       DRecord oldRecord = recordCtrl.record;
       bool found = false;
-      for (DRecord record in _records) {
+      for (DRecord record in datasource.recordList) {
         if (oldRecord.hasRecordId()) {
           if (oldRecord.recordId == record.recordId) {
             recordCtrl.record = record;
@@ -245,18 +251,18 @@ class ObjectCtrl extends LComponent {
 
   /// display summary
   void _displaySummary({String findString, int findCount}) {
-    if (_records == null || _records.isEmpty) {
+    if (datasource.recordList == null || datasource.recordList.isEmpty) {
       _header.summary = objectCtrlNoRecords();
-    } else if (_records.length == 1) {
+    } else if (datasource.recordList.length == 1) {
       _header.summary = objectCtrl1Record();
     } else if (datasource.recordSorting.isEmpty) {
-      String info = "${_records.length} ${objectCtrlRecords()}";
+      String info = "${datasource.recordList.length} ${objectCtrlRecords()}";
       if (findString != null && findString.isNotEmpty) {
         info += " (${findCount} ${objectCtrlMatching()} '${findString}')";
       }
       _header.summary = info;
     } else {
-      String info = "${_records.length} ${objectCtrlRecords()} ${LUtil.DOT_SPACE} ${objectCtrlSortedBy()}";
+      String info = "${datasource.recordList.length} ${objectCtrlRecords()} ${LUtil.DOT_SPACE} ${objectCtrlSortedBy()}";
       String prefix = " ";
       for (RecordSort sort in datasource.recordSorting.list) {
         info += prefix + sort.columnLabel + (sort.isAscending ? LUtil.SORT_ASC : LUtil.SORT_DESC);
@@ -269,30 +275,30 @@ class ObjectCtrl extends LComponent {
     }
   } // displaySummary
 
-  /// Display Table Sort Info
-  void onRecordsSortResult(bool sortedLocally) {
-    if (sortedLocally) {
-      display(datasource.recordList);
-    } else {
-      _doQuery();
-    }
-  } // onRecordsSorted
-
-
-
   /**
    * UI Table
    */
   void _displayTable() {
-    _table = new TableCtrlUi(datasource.ui, recordSorting:datasource.recordSorting,
-        idPrefix:id, editMode:LTable.EDIT_FIELD)
-      ..bordered = true
-      ..responsiveOverflow = true;
-    _table.recordSaved = onRecordSaved;
-    _table.recordDeleted = onRecordDeleted;
-    _table.recordsDeleted = onRecordsDeleted;
-    _table.setRecords(_records, recordAction:onAppsActionRecord); // urv click
-    _content.add(_table);
+    if (_table == null) {
+      _table = new TableCtrl(idPrefix: id,
+          tableUi: datasource.ui,
+          optionCreateNew: true,
+          optionRowSelect: true,
+          recordSorting: datasource.recordSorting,
+          optionLayout: true,
+          optionEdit: true,
+          editMode: LTable.EDIT_FIELD,
+          alwaysOneEmptyLine: false)
+        ..bordered = true
+        ..responsiveOverflow = true;
+      _table.recordSaved = onRecordSaved;
+      _table.recordDeleted = onRecordDeleted;
+      _table.recordsDeleted = onRecordsDeleted;
+      _table.setRecords(datasource.recordList, recordAction: onAppsActionRecord); // urv click
+    }
+    if (_table.element.parent == null) {
+      _content.add(_table);
+    }
   } // displayTable
   TableCtrl _table;
 
@@ -300,19 +306,28 @@ class ObjectCtrl extends LComponent {
    * Compact
    */
   void _displayCompact() {
-    _cardCompact = new LCardCompact(id);
-    _cardCompact.setUi(datasource.ui); // header
-    _cardCompact.addTableAction(AppsAction.createNew(onAppsActionNew));
-    _cardCompact.addTableAction(AppsAction.createLayout(onAppsActionCompactLayout));
+    if (_cardCompact == null) {
+      _cardCompact = new LCardCompact(id);
+      _cardCompact.setUi(datasource.ui); // header
+      _cardCompact.addTableAction(AppsAction.createNew(onAppsActionNew));
+      _cardCompact.addTableAction(AppsAction.createLayout(onAppsActionCompactLayout));
 
-    _cardCompact.addRowAction(AppsAction.createEdit(onAppsActionEdit));
-    _cardCompact.addRowAction(AppsAction.createDelete(onAppsActionDelete));
-    _cardCompact.display(_records, recordAction:onAppsActionRecord); // urv click
-    _content.add(_cardCompact);
+      _cardCompact.addRowAction(AppsAction.createEdit(onAppsActionEdit));
+      _cardCompact.addRowAction(AppsAction.createDelete(onAppsActionDelete));
+      _cardCompact.display(datasource.recordList, recordAction: onAppsActionRecord); // urv click
+    }
+    if (_cardCompact.element.parent == null) {
+      _content.add(_cardCompact);
+    }
   } // displayTable
   LCardCompact _cardCompact;
 
 
+  void onSortClicked(String name, bool asc, MouseEvent evt) {
+    if (_table != null) {
+      _table.onTableSortClicked(name, asc, evt);
+    }
+  }
 
   /// Table selected row count
   int get selectedRowCount {
@@ -349,7 +364,15 @@ class ObjectCtrl extends LComponent {
     oe.modal.showInElement(element);
   } // onAppsActionNew
 
-  /// Record Saved (from new/table)
+
+  /// Application Action Refresh/Requery
+  void onAppsActionRefresh(String value, DRecord record, DEntry entry, var actionVar) {
+    _log.config("onAppsActionRefresh ${tableName}");
+    _doQuery();
+  }
+
+
+    /// Record Saved (from new/table)
   Future<SResponse> onRecordSaved(DRecord record) {
     _log.config("onRecordSaved ${tableName}");
     Completer<SResponse> completer = new Completer<SResponse>();
@@ -358,7 +381,7 @@ class ObjectCtrl extends LComponent {
     .then((DataResponse response) {
       completer.complete(response.response);
       _content.loading = false;
-      display(response.recordList);
+      display();
     });
     return completer.future;
   }
@@ -372,7 +395,7 @@ class ObjectCtrl extends LComponent {
     .then((DataResponse response) {
       completer.complete(response.response);
       _content.loading = false;
-      display(response.recordList);
+      display();
     });
     return completer.future;
   }
@@ -386,7 +409,7 @@ class ObjectCtrl extends LComponent {
     .then((DataResponse response) {
       completer.complete(response.response);
       _content.loading = false;
-      display(response.recordList);
+      display();
     });
     return completer.future;
   }

@@ -457,10 +457,16 @@ class LTableHeaderRow extends LTableRow {
   /**
    * Table Header Row
    */
-  LTableHeaderRow(TableRowElement element, int rowNo, String idPrefix,
-      String cssClass, bool rowSelect,
-      List<String> nameList, Map<String,String> nameLabelMap,
-      this.tableSortClicked, List<AppsAction> tableActions, List<DataColumn> dataColumns)
+  LTableHeaderRow(TableRowElement element,
+      int rowNo,
+      String idPrefix,
+      String cssClass,
+      bool rowSelect,
+      List<String> nameList,
+      Map<String,String> nameLabelMap,
+      this.tableSortClicked,
+      List<AppsAction> tableActions,
+      List<DataColumn> dataColumns)
     : super (element, rowNo, idPrefix, null, cssClass, rowSelect, nameList, nameLabelMap,
         LTableRow.TYPE_HEAD, tableActions, dataColumns);
 
@@ -507,7 +513,7 @@ class LTableHeaderRow extends LTableRow {
   }
 
   /// Set Sorting
-  void setSorting(RecordSorting recordSorting) {
+  void setSorting(RecordSortList recordSorting) {
     for (LTableHeaderCell cell in _cells) {
       if (cell.sortable) {
         RecordSort sort = recordSorting.getSort(cell.name);

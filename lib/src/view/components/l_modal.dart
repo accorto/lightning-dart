@@ -293,7 +293,8 @@ class LModal
     }
     if (actions != null) {
       for (AppsAction action in actions) {
-        LButton btn = action.asButton(true, buttonClasses: [LButton.C_BUTTON__NEUTRAL], idPrefix: id);
+        action.buttonClasses = [LButton.C_BUTTON__NEUTRAL];
+        LButton btn = action.asButton(true, idPrefix: id);
         btn.onClick.listen(onClickRemove);
         footer.append(btn.element);
       }

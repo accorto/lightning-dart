@@ -159,10 +159,15 @@ class LButton
    * [element] can be a button, anchor, or input
    * if [idPrefix] is provided, the id will be idPrefix-name, if empty - the name
    */
-  LButton(Element this.element, String name, String label, {String idPrefix,
+  LButton(Element this.element,
+      String name,
+      String label,
+      {String idPrefix,
       Element labelElement,
       List<String> buttonClasses,
-      LIcon icon, bool iconLeft: false, String assistiveText}) {
+      LIcon icon,
+      bool iconLeft: false,
+      String assistiveText}) {
     element.classes.add(C_BUTTON);
     if (element is ButtonElement) {
       (element as ButtonElement).name = name;

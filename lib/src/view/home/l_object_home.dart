@@ -8,7 +8,7 @@ part of lightning_dart;
 
 
 /**
- * Object Home
+ * Object Home (header)
  * - List view of the Object with Record Lookup / Search
  */
 class LObjectHome
@@ -17,6 +17,9 @@ class LObjectHome
   static const String VIEW_LAYOUT_TABLE = "table";
   static const String VIEW_LAYOUT_CARDS = "cards";
   static const String VIEW_LAYOUT_COMPACT = "compact";
+
+  static final Logger _log = new Logger("LObjectHome");
+
 
   /// Top Row - Icon - Title - Label - Follow - Actions
   final DivElement _header = new DivElement()
@@ -44,14 +47,15 @@ class LObjectHome
   final ParagraphElement _summary = new ParagraphElement()
     ..classes.addAll([LText.C_TEXT_BODY__SMALL, LMargin.C_TOP__X_SMALL]);
 
-  /// Record Sort
-  final RecordSorting recordSorting;
+  // Sort callback
+  final TableSortClicked sortClicked;
   final String idPrefix;
 
   /**
    * Object Home
    */
-  LObjectHome(RecordSorting this.recordSorting, {String this.idPrefix}) {
+  LObjectHome(TableSortClicked this.sortClicked,
+      {String this.idPrefix}) {
     if (idPrefix != null && idPrefix.isNotEmpty) {
       element.id = "${idPrefix}-home";
       _headerLeftRecordType.id = "${idPrefix}-record-type";
@@ -86,7 +90,7 @@ class LObjectHome
     //
     _sort = new LDropdown.icon("sort", new LIconUtility(LIconUtility.SORT),
       idPrefix:idPrefix, assistiveText:lObjectHomeSort());
-    if (recordSorting != null) {
+    if (sortClicked != null) {
       _sort.right = true;
       _headerRightGrid.append(_sort.element);
     }
@@ -121,12 +125,18 @@ class LObjectHome
       recordType = ui.table.label + "s";
     }
     // sort columns
-    if (recordSorting != null) {
+    if (sortClicked != null) {
       _sort.dropdown.clearOptions();
+      List<LDropdownItem> itemList = new List<LDropdownItem>();
       for (UIGridColumn gc in ui.gridColumnList) {
         LDropdownItem item = LDropdownItem.create(value:gc.columnName, label:gc.column.label);
-        _sort.dropdown.addDropdownItem(item);
+        itemList.add(item);
       }
+      itemList.sort((LDropdownItem one, LDropdownItem two){
+        return one.label.compareTo(two.label);
+      });
+      for (LDropdownItem item in itemList)
+        _sort.dropdown.addDropdownItem(item);
       _sort.dropdown.editorChange = onSortChange;
     }
   } // setUi
@@ -139,12 +149,11 @@ class LObjectHome
       ..text = error);
   }
 
-  /// Sort
+  /// Sort Dropdown selected
   void onSortChange(String name, String newValue, DEntry entry, var details) {
-    if (recordSorting != null) {
-      recordSorting.set(new RecordSort.create(newValue, true));
-      recordSorting.sort();
-    }
+    _log.config("onSortChange ${newValue}");
+    if (sortClicked != null)
+      sortClicked(newValue, true, null);
   }
 
   /**
@@ -197,7 +206,7 @@ class LObjectHome
 
   static String lObjectHomeFind() => Intl.message("Find in View", name: "lObjectHomeFind");
 
-  static String lObjectHomeSort() => Intl.message("Sort", name: "lObjectHomeSort");
+  static String lObjectHomeSort() => Intl.message("Sort by", name: "lObjectHomeSort");
 
   static String lObjectHomeSave() => Intl.message("Save", name: "lObjectHomeSave", args: []);
 

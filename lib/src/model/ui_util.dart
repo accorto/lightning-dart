@@ -14,6 +14,51 @@ class UiUtil {
   static final Logger _log = new Logger("UiUtil");
 
   /**
+   * Validate UI structure
+   */
+  static void validate(final UI ui) {
+    // grid columns in need of panel column
+    Map<String, UIGridColumn> gcMap = new Map<String, UIGridColumn>();
+
+    // Grid Columns
+    for (UIGridColumn gc in ui.gridColumnList) {
+      if (!gc.hasColumn()) {
+        DColumn column = DataUtil.findColumn(ui.table, gc.columnId, gc.columnName);
+        if (column != null) {
+          gc.column = column;
+          if (!gc.hasColumnId())
+            gc.columnId = column.columnId;
+          if (!gc.hasColumnName())
+            gc.columnName = column.name;
+        }
+      }
+      if (!gc.hasPanelColumn()) {
+        gcMap[gc.columnName] = gc;
+      }
+    } // gc
+
+    // Panel
+    for (UIPanel panel in ui.panelList) {
+      for (UIPanelColumn pc in panel.panelColumnList) {
+        if (!pc.hasColumn()) {
+          DColumn column = DataUtil.findColumn(ui.table, pc.columnId, pc.columnName);
+          if (column != null) {
+            pc.column = column;
+            if (!pc.hasColumnId())
+              pc.columnId = column.columnId;
+            if (!pc.hasColumnName())
+              pc.columnName = column.name;
+          }
+        }
+        UIGridColumn gc = gcMap[pc.columnName];
+        if (gc != null)
+          gc.panelColumn = pc;
+      } // pc
+    } // panel
+  } // validate
+
+
+  /**
    * Copy UI (table the same)
    */
   static UiUtil clone(UI original, {String label, String name}) {
@@ -26,7 +71,6 @@ class UiUtil {
     //
     return new UiUtil(ui);
   } // copy
-
 
   /// The UI
   final UI ui;

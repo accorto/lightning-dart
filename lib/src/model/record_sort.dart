@@ -7,10 +7,7 @@
 part of lightning_model;
 
 /// Execute Sorting
-typedef bool SortExecute();
-
-/// Sort was executed locally or needs to go to server
-typedef void SortResult(bool sortedLocally);
+typedef bool SortExecuteRemote();
 
 /**
  * Record Sorting - maintains Record Sort Info
@@ -22,52 +19,53 @@ typedef void SortResult(bool sortedLocally);
  * - query request - info set
  *
  */
-class RecordSorting {
+class RecordSortList {
 
   static final Logger _log = new Logger("RecordSorting");
 
   /// Record Sorts
-  final List<RecordSort> list = new List<RecordSort>();
+  final List<RecordSort> _sortList = new List<RecordSort>();
+  /// Record Sorts
+  List<RecordSort> get list => _sortList;
 
   /// Execute Sorting
-  SortExecute sortExecute;
-  /// Execute Sorting
-  SortResult sortResult;
+  SortExecuteRemote sortExecuteRemote;
 
   /// Record Sort List
-  RecordSorting();
+  RecordSortList();
 
-  bool get isEmpty => list.isEmpty;
-  bool get isNotEmpty => list.isNotEmpty;
+
+  bool get isEmpty => _sortList.isEmpty;
+  bool get isNotEmpty => _sortList.isNotEmpty;
 
   /// Set From Sorting
   void setFromRequest(DataRequest request) {
-    list.clear();
+    _sortList.clear();
     for (DSort sort in request.querySortList) {
-      list.add(new RecordSort(sort));
+      _sortList.add(new RecordSort(sort));
     }
   }
 
   /// Clear List
   void clear() {
-    list.clear();
+    _sortList.clear();
   }
 
   /// Set Sort
   void set(RecordSort sort) {
-    list.clear();
-    list.add(sort);
+    _sortList.clear();
+    _sortList.add(sort);
   }
 
   /// Add Sort
   void add(RecordSort sort) {
-    list.add(sort);
+    _sortList.add(sort);
   }
 
   /// get Record Sort for [columnName] or null
   RecordSort getSort (String columnName) {
-    if (list.isNotEmpty && columnName != null && columnName.isNotEmpty) {
-      for (RecordSort sort in list) {
+    if (_sortList.isNotEmpty && columnName != null && columnName.isNotEmpty) {
+      for (RecordSort sort in _sortList) {
         if (sort.sort.columnName == columnName) {
           return sort;
         }
@@ -78,29 +76,23 @@ class RecordSorting {
 
   /// Remove Sort Record
   void remove(RecordSort sort) {
-    list.remove(sort);
+    _sortList.remove(sort);
   }
 
-  /// Execute Sort
-  bool sort() {
-    bool sortedLocally = null;
-    if (list.isEmpty) {
-      _log.info("sort - no entries");
-      sortedLocally = true; // no need
-    } else {
-      if (sortExecute != null) {
-        sortedLocally = sortExecute(); // data source
-      }
+  /// Execute Sort remotely - true if remote
+  bool sortRemote() {
+    if (_sortList.isEmpty) {
+      return false; // no sorting
     }
-    if (sortResult != null && sortedLocally != null) {
-      sortResult(sortedLocally);
+    if (sortExecuteRemote != null) {
+      return sortExecuteRemote(); // data source
     }
-    return sortedLocally;
+    return false;
   }
 
 
   /// Local Sort
-  void sortList(List<DRecord> recordList) {
+  void sortRecordList(List<DRecord> recordList) {
     if (recordList != null && recordList.length > 1) {
       _log.config("sortList ${toString()}");
       recordList.sort(recordSortCompare);
@@ -130,11 +122,10 @@ class RecordSorting {
 
 
   String toString() {
-    return list.toString();
+    return _sortList.toString();
   }
 
-
-} // RecordSorting
+} // RecordSortList
 
 
 

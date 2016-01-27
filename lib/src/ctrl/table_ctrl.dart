@@ -9,10 +9,8 @@ part of lightning_ctrl;
 
 /**
  * Table Controller
- * SubClasses need to implement:
- * - UI get [ui]
  */
-abstract class TableCtrl
+class TableCtrl
     extends LTable {
 
   static final Logger _log = new Logger("TableCtrl");
@@ -35,9 +33,10 @@ abstract class TableCtrl
    * - provide [appsActionNewCallback] to overwrite creating new row (inline)
    */
   TableCtrl({String idPrefix,
+      UI tableUi,
       bool this.optionCreateNew:true,
       bool optionRowSelect:true,
-      RecordSorting recordSorting,
+      RecordSortList recordSorting,
       bool this.optionLayout:true,
       bool this.optionEdit:true,
       String editMode: LTable.EDIT_ALL,
@@ -46,7 +45,11 @@ abstract class TableCtrl
     this.editMode = editMode;
     //
     addActions();
-    setUi(ui);
+    if (tableUi != null) {
+      setUi(tableUi);
+    } else {
+      setUi(ui);
+    }
     //
     resetContent();
   } // ObjectTable
@@ -60,6 +63,7 @@ abstract class TableCtrl
       addTableAction(AppsAction.createDeleteSelected(onAppsActionDeleteSelected));
     if (optionLayout)
       addTableAction(AppsAction.createLayout(onAppsActionTableLayout));
+
     //
     if (optionEdit && editMode != LTable.EDIT_RO)
       addRowAction(AppsAction.createEdit(onAppsActionEdit));
@@ -198,10 +202,6 @@ abstract class TableCtrl
 
 
 
-
-  /// Get UI
-  UI get ui;
-
   /// Application Action Table Layout
   void onAppsActionTableLayout(String value, DRecord record, DEntry entry, var actionVar) {
     _log.config("onAppsActionTableLayout ${ui.tableName} ${value}");
@@ -300,31 +300,3 @@ abstract class TableCtrl
   static String tableCtrlDeleteRecordsText() => Intl.message("Do you want to delete the selected records?", name: "tableCtrlDeleteRecordsText");
 
 } // TableCtrl
-
-
-
-/**
- * Table Controller with fixed UI
- */
-class TableCtrlUi extends TableCtrl {
-
-  /// ui
-  final UI ui;
-
-  /**
-   * Table Controller
-   */
-  TableCtrlUi(UI this.ui, {String idPrefix,
-      bool optionCreateNew:true,
-      bool optionRowSelect:true,
-      RecordSorting recordSorting,
-      bool optionLayout:true,
-      bool optionEdit:true,
-      String editMode: LTable.EDIT_FIELD,
-      bool alwaysOneEmptyLine:false})
-    : super(idPrefix:idPrefix,
-        optionCreateNew:optionCreateNew, optionRowSelect:optionRowSelect, recordSorting:recordSorting,
-        optionLayout:optionLayout, optionEdit:optionEdit,
-        editMode:editMode, alwaysOneEmptyLine:alwaysOneEmptyLine);
-
-} // TableCtrlUi

@@ -103,24 +103,24 @@ class LTable
   AppsActionTriggered recordAction;
   /// Table Row Select callback
   TableSelectClicked tableSelectClicked;
-  /// Row List set is display
-  List<LTableRow> _rowList = new List<LTableRow>();
 
   /// Row Select
   final bool optionRowSelect;
   /// Record Sort List
-  RecordSorting recordSorting;
+  RecordSortList recordSorting;
   /// IdPrefix
   final String idPrefix;
 
   /**
    * Table
    */
-  LTable(String this.idPrefix, {bool this.optionRowSelect:true, RecordSorting this.recordSorting}) {
+  LTable(String this.idPrefix,
+      {bool this.optionRowSelect:true,
+      RecordSortList this.recordSorting}) {
     _table.id = LComponent.createId(idPrefix, "table");
     if (recordSorting == null)
-      this.recordSorting = new RecordSorting();
-  }
+      this.recordSorting = new RecordSortList();
+  } // LTable
 
   /// Responsive Stacked
   bool get responsiveStacked => element.classes.contains(C_MAX_MEDIUM_TABLE__STACKED);
@@ -216,7 +216,7 @@ class LTable
 
   /// Table Sort = shift - multiple
   void onTableSortClicked(String name, bool asc, MouseEvent evt) {
-    bool shiftMeta = (evt.shiftKey || evt.metaKey);
+    bool shiftMeta = evt != null && (evt.shiftKey || evt.metaKey);
     _log.config("onTableSortClicked ${name} ${asc} shiftMeta=${shiftMeta}");
     if (shiftMeta) {
       RecordSort sortFound = recordSorting.getSort(name);
@@ -233,13 +233,25 @@ class LTable
     }
     recordSorting.add(sort);
     //
-    loading = true;
-    bool sortLocal = recordSorting.sort();
-    if (sortLocal == null) { // not sorted locally nor server
-      recordSorting.sortList(recordList);
-      display();
+    if (_tbodyRows.length > 1) {
+      if (recordSorting.sortRemote()) {
+        for (AppsAction action in _tableActions) {
+          if (action.value == AppsAction.REFRESH) {
+            action.callback(null, null, null, null);
+            return;
+          }
+        }
+        _log.warning("onTableSortClicked NO_Action sortRemote");
+      } else {
+        _tbodyRows.sort((LTableRow one, LTableRow two) {
+          return recordSorting.recordSortCompare(one.record, two.record);
+        });
+        _tbody.children.clear();
+        for (LTableRow row in _tbodyRows) {
+          _tbody.children.add(row.rowElement);
+        }
+      }
     }
-    loading = false;
   } // onTableSortClicked
 
   /**
@@ -257,13 +269,13 @@ class LTable
     int count = 0;
     RegExp regEx = LUtil.createRegExp(findString);
     if (regEx == null) {
-      for (LTableRow row in _rowList) {
+      for (LTableRow row in _tbodyRows) {
         row.record.clearIsMatchFind();
         row.show = true;
       }
       count = recordList.length;
     } else {
-      for (LTableRow row in _rowList) {
+      for (LTableRow row in _tbodyRows) {
         bool match = false;
         for (DEntry entry in row.record.entryList) {
           if (entry.hasValueDisplay()) {
@@ -323,7 +335,7 @@ class LTable
     _rowActions.add(action);
   }
 
-  /// Add Table Body Row
+  /// Create and Add Table Body Row
   LTableRow addBodyRow({String rowValue}) {
     if (_tbody == null)
       _tbody = _table.createTBody();
@@ -365,14 +377,14 @@ class LTable
       }
     }
     // Grid Columns
-    if (dataColumns.isEmpty) {
+    if (dataColumns.isEmpty) { // nothing added yet
       for (UIGridColumn gc in _ui.gridColumnList) {
         dataColumns.add(DataColumn.fromUi(_ui,
             gc.columnName, columnId: gc.columnId, gridColumn:gc));
       }
     }
     // table column fallback
-    if (dataColumns.isEmpty) {
+    if (dataColumns.isEmpty) { // nothing added yet
       for (DColumn col in _ui.table.columnList) {
         dataColumns.add(DataColumn.fromUi(_ui, col.name, tableColumn:col));
       }
@@ -384,6 +396,10 @@ class LTable
       }
     }
   } // setUi
+  /// UI Meta Data
+  UI _ui;
+  /// overwrite for fixed ui
+  UI get ui => _ui;
 
   /// Reset Table Structure
   void resetStructure() {
@@ -399,8 +415,6 @@ class LTable
     nameLabelMap.clear();
     nameList.clear();
   }
-  /// UI Meta Data
-  UI _ui;
   /// Table Meta Data
   final List<DataColumn> dataColumns = new List<DataColumn>();
 
@@ -422,11 +436,9 @@ class LTable
       _tbodyRows.clear();
     }
     int i = 0;
-    _rowList.clear();
     for (DRecord record in recordList) {
-      LTableRow row = addBodyRow(rowValue: record.recordId);
+      LTableRow row = addBodyRow(rowValue: record.recordId); // adds to _tbodyRows
       row.setRecord(record, i++, recordAction:recordAction);
-      _rowList.add(row);
     }
   } // display
 

@@ -108,14 +108,24 @@ class AppsAction {
   DOption option;
   /// Action Specific Variable
   var actionVar;
+  /// show label in buttons
+  bool showLabel = true;
   /// Action Icon
   LIcon icon;
+  /// Assitive Text
+  String assistiveText;
+  /// Button Classes e.g. [LButton.C_BUTTON__NEUTRAL], [C_BUTTON__BRAND];
+  List<String> buttonClasses;
+
 
   /// Apps Action from option
-  AppsAction.from(DOption this.option, AppsActionTriggered this.callback);
+  AppsAction.from(DOption this.option,
+      AppsActionTriggered this.callback);
 
-  /// Apps Action with [name] (
-  AppsAction(String value, String label, AppsActionTriggered this.callback) {
+  /// Apps Action with [value]
+  AppsAction(String value,
+      String label,
+      AppsActionTriggered this.callback) {
     option = new DOption()
       ..value = value
       ..label = label;
@@ -139,14 +149,21 @@ class AppsAction {
   bool _disabled = false;
 
   /// as Button - [createClick] to call [callback]
-  LButton asButton(bool createOnClick, {DataRecord data, List<String> buttonClasses, String idPrefix, bool recreate:false}) {
+  LButton asButton(bool createOnClick,
+      {DataRecord data,
+      String idPrefix,
+      bool recreate:false}) {
+
     if (_btn != null && !recreate) {
       return _btn;
     }
-    _btn = new LButton(new ButtonElement(), value, label, icon:icon, idPrefix:idPrefix);
-    if (buttonClasses != null) {
-      _btn.classes.addAll(buttonClasses);
-    }
+    _btn = new LButton(new ButtonElement(), value,
+        showLabel ? label : null,
+        icon:icon,
+        idPrefix:idPrefix,
+        buttonClasses:buttonClasses,
+        assistiveText: assistiveText == null ? label : assistiveText);
+    //
     _btn.disabled = _disabled;
     if (createOnClick && callback != null) {
       _btn.onClick.listen((MouseEvent evt){
@@ -163,7 +180,9 @@ class AppsAction {
   LButton _btn;
 
   /// as Dropdown Item
-  LDropdownItem asDropdown(bool createOnClick, {bool recreate:false}) {
+  LDropdownItem asDropdown(bool createOnClick,
+      {bool recreate:false}) {
+
     if (_item != null && !recreate) {
       return _item;
     }
@@ -185,6 +204,9 @@ class AppsAction {
   } // adDropdown
   LDropdownItem _item;
 
+  String toString() {
+    return "AppsAction[${value}]";
+  }
 
   static String appsAction() => Intl.message("Action", name: "appsAction");
   static String appsActions() => Intl.message("Actions", name: "appsActions");

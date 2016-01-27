@@ -23,7 +23,8 @@ part of lightning_ctrl;
  * --- Activity
  * --- Collaborate
  */
-class RecordCtrl extends LComponent {
+class RecordCtrl
+    extends LComponent {
 
   /// Table Edit Mode - Read Only
   static const String EDIT_RO = "ro";

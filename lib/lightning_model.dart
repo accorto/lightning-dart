@@ -63,7 +63,7 @@ part 'src/model/preference_idb.dart';
 part 'src/model/preference_local.dart';
 part 'src/model/preference_sql.dart';
 part 'src/model/preference_storage.dart';
-part 'src/model/record_sorting.dart';
+part 'src/model/record_sort.dart';
 part 'src/model/setting_item.dart';
 part 'src/model/settings.dart';
 part 'src/model/string_tokenizer.dart';

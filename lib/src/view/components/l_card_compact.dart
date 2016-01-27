@@ -10,7 +10,8 @@ part of lightning_dart;
  * Compact Card - container for Tiles
  * - same API as Table
  */
-class LCardCompact extends LCard {
+class LCardCompact
+    extends LCard {
 
   static final Logger _log = new Logger("LCardCompact");
 

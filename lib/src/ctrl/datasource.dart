@@ -27,7 +27,7 @@ class Datasource
   final String uiUri;
 
   /// Record Sort List
-  final RecordSorting recordSorting = new RecordSorting();
+  final RecordSortList recordSorting = new RecordSortList();
 
   /// WindowNo
   final int windowNo = ++_s_windowNo;
@@ -62,7 +62,7 @@ class Datasource
    * to server uri [serverUrl][dataUri] or [uiUri]
    */
   Datasource(String this.tableName, String this.dataUri, String this.uiUri) {
-    recordSorting.sortExecute = sortExecute;
+    recordSorting.sortExecuteRemote = sortExecuteRemote;
   }
 
   /// Data Source Initialized
@@ -94,13 +94,8 @@ class Datasource
   DTable _table;
 
   /// Execute Sort locally if possible
-  bool sortExecute() {
-    // local sort
-    if (totalRows == recordList.length) {
-      recordSorting.sortList(recordList);
-      return true;
-    }
-    return false;
+  bool sortExecuteRemote() {
+    return totalRows != recordList.length;
   }
 
 
@@ -335,6 +330,8 @@ class Datasource
     // Sort
     if (recordSorting.isNotEmpty) {
       for (RecordSort sort in recordSorting.list) {
+        if (sort.columnName == DataRecord.URV)
+          continue;
         req.querySortList.add(sort.sort);
       }
     }
