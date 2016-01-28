@@ -88,7 +88,7 @@ class DataUtil {
     return "";
   }
   /// Date - 2014-11-16 or ""
-  static DateTime asDate(String valueDisplay, bool html5, bool isUtc) {
+  static DateTime asDate(String valueDisplay, bool html5, bool isUtc, {bool logWarning:true}) {
     if (isEmpty(valueDisplay)) {
       return null;
     }
@@ -105,7 +105,8 @@ class DataUtil {
         return dt;
       }
     } catch (ex) {
-      _log.warning("asDate ${valueDisplay}", ex);
+      if (logWarning)
+        _log.warning("asDate ${valueDisplay}", ex);
     }
     return null;
   }
@@ -151,7 +152,7 @@ class DataUtil {
     return "";
   }
   /// DateTime - 2014-11-16T15:25:33 or "" (local)
-  static DateTime asDateTime(String valueDisplay, bool html5) {
+  static DateTime asDateTime(String valueDisplay, bool html5, {bool logWarning:true}) {
     if (isEmpty(valueDisplay)) {
       return null;
     }
@@ -162,7 +163,8 @@ class DataUtil {
       DateTime dt = ClientEnv.dateFormat_ymd_hm.parseLoose(valueDisplay, false);
       return dt;
     } catch (ex) {
-      _log.warning("asDateTime ${valueDisplay}", ex);
+      if (logWarning)
+        _log.warning("asDateTime ${valueDisplay}", ex);
     }
   }
   /// DateTime - 2014-11-16T15:25:33 or "" (local)
@@ -183,15 +185,15 @@ class DataUtil {
   } // asDateTimeMs
 
 
-  /// Time - 15:25:33 or ""
+  /// Time - 15:25:33 or "" (local)
   static String asTimeString(String valueMs, DataRecord data, bool html5) {
     if (isNotEmpty(valueMs)) {
       int ms = int.parse(valueMs, onError: (String value) {
         return parseDateVariable(value, EditorI.TYPE_TIME);
       });
       if (ms != 0) {
-        DateTime date = new DateTime.fromMillisecondsSinceEpoch(ms, isUtc: false); // convert to local
-        date = _adjustTimezone(date, data, false);
+        DateTime date = new DateTime.fromMillisecondsSinceEpoch(ms, isUtc: false);
+        //date = _adjustTimezone(date, data, false);
         if (html5) {
           String s = date.toIso8601String();
           return s.substring(11, 19);
@@ -202,8 +204,8 @@ class DataUtil {
     }
     return "";
   } // asTimeString
-  /// Time - 15:25:33 or ""
-  static DateTime asTime(String valueDisplay, DataRecord data, bool html5) {
+  /// Time - 15:25:33 or "" (local)
+  static DateTime asTime(String valueDisplay, DataRecord data, bool html5, {bool logWarning:true}) {
     if (isNotEmpty(valueDisplay)) {
       String parse = valueDisplay;
       DateTime dt = null;
@@ -212,21 +214,22 @@ class DataUtil {
           parse = "1970-01-01 ${valueDisplay}";
           dt = DateTime.parse(parse);
         } else {
-          dt = ClientEnv.dateFormat_hm.parseLoose(parse, false);
+          dt = ClientEnv.dateFormat_hm.parseLoose(parse, false); // local
         }
         int ms = dt.millisecondsSinceEpoch;
-        if (ms > ONEDAY_MS) {
+        while (ms > ONEDAY_MS) {
           dt = dt.subtract(new Duration(milliseconds: ONEDAY_MS));
         }
-        dt = _adjustTimezone(dt, data, true);
+        // dt = _adjustTimezone(dt, data, true);
         return dt;
       } catch (error, stacktrace) {
-        _log.warning("asTime parse=${parse} ()", error, stacktrace);
+        if (logWarning)
+          _log.warning("asTime parse=${parse} (${valueDisplay})", error, stacktrace);
       }
     }
     return null;
   } // asTimeMs
-  /// Time - 15:25:33 or ""
+  /// Time - 15:25:33 or "" (local)
   static String asTimeMs(String valueDisplay, DataRecord data, bool html5) {
     if (isNotEmpty(valueDisplay)) {
       String parse = valueDisplay;
@@ -236,15 +239,15 @@ class DataUtil {
           parse = "1970-01-01 ${valueDisplay}";
           dt = DateTime.parse(parse);
         } else {
-          dt = ClientEnv.dateFormat_hm.parseLoose(parse, false);
+          dt = ClientEnv.dateFormat_hm.parseLoose(parse, false); // local
         }
-        dt = _adjustTimezone(dt, data, true);
+        // dt = _adjustTimezone(dt, data, true);
         int ms = dt.millisecondsSinceEpoch;
-        if (ms > ONEDAY_MS)
+        while (ms > ONEDAY_MS)
           ms -= ONEDAY_MS;
         return ms.toString();
       } catch (error, stacktrace) {
-        _log.warning("asTimeMs parse=${parse} ()", error, stacktrace);
+        _log.warning("asTimeMs parse=${parse} (${valueDisplay})", error, stacktrace);
       }
     }
     return "";
@@ -277,12 +280,12 @@ class DataUtil {
       DateTime now = new DateTime.now();
       if (type == EditorI.TYPE_DATE) {
         DateTime date = new DateTime.utc(now.year, now.month, now.day);
-        return date.millisecondsSinceEpoch;
+        return date.millisecondsSinceEpoch; // utc
       } else if (type == EditorI.TYPE_TIME) {
-        DateTime time = new DateTime(0,0,0, now.hour, now.minute);
-        return time.millisecondsSinceEpoch;
+        DateTime time = new DateTime(1970,1,1, now.hour, now.minute);
+        return time.millisecondsSinceEpoch; // local
       } else {
-        return now.millisecondsSinceEpoch;
+        return now.millisecondsSinceEpoch; // local
       }
     }
     _log.warning("parseDateVariable ${value}");

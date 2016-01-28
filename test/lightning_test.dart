@@ -14,6 +14,7 @@ library lightning.test;
 
 import 'package:test/test.dart';
 import 'package:lightning/lightning.dart';
+import 'package:intl/intl.dart';
 
 import '../web/demo.dart';
 import '../web/exampleWorkspace.dart';
@@ -46,8 +47,7 @@ void main() {
     test('Components Test', () {
       expect(page, isNotNull);
       expect(demoPage, isNotNull);
-      expect(demoPage.element.children.length, equals(32));
-      print('components test');
+      expect(demoPage.element.children.length, equals(33));
     });
   }); // Components
 
@@ -69,7 +69,6 @@ void main() {
       expect(page, isNotNull);
       expect(ctrl, isNotNull);
       expect(ctrl.element.children.length, equals(2));
-      print('children test');
     });
   }); // Workspace
 
@@ -117,5 +116,57 @@ void main() {
     });
 
   }); // SelectLookup
+
+
+  group('DateTime', () {
+
+    test('convert', (){
+      DateTime now = new DateTime.now(); // local
+      expect("PST", equals(now.timeZoneName),
+          reason: "${now.toIso8601String()} ${now.timeZoneName} offset=${now.timeZoneOffset}");
+
+      DateTime dtUtc = new DateTime.utc(2016, 3, 12, 9, 0, 0);
+      expect(dtUtc.millisecondsSinceEpoch, equals(1457773200000),
+          reason: "utc ${dtUtc.toIso8601String()} ${dtUtc.timeZoneName} offset=${dtUtc.timeZoneOffset}");
+
+      DateTime dtLocal = new DateTime(2016, 3, 12, 9, 0, 0);
+      expect(dtLocal.millisecondsSinceEpoch, equals(1457802000000),
+          reason: "local ${dtLocal.toIso8601String()} ${dtLocal.timeZoneName} offset=${dtLocal.timeZoneOffset}");
+
+      Duration diff = dtUtc.difference(dtLocal);
+      expect(new Duration(hours: -8), equals(diff), reason: "diff std", verbose: true);
+
+
+      DateTime dtUtc2 = new DateTime.utc(2016, 3, 13, 9, 0, 0);
+      expect(dtUtc2.millisecondsSinceEpoch, equals(1457859600000),
+          reason: "utc2 ${dtUtc2.toIso8601String()} ${dtUtc2.timeZoneName} offset=${dtUtc2.timeZoneOffset}");
+
+      DateTime dtLocal2 = new DateTime(2016, 3, 13, 9, 0, 0);
+      expect(dtLocal2.millisecondsSinceEpoch, equals(1457884800000),
+          reason: "local2 ${dtLocal2.toIso8601String()} ${dtLocal2.timeZoneName} offset=${dtLocal2.timeZoneOffset}");
+
+      Duration diff2 = dtUtc2.difference(dtLocal2);
+      expect(diff2, equals(new Duration(hours: -7)), reason: "diff day", verbose: true);
+
+      Duration diffUtc = dtUtc.difference(dtUtc2);
+      expect(diffUtc, equals(new Duration(hours: -24)), reason: "diff utc", verbose: true);
+
+      Duration diffLocal = dtLocal.difference(dtLocal2);
+      expect(diffLocal, equals(new Duration(hours: -23)), reason: "diff local", verbose: true);
+
+
+      DateTime midnight = new DateTime.utc(1970,1,1,0,0,0);
+      expect(midnight.millisecondsSinceEpoch, equals(0), reason: "midnight");
+      DateFormat usFormat = new DateFormat("h:mm a");
+      expect(usFormat.format(midnight), equals("12:00 AM"), reason: "midnight US");
+
+      DateTime noon = new DateTime.utc(1970,1,1,12,0,0);
+      expect(noon.millisecondsSinceEpoch, equals(12*60*60*1000));
+      expect(usFormat.format(noon), equals("12:00 PM"), reason: "noon US");
+
+    });
+
+  }); // DateTime
+
 
 } // main

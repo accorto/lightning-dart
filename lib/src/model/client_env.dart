@@ -121,12 +121,13 @@ class ClientEnv {
     dateFormat_hm = new DateFormat.Hm(localeName);
     dateFormat_hms = new DateFormat.Hms(localeName);
     dateFormat_ymd_hm = new DateFormat.yMd(localeName);
-    if (language == "en") { // fix
+    // print("${localeName} | ${language} | ${dateFormat_hm.pattern.toString()}");
+    if (language == "en") { // am/pm fix
       if (!dateFormat_hm.pattern.toString().contains("a")) {
-        dateFormat_hm = new DateFormat("K:mm a", localeName);
-        dateFormat_hms = new DateFormat("K:mm:ss a", localeName);
-        dateFormat_ymd_hm.addPattern("K:mm a");
-        dateFormat_md_hm.addPattern("K:mm a");
+        dateFormat_hm = new DateFormat("h:mm a", localeName);
+        dateFormat_hms = new DateFormat("h:mm:ss a", localeName);
+        dateFormat_ymd_hm.addPattern("h:mm a");
+        dateFormat_md_hm.addPattern("h:mm a");
       } else {
         dateFormat_ymd_hm.add_Hm();
         dateFormat_md_hm.add_Hm();

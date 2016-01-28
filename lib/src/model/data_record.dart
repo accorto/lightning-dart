@@ -217,6 +217,7 @@ class DataRecord {
       deValue = NULLVALUE;
     dataEntry.value = deValue;
     //
+    dataEntry.clearValueDisplay();
     dataEntry.isChanged = dataEntry.value != dataEntry.valueOriginal;
     return dataEntry.isChanged;
   } // setEntryValue
@@ -540,7 +541,7 @@ class DataRecord {
   /// Get Timezone
   TZ getTimezone() {
     for (DEntry entry in _record.entryList) {
-      if (entry.columnName == "Timezone") {
+      if (entry.columnName == TZ.TZ_COLUMN_NAME) {
         if (entry.value == NULLVALUE)
           return null;
         String tzName = entry.value;
@@ -655,7 +656,10 @@ class DataRecord {
         dataEntry.clearValueOriginal();
         if (dataEntry.value == NULLVALUE)
           dataEntry.clearValue();
+      } else {
+        dataEntry.clearValue();
       }
+      dataEntry.clearValueDisplay();
       dataEntry.isChanged = false;
       resetCached();
     }

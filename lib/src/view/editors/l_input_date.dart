@@ -64,7 +64,7 @@ class LInputDate
       _invalidInput = lInputDateInvalidInputDateTime();
       _type = EditorI.TYPE_DATETIME;
     } else if (type == EditorI.TYPE_TIME) {
-      _formatter = ClientEnv.dateFormat_hm; // new DateFormat.Hm(ClientEnv.localeName);
+      _formatter = ClientEnv.dateFormat_hm;
       _invalidInput = lInputDateInvalidInputTime();
       _type = EditorI.TYPE_TIME;
     } else {
@@ -163,7 +163,7 @@ class LInputDate
     } else if (type == EditorI.TYPE_DATETIME) {
       display = DataUtil.asDateTimeString(valueMs, html5); // local
     } else if (type == EditorI.TYPE_TIME) {
-      display = DataUtil.asTimeString(valueMs, data, html5); //
+      display = DataUtil.asTimeString(valueMs, data, html5); // local
     }
     if (display == null || display.isEmpty) {
       if (setValidity)
@@ -181,7 +181,7 @@ class LInputDate
     return completer.future;
   } // render
 
-  /// parse display [newValue] to ms or empty string
+  /// parse manually entered display [newValue] to ms or empty string
   String parse(String newValue, bool setValidity) {
     if (setValidity)
       input.setCustomValidity("");
@@ -189,11 +189,11 @@ class LInputDate
       return ""; // incomplete date string
     DateTime dt = null;
     if (type == EditorI.TYPE_DATE) {
-      dt = DataUtil.asDate(newValue, html5, isUtc); // UTC
+      dt = DataUtil.asDate(newValue, html5, isUtc, logWarning:false); // UTC
     } else if (type == EditorI.TYPE_DATETIME) {
-      dt = DataUtil.asDateTime(newValue, html5); // local
+      dt = DataUtil.asDateTime(newValue, html5, logWarning:false); // local
     } else if (type == EditorI.TYPE_TIME) {
-      dt = DataUtil.asTime(newValue, data, html5); //
+      dt = DataUtil.asTime(newValue, data, html5, logWarning:false); // local
     }
     if (dt == null) {
       if (setValidity)
@@ -201,8 +201,6 @@ class LInputDate
       return newValue; // invalid
     }
     int time = dt.millisecondsSinceEpoch;
-    if (time == 0)
-      return "";
     return time.toString();
   } // render
 

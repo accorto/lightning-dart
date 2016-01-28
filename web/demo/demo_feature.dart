@@ -39,9 +39,14 @@ abstract class DemoFeature
   /**
    * Feature
    */
-  DemoFeature(String this.id, String this.label,
-      {String this.sldsPath, String this.sldsStatus, String this.devStatus:STATUS_NIY,
-      List<String> this.hints, List<String> this.issues, List<String> this.plans}) {
+  DemoFeature(String this.id,
+      String this.label,
+      {String this.sldsPath,
+      String this.sldsStatus,
+      String this.devStatus:STATUS_NIY,
+      List<String> this.hints,
+      List<String> this.issues,
+      List<String> this.plans}) {
     element.id = id;
 
     DivElement header = new DivElement()

@@ -14,7 +14,7 @@ part of lightning_model;
 class TZ {
 
   static final Logger _log = new Logger("TZ");
-
+  static const String TZ_COLUMN_NAME = "Timezone";
 
   /// List of Json TimeZones
   static List tzListJson; // loaded from Timezone.init()
