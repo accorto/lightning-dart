@@ -122,7 +122,10 @@ void main() {
 
     test('convert', (){
       DateTime now = new DateTime.now(); // local
-      expect("PST", equals(now.timeZoneName),
+      if (now.timeZoneName != "PST") {
+        return; // cannot switch/set local timezone
+      }
+      expect(now.timeZoneName, equals("PST"),
           reason: "${now.toIso8601String()} ${now.timeZoneName} offset=${now.timeZoneOffset}");
 
       DateTime dtUtc = new DateTime.utc(2016, 3, 12, 9, 0, 0);
