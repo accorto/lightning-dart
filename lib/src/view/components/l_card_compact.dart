@@ -73,7 +73,7 @@ class LCardCompact
   }
 
   /// Set Records - [recordAction] click on drv/urv
-  void display(List<DRecord> records, {AppsActionTriggered recordAction}) {
+  void setRecords(List<DRecord> records, {AppsActionTriggered recordAction}) {
     clearEntries();
     int i = 0;
     for (DRecord record in records) {

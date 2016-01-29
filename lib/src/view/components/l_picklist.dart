@@ -78,7 +78,7 @@ class LPicklist
     _plButton.iconButton = false;
     _plButton.onClick.listen(onButtonClick);
     _plDiv.append(_plButton.element);
-    _plButtonLabel.text = lPicklistSelectOption();
+    _plButtonLabel.text = placeholder;
     //
     createStandard(this);
     element.append(_plDiv);
@@ -138,7 +138,12 @@ class LPicklist
   bool get multiple => false;
 
   /// Small Editor/Label
-  void set small (bool newValue) {}
+  void set small (bool newValue) {
+    if (newValue)
+      _plButton.classes.add(LButton.C_BUTTON__SMALL);
+    else
+      _plButton.classes.remove(LButton.C_BUTTON__SMALL);
+  }
 
   /// String Value
 
@@ -155,7 +160,7 @@ class LPicklist
     if (item != null && item.label != null && item.label.isNotEmpty) {
       _plButtonLabel.text = item.label;
     } else if (required) {
-      _plButtonLabel.text = lPicklistSelectOption();
+      _plButtonLabel.text = placeholder;
     } else {
       _plButtonLabel.text = Html0.SPACE_NB;
     }
@@ -227,10 +232,10 @@ class LPicklist
     String txt = _plButtonLabel.text;
     if (newValue) {
       if (txt == null || txt.isEmpty || txt == Html0.SPACE_NB) {
-        _plButtonLabel.text = lPicklistSelectOption();
+        _plButtonLabel.text = placeholder;
       }
     } else {
-      if (txt == lPicklistSelectOption()) {
+      if (txt == placeholder) {
         _plButtonLabel.text = Html0.SPACE_NB;
       }
     }
@@ -242,6 +247,14 @@ class LPicklist
     }
     _dropdown.required = newValue; // if required sets first
   } // required
+
+  String get placeholder => _placeholder;
+  void set placeholder (String newValue) {
+    if (_plButtonLabel.text == _placeholder)
+      _plButtonLabel.text = newValue;
+    _placeholder = newValue;
+  }
+  String _placeholder = lPicklistSelectOption();
 
   bool get spellcheck => false;
   void set spellcheck (bool newValue) { // ignore

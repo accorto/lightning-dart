@@ -22,6 +22,7 @@ part 'demo/breadcrumbs.dart';
 part 'demo/buttons.dart';
 part 'demo/button_groups.dart';
 part 'demo/cards.dart';
+part 'demo/card_panels.dart';
 part 'demo/datepickers.dart';
 part 'demo/datetimes.dart';
 part 'demo/feeds.dart';
@@ -121,6 +122,7 @@ class DemoPage extends AppsPage {
     _addFeature(new Buttons()..toc(toc, onlySelectedHide));
     _addFeature(new ButtonGroups()..toc(toc, onlySelectedHide));
     _addFeature(new Cards()..toc(toc, onlySelectedHide));
+    _addFeature(new CardPanels()..toc(toc, onlySelectedHide));
     _addFeature(new Tables()..toc(toc, onlySelectedHide));
     _addFeature(new Datepickers()..toc(toc, onlySelectedHide));
     _addFeature(new DateTimes()..toc(toc, onlySelectedHide));

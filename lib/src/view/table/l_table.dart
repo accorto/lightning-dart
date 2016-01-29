@@ -149,7 +149,7 @@ class LTable
       if (_wrapper == null) {
         _wrapper = new DivElement()
           ..classes.add(LScrollable.C_SCROLLABLE__X)
-          ..append(element);
+          ..append(_table);
       }
     } else if (_wrapper != null) {
       _table.remove();
@@ -366,7 +366,7 @@ class LTable
     }
   }
 
-  /// Set Header
+  /// Set UI
   void setUi(UI ui, {bool fromQueryColumns:false}) {
     _ui = ui;
     dataColumns.clear();

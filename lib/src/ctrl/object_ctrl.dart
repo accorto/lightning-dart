@@ -68,7 +68,6 @@ class ObjectCtrl
     _header.loading = true;
     datasource.uiFuture()
     .then((UI ui) {
-      _header.loading = false;
       element.attributes[Html0.DATA_VALUE] = ui.tableName;
       UiUtil.validate(ui);
       _header.setUi(ui);
@@ -78,12 +77,14 @@ class ObjectCtrl
       if (!ui.isReadOnly) {
         _header.addAction(AppsAction.createNew(onAppsActionNew));
       }
+      _header.loading = false;
 
       // TODO _header.filterList.addFilter()
       if (queryExecute)
         _doQuery();
     })
     .catchError((error, stackTrace) {
+      _header.loading = false;
       _log.warning(idPrefix, error, stackTrace);
       _header.setUiFail("${error}");
     });
@@ -189,8 +190,9 @@ class ObjectCtrl
     _header.summary = "${objectCtrlQuerying()} ...";
     datasource.query()
     .then((DataResponse response) {
-      _content.loading = false;
+      _header.summary = "${objectCtrlProcessing()} ...";
       display();
+      _content.loading = false;
     });
   } // doQuery
 
@@ -210,16 +212,20 @@ class ObjectCtrl
       if (viewLayout == LObjectHome.VIEW_LAYOUT_COMPACT) {
         if (_table != null)
           _table.element.remove();
+        if (_cardPanel != null)
+          _cardPanel.element.remove();
         _displayCompact();
-      /* } else if (viewLayout == LObjectHome.VIEW_LAYOUT_CARDS) {
+      } else if (viewLayout == LObjectHome.VIEW_LAYOUT_CARDS) {
         if (_table != null)
           _table.element.remove();
         if (_cardCompact != null)
           _cardCompact.element.remove();
-        _displayCards(); */
+        _displayCards();
       } else /* if (viewLayout == LObjectHome.VIEW_LAYOUT_TABLE) */ {
         if (_cardCompact != null)
           _cardCompact.element.remove();
+        if (_cardPanel != null)
+          _cardPanel.element.remove();
         _displayTable();
       }
       _displaySummary();
@@ -303,6 +309,21 @@ class ObjectCtrl
   TableCtrl _table;
 
   /**
+   * Card Panel
+   */
+  void _displayCards() {
+    if (_cardPanel == null) {
+      _cardPanel = new CardPanel(id);
+      _cardPanel.setUi(datasource.ui); // header
+      _cardPanel.setRecords(datasource.recordList, recordAction: onAppsActionRecord); // urv click
+    }
+    if (_cardPanel.element.parent == null) {
+      _content.add(_cardPanel);
+    }
+  }
+  CardPanel _cardPanel;
+
+  /**
    * Compact
    */
   void _displayCompact() {
@@ -314,7 +335,7 @@ class ObjectCtrl
 
       _cardCompact.addRowAction(AppsAction.createEdit(onAppsActionEdit));
       _cardCompact.addRowAction(AppsAction.createDelete(onAppsActionDelete));
-      _cardCompact.display(datasource.recordList, recordAction: onAppsActionRecord); // urv click
+      _cardCompact.setRecords(datasource.recordList, recordAction: onAppsActionRecord); // urv click
     }
     if (_cardCompact.element.parent == null) {
       _content.add(_cardCompact);
@@ -323,6 +344,7 @@ class ObjectCtrl
   LCardCompact _cardCompact;
 
 
+  /// Sort Dropdown selected
   void onSortClicked(String name, bool asc, MouseEvent evt) {
     if (_table != null) {
       _table.onTableSortClicked(name, asc, evt);
@@ -380,8 +402,8 @@ class ObjectCtrl
     datasource.save(record)
     .then((DataResponse response) {
       completer.complete(response.response);
-      _content.loading = false;
       display();
+      _content.loading = false;
     });
     return completer.future;
   }
@@ -394,8 +416,8 @@ class ObjectCtrl
     datasource.delete(record)
     .then((DataResponse response) {
       completer.complete(response.response);
-      _content.loading = false;
       display();
+      _content.loading = false;
     });
     return completer.future;
   }
@@ -408,8 +430,8 @@ class ObjectCtrl
     datasource.deleteAll(records)
     .then((DataResponse response) {
       completer.complete(response.response);
-      _content.loading = false;
       display();
+      _content.loading = false;
     });
     return completer.future;
   }
@@ -540,8 +562,9 @@ class ObjectCtrl
 
 
   static String objectCtrlQuerying() => Intl.message("Querying", name: "objectCtrlQuerying");
-  static String objectCtrlMatching() => Intl.message("matching", name: "objectCtrlMatching");
+  static String objectCtrlProcessing() => Intl.message("Processing", name: "objectCtrlProcessing");
 
+  static String objectCtrlMatching() => Intl.message("matching", name: "objectCtrlMatching");
   static String objectCtrlNoRecords() => Intl.message("No records", name: "objectCtrlNoRecords");
   static String objectCtrlNoRecordInfo() => Intl.message("No records to display - change Filter or create New", name: "objectCtrlNoRecordInfo");
   // query

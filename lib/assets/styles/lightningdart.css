@@ -6172,6 +6172,17 @@ a.slds-button--inverse:focus {
   -webkit-justify-content: center;
       -ms-flex-pack: center;
           justify-content: center; }
+.cpanel {
+  margin: 0.5rem 0.75rem; }
+.cpanel-column {
+  min-width: 150px;
+  padding: 0 0.5rem;
+  border-right: 1px solid #0070d2; }
+  .cpanel-column:first-child {
+    padding-left: 1rem; }
+  .cpanel-column:last-child {
+    padding-right: 1rem;
+    border-right: none; }
 .grab {
   cursor: -moz-grab;
   cursor: url(https://www.google.com/intl/en_ALL/mapfiles/openhand.cur), move; }

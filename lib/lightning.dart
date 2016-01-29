@@ -88,6 +88,9 @@ part 'src/view/components/l_utilities.dart';
 part 'src/view/components/l_visibility.dart';
 part 'src/view/components/list_item.dart';
 
+part 'src/view/cpanel/card_panel.dart';
+part 'src/view/cpanel/card_panel_column.dart';
+
 part 'src/view/editors/editor_util.dart';
 part 'src/view/editors/l_checkbox.dart';
 part 'src/view/editors/l_datepicker.dart';

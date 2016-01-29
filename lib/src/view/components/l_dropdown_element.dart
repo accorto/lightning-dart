@@ -241,6 +241,7 @@ class LDropdownElement
       else
         editorChange(name, selectedItem.value, null, selectedItem);
     }
+    show = false; // hide
   } // onItemClick (dropdown)
 
 

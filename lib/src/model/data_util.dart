@@ -253,7 +253,7 @@ class DataUtil {
     return "";
   } // asTimeMs
 
-  /// adjust date for record timezone
+  /* adjust date for record timezone
   static DateTime _adjustTimezone(DateTime date, DataRecord data, bool add) {
     if (date != null && data != null) {
       TZ tz = data.getTimezone();
@@ -268,7 +268,7 @@ class DataUtil {
       }
     }
     return date; // no change
-  }
+  } */
 
   /// Parse now/time/today/date - or return 0
   static int parseDateVariable(String value, String type) {
