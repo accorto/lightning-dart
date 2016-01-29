@@ -10,6 +10,7 @@ import "dart:async";
 import "dart:html";
 
 import "package:lightning/lightning_ctrl.dart";
+import "package:lightning/lightning_graph.dart";
 import 'package:logging/logging.dart';
 
 import 'dart:typed_data';
@@ -62,7 +63,9 @@ void start(PageSimple page, Datasource dataSource) {
   if (dataSource == null) {
     dataSource = new WorkspaceData();
   }
-  ObjectCtrl ctrl = new ObjectCtrl(dataSource);
+  GraphDialog graphDialog = new GraphDialog(page.element, dataSource);
+  ObjectCtrl ctrl = new ObjectCtrl(dataSource,
+      onGraphClick: graphDialog.onGraphClick);
 
   page.element.classes.add(LGrid.C_WRAP);
   page.add(ctrl);

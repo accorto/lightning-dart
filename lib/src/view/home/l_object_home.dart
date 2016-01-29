@@ -55,7 +55,8 @@ class LObjectHome
    * Object Home
    */
   LObjectHome(TableSortClicked this.sortClicked,
-      {String this.idPrefix}) {
+      {String this.idPrefix,
+      void onGraphClick(MouseEvent evt)}) {
     if (idPrefix != null && idPrefix.isNotEmpty) {
       element.id = "${idPrefix}-home";
       _headerLeftRecordType.id = "${idPrefix}-record-type";
@@ -87,12 +88,20 @@ class LObjectHome
     DivElement _headerRightGrid = new DivElement()
       ..classes.add(LGrid.C_GRID);
     _headerRight.append(_headerRightGrid);
-    //
+
+    // sort
     _sort = new LDropdown.icon("sort", new LIconUtility(LIconUtility.SORT),
       idPrefix:idPrefix, assistiveText:lObjectHomeSort());
     if (sortClicked != null) {
       _sort.right = true;
       _headerRightGrid.append(_sort.element);
+    }
+    // graph
+    if (onGraphClick != null) {
+      LButton graph = new LButton.iconContainer("graph",
+          new LIconUtility(LIconUtility.CHART), "Show Graph");
+      graph.onClick.listen(onGraphClick);
+      _headerRightGrid.append(graph.element);
     }
     //
     _viewLayout = new LDropdown.selectIcon(idPrefix:idPrefix);

@@ -86,6 +86,7 @@ class LDropdownItem
       _leftIcon = createSelect();
     else
       _leftIcon = null;
+    _rebuild(null);
   }
 
   String toString() => "LDropdownItem[${option.value}]";

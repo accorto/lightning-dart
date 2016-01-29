@@ -96,7 +96,6 @@ class LPicklist
     _dropdown.element.style.width = "100%"; // C_Dropdown has width of 15rem
     //
     showDropdown = false;
-    _dropdown.selectMode = true;
 
     // Selection list
     if (dataColumn != null) {
