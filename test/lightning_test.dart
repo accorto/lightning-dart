@@ -47,7 +47,7 @@ void main() {
     test('Components Test', () {
       expect(page, isNotNull);
       expect(demoPage, isNotNull);
-      expect(demoPage.element.children.length, equals(33));
+      expect(demoPage.element.children.length, equals(34), reason: "demo component count");
     });
   }); // Components
 
