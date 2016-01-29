@@ -14,27 +14,35 @@ part of lightning_dart;
 class CardPanel
     extends LComponent {
 
+  static final Logger _log = new Logger("CardPanel");
+
+  static const String C_CPANEL = "cpanel";
+  static const String C_CPANEL_COLUMN = "cpanel-column";
+
+
   /// the card panel
-  final DivElement element = new DivElement();
-  final DivElement _header = new DivElement();
+  final Element element = new Element.section()
+    ..classes.add(C_CPANEL);
+  final Element _header = new Element.header()
+    ..classes.add(LText.C_TEXT_ALIGN__RIGHT);
   /// Column Selector
-  LPicklist _columnPicklist;
+  LPicklist _groupPicklist;
   /// Show All Columns
-  LCheckbox _showAllColumns;
+  LCheckbox _showEmptyColumns;
 
   /// Content Wrapper
-  final DivElement _wrapper = new DivElement()
-    ..classes.add(LScrollable.C_SCROLLABLE__X);
+  final Element _content = new Element.div()
+    ..classes.add(LGrid.C_GRID);
   /// panel column list
   final List<CardPanelColumn> _panelColumnList = new List<CardPanelColumn>();
 
 
   /// Record Sort List
   final List<DRecord> recordList = new List<DRecord>();
-  /// Record action (click on drv)
-  AppsActionTriggered recordAction;
 
   final String idPrefix;
+  /// Record action (click on drv)
+  AppsActionTriggered recordAction;
 
   /**
    * Card Panel
@@ -42,39 +50,40 @@ class CardPanel
   CardPanel(String this.idPrefix) {
     element.id = LComponent.createId(idPrefix, "cpanel");
     element.append(_header);
-    element.append(_wrapper);
+    Element wrapper = new Element.div()
+      ..classes.add(LScrollable.C_SCROLLABLE__X)
+      ..append(_content);
+    element.append(wrapper);
 
-    _columnPicklist = new LPicklist("col-select", idPrefix:idPrefix)
-      ..label = "Column Selector"
-      ..placeholder = "select a column to organize the records";
-    _columnPicklist.editorChange = onColumnSelectChange;
-    _header.append(_columnPicklist.element);
+    LForm form = new LForm.inline("form", idPrefix:idPrefix)
+      ..formRecordChange = onFormRecordChange;
+    _header.append(form.element);
 
-    _showAllColumns = new LCheckbox("all-columns", idPrefix: idPrefix)
-      ..label = "Show all columns"
+    _groupPicklist = new LPicklist("group", idPrefix:idPrefix)
+      ..label = cardPanelGroupBy()
+      ..title = cardPanelGroupByTitle()
+      ..placeholder = cardPanelGroupByTitle()
+      ..small = true;
+    form.addEditor(_groupPicklist);
+
+    _showEmptyColumns = new LCheckbox("empty", idPrefix: idPrefix)
+      ..label = cardPanelShowEmpty()
+      ..title = cardPanelShowEmptyTitle()
       ..checked = true;
-    _showAllColumns.editorChange = onAllColumnsChange;
-    _header.append(_showAllColumns.element);
-
-
+    form.addEditor(_showEmptyColumns);
   } // CardPanel
 
 
-  void addColumnSelectOption(DOption option) {
-    _columnPicklist.addDOption(option);
-  }
-
-
-  void addColumn(CardPanelColumn pcolumn) {
-    _wrapper.append(pcolumn.element);
-    _panelColumnList.add(pcolumn);
+  /// Add Column Group Option
+  void addGroupOption(DOption option) {
+    _groupPicklist.addDOption(option);
   }
 
   /// Set UI
   void setUi(UI ui) {
     _ui = ui;
 
-    _columnPicklist.clearOptions();
+    _groupPicklist.clearOptions();
     for (DColumn col in _ui.table.columnList) {
       if (DataTypeUtil.isPick(col.dataType)) {
         DOption option = new DOption()
@@ -82,7 +91,7 @@ class CardPanel
             ..label = col.label;
         if (col.hasColumnId())
           option.id = col.columnId;
-        addColumnSelectOption(option);
+        addGroupOption(option);
       }
     }
 
@@ -92,16 +101,24 @@ class CardPanel
   /// overwrite for fixed ui
   UI get ui => _ui;
 
-  /// Column Select Change
-  void onColumnSelectChange(String name, String columnName, DEntry entry, var details) {
-    display();
-  } // onColumnSelectChange
+  /// parameter changed
+  void onFormRecordChange(DRecord record, DEntry columnChanged, int rowNo) {
+    if (columnChanged.columnName == "group") {
+      display();
+    } else {
+      onShowEmptyColumnsChange();
+    }
+  }
 
   /// Show All Columns Changed
-  void onAllColumnsChange(String name, String columnName, DEntry entry, var details) {
-    bool all = _showAllColumns.checked;
+  void onShowEmptyColumnsChange() {
+    bool all = _showEmptyColumns.checked;
+    _log.config("onShowEmptyColumnsChange ${all}");
     for (CardPanelColumn pcolumn in _panelColumnList) {
-      pcolumn.show = all || pcolumn.cardList.isNotEmpty;
+      if (pcolumn.isOtherColumn)
+        pcolumn.show = pcolumn.cardList.isNotEmpty;
+      else
+        pcolumn.show = all || pcolumn.cardList.isNotEmpty;
     }
   }
 
@@ -117,54 +134,84 @@ class CardPanel
    * Display
    */
   void display() {
-    String columnName = _columnPicklist.value;
+    String columnName = _groupPicklist.value;
     if (columnName == null || columnName.isEmpty)
       return;
 
-    _wrapper.children.clear();
+    _content.children.clear();
     _panelColumnList.clear();
 
     // get options from table column
     if (_ui != null) {
       DColumn column = DataUtil.getTableColumn(_ui.table, columnName);
       for (DOption option in column.pickValueList) {
-        CardPanelColumn pcolumn = new CardPanelColumn(option.value, option.label, idPrefix:idPrefix);
-        addColumn(pcolumn);
+        _addColumn( new CardPanelColumn(option.value, option.label, idPrefix:idPrefix));
       }
     }
     // get options from records
     if (_panelColumnList.isEmpty) {
+      Set<String> values = new Set<String>();
       for (DRecord record in recordList) {
-
+        String value = DataRecord.getColumnValue(record, columnName);
+        if (value != null && value.isNotEmpty)
+          values.add(value);
+      }
+      for (String value in values) {
+        _addColumn(new CardPanelColumn(value, value, idPrefix:idPrefix));
       }
     }
-
-    CardPanelColumn otherColumn = new CardPanelColumn("otherValues", "Other Values", idPrefix:idPrefix);
-    addColumn(otherColumn);
+    _log.config("display columns=${_panelColumnList.length}");
+    CardPanelColumn otherColumn = new CardPanelColumn("other-values",
+        cardPanelOthers(), idPrefix:idPrefix, isOtherColumn: true);
+    _addColumn(otherColumn);
 
 
     /// Add Records to Columns
     for (DRecord record in recordList) {
       DataRecord data = new DataRecord(null, value: record);
       String columnValue = data.getValue(name:columnName);
-      bool found = false;
+      LCardCompactEntry card;
       for (CardPanelColumn pcolumn in _panelColumnList) {
         if (pcolumn.value == columnValue) {
-          pcolumn.addData(data);
-          found = true;
+          card = pcolumn.addRecord(record, recordAction);
           break;
         }
       }
-      if (!found) {
-        otherColumn.addData(data);
+      if (card == null) {
+        card = otherColumn.addRecord(record, recordAction);
+      }
+      if (_ui == null) {
+        card.displayRecord();
+      } else {
+        card.display(_ui, useQueryColumnList: true);
       }
     }
 
-    if (_showAllColumns.checked) {
+    if (!_showEmptyColumns.checked) {
       for (CardPanelColumn pcolumn in _panelColumnList) {
         pcolumn.show = pcolumn.cardList.isNotEmpty;
       }
     }
+    // remove others if empty
+    if (otherColumn.cardList.isEmpty) {
+      otherColumn.element.remove();
+    } else {
+      otherColumn.show = true;
+    }
   } // display
+
+  void _addColumn(CardPanelColumn pcolumn) {
+    _content.append(pcolumn.element);
+    _panelColumnList.add(pcolumn);
+  }
+
+
+  static String cardPanelGroupBy() => Intl.message("Group by", name: "cardPanelGroupBy");
+  static String cardPanelGroupByTitle() => Intl.message("select a column to group records", name: "cardPanelGroupByTitle");
+
+  static String cardPanelShowEmpty() => Intl.message("Show empty", name: "cardPanelShowEmpty");
+  static String cardPanelShowEmptyTitle() => Intl.message("Show empty columns", name: "cardPanelShowEmptyTitle");
+
+  static String cardPanelOthers() => Intl.message("Other values", name: "cardPanelOthers");
 
 } // CardPanel

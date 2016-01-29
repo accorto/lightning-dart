@@ -24,9 +24,7 @@ class LCardCompactEntry extends LTileGeneric {
    */
   LCardCompactEntry(String label, {Element button, AppsActionTriggered this.recordAction})
       : super(label) {
-    if (button != null) {
-      _heading.append(button);
-    }
+    _init(button);
   } // LCardCompactEntry
 
   /**
@@ -35,35 +33,83 @@ class LCardCompactEntry extends LTileGeneric {
   LCardCompactEntry.from(DRecord record, {Element button, AppsActionTriggered this.recordAction})
       : super(record.drv) {
     this.record = record;
-
     element.attributes[Html0.DATA_VALUE] = record.recordId;
     titleLink.href = "#${record.urv}";
+    _init(button);
+  } // LCardCompactEntry
 
+  /// add button and set action
+  void _init(Element button) {
     if (button != null) {
       _heading.append(button);
     }
-  } // LCardCompactEntry
-
-  void addActions(List<AppsAction> actions, {Object actionReference}) {
-    if (_dropdown == null) { // init
+    if (recordAction != null) {
       titleLink.onClick.listen((MouseEvent evt) {
         evt.preventDefault();
         recordAction("record", record, null, null);
       });
     }
+  } // init
+
+  /// add action
+  void addActions(List<AppsAction> actions, {Object actionReference}) {
     super.addActions(actions,
       actionReference: actionReference == null ? record : actionReference);
   }
 
-  void display(UI ui) {
+  /**
+   * [addEntry] based on UI - queryColumnList or gridColumnList
+   */
+  void display(UI ui, {bool useQueryColumnList:false}) {
+    if (record == null)
+      return;
     DataRecord data = new DataRecord(null, value: record);
-    for (UIGridColumn gc in ui.gridColumnList) {
-      String label = gc.column.label;
-      String value = data.getValue(name: gc.columnName);
-      // TODO render correctly
-      addEntry(label, value, addColonsToLabel: true);
+    if (useQueryColumnList && ui.queryColumnList.isNotEmpty) {
+      for (UIQueryColumn qc in ui.queryColumnList) {
+        String label = qc.columnName;
+        if (qc.hasColumn())
+          label = qc.column.label;
+        String value = "";
+        DEntry entry = data.getEntry(qc.columnId, qc.columnName, false);
+        if (entry != null) {
+          value = DataRecord.getEntryValue(entry);
+          if (entry.hasValueDisplay())
+            value = entry.valueDisplay;
+        }
+        addEntry(label, value);
+      }
+    } else {
+      for (UIGridColumn gc in ui.gridColumnList) {
+        String label = gc.columnName;
+        if (gc.hasColumn())
+          label = gc.column.label;
+        //
+        String value = "";
+        DEntry entry = data.getEntry(gc.columnId, gc.columnName, false);
+        if (entry != null) {
+          value = DataRecord.getEntryValue(entry);
+          if (entry.hasValueDisplay())
+            value = entry.valueDisplay;
+        }
+        addEntry(label, value);
+      }
     }
   } // display
+
+  /**
+   * [addEntry] based on [record]
+   */
+  void displayRecord() {
+    if (record == null)
+      return;
+    for (DEntry entry in record.entryList) {
+      String label = entry.columnName;
+      String value = DataRecord.getEntryValue(entry);
+      if (entry.hasValueDisplay())
+        value = entry.valueDisplay;
+      addEntry(label, value);
+    }
+  }
 
 } // LCardCompactEntry
 

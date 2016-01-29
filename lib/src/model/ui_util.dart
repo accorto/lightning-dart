@@ -37,6 +37,20 @@ class UiUtil {
       }
     } // gc
 
+    // Query Columns
+    for (UIQueryColumn qc in ui.queryColumnList) {
+      if (!qc.hasColumn()) {
+        DColumn column = DataUtil.findColumn(ui.table, qc.columnId, qc.columnName);
+        if (column != null) {
+          qc.column = column;
+          if (!qc.hasColumnId())
+            qc.columnId = column.columnId;
+          if (!qc.hasColumnName())
+            qc.columnName = column.name;
+        }
+      }
+    } // qc
+
     // Panel
     for (UIPanel panel in ui.panelList) {
       for (UIPanelColumn pc in panel.panelColumnList) {

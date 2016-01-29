@@ -71,8 +71,6 @@ class LDropdown
   static const String C_ACTION_OVERFLOW__TOUCH__FOOTER = "slds-action-overflow--touch__footer";
 
 
-  static const String C_CLICK_TO_SHOW = "slds-click-to-show";
-
   static const String C_DROPDOWN__MENU = "slds-dropdown--menu";
   static const String C_DROPDOWN__ACTIONS = "slds-dropdown--actions";
 
@@ -85,6 +83,9 @@ class LDropdown
   static const String C_ICON__RIGHT = "slds-icon--right";
 
   static List<String> POSITIONS = [C_DROPDOWN__LEFT, C_DROPDOWN__RIGHT];
+
+
+  static final Logger _log = new Logger("LDropdown");
 
   /// Dropdown with Button
   final DivElement element = new DivElement()
@@ -128,6 +129,7 @@ class LDropdown
       dropdown.element.classes.addAll(dropdownClasses);
     }
     element.append(dropdown.element);
+    button.onClick.listen(onButtonClick);
   } // LDropdown
 
   /// Settings Icon Button + Dropdown
@@ -238,29 +240,6 @@ class LDropdown
     _dropdownHeading.text = newValue;
   }
 
-  /// Click to Show (vs. hover)
-  bool get clickToShow => element.classes.contains(C_CLICK_TO_SHOW);
-  /// Click to Show (vs. hover)
-  void set clickToShow (bool newValue) {
-    if (newValue) {
-      element.classes.add(C_CLICK_TO_SHOW);
-      if (_clickToShow == null) {
-        _clickToShow = element.onClick.listen((MouseEvent evt) {
-          element.classes.toggle(LVisibility.C_ACTIVE);
-        });
-      }
-    } else {
-      element.classes.remove(C_CLICK_TO_SHOW);
-      element.classes.remove(LVisibility.C_ACTIVE);
-      if (_clickToShow != null) {
-        _clickToShow.cancel();
-        _clickToShow = null;
-      }
-    }
-  }
-  StreamSubscription<MouseEvent> _clickToShow;
-
-
   /// Get Value
   String get value => dropdown.value;
   /// Set Value
@@ -299,6 +278,11 @@ class LDropdown
     }
     if (editorChange != null) // if this were an EditorI
       editorChange(name, newValue, ignored, details);
+  }
+
+  void onButtonClick(MouseEvent evt) {
+    _log.config("onButtonClick ${name}");
+    dropdown.show = !dropdown.show;
   }
 
   @override

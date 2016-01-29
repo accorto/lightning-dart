@@ -107,7 +107,6 @@ class LButtonGroup extends LComponent {
     if (dropdownItems.isEmpty) {
       _more.disabled = true;
       element.classes.remove(LDropdown.C_DROPDOWN_TRIGGER);
-      element.classes.remove(LDropdown.C_CLICK_TO_SHOW);
       element.attributes.remove(Html0.ARIA_HASPOPUP);
     } else { // dropdown
       element.append(_more.element);
