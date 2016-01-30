@@ -12,6 +12,8 @@ part of lightning_graph;
 class GraphBy
     extends GraphPoint {
 
+  static final Logger _log = new Logger("GraphBy");
+
   String get columnName => key;
 
   /// Values
@@ -27,8 +29,9 @@ class GraphBy
   GraphBy(String columnName, String label, Map<String,String> this.keyLabelMap)
       : super (columnName, label) {
     if (keyLabelMap == null) {
+      _log.config("${columnName} keyMap for FK");
       FkService.instance.getFkMapFuture(columnName)
-          .then((Map<String, String> map) {
+      .then((Map<String, String> map) {
         keyLabelMap = map;
         _needLabelUpdate = true;
       });
@@ -125,10 +128,21 @@ class GraphBy
     return labels;
   } // getDateLabels
 
+  /// Info
   String toString() {
     String s = super.toString();
     if (byValueList != null)
       s += " byValueList=#${byValueList.length}";
+    return s;
+  }
+
+  /// Dump Info (updates label)
+  String toStringX(String linePrefix) {
+    String s = super.toStringX(linePrefix);
+    updateLabels();
+    for (GraphPoint point in byValueList) {
+      s += "\n" + point.toStringX("${linePrefix}= ");
+    }
     return s;
   }
 

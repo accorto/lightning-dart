@@ -166,7 +166,6 @@ class GraphPoint {
 
   // checkDate
 
-
   /// info
   String toString() {
     String info = "${label == null ? key : label}: count=${count} "
@@ -179,4 +178,20 @@ class GraphPoint {
     }
     return info;
   }
-}
+
+  /// Dump Info
+  String toStringX(String linePrefix) {
+    String s = "${linePrefix}${key}($label):\t count=${count} "
+        "sum=${_sum.toStringAsFixed(1)} "
+        "min=${_min == null ? "-" : _min.toStringAsFixed(1)} "
+        "max=${_max == null ? "-" : _max.toStringAsFixed(1)} "
+        "avg=${avg.toStringAsFixed(1)} nullCount=${_nullCount}";
+    if (byDateList != null) {
+      for (GraphPoint byDate in byDateList) {
+        s += "\n" + byDate.toStringX("${linePrefix}- ");
+      }
+    }
+    return s;
+  }
+
+} // GraphPoint

@@ -82,7 +82,7 @@ class GraphCalc
    */
   void calculatePoint(DRecord record, DateTime date, String dateString, num value, String valueString) {
     if (_match(record, date, dateString, value, valueString)) {
-      _log.finer("calculatePoint ${label} Match value=${value} ${date}");
+      //_log.finer("calculatePoint ${label} Match value=${value} ${date}");
       calculate(value, date);
       for (GraphBy by in _byList) {
         by.calculateRecord(record, value, date);
@@ -116,10 +116,12 @@ class GraphCalc
   } // match
 
   /// Display
-  void display(Element host) {
-    if (renderStackedChart(host))
-      return;
-    if (renderPie(host))
+  void display(EngineBase engine) {
+    _log.info("display ${tableName}.${columnName} ${label}\n${toStringX('')}"); // updates by labels
+
+    if (engine.renderStacked(this))
+      return; // su
+    if (engine.renderPie(this))
       return;
 
     ParagraphElement p = new ParagraphElement()
@@ -129,7 +131,7 @@ class GraphCalc
     } else {
       p.text = toString();
     }
-    host.append(p);
+    engine.element.append(p);
     /*
     if (byDateList != null) {
       sortDateList();
@@ -171,195 +173,42 @@ class GraphCalc
     } */
   } // display
 
+  /**
+   * Dump Info (updated by labels)
+   * - byDateList   (GraphPoint - byDateList[GraphPoint])
+   * . byList       (GraphCalc - byList[GraphBy])
+   * = byValueList  (GraphBy - byValueList[GraphPoint])
 
-  /// render stacked chart in [parent]
-  bool renderStackedChart(Element parent) {
-    bool rendered = false;
+      counT(Display):	 count=118 sum=118.0 min=1.0 max=1.0 avg=1.0 nullCount=0
+      - 1435449600000(6/28/2015):	 count=17 sum=17.0 min=1.0 max=1.0 avg=1.0 nullCount=0
+      - 1420934400000(1/11/2015):	 count=100 sum=100.0 min=1.0 max=1.0 avg=1.0 nullCount=0
+      - 1437868800000(7/26/2015):	 count=1 sum=1.0 min=1.0 max=1.0 avg=1.0 nullCount=0
+      . Created(Created):	 count=118 sum=118.0 min=1.0 max=1.0 avg=1.0 nullCount=0
+      . - 1435449600000(6/28/2015):	 count=17 sum=17.0 min=1.0 max=1.0 avg=1.0 nullCount=0
+      . - 1420934400000(1/11/2015):	 count=100 sum=100.0 min=1.0 max=1.0 avg=1.0 nullCount=0
+      . - 1437868800000(7/26/2015):	 count=1 sum=1.0 min=1.0 max=1.0 avg=1.0 nullCount=0
+      . = 1421107847000(1421107847000):	 count=2 sum=2.0 min=1.0 max=1.0 avg=1.0 nullCount=0
+      . = - 1420934400000(1/11/2015):	 count=2 sum=2.0 min=1.0 max=1.0 avg=1.0 nullCount=0
+      :: byValueList of byList(GraphBy) not used
+
+      38:47.660  GraphCalc: display AD_Table.counT Display
+      counT(Display):	 count=118 sum=118.0 min=1.0 max=1.0 avg=1.0 nullCount=0
+      . TableCategory(Category):	 count=118 sum=118.0 min=1.0 max=1.0 avg=1.0 nullCount=0
+      . = ASSOCIATION(Association):	 count=3 sum=3.0 min=1.0 max=1.0 avg=1.0 nullCount=0
+      . = BASE(Base):	 count=18 sum=18.0 min=1.0 max=1.0 avg=1.0 nullCount=0
+      . = DICTIONARY(Dictionary):	 count=66 sum=66.0 min=1.0 max=1.0 avg=1.0 nullCount=0
+      . = REFERENCE(Reference):	 count=22 sum=22.0 min=1.0 max=1.0 avg=1.0 nullCount=0
+      . = SETTING2(Setting):	 count=1 sum=1.0 min=1.0 max=1.0 avg=1.0 nullCount=0
+      . = TRANSACTION(Transaction):	 count=8 sum=8.0 min=1.0 max=1.0 avg=1.0 nullCount=0
+
+   */
+  String toStringX(String linePrefix) {
+    String s = "${linePrefix}${super.toStringX(linePrefix)}";
     for (GraphBy by in _byList) {
-      if (by.byPeriod == null)
-        continue;
-      if (by.byValueList.isEmpty)
-        continue; // no data
-
-      // layout
-      DivElement chartHostWrapper = new DivElement()
-        ..classes.addAll(["chart-host-wrapper"]);
-      parent.append(chartHostWrapper);
-      DivElement chartHost = new DivElement()
-        ..classes.addAll(["chart-host"]);
-      chartHostWrapper.append(chartHost);
-      DivElement legendHost = new DivElement()
-        ..classes.addAll(["chart-legend-host"]);
-      chartHostWrapper.append(legendHost);
-      rendered = true;
-
-      // config
-      List<int> measures = new List<int>();
-      for (int i = 0; i < by.byValueList.length; i++) {
-        measures.add(i + 1);
-      }
-      /*
-      ChartSeries series = new ChartSeries(tableName, measures,
-          new StackedBarChartRenderer(alwaysAnimate: true));
-      Iterable<ChartSeries> seriesList = [series];
-      Iterable<int> dimensionList = [0];
-      ChartConfig config = new ChartConfig(seriesList, dimensionList)
-        ..legend = new ChartLegend(legendHost,
-            showValues: true,
-            title: by.label);
-      int width = chartHost.clientWidth;
-      if (config.minimumSize.width > width) { // 400x300
-        config.minimumSize = new Rect.size(width, 300*(width~/400));
-      }
-
-      // data
-      ChartData data = new ChartData(_stackedColumns(by), _stackedRows(by));
-      ChartState state = new ChartState();
-      // area
-      CartesianArea area = new CartesianArea(chartHost, data, config,
-          state:state, useTwoDimensionAxes:false, useRowColoring:false);
-      area.theme = new QuantumChartTheme2();
-      createDefaultCartesianBehaviors().forEach((behavior) {
-        area.addChartBehavior(behavior);
-      });
-      area.draw();
-      */
+      s += "\n" + by.toStringX("${linePrefix}. ");
     }
-    return rendered;
-  } // renderStackedChart
-
-  /* stacked columns (by values)
-  List<ChartColumnSpec> _stackedColumns(GraphBy by) {
-    List<ChartColumnSpec> list = new List<ChartColumnSpec>();
-    List<String> info = new List<String>();
-    by.updateLabels();
-    ChartColumnSpec column = new ChartColumnSpec(label:GraphCalcDate(),
-        type: ChartColumnSpec.TYPE_STRING);
-    info.add(GraphCalcDate());
-    list.add(column);
-    // TODO only used by values
-    for (GraphPoint point in by.byValueList) {
-      FormatFunction formatter = _format2num;
-      column = new ChartColumnSpec(label:point.label,
-          type: ChartColumnSpec.TYPE_NUMBER,
-          formatter:formatter);
-      info.add(point.label);
-      list.add(column);
-    }
-    _log.fine("stackedColumns ${info}");
-    return list;
-  } // stackedColumns */
-
-  /// stacked column values - list of dates + by values
-  List<List<dynamic>> _stackedRows(GraphBy by) {
-    List<List<dynamic>> list = new List<List<dynamic>>();
-    List<String> dateLabels = by.getDateLabels(); // sync date info
-    for (int i = 0; i < dateLabels.length; i++) {
-      List<dynamic> row = new List<dynamic>();
-      row.add(dateLabels[i]);
-      for (GraphPoint point in by.byValueList) {
-        row.add(point.byDateList[i].sum);
-      }
-      _log.finer(row);
-      list.add(row);
-    }
-    _log.fine("stackedRows ${list.length} * ${dateLabels.length}");
-    return list;
-  } // stackedRows
-
-
-
-  /// Render Pie in [parent]
-  bool renderPie(Element parent) {
-    bool rendered = false;
-    bool isDonut = true;
-    for (GraphBy by in _byList) {
-      if (by.count == 0)
-        continue;
-      // layout
-      DivElement chartHostWrapper = new DivElement()
-        ..classes.addAll(["chart-host-wrapper"]);
-      parent.append(chartHostWrapper);
-      DivElement chartHost = new DivElement()
-        ..classes.addAll(["chart-host"]);
-      chartHostWrapper.append(chartHost);
-      DivElement legendHost = new DivElement()
-        ..classes.addAll(["chart-legend-host"]);
-      chartHostWrapper.append(legendHost);
-      rendered = true;
-      //
-      by.updateLabels();
-      /*
-      ChartSeries series = new ChartSeries(tableName, [1],
-          new PieChartRenderer(innerRadiusRatio: isDonut ? 0.5 : 0,
-              statsMode: PieChartRenderer.STATS_VALUE_PERCENTAGE,
-              showLabels: true,
-              sortDataByValue: false));
-      ChartConfig config = new ChartConfig([series], [0])
-        ..legend = new ChartLegend(legendHost,
-            title: by.label,
-            showValues: true);
-      int width = chartHost.clientWidth;
-      if (config.minimumSize.width > width) { // 400x300
-        config.minimumSize = new Rect.size(width, 300*(width~/400));
-      }
-
-      ChartData data = new ChartData(_pieColumns(by), _pieRows(by));
-      ChartState state = new ChartState();
-
-      LayoutArea area = new LayoutArea(chartHost, data, config,
-          state:state);
-      area.theme = new QuantumChartTheme2();
-      createDefaultCartesianBehaviors().forEach((behavior) {
-        area.addChartBehavior(behavior);
-      });
-      area.draw();
-      */
-    }
-    return rendered;
-  } // renderPie
-
-  /* pie column list
-  List<ChartColumnSpec> _pieColumns(GraphBy by) {
-    List<ChartColumnSpec> list = new List<ChartColumnSpec>();
-    by.updateLabels();
-    ChartColumnSpec column = new ChartColumnSpec(label:"-", type: ChartColumnSpec.TYPE_STRING);
-    list.add(column);
-    for (GraphPoint point in by.byValueList) {
-      FormatFunction formatter = _format2num;
-      column = new ChartColumnSpec(label:point.label,
-          type: ChartColumnSpec.TYPE_NUMBER,
-          formatter:formatter);
-      list.add(column);
-    }
-    return list;
-  } */
-
-  /// pie column rows
-  List<List<dynamic>> _pieRows(GraphBy by) {
-    List<List<dynamic>> list = new List<List<dynamic>>();
-    for (GraphPoint point in by.byValueList) {
-      List<dynamic> row = new List<dynamic>();
-      row.add(point.label);
-      row.add(point.sum);
-      list.add(row);
-    }
-    return list;
+    return s;
   }
-
-
-  /* Helper method to create default behaviors for cartesian chart demos.
-  Iterable<ChartBehavior> createDefaultCartesianBehaviors() =>
-      new List.from([
-        new Hovercard(isMultiValue: true),
-        new AxisLabelTooltip()
-      ]);
-
-  String _format2num(dynamic value) {
-    if (value is num)
-      return value.toStringAsFixed(numPrecision);
-    return value;
-  } */
 
   static String graphCalcDate() => Intl.message("Date", name: "graphCalcDate");
   static String graphCalcNoData() => Intl.message("No Data", name: "graphCalcNoData");

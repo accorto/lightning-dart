@@ -400,6 +400,8 @@ class LTable
   UI _ui;
   /// overwrite for fixed ui
   UI get ui => _ui;
+  /// Table Meta Data
+  final List<DataColumn> dataColumns = new List<DataColumn>();
 
   /// Reset Table Structure
   void resetStructure() {
@@ -415,8 +417,6 @@ class LTable
     nameLabelMap.clear();
     nameList.clear();
   }
-  /// Table Meta Data
-  final List<DataColumn> dataColumns = new List<DataColumn>();
 
 
   /// Set Records - [recordAction] click on drv/urv

@@ -28,7 +28,7 @@ class GraphMatch {
   MatchOpDate dateOp;
 
   /**
-   * KPI Record Match
+   * Record Match
    */
   GraphMatch(String this.columnName, MatchType this.type) {
   }

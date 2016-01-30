@@ -14,25 +14,14 @@ class GraphPanel
 
   static final Logger _log = new Logger("GraphPanel");
 
-
-  // element
-  final Element element = new Element.article()
-    ..classes.add("chart-wrapper")
-    ..style.minHeight = "400px";
-
-  DivElement _wrapper = new DivElement()
-    ..classes.add("chart-title-wrapper");
-  HeadingElement _h2 = new HeadingElement.h2()
-    ..classes.add("chart-title");
+  /// chart engine
+  final EngineBase engine = new EngineCharted();
+  /// engine element
+  Element get element => engine.element;
 
   /// KPI / Element name/id
   final String id;
   final String tableName;
-
-  /// KPI Label
-  final String label;
-
-  String description;
 
   final List<GraphCalc> _calcList = new List<GraphCalc>();
   final List<GraphMatch> _matchList = new List<GraphMatch>();
@@ -41,60 +30,71 @@ class GraphPanel
   ByPeriod _byPeriod;
 
   /**
-   * Kpi Metric
+   * Graph Panel
    */
-  GraphPanel(String this.id, String this.tableName, String this.label) {
+  GraphPanel(String this.id, String this.tableName,
+    {String title, String subTitle}) {
     element.id = id;
-    _wrapper.append(_h2);
-    _h2.text = label;
-    element.append(_wrapper); // recreated!
+    if (title != null)
+      engine.title = title;
+    if (subTitle != null)
+      engine.subTitle = subTitle;
   }
 
+  /// reset panel
   void reset() {
-    _byList.clear();
-    _matchList.clear();
     _calcList.clear();
+    _matchList.clear();
+    _byList.clear();
     _byPeriod = null;
   }
 
   /// calc sum for numeric value of [columnName]
   void calc(String columnName, String label, String dateColumnName, {int numPrecision:2}) {
+    _log.fine("calc ${columnName} (${dateColumnName})");
     _calcList.add(new GraphCalc(tableName, columnName, label,
         dateColumnName, numPrecision:numPrecision));
   }
 
   /// match
   void matchRegex(String columnName, RegExp regex) {
+    _log.fine("matchRegex ${columnName} ${regex}");
     _matchList.add(new GraphMatch(columnName, MatchType.Regex)
       ..regex = regex);
   }
   /// match
   void matchNum(String columnName, MatchOpNum op, num value) {
+    _log.fine("matchNum ${columnName} ${op} ${value}");
     _matchList.add(new GraphMatch(columnName, MatchType.Num)
       ..numOp = op
       ..numValue = value);
   }
   /// match
   void matchDate(String columnName, MatchOpDate op) {
+    _log.fine("matchDate ${columnName} ${op}");
     _matchList.add(new GraphMatch(columnName, MatchType.Date)
       ..dateOp = op);
   }
   /// match
   void matchNull(String columnName) {
+    _log.fine("matchNull ${columnName}");
     _matchList.add(new GraphMatch(columnName, MatchType.Null));
   }
   /// match
   void matchNotNull(String columnName) {
+    _log.fine("matchNull ${columnName}");
     _matchList.add(new GraphMatch(columnName, MatchType.NotNull));
   }
 
   /// add Group By
   void by(String columnName, String label, Map<String, String> keyLabelMap) {
+    _log.fine("by ${columnName} ${keyLabelMap.keys}");
     _byList.add(new GraphBy(columnName, label, keyLabelMap));
   } // by
 
   /// by period
   void byPeriod(ByPeriod byPeriod) {
+    _log.fine("byPeriod ${byPeriod}");
     _byPeriod = byPeriod;
   }
 
@@ -102,11 +102,7 @@ class GraphPanel
    * Calculate  Value
    */
   void calculate(List<DRecord> records) {
-    // reset
-    element.children.clear();
-    element.append(_wrapper);
-    // calculate
-    _log.config("calculate '${label}' records=${records.length}") ;
+    _log.config("calculate '${tableName}' records=${records.length}") ;
     for (GraphCalc calc in _calcList) {
       calc.resetCalc(_matchList, _byList, _byPeriod);
       for (DRecord record in records) {
@@ -117,9 +113,9 @@ class GraphPanel
 
   /// display
   void display() {
+    engine.reset();
     for (GraphCalc calc in _calcList) {
-      _log.config("display '${label}': ${calc.toString()}") ;
-      calc.display(element);
+      calc.display(engine);
     }
   }
 

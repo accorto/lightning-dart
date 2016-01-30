@@ -8,7 +8,7 @@ part of lightning_dart.demo;
 
 class Forms2 extends DemoFeature {
 
-  Forms2() : super ("forms2", "Forms (2)",
+  Forms2() : super ("forms2", "Forms(2)",
   sldsStatus: DemoFeature.SLDS_DEV_READY,
   devStatus: DemoFeature.STATUS_COMPLETE,
   hints: [],

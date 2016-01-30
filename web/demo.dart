@@ -10,12 +10,15 @@ import 'dart:html';
 import 'dart:async';
 
 import "package:lightning/lightning_ctrl.dart";
-export "package:lightning/lightning_ctrl.dart";
+import "package:lightning/lightning_graph.dart";
 
-import 'exampleWorkspace.dart';
+export "package:lightning/lightning_ctrl.dart";
 
 
 part 'demo/demo_feature.dart';
+part 'demo/demo_data.dart';
+part 'demo/ui_util_demo.dart';
+
 part 'demo/activity_timeline.dart';
 part 'demo/badges.dart';
 part 'demo/breadcrumbs.dart';
@@ -43,6 +46,7 @@ part 'demo/popovers.dart';
 part 'demo/publishers.dart';
 part 'demo/spinners.dart';
 part 'demo/tables.dart';
+part 'demo/tables_graphs.dart';
 part 'demo/tabs.dart';
 part 'demo/tiles.dart';
 part 'demo/trees.dart';
@@ -124,6 +128,7 @@ class DemoPage extends AppsPage {
     _addFeature(new Cards()..toc(toc, onlySelectedHide));
     _addFeature(new CardPanels()..toc(toc, onlySelectedHide));
     _addFeature(new Tables()..toc(toc, onlySelectedHide));
+    _addFeature(new TablesGraphs()..toc(toc, onlySelectedHide));
     _addFeature(new Datepickers()..toc(toc, onlySelectedHide));
     _addFeature(new DateTimes()..toc(toc, onlySelectedHide));
     _addFeature(new Feeds()..toc(toc, onlySelectedHide));
@@ -227,8 +232,8 @@ class ExampleWorkspace extends AppsPage {
   Element element = new DivElement();
 
   ExampleWorkspace() : super ("wb", "wb", formIcon, "Workspace", "Lightning Dart Workspace Example") {
-    WorkspaceData wbData = new WorkspaceData();
-    ObjectCtrl ctrl = new ObjectCtrl(wbData);
+    DemoData datasource = new DemoData();
+    ObjectCtrl ctrl = new ObjectCtrl(datasource);
     element.append(ctrl.element);
   } // ExampleWorkspace
 

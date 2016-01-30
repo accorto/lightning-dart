@@ -17,7 +17,8 @@ import 'dart:typed_data';
 import 'package:fixnum/fixnum.dart';
 import "package:lightning/protoc/rr_login_pb.dart";
 
-part "exampleWorkspaceData.dart";
+import "demo.dart";
+
 part "exampleWorkspaceLogin.dart";
 
 /**
@@ -61,7 +62,7 @@ main() async {
  */
 void start(PageSimple page, Datasource dataSource) {
   if (dataSource == null) {
-    dataSource = new WorkspaceData();
+    dataSource = new DemoData();
   }
   GraphDialog graphDialog = new GraphDialog(page.element, dataSource);
   ObjectCtrl ctrl = new ObjectCtrl(dataSource,

@@ -15,3 +15,4 @@ bin/trl_arb.dart
 translate_to_arb.sh
 translate_from_arb.sh
 
+*.css.map

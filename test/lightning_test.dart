@@ -17,7 +17,6 @@ import 'package:lightning/lightning.dart';
 import 'package:intl/intl.dart';
 
 import '../web/demo.dart';
-import '../web/exampleWorkspace.dart';
 
 /**
  * Execute test:
@@ -47,7 +46,7 @@ void main() {
     test('Components Test', () {
       expect(page, isNotNull);
       expect(demoPage, isNotNull);
-      expect(demoPage.element.children.length, equals(34), reason: "demo component count");
+      expect(demoPage.element.children.length, equals(35), reason: "demo component count");
     });
   }); // Components
 
@@ -58,7 +57,7 @@ void main() {
 
     setUp(() async {
       await LightningDart.init(); // client env
-      WorkspaceData wbData = new WorkspaceData();
+      Datasource wbData = new DemoData();
       ctrl = new ObjectCtrl(wbData);
       page = LightningDart.createPageSimple();
       page.element.classes.add(LGrid.C_WRAP);
