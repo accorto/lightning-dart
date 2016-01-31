@@ -74,7 +74,7 @@ class EngineCharted
   bool renderStacked(GraphCalc calc) {
     _numPrecision = calc.numPrecision;
     bool rendered = false;
-    for (GraphBy by in calc._byList) {
+    for (StatBy by in calc.byList) {
       if (by.byPeriod == null)
         continue;
       if (by.byValueList.isEmpty)
@@ -138,12 +138,12 @@ class EngineCharted
     List<ChartColumnSpec> list = new List<ChartColumnSpec>();
     List<String> info = new List<String>();
     by.updateLabels();
-    ChartColumnSpec column = new ChartColumnSpec(label:GraphCalc.graphCalcDate(),
+    ChartColumnSpec column = new ChartColumnSpec(label:StatCalc.statCalcDate(),
         type: ChartColumnSpec.TYPE_STRING);
-    info.add(GraphCalc.graphCalcDate());
+    info.add(StatCalc.statCalcDate());
     list.add(column);
     // TODO only used by values
-    for (GraphPoint point in by.byValueList) {
+    for (StatPoint point in by.byValueList) {
       FormatFunction formatter = _format2num;
       column = new ChartColumnSpec(label:point.label,
           type: ChartColumnSpec.TYPE_NUMBER,
@@ -162,7 +162,7 @@ class EngineCharted
     for (int i = 0; i < dateLabels.length; i++) {
       List<dynamic> row = new List<dynamic>();
       row.add(dateLabels[i]);
-      for (GraphPoint point in by.byValueList) {
+      for (StatPoint point in by.byValueList) {
         row.add(point.byDateList[i].sum);
       }
       _log.finer(row);
@@ -180,7 +180,7 @@ class EngineCharted
     _numPrecision = calc.numPrecision;
     bool rendered = false;
     bool isDonut = true;
-    for (GraphBy by in calc._byList) {
+    for (StatBy by in calc.byList) {
       if (by.count == 0)
         continue;
       // layout
@@ -236,7 +236,7 @@ class EngineCharted
     by.updateLabels();
     ChartColumnSpec column = new ChartColumnSpec(label:"-", type: ChartColumnSpec.TYPE_STRING);
     list.add(column);
-    for (GraphPoint point in by.byValueList) {
+    for (StatPoint point in by.byValueList) {
       FormatFunction formatter = _format2num;
       column = new ChartColumnSpec(label:point.label,
           type: ChartColumnSpec.TYPE_NUMBER,
@@ -249,7 +249,7 @@ class EngineCharted
   /// pie column rows
   List<List<dynamic>> _pieRows(GraphBy by) {
     List<List<dynamic>> list = new List<List<dynamic>>();
-    for (GraphPoint point in by.byValueList) {
+    for (StatPoint point in by.byValueList) {
       List<dynamic> row = new List<dynamic>();
       row.add(point.label);
       row.add(point.sum);

@@ -6,6 +6,15 @@
 
 part of lightning_graph;
 
+/// Match Numeric Operator
+enum MatchOpNum { EQ, GE, GT, LE, LT }
+
+/// Match Date Operator
+enum MatchOpDate { Today, ThisWeek, LastWeek, Last4Weeks }
+
+/// Match Types
+enum MatchType { Regex, Num, Date, Null, NotNull }
+
 /**
  * Graph Match Criteria
  */
@@ -126,17 +135,18 @@ class GraphMatch {
     }
     if (type == MatchType.Date) {
       // see recordValueDate
+      DateTime utcDate = date.toUtc();
       if (dateOp == MatchOpDate.Today) {
-        return recordValueDateToday(date);
+        return recordValueDateToday(utcDate);
       }
       if (dateOp == MatchOpDate.ThisWeek) {
-        return recordValueDateThisWeek(date);
+        return recordValueDateThisWeek(utcDate);
       }
       if (dateOp == MatchOpDate.LastWeek) {
-        return recordValueDateLastWeek(date);
+        return recordValueDateLastWeek(utcDate);
       }
       if (dateOp == MatchOpDate.Last4Weeks) {
-        return recordValueDateLast4Weeks(date);
+        return recordValueDateLast4Weeks(utcDate);
       }
       _log.warning("dateMatch ${columnName} not found op=${dateOp}");
     }

@@ -4,35 +4,37 @@
  * License options+support:  https://lightningdart.com
  */
 
-part of lightning_graph;
+part of lightning_dart;
+
+/// By Date
+enum ByPeriod { Day, Week, Month, Quarter, Year }
 
 /**
  * Graph Metric point (count, sum, ...)
  */
-class GraphPoint {
+class StatPoint {
 
-  /// key / column name
+  /// key (column name)
   final String key;
-
-  /// label (cam update)
+  /// label (can update)
   String label;
 
   /// by Date criteria
   ByPeriod byPeriod;
 
   /// by date values
-  List<GraphPoint> byDateList;
+  List<StatPoint> byDateList;
 
   int _count = 0;
   int _nullCount = 0;
-  double _sum = 0.0;
-  double _min = null;
-  double _max = null;
+  num _sum = 0.0;
+  num _min = null;
+  num _max = null;
 
   /**
    * Metric point with [key] (columnName, name) and [label]
    */
-  GraphPoint(String this.key, String this.label);
+  StatPoint(String this.key, String this.label);
 
   /// reset
   void reset() {
@@ -45,25 +47,28 @@ class GraphPoint {
   }
 
   /// update
-  void calculate(num value, DateTime date) {
-    if (value == null) {
+  void calculate(num value, String valueString, DateTime date) {
+    if (valueString == null) {
       _nullCount++;
     } else {
       _count++;
-      _sum += value;
-      if (_min == null || value < _min)
-        _min = value;
-      if (_max == null || value > _max)
-        _max = value;
+      if (value != null) {
+        _sum += value;
+        if (_min == null || value < _min)
+          _min = value;
+        if (_max == null || value > _max)
+          _max = value;
+      }
     }
+
     // By Period
     if (byPeriod != null && date != null) {
       if (byDateList == null)
-        byDateList = new List<GraphPoint>();
-      DateTime date2 = getDateKey(date);
+        byDateList = new List<StatPoint>();
+      DateTime date2 = getDateKey(date.toUtc());
       String dateKey = date2.millisecondsSinceEpoch.toString();
-      GraphPoint point = null;
-      for (GraphPoint pp in byDateList) {
+      StatPoint point = null;
+      for (StatPoint pp in byDateList) {
         if (pp.key == dateKey) {
           point = pp;
           break;
@@ -71,23 +76,20 @@ class GraphPoint {
       }
       if (point == null) {
         String dateLabel = format(date2);
-        point = new GraphPoint(dateKey, dateLabel);
+        point = new StatPoint(dateKey, dateLabel);
         byDateList.add(point);
       }
-      point.calculate(value, null);
+      point.calculate(value, valueString, null);
     }
-  }
+  } // calculate
 
-  // calculate
 
   double get sum => _sum;
 
   int get count => _count;
-
   int get nullCount => _nullCount;
 
   double get min => _min == null ? 0.0 : _min;
-
   double get max => _max == null ? 0.0 : _max;
 
   double get avg {
@@ -147,7 +149,7 @@ class GraphPoint {
   /// sort date list based on date
   void sortDateList() {
     if (byDateList != null) {
-      byDateList.sort((GraphPoint one, GraphPoint two) {
+      byDateList.sort((StatPoint one, StatPoint two) {
         return one.key.compareTo(two.key); // by time
       });
     }
@@ -156,12 +158,12 @@ class GraphPoint {
   /// ensure that key/label exists
   void checkDate(key, label) {
     if (byDateList == null)
-      byDateList = new List<GraphPoint>();
-    for (GraphPoint pp in byDateList) {
+      byDateList = new List<StatPoint>();
+    for (StatPoint pp in byDateList) {
       if (pp.key == key)
         return;
     }
-    byDateList.add(new GraphPoint(key, label));
+    byDateList.add(new StatPoint(key, label));
   }
 
   // checkDate
@@ -187,11 +189,33 @@ class GraphPoint {
         "max=${_max == null ? "-" : _max.toStringAsFixed(1)} "
         "avg=${avg.toStringAsFixed(1)} nullCount=${_nullCount}";
     if (byDateList != null) {
-      for (GraphPoint byDate in byDateList) {
+      for (StatPoint byDate in byDateList) {
         s += "\n" + byDate.toStringX("${linePrefix}- ");
       }
     }
     return s;
   }
 
-} // GraphPoint
+
+  /// find by Period
+  static ByPeriod findPeriod(String value) {
+    if (ByPeriod.Day.toString() == value)
+      return ByPeriod.Day;
+    if (ByPeriod.Week.toString() == value)
+      return ByPeriod.Week;
+    if (ByPeriod.Month.toString() == value)
+      return ByPeriod.Month;
+    if (ByPeriod.Quarter.toString() == value)
+      return ByPeriod.Quarter;
+    if (ByPeriod.Year.toString() == value)
+      return ByPeriod.Year;
+    return null;
+  }
+
+  static String statByPeriodDay() => Intl.message("Day", name: "statByPeriodDay");
+  static String statByPeriodWeek() => Intl.message("Week", name: "statByPeriodWeek");
+  static String statByPeriodMonth() => Intl.message("Month", name: "statByPeriodMonth");
+  static String statByPeriodQuarter() => Intl.message("Quarter", name: "statByPeriodQuarter");
+  static String statByPeriodYear() => Intl.message("Year", name: "statByPeriodYear");
+
+} // StatPoint

@@ -61,9 +61,9 @@ class GraphElement {
       ..small = true;
     form.addEditor(_whatPickList);
     _whatPickList.addDOption(new DOption()
-      ..value = GraphCalc.COLUMN_COUNT
+      ..value = StatCalc.COLUMN_COUNT
       ..label = graphElementCount());
-    _whatPickList.value = GraphCalc.COLUMN_COUNT;
+    _whatPickList.value = StatCalc.COLUMN_COUNT;
 
     _byPickList = new LPicklist(_NAME_BY, idPrefix: id)
       ..label = graphElementBy()
@@ -76,19 +76,19 @@ class GraphElement {
     form.addEditor(_byPeriodPickList);
     _byPeriodPickList.addDOption(new DOption()
       ..value = ByPeriod.Day.toString()
-      ..label = LightningGraph.graphByDay());
+      ..label = StatPoint.statByPeriodDay());
     _byPeriodPickList.addDOption(new DOption()
       ..value = ByPeriod.Week.toString()
-      ..label = LightningGraph.graphByWeek());
+      ..label = StatPoint.statByPeriodWeek());
     _byPeriodPickList.addDOption(new DOption()
       ..value = ByPeriod.Month.toString()
-      ..label = LightningGraph.graphByMonth());
+      ..label = StatPoint.statByPeriodMonth());
     _byPeriodPickList.addDOption(new DOption()
       ..value = ByPeriod.Quarter.toString()
-      ..label = LightningGraph.graphByQuarter());
+      ..label = StatPoint.statByPeriodQuarter());
     _byPeriodPickList.addDOption(new DOption()
       ..value = ByPeriod.Year.toString()
-      ..label = LightningGraph.graphByYear());
+      ..label = StatPoint.statByPeriodYear());
     _byPeriodPickList.value = ByPeriod.Week.toString();
     _byPeriodPickList.show = false;
 
@@ -139,25 +139,25 @@ class GraphElement {
       keyLabelMap[option.value] = option.label;
     }
     _graphPanel.by(byColumn.name, byColumn.label, keyLabelMap);
-    String dateColumnName = null;
+    // TODO
+    DColumn dateColumn = null;
     if (_dateColumns.contains(by)) {
-      dateColumnName = by;
-      _graphPanel.byPeriod(LightningGraph.findPeriod(period));
+      dateColumn = byColumn;
     }
 
     // what
-    if (what == GraphCalc.COLUMN_COUNT) {
-      _graphPanel.calc(what, graphElementWhat(), dateColumnName);
+    if (what == StatCalc.COLUMN_COUNT) {
+    // TODO  _graphPanel.calc(what, graphElementWhat(), dateColumnName);
     } else {
       DColumn whatColumn = DataUtil.findColumn(table, null, what);
       if (whatColumn == null) {
         _log.info("onFormRecordChange NotFound column=${what}");
         return;
       }
-      _graphPanel.calc(whatColumn.name, whatColumn.label, dateColumnName);
+      _graphPanel.calc(whatColumn);
     }
     //
-    _graphPanel.calculate(records);
+    _graphPanel.calculate(records, dateColumn, StatPoint.findPeriod(period));
     _graphPanel.display();
   } // onFormRecordChange
 

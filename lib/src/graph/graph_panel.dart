@@ -27,8 +27,6 @@ class GraphPanel
   final List<GraphMatch> _matchList = new List<GraphMatch>();
   final List<GraphBy> _byList = new List<GraphBy>();
 
-  ByPeriod _byPeriod;
-
   /**
    * Graph Panel
    */
@@ -46,14 +44,12 @@ class GraphPanel
     _calcList.clear();
     _matchList.clear();
     _byList.clear();
-    _byPeriod = null;
   }
 
   /// calc sum for numeric value of [columnName]
-  void calc(String columnName, String label, String dateColumnName, {int numPrecision:2}) {
-    _log.fine("calc ${columnName} (${dateColumnName})");
-    _calcList.add(new GraphCalc(tableName, columnName, label,
-        dateColumnName, numPrecision:numPrecision));
+  void calc(DColumn column) {
+    _log.fine("calc ${column.name}");
+    _calcList.add(new GraphCalc(tableName, column));
   }
 
   /// match
@@ -92,22 +88,30 @@ class GraphPanel
     _byList.add(new GraphBy(columnName, label, keyLabelMap));
   } // by
 
-  /// by period
-  void byPeriod(ByPeriod byPeriod) {
-    _log.fine("byPeriod ${byPeriod}");
-    _byPeriod = byPeriod;
-  }
-
   /**
    * Calculate  Value
    */
-  void calculate(List<DRecord> records) {
-    _log.config("calculate '${tableName}' records=${records.length}") ;
-    for (GraphCalc calc in _calcList) {
-      calc.resetCalc(_matchList, _byList, _byPeriod);
-      for (DRecord record in records) {
-        calc.calculateRecord(record);
+  void calculate(List<DRecord> recordList, DColumn dateColumn, ByPeriod byPeriod) {
+    _log.config("calculate '${tableName}' records=${recordList.length}") ;
+    for (StatCalc what in _calcList) {
+      if (what is GraphCalc)
+        what.resetCalcGraph(_matchList, _byList, dateColumn, byPeriod);
+      else
+        what.resetCalc(_byList, dateColumn, byPeriod);
+    }
+    for (DRecord record in recordList) {
+      String dateString = null;
+      DateTime recordDate = null;
+      if (dateColumn != null) {
+        dateString = DataRecord.getColumnValue(record, dateColumn.name);
+        recordDate = StatCalc.recordDate(dateString, dateColumn);
       }
+      for (StatCalc what in _calcList) {
+        what.calculateRecord2(record, recordDate, dateString);
+      }
+    }
+    for (StatCalc what in _calcList) {
+      what.dump();
     }
   } // calculate
 
