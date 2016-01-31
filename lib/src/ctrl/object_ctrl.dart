@@ -347,9 +347,9 @@ class ObjectCtrl
 
 
   /// Sort Dropdown selected
-  void onSortClicked(String name, bool asc, MouseEvent evt) {
+  void onSortClicked(String name, bool asc, DataType dataType, MouseEvent evt) {
     if (_table != null) {
-      _table.onTableSortClicked(name, asc, evt);
+      _table.onTableSortClicked(name, asc, dataType, evt);
     }
   }
 

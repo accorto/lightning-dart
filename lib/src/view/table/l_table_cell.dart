@@ -137,9 +137,12 @@ class LTableHeaderCell extends LTableCell {
     if (tableSortClicked != null) {
       sortable = true;
       sortAsc = true;
+      DataType dataType = null;
+      if (dataColumn != null)
+        dataType = dataColumn.tableColumn.dataType;
       element.onClick.listen((MouseEvent evt) {
         sortAsc = !sortAsc; // toggle
-        tableSortClicked(name, sortAsc, evt);
+        tableSortClicked(name, sortAsc, dataType, evt);
       });
     }
   }

@@ -110,7 +110,13 @@ class RecordSortList {
       String twoValue = columnName == DataRecord.URV ? two.drv : DataRecord.getColumnValue(two, columnName);
       if (twoValue == null)
         twoValue = "";
+      //
       cmp = oneValue.compareTo(twoValue);
+      if (DataTypeUtil.isNumber(sort.dataType)) {
+        double oneDouble = double.parse(oneValue, (_){ return double.NAN; });
+        double twoDouble = double.parse(twoValue, (_){ return double.NAN; });
+        cmp = oneDouble.compareTo(twoDouble);
+      }
       if (cmp != 0) {
         if (sort.isDescending)
           cmp *= -1;
@@ -179,6 +185,12 @@ class RecordSort {
       }
     }
   } // setLabel
+
+  DataType get dataType => _dataType;
+  void set dataType (DataType newValue) {
+    _dataType = newValue;
+  }
+  DataType _dataType;
 
   /// column name : a|d
   String toString() => "${columnName}:${isAscending ? "a" : "d"}";

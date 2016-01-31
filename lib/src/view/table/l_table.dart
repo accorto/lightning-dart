@@ -7,7 +7,7 @@
 part of lightning_dart;
 
 /// Sort Clicked
-typedef void TableSortClicked(String name, bool asc, MouseEvent evt);
+typedef void TableSortClicked(String name, bool asc, DataType dataType, MouseEvent evt);
 
 /// Select Clicked (select or unselect)
 typedef void TableSelectClicked(DataRecord data);
@@ -215,7 +215,7 @@ class LTable
   LTableHeaderRow _headerRow;
 
   /// Table Sort = shift - multiple
-  void onTableSortClicked(String name, bool asc, MouseEvent evt) {
+  void onTableSortClicked(String name, bool asc, DataType dataType, MouseEvent evt) {
     bool shiftMeta = evt != null && (evt.shiftKey || evt.metaKey);
     _log.config("onTableSortClicked ${name} ${asc} shiftMeta=${shiftMeta}");
     if (shiftMeta) {
@@ -225,11 +225,15 @@ class LTable
     } else {
       recordSorting.clear();
     }
-    RecordSort sort = new RecordSort.create(name, asc);
+    RecordSort sort = new RecordSort.create(name, asc)
+      ..dataType = dataType;
     if (_ui == null) {
       sort.columnLabel = name;
     } else {
       sort.setLabelFrom(_ui.table);
+      if (sort.dataType == null) {
+        sort.dataType = DataTypeUtil.getDataType(_ui.table, null, name);
+      }
     }
     recordSorting.add(sort);
     //

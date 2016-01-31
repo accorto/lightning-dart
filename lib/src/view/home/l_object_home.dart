@@ -162,7 +162,7 @@ class LObjectHome
   void onSortChange(String name, String newValue, DEntry entry, var details) {
     _log.config("onSortChange ${newValue}");
     if (sortClicked != null)
-      sortClicked(newValue, true, null);
+      sortClicked(newValue, true, null, null);
   }
 
   /**
