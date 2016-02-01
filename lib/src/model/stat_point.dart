@@ -4,7 +4,7 @@
  * License options+support:  https://lightningdart.com
  */
 
-part of lightning_dart;
+part of lightning_model;
 
 /// By Date
 enum ByPeriod { Day, Week, Month, Quarter, Year }
@@ -27,7 +27,7 @@ class StatPoint {
 
   int _count = 0;
   int _nullCount = 0;
-  num _sum = 0.0;
+  num _sum = null;
   num _min = null;
   num _max = null;
 
@@ -40,7 +40,7 @@ class StatPoint {
   void reset() {
     _count = 0;
     _nullCount = 0;
-    _sum = 0.0;
+    _sum = null;
     _min = null;
     _max = null;
     byDateList = null;
@@ -53,11 +53,18 @@ class StatPoint {
     } else {
       _count++;
       if (value != null) {
-        _sum += value;
-        if (_min == null || value < _min)
+        if (_sum == null) {
+          _sum = value;
+        } else {
+          _sum += value;
+        }
+        // min/max
+        if (_min == null || value < _min) {
           _min = value;
-        if (_max == null || value > _max)
+        }
+        if (_max == null || value > _max) {
           _max = value;
+        }
       }
     }
 
@@ -83,20 +90,45 @@ class StatPoint {
     }
   } // calculate
 
+  bool get hasSum => _sum != null;
+  /// value sum
+  num get sum => _sum == null ? 0 : _sum;
 
-  double get sum => _sum;
-
+  /// total count
   int get count => _count;
+  /// null count
   int get nullCount => _nullCount;
 
-  double get min => _min == null ? 0.0 : _min;
-  double get max => _max == null ? 0.0 : _max;
+  num get min => _min == null ? 0 : _min;
+  num get max => _max == null ? 0 : _max;
+  /// has Min/Max
+  bool get hasMinMax => _min != null && _max != null;
 
-  double get avg {
+  /// average
+  num get avg {
+    if (_sum == null || _sum == 0) {
+      return 0;
+    }
     if (_count == 0)
       return _sum;
     return _sum / _count;
   }
+
+  /// percent 0..100 of min/max or 0
+  int getPercent(String value) {
+    if (_min == null || _max == null || value == null || value.isEmpty) {
+      return 0;
+    }
+    double numValue = double.parse(value, (_){return null;});
+    if (numValue == null || numValue <= _min)
+      return 0;
+    if (numValue >= _max)
+      return 100;
+    //
+    double pct = 100 * ((numValue - _min) / (_max - _min));
+    return pct.toInt();
+  } // getPercent
+
 
   /// start/first date for [date] based on period
   DateTime getDateKey(DateTime date) {
@@ -171,10 +203,11 @@ class StatPoint {
   /// info
   String toString() {
     String info = "${label == null ? key : label}: count=${count} "
-        "sum=${_sum.toStringAsFixed(1)} "
+        "sum=${_sum == null ? "-" : _sum.toStringAsFixed(1)} "
         "min=${_min == null ? "-" : _min.toStringAsFixed(1)} "
         "max=${_max == null ? "-" : _max.toStringAsFixed(1)} "
-        "avg=${avg.toStringAsFixed(1)} nullCount=${_nullCount} ";
+        "avg=${_sum == null ? "-" : avg.toStringAsFixed(1)} "
+        "nulls=${_nullCount} ";
     if (byPeriod != null) {
       info += " ${byPeriod}=#${byDateList == null ? "-" : byDateList.length}";
     }
@@ -184,10 +217,11 @@ class StatPoint {
   /// Dump Info
   String toStringX(String linePrefix) {
     String s = "${linePrefix}${key}($label):\t count=${count} "
-        "sum=${_sum.toStringAsFixed(1)} "
+        "sum=${_sum == null ? "-" : _sum.toStringAsFixed(1)} "
         "min=${_min == null ? "-" : _min.toStringAsFixed(1)} "
         "max=${_max == null ? "-" : _max.toStringAsFixed(1)} "
-        "avg=${avg.toStringAsFixed(1)} nullCount=${_nullCount}";
+        "avg=${_sum == null ? "-" : avg.toStringAsFixed(1)} "
+        "nulls=${_nullCount} ";
     if (byDateList != null) {
       for (StatPoint byDate in byDateList) {
         s += "\n" + byDate.toStringX("${linePrefix}- ");

@@ -20,7 +20,6 @@ part 'src/graph/graph_by.dart';
 part 'src/graph/graph_calc.dart';
 part 'src/graph/graph_dialog.dart';
 part 'src/graph/graph_element.dart';
-part 'src/graph/graph_match.dart';
 part 'src/graph/graph_panel.dart';
 part 'src/graph/engine_base.dart';
 part 'src/graph/engine_charted.dart';

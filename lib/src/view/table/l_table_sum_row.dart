@@ -72,21 +72,24 @@ class LTableSumRow
       String label = calc.column.label;
       String value = "";
 
+      String align = null;
+      DataType dt = calc.column.dataType;
+      if (DataTypeUtil.isCenterAligned(dt))
+        align = LTable.C_TEXT_CENTER;
+      else if (DataTypeUtil.isRightAligned(dt))
+        align = LTable.C_TEXT_RIGHT;
+
+
       if (name == DataRecord.URV || name == "Id") {
       //  addCellUrv(record, recordAction);
       } else {
-        if (DataTypeUtil.isNumber(calc.column.dataType)) {
-          value = calc.sum.toStringAsFixed(calc.numPrecision);
+        if (DataTypeUtil.isNumber(dt)) {
+          value = calc.sum.toStringAsFixed(calc.decimalDigits);
         } else {
           value = calc.count.toString();
         }
+        new LTableSumCell(tc, name, label, value, align, calc);
       }
-
-      DivElement content = new DivElement()
-        ..classes.add(LText.C_TRUNCATE)
-        ..text = value;
-
-      new LTableCell(tc, content, name, label, value, LText.C_TEXT_ALIGN__CENTER, null);
     } // for all column names
   } // display
 

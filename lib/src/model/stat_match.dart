@@ -4,42 +4,42 @@
  * License options+support:  https://lightningdart.com
  */
 
-part of lightning_graph;
+part of lightning_model;
 
 /// Match Numeric Operator
-enum MatchOpNum { EQ, GE, GT, LE, LT }
+enum StatMatchOpNum { EQ, GE, GT, LE, LT }
 
 /// Match Date Operator
-enum MatchOpDate { Today, ThisWeek, LastWeek, Last4Weeks }
+enum StatMatchOpDate { Today, ThisWeek, LastWeek, Last4Weeks }
 
 /// Match Types
-enum MatchType { Regex, Num, Date, Null, NotNull }
+enum StatMatchType { Regex, Num, Date, Null, NotNull }
 
 /**
- * Graph Match Criteria
+ * Statistic Match Criteria
  */
-class GraphMatch {
+class StatMatch {
 
-  static final Logger _log = new Logger("GraphMatch");
+  static final Logger _log = new Logger("StatMatch");
 
   /// column name
   final String columnName;
   /// match type
-  final MatchType type;
+  final StatMatchType type;
 
   /// match regex
   RegExp regex;
   /// match num op
-  MatchOpNum numOp;
+  StatMatchOpNum numOp;
   /// match num value
   num numValue;
   /// match date
-  MatchOpDate dateOp;
+  StatMatchOpDate dateOp;
 
   /**
    * Record Match
    */
-  GraphMatch(String this.columnName, MatchType this.type) {
+  StatMatch(String this.columnName, StatMatchType this.type) {
   }
 
 
@@ -51,22 +51,22 @@ class GraphMatch {
       if (columnName == entry.columnName) {
         String value = DataRecord.getEntryValue(entry);
         // looking for null
-        if (type == MatchType.Null)
+        if (type == StatMatchType.Null)
           return value == null || value.isEmpty;
         // looking for not null
-        if (type == MatchType.NotNull)
+        if (type == StatMatchType.NotNull)
           return value != null && value.isNotEmpty;
         // value null/empty
         if (value == null || value.isEmpty)
           return false;
 
-        if (type == MatchType.Regex) {
+        if (type == StatMatchType.Regex) {
           return recordValueRegex(value);
         }
-        if (type == MatchType.Num) {
+        if (type == StatMatchType.Num) {
           return recordValueNum(value);
         }
-        if (type == MatchType.Date) {
+        if (type == StatMatchType.Date) {
           return recordValueDate(value);
         }
         _log.warning("recordMatch ${columnName} not found type=${type}");
@@ -74,7 +74,7 @@ class GraphMatch {
       }
     }
     // column not found
-    if (type == MatchType.Null)
+    if (type == StatMatchType.Null)
       return true;
     return false;
   } // recordMatch
@@ -82,33 +82,33 @@ class GraphMatch {
   /// match value
   bool valueMatch(num value, String stringValue) {
     // looking for null
-    if (type == MatchType.Null)
+    if (type == StatMatchType.Null)
       return value == null;
     // looking for not null
-    if (type == MatchType.NotNull)
+    if (type == StatMatchType.NotNull)
       return value != null;
     // value null/empty
     if (value == null)
       return false;
 
-    if (type == MatchType.Regex) {
+    if (type == StatMatchType.Regex) {
       return recordValueRegex(stringValue);
     }
-    if (type == MatchType.Num) {
+    if (type == StatMatchType.Num) {
       // see recordValueNum
-      if (numOp == MatchOpNum.EQ)
+      if (numOp == StatMatchOpNum.EQ)
         return value == numValue;
-      if (numOp == MatchOpNum.GE)
+      if (numOp == StatMatchOpNum.GE)
         return value >= numValue;
-      if (numOp == MatchOpNum.GT)
+      if (numOp == StatMatchOpNum.GT)
         return value > numValue;
-      if (numOp == MatchOpNum.LE)
+      if (numOp == StatMatchOpNum.LE)
         return value <= numValue;
-      if (numOp == MatchOpNum.LT)
+      if (numOp == StatMatchOpNum.LT)
         return value < numValue;
       _log.warning("valueMatch ${columnName} not found op=${numOp}");
     }
-    if (type == MatchType.Date) {
+    if (type == StatMatchType.Date) {
       return recordValueDate(stringValue);
     }
     _log.warning("valueMatch ${columnName} not found type=${type}");
@@ -118,34 +118,34 @@ class GraphMatch {
   /// match date
   bool dateMatch(DateTime date, String stringDate) {
     // looking for null
-    if (type == MatchType.Null)
+    if (type == StatMatchType.Null)
       return date == null;
     // looking for not null
-    if (type == MatchType.NotNull)
+    if (type == StatMatchType.NotNull)
       return date != null;
     // value null/empty
     if (date == null)
       return false;
 
-    if (type == MatchType.Regex) {
+    if (type == StatMatchType.Regex) {
       return recordValueRegex(stringDate);
     }
-    if (type == MatchType.Num) {
+    if (type == StatMatchType.Num) {
       return recordValueNum(stringDate);
     }
-    if (type == MatchType.Date) {
+    if (type == StatMatchType.Date) {
       // see recordValueDate
       DateTime utcDate = date.toUtc();
-      if (dateOp == MatchOpDate.Today) {
+      if (dateOp == StatMatchOpDate.Today) {
         return recordValueDateToday(utcDate);
       }
-      if (dateOp == MatchOpDate.ThisWeek) {
+      if (dateOp == StatMatchOpDate.ThisWeek) {
         return recordValueDateThisWeek(utcDate);
       }
-      if (dateOp == MatchOpDate.LastWeek) {
+      if (dateOp == StatMatchOpDate.LastWeek) {
         return recordValueDateLastWeek(utcDate);
       }
-      if (dateOp == MatchOpDate.Last4Weeks) {
+      if (dateOp == StatMatchOpDate.Last4Weeks) {
         return recordValueDateLast4Weeks(utcDate);
       }
       _log.warning("dateMatch ${columnName} not found op=${dateOp}");
@@ -164,15 +164,15 @@ class GraphMatch {
     try {
       double dd = double.parse(value);
       // see valueMatch
-      if (numOp == MatchOpNum.EQ)
+      if (numOp == StatMatchOpNum.EQ)
         return dd == numValue;
-      if (numOp == MatchOpNum.GE)
+      if (numOp == StatMatchOpNum.GE)
         return dd >= numValue;
-      if (numOp == MatchOpNum.GT)
+      if (numOp == StatMatchOpNum.GT)
         return dd > numValue;
-      if (numOp == MatchOpNum.LE)
+      if (numOp == StatMatchOpNum.LE)
         return dd <= numValue;
-      if (numOp == MatchOpNum.LT)
+      if (numOp == StatMatchOpNum.LT)
         return dd < numValue;
       _log.warning("recordValueNum ${columnName} not found op=${numOp}");
     } catch (error) {
@@ -192,16 +192,16 @@ class GraphMatch {
       int time = int.parse(value);
       DateTime dt = new DateTime.fromMillisecondsSinceEpoch(time, isUtc: true);
       // see dateMatch
-      if (dateOp == MatchOpDate.Today) {
+      if (dateOp == StatMatchOpDate.Today) {
         return recordValueDateToday(dt);
       }
-      if (dateOp == MatchOpDate.ThisWeek) {
+      if (dateOp == StatMatchOpDate.ThisWeek) {
         return recordValueDateThisWeek(dt);
       }
-      if (dateOp == MatchOpDate.LastWeek) {
+      if (dateOp == StatMatchOpDate.LastWeek) {
         return recordValueDateLastWeek(dt);
       }
-      if (dateOp == MatchOpDate.Last4Weeks) {
+      if (dateOp == StatMatchOpDate.Last4Weeks) {
         return recordValueDateLast4Weeks(dt);
       }
       _log.warning("recordValueDate ${columnName} not found op=${dateOp}");
@@ -303,4 +303,4 @@ class GraphMatch {
   }
   DateTime _last4WeekStart;
 
-} // GraphMatch
+} // StatMatch

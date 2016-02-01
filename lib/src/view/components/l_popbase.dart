@@ -16,7 +16,6 @@ abstract class LPopbase
 
   /// css for positioning
   //static CssStyleSheet _cssStyleSheet;
-
   /// Css Rule for this
   //CssStyleRule _cssRule;
 
@@ -26,6 +25,9 @@ abstract class LPopbase
       return wrapper;
     return pop;
   }
+
+  /// Set PopWidth explicitly e.g. 20rem
+  String popWidth = null;
 
   /// wrap target + pop
   DivElement wrapper;
@@ -46,52 +48,52 @@ abstract class LPopbase
 
   /// Show pop above [component]
   void showAbove(LComponent component, {
-  bool showOnHover: true, bool showOnClick: true}) {
+      bool showOnHover: true, bool showOnClick: true}) {
     showAboveElement(component.element,
                          showOnHover:showOnHover, showOnClick:showOnClick);
   }
   /// Show pop above [target]
   void showAboveElement(Element target, {
-  bool showOnHover: true, bool showOnClick: true}) {
+      bool showOnHover: true, bool showOnClick: true}) {
     nubbin = LPopover.C_NUBBIN__BOTTOM;
     _showPrep(target, showOnHover, showOnClick);
   }
 
   /// Show pop below [component]
   void showBelow(LComponent component, {
-  bool showOnHover: true, bool showOnClick: true}) {
+      bool showOnHover: true, bool showOnClick: true}) {
     showBelowElement(component.element,
                          showOnHover:showOnHover, showOnClick:showOnClick);
   }
   /// Show pop below [target]
   void showBelowElement(Element target, {
-  bool showOnHover: true, bool showOnClick: true}) {
+      bool showOnHover: true, bool showOnClick: true}) {
     nubbin = LPopover.C_NUBBIN__TOP;
     _showPrep(target, showOnHover, showOnClick);
   }
 
   /// Show pop right [component]
   void showRight(LComponent component, {
-  bool showOnHover: true, bool showOnClick: true}) {
+      bool showOnHover: true, bool showOnClick: true}) {
     showRightElement(component.element,
                          showOnHover:showOnHover, showOnClick:showOnClick);
   }
   /// Show pop right [target]
   void showRightElement(Element target, {
-  bool showOnHover: true, bool showOnClick: true}) {
+      bool showOnHover: true, bool showOnClick: true}) {
     nubbin = LPopover.C_NUBBIN__LEFT;
     _showPrep(target, showOnHover, showOnClick);
   }
 
   /// Show pop left [component]
   void showLeft(LComponent component, {
-  bool showOnHover: true, bool showOnClick: true}) {
+      bool showOnHover: true, bool showOnClick: true}) {
     showLeftElement(component.element,
                         showOnHover:showOnHover, showOnClick:showOnClick);
   }
   /// Show pop left [target]
   void showLeftElement(Element target, {
-  bool showOnHover: true, bool showOnClick: true}) {
+      bool showOnHover: true, bool showOnClick: true}) {
     nubbin = LPopover.C_NUBBIN__RIGHT;
     _showPrep(target, showOnHover, showOnClick);
   }
@@ -149,7 +151,12 @@ abstract class LPopbase
     }
     //
     pop.classes.remove(LVisibility.C_HIDE);
-    pop.style.width = "20rem"; // not just max width
+    // explicit width
+    if (popWidth != null) {
+      pop.style.width = popWidth;
+    } else {
+      pop.style.maxWidth = "20rem";
+    }
     // should calculate max required with from content
     Rectangle elementRect = pop.getBoundingClientRect();
     //_log.fine("element ${elementRect}");

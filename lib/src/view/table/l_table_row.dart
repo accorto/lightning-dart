@@ -202,7 +202,7 @@ class LTableRow
         evt.preventDefault();
         recordAction("record", record, null, null);
       });
-    } else if (_editMode == LTable.EDIT_SELECT_SINGLE || _editMode == LTable.EDIT_SELECT_MULTI) {
+    } else if (isEditModeSelectSingleMulti) {
       a.onClick.listen(onRowSelectClick);
     }
     return addCell(a, DataRecord.URV, record.urv, null, null)
@@ -259,7 +259,7 @@ class LTableRow
   /**
    * with [display] of column [name] with [value]
    * if you not provide the data column [name], it is derived - if found the label is derived (required for responsive)
-   * [align] LText.C_TEXT_ALIGN__CENTER LText.C_TEXT_RIGHT
+   * [align] e.g. LTable.C_TEXT_CENTER
    */
   LTableCell addCell(Element content,
       String name,
@@ -352,54 +352,53 @@ class LTableRow
         String value = DataRecord.getEntryValue(entry);
         String align = _displayAlign(dataColumn);
 
-        if (_editMode == LTable.EDIT_RO
-            || _editMode == LTable.EDIT_SELECT_SINGLE || _editMode == LTable.EDIT_SELECT_MULTI
-            || (_editMode == LTable.EDIT_SEL && !selected)) {
+        if (isEditModeRO
+            || isEditModeSelectSingleMulti
+            || (isEditModeSel && !selected)) {
           if (dataColumn.isValueRenderElement) {
             LEditor editor = _getRenderEditor(dataColumn);
             addCell(editor.getValueRenderElement(value), name, value, align, dataColumn);
           } else
           if (entry != null && entry.hasValueDisplay()) {
-            addCellText(entry.valueDisplay, name:name, value:value, dataColumn:dataColumn);
-          } else if (value == null || value.isEmpty || dataColumn == null) {
-            addCellText(value, name:name, value:value, dataColumn:dataColumn);
+            addCellText(entry.valueDisplay, name:name, value:value, align:align, dataColumn:dataColumn);
+          } else if (value == null || value.isEmpty || dataColumn == null || !dataColumn.isValueRender) {
+            addCellText(value, name:name, value:value, align:align, dataColumn:dataColumn);
           } else {
-            LTableCell cell = addCellText("<${value}>", name:name, value:value, dataColumn:dataColumn);
+            LTableCell cell = addCellText("<${value}>", name:name, value:value, align:align, dataColumn:dataColumn);
             EditorUtil.render(dataColumn, value)
             .then((String display){
-              cell.cellElement.children.first.text = display;
+              cell.contentText = display;
               if (entry != null) {
                 entry.valueDisplay = display;
               }
             })
             .catchError((error, stackTrace){
-              cell.cellElement.children.first.text = "${error}";
+              cell.contentText = "${error}";
             });
           }
         } else { // all, sel or field
           LEditor editor = EditorUtil.createfromColumn(name, dataColumn, true,
             idPrefix:rowElement.id, data:data, entry:entry); // no isAlternativeDisplay
-          bool editModeField = _editMode == LTable.EDIT_FIELD;
           if (editor.isValueRenderElement) {
-            addCellEditor(editor, value, value, align, editModeField);
+            addCellEditor(editor, value, value, align, isEditModeField);
           } else if (editor.isValueDisplay && entry != null && entry.hasValueDisplay()) {
-            addCellEditor(editor, entry.valueDisplay, value, align, editModeField);
+            addCellEditor(editor, entry.valueDisplay, value, align, isEditModeField);
           } else if (editor.isValueDisplay && value != null && value.isNotEmpty) {
-            LTableCell cell = addCellEditor(editor, "<${value}>", value, align, editModeField);
-            if (editModeField) {
+            LTableCell cell = addCellEditor(editor, "<${value}>", value, align, isEditModeField);
+            if (isEditModeField) {
               editor.render(value, false)
               .then((String display){
-                cell.cellElement.children.first.text = display;
+                cell.contentText = display;
                 if (entry != null) {
                   entry.valueDisplay = display;
                 }
               })
               .catchError((error, stackTrace){
-                cell.cellElement.children.first.text = "${error}";
+                cell.contentText = "${error}";
               });
             }
           } else {
-            addCellEditor(editor, value, value, align, editModeField);
+            addCellEditor(editor, value, value, align, isEditModeField);
           }
         }
       }
@@ -423,14 +422,14 @@ class LTableRow
     _editMode = newValue;
     if (type == TYPE_HEAD) {
       if (_label != null) {
-        if (_editMode == LTable.EDIT_SELECT_SINGLE) {
+        if (isEditModeSelectSingle) {
           _label.classes.add(LVisibility.C_HIDE);
         } else {
           _label.classes.remove(LVisibility.C_HIDE);
         }
       }
     } else if (type == TYPE_BODY) {
-      if (_editMode == LTable.EDIT_SELECT_SINGLE || _editMode == LTable.EDIT_SELECT_MULTI) {
+      if (isEditModeSelectSingleMulti) {
         if (_rowClickSubscription == null)
           _rowClickSubscription = rowElement.onClick.listen(onRowSelectClick);
       }
@@ -441,6 +440,19 @@ class LTableRow
   }
   String _editMode = LTable.EDIT_RO;
   StreamSubscription<MouseEvent> _rowClickSubscription;
+
+  /// Table Edit Mode - Read Only
+  bool get isEditModeRO => _editMode == LTable.EDIT_RO;
+  /// Table Edit Mode - Field Click
+  bool get isEditModeField => _editMode == LTable.EDIT_FIELD;
+  /// Table Edit Mode - Selected Rows
+  bool get isEditModeSel => _editMode == LTable.EDIT_SEL;
+  /// Table Edit Mode - R/O Select Single or Multiple Rows
+  bool get isEditModeSelectSingleMulti => _editMode == LTable.EDIT_SELECT_SINGLE || _editMode == LTable.EDIT_SELECT_MULTI;
+  /// Table Edit Mode - R/O Select Single Row
+  bool get isEditModeSelectSingle => _editMode == LTable.EDIT_SELECT_SINGLE;
+  /// Table Edit Mode - R/O Select Multiple Rows
+  bool get isEditModeSelectMulti => _editMode == LTable.EDIT_SELECT_MULTI;
 
 
   /// find column by name or null

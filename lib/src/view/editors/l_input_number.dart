@@ -194,12 +194,22 @@ class LInputNumber
   @override
   void set column (DataColumn newValue) {
     super.column = newValue; // min/max
-    // digits
-    decimalDigits = newValue.tableColumn.decimalDigits;
     // data type
     dataType = newValue.tableColumn.dataType;
     if (dataType == DataType.CURRENCY && _currencySelect == null) {
       _columnCurrency();
+    }
+    // digits (see StatCalc)
+    if (newValue.tableColumn.hasDecimalDigits()) {
+      decimalDigits = newValue.tableColumn.decimalDigits; // explicit
+    } else if (dataType == DataType.AMOUNT || dataType == DataType.CURRENCY) {
+      decimalDigits = 2;
+    } else if  (dataType == DataType.QUANTITY || dataType == DataType.DECIMAL) {
+      decimalDigits = 1;
+    } else if  (dataType == DataType.NUMBER) { // float
+      decimalDigits = 3;
+    } else { // DataType.INT, DataType.RATING
+      decimalDigits = 0;
     }
   } // column
 

@@ -147,13 +147,11 @@ class DemoData extends Datasource {
     if (amount != null)
       r.entryList.add(new DEntry()
         ..columnName = COL_AMOUNT
-        ..valueOriginal = amount.toString()
-        ..valueDisplay = amount.toStringAsFixed(2));
+        ..valueOriginal = amount.toString());
     if (date != null)
       r.entryList.add(new DEntry()
         ..columnName = COL_DATE
-        ..valueOriginal = date.millisecondsSinceEpoch.toString()
-        ..valueDisplay = date.toIso8601String().substring(0,10));
+        ..valueOriginal = date.millisecondsSinceEpoch.toString());
 
     return r;
   } // createRecord

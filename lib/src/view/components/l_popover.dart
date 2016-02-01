@@ -7,9 +7,10 @@
 part of lightning_dart;
 
 /**
- * Popover
+ * Popover with head/conent
  */
-class LPopover extends LPopbase {
+class LPopover
+    extends LPopbase {
 
   /// slds-popover - Initializes popover | Required
   static const String C_POPOVER = "slds-popover";

@@ -14,7 +14,10 @@ class GraphElement {
 
   static const String _NAME_BY = "by";
   static const String _NAME_WHAT = "what";
+  static const String _NAME_BYDATE = "date";
   static const String _NAME_PERIOD = "period";
+
+  static const String _VALUE_NONE = "-";
 
   static final Logger _log = new Logger("GraphElement");
 
@@ -26,8 +29,8 @@ class GraphElement {
 
   LPicklist _whatPickList;
   LPicklist _byPickList;
-  LPicklist _byPeriodPickList;
-  List<String> _dateColumns = new List<String>();
+  LPicklist _datePickList;
+  LPicklist _periodPickList;
   GraphPanel _graphPanel;
 
   /**
@@ -57,44 +60,59 @@ class GraphElement {
     form.formRecordChange = onFormRecordChange;
 
     _whatPickList = new LPicklist(_NAME_WHAT, idPrefix: id)
-      ..label = graphElementWhat()
+      ..label = StatCalc.statCalcWhat()
       ..small = true;
-    form.addEditor(_whatPickList);
     _whatPickList.addDOption(new DOption()
-      ..value = StatCalc.COLUMN_COUNT
-      ..label = graphElementCount());
-    _whatPickList.value = StatCalc.COLUMN_COUNT;
+      ..value = StatCalc.COUNT_COLUMN_NAME
+      ..label = StatCalc.statCalcCount());
+    _whatPickList.value = StatCalc.COUNT_COLUMN_NAME;
+    form.addEditor(_whatPickList);
 
     _byPickList = new LPicklist(_NAME_BY, idPrefix: id)
-      ..label = graphElementBy()
-      ..small = true;
+      ..label = StatCalc.statCalcBy()
+      ..small = true
+      ..placeholder = StatCalc.statCalcByTitle();
+    //_byPickList.addDOption(new DOption()
+    //  ..value = _VALUE_NONE
+    //  ..label = StatCalc.statCalcByNone());
+    //_byPickList.value = _VALUE_NONE;
     form.addEditor(_byPickList);
 
-    _byPeriodPickList = new LPicklist(_NAME_PERIOD, idPrefix: id)
-      ..title = graphElementByPeriod()
+    _datePickList = new LPicklist(_NAME_BYDATE, idPrefix: id)
+      ..label = StatCalc.statCalcDate()
       ..small = true;
-    form.addEditor(_byPeriodPickList);
-    _byPeriodPickList.addDOption(new DOption()
+    _datePickList.addDOption(new DOption()
+      ..value = _VALUE_NONE
+      ..label = StatCalc.statCalcDateNone());
+    _datePickList.value = _VALUE_NONE;
+    form.addEditor(_datePickList);
+
+    _periodPickList = new LPicklist(_NAME_PERIOD, idPrefix: id)
+      ..title = StatCalc.statCalcByPeriod()
+      ..small = true;
+    form.addEditor(_periodPickList);
+    _periodPickList.addDOption(new DOption()
       ..value = ByPeriod.Day.toString()
       ..label = StatPoint.statByPeriodDay());
-    _byPeriodPickList.addDOption(new DOption()
+    _periodPickList.addDOption(new DOption()
       ..value = ByPeriod.Week.toString()
       ..label = StatPoint.statByPeriodWeek());
-    _byPeriodPickList.addDOption(new DOption()
+    _periodPickList.addDOption(new DOption()
       ..value = ByPeriod.Month.toString()
       ..label = StatPoint.statByPeriodMonth());
-    _byPeriodPickList.addDOption(new DOption()
+    _periodPickList.addDOption(new DOption()
       ..value = ByPeriod.Quarter.toString()
       ..label = StatPoint.statByPeriodQuarter());
-    _byPeriodPickList.addDOption(new DOption()
+    _periodPickList.addDOption(new DOption()
       ..value = ByPeriod.Year.toString()
       ..label = StatPoint.statByPeriodYear());
-    _byPeriodPickList.value = ByPeriod.Week.toString();
-    _byPeriodPickList.show = false;
+    _periodPickList.value = ByPeriod.Week.toString();
+    _periodPickList.show = false;
 
     // fill options
     List<DOption> whatList = new List<DOption>();
     List<DOption> byList = new List<DOption>();
+    List<DOption> dateList = new List<DOption>();
     for (DColumn col in table.columnList) {
       DOption colOption = new DOption()
         ..value = col.name
@@ -105,16 +123,20 @@ class GraphElement {
       } else if (DataTypeUtil.isPick(dt) || DataTypeUtil.isFk(dt)) {
         byList.add(colOption);
       } else if (DataTypeUtil.isDate(dt)) {
-        byList.add(colOption);
-        _dateColumns.add(col.name);
+        dateList.add(colOption);
       }
     }
     whatList.sort(OptionUtil.compareLabel);
     for (DOption colOption in whatList)
       _whatPickList.addDOption(colOption);
+
     byList.sort(OptionUtil.compareLabel);
     for (DOption colOption in byList)
       _byPickList.addDOption(colOption);
+
+    dateList.sort(OptionUtil.compareLabel);
+    for (DOption colOption in dateList)
+      _datePickList.addDOption(colOption);
 
     return form;
   } // init
@@ -123,31 +145,42 @@ class GraphElement {
   void onFormRecordChange(DRecord record, DEntry columnChanged, int rowNo) {
     String what = _whatPickList.value;
     String by = _byPickList.value;
-    String period = _byPeriodPickList.value;
-    _byPeriodPickList.show = _dateColumns.contains(by);
-    _log.config("onFormRecordChange what=${what} by=${by} ${period}");
+    String date = _datePickList.value;
+    String period = _periodPickList.value;
+    _periodPickList.show = date != null && date.isNotEmpty;
+    _log.config("onFormRecordChange what=${what} by=${by} date=${date} ${period}");
     _graphPanel.reset();
 
     // by
-    DColumn byColumn = DataUtil.findColumn(table, null, by);
-    if (byColumn == null) {
-      _log.info("onFormRecordChange NotFound column=${by}");
-      return;
+    DColumn byColumn = null;
+    if (by != null && by.isNotEmpty && by != _VALUE_NONE) {
+      byColumn = DataUtil.findColumn(table, null, by);
+      if (byColumn == null) {
+        _log.info("onFormRecordChange NotFound by=${by}");
+      }
+      else {
+        Map<String, String> keyLabelMap = new Map<String, String>();
+        for (DOption option in byColumn.pickValueList) {
+          keyLabelMap[option.value] = option.label;
+        }
+        _graphPanel.by(byColumn.name, byColumn.label, keyLabelMap);
+      }
     }
-    Map<String,String> keyLabelMap = new Map<String,String>();
-    for (DOption option in byColumn.pickValueList) {
-      keyLabelMap[option.value] = option.label;
-    }
-    _graphPanel.by(byColumn.name, byColumn.label, keyLabelMap);
-    // TODO
+
+    // date
     DColumn dateColumn = null;
-    if (_dateColumns.contains(by)) {
-      dateColumn = byColumn;
+    ByPeriod byPeriod = null;
+    if (date != null && date.isNotEmpty && date != _VALUE_NONE) {
+      dateColumn = DataUtil.findColumn(table, null, date);
+      if (dateColumn == null) {
+        _log.info("onFormRecordChange NotFound date=${by}");
+      }
+      byPeriod = StatPoint.findPeriod(period);
     }
 
     // what
-    if (what == StatCalc.COLUMN_COUNT) {
-    // TODO  _graphPanel.calc(what, graphElementWhat(), dateColumnName);
+    if (what == StatCalc.COUNT_COLUMN_NAME) {
+      _graphPanel.calc(StatCalc.COUNT_COLUMN);
     } else {
       DColumn whatColumn = DataUtil.findColumn(table, null, what);
       if (whatColumn == null) {
@@ -157,14 +190,9 @@ class GraphElement {
       _graphPanel.calc(whatColumn);
     }
     //
-    _graphPanel.calculate(records, dateColumn, StatPoint.findPeriod(period));
+    _graphPanel.calculate(records, dateColumn, byPeriod);
     _graphPanel.display();
   } // onFormRecordChange
 
-
-  static String graphElementWhat() => Intl.message("Display", name: "graphElementWhat");
-  static String graphElementBy() => Intl.message("Group by", name: "graphElementBy");
-  static String graphElementByPeriod() => Intl.message("Group by Period", name: "graphElementByPeriod");
-  static String graphElementCount() => Intl.message("Count", name: "graphElementCount");
 
 } // GraphElement

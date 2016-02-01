@@ -4,7 +4,7 @@
  * License options+support:  https://lightningdart.com
  */
 
-part of lightning_dart;
+part of lightning_model;
 
 /**
  * Stat (Group) By

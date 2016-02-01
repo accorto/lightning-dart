@@ -19,21 +19,28 @@ class TableStatistics {
    */
   TableStatistics(List<DataColumn> this.datacolumns) {
     for (DataColumn dataColumn in datacolumns) {
-      StatCalc calc = new StatCalc(dataColumn.table.name,
+      dataColumn.statCol = new StatCalc(dataColumn.table.name,
           dataColumn.tableColumn);
-      calcList.add(calc);
+      calcList.add(dataColumn.statCol);
     }
   } // TableStatistics
 
 
   /**
-   * Calculate
+   * Calculate Value
    */
   void calculate(List<DRecord> recordList, List<StatBy> byList,
       DColumn dateColumn, ByPeriod byPeriod) {
+    //_log.config("calculate records=${recordList.length} calc=${calcList.length} by=${byList.length}");
+
+    // see GraphPanel.calculate(..)
+
+    // reset
+    List<StatMatch> matchList = new List<StatMatch>();
     for (StatCalc what in calcList) {
-      what.resetCalc(byList, dateColumn, byPeriod);
+      what.resetCalc(byList, matchList, dateColumn, byPeriod);
     }
+
     for (DRecord record in recordList) {
       String dateString = null;
       DateTime recordDate = null;

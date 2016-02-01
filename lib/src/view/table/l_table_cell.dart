@@ -13,20 +13,27 @@ class LTableCell {
 
   /// td/th
   final TableCellElement cellElement;
-  /// Meta Data
-  final DataColumn dataColumn;
+  /// content renderer
+  final Element content;
   /// (Column)Name
   final String name;
+  /// Data Value
+  final String value;
+  /// Alignment
+  final String align;
+  /// Meta Data
+  final DataColumn dataColumn;
 
   /**
    * Table Cell with [cellElement] all other optional
+   * [align] like LTable.C_TEXT_CENTER
    */
   LTableCell(TableCellElement this.cellElement,
-      Element content,
+      Element this.content,
       String this.name,
       String label,
-      String value,
-      String align,
+      String this.value,
+      String this.align,
       DataColumn this.dataColumn) {
     if (align != null && align.isNotEmpty)
       cellElement.classes.add(align);
@@ -39,6 +46,29 @@ class LTableCell {
       cellElement.attributes[Html0.DATA_VALUE] = value;
     if (content != null)
       cellElement.append(content);
+    //
+    renderStatistics();
   } // LTableCell
+
+  /**
+   * Set Content Text
+   */
+  void set contentText(String text) {
+    if (content != null)
+      content.text = text;
+  }
+
+  /// render Statistics
+  void renderStatistics() {
+    if (dataColumn != null && value != null
+        && dataColumn.statCol != null) {
+      int percent = dataColumn.statCol.getPercent(value);
+      if (percent > 0) {
+        content.classes.add(align == LTable.C_TEXT_RIGHT
+          ? "cell-stat-right" : "cell-stat-left");
+        content.style.backgroundSize = "${percent}% auto";
+      }
+    }
+  }
 
 } // LTableCell

@@ -72,7 +72,7 @@ class EngineCharted
 
   /// render stacked chart - true if rendered
   bool renderStacked(GraphCalc calc) {
-    _numPrecision = calc.numPrecision;
+    _numPrecision = calc.decimalDigits;
     bool rendered = false;
     for (StatBy by in calc.byList) {
       if (by.byPeriod == null)
@@ -134,13 +134,13 @@ class EngineCharted
   } // renderStackedChart
 
   /// stacked columns (by values)
-  List<ChartColumnSpec> _stackedColumns(GraphBy by) {
+  List<ChartColumnSpec> _stackedColumns(StatBy by) {
     List<ChartColumnSpec> list = new List<ChartColumnSpec>();
     List<String> info = new List<String>();
     by.updateLabels();
-    ChartColumnSpec column = new ChartColumnSpec(label:StatCalc.statCalcDate(),
+    ChartColumnSpec column = new ChartColumnSpec(label:StatCalc.statCalcColumnDate(),
         type: ChartColumnSpec.TYPE_STRING);
-    info.add(StatCalc.statCalcDate());
+    info.add("date");
     list.add(column);
     // TODO only used by values
     for (StatPoint point in by.byValueList) {
@@ -148,7 +148,7 @@ class EngineCharted
       column = new ChartColumnSpec(label:point.label,
           type: ChartColumnSpec.TYPE_NUMBER,
           formatter:formatter);
-      info.add(point.label);
+      info.add(point.key);
       list.add(column);
     }
     _log.fine("stackedColumns ${info}");
@@ -156,14 +156,18 @@ class EngineCharted
   } // stackedColumns
 
   /// stacked column values - list of dates + by values
-  List<List<dynamic>> _stackedRows(GraphBy by) {
+  List<List<dynamic>> _stackedRows(StatBy by) {
     List<List<dynamic>> list = new List<List<dynamic>>();
     List<String> dateLabels = by.getDateLabels(); // sync date info
     for (int i = 0; i < dateLabels.length; i++) {
       List<dynamic> row = new List<dynamic>();
       row.add(dateLabels[i]);
       for (StatPoint point in by.byValueList) {
-        row.add(point.byDateList[i].sum);
+        if (point.byDateList[i].hasSum) {
+          row.add(point.byDateList[i].sum);
+        } else {
+          row.add(point.byDateList[i].count);
+        }
       }
       _log.finer(row);
       list.add(row);
@@ -177,7 +181,7 @@ class EngineCharted
    * Render Pie in [parent]
    */
   bool renderPie(GraphCalc calc) {
-    _numPrecision = calc.numPrecision;
+    _numPrecision = calc.decimalDigits;
     bool rendered = false;
     bool isDonut = true;
     for (StatBy by in calc.byList) {
@@ -231,7 +235,7 @@ class EngineCharted
   } // renderPie
 
   /// pie column list
-  List<ChartColumnSpec> _pieColumns(GraphBy by) {
+  List<ChartColumnSpec> _pieColumns(StatBy by) {
     List<ChartColumnSpec> list = new List<ChartColumnSpec>();
     by.updateLabels();
     ChartColumnSpec column = new ChartColumnSpec(label:"-", type: ChartColumnSpec.TYPE_STRING);
@@ -247,12 +251,16 @@ class EngineCharted
   }
 
   /// pie column rows
-  List<List<dynamic>> _pieRows(GraphBy by) {
+  List<List<dynamic>> _pieRows(StatBy by) {
     List<List<dynamic>> list = new List<List<dynamic>>();
     for (StatPoint point in by.byValueList) {
       List<dynamic> row = new List<dynamic>();
       row.add(point.label);
-      row.add(point.sum);
+      if (point.hasSum) {
+        row.add(point.sum);
+      } else {
+        row.add(point.count);
+      }
       list.add(row);
     }
     return list;

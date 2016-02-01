@@ -8,6 +8,8 @@ part of lightning_graph;
 
 /**
  * Graph Panel
+ * - host and interface to Engine
+ * - part of graph element
  */
 class GraphPanel
     extends LComponent {
@@ -24,7 +26,7 @@ class GraphPanel
   final String tableName;
 
   final List<GraphCalc> _calcList = new List<GraphCalc>();
-  final List<GraphMatch> _matchList = new List<GraphMatch>();
+  final List<StatMatch> _matchList = new List<StatMatch>();
   final List<GraphBy> _byList = new List<GraphBy>();
 
   /**
@@ -55,31 +57,31 @@ class GraphPanel
   /// match
   void matchRegex(String columnName, RegExp regex) {
     _log.fine("matchRegex ${columnName} ${regex}");
-    _matchList.add(new GraphMatch(columnName, MatchType.Regex)
+    _matchList.add(new StatMatch(columnName, StatMatchType.Regex)
       ..regex = regex);
   }
   /// match
-  void matchNum(String columnName, MatchOpNum op, num value) {
+  void matchNum(String columnName, StatMatchOpNum op, num value) {
     _log.fine("matchNum ${columnName} ${op} ${value}");
-    _matchList.add(new GraphMatch(columnName, MatchType.Num)
+    _matchList.add(new StatMatch(columnName, StatMatchType.Num)
       ..numOp = op
       ..numValue = value);
   }
   /// match
-  void matchDate(String columnName, MatchOpDate op) {
+  void matchDate(String columnName, StatMatchOpDate op) {
     _log.fine("matchDate ${columnName} ${op}");
-    _matchList.add(new GraphMatch(columnName, MatchType.Date)
+    _matchList.add(new StatMatch(columnName, StatMatchType.Date)
       ..dateOp = op);
   }
   /// match
   void matchNull(String columnName) {
     _log.fine("matchNull ${columnName}");
-    _matchList.add(new GraphMatch(columnName, MatchType.Null));
+    _matchList.add(new StatMatch(columnName, StatMatchType.Null));
   }
   /// match
   void matchNotNull(String columnName) {
     _log.fine("matchNull ${columnName}");
-    _matchList.add(new GraphMatch(columnName, MatchType.NotNull));
+    _matchList.add(new StatMatch(columnName, StatMatchType.NotNull));
   }
 
   /// add Group By
@@ -91,13 +93,15 @@ class GraphPanel
   /**
    * Calculate  Value
    */
-  void calculate(List<DRecord> recordList, DColumn dateColumn, ByPeriod byPeriod) {
-    _log.config("calculate '${tableName}' records=${recordList.length}") ;
+  void calculate(List<DRecord> recordList,
+      DColumn dateColumn, ByPeriod byPeriod) {
+    _log.config("calculate '${tableName}' records=${recordList.length} calc=${_calcList.length} by=${_byList.length} match=${_matchList.length}");
+
+    // see TableStatistics.calculate(..)
+
+    // reset
     for (StatCalc what in _calcList) {
-      if (what is GraphCalc)
-        what.resetCalcGraph(_matchList, _byList, dateColumn, byPeriod);
-      else
-        what.resetCalc(_byList, dateColumn, byPeriod);
+      what.resetCalc(_byList, _matchList, dateColumn, byPeriod);
     }
     for (DRecord record in recordList) {
       String dateString = null;
@@ -110,9 +114,8 @@ class GraphPanel
         what.calculateRecord2(record, recordDate, dateString);
       }
     }
-    for (StatCalc what in _calcList) {
-      what.dump();
-    }
+    //
+    for (StatCalc what in _calcList) {what.dump();}
   } // calculate
 
   /// display
