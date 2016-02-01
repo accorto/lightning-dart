@@ -86,6 +86,8 @@ class DataColumn {
   final UIPanelColumn uiPanelColumn;
   /// optional grid column
   final UIGridColumn uiGridColumn;
+  /// Statistics
+  StatCalc statCol;
 
   /**
    * Data Column Info with optional [table], [panelColumn] and [uiGridColumn]
@@ -234,6 +236,12 @@ class DataColumn {
     return dataType == DataType.BOOLEAN
         || dataType == DataType.IMAGE
         || dataType == DataType.COLOR;
+  }
+
+  /// rendered in an Element
+  bool get isValueRender {
+    DataType dataType = tableColumn.dataType;
+    return DataTypeUtil.isDisplayRendered(dataType);
   }
 
   /// tableName.columnName

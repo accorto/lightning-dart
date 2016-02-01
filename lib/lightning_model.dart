@@ -66,6 +66,11 @@ part 'src/model/preference_storage.dart';
 part 'src/model/record_sort.dart';
 part 'src/model/setting_item.dart';
 part 'src/model/settings.dart';
+part 'src/model/stat_by.dart';
+part 'src/model/stat_calc.dart';
+part 'src/model/stat_match.dart';
+part 'src/model/stat_point.dart';
 part 'src/model/string_tokenizer.dart';
 part 'src/model/tz.dart';
 part 'src/model/ui_util.dart';
+

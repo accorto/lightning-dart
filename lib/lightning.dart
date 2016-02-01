@@ -120,8 +120,14 @@ part 'src/view/form/l_form_element.dart';
 part 'src/view/form/l_form_field_set.dart';
 
 part 'src/view/table/l_table.dart';
+part 'src/view/table/l_table_action_cell.dart';
 part 'src/view/table/l_table_cell.dart';
+part 'src/view/table/l_table_header_cell.dart';
+part 'src/view/table/l_table_header_row.dart';
 part 'src/view/table/l_table_row.dart';
+part 'src/view/table/l_table_sum_cell.dart';
+part 'src/view/table/l_table_sum_row.dart';
+part 'src/view/table/table_statistics.dart';
 
 part 'src/view/home/apps_action.dart';
 part 'src/view/home/l_object_home.dart';
@@ -130,6 +136,7 @@ part 'src/view/home/l_record_home.dart';
 part 'src/view/home/l_related_list.dart';
 part 'src/view/home/page_simple.dart';
 
+part 'src/view/utility/dl_util.dart';
 part 'src/view/utility/html0.dart';
 part 'src/view/utility/l_util.dart';
 part 'src/view/utility/option_util.dart';

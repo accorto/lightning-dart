@@ -87,6 +87,12 @@ class OptionUtil {
     return retValue;
   }
 
+  /// Compare by label
+  static int compareLabel(DOption one, DOption two){
+    return one.label.compareTo(two.label);
+  }
+
+
   static String optionUtilYes() => Intl.message("Yes", name: "optionUtilYes");
   static String optionUtilNo() => Intl.message("No", name: "optionUtilNo");
 

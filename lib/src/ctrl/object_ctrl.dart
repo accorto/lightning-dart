@@ -42,6 +42,7 @@ class ObjectCtrl
    */
   ObjectCtrl(Datasource this.datasource,
       {String containerClass: LGrid.C_CONTAINER__FLUID,
+      void onGraphClick(MouseEvent),
       bool queryExecute:true}) {
     String idPrefix = "oc-" + datasource.tableName;
     element.id = idPrefix;
@@ -49,7 +50,8 @@ class ObjectCtrl
       element.classes.add(containerClass);
     }
     // Header
-    _header = new LObjectHome(onSortClicked, idPrefix:idPrefix);
+    _header = new LObjectHome(onSortClicked, idPrefix:idPrefix,
+        onGraphClick: onGraphClick);
     element.append(_header.element);
     // Content
     _content.element.id = "${idPrefix}-content";
@@ -345,9 +347,9 @@ class ObjectCtrl
 
 
   /// Sort Dropdown selected
-  void onSortClicked(String name, bool asc, MouseEvent evt) {
+  void onSortClicked(String name, bool asc, DataType dataType, MouseEvent evt) {
     if (_table != null) {
-      _table.onTableSortClicked(name, asc, evt);
+      _table.onTableSortClicked(name, asc, dataType, evt);
     }
   }
 

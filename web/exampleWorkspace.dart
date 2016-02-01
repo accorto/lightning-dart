@@ -10,13 +10,15 @@ import "dart:async";
 import "dart:html";
 
 import "package:lightning/lightning_ctrl.dart";
+import "package:lightning/lightning_graph.dart";
 import 'package:logging/logging.dart';
 
 import 'dart:typed_data';
 import 'package:fixnum/fixnum.dart';
 import "package:lightning/protoc/rr_login_pb.dart";
 
-part "exampleWorkspaceData.dart";
+import "demo.dart";
+
 part "exampleWorkspaceLogin.dart";
 
 /**
@@ -60,9 +62,11 @@ main() async {
  */
 void start(PageSimple page, Datasource dataSource) {
   if (dataSource == null) {
-    dataSource = new WorkspaceData();
+    dataSource = new DemoData();
   }
-  ObjectCtrl ctrl = new ObjectCtrl(dataSource);
+  GraphDialog graphDialog = new GraphDialog(page.element, dataSource);
+  ObjectCtrl ctrl = new ObjectCtrl(dataSource,
+      onGraphClick: graphDialog.onGraphClick);
 
   page.element.classes.add(LGrid.C_WRAP);
   page.add(ctrl);

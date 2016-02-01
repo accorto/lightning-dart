@@ -1,24 +1,28 @@
 /*
- * Copyright (c) 2015 Accorto, Inc. All Rights Reserved
+ * Copyright (c) 2016 Accorto, Inc. All Rights Reserved
  * License: GPLv3  http://www.gnu.org/licenses/gpl-3.0.txt
  * License options+support:  https://lightningdart.com
  */
 
 part of lightning_dart.demo;
 
-class Tables extends DemoFeature {
+class TablesGraphs extends DemoFeature {
 
-  Tables()
-  : super("data-tables", "Data Tables",
-  sldsStatus: DemoFeature.SLDS_PROTOTYPE,
-  devStatus: DemoFeature.STATUS_COMPLETE,
-  hints: ["sorting works with Records, not as here when when cells are populated directly", "see workspace demo"],
-  issues: [],
-  plans: []);
+  TablesGraphs() : super("tableGraphs", "Data Tables(2)",
+      sldsPath: "",
+      sldsStatus: "n/a",
+      devStatus: DemoFeature.STATUS_PARTIAL,
+      hints: [],
+      issues: [],
+      plans: []);
 
   LComponent get content {
+    CDiv div = new CDiv()
+      ..classes.add(LMargin.C_HORIZONTAL__MEDIUM);
 
-    LTable table = new LTable("t2")
+    Datasource datasource = DemoData.createDatasource();
+
+    LTable table = new LTable("tg")
       ..bordered = borderedOption
       ..responsiveOverflow = responsiveOverflowOption;
     if (responsiveStackedOption)
@@ -27,63 +31,30 @@ class Tables extends DemoFeature {
       table.responsiveStackedHorizontal = responsiveStackedHorizontalOption;
     if (actionOption) {
       table.addTableAction(new AppsAction("ta", "Table Action", (String value, DRecord record, DEntry entry, var actionVar){
-          print("Table Action ${value}");
-        })
+        print("Table Action ${value}");
+      })
       );
       table.addRowAction(new AppsAction("ra", "Row Action", (String value, DRecord record, DEntry entry, var actionVar){
-          print("Row Action ${value}");
-        })
+        print("Row Action ${value}");
+      })
       );
     }
+    //
+    table.setUi(datasource.ui);
+    table.setRecords(datasource.recordList);
+    div.add(table);
+    div.append(new HRElement());
 
-    LTableHeaderRow thead = table.addHeadRow(sortOption);
-    thead.addHeaderCell("fn", "First Name");
-    thead.addHeaderCell("ln", "Last Name");
-    thead.addHeaderCell("city", "City");
-    LTableRow tbody = table.addBodyRow();
-    tbody.addCellText("Joe");
-    tbody.addCellText("Block");
-    tbody.addCellText("Small Town");
-    tbody = table.addBodyRow();
-    tbody.addCellText("Marie");
-    tbody.addCellText("Smith");
-    tbody.addCellText("Near You");
+    //
+    GraphElement graph = new GraphElement(datasource);
+    graph.init();
+    div.append(graph.element);
 
-    return table;
+    return div;
   }
 
   String get source {
     return '''
-    LTable table = new LTable("t2")
-      ..bordered = borderedOption
-      ..responsiveOverflow = responsiveOverflowOption;
-    if (responsiveStackedOption)
-      table.responsiveStacked = responsiveStackedOption;
-    if (responsiveStackedHorizontalOption) // overwrites stacked
-      table.responsiveStackedHorizontal = responsiveStackedHorizontalOption;
-    if (actionOption) {
-      table.addTableAction(new AppsAction("ta", "Table Action", (String value, DRecord record, DEntry entry, var actionVar){
-          print("Table Action \${value}");
-        })
-      );
-      table.addRowAction(new AppsAction("ra", "Row Action", (String value, DRecord record, DEntry entry, var actionVar){
-          print("Row Action \${value}");
-        })
-      );
-    }
-
-    LTableHeaderRow thead = table.addHeadRow(sortOption);
-    thead.addHeaderCell("fn", "First Name");
-    thead.addHeaderCell("ln", "Last Name");
-    thead.addHeaderCell("city", "City");
-    LTableRow tbody = table.addBodyRow();
-    tbody.addCellText("Joe");
-    tbody.addCellText("Block");
-    tbody.addCellText("Small Town");
-    tbody = table.addBodyRow();
-    tbody.addCellText("Marie");
-    tbody.addCellText("Smith");
-    tbody.addCellText("Near You");
 
     ''';
   }
@@ -161,6 +132,5 @@ class Tables extends DemoFeature {
     list.add(optionActionCb());
     return list;
   }
-
 
 }

@@ -7,7 +7,7 @@
 part of lightning_dart;
 
 /// Sort Clicked
-typedef void TableSortClicked(String name, bool asc, MouseEvent evt);
+typedef void TableSortClicked(String name, bool asc, DataType dataType, MouseEvent evt);
 
 /// Select Clicked (select or unselect)
 typedef void TableSelectClicked(DataRecord data);
@@ -190,9 +190,16 @@ class LTable
       _thead = _table.createTHead();
     LTableHeaderRow row = null;
     if (primary) {
-      _headerRow = new LTableHeaderRow(_thead.addRow(), _theadRows.length, id,
-        LText.C_TEXT_HEADING__LABEL, optionRowSelect, nameList, nameLabelMap,
-        enableSort ? onTableSortClicked : null, _tableActions, dataColumns);
+      _headerRow = new LTableHeaderRow(_thead.addRow(),
+          _theadRows.length,
+          idPrefix,
+          LText.C_TEXT_HEADING__LABEL,
+          optionRowSelect,
+          nameList,
+          nameLabelMap,
+          enableSort ? onTableSortClicked : null,
+          _tableActions,
+          dataColumns);
       if (optionRowSelect && _theadRows.isEmpty) {
         _headerRow.selectCb.onClick.listen((MouseEvent evt) {
           selectAll(_headerRow.selectCb.checked);
@@ -200,9 +207,17 @@ class LTable
       }
       row = _headerRow;
     } else {
-      row = new LTableRow(_thead.addRow(), _tbodyRows.length, idPrefix, null,
-        LText.C_TEXT_HEADING__LABEL, optionRowSelect, nameList, nameLabelMap,
-        LTableRow.TYPE_HEAD, null, dataColumns);
+      row = new LTableRow(_thead.addRow(),
+          _tbodyRows.length,
+          idPrefix,
+          null, // rowValue
+          LText.C_TEXT_HEADING__LABEL,
+          optionRowSelect,
+          nameList,
+          nameLabelMap,
+          LTableRow.TYPE_HEAD,
+          null, // rowAction
+          dataColumns);
     }
     row.editMode = _editMode;
     _theadRows.add(row);
@@ -215,7 +230,7 @@ class LTable
   LTableHeaderRow _headerRow;
 
   /// Table Sort = shift - multiple
-  void onTableSortClicked(String name, bool asc, MouseEvent evt) {
+  void onTableSortClicked(String name, bool asc, DataType dataType, MouseEvent evt) {
     bool shiftMeta = evt != null && (evt.shiftKey || evt.metaKey);
     _log.config("onTableSortClicked ${name} ${asc} shiftMeta=${shiftMeta}");
     if (shiftMeta) {
@@ -225,11 +240,15 @@ class LTable
     } else {
       recordSorting.clear();
     }
-    RecordSort sort = new RecordSort.create(name, asc);
+    RecordSort sort = new RecordSort.create(name, asc)
+      ..dataType = dataType;
     if (_ui == null) {
       sort.columnLabel = name;
     } else {
       sort.setLabelFrom(_ui.table);
+      if (sort.dataType == null) {
+        sort.dataType = DataTypeUtil.getDataType(_ui.table, null, name);
+      }
     }
     recordSorting.add(sort);
     //
@@ -339,9 +358,17 @@ class LTable
   LTableRow addBodyRow({String rowValue}) {
     if (_tbody == null)
       _tbody = _table.createTBody();
-    LTableRow row = new LTableRow(_tbody.addRow(), _tbodyRows.length, idPrefix, rowValue,
-        LButton.C_HINT_PARENT, optionRowSelect, nameList, nameLabelMap,
-        LTableRow.TYPE_BODY, _rowActions, dataColumns);
+    LTableRow row = new LTableRow(_tbody.addRow(),
+        _tbodyRows.length,
+        idPrefix,
+        rowValue,
+        LButton.C_HINT_PARENT,
+        optionRowSelect,
+        nameList,
+        nameLabelMap,
+        LTableRow.TYPE_BODY,
+        _rowActions,
+        dataColumns);
     row.editMode = _editMode;
     row.tableSelectClicked = onTableRowSelectClicked;
     _tbodyRows.add(row);
@@ -352,10 +379,50 @@ class LTable
   LTableRow addFootRow() {
     if (_tfoot == null)
       _tfoot = _table.createTFoot();
-    LTableRow row = new LTableRow(_tfoot.addRow(), _tfootRows.length, idPrefix, null,
-        LButton.C_HINT_PARENT, optionRowSelect, nameList, nameLabelMap,
-        LTableRow.TYPE_FOOT, null, dataColumns);
+    LTableRow row = new LTableRow(_tfoot.addRow(),
+        _tfootRows.length,
+        idPrefix,
+        null, // rowValue
+        LButton.C_HINT_PARENT,
+        optionRowSelect,
+        nameList,
+        nameLabelMap,
+        LTableRow.TYPE_FOOT,
+        null, // rowAction
+        dataColumns);
     _tfootRows.add(row);
+    return row;
+  }
+  /// add row to Footer
+  LTableSumRow addStatRow(bool foot) {
+    TableRowElement element = null;
+    int rowNo = 0;
+    if (foot) {
+      if (_tfoot == null)
+        _tfoot = _table.createTFoot();
+      element = _tfoot.addRow();
+      rowNo = _tfootRows.length;
+    } else {
+      if (_tbody == null)
+        _tbody = _table.createTBody();
+      element = _tbody.addRow();
+      rowNo = _tbodyRows.length;
+    }
+    //
+    LTableSumRow row = new LTableSumRow(element,
+        rowNo,
+        idPrefix,
+        LButton.C_HINT_PARENT,
+        false, // rowSelect
+        nameList,
+        nameLabelMap,
+        foot ? LTableRow.TYPE_FOOT : LTableRow.TYPE_BODY,
+        dataColumns);
+    //
+    if (foot)
+      _tfootRows.add(row);
+    else
+      _tbodyRows.add(row);
     return row;
   }
 
@@ -389,17 +456,23 @@ class LTable
         dataColumns.add(DataColumn.fromUi(_ui, col.name, tableColumn:col));
       }
     }
+    // Header
     LTableHeaderRow row = addHeadRow(true);
     for (DataColumn dataColumn in dataColumns) {
       if (dataColumn.isActiveGrid) {
         row.addGridColumn(dataColumn);
       }
     }
+    _statistics = new TableStatistics(dataColumns);
   } // setUi
   /// UI Meta Data
   UI _ui;
   /// overwrite for fixed ui
   UI get ui => _ui;
+  /// Table Meta Data
+  final List<DataColumn> dataColumns = new List<DataColumn>();
+  /// Statistics
+  TableStatistics _statistics;
 
   /// Reset Table Structure
   void resetStructure() {
@@ -415,8 +488,6 @@ class LTable
     nameLabelMap.clear();
     nameList.clear();
   }
-  /// Table Meta Data
-  final List<DataColumn> dataColumns = new List<DataColumn>();
 
 
   /// Set Records - [recordAction] click on drv/urv
@@ -424,9 +495,11 @@ class LTable
     recordList.clear();
     recordList.addAll(records);
     this.recordAction = recordAction;
+    calculateStatistics();
     display();
-    if (_headerRow != null)
+    if (_headerRow != null) {
       _headerRow.setSorting(recordSorting);
+    }
   } // setRecords
 
   /// Display Records
@@ -439,6 +512,11 @@ class LTable
     for (DRecord record in recordList) {
       LTableRow row = addBodyRow(rowValue: record.recordId); // adds to _tbodyRows
       row.setRecord(record, i++, recordAction:recordAction);
+    }
+    // Statistics
+    if (_statistics != null) {
+      LTableSumRow row = addStatRow(true);
+      row.setStatistics(_statistics);
     }
   } // display
 
@@ -573,6 +651,30 @@ class LTable
     _table.append(col);
     return col;
   }
+
+  /// Total Row
+  bool get isTableTotal => _isTableTotal;
+  void set isTableTotal (bool newValue) {
+    _isTableTotal = newValue;
+    calculateStatistics();
+    display();
+  }
+  bool _isTableTotal = true;
+
+  /**
+   * Calculate statistics
+   */
+  void calculateStatistics() {
+    _tfootRows.clear();
+    if (!isTableTotal || _statistics == null) {
+      return;
+    }
+    //
+    List<StatBy> byList = new List<StatBy>();
+    DColumn dateColumn = null;
+    ByPeriod byPeriod = null;
+    _statistics.calculate(recordList, byList, dateColumn, byPeriod);
+  } // calculateStatistics
 
 
   static String lTableRowSelectAll() => Intl.message("Select All", name: "lTableRowSelectAll", args: []);
