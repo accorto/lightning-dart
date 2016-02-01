@@ -64,7 +64,7 @@ class GraphElement {
       ..small = true;
     _whatPickList.addDOption(new DOption()
       ..value = StatCalc.COUNT_COLUMN_NAME
-      ..label = StatCalc.statCalcCount());
+      ..label = StatCalc.statCalcWhatCount());
     _whatPickList.value = StatCalc.COUNT_COLUMN_NAME;
     form.addEditor(_whatPickList);
 
@@ -72,10 +72,10 @@ class GraphElement {
       ..label = StatCalc.statCalcBy()
       ..small = true
       ..placeholder = StatCalc.statCalcByTitle();
-    //_byPickList.addDOption(new DOption()
-    //  ..value = _VALUE_NONE
-    //  ..label = StatCalc.statCalcByNone());
-    //_byPickList.value = _VALUE_NONE;
+    _byPickList.addDOption(new DOption()
+      ..value = _VALUE_NONE
+      ..label = StatCalc.statCalcByNone());
+    _byPickList.value = _VALUE_NONE;
     form.addEditor(_byPickList);
 
     _datePickList = new LPicklist(_NAME_BYDATE, idPrefix: id)
@@ -88,7 +88,8 @@ class GraphElement {
     form.addEditor(_datePickList);
 
     _periodPickList = new LPicklist(_NAME_PERIOD, idPrefix: id)
-      ..title = StatCalc.statCalcByPeriod()
+      ..label = StatCalc.statCalcPeriod()
+      ..title = StatCalc.statCalcPeriodTitle()
       ..small = true;
     form.addEditor(_periodPickList);
     _periodPickList.addDOption(new DOption()
@@ -147,7 +148,6 @@ class GraphElement {
     String by = _byPickList.value;
     String date = _datePickList.value;
     String period = _periodPickList.value;
-    _periodPickList.show = date != null && date.isNotEmpty;
     _log.config("onFormRecordChange what=${what} by=${by} date=${date} ${period}");
     _graphPanel.reset();
 
@@ -176,6 +176,9 @@ class GraphElement {
         _log.info("onFormRecordChange NotFound date=${by}");
       }
       byPeriod = StatPoint.findPeriod(period);
+      _periodPickList.show = true;
+    } else {
+      _periodPickList.show = false;
     }
 
     // what

@@ -25,8 +25,8 @@ class GraphCalc
   /// Display
   void display(EngineBase engine) {
 
-    if (byList.isNotEmpty
-        && byList.first.byValueList.isNotEmpty
+    if ((dateColumn != null
+        || (byList.isNotEmpty && byList.first.byValueList.isNotEmpty))
         && engine.renderStacked(this)) {
       return;
     }

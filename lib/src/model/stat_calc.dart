@@ -34,7 +34,7 @@ class StatCalc
   /// Count Column
   static final DColumn COUNT_COLUMN = new DColumn()
     ..name = COUNT_COLUMN_NAME
-    ..label = statCalcCount()
+    ..label = statCalcWhatCount()
     ..dataType = DataType.INT;
 
   final String tableName;
@@ -258,17 +258,20 @@ class StatCalc
 
   static String statCalcColumnDate() => Intl.message("Date", name: "statCalcColumnDate");
   static String statCalcNoData() => Intl.message("No Data", name: "statCalcNoData");
-
+  
+  // labels
   static String statCalcWhat() => Intl.message("Display", name: "statCalcWhat");
-  static String statCalcBy() => Intl.message("Group by", name: "statCalcBy");
-  static String statCalcByTitle() => Intl.message("Select a Column", name: "statCalcByTitle");
-  static String statCalcByNone() => Intl.message("None", name: "statCalcByNone");
-
+  static String statCalcBy() => Intl.message("Group", name: "statCalcBy");
   static String statCalcDate() => Intl.message("by", name: "statCalcDate");
+  static String statCalcPeriod() => Intl.message("per", name: "statCalcPeriod");
+  static String statCalcPeriodTitle() => Intl.message("Group date per Period", name: "statCalcPeriodTitle");
+
+  static String statCalcByTitle() => Intl.message("Select a Column", name: "statCalcByTitle");
+
+  // values
+  static String statCalcWhatCount() => Intl.message("Count", name: "statCalcWhatCount");
+  static String statCalcByNone() => Intl.message("None", name: "statCalcByNone");
   static String statCalcDateNone() => Intl.message("Total", name: "statCalcDateNone");
 
-  static String statCalcByPeriod() => Intl.message("Group date by Period", name: "statCalcByPeriod");
-
-  static String statCalcCount() => Intl.message("Count", name: "statCalcCount");
 
 } // StatCalc

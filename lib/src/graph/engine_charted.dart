@@ -47,6 +47,7 @@ class EngineCharted
     element.append(_wrapper);
   }
 
+  /// set chart title
   void set title (String newValue) {
     _title.text = newValue;
     if (newValue == null || newValue.isEmpty)
@@ -68,9 +69,11 @@ class EngineCharted
   void reset() {
     element.children.clear();
     element.append(_wrapper);
+    _legendHost = null;
+    _chartHost = null;
   }
 
-  /// render stacked chart - true if rendered
+  /// render stacked bar chart - true if rendered
   bool renderStacked(GraphCalc calc) {
     _numPrecision = calc.decimalDigits;
     bool rendered = false;
@@ -79,19 +82,8 @@ class EngineCharted
         continue;
       if (by.byValueList.isEmpty)
         continue; // no data
-
-      // layout
-      DivElement chartHostWrapper = new DivElement()
-        ..classes.addAll(["chart-host-wrapper"]);
-      element.append(chartHostWrapper);
-      DivElement chartHost = new DivElement()
-        ..classes.addAll(["chart-host"])
-        ..dir = "ltr";
-      chartHostWrapper.append(chartHost);
-      DivElement legendHost = new DivElement()
-        ..classes.addAll(["chart-legend-host"]);
-      chartHostWrapper.append(legendHost);
       rendered = true;
+      _createLayout();
 
       // config
       List<int> measures = new List<int>();
@@ -104,10 +96,10 @@ class EngineCharted
       Iterable<ChartSeries> seriesList = [series];
       Iterable<int> dimensionList = [0];
       ChartConfig config = new ChartConfig(seriesList, dimensionList)
-        ..legend = new ChartLegend(legendHost,
+        ..legend = new ChartLegend(_legendHost,
             showValues: true,
             title: by.label);
-      int width = chartHost.clientWidth; // scale down
+      int width = _chartHost.clientWidth; // scale down
       if (config.minimumSize.width > width) { // 400x300
         int height = 300*(width~/400);
         config.minimumSize = new Rect.size(width, height);
@@ -115,20 +107,22 @@ class EngineCharted
       _log.fine("renderStacked size=${config.minimumSize}"); // x y w h
       int height = config.minimumSize.height;
       if (height > 0)
-        legendHost.style.maxHeight = "${height}px";
+        _legendHost.style.maxHeight = "${height}px";
 
       // data
       ChartData data = new ChartData(_stackedColumns(by), _stackedRows(by));
       ChartState state = new ChartState();
       // area
-      CartesianArea area = new CartesianArea(chartHost, data, config,
+      CartesianArea area = new CartesianArea(_chartHost, data, config,
           state:state, useTwoDimensionAxes:false, useRowColoring:false);
       area.theme = new EngineChartedTheme();
       createDefaultCartesianBehaviors().forEach((behavior) {
         area.addChartBehavior(behavior);
       });
       area.draw();
-
+    }
+    if (!rendered && calc.byDateList != null && calc.byDateList.isNotEmpty) {
+      return renderBar(calc);
     }
     return rendered;
   } // renderStackedChart
@@ -178,6 +172,85 @@ class EngineCharted
 
 
   /**
+   * Render Bar Chart
+   */
+  bool renderBar(GraphCalc calc) {
+    ChartData data = null;
+    if (calc.byDateList != null && calc.byDateList.isNotEmpty) { // .. no by
+      data = new ChartData(_pointColumns(calc.label), _pointRows(calc.byDateList));
+    } else if (calc.byList.isNotEmpty) { // by w/o date (like pie)
+      StatBy by = calc.byList.first;
+      data = new ChartData(_byColumns(by), _byRows(by));
+    }
+    if (data == null) {
+      return false; // no data
+    }
+    _createLayout();
+
+    ChartSeries series = new ChartSeries(calc.tableName, [1],
+        new BarChartRenderer(alwaysAnimate: true));
+    Iterable<ChartSeries> seriesList = [series];
+    Iterable<int> dimensionList = [0];
+    ChartConfig config = new ChartConfig(seriesList, dimensionList)
+      ..legend = new ChartLegend(_legendHost,
+          showValues: true,
+          title: calc.label);
+    int width = _chartHost.clientWidth; // scale down
+    if (config.minimumSize.width > width) { // 400x300
+      int height = 300*(width~/400);
+      config.minimumSize = new Rect.size(width, height);
+    }
+    _log.fine("renderBar size=${config.minimumSize}"); // x y w h
+    int height = config.minimumSize.height;
+    if (height > 0)
+      _legendHost.style.maxHeight = "${height}px";
+
+    // data
+    ChartState state = new ChartState();
+    // area
+    CartesianArea area = new CartesianArea(_chartHost, data, config,
+        state:state, useTwoDimensionAxes:false, useRowColoring:false);
+    area.theme = new EngineChartedTheme();
+    createDefaultCartesianBehaviors().forEach((behavior) {
+      area.addChartBehavior(behavior);
+    });
+    area.draw();
+    return true;
+  } // renderStackedPlain
+
+  /// bar column list
+  List<ChartColumnSpec> _pointColumns(String label) {
+    List<ChartColumnSpec> list = new List<ChartColumnSpec>();
+    ChartColumnSpec column = new ChartColumnSpec(label: "--",
+        type: ChartColumnSpec.TYPE_STRING);
+    list.add(column);
+
+    FormatFunction formatter = _format2num;
+    column = new ChartColumnSpec(label:label,
+        type: ChartColumnSpec.TYPE_NUMBER,
+        formatter:formatter);
+    list.add(column);
+    return list;
+  }
+
+  /// bar column rows
+  List<List<dynamic>> _pointRows(List<StatPoint> pointList) {
+    List<List<dynamic>> list = new List<List<dynamic>>();
+    for (StatPoint point in pointList) {
+      List<dynamic> row = new List<dynamic>();
+      row.add(point.label);
+      if (point.hasSum) {
+        row.add(point.sum);
+      } else {
+        row.add(point.count);
+      }
+      list.add(row);
+    }
+    return list;
+  }
+
+
+  /**
    * Render Pie in [parent]
    */
   bool renderPie(GraphCalc calc) {
@@ -187,17 +260,8 @@ class EngineCharted
     for (StatBy by in calc.byList) {
       if (by.count == 0)
         continue;
-      // layout
-      DivElement chartHostWrapper = new DivElement()
-        ..classes.addAll(["chart-host-wrapper"]);
-      element.append(chartHostWrapper);
-      DivElement chartHost = new DivElement()
-        ..classes.addAll(["chart-host"]);
-      chartHostWrapper.append(chartHost);
-      DivElement legendHost = new DivElement()
-        ..classes.addAll(["chart-legend-host"]);
-      chartHostWrapper.append(legendHost);
       rendered = true;
+      _createLayout();
       //
       by.updateLabels();
 
@@ -207,10 +271,10 @@ class EngineCharted
               showLabels: true,
               sortDataByValue: false));
       ChartConfig config = new ChartConfig([series], [0])
-        ..legend = new ChartLegend(legendHost,
+        ..legend = new ChartLegend(_legendHost,
             title: by.label,
             showValues: true);
-      int width = chartHost.clientWidth;
+      int width = _chartHost.clientWidth;
       if (config.minimumSize.width > width) { // 400x300
         int height = 300*(width~/400);
         config.minimumSize = new Rect.size(width, height);
@@ -218,12 +282,12 @@ class EngineCharted
       _log.fine("renderPie size=${config.minimumSize}"); // x y w h
       int height = config.minimumSize.height;
       if (height > 0)
-        legendHost.style.maxHeight = "${height}px";
+        _legendHost.style.maxHeight = "${height}px";
 
-      ChartData data = new ChartData(_pieColumns(by), _pieRows(by));
+      ChartData data = new ChartData(_byColumns(by), _byRows(by));
       ChartState state = new ChartState();
 
-      LayoutArea area = new LayoutArea(chartHost, data, config,
+      LayoutArea area = new LayoutArea(_chartHost, data, config,
           state:state);
       area.theme = new EngineChartedTheme();
       createDefaultCartesianBehaviors().forEach((behavior) {
@@ -235,7 +299,7 @@ class EngineCharted
   } // renderPie
 
   /// pie column list
-  List<ChartColumnSpec> _pieColumns(StatBy by) {
+  List<ChartColumnSpec> _byColumns(StatBy by) {
     List<ChartColumnSpec> list = new List<ChartColumnSpec>();
     by.updateLabels();
     ChartColumnSpec column = new ChartColumnSpec(label:"-", type: ChartColumnSpec.TYPE_STRING);
@@ -251,7 +315,7 @@ class EngineCharted
   }
 
   /// pie column rows
-  List<List<dynamic>> _pieRows(StatBy by) {
+  List<List<dynamic>> _byRows(StatBy by) {
     List<List<dynamic>> list = new List<List<dynamic>>();
     for (StatPoint point in by.byValueList) {
       List<dynamic> row = new List<dynamic>();
@@ -280,5 +344,22 @@ class EngineCharted
     return value;
   }
 
+  /// create Charted layout
+  void _createLayout() {
+    if (_chartHost == null) {
+      DivElement chartHostWrapper = new DivElement()
+        ..classes.addAll(["chart-host-wrapper"]);
+      element.append(chartHostWrapper);
+      _chartHost = new DivElement()
+        ..classes.addAll(["chart-host"])
+        ..dir = "ltr";
+      chartHostWrapper.append(_chartHost);
+      _legendHost = new DivElement()
+        ..classes.addAll(["chart-legend-host"]);
+      chartHostWrapper.append(_legendHost);
+    }
+  }
+  DivElement _legendHost;
+  DivElement _chartHost;
 
 } // EngineCharted
