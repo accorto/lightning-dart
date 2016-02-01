@@ -5,8 +5,9 @@ Intermediate Patches, Functionality improvements via +x prefix.
 
 ## head
 
-- #38 card panel
-- #36 ie type restrictions
+- #40 Data Graph
+- #38 Card Panel
+- #36 IE type restrictions
 - #35 svg compatibility edge/ie
 - #34 color editor
 - #17 timezone editor
