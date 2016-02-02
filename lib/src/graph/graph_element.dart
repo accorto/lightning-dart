@@ -159,11 +159,7 @@ class GraphElement {
         _log.info("onFormRecordChange NotFound by=${by}");
       }
       else {
-        Map<String, String> keyLabelMap = new Map<String, String>();
-        for (DOption option in byColumn.pickValueList) {
-          keyLabelMap[option.value] = option.label;
-        }
-        _graphPanel.by(byColumn.name, byColumn.label, keyLabelMap);
+        _graphPanel.byColumn(byColumn);
       }
     }
 

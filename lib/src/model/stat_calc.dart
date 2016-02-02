@@ -38,8 +38,6 @@ class StatCalc
     ..dataType = DataType.INT;
 
   final String tableName;
-  DColumn column;
-  DColumn dateColumn;
 
   final List<StatBy> byList = new List<StatBy>();
   List<StatMatch> _matchList;
@@ -170,13 +168,13 @@ class StatCalc
   } // match
 
 
-  /// Display
+  /// Display details (fine)
   void dump() {
     String info = "dump ${tableName}.${key} (${label})";
     if (dateColumn != null)
       info += " ${dateColumn.name} ${byPeriod}";
     info += "\n${toStringX('')}"; // updates by label
-    _log.info(info);
+    _log.fine(info);
   } // dump
 
   /**
@@ -247,6 +245,14 @@ class StatCalc
       . = paid(Paid):	 count=2 sum=- min=- max=- avg=- nulls=0
       . = - 1420329600000(1/4/2015):	 count=2 sum=- min=- max=- avg=- nulls=0
 
+      StatCalc: dump demo.counT (Count) date ByPeriod.Week
+      counT(Count):	 count=7 sum=- min=- max=- avg=- nulls=0
+      - 1419724800000(12/28/2014):	 count=1 sum=- min=- max=- avg=- nulls=0
+      - 1420329600000(1/4/2015):	 count=2 sum=- min=- max=- avg=- nulls=0
+      - 1422748800000(2/1/2015):	 count=2 sum=- min=- max=- avg=- nulls=0
+      - 1423353600000(2/8/2015):	 count=1 sum=- min=- max=- avg=- nulls=0
+      - 1433030400000(5/31/2015):	 count=1 sum=- min=- max=- avg=- nulls=0
+
    */
   String toStringX(String linePrefix) {
     String s = "${linePrefix}${super.toStringX(linePrefix)}";
@@ -258,7 +264,7 @@ class StatCalc
 
   static String statCalcColumnDate() => Intl.message("Date", name: "statCalcColumnDate");
   static String statCalcNoData() => Intl.message("No Data", name: "statCalcNoData");
-  
+
   // labels
   static String statCalcWhat() => Intl.message("Display", name: "statCalcWhat");
   static String statCalcBy() => Intl.message("Group", name: "statCalcBy");

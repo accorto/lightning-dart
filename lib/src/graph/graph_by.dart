@@ -9,7 +9,8 @@ part of lightning_graph;
 /**
  * Stat (Group) By
  */
-class GraphBy extends StatBy {
+class GraphBy
+    extends StatBy {
 
   static final Logger _log = new Logger("GraphBy");
 
@@ -28,5 +29,22 @@ class GraphBy extends StatBy {
       });
     }
   } // GraphBy
+
+  /**
+   * Graph (Group) by
+   */
+  GraphBy.column(DColumn column)
+      : super.column(column) {
+
+    if (keyLabelMap == null) {
+      _log.config("${columnName} keyMap for FK");
+      FkService.instance.getFkMapFuture(columnName)
+          .then((Map<String, String> map) {
+        keyLabelMap = map;
+        needLabelUpdate = true;
+      });
+    }
+  } // GraphBy
+
 
 } // GraphBy

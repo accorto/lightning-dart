@@ -653,29 +653,57 @@ class LTable
   }
 
   /// Total Row
-  bool get isTableTotal => _isTableTotal;
-  void set isTableTotal (bool newValue) {
-    _isTableTotal = newValue;
+  bool get withStatistics => _withStatistics;
+  void set withStatistics (bool newValue) {
+    _withStatistics = newValue;
     calculateStatistics();
     display();
   }
-  bool _isTableTotal = true;
+  bool _withStatistics = false;
 
   /**
    * Calculate statistics
    */
   void calculateStatistics() {
     _tfootRows.clear();
-    if (!isTableTotal || _statistics == null) {
+    if (_statistics == null || !_withStatistics) {
       return;
     }
     //
     List<StatBy> byList = new List<StatBy>();
+    if (_groupByColumnName != null && _ui != null) {
+      DColumn byColumn = DataUtil.findColumn(_ui.table, null, _groupByColumnName);
+      if (byColumn != null) {
+        byList.add(new StatBy.column(byColumn));
+      }
+    }
     DColumn dateColumn = null;
     ByPeriod byPeriod = null;
     _statistics.calculate(recordList, byList, dateColumn, byPeriod);
   } // calculateStatistics
 
+
+  /// Set Group By Column
+  void set groupByColumnName (String newValue) {
+    if (_statistics == null) {
+      return;
+    }
+    // remove stat records
+    if (_groupByColumnName != null) {
+      List<DRecord> removeList = new List<DRecord>();
+      for (DRecord record in recordList) {
+        if (record.hasIsGroupBy())
+          removeList.add(record);
+      }
+      for (DRecord record in removeList) {
+        recordList.remove(record);
+      }
+    }
+    _groupByColumnName = newValue;
+    calculateStatistics();
+    display();
+  }
+  String _groupByColumnName;
 
   static String lTableRowSelectAll() => Intl.message("Select All", name: "lTableRowSelectAll", args: []);
   static String lTableRowSelectRow() => Intl.message("Select Row", name: "lTableRowSelectRow", args: []);

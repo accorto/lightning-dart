@@ -28,12 +28,22 @@ class StatBy
    */
   StatBy(String columnName, String label, Map<String,String> this.keyLabelMap)
       : super (columnName, label) {
-  } // KpiMetricBy
+  } // GroupBy
+
+  /// stat (group) by
+  StatBy.column(DColumn column) : super (column.name, column.label) {
+    this.column = column;
+    keyLabelMap = new Map<String, String>();
+    for (DOption option in column.pickValueList) {
+      keyLabelMap[option.value] = option.label;
+    }
+  }
 
   /// clone
   StatBy clone() {
     return new StatBy(columnName, label, keyLabelMap)
-      ..byPeriod = byPeriod;
+      ..byPeriod = byPeriod
+      ..column = column;
   }
 
   /**
@@ -119,6 +129,37 @@ class StatBy
     }
     return labels;
   } // getDateLabels
+
+  /// consolidate date pints/labels
+  List<StatPoint> getDatePoints() {
+    /// get all date values in points
+    Map<String,StatPoint> pointDateMap = new Map<String,StatPoint>();
+    for (StatPoint point in byValueList) {
+      if (point.byDateList != null) {
+        for (StatPoint datePoint in point.byDateList) {
+          pointDateMap[datePoint.key] = datePoint;
+        }
+      }
+    }
+    // add missing dates in points + sort
+    for (StatPoint point in byValueList) {
+      pointDateMap.forEach((String key, StatPoint point){
+        point.checkDate(key, point.label);
+      });
+      point.sortDateList();
+    }
+    /// create list
+    List<String> keys = new List<String>.from(pointDateMap.keys);
+    keys.sort((String one, String two){
+      return one.compareTo(two);
+    });
+    List<StatPoint> points = new List<StatPoint>();
+    for (String key in keys) {
+      points.add(pointDateMap[key]);
+    }
+    return points;
+  } // getLabels
+
 
   /// Info
   String toString() {

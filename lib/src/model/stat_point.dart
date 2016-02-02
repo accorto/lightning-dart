@@ -18,6 +18,9 @@ class StatPoint {
   final String key;
   /// label (can update)
   String label;
+  /// Meta Info
+  DColumn column;
+  DColumn dateColumn;
 
   /// by Date criteria
   ByPeriod byPeriod;

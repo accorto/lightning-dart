@@ -298,7 +298,8 @@ class ObjectCtrl
           editMode: LTable.EDIT_FIELD,
           alwaysOneEmptyLine: false)
         ..bordered = true
-        ..responsiveOverflow = true;
+        ..responsiveOverflow = true
+        ..withStatistics = true;
       _table.recordSaved = onRecordSaved;
       _table.recordDeleted = onRecordDeleted;
       _table.recordsDeleted = onRecordsDeleted;

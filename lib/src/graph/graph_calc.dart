@@ -24,7 +24,6 @@ class GraphCalc
 
   /// Display
   void display(EngineBase engine) {
-
     if ((dateColumn != null
         || (byList.isNotEmpty && byList.first.byValueList.isNotEmpty))
         && engine.renderStacked(this)) {
@@ -43,45 +42,6 @@ class GraphCalc
       p.text = toString();
     }
     engine.element.append(p);
-    /*
-    if (byDateList != null) {
-      sortDateList();
-      for (GraphPoint pp in byDateList) {
-        p = new ParagraphElement()
-          ..text = "> ${pp}";
-        host.append(p);
-      }
-    }
-
-    /// By
-    for (GraphBy by in _byList) {
-      p = new ParagraphElement()
-        ..text = "- ${by}";
-      host.append(p);
-      if (by.byDateList != null) {
-        by.sortDateList();
-        for (GraphPoint pp in by.byDateList) {
-          p = new ParagraphElement()
-            ..text = "- > ${pp}";
-          host.append(p);
-        }
-      }
-      //
-      by.updateLabels();
-      for (GraphPoint point in by.byValueList) {
-        p = new ParagraphElement()
-          ..text = "-- ${point}";
-        host.append(p);
-        if (point.byDateList != null) {
-          point.sortDateList();
-          for (GraphPoint pp in point.byDateList) {
-            p = new ParagraphElement()
-              ..text = "-- > ${pp}";
-            host.append(p);
-          }
-        }
-      }
-    } */
   } // display
 
 } // GraphCalc

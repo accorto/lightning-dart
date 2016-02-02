@@ -29,7 +29,8 @@ class TableStatistics {
   /**
    * Calculate Value
    */
-  void calculate(List<DRecord> recordList, List<StatBy> byList,
+  void calculate(List<DRecord> recordList,
+      List<StatBy> byList,
       DColumn dateColumn, ByPeriod byPeriod) {
     //_log.config("calculate records=${recordList.length} calc=${calcList.length} by=${byList.length}");
 
@@ -52,8 +53,13 @@ class TableStatistics {
         what.calculateRecord2(record, recordDate, dateString);
       }
     }
-    //
-    for (StatCalc what in calcList) {what.dump();}
+
+    for (StatCalc what in calcList) {
+      what.dump();
+      if (byList.isNotEmpty) {
+        // TODO create records
+      }
+    }
   } // calculate
 
 

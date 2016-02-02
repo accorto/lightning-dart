@@ -14,6 +14,7 @@ import 'package:intl/intl.dart';
 import 'lightning_ctrl.dart';
 
 import 'package:charted/charted.dart';
+import 'package:observe/observe.dart';
 
 
 part 'src/graph/graph_by.dart';

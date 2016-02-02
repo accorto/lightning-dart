@@ -24,19 +24,20 @@ class TablesGraphs extends DemoFeature {
 
     LTable table = new LTable("tg")
       ..bordered = borderedOption
-      ..responsiveOverflow = responsiveOverflowOption;
+      ..responsiveOverflow = responsiveOverflowOption
+      ..withStatistics = true;
     if (responsiveStackedOption)
       table.responsiveStacked = responsiveStackedOption;
     if (responsiveStackedHorizontalOption) // overwrites stacked
       table.responsiveStackedHorizontal = responsiveStackedHorizontalOption;
     if (actionOption) {
       table.addTableAction(new AppsAction("ta", "Table Action", (String value, DRecord record, DEntry entry, var actionVar){
-        print("Table Action ${value}");
-      })
+          print("Table Action ${value}");
+        })
       );
       table.addRowAction(new AppsAction("ra", "Row Action", (String value, DRecord record, DEntry entry, var actionVar){
-        print("Row Action ${value}");
-      })
+          print("Row Action ${value}");
+        })
       );
     }
     //

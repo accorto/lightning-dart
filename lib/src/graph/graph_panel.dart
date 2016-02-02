@@ -89,6 +89,11 @@ class GraphPanel
     _log.fine("by ${columnName} ${keyLabelMap.keys}");
     _byList.add(new GraphBy(columnName, label, keyLabelMap));
   } // by
+  /// add Group By
+  void byColumn(DColumn column) {
+    _log.fine("by ${column.name}");
+    _byList.add(new GraphBy.column(column));
+  } // by
 
   /**
    * Calculate  Value
