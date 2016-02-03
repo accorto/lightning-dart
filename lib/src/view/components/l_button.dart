@@ -441,8 +441,12 @@ class LButton
   void set small (bool newValue) {
     if (newValue) {
       element.classes.add(C_BUTTON__SMALL);
+      if (icon != null)
+        element.classes.add(C_BUTTON__ICON_SMALL);
     } else {
       element.classes.remove(C_BUTTON__SMALL);
+      if (icon != null)
+        element.classes.remove(C_BUTTON__ICON_SMALL);
     }
   }
 
@@ -731,7 +735,8 @@ class LButtonStatefulIcon
    * Stateful Icon
    */
   LButtonStatefulIcon(String name, String assistiveText, LIcon icon,
-        {String idPrefix, void onButtonClick(MouseEvent evt)})
+        {String idPrefix,
+        void onButtonClick(MouseEvent evt)})
     : super(new ButtonElement(), name, null,
         buttonClasses:[LButton.C_BUTTON__ICON_BORDER],
         idPrefix:idPrefix, icon:icon, assistiveText:assistiveText) {

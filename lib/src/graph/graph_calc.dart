@@ -7,7 +7,7 @@
 part of lightning_graph;
 
 /**
- * Graph Calculation
+ * Graph Calculation + Display
  */
 class GraphCalc
     extends StatCalc {

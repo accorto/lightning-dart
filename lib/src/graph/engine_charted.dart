@@ -28,9 +28,10 @@ class EngineCharted
   HeadingElement _subTitle = new HeadingElement.h4()
     ..classes.add("chart-subtitle");
 
-  int _numPrecision = 2;
 
   GraphCalc _calc;
+  int _numPrecision = 2;
+
   List<StatPoint> _metaRowList = new List<StatPoint>();
   List<StatPoint> _metaColList = new List<StatPoint>();
 
@@ -319,12 +320,14 @@ class EngineCharted
     by.updateLabels();
     ChartColumnSpec column = new ChartColumnSpec(label:label, type: ChartColumnSpec.TYPE_STRING);
     list.add(column);
+    _metaColList.add(by);
     for (StatPoint point in by.byValueList) {
       FormatFunction formatter = _format2num;
       column = new ChartColumnSpec(label:point.label,
           type: ChartColumnSpec.TYPE_NUMBER,
           formatter:formatter);
       list.add(column);
+      _metaColList.add(point);
     }
     return list;
   }
@@ -394,8 +397,11 @@ class EngineCharted
         for (ChangeRecord change in changes) {
           if (change is ChartHighlightChangeRecord && change.add != null) {
             handleHighlight(change);
-          } else if (change is ChartSelectionChangeRecord && change.add != null) {
-            handleSelection(change);
+          } else if (change is ChartSelectionChangeRecord) {
+            if (change.add != null)
+              handleSelection(change);
+            else if (change.remove != null)
+              handleClear();
           }
         }
       });
@@ -406,6 +412,7 @@ class EngineCharted
   ChartState _state;
   ChartData _data;
 
+  /// dump data
   void dumpData() {
     String info = "";
     int i = 0;
@@ -422,24 +429,32 @@ class EngineCharted
       i++;
     }
     _log.config("dumpData " + info);
-
   }
 
 
-  /// Pie Chart
+  /// handle Pie Chart click
   void handleSelection(ChartSelectionChangeRecord change) {
+    if (syncTable == null)
+      return;
+    String columnName = null;
+    if (_calc.byList.isNotEmpty)
+      columnName = _calc.byList.first.key;
+    String columnValue = null;
+    //
     int id = change.add;
-    String info = "handleSelection id=${id}";
-    StatPoint point = null;
+    String info = "handleSelection id=${id} ${columnName}";
+    StatPoint rowPoint = null;
     if (id < _metaRowList.length) {
-      point = _metaRowList[id];
-      if (point != null) {
-        info += " key=${point.key}";
-        if (point.column != null) {
-          info += " column=${point.column.name}";
+      rowPoint = _metaRowList[id];
+      if (rowPoint != null) {
+        columnValue = rowPoint.key;
+        info += "=${rowPoint.key} count=${rowPoint.count}";
+
+        if (rowPoint.column != null) {
+          info += " column=${rowPoint.column.name}";
         }
-        if (point.byPeriod != null) {
-          info += " ${point.byPeriod}";
+        if (rowPoint.byPeriod != null) {
+          info += " ${rowPoint.byPeriod}";
         }
       }
     }
@@ -447,26 +462,57 @@ class EngineCharted
       info += " -- date=${_calc.dateColumn.name} ${_calc.byPeriod}";
     }
     _log.config(info);
-
-
+    if (columnName != null) {
+      int match = syncTable.graphSelect((DRecord record) {
+        String recordValue = DataRecord.getColumnValue(record, columnName);
+        if (columnValue.isEmpty)
+          return recordValue == null || recordValue.isEmpty;
+        return recordValue == columnValue;
+      });
+      if (match != rowPoint.count) {
+        info += " <> actual=${match}";
+        _log.warning(info);
+      }
+    }
   } // handleSelection
+
+  /// Clear Table selection
+  void handleClear() {
+    if (syncTable == null)
+      return;
+    syncTable.graphSelect(null);
+  }
 
   /// Bar Chart
   void handleHighlight(ChartHighlightChangeRecord change) {
+    if (syncTable == null)
+      return;
+    String columnName = null;
+    if (_calc.byList.isNotEmpty)
+      columnName = _calc.byList.first.key;
+    String columnValue = null;
+    String dateColumnName = null;
+    String dateColumnValue = null;
+    ByPeriod dateByPeriod;
+
     int col = change.add.first;
-    String info = "handleHighlight col=${col}";
+    String info = "handleHighlight ${columnName} col=${col}";
     StatPoint colPoint = null;
     if (col < _metaColList.length) {
       colPoint = _metaColList[col];
       if (colPoint != null) {
+        columnValue = colPoint.key;
         info += " key=${colPoint.key}";
         if (colPoint.column != null) {
+          columnName = colPoint.column.name; // for count
           info += " column=${colPoint.column.name}";
         }
         if (colPoint.dateColumn != null) {
+          dateColumnName = colPoint.dateColumn.name; // for count
           info += " date=${colPoint.dateColumn.name}";
         }
         if (colPoint.byPeriod != null) {
+          dateByPeriod = colPoint.byPeriod; // for count
           info += " ${colPoint.byPeriod}";
         }
       }
@@ -478,14 +524,17 @@ class EngineCharted
     if (row < _metaRowList.length) {
       rowPoint = _metaRowList[row];
       if (rowPoint != null) {
+        dateColumnValue = rowPoint.key;
         info += " key=${rowPoint.key}";
         if (rowPoint.column != null) {
           info += " column=${rowPoint.column.name}";
         }
         if (rowPoint.dateColumn != null) {
+          dateColumnName = rowPoint.dateColumn.name;
           info += " date=${rowPoint.dateColumn.name}";
         }
         if (rowPoint.byPeriod != null) {
+          dateByPeriod = rowPoint.byPeriod;
           info += " ${rowPoint.byPeriod}";
         }
       }
@@ -494,9 +543,38 @@ class EngineCharted
       info += " -- date=${_calc.dateColumn.name} ${_calc.byPeriod}";
     }
     _log.config(info);
-
-
+    if (columnName != null && dateColumnName != null && dateColumnValue != null) {
+      int match = syncTable.graphSelect((DRecord record) {
+        // value
+        if (columnName != StatCalc.COUNT_COLUMN_NAME) {
+          String recordValue = DataRecord.getColumnValue(record, columnName);
+          if (columnValue.isEmpty) {
+            if (!(recordValue == null || recordValue.isEmpty))
+              return false;
+          } else {
+            if (recordValue != columnValue)
+              return false;
+          }
+        }
+        // date
+        String dateValue = DataRecord.getColumnValue(record, dateColumnName);
+        return isDateMatch(dateValue, dateColumnValue, dateByPeriod);
+      });
+    }
   } // handleHighlight
+
+  static bool isDateMatch(String dateValue, String dateColumnValue, ByPeriod dateByPeriod) {
+    if (dateValue == null || dateValue.isEmpty)
+      return false;
+    if (dateValue == dateColumnValue)
+      return true;
+    int time = int.parse(dateValue, onError: (_){return null;});
+    if (time == null)
+      return false;
+    DateTime date0 = new DateTime.fromMicrosecondsSinceEpoch(time, isUtc: true);
+    date0 = StatPoint.getDateKey(date0, dateByPeriod);
+    return date0.millisecondsSinceEpoch.toString() == dateColumnValue;
+  }
 
 
 } // EngineCharted

@@ -57,6 +57,12 @@ class RecordSortList {
     _sortList.add(sort);
   }
 
+  /// Set as first
+  void setFirst(RecordSort sort) {
+    _sortList.remove(sort);
+    _sortList.insert(0, sort);
+  }
+
   /// Add Sort
   void add(RecordSort sort) {
     _sortList.add(sort);

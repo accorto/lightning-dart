@@ -47,51 +47,99 @@ class LTableSumRow
   TableStatistics statistics;
 
 
+  /// display stat record
   void display() {
-    if (statistics == null)
-      return;
-
     for (String name in nameList) {
       TableCellElement tc = new Element.td();
-      rowElement.append(tc);
-      if (name == null) {
-        continue;
-      }
-      StatCalc calc = null;
-      for (StatCalc c in statistics.calcList) {
-        if (c.column.name == name) {
-          calc = c;
-          break;
+
+      if (name == null) { // select column
+        rowElement.append(tc);
+        LIconUtility icon = new LIconUtility(
+            statistics == null ? LIconUtility.SUMMARYDETAIL : LIconUtility.SUMMARY,
+            color: LIcon.C_ICON_TEXT_DEFAULT,
+            size: LIcon.C_ICON__X_SMALL);
+        if (statistics == null) {
+          icon.title = data.record.drv;
+          rowElement.title = data.record.drv;
+        } else {
+          icon.title = lTableSumRowSummary();
         }
-      }
-
-      if (calc == null) {
+        tc.append(icon.element);
         continue;
       }
-
-      String label = calc.column.label;
-      String value = "";
-
-      String align = null;
-      DataType dt = calc.column.dataType;
-      if (DataTypeUtil.isCenterAligned(dt))
-        align = LTable.C_TEXT_CENTER;
-      else if (DataTypeUtil.isRightAligned(dt))
-        align = LTable.C_TEXT_RIGHT;
-
-
       if (name == DataRecord.URV || name == "Id") {
-      //  addCellUrv(record, recordAction);
-      } else {
+        rowElement.append(tc);
+        continue;
+      }
+      //
+      String value = "";
+      String align = null;
+
+      if (statistics == null) { // group by
+        DataColumn dataColumn = findColumn(name);
+        DEntry entry = data.getEntry(null, name, false);
+        if (entry == null) {
+          rowElement.append(tc);
+        } else {
+          value = DataRecord.getEntryValue(entry);
+          align = _displayAlign(dataColumn);
+          //
+          _displayRo(name, value, align, dataColumn, entry, false);
+        }
+      } else { // footer
+        rowElement.append(tc);
+        //
+        StatCalc calc = findCalc(name);
+        if (calc == null) {
+          continue;
+        }
+
+        String label = calc.column.label;
+        DataType dt = calc.column.dataType;
+        if (DataTypeUtil.isCenterAligned(dt))
+          align = LTable.C_TEXT_CENTER;
+        else if (DataTypeUtil.isRightAligned(dt))
+          align = LTable.C_TEXT_RIGHT;
+        //
         if (DataTypeUtil.isNumber(dt)) {
           value = calc.sum.toStringAsFixed(calc.decimalDigits);
         } else {
           value = calc.count.toString();
         }
         new LTableSumCell(tc, name, label, value, align, calc);
-      }
+      } // statistics
     } // for all column names
   } // display
 
+
+  /// find calc with name
+  StatCalc findCalc(String name) {
+    if (statistics != null) {
+      for (StatCalc calc in statistics.calcList) {
+        if (calc.column.name == name) {
+          return calc;
+        }
+      }
+    }
+    return null;
+  }
+
+  /// add group by cell
+  LTableCell addCell(Element content,
+      String name,
+      String value,
+      String align,
+      DataColumn dataColumn,
+      {bool fieldEdit: false,
+      bool addStatistics: true}) {
+    if (content != null)
+      content.classes.add("cell-by");
+    return super.addCell(content,
+        name, value, align, dataColumn,
+        fieldEdit:fieldEdit, addStatistics:addStatistics);
+  }
+
+
+  static String lTableSumRowSummary() => Intl.message("Summary", name: "lTableSumRowSummary");
 
 } // LTableSumRow

@@ -27,8 +27,8 @@ class GraphDialog
       : super(datasource) {
   } // GraphDialog
 
-  /// Initialize Dialog
-  void init() {
+  /// Initialize Dialog - [syncTable] set before calling
+  void init(LTable ignored) {
     String id = LComponent.createId("gd", table.name);
     _modal = new LModal(id)
       ..large = true
@@ -44,10 +44,11 @@ class GraphDialog
   } // init
 
   /// Init and show dialog
+  /// - set [syncTable] before click
   void onGraphClick(MouseEvent evt) {
     _log.config("onGraphClick");
     if (_modal == null) {
-      init();
+      init(null);
     }
     _modal.showInElement(parent);
   }

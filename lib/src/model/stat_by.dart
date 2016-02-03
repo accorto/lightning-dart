@@ -14,8 +14,6 @@ class StatBy
 
   static final Logger _log = new Logger("StatBy");
 
-  String get columnName => key;
-
   /// Values
   List<StatPoint> byValueList = new List<StatPoint>();
   /// Key-Value Map
@@ -26,8 +24,8 @@ class StatBy
   /**
    * Stat (Group) By
    */
-  StatBy(String columnName, String label, Map<String,String> this.keyLabelMap)
-      : super (columnName, label) {
+  StatBy(String key, String label, Map<String,String> this.keyLabelMap)
+      : super (key, label) {
   } // GroupBy
 
   /// stat (group) by
@@ -39,9 +37,9 @@ class StatBy
     }
   }
 
-  /// clone
+  /// clone w/o value
   StatBy clone() {
-    return new StatBy(columnName, label, keyLabelMap)
+    return new StatBy(key, label, keyLabelMap)
       ..byPeriod = byPeriod
       ..column = column;
   }
@@ -49,25 +47,26 @@ class StatBy
   /**
    * Calculate
    */
-  void calculateRecord(DRecord record, double value, String valueString, DateTime date) {
-    calculate(value, valueString, date); // total
-    String key = DataRecord.getColumnValue(record, columnName);
-    if (key == null) {
-      key = "";
+  void calculateRecord(DRecord record,
+      num valueNum, String valueString, DateTime date) {
+    calculate(valueNum, valueString, date); // total
+    String key0 = DataRecord.getColumnValue(record, key);
+    if (key0 == null) {
+      key0 = "";
     }
     StatPoint point = null;
     for (StatPoint pp in byValueList) {
-      if (pp.key == key) {
+      if (pp.key == key0) {
         point = pp;
         break;
       }
     }
     if (point == null) {
-      point = new StatPoint(key, null);
+      point = new StatPoint(key0, null);
       point.byPeriod = byPeriod;
       byValueList.add(point);
     }
-    point.calculate(value, valueString, date);
+    point.calculate(valueNum, valueString, date);
     needLabelUpdate = true;
   } // calculate
 

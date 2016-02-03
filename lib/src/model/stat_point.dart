@@ -50,23 +50,23 @@ class StatPoint {
   }
 
   /// update
-  void calculate(num value, String valueString, DateTime date) {
+  void calculate(num valueNum, String valueString, DateTime date) {
     if (valueString == null) {
       _nullCount++;
     } else {
       _count++;
-      if (value != null) {
+      if (valueNum != null) {
         if (_sum == null) {
-          _sum = value;
+          _sum = valueNum;
         } else {
-          _sum += value;
+          _sum += valueNum;
         }
         // min/max
-        if (_min == null || value < _min) {
-          _min = value;
+        if (_min == null || valueNum < _min) {
+          _min = valueNum;
         }
-        if (_max == null || value > _max) {
-          _max = value;
+        if (_max == null || valueNum > _max) {
+          _max = valueNum;
         }
       }
     }
@@ -75,7 +75,7 @@ class StatPoint {
     if (byPeriod != null && date != null) {
       if (byDateList == null)
         byDateList = new List<StatPoint>();
-      DateTime date2 = getDateKey(date.toUtc());
+      DateTime date2 = getDateKey(date.toUtc(), byPeriod);
       String dateKey = date2.millisecondsSinceEpoch.toString();
       StatPoint point = null;
       for (StatPoint pp in byDateList) {
@@ -89,7 +89,7 @@ class StatPoint {
         point = new StatPoint(dateKey, dateLabel);
         byDateList.add(point);
       }
-      point.calculate(value, valueString, null);
+      point.calculate(valueNum, valueString, null);
     }
   } // calculate
 
@@ -133,8 +133,8 @@ class StatPoint {
   } // getPercent
 
 
-  /// start/first date for [date] based on period
-  DateTime getDateKey(DateTime date) {
+  /// start/first date for utc [date] based on period
+  static DateTime getDateKey(DateTime date, ByPeriod byPeriod) {
     if (byPeriod == ByPeriod.Day) {
       return new DateTime.utc(date.year, date.month, date.day);
     }

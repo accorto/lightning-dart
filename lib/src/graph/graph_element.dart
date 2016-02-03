@@ -33,14 +33,19 @@ class GraphElement {
   LPicklist _periodPickList;
   GraphPanel _graphPanel;
 
+  /// Sync Table
+  LTable syncTable;
+  LButtonStatefulIcon _syncTableButton;
+
   /**
    * Graph Element - call [init] explicitly
    */
   GraphElement(Datasource this.datasource) {
   } // GraphElement
 
-  /// Initialize Element
-  void init() {
+  /// Initialize Element with optional [syncTable]
+  void init(LTable syncTable) {
+    this.syncTable = syncTable;
     element
       ..id = LComponent.createId("ge", table.name)
       ..style.minHeight = "300px";
@@ -139,6 +144,17 @@ class GraphElement {
     for (DOption colOption in dateList)
       _datePickList.addDOption(colOption);
 
+    if (syncTable != null) {
+      _syncTableButton = new LButtonStatefulIcon("syncTable",
+          graphElementSyncTable(),
+          new LIconUtility(LIconUtility.TABLE),
+          idPrefix: id,
+          onButtonClick: onSyncButtonClick)
+        ..small = true
+        ..selected = true
+        ..element.style.verticalAlign = "top";
+      form.add(_syncTableButton);
+    }
     return form;
   } // init
 
@@ -191,7 +207,41 @@ class GraphElement {
     //
     _graphPanel.calculate(records, dateColumn, byPeriod);
     _graphPanel.display();
+    //
+    doSyncTable(by);
   } // onFormRecordChange
 
+  /// Sync Table Button clicked
+  void onSyncButtonClick(MouseEvent evt) {
+    doSyncTable(_byPickList.value);
+  }
+
+  /// sync table
+  bool get isSyncTable {
+    return syncTable != null && _syncTableButton != null && _syncTableButton.selected;
+  }
+
+  /// Sync Table
+  void doSyncTable(String by) {
+    if (syncTable != null) {
+      if (by != null && by.isEmpty) {
+        by = null;
+      }
+      if (isSyncTable) {
+        _graphPanel.engine.syncTable = syncTable;
+      } else {
+        by = null;
+        _graphPanel.engine.syncTable = null;
+        syncTable.graphSelect(null);
+      }
+      if (by != syncTable.groupByColumnName) {
+        syncTable.groupByColumnName = by;
+        syncTable.display();
+      }
+    }
+  } // doSyncTable
+
+
+  static String graphElementSyncTable() => Intl.message("Synchronize with Table", name: "graphElementSyncTable");
 
 } // GraphElement

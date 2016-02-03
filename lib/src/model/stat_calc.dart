@@ -169,19 +169,19 @@ class StatCalc
 
 
   /// Display details (fine)
-  void dump() {
+  void dump({String linePrefix: "\t"}) {
     String info = "dump ${tableName}.${key} (${label})";
     if (dateColumn != null)
       info += " ${dateColumn.name} ${byPeriod}";
-    info += "\n${toStringX('')}"; // updates by label
+    info += "\n${toStringX(linePrefix)}"; // updates by label
     _log.fine(info);
   } // dump
 
   /**
    * Dump Info (updated by labels)
-   * - byDateList   (GraphPoint - byDateList[GraphPoint])
-   * . byList       (GraphCalc - byList[GraphBy])
-   * = byValueList  (GraphBy - byValueList[GraphPoint])
+   * - byDateList   (StatPoint - byDateList[StatPoint])
+   * . byList       (StatCalc - byList[StatBy])
+   * = byValueList  (StatBy - byValueList[StatPoint])
 
       StatCalc: dump demo.counT (Count)
       counT(Count):	 count=7 sum=- min=- max=- avg=- nulls=0
@@ -255,7 +255,7 @@ class StatCalc
 
    */
   String toStringX(String linePrefix) {
-    String s = "${linePrefix}${super.toStringX(linePrefix)}";
+    String s = "${super.toStringX(linePrefix)}";
     for (StatBy by in byList) {
       s += "\n" + by.toStringX("${linePrefix}. ");
     }

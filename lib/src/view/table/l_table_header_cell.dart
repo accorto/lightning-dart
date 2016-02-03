@@ -29,7 +29,8 @@ class LTableHeaderCell
           label,
           value,
           align,
-          dataColumn) {
+          dataColumn,
+          false) {
 
     // set before element.attributes["scope"] = "col";
     if (tableSortClicked != null) {

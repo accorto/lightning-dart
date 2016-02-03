@@ -34,7 +34,8 @@ class LTableCell {
       String label,
       String this.value,
       String this.align,
-      DataColumn this.dataColumn) {
+      DataColumn this.dataColumn,
+      bool addStatistics) {
     if (align != null && align.isNotEmpty)
       cellElement.classes.add(align);
 
@@ -47,7 +48,8 @@ class LTableCell {
     if (content != null)
       cellElement.append(content);
     //
-    renderStatistics();
+    if (addStatistics)
+      renderStatistics();
   } // LTableCell
 
   /**

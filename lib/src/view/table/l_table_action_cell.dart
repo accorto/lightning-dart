@@ -36,7 +36,7 @@ class LTableActionCell
    */
   LTableActionCell(TableCellElement element, LButton button, DataColumn dataColumn,
       {String dropdownDirection:LDropdown.C_DROPDOWN__RIGHT})
-      : super(element, button.element, "action", null, null, null, dataColumn) {
+      : super(element, button.element, "action", null, null, null, dataColumn, false) {
     this.button = button;
     cellElement.classes.add(LTable.C_ROW_ACTION);
     dropdown = new LDropdown(button, button.id,

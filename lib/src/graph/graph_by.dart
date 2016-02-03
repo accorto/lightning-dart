@@ -17,13 +17,13 @@ class GraphBy
   /**
    * Graph (Group) by
    */
-  GraphBy(String columnName, String label, Map<String,String> keyLabelMap)
-    : super(columnName, label, keyLabelMap) {
+  GraphBy(String key, String label, Map<String,String> keyLabelMap)
+    : super(key, label, keyLabelMap) {
 
     if (keyLabelMap == null) {
-      _log.config("${columnName} keyMap for FK");
-      FkService.instance.getFkMapFuture(columnName)
-          .then((Map<String, String> map) {
+      _log.config("keyMap for FK=${key}");
+      FkService.instance.getFkMapFuture(key) // columnName
+      .then((Map<String, String> map) {
         keyLabelMap = map;
         needLabelUpdate = true;
       });
@@ -37,9 +37,9 @@ class GraphBy
       : super.column(column) {
 
     if (keyLabelMap == null) {
-      _log.config("${columnName} keyMap for FK");
-      FkService.instance.getFkMapFuture(columnName)
-          .then((Map<String, String> map) {
+      _log.config("keyMap for FK=${key}");
+      FkService.instance.getFkMapFuture(key) // columnName
+      .then((Map<String, String> map) {
         keyLabelMap = map;
         needLabelUpdate = true;
       });

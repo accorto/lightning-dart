@@ -251,17 +251,52 @@ class LTable
       }
     }
     recordSorting.add(sort);
-    //
+
+    // group by
+    bool redisplay = false;
+    if (_groupByColumnName == null) {
+      redisplay = clearRecordListGroupBy();
+    } else {
+      RecordSort group = recordSorting.getSort(_groupByColumnName);
+      if (group == null) {
+        _groupByColumnName = null;
+        redisplay = clearRecordListGroupBy();
+        display();
+      } else {
+        recordSorting.setFirst(group);
+      }
+    }
+    _sort(true, redisplay);
+  } // onTableSortClicked
+
+  /// Sort Group by local only
+  void _sortGroupBy() {
+    if (_groupByColumnName == null) {
+      return;
+    }
+    RecordSort group = recordSorting.getSort(_groupByColumnName);
+    if (group == null) {
+      group = new RecordSort.create(_groupByColumnName, true);
+    }
+    recordSorting.setFirst(group);
+    _sort(false, false);
+  }
+
+  /// Sort Table body Rows
+  void _sort(bool sortRemoteOk, bool redisplay) {
     if (_tbodyRows.length > 1) {
-      if (recordSorting.sortRemote()) {
+      if (sortRemoteOk && recordSorting.sortRemote()) {
         for (AppsAction action in _tableActions) {
           if (action.value == AppsAction.REFRESH) {
             action.callback(null, null, null, null);
             return;
           }
         }
-        _log.warning("onTableSortClicked NO_Action sortRemote");
-      } else {
+        _log.warning("sort NO_Action sortRemote");
+      } else { // local
+        if (redisplay) {
+          display(); //
+        }
         _tbodyRows.sort((LTableRow one, LTableRow two) {
           return recordSorting.recordSortCompare(one.record, two.record);
         });
@@ -271,7 +306,8 @@ class LTable
         }
       }
     }
-  } // onTableSortClicked
+  } // sport
+
 
   /**
    * Table Row Selected Clicked
@@ -322,6 +358,27 @@ class LTable
     }
     return count;
   } // findInTable
+
+  /// show rows based on selected Graph portion
+  int graphSelect(bool graphMatch(DRecord record)) {
+    if (graphMatch == null) {
+      for (LTableRow row in _tbodyRows) {
+        row.record.clearIsMatchFind();
+        row.show = true;
+      }
+      return recordList.length;
+    }
+    int count = 0;
+    for (LTableRow row in _tbodyRows) {
+      bool match = graphMatch(row.record);
+      row.record.isMatchFind = match;
+      row.show = match;
+      if (match && !row.record.isGroupBy)
+        count++;
+    }
+    return count;
+  } // graphSelect
+
 
   /// Table Edit Mode
   String get editMode => _editMode;
@@ -393,23 +450,23 @@ class LTable
     _tfootRows.add(row);
     return row;
   }
-  /// add row to Footer
+  /// add sum row to Footer or Body
   LTableSumRow addStatRow(bool foot) {
-    TableRowElement element = null;
+    TableRowElement tr = null;
     int rowNo = 0;
     if (foot) {
       if (_tfoot == null)
         _tfoot = _table.createTFoot();
-      element = _tfoot.addRow();
+      tr = _tfoot.addRow();
       rowNo = _tfootRows.length;
     } else {
       if (_tbody == null)
         _tbody = _table.createTBody();
-      element = _tbody.addRow();
+      tr = _tbody.addRow();
       rowNo = _tbodyRows.length;
     }
     //
-    LTableSumRow row = new LTableSumRow(element,
+    LTableSumRow row = new LTableSumRow(tr,
         rowNo,
         idPrefix,
         LButton.C_HINT_PARENT,
@@ -463,7 +520,7 @@ class LTable
         row.addGridColumn(dataColumn);
       }
     }
-    _statistics = new TableStatistics(dataColumns);
+    _statistics = new TableStatistics(ui.table.name, dataColumns);
   } // setUi
   /// UI Meta Data
   UI _ui;
@@ -495,26 +552,39 @@ class LTable
     recordList.clear();
     recordList.addAll(records);
     this.recordAction = recordAction;
-    calculateStatistics();
     display();
     if (_headerRow != null) {
       _headerRow.setSorting(recordSorting);
     }
   } // setRecords
 
-  /// Display Records
+  /// Display Records (calculates statistics)
   void display() {
     if (_tbody != null) {
       _tbody.children.clear();
       _tbodyRows.clear();
     }
+    if (_tfoot != null) {
+      _tfoot.children.clear();
+      _tfootRows.clear();
+    }
+    bool needSort = _displayCalculateStatistics();
+    //_log.fine("display records=${recordList.length}");
     int i = 0;
     for (DRecord record in recordList) {
-      LTableRow row = addBodyRow(rowValue: record.recordId); // adds to _tbodyRows
-      row.setRecord(record, i++, recordAction:recordAction);
+      if (record.hasIsGroupBy()) {
+        LTableSumRow row = addStatRow(false);
+        row.setRecord(record, i++);
+      } else {
+        LTableRow row = addBodyRow(rowValue: record.recordId); // adds to _tbodyRows
+        row.setRecord(record, i++, recordAction: recordAction);
+      }
+    }
+    if (needSort) {
+      _sortGroupBy();
     }
     // Statistics
-    if (_statistics != null) {
+    if (_statistics != null && _withStatistics) {
       LTableSumRow row = addStatRow(true);
       row.setStatistics(_statistics);
     }
@@ -654,21 +724,21 @@ class LTable
 
   /// Total Row
   bool get withStatistics => _withStatistics;
+  /// set statistics - call display
   void set withStatistics (bool newValue) {
     _withStatistics = newValue;
-    calculateStatistics();
-    display();
   }
   bool _withStatistics = false;
 
   /**
-   * Calculate statistics
+   * Calculate statistics (called from display)
+   * returns true if display needs to be sorted
    */
-  void calculateStatistics() {
-    _tfootRows.clear();
-    if (_statistics == null || !_withStatistics) {
-      return;
+  bool _displayCalculateStatistics() {
+    if (_statistics == null) {
+      return false;
     }
+    clearRecordListGroupBy(); // remove group by
     //
     List<StatBy> byList = new List<StatBy>();
     if (_groupByColumnName != null && _ui != null) {
@@ -679,31 +749,44 @@ class LTable
     }
     DColumn dateColumn = null;
     ByPeriod byPeriod = null;
-    _statistics.calculate(recordList, byList, dateColumn, byPeriod);
+
+    if (byList.isNotEmpty || _withStatistics) {
+      return _statistics.calculate(recordList,
+            byList, dateColumn, byPeriod); // add group by records
+    }
+    return false;
   } // calculateStatistics
 
 
   /// Set Group By Column
+  String get groupByColumnName => _groupByColumnName;
+  /// Set Group By Column - call display
   void set groupByColumnName (String newValue) {
-    if (_statistics == null) {
-      return;
+    if (newValue == null || newValue.isEmpty)
+      _groupByColumnName = null;
+    else
+      _groupByColumnName = newValue;
+  }
+  String _groupByColumnName;
+
+  /// clear group by records
+  /// return true if records were removed
+  bool clearRecordListGroupBy() {
+    List<DRecord> removeList = new List<DRecord>();
+    for (DRecord record in recordList) {
+      if (record.hasIsGroupBy())
+        removeList.add(record);
     }
-    // remove stat records
-    if (_groupByColumnName != null) {
-      List<DRecord> removeList = new List<DRecord>();
-      for (DRecord record in recordList) {
-        if (record.hasIsGroupBy())
-          removeList.add(record);
-      }
+    if (removeList.isNotEmpty) {
+      int origLength = recordList.length;
       for (DRecord record in removeList) {
         recordList.remove(record);
       }
+      bool ok = (recordList.length == origLength-removeList.length);
+      _log.log(ok ? Level.CONFIG : Level.WARNING, "clearGroupBy ${recordList.length}=${origLength}-${removeList.length}");
     }
-    _groupByColumnName = newValue;
-    calculateStatistics();
-    display();
-  }
-  String _groupByColumnName;
+    return removeList.isNotEmpty;
+  } // clearGroupBy
 
   static String lTableRowSelectAll() => Intl.message("Select All", name: "lTableRowSelectAll", args: []);
   static String lTableRowSelectRow() => Intl.message("Select Row", name: "lTableRowSelectRow", args: []);

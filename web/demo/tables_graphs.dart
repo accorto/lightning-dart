@@ -47,8 +47,8 @@ class TablesGraphs extends DemoFeature {
     div.append(new HRElement());
 
     //
-    GraphElement graph = new GraphElement(datasource);
-    graph.init();
+    GraphElement graph = new GraphElement(datasource)
+      ..init(table);
     div.append(graph.element);
 
     return div;

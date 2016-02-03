@@ -20,6 +20,9 @@ abstract class EngineBase {
   /// Set Sub Heading
   void set subTitle (String newValue);
 
+  /// Sync Table
+  LTable syncTable;
+
   /// Reset Elements
   void reset();
 

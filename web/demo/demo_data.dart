@@ -110,7 +110,7 @@ class DemoData extends Datasource {
     list.add(createRecord("Jorg",   "paid", "Redwood City",   24, 22.3, new DateTime.utc(2015, 1, 9)));
     list.add(createRecord("Jorge",  "due",  "Santa Clara",    24, 42.3, new DateTime.utc(2015, 2, 1)));
     list.add(createRecord("George", "due",  "San Mateo",      26, 12.3, new DateTime.utc(2015, 2, 4)));
-    list.add(createRecord("Josh",   "new",  "San Francisco",  26, 52.3, new DateTime.utc(2015, 2, 9)));
+    list.add(createRecord("Josh",   "new",  "San Jose",       26, 52.3, new DateTime.utc(2015, 2, 9)));
     list.add(createRecord("Oddie",  null,   null,             23, 32.3, new DateTime.utc(2015, 6, 1)));
 
     if (uiu != null) {

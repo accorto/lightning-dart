@@ -185,11 +185,16 @@ class LTableRow
       {String name,
       String value,
       String align,
-      DataColumn dataColumn}) {
+      DataColumn dataColumn,
+      bool addStatistics:true}) {
     DivElement div = new DivElement()
-      ..classes.add(LText.C_TRUNCATE)
-      ..text = display == null ? "" : display;
-    return addCell(div, name, value, align, dataColumn);
+      ..classes.add(LText.C_TRUNCATE);
+    if (display == null || display.isEmpty) {
+      div.appendHtml("&nbsp;");
+    } else {
+      div.text = display;
+    }
+    return addCell(div, name, value, align, dataColumn, addStatistics: addStatistics);
   }
 
   /// Add Link
@@ -254,7 +259,7 @@ class LTableRow
       return addCell(div, editor.name, value, align, editor.dataColumn);
     }
     return addCell(editor.input, null, null, align, editor.dataColumn);
-  }
+  } // addCellEditor
 
   /**
    * with [display] of column [name] with [value]
@@ -266,7 +271,8 @@ class LTableRow
       String value,
       String align,
       DataColumn dataColumn,
-      {bool fieldEdit:false}) {
+      {bool fieldEdit: false,
+      bool addStatistics: true}) {
 
     // find column Name
     String theName = name;
@@ -298,8 +304,8 @@ class LTableRow
         _log.config("fieldFocus ${theName}");
       });
     }
-    return new LTableCell(tc, content, theName, label, value, align, dataColumn);
-  } // addTableElement
+    return new LTableCell(tc, content, theName, label, value, align, dataColumn, addStatistics);
+  } // addCell
 
   /**
    * Add Actions
@@ -355,27 +361,7 @@ class LTableRow
         if (isEditModeRO
             || isEditModeSelectSingleMulti
             || (isEditModeSel && !selected)) {
-          if (dataColumn.isValueRenderElement) {
-            LEditor editor = _getRenderEditor(dataColumn);
-            addCell(editor.getValueRenderElement(value), name, value, align, dataColumn);
-          } else
-          if (entry != null && entry.hasValueDisplay()) {
-            addCellText(entry.valueDisplay, name:name, value:value, align:align, dataColumn:dataColumn);
-          } else if (value == null || value.isEmpty || dataColumn == null || !dataColumn.isValueRender) {
-            addCellText(value, name:name, value:value, align:align, dataColumn:dataColumn);
-          } else {
-            LTableCell cell = addCellText("<${value}>", name:name, value:value, align:align, dataColumn:dataColumn);
-            EditorUtil.render(dataColumn, value)
-            .then((String display){
-              cell.contentText = display;
-              if (entry != null) {
-                entry.valueDisplay = display;
-              }
-            })
-            .catchError((error, stackTrace){
-              cell.contentText = "${error}";
-            });
-          }
+          _displayRo(name, value, align, dataColumn, entry, true);
         } else { // all, sel or field
           LEditor editor = EditorUtil.createfromColumn(name, dataColumn, true,
             idPrefix:rowElement.id, data:data, entry:entry); // no isAlternativeDisplay
@@ -404,6 +390,35 @@ class LTableRow
       }
     } // for all column names
   } // display
+
+  /// display Read Only
+  void _displayRo(String name, String value, String align,
+      DataColumn dataColumn, DEntry entry, bool addStatistics) {
+    if (dataColumn != null && dataColumn.isValueRenderElement) {
+      LEditor editor = _getRenderEditor(dataColumn);
+      addCell(editor.getValueRenderElement(value), name, value, align,
+          dataColumn, addStatistics:addStatistics);
+    } else if (entry != null && entry.hasValueDisplay()) {
+      addCellText(entry.valueDisplay, name:name, value:value, align:align,
+          dataColumn:dataColumn, addStatistics:addStatistics);
+    } else if (value == null || value.isEmpty || dataColumn == null || !dataColumn.isValueRender) {
+      addCellText(value, name:name, value:value, align:align,
+          dataColumn:dataColumn, addStatistics:addStatistics);
+    } else {
+      LTableCell cell = addCellText("<${value}>", name:name, value:value, align:align,
+          dataColumn:dataColumn, addStatistics:addStatistics);
+      EditorUtil.render(dataColumn, value)
+      .then((String display){
+        cell.contentText = display;
+        if (entry != null) {
+          entry.valueDisplay = display;
+        }
+      })
+      .catchError((error, stackTrace){
+        cell.contentText = "${error}";
+      });
+    }
+  } // displayRo
 
   /// Render Value
   String _displayAlign(DataColumn dataColumn) {

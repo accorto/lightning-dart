@@ -97,18 +97,19 @@ class GraphPanel
 
   /**
    * Calculate  Value
+   * see [TableStatistics.calculate]
    */
   void calculate(List<DRecord> recordList,
       DColumn dateColumn, ByPeriod byPeriod) {
     _log.config("calculate '${tableName}' records=${recordList.length} calc=${_calcList.length} by=${_byList.length} match=${_matchList.length}");
-
-    // see TableStatistics.calculate(..)
 
     // reset
     for (StatCalc what in _calcList) {
       what.resetCalc(_byList, _matchList, dateColumn, byPeriod);
     }
     for (DRecord record in recordList) {
+      if (record.hasIsGroupBy())
+        continue;
       String dateString = null;
       DateTime recordDate = null;
       if (dateColumn != null) {

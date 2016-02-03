@@ -29,7 +29,8 @@ class LTableSumCell
         label,
         value,
         align,
-        null) {
+        null,
+        false) {
 
     // content
     LIconUtility icon = new LIconUtility(LIconUtility.INFO,
