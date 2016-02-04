@@ -51,7 +51,7 @@ class LTableHeaderRow
       ..text = label == null ? "" : label;
 
     if (name != null && name.isNotEmpty && label != null && label.isNotEmpty) {
-      int index = rowElement.children.length;
+      int index = rowElement.children.length -1;
       while (nameList.length < index)
         nameList.add(null);
       nameList.add(name);

@@ -4,6 +4,13 @@
  * License options+support:  https://lightningdart.com
  */
 
+/**
+ * Lightning Dart Business Graphics
+ * based on DRecord and built on Charted
+ * include
+    <link rel="stylesheet" href="packages/lightning/assets/styles/charted_theme.css">
+ *
+ */
 library lightning_graph;
 
 import 'dart:html';
@@ -28,8 +35,6 @@ part 'src/graph/engine_charted_theme.dart';
 
 /**
  * Business Graphics based on DRecord
- * include
-    <link rel="stylesheet" href="packages/lightning/assets/styles/charted_theme.css">
  */
 class LightningGraph {
 
