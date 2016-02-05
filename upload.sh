@@ -67,4 +67,8 @@ aws s3 sync ${MODEL} s3://lightningdart/model --quiet
 aws s3 ls s3://lightningdart --recursive --summarize --human-readable
 
 echo $TS
+# https://lightningdart.com
 echo "http://lightningdart.s3-website-us-east-1.amazonaws.com/"
+
+# CI
+curl http://ci.bizfabrik.com/job/IT_Lightning/build?token=build --user jorg.janke@accorto.com:$BIZPASS

@@ -91,9 +91,25 @@ class SvgUtil {
       String viewBox = sym.getAttribute("viewBox"); // as text
       svgElement.setAttribute("viewBox", viewBox);
       //
-      svgElement.children.clear();                // remove use
-      Element clone = sym.firstChild.clone(true); // add path
-      svgElement.append(clone);
+      Element path = null;
+      for (var p in sym.childNodes) { // might be text (space)
+        if (p is svg.PathElement) {
+          path = p;
+          break;
+        }
+      }
+      if (path == null) {
+        svgElement.setAttribute("data-info", "NoPath ${symbolName}");
+      } else {
+        Element clone = path.clone(true);
+        if (svgElement.children.length == 1) {
+          svgElement.children.clear(); // remove use
+          svgElement.append(clone); // add path
+        } else {
+          svgElement.children.removeLast(); // remove use
+          svgElement.append(clone); // add path
+        }
+      }
     }
   } // svgDirectUpdate
 
