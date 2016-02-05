@@ -98,11 +98,11 @@ class NewWindow {
   int winHeight;
   int winTop;
   int winLeft;
-  bool winMenubar;
-  bool winToolbar;
-  bool winLocation;
+  bool winMenubar = true;
+  bool winToolbar = true;
+  bool winLocation = true;
   bool winResizable = true;
-  bool winStatus;
+  bool winStatus = true;
 
 
   static String newWindowText() => Intl.message("open in New Window", name: "newWindowText");
