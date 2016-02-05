@@ -21,7 +21,7 @@ abstract class AppsPage
   static RouteEventHandler routeHandler;
 
   // Menu Entry
-  AnchorElement menuEntry = new AnchorElement(href: "#")
+  final AnchorElement menuEntry = new AnchorElement(href: "#")
     ..classes.add(AppsMenu.C_APPS_MENU_ENTRY);
 
   final String name;
@@ -48,6 +48,7 @@ abstract class AppsPage
       bool defaultRoute:false,
       bool handleRouteEvents:false}) {
     element.id = id;
+
     // Menu Entry
     menuEntry.id = id + MENU_SUFFIX;
     menuEntry.attributes[Html0.DATA_VALUE] = name;
@@ -58,6 +59,8 @@ abstract class AppsPage
     } else { // internal
       menuEntry.href = "#" + id;
     }
+    menuEntry.title = title;
+
     // Menu Icon
     icon.removeColor();
     icon.classes.addAll([LIcon.C_ICON, LIcon.C_ICON__SMALL]);
@@ -66,6 +69,7 @@ abstract class AppsPage
     if (label != null && label.isNotEmpty) {
       menuEntry.append(new SpanElement()..text = label);
     }
+
     // Router
     LightningCtrl.router.addRoute(name:name, path:path==null?name:path, title:title,
       defaultRoute:defaultRoute, enter:handleRouteEvents?onRouteEnter:routeHandler);

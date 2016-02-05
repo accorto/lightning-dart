@@ -10,7 +10,8 @@ part of lightning_ctrl;
 /**
  * Left Side Menu
  */
-class AppsMenu extends LComponent {
+class AppsMenu
+    extends LComponent {
 
   static const String C_APPS_MENU = "apps-menu";
   /// Show = Button
@@ -64,7 +65,10 @@ class AppsMenu extends LComponent {
       _menuHelp = new AnchorElement(href: apps.helpUrl)
         ..classes.add(AppsMenu.C_APPS_MENU_ENTRY)
         ..id = "a-menu-help"
-        ..target = "help";
+        ..target = "help"
+        ..title = appsMenuHelp();
+      //..style.cursor = "help";
+
       LIcon helpIcon = new LIconUtility(LIconUtility.HELP, size: LIcon.C_ICON__SMALL);
       _menuHelp.append(helpIcon.element);
       _menuHelp.append(new SpanElement()..text = appsMenuHelp());
