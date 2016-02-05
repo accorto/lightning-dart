@@ -77,7 +77,7 @@ class LLookup
 
   /// Displayed in Grid
   final bool inGrid;
-  bool isMobileUi = Settings.getAsBool(Settings.MOBILE_UI);
+  bool isMobileUi = Settings.getAsBool(Settings.MOBILE_UI, defaultValue: ClientEnv.isMobileUserAgent);
 
   /**
    * Lookup

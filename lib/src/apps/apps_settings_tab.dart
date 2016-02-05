@@ -55,8 +55,9 @@ class AppSettingsTab
 
   /// reload from local preferences
   void onResetClick(MouseEvent evt) {
-    Settings.load(); // updates value
+    Settings.reset(); // updates value
     for (AppSettingsTabLine line in _lines) {
+      line.setting.value = Settings.get(line.setting.name);
       line.setEditorValue();
     }
     if (AppsSettings._onChange != null) {
@@ -94,10 +95,21 @@ class AppSettingsTabLine {
 
   /// get/create Editor + set value
   Element get editor {
+    if (_input != null)
+      return _input;
+    if (_select != null)
+      return _select;
+    //
     if (setting.isPick) {
       _select = new SelectElement()
           ..name = setting.name;
       for (DOption option in setting.optionList) {
+        _select.append(new OptionElement(data: option.label, value: option.value));
+      }
+    } else if (setting.optional && setting.isBool) {
+      _select = new SelectElement()
+        ..name = setting.name;
+      for (DOption option in OptionUtil.optionsYesNo(true)) {
         _select.append(new OptionElement(data: option.label, value: option.value));
       }
     } else {
@@ -118,9 +130,13 @@ class AppSettingsTabLine {
 
   /// set editor value
   void setEditorValue() {
-    if (setting.isBool)
-      _input.checked = setting.valueAsBool();
-    else if (setting.isInt)
+    if (setting.isBool) {
+      if (_input != null) {
+        _input.checked = setting.valueAsBool();
+      } else {
+        _select.value = setting.value;
+      }
+    } else if (setting.isInt)
       _input.valueAsNumber = setting.valueAsInt();
     else if (setting.isNum)
       _input.valueAsNumber = setting.valueAsNum();
@@ -130,18 +146,20 @@ class AppSettingsTabLine {
       _input.value = setting.value;
   }
 
-  /// reset
-  void reset() {
-    setting.reset();
-    setEditorValue();
-  }
-
   /// save value to setting (need to save to preference)
   void save() {
     if (setting.userUpdatable) {
-      if (setting.isBool)
-        setting.value = _input.checked;
-      else if (setting.isInt)
+      if (setting.isBool) {
+        if (_input != null) {
+          setting.value = _input.checked;
+        } else {
+          String vv = _select.value;
+          if (vv == null || vv.isEmpty)
+            setting.value = null;
+          else
+            setting.value = vv == Html0.V_TRUE;
+        }
+      } else if (setting.isInt)
         setting.value = _input.valueAsNumber;
       else if (setting.isNum)
         setting.value = _input.valueAsNumber;

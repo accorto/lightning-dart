@@ -74,7 +74,7 @@ class LSelect
     // Alternative display
     if (dataColumn != null && dataColumn.tableColumn.pickValueList.isEmpty
         && dataColumn.tableColumn.dataType == DataType.BOOLEAN) {
-      dOptionList = OptionUtil.optioneYesNo();
+      dOptionList = OptionUtil.optionsYesNo(false);
       // make optional
       if (dataColumn.uiPanelColumn != null
         && dataColumn.uiPanelColumn.hasIsMandatory()

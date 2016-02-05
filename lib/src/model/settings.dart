@@ -33,18 +33,21 @@ class Settings {
       add(MOBILE_UI, ClientEnv.isMobileUserAgent.toString(),
           label:"Mobile UI",
           description: "Mobile (phone, tablet) environment",
-          dataType: EditorI.TYPE_CHECKBOX);
+          dataType: EditorI.TYPE_CHECKBOX)
+        ..optional = true;
       add(NATIVE_HTML5, ClientEnv.isMobileUserAgent.toString(),
           label:"Native Html5",
           description: "Use native HTML5 elements, e.g. date, number",
-          dataType: EditorI.TYPE_CHECKBOX);
-      add(GEO_ENABLED, VALUE_FALSE,
-          label:"Geo Location",
-          description: "Request browser Geo Location",
-          dataType: EditorI.TYPE_CHECKBOX);
+          dataType: EditorI.TYPE_CHECKBOX)
+        ..optional = true;
       add(ICON_IMAGE, VALUE_FALSE,
           label:"Icon Image",
           description: "Icons use path rather than symbol",
+          dataType: EditorI.TYPE_CHECKBOX)
+        ..optional = true;
+      add(GEO_ENABLED, VALUE_FALSE,
+          label:"Geo Location",
+          description: "Request browser Geo Location",
           dataType: EditorI.TYPE_CHECKBOX);
       add(EXPERT_MODE, VALUE_FALSE,
           label:"Expert Mode",
@@ -67,7 +70,7 @@ class Settings {
       ..description = description;
     if (label != null)
       item.label = label;
-    Settings.settingList.add(item);
+    settingList.add(item);
     return item;
   } // add
 
@@ -82,7 +85,7 @@ class Settings {
     return add(name, value, label:label, dataType:dataType, userUpdatable:userUpdatable);
   }
 
-    /**
+  /**
    * Load from Preferences to original value
    * (initially loaded from [Preference.init()])
    */
@@ -101,13 +104,20 @@ class Settings {
       if (value == null) {
         value = Preference.get(PREFERENCE_PREFIX, item.name, null);
       }
+      item.valueOriginal = value;
       if (value != null) {
-        item.valueOriginal = value;
         count++;
       }
     }
     _log.config("load #${count} of ${settingList.length}");
   } // load
+
+  /// reset and load
+  static void reset() {
+    Preference.removeAll(PREFERENCE_PREFIX);
+    load();
+  }
+
 
   /**
    * Store values to Preferences

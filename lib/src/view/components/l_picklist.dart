@@ -104,7 +104,7 @@ class LPicklist
         dOptionList = tableColumn.pickValueList;
       } else if (dataColumn.tableColumn.dataType == DataType.BOOLEAN) {
         // Alternative display
-        dOptionList = OptionUtil.optioneYesNo();
+        dOptionList = OptionUtil.optionsYesNo(false);
         // make optional
         if (dataColumn.uiPanelColumn != null
             && dataColumn.uiPanelColumn.hasIsMandatory()

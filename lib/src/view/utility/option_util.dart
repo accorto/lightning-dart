@@ -74,14 +74,16 @@ class OptionUtil {
   }
 
   /// option list with yes/no
-  static List<DOption> optioneYesNo() {
+  static List<DOption> optionsYesNo(bool optional) {
     List<DOption> retValue = new List<DOption>();
+    if (optional)
+      retValue.add(new DOption());
     DOption doption = new DOption()
-      ..value = "true"
+      ..value = Html0.V_TRUE
       ..label = optionUtilYes();
     retValue.add(doption);
     doption = new DOption()
-      ..value = "false"
+      ..value = Html0.V_FALSE
       ..label = optionUtilNo();
     retValue.add(doption);
     return retValue;

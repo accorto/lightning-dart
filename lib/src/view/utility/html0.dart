@@ -140,4 +140,9 @@ class Html0 {
   static const String V_FALSE = "false";
 
 
+  /// Namespace xlink
+  static const String NS_XLINK = "http://www.w3.org/1999/xlink";
+  /// Namespace xhtml
+  static const String NS_XHTML = "http://www.w3.org/1999/xhtml";
+
 } // Html0

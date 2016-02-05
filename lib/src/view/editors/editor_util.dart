@@ -22,7 +22,7 @@ class EditorUtil {
    */
   static LEditor createfromColumn(String name, DataColumn dataColumn, bool inGrid,
       {String idPrefix, DataRecord data, DEntry entry, bool isAlternativeDisplay:false}) {
-    bool html5 = Settings.getAsBool(Settings.NATIVE_HTML5);
+    bool html5 = Settings.getAsBool(Settings.NATIVE_HTML5, defaultValue: ClientEnv.isMobileUserAgent);
     LEditor editor = null;
     if (dataColumn != null) {
       name = dataColumn.name;

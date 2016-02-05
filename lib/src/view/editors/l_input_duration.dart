@@ -38,7 +38,7 @@ class LInputDuration
     super._initEditor(type);
     _type = type;
     _isHour = (type == EditorI.TYPE_DURATIONHOUR);
-    mobileUi = Settings.getAsBool(Settings.MOBILE_UI);;
+    mobileUi = Settings.getAsBool(Settings.MOBILE_UI, defaultValue: ClientEnv.isMobileUserAgent);
     input.onBlur.listen((Event evt){
       input.value = renderSync(input.value, true);
     });

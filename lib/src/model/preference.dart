@@ -156,7 +156,7 @@ class Preference {
       if (sub != null && sub.isNotEmpty)
         key = "${name}.${sub}";
       _map.remove(key);
-      _save();
+      _pref.dbDelete(key);
     }
   }
 
@@ -176,7 +176,7 @@ class Preference {
       for (String key in toDelete) {
         _map.remove(key);
       }
-      _save();
+      _pref.dbDeleteList(toDelete);
     } else {
       clear();
     }

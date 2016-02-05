@@ -26,11 +26,13 @@ class SvgUtil {
   static bool _createImg;
 
   /// Create svg direct vs. use
-  static bool createDirect() {
+  static bool createDirect(bool implementationOnly) {
+    if (implementationOnly)
+      return !document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#Structure", "1.1");
     if (_createDirect == null) {
       _createDirect = !document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#Structure", "1.1");
       if (!_createDirect) {
-        _createDirect = ClientEnv.isIE;
+        _createDirect = ClientEnv.isIE11  || ClientEnv.isChrome;
       }
     }
     return _createDirect;
@@ -90,7 +92,7 @@ class SvgUtil {
     } else {
       String viewBox = sym.getAttribute("viewBox"); // as text
       svgElement.setAttribute("viewBox", viewBox);
-      //
+      // find path in symbol
       Element path = null;
       for (var p in sym.childNodes) { // might be text (space)
         if (p is svg.PathElement) {
@@ -102,12 +104,16 @@ class SvgUtil {
         svgElement.setAttribute("data-info", "NoPath ${symbolName}");
       } else {
         Element clone = path.clone(true);
+        // if use has title, we loose it
         if (svgElement.children.length == 1) {
           svgElement.children.clear(); // remove use
           svgElement.append(clone); // add path
         } else {
-          svgElement.children.removeLast(); // remove use
-          svgElement.append(clone); // add path
+          for (var use in svgElement.children) {
+            if (use is svg.UseElement) {
+              use.replaceWith(clone); // replace use
+            }
+          }
         }
       }
     }

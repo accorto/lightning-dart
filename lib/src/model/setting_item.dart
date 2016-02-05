@@ -60,6 +60,8 @@ class SettingItem {
   }
   String _dataType;
 
+  /// Optional
+  bool optional = false;
 
   /// Setting value
   String get value {
@@ -119,7 +121,8 @@ class SettingItem {
     return dataType == EditorI.TYPE_NUMBER;
   }
   bool get isPick {
-    return dataType == EditorI.TYPE_SELECT && optionList != null && optionList.isNotEmpty;
+    return dataType == EditorI.TYPE_SELECT
+        && optionList != null && optionList.isNotEmpty;
   }
 
   /// int or 0

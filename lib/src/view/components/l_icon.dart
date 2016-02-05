@@ -185,12 +185,10 @@ class LIcon {
     }
     element.setAttributeNS(null, Html0.ARIA_HIDDEN, "true");
     element.setAttributeNS(null, Html0.ROLE, Html0.ROLE_IMG);
-    this.linkName = linkName;
+    this.linkName = linkName; // sets use
     //
     element.append(_use);
-    if (Settings.getAsBool(Settings.ICON_IMAGE)
-        || SvgUtil.createImg() // no svg browser support
-        || SvgUtil.createDirect()) {
+    if (Settings.getAsBool(Settings.ICON_IMAGE, defaultValue: SvgUtil.createDirect(false))) {
       SvgUtil.svgDirect(element, "${packagePrefix}${linkPrefix}", linkName);
     }
   } // LIcon
@@ -250,6 +248,7 @@ class LIcon {
   void set linkName (String newValue) {
     _linkName = newValue;
     _use.href.baseVal = "${packagePrefix}${linkPrefix}#${_linkName}";
+    //_use.setAttributeNS(Html0.NS_XLINK, "href", "${packagePrefix}${linkPrefix}#${_linkName}");
   }
   /// Link name
   String _linkName;
