@@ -10,7 +10,8 @@ part of lightning_ctrl;
  * Main Page Menu Item
  * - a menu Item and the container for the content
  */
-abstract class AppsPage extends LComponent {
+abstract class AppsPage
+    extends LComponent {
 
   static const String MENU_SUFFIX = "-menu";
 
@@ -39,9 +40,13 @@ abstract class AppsPage extends LComponent {
    * if the [path] is not provided, it is [name]
    * (needs to be created after AppsMain!)
    */
-  AppsPage(String id, String this.name, LIcon this.icon, String this.label, String this.title,
-        {String this.externalHref, String target, String path,
-        bool defaultRoute:false, bool handleRouteEvents:false}) {
+  AppsPage(String id, String this.name,
+      LIcon this.icon,
+      String this.label,
+      String this.title,
+      {String this.externalHref, String target, String path,
+      bool defaultRoute:false,
+      bool handleRouteEvents:false}) {
     element.id = id;
     // Menu Entry
     menuEntry.id = id + MENU_SUFFIX;

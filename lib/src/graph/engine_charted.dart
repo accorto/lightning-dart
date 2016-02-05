@@ -560,6 +560,8 @@ class EngineCharted
         String dateValue = DataRecord.getColumnValue(record, dateColumnName);
         return isDateMatch(dateValue, dateColumnValue, dateByPeriod);
       });
+      info += " match=${match}";
+      _log.fine(info);
     }
   } // handleHighlight
 

@@ -34,6 +34,11 @@ class ClientEnv {
   /** System Session */
   static Session _session;
 
+  /// Original Uri (window.location)
+  static Uri uriOriginal;
+  /// Base Uri w/o fragment/query
+  static Uri uriBase;
+
   /// Date Format Short - 1/1/2005
   static DateFormat dateFormat_ymd;
   /// Date Format Short -  1/1
@@ -66,6 +71,9 @@ class ClientEnv {
    * - called from LightningDart.init()
    */
   static Future<bool> init() {
+    uriOriginal = Uri.parse(window.location.toString());
+    uriBase = uriOriginal.replace(query: "").removeFragment();
+    //
     localeName = window.navigator.language;
     Settings.init();
     Completer<bool> completer = new Completer<bool>();

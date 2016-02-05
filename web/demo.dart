@@ -249,7 +249,9 @@ class SupportLink extends AppsPage {
 
   final DivElement element = new DivElement();
 
-  SupportLink() : super("support", "support", supportIcon, "Doc + Support", "Lightning Dart Support",
-    externalHref: "http://lightning.accorto.com", target: "_blank");
+  SupportLink() : super("support", "support", supportIcon,
+      "Doc + Support", "Lightning Dart Support",
+      externalHref: "http://lightning.accorto.com", // support
+      target: NewWindow.NAME_BLANK);
 
 }

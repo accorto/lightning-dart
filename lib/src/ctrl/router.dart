@@ -222,7 +222,9 @@ class Router {
   /**
    * Add Route with [name] and [path] without starting / or #
    */
-  void addRoute({String name, String path, String title, RouteEventHandler enter, bool defaultRoute:false}) {
+  void addRoute({String name, String path, String title,
+      RouteEventHandler enter,
+      bool defaultRoute:false}) {
     path = cleanPath(path, addPrefix: false);
     for (Route rr in _routeList) {
       if (rr.name == name || rr.path == path) {

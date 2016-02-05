@@ -134,6 +134,7 @@ part 'src/view/home/l_object_home.dart';
 part 'src/view/home/l_object_home_filter.dart';
 part 'src/view/home/l_record_home.dart';
 part 'src/view/home/l_related_list.dart';
+part 'src/view/home/new_window.dart';
 part 'src/view/home/page_simple.dart';
 
 part 'src/view/utility/dl_util.dart';

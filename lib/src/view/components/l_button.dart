@@ -260,7 +260,7 @@ class LButton
         buttonClasses: [C_BUTTON__NEUTRAL], idPrefix:idPrefix);
   /// Neutral Anchor
   LButton.neutralAnchor(String name, String label,
-      {String href, String target:"_blank", String idPrefix})
+      {String href, String target:NewWindow.NAME_BLANK, String idPrefix})
     : this(new AnchorElement(href:(href == null ? "#" : href)) ..target = target,
         name, label,
         buttonClasses: [C_BUTTON__NEUTRAL], idPrefix:idPrefix);
@@ -276,7 +276,7 @@ class LButton
         buttonClasses: [C_BUTTON__NEUTRAL], icon:icon, iconLeft:iconLeft, idPrefix:idPrefix);
   /// Neutral Anchor
   LButton.neutralAnchorIcon(String name, String label, LIcon icon,
-      {String href, String target:"_blank", bool iconLeft: false, String idPrefix})
+      {String href, String target:NewWindow.NAME_BLANK, bool iconLeft: false, String idPrefix})
     : this(new AnchorElement(href:(href == null ? "#" : href)) ..target = target,
         name, label,
         buttonClasses: [C_BUTTON__NEUTRAL], icon:icon, iconLeft:iconLeft, idPrefix:idPrefix);
@@ -296,7 +296,7 @@ class LButton
         buttonClasses: [C_BUTTON__BRAND], icon:icon, iconLeft:iconLeft, idPrefix:idPrefix);
   /// Brand Button
   LButton.brandAnchor(String name, String label,
-      {String href, String target:"_blank", String idPrefix})
+      {String href, String target:NewWindow.NAME_BLANK, String idPrefix})
     : this(new AnchorElement(href: (href == null ? "#" : href)) ..target = target,
         name, label,
         buttonClasses: [C_BUTTON__BRAND], idPrefix:idPrefix);

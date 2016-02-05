@@ -696,7 +696,7 @@ class LTable
   /**
    * Add Plain Body Row
    */
-  void addRowDataList(List<dynamic> tdValues) {
+  TableRowElement addRowDataList(List<dynamic> tdValues) {
     if (_tbody == null)
       _tbody = _table.createTBody();
     TableRowElement tr = _tbody.addRow();
@@ -713,6 +713,7 @@ class LTable
         }
       }
     }
+    return tr;
   } // addRowDataList
 
   /// Add col element to table

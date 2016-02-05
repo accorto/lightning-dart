@@ -67,6 +67,7 @@ class Buttons extends DemoFeature {
     div.add(new LButton.iconBorderFilled("b64", new LIconUtility(LIconUtility.SETTINGS), "border filled"));
     div.add(new LButton.more("b65", null, new LIconUtility(LIconUtility.SETTINGS), "more"));
     div.add(new LButton.more("b66", "More", new LIconUtility(LIconUtility.SETTINGS), "more"));
+    div.append(new NewWindow().element);
 
     div.appendHrSmall();
     div.add(new LButton.destructive("b71", "destructive button"));

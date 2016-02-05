@@ -186,7 +186,8 @@ class LIcon {
     this.linkName = linkName;
     //
     element.append(_use);
-    if (SvgUtil.createImg() // no svg support
+    if (Settings.getAsBool(Settings.ICON_IMAGE)
+        || SvgUtil.createImg() // no svg browser support
         || SvgUtil.createDirect()) {
       SvgUtil.svgDirect(element, "${packagePrefix}${linkPrefix}", linkName);
     }

@@ -42,6 +42,11 @@ class SettingItem {
   }
   String _label;
 
+  String get description => _description;
+  void set description (String newValue) {
+    _description = newValue;
+  }
+  String _description;
 
   /// Data Type (EditorI) or text
   String get dataType {

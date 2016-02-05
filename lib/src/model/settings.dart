@@ -14,6 +14,7 @@ class Settings {
   static const String NATIVE_HTML5 = "nativeHtml5";
   static const String MOBILE_UI = "mobileUI";
   static const String EXPERT_MODE = "expertMode";
+  static const String ICON_IMAGE = "iconImg";
   static const String GEO_ENABLED = "geoEnabled";
 
 
@@ -30,13 +31,25 @@ class Settings {
   static void init() {
     if (settingList.isEmpty) {
       add(MOBILE_UI, ClientEnv.isMobileUserAgent.toString(),
-          label:"Mobile UI", dataType: EditorI.TYPE_CHECKBOX);
+          label:"Mobile UI",
+          description: "Mobile (phone, tablet) environment",
+          dataType: EditorI.TYPE_CHECKBOX);
       add(NATIVE_HTML5, ClientEnv.isMobileUserAgent.toString(),
-          label:"Native Html5", dataType: EditorI.TYPE_CHECKBOX);
+          label:"Native Html5",
+          description: "Use native HTML5 elements, e.g. date, number",
+          dataType: EditorI.TYPE_CHECKBOX);
       add(GEO_ENABLED, VALUE_FALSE,
-          label:"Geo Location", dataType: EditorI.TYPE_CHECKBOX);
+          label:"Geo Location",
+          description: "Request browser Geo Location",
+          dataType: EditorI.TYPE_CHECKBOX);
+      add(ICON_IMAGE, VALUE_FALSE,
+          label:"Icon Image",
+          description: "Icons use path rather than symbol",
+          dataType: EditorI.TYPE_CHECKBOX);
       add(EXPERT_MODE, VALUE_FALSE,
-          label:"Expert Mode", dataType: EditorI.TYPE_CHECKBOX);
+          label:"Expert Mode",
+          description: "Show detailed information",
+          dataType: EditorI.TYPE_CHECKBOX);
     }
   } // init
 
@@ -44,12 +57,14 @@ class Settings {
    * Add Setting
    */
   static SettingItem add(String name, String value,
-                  {String label,
-                  String dataType: EditorI.TYPE_TEXT,
-                  bool userUpdatable: true}) {
+      {String label,
+      String dataType: EditorI.TYPE_TEXT,
+      String description,
+      bool userUpdatable: true}) {
     SettingItem item = new SettingItem(name, value: value)
       ..dataType = dataType
-      ..userUpdatable = userUpdatable;
+      ..userUpdatable = userUpdatable
+      ..description = description;
     if (label != null)
       item.label = label;
     Settings.settingList.add(item);
@@ -60,9 +75,9 @@ class Settings {
    * Add Setting - get Value from Preference
    */
   static SettingItem addFromPreference(String name, String defaultValue,
-                         {String label,
-                         String dataType: EditorI.TYPE_TEXT,
-                         bool userUpdatable: true}) {
+      {String label,
+      String dataType: EditorI.TYPE_TEXT,
+      bool userUpdatable: true}) {
     String value = Preference.get(PREFERENCE_PREFIX, name, defaultValue);
     return add(name, value, label:label, dataType:dataType, userUpdatable:userUpdatable);
   }

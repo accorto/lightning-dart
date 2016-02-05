@@ -108,7 +108,7 @@ class FormCtrl
             idPrefix:id, iconLeft: true);
         }
         if (process.hasWebLinkUrl())
-          (btn.element as AnchorElement).target = "_blank";
+          (btn.element as AnchorElement).target = NewWindow.NAME_BLANK;
       } else {
         if (icon == null) {
           btn = new LButton.neutral(process.name, process.label,

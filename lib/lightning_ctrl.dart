@@ -41,6 +41,7 @@ part 'src/apps/apps_header.dart';
 part 'src/apps/apps_logout.dart';
 part 'src/apps/apps_main.dart';
 part 'src/apps/apps_menu.dart';
+part 'src/apps/apps_new_window.dart';
 part 'src/apps/apps_page.dart';
 part 'src/apps/apps_settings.dart';
 part 'src/apps/apps_settings_tab.dart';

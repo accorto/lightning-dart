@@ -45,7 +45,9 @@ class AppSettingsTab
     for (SettingItem item in Settings.settingList) {
       AppSettingsTabLine line = new AppSettingsTabLine(item);
 
-      table.addRowDataList([item.label, line.editor]);
+      TableRowElement tr = table.addRowDataList([item.label, line.editor]);
+      if (item.description != null)
+        tr.title = item.description;
       _lines.add(line);
     }
     element.append(_buttonDiv);

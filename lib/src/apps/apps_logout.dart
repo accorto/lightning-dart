@@ -12,12 +12,15 @@ part of lightning_ctrl;
 class AppsLogout
     extends AppsPage {
 
+  static const String NAME = "logout";
+
   final DivElement element = new DivElement();
 
   /// Logout
-  AppsLogout() : super("logout", "logout",
-        new LIconUtility(LIconUtility.LOGOUT),
-        appsLogoutLabel(), appsLogoutLabel()) {
+  AppsLogout() : super(NAME, NAME,
+      new LIconUtility(LIconUtility.LOGOUT),
+      appsLogoutLabel(),
+      appsLogoutLabel()) {
   } // AppsLogout
 
 
