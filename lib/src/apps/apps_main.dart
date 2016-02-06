@@ -26,6 +26,7 @@ class AppsMain
   static AppsMain instance;
   /// Modal Div
   static DivElement get modals => instance._modalDiv;
+
   /// Login Required
   static bool loginRequired = false;
 

@@ -34,13 +34,12 @@ class Preference {
         .then((_) => _pref.dbGetMap())
         .then((Map<String, String> map) {
           _map = map;
-          _log.config("init0 #${_map.length}");
-          Settings.load(map:map);
+          _log.config("init #${_map.length}");
+          Settings.loadMap(map);
           completer.complete(true);
         })
         .catchError((error, StackTrace stackTrace) {
-          _log.warning("init0", error, stackTrace);
-          _map = new Map<String, String>();
+          _log.warning("init", error, stackTrace);
           completer.completeError(error, stackTrace);
         });
       } else {
@@ -48,13 +47,12 @@ class Preference {
         .then((_) => _pref.dbGetMap())
         .then((Map<String, String> map) {
           _map = map;
-          _log.config("init #${_map.length}");
-          Settings.load(map:map);
+          _log.config("init(2) #${_map.length}");
+          Settings.loadMap(map);
           completer.complete(true);
         })
         .catchError((error, StackTrace stackTrace) {
-          _log.warning("init", error, stackTrace);
-          _map = new Map<String, String>();
+          _log.warning("init(2)", error, stackTrace);
           completer.completeError(error, stackTrace);
         });
       }
@@ -119,6 +117,10 @@ class Preference {
    * Save [name] and optional [sub] category with [value]
    */
   static void set(String name, String sub, String value) {
+    if (value == null || value.isEmpty) {
+      remove(name, sub);
+      return;
+    }
     if (_map == null) {
       init();
     }
@@ -127,15 +129,10 @@ class Preference {
       if (sub != null && sub.isNotEmpty)
         key = "${name}.${sub}";
       //
-      if (value == null || value.isEmpty) {
-        _map.remove(key);
-      } else {
-        _map[key] = value;
-      }
-      _log.finest("set ${key}=${value}");
+      _map[key] = value;
       _save();
     }
-  }
+  } // set
   // Save [name] with [value]
   static void setBool(String name, String sub, bool value) {
     set(name, sub, value.toString());
@@ -158,7 +155,7 @@ class Preference {
       _map.remove(key);
       _pref.dbDelete(key);
     }
-  }
+  } // remove
 
   /**
    * Remove all keys starting with name

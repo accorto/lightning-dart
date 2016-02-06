@@ -33,6 +33,9 @@ class PageSimple
 
   static final Logger _log = new Logger("PageSimple");
 
+  /// Current Instance
+  static PageSimple instance;
+
   /// Search for classes to find main element
   static final List<String> MAIN_CLASSES = [LGrid.C_CONTAINER, LGrid.C_CONTAINER__FLUID,
     LGrid.C_CONTAINER__LARGE, LGrid.C_CONTAINER__MEDIUM, LGrid.C_CONTAINER__SMALL, LGrid.C_GRID];
@@ -58,6 +61,7 @@ class PageSimple
    */
   PageSimple(Element this.element, String id,
         {List<String> classList}){
+    instance = this;
     element.classes.clear();
     if (classList != null && classList.isNotEmpty) {
       element.classes.addAll(classList);

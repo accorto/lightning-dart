@@ -17,10 +17,11 @@ class Settings {
   static const String ICON_IMAGE = "iconImg";
   static const String GEO_ENABLED = "geoEnabled";
 
-
-  static const String PREFERENCE_PREFIX = "settings";
   static const String VALUE_TRUE = "true";
   static const String VALUE_FALSE = "false";
+
+  static const String _PREFERENCE_PREFIX = "setting";
+  static const String _LAST_MOD = "lastMod";
 
   static final Logger _log = new Logger("Settings");
 
@@ -81,53 +82,48 @@ class Settings {
       {String label,
       String dataType: EditorI.TYPE_TEXT,
       bool userUpdatable: true}) {
-    String value = Preference.get(PREFERENCE_PREFIX, name, defaultValue);
+    String value = Preference.get(_PREFERENCE_PREFIX, name, defaultValue);
     return add(name, value, label:label, dataType:dataType, userUpdatable:userUpdatable);
   }
 
   /**
    * Load from Preferences to original value
-   * (initially loaded from [Preference.init()])
+   * (from [Preference.init()])
    */
-  static void load({Map<String, String> map}) {
+  static void loadMap(Map<String, String> map) {
     int count = 0;
+    String lastMod = map["${_PREFERENCE_PREFIX}.${_LAST_MOD}"];
     for (SettingItem item in settingList) {
-      String name = item.name;
-      String value = null;
-      if (map != null) {
-        value = map[name];
-        if (value == null) {
-          name = "${PREFERENCE_PREFIX}.${item.name}";
-          value = map[name];
-        }
-      }
-      if (value == null) {
-        value = Preference.get(PREFERENCE_PREFIX, item.name, null);
-      }
-      item.valueOriginal = value;
-      if (value != null) {
+      String key = "${_PREFERENCE_PREFIX}.${item.name}";
+      String value = map[key];
+      //
+      if (value != null || item.optional) {
+        item.valueOriginal = value;
         count++;
       }
     }
-    _log.config("load #${count} of ${settingList.length}");
+    _log.fine("loadMap #${count} of ${settingList.length} in ${map.length}  ${lastMod == null ? "" : lastMod}");
   } // load
 
   /// reset and load
   static void reset() {
-    Preference.removeAll(PREFERENCE_PREFIX);
-    load();
+    Preference.removeAll(_PREFERENCE_PREFIX);
+    for (SettingItem item in settingList) {
+      item.valueOriginal = null;
+    }
   }
 
 
   /**
-   * Store values to Preferences
+   * Store all setting values to Preferences
    */
   static void save() {
     for (SettingItem item in settingList) {
       String value = item.value;
-      Preference.set(PREFERENCE_PREFIX, item.name, value);
+      Preference.set(_PREFERENCE_PREFIX, item.name, value);
       item.valueOriginal = value;
     }
+    Preference.set(_PREFERENCE_PREFIX, _LAST_MOD, new DateTime.now().toIso8601String());
     _log.config("save #${settingList.length}");
   } // save
 

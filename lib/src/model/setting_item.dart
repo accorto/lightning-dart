@@ -18,7 +18,7 @@ class SettingItem {
   bool userUpdatable = true;
 
   /**
-   * Setting Item
+   * Setting Item with [name] and original [value]
    */
   SettingItem(String this.name, {dynamic value}) {
     if (value == null)
@@ -67,12 +67,14 @@ class SettingItem {
   String get value {
     if (_value == null)
       return _valueOriginal;
+    if (_value == DataRecord.NULLVALUE)
+      return null;
     return _value;
   }
   /// Set Value
   void set value(dynamic newValue) {
     if (newValue == null) {
-      _value = null;
+      _value = DataRecord.NULLVALUE;
     } else if (newValue is String) {
       _value = newValue;
     } else {
@@ -173,10 +175,10 @@ class SettingItem {
     }
   }
 
-  /// Save in Preference
+  /// Save individually in Preference (does not update LastMod)
   void save() {
     String vv = value;
-    Preference.set(Settings.PREFERENCE_PREFIX, name, vv);
+    Preference.set(Settings._PREFERENCE_PREFIX, name, vv);
     _valueOriginal = vv;
     _value = null;
 

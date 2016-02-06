@@ -74,10 +74,13 @@ class AppSettingsTab
     if (AppsSettings._onChange != null) {
       AppsSettings._onChange.add(true);
     }
+    if (PageSimple.instance != null)
+      PageSimple.instance.setStatusSuccess(appsSettingsTabSaved());
   }
 
 
   static String appsSettingsTabLabel() => Intl.message("Settings", name: "appsSettingsTabLabel");
+  static String appsSettingsTabSaved() => Intl.message("Settings saved", name: "appsSettingsTabSaved");
 
 } // AppSettingsTab
 
