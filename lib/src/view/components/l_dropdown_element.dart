@@ -27,11 +27,13 @@ class LDropdownElement
   /// Callback on Change
   EditorChange editorChange;
 
+  final String idPrefix;
   /// Dropdown name
   final String name;
 
   /// Dropdown Element
-  LDropdownElement(DivElement this.element, {String this.name: "dd", String idPrefix}) {
+  LDropdownElement(DivElement this.element,
+      {String this.name: "dd", String this.idPrefix}) {
     element.append(_dropdownList);
     element.id = LComponent.createId(idPrefix, "dd");
   }
@@ -187,7 +189,9 @@ class LDropdownElement
   }
 
   void addDOption(DOption option) {
-    addDropdownItem(new LDropdownItem(option));
+    LDropdownItem item = new LDropdownItem(option);
+    item.createId(idPrefix);
+    addDropdownItem(item);
   }
 
   /**

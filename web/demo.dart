@@ -84,7 +84,7 @@ class DemoPage extends AppsPage {
   /// The Element
   Element element = new DivElement();
 
-  final LCheckbox _onlySelectedCb = new LCheckbox("onlySelected")
+  final LCheckbox _onlySelectedCb = new LCheckbox("onlySelected", idPrefix: "demo")
     ..label = "Show only selected components";
   final List<DemoFeature> _featureList = new List<DemoFeature>();
 

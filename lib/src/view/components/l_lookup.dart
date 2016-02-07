@@ -417,6 +417,7 @@ class LLookup
 
   /// add Lookup Item
   void addLookupItem(LLookupItem item) {
+    item.createId(id);
     _lookupItemList.add(item);
     _lookupList.append(item.element);
     item.onClick.listen(onItemClick);

@@ -167,7 +167,8 @@ abstract class DemoFeature
   /// Link to Feature
   void toc(Element toc, void onlySelectedHide()) {
     AnchorElement a = new AnchorElement(href: "#${id}")
-      ..text = label;
+      ..text = label
+      ..id = LComponent.createId("demo", id);
     a.onClick.listen((MouseEvent evt){
       evt.preventDefault();
       onlySelectedHide();

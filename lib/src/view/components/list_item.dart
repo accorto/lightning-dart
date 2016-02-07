@@ -55,6 +55,12 @@ class ListItem
     }
   }
 
+  /// create id
+  void createId(String idPrefix) {
+    String id0 = LComponent.createId(idPrefix, value);
+    id = LUtil.toVariableName(id0);
+  }
+
   /// Label
   void set label(String newValue) {
     super.label = newValue;
