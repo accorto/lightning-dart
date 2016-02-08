@@ -4,7 +4,7 @@
  * License options+support:  https://lightningdart.com
  */
 
-part of lightning_graph;
+part of lightning_ctrl;
 
 /**
  * Graph Element
@@ -21,7 +21,7 @@ class GraphElement {
 
   static final Logger _log = new Logger("GraphElement");
 
-  Element element = new Element.section();
+  Element element = new Element.aside();
 
   final Datasource datasource;
   DTable get table => datasource.ui.table;
@@ -36,26 +36,57 @@ class GraphElement {
   /// Sync Table
   LTable syncTable;
   LButtonStatefulIcon _syncTableButton;
+  bool _displayHorizontal = true;
 
   /**
    * Graph Element - call [init] explicitly
    */
-  GraphElement(Datasource this.datasource) {
-  } // GraphElement
-
-  /// Initialize Element with optional [syncTable]
-  void init(LTable syncTable) {
-    this.syncTable = syncTable;
+  GraphElement(Datasource this.datasource, LTable this.syncTable, bool popIn) {
     element
-      ..id = LComponent.createId("ge", table.name)
-      ..style.minHeight = "300px";
+      ..id = LComponent.createId("ge", table.name);
 
+    _syncTableButton = new LButtonStatefulIcon("syncTable",
+        graphElementSyncTable(),
+        new LIconUtility(LIconUtility.TABLE),
+        idPrefix: element.id,
+        onButtonClick: onSyncButtonClick)
+      ..small = true
+      ..selected = !popIn
+      ..element.style.verticalAlign = "top";
     LForm form = _initForm(element.id);
-    element.append(form.element);
 
+    if (popIn) {
+      _displayHorizontal = false;
+      element.classes.add("graph-popin");
+
+      // header
+      SpanElement text = new SpanElement()
+        ..classes.addAll([LText.C_TEXT_HEADING__SMALL, LMargin.C_TOP__SMALL, LMargin.C_LEFT__MEDIUM])
+        ..text = graphElementTitle();
+      LButton hide = new LButton.iconBare("hide",
+          new LIconUtility(LIconUtility.RIGHT),
+          graphElementHide())
+        ..classes.add(LFloat.C_FLOAT__RIGHT);
+      hide.onClick.listen((MouseEvent evt){
+        show = false;
+      });
+
+      Element header = new Element.header()
+        ..classes.add(LMargin.C_BOTTOM__X_SMALL)
+        ..append(_syncTableButton.element)
+        ..append(hide.element)
+        ..append(text);
+      element.append(header);
+    } else {
+
+      form.add(_syncTableButton);
+    }
+
+    element.append(form.element);
     _graphPanel = new GraphPanel(element.id, table.name);
     element.append(_graphPanel.element);
-  }
+  } // GraphElement
+
 
   /**
    * Initialize Form
@@ -144,19 +175,14 @@ class GraphElement {
     for (DOption colOption in dateList)
       _datePickList.addDOption(colOption);
 
-    if (syncTable != null) {
-      _syncTableButton = new LButtonStatefulIcon("syncTable",
-          graphElementSyncTable(),
-          new LIconUtility(LIconUtility.TABLE),
-          idPrefix: id,
-          onButtonClick: onSyncButtonClick)
-        ..small = true
-        ..selected = true
-        ..element.style.verticalAlign = "top";
-      form.add(_syncTableButton);
-    }
     return form;
-  } // init
+  } // initForm
+
+  bool get show => !element.classes.contains(LVisibility.C_HIDE);
+  void set show (bool newValue) {
+    element.classes.toggle(LVisibility.C_HIDE, !newValue);
+    _syncTableButton.show = syncTable != null;
+  }
 
   /// Selection
   void onFormRecordChange(DRecord record, DEntry columnChanged, int rowNo) {
@@ -206,7 +232,7 @@ class GraphElement {
     }
     //
     _graphPanel.calculate(records, dateColumn, byPeriod);
-    _graphPanel.display();
+    _graphPanel.display(_displayHorizontal);
     //
     doSyncTable(by);
   } // onFormRecordChange
@@ -242,6 +268,8 @@ class GraphElement {
   } // doSyncTable
 
 
+  static String graphElementTitle() => Intl.message("Graph", name: "graphElementTitle");
   static String graphElementSyncTable() => Intl.message("Synchronize with Table", name: "graphElementSyncTable");
+  static String graphElementHide() => Intl.message("Hide Graph", name: "graphElementHide");
 
 } // GraphElement

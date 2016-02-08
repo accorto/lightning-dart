@@ -186,7 +186,8 @@ class LTableRow
       String value,
       String align,
       DataColumn dataColumn,
-      bool addStatistics:true}) {
+      bool addStatistics:true,
+      TableCellElement tc}) {
     DivElement div = new DivElement()
       ..classes.add(LText.C_TRUNCATE);
     if (display == null || display.isEmpty) {
@@ -194,7 +195,7 @@ class LTableRow
     } else {
       div.text = display;
     }
-    return addCell(div, name, value, align, dataColumn, addStatistics: addStatistics);
+    return addCell(div, name, value, align, dataColumn, addStatistics: addStatistics, tc:tc);
   }
 
   /// Add Link
@@ -272,7 +273,8 @@ class LTableRow
       String align,
       DataColumn dataColumn,
       {bool fieldEdit: false,
-      bool addStatistics: true}) {
+      bool addStatistics: true,
+      TableCellElement tc}) {
 
     // find column Name
     String theName = name;
@@ -287,17 +289,19 @@ class LTableRow
       label = nameLabelMap[theName];
     }
 
-    TableCellElement tc = null;
-    if (type == TYPE_HEAD) {
-      tc = new Element.th()
-        ..attributes["scope"] = "col";
-    } else {
-      tc = new Element.td();
-    }
-    if (_actionCell == null) {
-      rowElement.append(tc);
-    } else {
-      rowElement.insertBefore(tc, _actionCell.cellElement);
+    // create if not exists
+    if (tc == null) {
+      if (type == TYPE_HEAD) {
+        tc = new Element.th()
+          ..attributes["scope"] = "col";
+      } else {
+        tc = new Element.td();
+      }
+      if (_actionCell == null) {
+        rowElement.append(tc);
+      } else {
+        rowElement.insertBefore(tc, _actionCell.cellElement);
+      }
     }
     if (fieldEdit) {
       tc.onFocus.listen((Event evt){
@@ -393,20 +397,21 @@ class LTableRow
 
   /// display Read Only
   void _displayRo(String name, String value, String align,
-      DataColumn dataColumn, DEntry entry, bool addStatistics) {
+      DataColumn dataColumn, DEntry entry,
+      bool addStatistics, {TableCellElement tc}) {
     if (dataColumn != null && dataColumn.isValueRenderElement) {
       LEditor editor = _getRenderEditor(dataColumn);
       addCell(editor.getValueRenderElement(value), name, value, align,
-          dataColumn, addStatistics:addStatistics);
+          dataColumn, addStatistics:addStatistics, tc:tc);
     } else if (entry != null && entry.hasValueDisplay()) {
       addCellText(entry.valueDisplay, name:name, value:value, align:align,
-          dataColumn:dataColumn, addStatistics:addStatistics);
+          dataColumn:dataColumn, addStatistics:addStatistics, tc:tc);
     } else if (value == null || value.isEmpty || dataColumn == null || !dataColumn.isValueRender) {
       addCellText(value, name:name, value:value, align:align,
-          dataColumn:dataColumn, addStatistics:addStatistics);
+          dataColumn:dataColumn, addStatistics:addStatistics, tc:tc);
     } else {
       LTableCell cell = addCellText("<${value}>", name:name, value:value, align:align,
-          dataColumn:dataColumn, addStatistics:addStatistics);
+          dataColumn:dataColumn, addStatistics:addStatistics, tc:tc);
       EditorUtil.render(dataColumn, value)
       .then((String display){
         cell.contentText = display;

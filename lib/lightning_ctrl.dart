@@ -14,6 +14,12 @@
  *       // application code
  *     });
  *
+ *
+ * Business Graphics
+ * using DRecord and built on Charted
+ * include
+    <link rel="stylesheet" href="packages/lightning/assets/styles/charted_theme.css">
+ *
  */
 library lightning_ctrl;
 
@@ -32,6 +38,8 @@ import 'package:stack_trace/stack_trace.dart';
 import 'package:protobuf/protobuf.dart';
 import 'package:intl/intl.dart';
 
+import 'package:charted/charted.dart';
+import 'package:observe/observe.dart';
 
 import 'lightning.dart';
 export 'lightning.dart';
@@ -74,6 +82,13 @@ part 'src/ctrl/table_layout.dart';
 part 'src/ctrl/timezone.dart';
 part 'src/ctrl/ui_service.dart';
 
+part 'src/graph/graph_by.dart';
+part 'src/graph/graph_calc.dart';
+part 'src/graph/graph_element.dart';
+part 'src/graph/graph_panel.dart';
+part 'src/graph/engine_base.dart';
+part 'src/graph/engine_charted.dart';
+part 'src/graph/engine_charted_theme.dart';
 
 /**
  * Lightning Dart Controller main entry point

@@ -378,7 +378,7 @@ abstract class EditorI {
       }
       if (!found) {
         _dependentOnList.add(new EditorIDependent(columnName));
-        _log.config("addDependentOn ${name}: ${columnName}");
+        //_log.config("addDependentOn ${name}: ${columnName}");
       }
     }
   }

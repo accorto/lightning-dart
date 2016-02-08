@@ -4,7 +4,7 @@
  * License options+support:  https://lightningdart.com
  */
 
-part of lightning_graph;
+part of lightning_ctrl;
 
 /**
  * Chart Engine Interface
@@ -28,9 +28,9 @@ abstract class EngineBase {
 
 
   /// render stacked chart - true if success
-  bool renderStacked(GraphCalc calc);
+  bool renderStacked(GraphCalc calc, bool displayHorizontal);
 
   /// render pie chart - true if success
-  bool renderPie(GraphCalc calc);
+  bool renderPie(GraphCalc calc, bool displayHorizontal);
 
 } // PanelBase

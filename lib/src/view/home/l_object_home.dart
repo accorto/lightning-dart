@@ -41,6 +41,7 @@ class LObjectHome
   final DivElement _headerRight = new DivElement()
     ..classes.addAll([LGrid.C_COL, LGrid.C_NO_FLEX, LGrid.C_ALIGN_BOTTOM]);
   LDropdown _sort;
+  LButton _graph;
   LDropdown _viewLayout;
   final LButtonGroup _actionButtonGroup = new LButtonGroup();
 
@@ -98,10 +99,10 @@ class LObjectHome
     }
     // graph
     if (onGraphClick != null) {
-      LButton graph = new LButton.iconContainer("graph",
+      _graph = new LButton.iconContainer("graph",
           new LIconUtility(LIconUtility.CHART), "Show Graph");
-      graph.onClick.listen(onGraphClick);
-      _headerRightGrid.append(graph.element);
+      _graph.onClick.listen(onGraphClick);
+      _headerRightGrid.append(_graph.element);
     }
     //
     _viewLayout = new LDropdown.selectIcon(idPrefix:idPrefix);
@@ -156,6 +157,12 @@ class LObjectHome
     element.children.clear();
     element.append(new DivElement()
       ..text = error);
+  }
+
+  bool get graphEnabled => _graph != null && _graph.show;
+  void set graphEnabled (bool newValue) {
+    if (_graph != null)
+      _graph.show = newValue;
   }
 
   /// Sort Dropdown selected

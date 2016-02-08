@@ -10,7 +10,6 @@ import 'dart:html';
 import 'dart:async';
 
 import "package:lightning/lightning_ctrl.dart";
-import "package:lightning/lightning_graph.dart";
 
 export "package:lightning/lightning_ctrl.dart";
 

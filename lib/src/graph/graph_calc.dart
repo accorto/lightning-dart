@@ -4,7 +4,7 @@
  * License options+support:  https://lightningdart.com
  */
 
-part of lightning_graph;
+part of lightning_ctrl;
 
 /**
  * Graph Calculation + Display
@@ -23,14 +23,14 @@ class GraphCalc
 
 
   /// Display
-  void display(EngineBase engine) {
+  void display(EngineBase engine, bool displayHorizontal) {
     if ((dateColumn != null
         || (byList.isNotEmpty && byList.first.byValueList.isNotEmpty))
-        && engine.renderStacked(this)) {
+        && engine.renderStacked(this, displayHorizontal)) {
       return;
     }
 
-    if (engine.renderPie(this)) {
+    if (engine.renderPie(this, displayHorizontal)) {
       return;
     }
 

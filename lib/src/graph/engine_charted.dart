@@ -4,7 +4,7 @@
  * License options+support:  https://lightningdart.com
  */
 
-part of lightning_graph;
+part of lightning_ctrl;
 
 /**
  * Graph Presentation via Charted
@@ -85,7 +85,7 @@ class EngineCharted
   /**
    * Render stacked bar chart - true if rendered
    */
-  bool renderStacked(GraphCalc calc) {
+  bool renderStacked(GraphCalc calc, bool displayHorizontal) {
     _calc = calc;
     _numPrecision = _calc.decimalDigits;
     bool rendered = false;
@@ -95,7 +95,7 @@ class EngineCharted
       if (by.byValueList.isEmpty)
         continue; // no data
       rendered = true;
-      _createLayout();
+      _createLayout(displayHorizontal);
 
       // config
       List<int> measures = new List<int>();
@@ -135,7 +135,7 @@ class EngineCharted
       area.draw();
     }
     if (!rendered && _calc.byDateList != null && _calc.byDateList.isNotEmpty) {
-      return renderBar(_calc);
+      return renderBar(_calc, displayHorizontal);
     }
     return rendered;
   } // renderStackedChart
@@ -187,7 +187,7 @@ class EngineCharted
   /**
    * Render Bar Chart
    */
-  bool renderBar(GraphCalc calc) {
+  bool renderBar(GraphCalc calc, bool displayHorizontal) {
     _calc = calc;
     if (_calc.byDateList != null && _calc.byDateList.isNotEmpty) { // .. no by
       _data = new ChartData(_pointColumns(_calc),
@@ -199,7 +199,7 @@ class EngineCharted
     if (_data == null) {
       return false; // no data
     }
-    _createLayout();
+    _createLayout(displayHorizontal);
 
     ChartSeries series = new ChartSeries(_calc.tableName, [1],
         new BarChartRenderer(alwaysAnimate: true));
@@ -268,7 +268,7 @@ class EngineCharted
   /**
    * Render Pie in [parent]
    */
-  bool renderPie(GraphCalc calc) {
+  bool renderPie(GraphCalc calc, bool displayHorizontal) {
     _calc = calc;
     _numPrecision = _calc.decimalDigits;
     bool rendered = false;
@@ -277,7 +277,7 @@ class EngineCharted
       if (by.count == 0)
         continue;
       rendered = true;
-      _createLayout();
+      _createLayout(displayHorizontal);
       //
       by.updateLabels();
 
@@ -372,17 +372,19 @@ class EngineCharted
   } */
 
   /// create Charted layout
-  void _createLayout() {
+  void _createLayout(bool displayHorizontal) {
     if (_chartHost == null) {
       DivElement chartHostWrapper = new DivElement()
         ..classes.addAll(["chart-host-wrapper"]);
       element.append(chartHostWrapper);
+
+      String vh = displayHorizontal ? "-h" : "-v";
       _chartHost = new DivElement()
-        ..classes.addAll(["chart-host"])
+        ..classes.add("chart-host${vh}")
         ..dir = "ltr";
       chartHostWrapper.append(_chartHost);
       _legendHost = new DivElement()
-        ..classes.addAll(["chart-legend-host"]);
+        ..classes.add("chart-legend-host${vh}");
       chartHostWrapper.append(_legendHost);
     }
   }

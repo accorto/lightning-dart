@@ -54,6 +54,25 @@ class TableCtrl
     resetContent();
   } // ObjectTable
 
+  /*
+  void set infiniteScroll(bool newValue) {
+    if (newValue) {
+      if (!responsiveOverflow)
+        responsiveOverflow = true;
+      Element ee = wrapper;
+      wrapper.classes.add(LScrollable.C_SCROLLABLE__Y);
+      ee.onScroll.listen((Event e) {
+        bool end = ee.scrollHeight - ee.scrollTop == ee.clientHeight;
+        if (end) {
+          _log.config("scroll end height=${ee.scrollHeight} top=${ee.scrollTop} client=${ee.clientHeight}");
+        } else {
+          _log.config("scroll --- height=${ee.scrollHeight} top=${ee.scrollTop} client=${ee.clientHeight}");
+        }
+      });
+    }
+  } */
+
+
   /// Add Table/Row Actions
   void addActions() {
     // Table Actions

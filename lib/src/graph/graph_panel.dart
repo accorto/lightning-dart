@@ -4,7 +4,7 @@
  * License options+support:  https://lightningdart.com
  */
 
-part of lightning_graph;
+part of lightning_ctrl;
 
 /**
  * Graph Panel
@@ -32,14 +32,15 @@ class GraphPanel
   /**
    * Graph Panel
    */
-  GraphPanel(String this.id, String this.tableName,
-    {String title, String subTitle}) {
+  GraphPanel(String this.id,
+      String this.tableName,
+      {String title, String subTitle}) {
     element.id = id;
     if (title != null)
       engine.title = title;
     if (subTitle != null)
       engine.subTitle = subTitle;
-  }
+  } // GraphPanel
 
   /// reset panel
   void reset() {
@@ -125,10 +126,10 @@ class GraphPanel
   } // calculate
 
   /// display
-  void display() {
+  void display(bool displayHorizontal) {
     engine.reset();
     for (GraphCalc calc in _calcList) {
-      calc.display(engine);
+      calc.display(engine, displayHorizontal);
     }
   }
 

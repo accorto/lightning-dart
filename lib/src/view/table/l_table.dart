@@ -156,6 +156,8 @@ class LTable
       _wrapper = null;
     }
   }
+  /// Scroll Wrapper
+  Element get wrapper => _wrapper;
 
   /// Table bordered
   bool get bordered => element.classes.contains(C_TABLE__BORDERED);

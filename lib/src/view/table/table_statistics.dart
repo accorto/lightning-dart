@@ -84,7 +84,8 @@ class TableStatistics {
               if (record == null) {
                 record = new DRecord()
                   ..isGroupBy = true
-                  ..drv = "${tableStatisticsGroupBy()}: ${by.label} = ${byValue.label}";
+                  ..drv = "${by.label}: ${byValue.label}"
+                  ..who = "${tableStatisticsGroupBy()} ${by.label}: ${byValue.label}";
                 record.entryList.add(key);
                 groupRecords[key] = record;
               }

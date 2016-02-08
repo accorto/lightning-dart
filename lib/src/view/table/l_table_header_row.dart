@@ -38,22 +38,26 @@ class LTableHeaderRow
         nameLabelMap,
         LTableRow.TYPE_HEAD,
         tableActions,
-        dataColumns);
+        dataColumns) {
+    if (rowSelect)
+      nameList.add(null);
+  }
 
   /**
    * Add Cell with Header Text
    * with [label] of column [name] with optional [value]
    * - name/label are used for responsive
    */
-  LTableHeaderCell addHeaderCell(String name, String label, {String value, String align, DataColumn dataColumn}) {
+  LTableHeaderCell addHeaderCell(String name, String label,
+      {String value, String align, DataColumn dataColumn}) {
     SpanElement span = new SpanElement()
       ..classes.add(LText.C_TRUNCATE)
       ..text = label == null ? "" : label;
 
     if (name != null && name.isNotEmpty && label != null && label.isNotEmpty) {
-      int index = rowElement.children.length -1;
-      while (nameList.length < index)
-        nameList.add(null);
+      //int index = rowElement.children.length -1;
+      //while (nameList.length < index)
+      //  nameList.add(null);
       nameList.add(name);
       nameLabelMap[name] = label;
     }

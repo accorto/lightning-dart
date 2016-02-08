@@ -42,7 +42,6 @@ class ObjectCtrl
    */
   ObjectCtrl(Datasource this.datasource,
       {String containerClass: LGrid.C_CONTAINER__FLUID,
-      void onGraphClick(MouseEvent),
       bool queryExecute:true}) {
     String idPrefix = "oc-" + datasource.tableName;
     element.id = idPrefix;
@@ -561,6 +560,22 @@ class ObjectCtrl
   /// Application Action Compact Layout
   void onAppsActionCompactLayout(String value, DRecord record, DEntry entry, var actionVar) {
     _log.config("onAppsActionCompactLayout ${tableName} ${value}");
+  }
+
+
+  void onGraphClick(MouseEvent evt) {
+    if (_graph == null) {
+      _graph = new GraphElement(datasource, _table, true);
+      element.insertBefore(_graph.element, _content.element);
+    }
+    _graph.syncTable = _table;
+    _graph.show = true;
+  }
+  GraphElement _graph;
+
+  bool get graphEnabled => _header.graphEnabled;
+  void set graphEnabled (bool newValue) {
+    _header.graphEnabled = newValue;
   }
 
 

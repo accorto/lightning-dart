@@ -1,3 +1,15 @@
+.graph-popin {
+  position: absolute;
+  right: 0;
+  width: 40%;
+  min-width: 300px;
+  height: 100%;
+  max-height: 900px;
+  z-index: 100;
+  padding: .5rem;
+  background: white;
+  border: 1px solid #EFEFEF; }
+
 /**
  * Charted Quantum components layout
  chart-wrapper
@@ -11,7 +23,8 @@
  -- chart-legend-host
  */
 .chart-wrapper {
-  display: block; }
+  display: block;
+  min-height: 300px; }
 
 .chart-title-wrapper {
   margin-bottom: 26px;
@@ -28,15 +41,27 @@
 
 .chart-host-wrapper {
   display: flex;
+  flex-wrap: wrap;
   width: 100%; }
 
-.chart-host {
+.chart-host-h {
   display: block;
   width: 70%; }
 
-.chart-legend-host {
+.chart-host-v {
+  display: block;
+  width: 100%; }
+
+.chart-legend-host-h {
   display: block;
   width: 30%;
+  overflow-y: auto; }
+
+.chart-legend-host-v {
+  display: block;
+  width: 100%;
+  margin: 5px 0 0 10px;
+  max-height: 400px;
   overflow-y: auto; }
 
 /*

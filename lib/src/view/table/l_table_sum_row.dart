@@ -51,16 +51,19 @@ class LTableSumRow
   void display() {
     for (String name in nameList) {
       TableCellElement tc = new Element.td();
+      rowElement.append(tc);
 
       if (name == null) { // select column
-        rowElement.append(tc);
         LIconUtility icon = new LIconUtility(
             statistics == null ? LIconUtility.SUMMARYDETAIL : LIconUtility.SUMMARY,
             color: LIcon.C_ICON_TEXT_DEFAULT,
             size: LIcon.C_ICON__X_SMALL);
         if (statistics == null) {
-          icon.title = data.record.drv;
-          rowElement.title = data.record.drv;
+          String title = data.record.who;
+          if (title.isEmpty)
+            title = data.record.drv;
+          icon.title = title;
+          rowElement.title = title;
         } else {
           icon.title = lTableSumRowSummary();
         }
@@ -68,7 +71,9 @@ class LTableSumRow
         continue;
       }
       if (name == DataRecord.URV || name == "Id") {
-        rowElement.append(tc);
+        Element small = new Element.tag("small")
+          ..text = data.record.drv;
+        tc.append(small);
         continue;
       }
       //
@@ -77,17 +82,17 @@ class LTableSumRow
 
       if (statistics == null) { // group by
         DataColumn dataColumn = findColumn(name);
+        if (dataColumn != null && dataColumn.isValueRenderElement) {
+          continue; // boolean
+        }
         DEntry entry = data.getEntry(null, name, false);
-        if (entry == null) {
-          rowElement.append(tc);
-        } else {
+        if (entry != null) {
           value = DataRecord.getEntryValue(entry);
           align = _displayAlign(dataColumn);
           //
-          _displayRo(name, value, align, dataColumn, entry, false);
+          _displayRo(name, value, align, dataColumn, entry, false, tc:tc);
         }
       } else { // footer
-        rowElement.append(tc);
         //
         StatCalc calc = findCalc(name);
         if (calc == null) {
@@ -131,12 +136,13 @@ class LTableSumRow
       String align,
       DataColumn dataColumn,
       {bool fieldEdit: false,
-      bool addStatistics: true}) {
+      bool addStatistics: true,
+      TableCellElement tc}) {
     if (content != null)
       content.classes.add("cell-by");
     return super.addCell(content,
         name, value, align, dataColumn,
-        fieldEdit:fieldEdit, addStatistics:addStatistics);
+        fieldEdit:fieldEdit, addStatistics:addStatistics, tc:tc);
   }
 
 
