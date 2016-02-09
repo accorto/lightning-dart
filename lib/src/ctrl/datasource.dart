@@ -89,8 +89,22 @@ class Datasource
     return completer.future;
   }
 
+  /// update Sort column labels
+  void updateSortLabels() {
+    if (recordSorting.isNotEmpty) {
+      for (RecordSort sort in recordSorting.list) {
+        sort.setLabelFrom(tableDirect);
+      }
+    }
+  }
+
   /// table direct - might be null
-  DTable get tableDirect => _table;
+  DTable get tableDirect {
+    if (_table == null && ui != null) {
+      _table = ui.table;
+    }
+    return _table;
+  }
   DTable _table;
 
   /// Execute Sort locally if possible

@@ -34,8 +34,11 @@ class GraphPanel
    */
   GraphPanel(String this.id,
       String this.tableName,
+      List<String> groupByColumnNames,
       {String title, String subTitle}) {
     element.id = id;
+    if (groupByColumnNames != null)
+      engine.groupByColumnNames = groupByColumnNames;
     if (title != null)
       engine.title = title;
     if (subTitle != null)

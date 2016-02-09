@@ -185,7 +185,12 @@ class LObjectHome
   /// Set Find Editor Change
   void set findEditorChange (EditorChange editorChange) {
     _headerFind.editorChange = editorChange;
-
+  }
+  /// find value
+  String get findValue => _headerFind.value;
+  /// set find value
+  void set findValue (String newValue) {
+    _headerFind.value = newValue;
   }
 
 

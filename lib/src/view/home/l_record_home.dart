@@ -83,8 +83,12 @@ class LRecordHome
 
       for (UIQueryColumn qc in ui.queryColumnList) {
         String columnName = qc.columnName;
-        String label = qc.columnLabel;
         DataColumn dataColumn = new DataColumn(ui.table, qc.column, null, null);
+        if (dataColumn.tableColumn.displaySeqNo > 0)
+          continue; // already displayed
+        String label = qc.columnLabel;
+        if (label.isEmpty)
+          label = dataColumn.label;
         LRecordHomeDetail d = new LRecordHomeDetail(columnName, label, dataColumn);
         _detailList.add(d);
         DivElement div = new DivElement()
@@ -200,6 +204,8 @@ class LRecordHome
     } else if (ui != null) {
       recordTitle = ui.label;
     }
+    _headerLeftRecordTitle.title = _record.who;
+    //
     for (LRecordHomeDetail detail in _detailList) {
       detail.display(_record);
     }
@@ -246,35 +252,35 @@ class LRecordHomeDetail {
         return;
       }
     }
+    // no value
     _dd.attributes[Html0.DATA_VALUE] = "";
     _dd.append(new ParagraphElement());
   } // display
 
+  /// display header details
   void _display(DEntry entry) {
-    String value = null;
-    if (entry.hasValue())
-      value = entry.value;
-    else if (entry.hasValueOriginal())
-      value = entry.valueOriginal;
-    if (value == DataRecord.NULLVALUE)
-      value = null;
-
-    ParagraphElement p = new ParagraphElement()
-      ..classes.add(LText.C_TEXT_BODY__REGULAR)
-      ..classes.add(LText.C_TRUNCATE);
-    _dd.append(p);
+    String value = DataRecord.getEntryValue(entry);
     if (value == null || value.isEmpty) {
       _dd.attributes[Html0.DATA_VALUE] = "";
     } else {
       _dd.attributes[Html0.DATA_VALUE] = value;
-      // show value
-      p.text = value;
-      if (_editor.isValueDisplay) {
-        _editor.render(value, false)
-        .then((String display){
-          p.text = display;
-          entry.valueDisplay = display;
-        });
+      if (_editor.isValueRenderElement) {
+        _dd.append(_editor.getValueRenderElement(value));
+      } else {
+        // show value
+        ParagraphElement pp = new ParagraphElement()
+          ..classes.add(LText.C_TEXT_BODY__REGULAR)
+          ..classes.add(LText.C_TRUNCATE);
+        _dd.append(pp);
+        pp.text = value;
+        // show display value
+        if (_editor.isValueDisplay) {
+          _editor.render(value, false)
+              .then((String display) {
+            pp.text = display;
+            entry.valueDisplay = display;
+          });
+        }
       }
     }
   } // display

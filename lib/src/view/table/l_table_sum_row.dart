@@ -39,9 +39,18 @@ class LTableSumRow
 
 
   /// set Record statistics
-  void setStatistics(TableStatistics statistics, {AppsActionTriggered recordAction}) {
-    this.recordAction = recordAction;
+  void setStatistics(TableStatistics statistics,
+      {AppsActionTriggered recordAction,
+      String label}) {
     this.statistics = statistics;
+    this.recordAction = recordAction;
+    //
+    if (label == null)
+      data.record.clearDrv();
+    else
+      data.record.drv = label;
+    //
+    rowElement.children.clear();
     display();
   }
   TableStatistics statistics;

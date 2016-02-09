@@ -89,8 +89,6 @@ class ObjectCtrl
       _log.warning(idPrefix, error, stackTrace);
       _header.setUiFail("${error}");
     });
-
-
   } // ObjectCtrl
 
   // ObjectCtrl
@@ -105,6 +103,12 @@ class ObjectCtrl
       _log.config("onFindEditorChange ${tableName} '${findString}' #${count}");
       _displaySummary(findString: findString, findCount: count);
     }
+  }
+
+  /// Graph Selection click
+  void onGraphSelectionChange(int count) {
+    _header.findValue = "";
+    _displaySummary(graphSelectCount: count);
   }
 
   /// Editor Change callback
@@ -257,7 +261,7 @@ class ObjectCtrl
   } // display
 
   /// display summary
-  void _displaySummary({String findString, int findCount}) {
+  void _displaySummary({String findString, int findCount, int graphSelectCount}) {
     if (datasource.recordList == null || datasource.recordList.isEmpty) {
       _header.summary = objectCtrlNoRecords();
     } else if (datasource.recordList.length == 1) {
@@ -267,8 +271,12 @@ class ObjectCtrl
       if (findString != null && findString.isNotEmpty) {
         info += " (${findCount} ${objectCtrlMatching()} '${findString}')";
       }
+      if (graphSelectCount != null) {
+        info += " (${graphSelectCount} ${LTable.lTableStatisticGraphSelect()})";
+      }
       _header.summary = info;
     } else {
+      datasource.updateSortLabels();
       String info = "${datasource.recordList.length} ${objectCtrlRecords()} ${LUtil.DOT_SPACE} ${objectCtrlSortedBy()}";
       String prefix = " ";
       for (RecordSort sort in datasource.recordSorting.list) {
@@ -277,6 +285,9 @@ class ObjectCtrl
       }
       if (findString != null && findString.isNotEmpty) {
         info += " (${findCount} ${objectCtrlMatching()} '${findString}')";
+      }
+      if (graphSelectCount != null) {
+        info += " (${graphSelectCount} ${LTable.lTableStatisticGraphSelect()})";
       }
       _header.summary = info;
     }
@@ -302,6 +313,7 @@ class ObjectCtrl
       _table.recordSaved = onRecordSaved;
       _table.recordDeleted = onRecordDeleted;
       _table.recordsDeleted = onRecordsDeleted;
+      _table.graphSelectionChange = onGraphSelectionChange;
       _table.setRecords(datasource.recordList, recordAction: onAppsActionRecord); // urv click
     }
     if (_table.element.parent == null) {
@@ -563,6 +575,7 @@ class ObjectCtrl
   }
 
 
+  /// Graph Icon Click
   void onGraphClick(MouseEvent evt) {
     if (_graph == null) {
       _graph = new GraphElement(datasource, _table, true);
@@ -583,6 +596,7 @@ class ObjectCtrl
   static String objectCtrlProcessing() => Intl.message("Processing", name: "objectCtrlProcessing");
 
   static String objectCtrlMatching() => Intl.message("matching", name: "objectCtrlMatching");
+
   static String objectCtrlNoRecords() => Intl.message("No records", name: "objectCtrlNoRecords");
   static String objectCtrlNoRecordInfo() => Intl.message("No records to display - change Filter or create New", name: "objectCtrlNoRecordInfo");
   // query

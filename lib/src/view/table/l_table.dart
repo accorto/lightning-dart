@@ -12,6 +12,8 @@ typedef void TableSortClicked(String name, bool asc, DataType dataType, MouseEve
 /// Select Clicked (select or unselect)
 typedef void TableSelectClicked(DataRecord data);
 
+/// Graph Selection Changed with selection [count] or null if no selection
+typedef void GraphSelectionChange(int count);
 
 /**
  * Table
@@ -110,6 +112,8 @@ class LTable
   RecordSortList recordSorting;
   /// IdPrefix
   final String idPrefix;
+  /// Callback for Graph Selection
+  GraphSelectionChange graphSelectionChange;
 
   /**
    * Table
@@ -236,9 +240,7 @@ class LTable
     bool shiftMeta = evt != null && (evt.shiftKey || evt.metaKey);
     _log.config("onTableSortClicked ${name} ${asc} shiftMeta=${shiftMeta}");
     if (shiftMeta) {
-      RecordSort sortFound = recordSorting.getSort(name);
-      if (sortFound != null)
-        recordSorting.remove(sortFound);
+      recordSorting.removeColumnName(name);
     } else {
       recordSorting.clear();
     }
@@ -280,11 +282,13 @@ class LTable
     if (group == null) {
       group = new RecordSort.create(_groupByColumnName, true);
     }
+    group.isGroupBy = true;
     recordSorting.setFirst(group);
     _sort(false, false);
   }
 
   /// Sort Table body Rows
+  /// - local: sort LTableRow then recreate tbody/rows
   void _sort(bool sortRemoteOk, bool redisplay) {
     if (_tbodyRows.length > 1) {
       if (sortRemoteOk && recordSorting.sortRemote()) {
@@ -299,6 +303,7 @@ class LTable
         if (redisplay) {
           display(); //
         }
+        _log.fine("sort local #${_tbodyRows.length}");
         _tbodyRows.sort((LTableRow one, LTableRow two) {
           return recordSorting.recordSortCompare(one.record, two.record);
         });
@@ -362,14 +367,22 @@ class LTable
   } // findInTable
 
   /// show rows based on selected Graph portion
+  /// returns matched row count
   int graphSelect(bool graphMatch(DRecord record)) {
+    // show all
     if (graphMatch == null) {
       for (LTableRow row in _tbodyRows) {
         row.record.clearIsMatchFind();
         row.show = true;
       }
+      if (_withStatistics && _statisticsRow != null) {
+        _statisticsRow.setStatistics(_statistics, label: lTableStatisticTotal());
+      }
+      if (graphSelectionChange != null)
+        graphSelectionChange(null);
       return recordList.length;
     }
+    // show matching
     int count = 0;
     for (LTableRow row in _tbodyRows) {
       bool match = graphMatch(row.record);
@@ -378,6 +391,12 @@ class LTable
       if (match && !row.record.isGroupBy)
         count++;
     }
+    if (_withStatistics && _statisticsRow != null) {
+      TableStatistics temp = _statistics.summary(recordList);
+      _statisticsRow.setStatistics(temp, label: lTableStatisticGraphSelect());
+    }
+    if (graphSelectionChange != null)
+      graphSelectionChange(count);
     return count;
   } // graphSelect
 
@@ -578,19 +597,21 @@ class LTable
         LTableSumRow row = addStatRow(false);
         row.setRecord(record, i++);
       } else {
-        LTableRow row = addBodyRow(rowValue: record.recordId); // adds to _tbodyRows
+        LTableRow row = addBodyRow(
+            rowValue: record.recordId); // adds to _tbodyRows
         row.setRecord(record, i++, recordAction: recordAction);
       }
     }
     if (needSort) {
-      _sortGroupBy();
+      _sortGroupBy(); // LTableRow
     }
     // Statistics
     if (_statistics != null && _withStatistics) {
-      LTableSumRow row = addStatRow(true);
-      row.setStatistics(_statistics);
+      _statisticsRow = addStatRow(true); // LTableSumRow
+      _statisticsRow.setStatistics(_statistics);
     }
   } // display
+  LTableSumRow _statisticsRow;
 
   /// Table selected row count
   int get selectedRowCount {
@@ -765,10 +786,20 @@ class LTable
   String get groupByColumnName => _groupByColumnName;
   /// Set Group By Column - call display
   void set groupByColumnName (String newValue) {
-    if (newValue == null || newValue.isEmpty)
-      _groupByColumnName = null;
-    else
-      _groupByColumnName = newValue;
+    if (newValue != null
+      && (newValue.isEmpty || newValue == "-")) {
+      newValue = null;
+    }
+    if (newValue == _groupByColumnName) {
+      return; // no change
+    }
+    // remove old sort
+    recordSorting.removeColumnName(_groupByColumnName);
+    //
+    _groupByColumnName = newValue;
+    display();
+    if (graphSelectionChange != null)
+      graphSelectionChange(null);
   }
   String _groupByColumnName;
 
@@ -786,15 +817,22 @@ class LTable
         recordList.remove(record);
       }
       bool ok = (recordList.length == origLength-removeList.length);
-      _log.log(ok ? Level.CONFIG : Level.WARNING, "clearGroupBy ${recordList.length}=${origLength}-${removeList.length}");
+      _log.log(ok ? Level.CONFIG : Level.WARNING, "clearRecordListGroupBy ${recordList.length}=${origLength}-${removeList.length}");
     }
+    if (graphSelectionChange != null)
+      graphSelectionChange(null);
     return removeList.isNotEmpty;
-  } // clearGroupBy
+  } // clearRecordListGroupBy
 
   static String lTableRowSelectAll() => Intl.message("Select All", name: "lTableRowSelectAll", args: []);
   static String lTableRowSelectRow() => Intl.message("Select Row", name: "lTableRowSelectRow", args: []);
 
   static String lTableColumnSortAsc() => Intl.message("Sort Ascending", name: "lTableColumnSortAsc", args: []);
   static String lTableColumnSortDec() => Intl.message("Sort Decending", name: "lTableColumnSortDec", args: []);
+
+  static String lTableStatisticTotal() => Intl.message("Total", name: "lTableStatisticTotal");
+  static String lTableStatisticGraphSelect() => Intl.message("Graph Selection", name: "lTableStatisticGraphSelect");
+  static String lTableStatisticMatchSelect() => Intl.message("Match Selection", name: "lTableStatisticMatchSelect");
+
 
 } // LTable

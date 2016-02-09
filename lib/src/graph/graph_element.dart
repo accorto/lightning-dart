@@ -37,6 +37,7 @@ class GraphElement {
   LTable syncTable;
   LButtonStatefulIcon _syncTableButton;
   bool _displayHorizontal = true;
+  final List<String> _groupByColumnNames = new List<String>();
 
   /**
    * Graph Element - call [init] explicitly
@@ -53,7 +54,7 @@ class GraphElement {
       ..small = true
       ..selected = !popIn
       ..element.style.verticalAlign = "top";
-    LForm form = _initForm(element.id);
+    LForm form = _initForm(element.id); // creates groupByColumns
 
     if (popIn) {
       _displayHorizontal = false;
@@ -83,7 +84,7 @@ class GraphElement {
     }
 
     element.append(form.element);
-    _graphPanel = new GraphPanel(element.id, table.name);
+    _graphPanel = new GraphPanel(element.id, table.name, _groupByColumnNames);
     element.append(_graphPanel.element);
   } // GraphElement
 
@@ -159,6 +160,7 @@ class GraphElement {
         whatList.add(colOption);
       } else if (DataTypeUtil.isPick(dt) || DataTypeUtil.isFk(dt)) {
         byList.add(colOption);
+        _groupByColumnNames.add(col.name);
       } else if (DataTypeUtil.isDate(dt)) {
         dateList.add(colOption);
       }
@@ -178,7 +180,9 @@ class GraphElement {
     return form;
   } // initForm
 
+  /// Showing
   bool get show => !element.classes.contains(LVisibility.C_HIDE);
+  /// Show
   void set show (bool newValue) {
     element.classes.toggle(LVisibility.C_HIDE, !newValue);
     _syncTableButton.show = syncTable != null;
@@ -262,7 +266,6 @@ class GraphElement {
       }
       if (by != syncTable.groupByColumnName) {
         syncTable.groupByColumnName = by;
-        syncTable.display();
       }
     }
   } // doSyncTable

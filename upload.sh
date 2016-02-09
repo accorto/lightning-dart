@@ -9,7 +9,6 @@ pub deps > dependencies.txt
 
 dartanalyzer lib/lightning.dart
 dartanalyzer lib/lightning_ctrl.dart
-dartanalyzer lib/lightning_graph.dart
 dartanalyzer web/demo.dart
 
 # dart build

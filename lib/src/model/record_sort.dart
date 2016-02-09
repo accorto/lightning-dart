@@ -80,9 +80,13 @@ class RecordSortList {
     return null;
   }
 
-  /// Remove Sort Record
-  void remove(RecordSort sort) {
-    _sortList.remove(sort);
+  /// Remove Sort Record with [columnName]
+  void removeColumnName(String columnName) {
+    if (columnName != null) {
+      RecordSort sort = getSort(columnName);
+      if (sort != null)
+        _sortList.remove(sort);
+    }
   }
 
   /// Execute Sort remotely - true if remote
@@ -123,6 +127,12 @@ class RecordSortList {
         double twoDouble = double.parse(twoValue, (_){ return double.NAN; });
         cmp = oneDouble.compareTo(twoDouble);
       }
+      if (cmp == 0 && sort.isGroupBy) {
+        if (one.isGroupBy)
+          cmp = 1; // one is after
+        else if (two.isGroupBy)
+          cmp = -1; // one is before
+      }
       if (cmp != 0) {
         if (sort.isDescending)
           cmp *= -1;
@@ -150,12 +160,15 @@ class RecordSort {
 
   /// Sort Info
   DSort sort;
+  bool isGroupBy = false;
+  String _columnLabel;
+  DataType _dataType;
 
   /// Record Sort
   RecordSort(DSort this.sort);
 
   /// Record Sort
-  RecordSort.create(String columnName, bool isAscending) {
+  RecordSort.create(String columnName, bool isAscending, {bool isGroupBy}) {
     sort = new DSort()
       ..columnName = columnName
       ..isAscending = isAscending;
@@ -175,18 +188,19 @@ class RecordSort {
   void set columnLabel (String newValue) {
     _columnLabel = newValue;
   }
-  String _columnLabel;
 
   /// set label from table column name
   void setLabelFrom(DTable table) {
-    String columnName = sort.columnName;
-    if (columnName == DataRecord.URV)
-      _columnLabel = "record name";
-    else {
-      for (DColumn col in table.columnList) {
-        if (col.name == columnName) {
-          _columnLabel = col.label;
-          break;
+    if (_columnLabel == null && table != null) {
+      String columnName = sort.columnName;
+      if (columnName == DataRecord.URV)
+        _columnLabel = "record name";
+      else {
+        for (DColumn col in table.columnList) {
+          if (col.name == columnName) {
+            _columnLabel = col.label;
+            break;
+          }
         }
       }
     }
@@ -196,7 +210,6 @@ class RecordSort {
   void set dataType (DataType newValue) {
     _dataType = newValue;
   }
-  DataType _dataType;
 
   /// column name : a|d
   String toString() => "${columnName}:${isAscending ? "a" : "d"}";

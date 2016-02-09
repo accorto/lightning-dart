@@ -39,7 +39,7 @@ class TableCtrl
       RecordSortList recordSorting,
       bool this.optionLayout:true,
       bool this.optionEdit:true,
-      String editMode: LTable.EDIT_ALL,
+      String editMode: LTable.EDIT_RO,
       bool this.alwaysOneEmptyLine:false})
     : super(idPrefix, optionRowSelect:optionRowSelect, recordSorting:recordSorting) {
     this.editMode = editMode;

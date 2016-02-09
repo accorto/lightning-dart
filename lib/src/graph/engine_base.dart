@@ -14,6 +14,9 @@ abstract class EngineBase {
   /// Graph Element
   Element get element;
 
+  /// Group By Column Names
+  List<String> groupByColumnNames = new List<String>();
+
   /// Set Heading
   void set title (String newValue);
 

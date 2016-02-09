@@ -36,6 +36,12 @@ class TableStatistics {
   } // TableStatistics
 
 
+  TableStatistics summary(List<DRecord> recordList) {
+    TableStatistics temp = new TableStatistics(tableName, datacolumnList);
+    temp.calculate(recordList, new List<StatBy>(), null, null, matchOnly: true);
+    return temp;
+  }
+
   /**
    * Calculate Value
    * see [GraphPanel.calculate]
@@ -44,7 +50,8 @@ class TableStatistics {
    */
   bool calculate(List<DRecord> recordList,
       List<StatBy> byList,
-      DColumn dateColumn, ByPeriod byPeriod) {
+      DColumn dateColumn, ByPeriod byPeriod,
+      {bool matchOnly:false}) {
     _log.config("calculate '${tableName}' records=${recordList.length} calc=${calcList.length} by=${byList.length}");
 
     // reset
@@ -54,8 +61,12 @@ class TableStatistics {
     }
 
     for (DRecord record in recordList) {
-      if (record.hasIsGroupBy())
+      if (record.hasIsGroupBy()) {
         continue;
+      }
+      if (matchOnly && !record.isMatchFind) {
+        continue;
+      }
       String dateString = null;
       DateTime recordDate = null;
       if (dateColumn != null) {
@@ -65,6 +76,9 @@ class TableStatistics {
       for (StatCalc what in calcList) {
         what.calculateRecord2(record, recordDate, dateString);
       }
+    }
+    if (matchOnly) {
+      return false;
     }
 
     Map<DEntry, DRecord> groupRecords = new Map<DEntry, DRecord>();

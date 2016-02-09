@@ -363,6 +363,7 @@ class LTableRow
         String align = _displayAlign(dataColumn);
 
         if (isEditModeRO
+            || data.isReadOnly
             || isEditModeSelectSingleMulti
             || (isEditModeSel && !selected)) {
           _displayRo(name, value, align, dataColumn, entry, true);

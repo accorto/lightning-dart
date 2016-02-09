@@ -14,6 +14,11 @@ class EngineCharted
 
   static final Logger _log = new Logger("EngineCharted");
 
+  static const String _TYPE_PIE = "pie";
+  static const String _TYPE_BAR = "bar";
+  static const String _TYPE_STACKED = "stacked";
+
+
   final Element element = new Element.article()
     ..classes.add("chart-wrapper");
 
@@ -31,6 +36,7 @@ class EngineCharted
 
   GraphCalc _calc;
   int _numPrecision = 2;
+  String _graphType;
 
   List<StatPoint> _metaRowList = new List<StatPoint>();
   List<StatPoint> _metaColList = new List<StatPoint>();
@@ -94,7 +100,9 @@ class EngineCharted
         continue;
       if (by.byValueList.isEmpty)
         continue; // no data
+
       rendered = true;
+      _graphType = _TYPE_STACKED;
       _createLayout(displayHorizontal);
 
       // config
@@ -199,6 +207,7 @@ class EngineCharted
     if (_data == null) {
       return false; // no data
     }
+    _graphType = _TYPE_BAR;
     _createLayout(displayHorizontal);
 
     ChartSeries series = new ChartSeries(_calc.tableName, [1],
@@ -276,7 +285,9 @@ class EngineCharted
     for (StatBy by in _calc.byList) {
       if (by.count == 0)
         continue;
+
       rendered = true;
+      _graphType = _TYPE_PIE;
       _createLayout(displayHorizontal);
       //
       by.updateLabels();
@@ -434,32 +445,49 @@ class EngineCharted
   }
 
 
-  /// handle Pie Chart click
+  /// handle Pie Chart click or legend click
   void handleSelection(ChartSelectionChangeRecord change) {
     if (syncTable == null)
       return;
     String columnName = null;
     if (_calc.byList.isNotEmpty)
       columnName = _calc.byList.first.key;
+    if (columnName == null)
+      return; // count/display on bar
     String columnValue = null;
     //
     int id = change.add;
     String info = "handleSelection id=${id} ${columnName}";
-    StatPoint rowPoint = null;
-    if (id < _metaRowList.length) {
-      rowPoint = _metaRowList[id];
-      if (rowPoint != null) {
-        columnValue = rowPoint.key;
-        info += "=${rowPoint.key} count=${rowPoint.count}";
+    StatPoint point = null;
+    if (id < _metaRowList.length && _graphType == _TYPE_PIE) {
+      point = _metaRowList[id];
+      if (point != null) {
+        columnValue = point.key;
+        info += "=${point.key} (row) count=${point.count}";
 
-        if (rowPoint.column != null) {
-          info += " column=${rowPoint.column.name}";
+        if (point.column != null) {
+          info += " column=${point.column.name}";
         }
-        if (rowPoint.byPeriod != null) {
-          info += " ${rowPoint.byPeriod}";
+        if (point.byPeriod != null) {
+          info += " ${point.byPeriod}";
         }
       }
     }
+    if (point == null && id < _metaColList.length) { // legend
+      point = _metaColList[id];
+      if (point != null) {
+        columnValue = point.key;
+        info += "=${point.key} (col) count=${point.count}";
+
+        if (point.column != null) {
+          info += " column=${point.column.name}";
+        }
+        if (point.byPeriod != null) {
+          info += " ${point.byPeriod}";
+        }
+      }
+    }
+
     if (_calc.dateColumn != null) {
       info += " -- date=${_calc.dateColumn.name} ${_calc.byPeriod}";
     }
@@ -467,11 +495,11 @@ class EngineCharted
     if (columnName != null) {
       int match = syncTable.graphSelect((DRecord record) {
         String recordValue = DataRecord.getColumnValue(record, columnName);
-        if (columnValue.isEmpty)
+        if (columnValue == null || columnValue.isEmpty)
           return recordValue == null || recordValue.isEmpty;
         return recordValue == columnValue;
       });
-      if (match != rowPoint.count) {
+      if (point != null && match != point.count) {
         info += " <> actual=${match}";
         _log.warning(info);
       }
@@ -485,7 +513,7 @@ class EngineCharted
     syncTable.graphSelect(null);
   }
 
-  /// Bar Chart
+  /// handle Bar/Stacked Chart click
   void handleHighlight(ChartHighlightChangeRecord change) {
     if (syncTable == null)
       return;
@@ -543,12 +571,18 @@ class EngineCharted
     }
     if (_calc.dateColumn != null) {
       info += " -- date=${_calc.dateColumn.name} ${_calc.byPeriod}";
+      if (dateColumnName == null) {
+        dateColumnName = _calc.dateColumn.name;
+      }
+      if (dateByPeriod == null) {
+        dateByPeriod = _calc.byPeriod;
+      }
     }
     _log.config(info);
     if (columnName != null && dateColumnName != null && dateColumnValue != null) {
       int match = syncTable.graphSelect((DRecord record) {
         // value
-        if (columnName != StatCalc.COUNT_COLUMN_NAME) {
+        if (groupByColumnNames.contains(columnName)) {
           String recordValue = DataRecord.getColumnValue(record, columnName);
           if (columnValue.isEmpty) {
             if (!(recordValue == null || recordValue.isEmpty))
@@ -558,7 +592,7 @@ class EngineCharted
               return false;
           }
         }
-        // date
+        // value matches - compare date
         String dateValue = DataRecord.getColumnValue(record, dateColumnName);
         return isDateMatch(dateValue, dateColumnValue, dateByPeriod);
       });
@@ -567,17 +601,21 @@ class EngineCharted
     }
   } // handleHighlight
 
-  static bool isDateMatch(String dateValue, String dateColumnValue, ByPeriod dateByPeriod) {
-    if (dateValue == null || dateValue.isEmpty)
+  /// Match Date [recordValue] to [targetValue] based on [dateByPeriod]
+  static bool isDateMatch(String recordValue,
+      String targetValue,
+      ByPeriod dateByPeriod,
+      {bool isUtc:true}) {
+    if (recordValue == null || recordValue.isEmpty)
       return false;
-    if (dateValue == dateColumnValue)
+    if (recordValue == targetValue)
       return true;
-    int time = int.parse(dateValue, onError: (_){return null;});
+    int time = int.parse(recordValue, onError: (_){return null;});
     if (time == null)
       return false;
-    DateTime date0 = new DateTime.fromMicrosecondsSinceEpoch(time, isUtc: true);
-    date0 = StatPoint.getDateKey(date0, dateByPeriod);
-    return date0.millisecondsSinceEpoch.toString() == dateColumnValue;
+    DateTime dateRecord = new DateTime.fromMillisecondsSinceEpoch(time, isUtc: isUtc);
+    DateTime dateCmp = StatPoint.getDateKey(dateRecord, dateByPeriod);
+    return dateCmp.millisecondsSinceEpoch.toString() == targetValue;
   }
 
 

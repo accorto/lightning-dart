@@ -21,11 +21,11 @@ class TablesGraphs extends DemoFeature {
       ..classes.add(LMargin.C_HORIZONTAL__MEDIUM);
 
     Datasource datasource = DemoData.createDatasource();
-
     LTable table = new LTable("tg")
-      ..bordered = borderedOption
-      ..responsiveOverflow = responsiveOverflowOption
-      ..withStatistics = true;
+      ..bordered = true
+      ..responsiveOverflow = true
+      ..withStatistics = statisticsOption
+      ..editMode = LTable.EDIT_RO;
     if (responsiveStackedOption)
       table.responsiveStacked = responsiveStackedOption;
     if (responsiveStackedHorizontalOption) // overwrites stacked
@@ -55,31 +55,48 @@ class TablesGraphs extends DemoFeature {
 
   String get source {
     return '''
-
+    Datasource datasource = DemoData.createDatasource();
+    LTable table = new LTable("tg")
+      ..bordered = true
+      ..responsiveOverflow = true
+      ..withStatistics = statisticsOption
+      ..editMode = LTable.EDIT_RO;
+    if (responsiveStackedOption)
+      table.responsiveStacked = responsiveStackedOption;
+    if (responsiveStackedHorizontalOption) // overwrites stacked
+      table.responsiveStackedHorizontal = responsiveStackedHorizontalOption;
+    if (actionOption) {
+      table.addTableAction(new AppsAction("ta", "Table Action", (String value, DRecord record, DEntry entry, var actionVar){
+          print("Table Action \${value}");
+        })
+      );
+      table.addRowAction(new AppsAction("ra", "Row Action", (String value, DRecord record, DEntry entry, var actionVar){
+          print("Row Action \${value}");
+        })
+      );
+    }
+    //
+    table.setUi(datasource.ui);
+    table.setRecords(datasource.recordList);
+    div.add(table);
+    div.append(new HRElement());
+    //
+    GraphElement graph = new GraphElement(datasource, table, false);
+    div.append(graph.element);
     ''';
   }
 
-  bool sortOption = false;
-  bool borderedOption = false;
-  bool responsiveOverflowOption = false;
+  bool statisticsOption = true;
   bool responsiveStackedOption = false;
   bool responsiveStackedHorizontalOption = false;
   bool actionOption = false;
 
-  EditorI optionBorderedCb() {
-    LCheckbox cb = new LCheckbox("bordered", idPrefix: id)
-      ..label = "Option: Bordered";
+  EditorI optionStatisticsCb() {
+    LCheckbox cb = new LCheckbox("statisticsO", idPrefix: id)
+      ..label = "Option: Statistics"
+      ..value = "true";
     cb.input.onClick.listen((MouseEvent evt){
-      borderedOption = cb.input.checked;
-      optionChanged();
-    });
-    return cb;
-  }
-  EditorI optionResponsiveOCb() {
-    LCheckbox cb = new LCheckbox("responsiveO", idPrefix: id)
-      ..label = "Option: Responsive Overflow";
-    cb.input.onClick.listen((MouseEvent evt){
-      responsiveOverflowOption = cb.input.checked;
+      statisticsOption = cb.input.checked;
       optionChanged();
     });
     return cb;
@@ -102,15 +119,6 @@ class TablesGraphs extends DemoFeature {
     });
     return cb;
   }
-  EditorI optionSortCb() {
-    LCheckbox cb = new LCheckbox("sorting", idPrefix: id)
-      ..label = "Option: Sorting *";
-    cb.input.onClick.listen((MouseEvent evt){
-      sortOption = cb.input.checked;
-      optionChanged();
-    });
-    return cb;
-  }
   EditorI optionActionCb() {
     LCheckbox cb = new LCheckbox("actions", idPrefix: id)
       ..label = "Option: Actions";
@@ -124,11 +132,9 @@ class TablesGraphs extends DemoFeature {
 
   List<EditorI> get options {
     List<EditorI> list = new List<EditorI>();
-    list.add(optionBorderedCb());
-    list.add(optionResponsiveOCb());
+    list.add(optionStatisticsCb());
     list.add(optionResponsiveSCb());
     list.add(optionResponsiveSHCb());
-    list.add(optionSortCb());
     list.add(optionActionCb());
     return list;
   }
