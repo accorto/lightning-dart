@@ -315,6 +315,8 @@ class ObjectCtrl
       _table.recordsDeleted = onRecordsDeleted;
       _table.graphSelectionChange = onGraphSelectionChange;
       _table.setRecords(datasource.recordList, recordAction: onAppsActionRecord); // urv click
+      _content.add(_table);
+      _table.setResponsiveScroll(0);
     }
     if (_table.element.parent == null) {
       _content.add(_table);

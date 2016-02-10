@@ -163,6 +163,61 @@ class LTable
   /// Scroll Wrapper
   Element get wrapper => _wrapper;
 
+  /// Y scroll - call after attached to dom
+  /// - if [height] == 0, calculate remainder
+  void setResponsiveScroll (int height) {
+    if (_wrapper == null)
+      responsiveOverflow = true; // X
+    if (height == 0) {
+      Rectangle rect = _wrapper.getBoundingClientRect();
+      int winHeight = window.innerHeight;
+      int docHeight = document.body.getBoundingClientRect().height;
+      int hdr = rect.top;
+      int ftr = docHeight - hdr - rect.height;
+      height = winHeight - hdr - ftr;
+    }
+    _wrapper.style.overflowY = "auto";
+    _wrapper.style.height = "${height}px";
+    _wrapper.onScroll.listen(onScrollTableWrapper);
+  }
+
+  /// scroll body with fixed header
+  void onScrollTableWrapper(Event evt) {
+    int top = _wrapper.getBoundingClientRect().top;
+    //_log.config("scroll top=${_wrapper.scrollTop} left=${_wrapper.scrollLeft} "
+    //    "clientTop=${_wrapper.clientTop} offsetTop=${_wrapper.offsetTop} scrollTop=${_wrapper.scrollTop} top=${top}");
+    if (_theadHeight == null) {
+      _theadHeight = _thead.getBoundingClientRect().height;
+      // (1) keep header on top - issue: checkboxes and action dropdown
+      //_thead.style.background = "white";
+      //_thead.style.transform = "translateY(${_wrapper.scrollTop}px)";
+
+      // (2) convert to fixed
+      _fixTableLayout();
+      _wrapper.style.marginTop = "${_theadHeight}px";
+      _thead.style.position = "absolute";
+      _thead.style.top = "${top}px";
+    } // init
+    _thead.style.left = "-${_wrapper.scrollLeft}px";
+  }
+  int _theadHeight;
+
+  /// fix table Layout
+  void _fixTableLayout() {
+    // must be displayed
+    Element colgroup = new Element.tag("colgroup");
+    Element tr = _thead.children.first;
+    for (Element th in tr.children) {
+      int width = th.getBoundingClientRect().width;
+      th.style.minWidth = "${width}px"; // required if detached
+      Element col = new Element.tag("col")
+        ..style.width = "${width}px";
+      colgroup.children.add(col);
+    }
+    _table.children.add(colgroup);
+    _table.style.tableLayout = "fixed"; // auto
+  }
+
   /// Table bordered
   bool get bordered => element.classes.contains(C_TABLE__BORDERED);
   /// Table bordered
