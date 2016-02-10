@@ -42,6 +42,7 @@ class LObjectHome
     ..classes.addAll([LGrid.C_COL, LGrid.C_NO_FLEX, LGrid.C_ALIGN_BOTTOM]);
   LDropdown _sort;
   LButton _graph;
+  LButton _filter;
   LDropdown _viewLayout;
   final LButtonGroup _actionButtonGroup = new LButtonGroup();
 
@@ -104,6 +105,10 @@ class LObjectHome
       _graph.onClick.listen(onGraphClick);
       _headerRightGrid.append(_graph.element);
     }
+    // filter
+    _filter = new LButton.iconContainer("filter",
+        new LIconUtility(LIconUtility.FILTERLIST), "Show Filter");
+    _headerRightGrid.append(_filter.element);
     //
     _viewLayout = new LDropdown.selectIcon(idPrefix:idPrefix);
     _viewLayout.right = true;

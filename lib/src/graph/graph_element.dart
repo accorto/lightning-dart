@@ -7,7 +7,7 @@
 part of lightning_ctrl;
 
 /**
- * Graph Element
+ * Graph Element (Pop-In)
  * with Form and Panel
  */
 class GraphElement {
@@ -40,11 +40,11 @@ class GraphElement {
   final List<String> _groupByColumnNames = new List<String>();
 
   /**
-   * Graph Element - call [init] explicitly
+   * Graph Element
    */
   GraphElement(Datasource this.datasource, LTable this.syncTable, bool popIn) {
     element
-      ..id = LComponent.createId("ge", table.name);
+      ..id = LComponent.createId("g-e", table.name);
 
     _syncTableButton = new LButtonStatefulIcon("syncTable",
         graphElementSyncTable(),
@@ -79,7 +79,6 @@ class GraphElement {
         ..append(text);
       element.append(header);
     } else {
-
       form.add(_syncTableButton);
     }
 

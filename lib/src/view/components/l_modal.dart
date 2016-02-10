@@ -467,8 +467,8 @@ class LModal
 
   // Trl
   static String lModalClose() => Intl.message("Close", name: "lModalClose", args: []);
-  static String lModalCancel() => Intl.message("Cancel", name: "lModalCancel", args: []);
-  static String lModalSave() => Intl.message("Save", name: "lModalSave", args: []);
+  static String lModalCancel() => Intl.message("Cancel", name: "lModalCancel");
+  static String lModalSave() => Intl.message("Save", name: "lModalSave");
 
 } // LModal
 

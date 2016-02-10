@@ -31,11 +31,12 @@ class LObjectHomeFilter {
   /// Lookup
   final LObjectHomeFilterLookup lookup = new LObjectHomeFilterLookup();
   /// Filter Maintenance
-  final LDropdown settings = new LDropdown(new LButton(new ButtonElement(), "filterList", null,
-      icon: new LIconUtility(LIconUtility.FILTERLIST),
-      buttonClasses: [LButton.C_BUTTON__ICON_CONTAINER],
-      assistiveText: lObjectHomeFilter()),
-    "filter-settings");
+  final LDropdown settings = new LDropdown(
+      new LButton(new ButtonElement(), "filterList", null,
+        icon: new LIconUtility(LIconUtility.SETTINGS),
+        buttonClasses: [LButton.C_BUTTON__ICON_CONTAINER],
+        assistiveText: lObjectHomeFilter()),
+      "filter-settings");
 
 
   /**
@@ -53,6 +54,7 @@ class LObjectHomeFilter {
     settings.dropdown.addDropdownItem(LDropdownItem.create(label: AppsAction.appsActionEdit(), value: AppsAction.EDIT));
     settings.dropdown.addDropdownItem(LDropdownItem.create(label: AppsAction.appsActionNew(), value: AppsAction.NEW));
     settings.dropdown.addDropdownItem(LDropdownItem.create(label: AppsAction.appsActionDelete(), value: AppsAction.DELETE));
+    // TODO Add Layout Action  - select fields to display
   } // LObjectHomeFilter
 
   /// Filter Value/Name
@@ -124,7 +126,7 @@ class LObjectHomeFilter {
  */
 class LObjectHomeFilterLookup {
 
-  static final Logger _log = new Logger("LObjectHomeQueryList");
+  static final Logger _log = new Logger("LObjectHomeFilterLookup");
 
   /// Callback
   EditorChange editorChange;
