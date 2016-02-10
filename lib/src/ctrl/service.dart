@@ -25,7 +25,6 @@ typedef void SendNotification(ServiceResponse level, String subject, String info
  */
 class Service {
 
-
   /** Product Name */
   static String productName = "Accorto";
   /** Client UUID */
@@ -106,7 +105,8 @@ class Service {
     _log.info("href=${window.location.href} referrer=${document.referrer} serverUrl=${serverUrl} query=${LightningCtrl.router.queryParams}");
   } // init
 
-
+  // Busy
+  bool _setBusy = true;
 
   /**
    * Create Client Request for [serverUri] with user [info].
@@ -182,9 +182,11 @@ class Service {
 
   /**
    * Create+Send protocol buffers HttpRequest to [trx] with [data]
+   * - [SimplePage.onServerStart]
    */
   Future<HttpRequest> sendRequest(String serverUri, Uint8List data, String info, {bool setBusy: true}) {
-    if (setBusy && onServerStart != null) {
+    _setBusy = setBusy;
+    if (_setBusy && onServerStart != null) {
       onServerStart(serverUri, info);
     }
     Uri uri = Uri.parse("${serverUrl}${serverUri}");
@@ -200,11 +202,12 @@ class Service {
 
   /**
    * Handle Success - send notifications, unlock ui
+   * [PageSimple.onServerSuccess]
    */
-  String handleSuccess(String subject, SResponse sresponse, int length, {bool setBusy: true}) {
+  String handleSuccess(String subject, SResponse sresponse, int length) {
     sresponse.clientReceiptTime = new Int64(new DateTime.now().millisecondsSinceEpoch); // ${ClientEnv.numberFormat_1.format(length/1024)}k
     String details = "${sresponse.trxType}=${sresponse.trxNo} ${subject} ${ServiceTracker.formatDuration(sresponse)} bytes=${length}";
-    if (setBusy && onServerSuccess != null)
+    if (_setBusy && onServerSuccess != null)
       onServerSuccess(sresponse, details);
     if (sendNotification != null) {
       sendNotification(sresponse.isSuccess ? ServiceResponse.Ok : ServiceResponse.Error,

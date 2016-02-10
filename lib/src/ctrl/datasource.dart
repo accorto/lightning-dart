@@ -381,7 +381,7 @@ class Datasource
     .then((HttpRequest httpRequest) {
       List<int> buffer = new Uint8List.view(httpRequest.response);
       DataResponse response = new DataResponse.fromBuffer(buffer);
-      String details = handleSuccess(info, response.response, buffer.length, setBusy: setBusy);
+      String details = handleSuccess(info, response.response, buffer.length);
       ServiceTracker track = new ServiceTracker(response.response, info, details);
       completer.complete(response);
       _log.info("received ${details}");

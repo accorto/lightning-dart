@@ -115,6 +115,10 @@ abstract class LComponent {
   /// set the page busy
   void set busy(bool newValue) {
     if (newValue) {
+      _busyCount++;
+      if (busy) {
+        return; // parallel
+      }
       element.classes.add(_C_BUSY);
       LSpinner spinner = new LSpinner.brand(size: LSpinner.C_SPINNER__LARGE);
       DivElement div = new DivElement()
@@ -127,14 +131,19 @@ abstract class LComponent {
       element.append(_busy);
     }
     else {
-      element.classes.remove(_C_BUSY);
-      if (_busy != null) {
-        _busy.remove();
+      _busyCount--;
+      if (_busyCount <= 0) {
+        element.classes.remove(_C_BUSY);
+        if (_busy != null) {
+          _busy.remove();
+        }
+        _busy = null;
+        _busyCount = 0;
       }
-      _busy = null;
     }
   } // busy
   DivElement _busy;
+  int _busyCount = 0;
 
   /**
    * Loading - container only

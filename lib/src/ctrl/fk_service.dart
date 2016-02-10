@@ -247,7 +247,7 @@ class FkService
     .then((HttpRequest httpRequest) {
       List<int> buffer = new Uint8List.view(httpRequest.response);
       DataResponse response = new DataResponse.fromBuffer(buffer);
-      String details = handleSuccess(info, response.response, buffer.length, setBusy:false);
+      String details = handleSuccess(info, response.response, buffer.length);
       ServiceTracker track = new ServiceTracker(response.response, info, details);
       if (response.response.isSuccess) {
         _log.info("received ${details}");
