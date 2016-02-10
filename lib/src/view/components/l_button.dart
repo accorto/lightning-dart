@@ -128,6 +128,10 @@ class LButton
   static const String C_BUTTON_SPACE_LEFT = "slds-button-space-left";
 
 
+  /// slds-button--hint (slds-button):
+  static const String C_BUTTON__HINT = "slds-button--hint";
+  static const String C_BUTTON__TRANSPARENT = "slds-button--transparent";
+
   /// Hint Wrapper
   static const String C_HINT_PARENT = "slds-hint-parent";
 
@@ -440,13 +444,14 @@ class LButton
   /// Button Size
   void set small (bool newValue) {
     if (newValue) {
-      element.classes.add(C_BUTTON__SMALL);
-      if (icon != null)
+      String ll = label;
+      if (icon != null && (ll == null || ll.isEmpty))
         element.classes.add(C_BUTTON__ICON_SMALL);
+      else
+        element.classes.add(C_BUTTON__SMALL);
     } else {
       element.classes.remove(C_BUTTON__SMALL);
-      if (icon != null)
-        element.classes.remove(C_BUTTON__ICON_SMALL);
+      element.classes.remove(C_BUTTON__ICON_SMALL);
     }
   }
 
