@@ -49,8 +49,7 @@ class ObjectCtrl
       element.classes.add(containerClass);
     }
     // Header
-    _header = new LObjectHome(onSortClicked, idPrefix:idPrefix,
-        onGraphClick: onGraphClick);
+    _header = new LObjectHome(onSortClicked, idPrefix:idPrefix);
     element.append(_header.element);
     // Content
     _content.element.id = "${idPrefix}-content";
@@ -61,9 +60,12 @@ class ObjectCtrl
     _header.viewLayoutChange = onViewLayoutChange;
     // find
     _header.findEditorChange = onFindEditorChange;
-
-    _header.filterList.settings.dropdown.editorChange = onFilterChange;
-    _header.filterList.filterSelectionChange = onFilterSelectionChange;
+    // filter
+    _header.filterButton.onClick.listen(onFilterClick);
+    _header.homeFilter.settings.dropdown.editorChange = onFilterChange;
+    _header.homeFilter.filterSelectionChange = onFilterSelectionChange;
+    // graph
+    _header.graphButton.onClick.listen(onGraphClick);
 
     // load UI
     _header.loading = true;
@@ -117,11 +119,11 @@ class ObjectCtrl
     display();
   }
 
-  /// Filter Change
+  /// Filter Change (dropdown)
   void onFilterChange(String name, String newValue, DEntry entry, var details) {
     // see LObjectHomeFilter
-    String filter = _header.filterList.filterValue;
-    SavedQuery query = _header.filterList.savedQuery;
+    String filter = _header.homeFilter.filterValue;
+    SavedQuery query = _header.homeFilter.savedQuery;
     _log.config("onFilterChange ${tableName} ${newValue} ${filter}");
     if (newValue != AppsAction.NEW && (filter == LObjectHomeFilter.RECENT || filter == LObjectHomeFilter.ALL)) {
       AppsAction filterNew = AppsAction.createYes(onFilterNewConfirmed);
@@ -189,7 +191,7 @@ class ObjectCtrl
   }
 
   void _doQuery() {
-    String filter = _header.filterList.filterValue;
+    String filter = _header.homeFilter.filterValue;
     _log.config("doQuery ${tableName} ${filter}");
     _content.loading = true;
     _header.summary = "${objectCtrlQuerying()} ...";
@@ -579,18 +581,46 @@ class ObjectCtrl
 
   /// Graph Icon Click
   void onGraphClick(MouseEvent evt) {
-    if (_graph == null) {
-      _graph = new GraphElement(datasource, _table, true);
-      element.insertBefore(_graph.element, _content.element);
+    showGraph = !showGraph;
+  }
+  /// graph showing?
+  bool get showGraph => _graph != null && _graph.show;
+  /// show graph
+  void set showGraph(bool newValue) {
+    if (newValue) {
+      showFilter = false;
+      if (_graph == null) { // init
+        _graph = new GraphElement(datasource, _table, true);
+        _graph.homeGraphButton = _header.graphButton;
+        element.insertBefore(_graph.element, _content.element);
+      }
+      _graph.syncTable = _table;
+      _graph.show = newValue;
+    } else if (_graph != null) {
+      _graph.show = newValue;
     }
-    _graph.syncTable = _table;
-    _graph.show = true;
+    _header.graphButton.selected = newValue;
   }
   GraphElement _graph;
 
-  bool get graphEnabled => _header.graphEnabled;
-  void set graphEnabled (bool newValue) {
-    _header.graphEnabled = newValue;
+  /// Filter Icon Click
+  void onFilterClick(MouseEvent evt) {
+    showFilter = !showFilter;
+  }
+  /// filter showing?
+  bool get showFilter => _header.homeFilter.filterPanel.show;
+  /// show filter
+  void set showFilter (bool newValue) {
+    ObjectHomeFilterPanel fe = _header.homeFilter.filterPanel;
+    if (newValue) {
+      showGraph = false;
+      if (fe.element.parent == null) { // init
+        fe.homeFilterButton = _header.filterButton;
+        element.insertBefore(fe.element, _content.element);
+      }
+    }
+    fe.show = newValue;
+    _header.filterButton.selected = newValue;
   }
 
 

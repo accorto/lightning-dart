@@ -94,6 +94,26 @@ class OptionUtil {
     return one.label.compareTo(two.label);
   }
 
+  /// Get [table] Column name/label list
+  static List<DOption> columnOptions(DTable table) {
+    if (table == null)
+      return null;
+    if (table.name == _lastTableName && _lastColumnList != null) {
+      return _lastColumnList;
+    }
+    _lastTableName = table.name;
+    _lastColumnList = new List<DOption>();
+    for (DColumn col in table.columnList) {
+      DOption op = new DOption()
+          ..value = col.name
+          ..label = col.label;
+      _lastColumnList.add(op);
+    }
+    _lastColumnList.sort(compareLabel);
+    return _lastColumnList;
+  }
+  static String _lastTableName;
+  static List<DOption> _lastColumnList;
 
   static String optionUtilYes() => Intl.message("Yes", name: "optionUtilYes");
   static String optionUtilNo() => Intl.message("No", name: "optionUtilNo");

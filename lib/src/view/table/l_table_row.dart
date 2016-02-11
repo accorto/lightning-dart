@@ -23,7 +23,7 @@ class LTableRow
     String key = "${dataColumn.table.name}.${dataColumn.name}";
     LEditor editor = _renderEditorMap[key];
     if (editor == null) {
-      editor =  EditorUtil.createfromColumn(dataColumn.name,
+      editor =  EditorUtil.createFromColumn(dataColumn.name,
           dataColumn, true, idPrefix:"table-${dataColumn.table.name}");
       _renderEditorMap[key] = editor;
     }
@@ -368,7 +368,7 @@ class LTableRow
             || (isEditModeSel && !selected)) {
           _displayRo(name, value, align, dataColumn, entry, true);
         } else { // all, sel or field
-          LEditor editor = EditorUtil.createfromColumn(name, dataColumn, true,
+          LEditor editor = EditorUtil.createFromColumn(name, dataColumn, true,
             idPrefix:rowElement.id, data:data, entry:entry); // no isAlternativeDisplay
           if (editor.isValueRenderElement) {
             addCellEditor(editor, value, value, align, isEditModeField);

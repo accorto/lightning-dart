@@ -15,12 +15,16 @@ part of lightning_dart;
  * - items (one line with multiple items [addItem)
  * - entries (one or more label/value pairs) [addEntry]
  */
-class LTileGeneric extends LTile {
+class LTileGeneric
+    extends LTile {
 
   /// Figure Image Div - if image
   DivElement _figure;
   /// Body Text Div - if image
   DivElement _body;
+
+  DivElement _detail;
+  UListElement _detailList;
 
   /// Heading
   final DivElement _heading = new DivElement()
@@ -95,29 +99,27 @@ class LTileGeneric extends LTile {
 
 
   /// Get Detail Div
-  DivElement get _detail {
-    if (__detail == null) {
-      __detail = new DivElement()
-        ..classes.addAll([LTile.C_TILE__DETAIL, LText.C_TEXT_BODY__SMALL]);
+  DivElement get detail {
+    if (_detail == null) {
+      _detail = createDetail(LTile.CLASSES_DETAIL);
       if (_body == null)
-        element.append(__detail);
+        element.append(_detail);
       else
-        _body.append(__detail);
+        _body.append(_detail);
     }
-    return __detail;
+    return _detail;
   }
 
   /// Get Detail ul
-  UListElement get _detailList {
-    if (__detailList == null) {
-      __detailList = new UListElement()
-        ..classes.addAll([LTile.C_TILE__DETAIL, LList.C_LIST__HORIZONTAL, LList.C_HAS_DIVIDERS, LText.C_TEXT_BODY__SMALL]);
+  UListElement get detailList {
+    if (_detailList == null) {
+      _detailList = createDetailList(LTile.CLASSES_DETAIL_LIST);
       if (_body == null)
-        element.append(__detailList);
+        element.append(_detailList);
       else
-        _body.append(__detailList);
+        _body.append(_detailList);
     }
-    return __detailList;
+    return _detailList;
   }
 
 } // LTileGeneric

@@ -50,8 +50,8 @@ class Buttons extends DemoFeature {
     box.add(new LButton.inverse("b43", "inverse small")..small = true);
 
     div.appendHrSmall();
-    div.add(new LButton.neutralIcon("b51", "neutral icon", new LIconUtility(LIconUtility.DOWNLOAD)));
-    div.add(new LButton.neutralIcon("b52", "icon neutral", new LIconUtility(LIconUtility.DOWNLOAD), iconLeft: true));
+    div.add(new LButton.neutralIcon("b51", "neutral icon", new LIconUtility(LIconUtility.DOWNLOAD), iconLeft: false));
+    div.add(new LButton.neutralIcon("b52", "icon neutral", new LIconUtility(LIconUtility.DOWNLOAD)));
     div.appendText(" Toggle Buttons: ");
     div.add(new LButtonStateful.follow("b53"));
     div.add(new LButtonStatefulIcon("b53", "stateful icon", new LIconUtility(LIconUtility.LIKE)));

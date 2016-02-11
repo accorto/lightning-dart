@@ -9,7 +9,8 @@ part of lightning_dart;
 /**
  * Tile
  */
-abstract class LTile extends LComponent {
+abstract class LTile
+    extends LComponent {
 
   /// slds-tile - Initializes tile | Required
   static const String C_TILE = "slds-tile";
@@ -33,27 +34,37 @@ abstract class LTile extends LComponent {
   /// Tile Title Link
   final AnchorElement titleLink = new AnchorElement(href: "#");
 
-  /// Detail div
-  DivElement get _detail;
-  DivElement __detail;
+  /// Detail div - (body) .tile__detail
+  DivElement get detail;
+  /// Standard Tile Detail Classes
+  static final List<String> CLASSES_DETAIL = [C_TILE__DETAIL, LText.C_TEXT_BODY__SMALL];
+  /// create Detail
+  DivElement createDetail(List<String> classList) {
+    return new DivElement()
+      ..classes.addAll(classList);
+  }
 
-
-  /// add p with text to detail
+  /// add p with text to [detail]
   ParagraphElement addText(String text) {
+    if (detail == null) {
+      return null;
+    }
     ParagraphElement p = new ParagraphElement()
       ..classes.add(LText.C_TRUNCATE)
       ..text = text;
-    _detail.append(p);
+    detail.append(p);
     return p;
-  }
+  } // addText
 
-
-  /// add label: value entry to detail
+  /// add label: value entry to [detail]
   void addEntry(String label, String value, {bool addColonsToLabel: true}) {
+    if (detail == null) {
+      return;
+    }
     if (_dl == null) {
       _dl = new DListElement()
         ..classes.addAll([LList.C_DL__HORIZONTAL, LText.C_TEXT_BODY__SMALL]);
-      _detail.append(_dl);
+      detail.append(_dl);
     }
     String labelText = label;
     if (addColonsToLabel)
@@ -78,19 +89,28 @@ abstract class LTile extends LComponent {
   DListElement _dl;
 
   /// Detail ul
-  UListElement get _detailList;
-  UListElement __detailList;
+  UListElement get detailList;
+  /// Standard Tile Detail List Classes
+  static final List<String> CLASSES_DETAIL_LIST = [C_TILE__DETAIL, LList.C_LIST__HORIZONTAL, LList.C_HAS_DIVIDERS, LText.C_TEXT_BODY__SMALL];
 
-
+  /// Create UL
+  UListElement createDetailList(List<String> classList) {
+    UListElement ul = new UListElement()
+      ..classes.addAll(classList);
+    element.append(ul);
+    return ul;
+  }
   /// Add li item to detail list (in one line with dots)
   LIElement addItem(String text) {
+    if (detailList == null) {
+      return null;
+    }
     LIElement li = new LIElement()
       ..classes.addAll([LText.C_TRUNCATE, LList.C_LIST__ITEM])
       ..text = text;
-    _detailList.append(li);
+    detailList.append(li);
     return li;
   }
-
 
   /// in board (position relative for use in  cards)
   bool get board => element.classes.contains(C_TILE__BOARD);
@@ -111,7 +131,11 @@ abstract class LTile extends LComponent {
  * - items (one line with multiple items [addItem)
  * - entries (one or more label/value pairs) [addEntry]
  */
-class LTileBase extends LTile {
+class LTileBase
+    extends LTile {
+
+  DivElement _detail;
+  UListElement _detailList;
 
   /// Base Tile
   LTileBase(String title) {
@@ -122,23 +146,21 @@ class LTileBase extends LTile {
   }
 
   /// Get Detail Div
-  DivElement get _detail {
-    if (__detail == null) {
-      __detail = new DivElement()
-        ..classes.addAll([LTile.C_TILE__DETAIL, LText.C_TEXT_BODY__SMALL]);
-      element.append(__detail);
+  DivElement get detail {
+    if (_detail == null) {
+      _detail = createDetail(LTile.CLASSES_DETAIL);
+      element.append(_detail);
     }
-    return __detail;
+    return _detail;
   }
 
   /// Get Detail ul
-  UListElement get _detailList {
-    if (__detailList == null) {
-      __detailList = new UListElement()
-        ..classes.addAll([LTile.C_TILE__DETAIL, LList.C_LIST__HORIZONTAL, LList.C_HAS_DIVIDERS, LText.C_TEXT_BODY__SMALL]);
-      element.append(__detailList);
+  UListElement get detailList {
+    if (_detailList == null) {
+      _detailList = createDetailList(LTile.CLASSES_DETAIL_LIST);
+      element.append(_detailList);
     }
-    return __detailList;
+    return _detailList;
   }
 
 } // LTileBase
@@ -150,7 +172,8 @@ class LTileBase extends LTile {
  * - items (one line with multiple items [addItem)
  * - entries (one or more label/value pairs) [addEntry]
  */
-class LTileIcon extends LTile {
+class LTileIcon
+    extends LTile {
 
   /// Figure Image Div
   final DivElement _figure = new DivElement()
@@ -158,6 +181,9 @@ class LTileIcon extends LTile {
   /// Body Text Div
   final DivElement _body = new DivElement()
     ..classes.add(LMedia.C_MEDIA__BODY);
+
+  DivElement _detail;
+  UListElement _detailList;
 
   /// Base Tile with Icon
   LTileIcon(String title, {LIcon icon, String imgSrc, ImageElement img, String alt}) {
@@ -188,23 +214,21 @@ class LTileIcon extends LTile {
   } // LTileIcon
 
   /// Get Detail Div
-  DivElement get _detail {
-    if (__detail == null) {
-      __detail = new DivElement()
-        ..classes.addAll([LTile.C_TILE__DETAIL, LText.C_TEXT_BODY__SMALL]);
-      _body.append(__detail);
+  DivElement get detail {
+    if (_detail == null) {
+      _detail = createDetail(LTile.CLASSES_DETAIL);
+      _body.append(_detail);
     }
-    return __detail;
+    return _detail;
   }
 
   /// Get Detail ul
-  UListElement get _detailList {
-    if (__detailList == null) {
-      __detailList = new UListElement()
-        ..classes.addAll([LTile.C_TILE__DETAIL, LList.C_LIST__HORIZONTAL, LList.C_HAS_DIVIDERS, LText.C_TEXT_BODY__SMALL]);
-      _body.append(__detailList);
+  UListElement get detailList {
+    if (_detailList == null) {
+      _detailList = createDetailList(LTile.CLASSES_DETAIL_LIST);
+      _body.append(_detailList);
     }
-    return __detailList;
+    return _detailList;
   }
 
 } // LTileIcon

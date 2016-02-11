@@ -69,7 +69,7 @@ class FormCtrl
             tableColumn:pc.column, panelColumn:pc, columnId:pc.columnId);
         dataColumns.add(dataColumn);
         if (dataColumn.isActivePanel) {
-          LEditor editor = EditorUtil.createfromColumn(null, dataColumn, false,
+          LEditor editor = EditorUtil.createFromColumn(null, dataColumn, false,
               idPrefix: element.id, data:data, isAlternativeDisplay:pc.isAlternativeDisplay);
           addEditor(editor, newRow:pc.isNewRow, width:pc.width, height:pc.height, marginClass:marginClass);
         }

@@ -17,13 +17,20 @@ class DataTypeUtil {
   static bool isFk(DataType dt) {
     return dt == DataType.FK || dt == DataType.USER || dt == DataType.TENANT;
   }
-  /// Data Type underlying String
+  /// Data Type underlying String (including pick)
   static bool isString(DataType dt) {
     return dt == DataType.STRING || dt == DataType.TEXT || dt == DataType.EMAIL
         || dt == DataType.IM || dt == DataType.PHONE
         || dt == DataType.PICK || dt == DataType.PICKAUTO || dt == DataType.PICKCHOICE
         || dt == DataType.PICKMULTI || dt == DataType.PICKMULTICHOICE
         || dt == DataType.TAG || dt == DataType.TIMEZONE
+        || dt == DataType.URL;
+  }
+  /// Data Type underlying String
+  static bool isStringStrict(DataType dt) {
+    return dt == DataType.STRING || dt == DataType.TEXT || dt == DataType.EMAIL
+        || dt == DataType.IM || dt == DataType.PHONE
+        || dt == DataType.TAG
         || dt == DataType.URL;
   }
   /// Data Type Number

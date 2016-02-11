@@ -240,7 +240,7 @@ class LRecordHomeDetail {
     _dd.attributes[Html0.DATA_NAME] = columnName;
     element.append(_dd);
     //
-    _editor = EditorUtil.createfromColumn(columnName, dataColumn, true);
+    _editor = EditorUtil.createFromColumn(columnName, dataColumn, true);
   } // LRecordHomeDetail
 
   /// Display Value

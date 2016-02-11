@@ -59,6 +59,38 @@ class LModal
 
   static final Logger _log = new Logger("LModal");
 
+  /// cancel button
+  static LButton createCancelButton({String label, String idPrefix}) {
+    if (label == null || label.isEmpty)
+      label = lModalCancel();
+    return new LButton.neutralIcon("cancel", label,
+        new LIconUtility(LIconUtility.CLOSE, color: LIcon.C_ICON_TEXT_ERROR),
+        idPrefix: idPrefix);
+  }
+
+  /// save button
+  static LButton createSaveButton({String label, String idPrefix}) {
+    if (label == null || label.isEmpty)
+      label = lModalSave();
+    return new LButton.brandIcon("save", label,
+        new LIconUtility(LIconUtility.CHECK),
+        idPrefix: idPrefix);
+  }
+
+  /// execute button
+  static LButton createExecuteButton({String label, String idPrefix, bool brand:false}) {
+    if (label == null || label.isEmpty)
+      label = lModalExecute();
+    if (brand)
+      return new LButton.brandIcon("execute", label,
+          new LIconUtility(LIconUtility.CONNECTED_APPS),
+          idPrefix: idPrefix);
+    return new LButton.neutralIcon("execute", label,
+        new LIconUtility(LIconUtility.CONNECTED_APPS),
+        idPrefix: idPrefix);
+  }
+
+
   /// open modals
   static List<LModal> _openModals = new List<LModal>();
   /// adjust z-index of nested Modals
@@ -254,11 +286,7 @@ class LModal
    */
   LButton addFooterButtons({String saveLabelOverride, bool hideOnSave: true,
       bool addCancel: true, String cancelLabelOverride}) {
-    String saveLabel = saveLabelOverride;
-    if (saveLabel == null || saveLabel.isEmpty)
-      saveLabel = lModalSave();
-    buttonSave = new LButton(new ButtonElement(), "save", saveLabel, idPrefix: id,
-      buttonClasses: [LButton.C_BUTTON__NEUTRAL, LButton.C_BUTTON__BRAND]);
+    buttonSave = createSaveButton(label: saveLabelOverride, idPrefix: id);
     if (hideOnSave)
       buttonSave.onClick.listen(onClickRemove);
 
@@ -272,11 +300,7 @@ class LModal
   /// add Cancel to Footer with optional [cancelLablel] override
   void addFooterCancel({String cancelLabel}) {
     if (buttonCancel == null) {
-      String label = cancelLabel;
-      if (label == null || label.isEmpty)
-        label = lModalCancel();
-      buttonCancel = new LButton(new ButtonElement(), "cancel", label, idPrefix: id,
-          buttonClasses: [LButton.C_BUTTON__NEUTRAL]);
+      buttonCancel = createCancelButton(label: cancelLabel, idPrefix: id);
       buttonCancel.onClick.listen(onClickCancel);
       footer.append(buttonCancel.element);
       footer.classes.add(C_MODAL__FOOTER__DIRECTIONAL);
@@ -469,6 +493,7 @@ class LModal
   static String lModalClose() => Intl.message("Close", name: "lModalClose", args: []);
   static String lModalCancel() => Intl.message("Cancel", name: "lModalCancel");
   static String lModalSave() => Intl.message("Save", name: "lModalSave");
+  static String lModalExecute() => Intl.message("Execute", name: "lModalExecute");
 
 } // LModal
 

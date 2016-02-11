@@ -11,7 +11,8 @@ part of lightning_dart;
  * Compact Card Entry (Tile)
  * - target: same api as row
  */
-class LCardCompactEntry extends LTileGeneric {
+class LCardCompactEntry
+    extends LTileGeneric {
 
 
   /// The record

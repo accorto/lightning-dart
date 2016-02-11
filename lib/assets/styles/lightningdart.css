@@ -6187,6 +6187,21 @@ a.slds-button--inverse:focus {
     background-color: white;
     color: #9faab5;
     cursor: default; }
+.slds-button--icon-container.slds-is-selected {
+  background-color: #0070d2;
+  border: 1px solid #0070d2;
+  color: white; }
+  .slds-button--icon-container.slds-is-selected:link, .slds-button--icon-container.slds-is-selected:visited, .slds-button--icon-container.slds-is-selected:active {
+    color: white; }
+  .slds-button--icon-container.slds-is-selected:hover, .slds-button--icon-container.slds-is-selected:focus {
+    background-color: #005fb2;
+    color: white; }
+  .slds-button--icon-container.slds-is-selected:active {
+    background-color: #00396b; }
+  .slds-button--icon-container.slds-is-selected .slds-button__icon {
+    fill: white; }
+  .slds-button--icon-container.slds-is-selected:hover .slds-button__icon, .slds-button--icon-container.slds-is-selected:focus .slds-button__icon {
+    fill: white; }
 .cpanel {
   margin: 0.5rem 0.75rem; }
 .cpanel-column {
@@ -6327,6 +6342,17 @@ input[type=number]::-webkit-inner-spin-button.decimal {
 .slds-modal--small .slds-modal__container {
   width: 90%;
   max-width: 580px; }
+.home-popin {
+  position: absolute;
+  right: 0;
+  width: 40%;
+  min-width: 300px;
+  height: 100%;
+  max-height: 900px;
+  z-index: 100;
+  padding: .5rem;
+  background: white;
+  border: 1px solid #EFEFEF; }
 .text-error {
   color: #c23934;
   stroke: #c23934; }

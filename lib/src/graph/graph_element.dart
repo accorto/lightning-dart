@@ -21,7 +21,11 @@ class GraphElement {
 
   static final Logger _log = new Logger("GraphElement");
 
+  /// element
   Element element = new Element.aside();
+
+  /// button on object Home
+  LButton homeGraphButton;
 
   final Datasource datasource;
   DTable get table => datasource.ui.table;
@@ -43,39 +47,40 @@ class GraphElement {
    * Graph Element
    */
   GraphElement(Datasource this.datasource, LTable this.syncTable, bool popIn) {
-    element
-      ..id = LComponent.createId("g-e", table.name);
+    String id = LComponent.createId("g-e", table.name);
+    element.id = id;
 
     _syncTableButton = new LButtonStatefulIcon("syncTable",
         graphElementSyncTable(),
         new LIconUtility(LIconUtility.TABLE),
-        idPrefix: element.id,
+        idPrefix: id,
         onButtonClick: onSyncButtonClick)
       ..small = true
       ..selected = !popIn
       ..element.style.verticalAlign = "top";
-    LForm form = _initForm(element.id); // creates groupByColumns
+    LForm form = _initForm(id); // creates groupByColumns
 
     if (popIn) {
       _displayHorizontal = false;
-      element.classes.add("graph-popin");
-
+      element.classes.add(LObjectHome.C_HOME_POPIN);
       // header
       SpanElement text = new SpanElement()
         ..classes.addAll([LText.C_TEXT_HEADING__SMALL, LMargin.C_TOP__SMALL, LMargin.C_LEFT__MEDIUM])
         ..text = graphElementTitle();
-      LButton hide = new LButton.iconBare("hide",
+
+      LButton close = new LButton.iconBare("close",
           new LIconUtility(LIconUtility.RIGHT),
-          graphElementHide())
+          LModal.lModalClose(),
+          idPrefix: id)
         ..classes.add(LFloat.C_FLOAT__RIGHT);
-      hide.onClick.listen((MouseEvent evt){
+      close.onClick.listen((MouseEvent evt){
         show = false;
       });
 
       Element header = new Element.header()
         ..classes.add(LMargin.C_BOTTOM__X_SMALL)
         ..append(_syncTableButton.element)
-        ..append(hide.element)
+        ..append(close.element)
         ..append(text);
       element.append(header);
     } else {
@@ -180,11 +185,15 @@ class GraphElement {
   } // initForm
 
   /// Showing
-  bool get show => !element.classes.contains(LVisibility.C_HIDE);
+  bool get show => element.parent != null // attached
+      && !element.classes.contains(LVisibility.C_HIDE);
   /// Show
   void set show (bool newValue) {
     element.classes.toggle(LVisibility.C_HIDE, !newValue);
     _syncTableButton.show = syncTable != null;
+    if (homeGraphButton != null) {
+      homeGraphButton.selected = newValue;
+    }
   }
 
   /// Selection
@@ -272,6 +281,5 @@ class GraphElement {
 
   static String graphElementTitle() => Intl.message("Graph", name: "graphElementTitle");
   static String graphElementSyncTable() => Intl.message("Synchronize with Table", name: "graphElementSyncTable");
-  static String graphElementHide() => Intl.message("Hide Graph", name: "graphElementHide");
 
 } // GraphElement

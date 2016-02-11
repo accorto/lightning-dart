@@ -140,7 +140,6 @@ class LButton
 
   static const String C_CLOSE = "close";
 
-
   /// The Button / Link
   final Element element;
   /// Label
@@ -170,7 +169,7 @@ class LButton
       Element labelElement,
       List<String> buttonClasses,
       LIcon icon,
-      bool iconLeft: false,
+      bool iconLeft: true,
       String assistiveText}) {
     element.classes.add(C_BUTTON);
     if (element is ButtonElement) {
@@ -199,6 +198,11 @@ class LButton
     _rebuild();
   } // LButton
 
+  /// set id prefix
+  void setIdPrefix(String idPrefix) {
+    element.id = LComponent.createId(idPrefix, name);
+  }
+  /// rebuild button
   void _rebuild() {
     element.children.clear();
     if (_icon == null) {
@@ -275,15 +279,18 @@ class LButton
 
   /// Neutral Button with Icon
   LButton.neutralIcon(String name, String label, LIcon icon,
-      {bool iconLeft: false, String idPrefix})
+      {bool iconLeft: true, String idPrefix})
     : this(new ButtonElement(), name, label,
-        buttonClasses: [C_BUTTON__NEUTRAL], icon:icon, iconLeft:iconLeft, idPrefix:idPrefix);
+        buttonClasses: [C_BUTTON__NEUTRAL],
+        icon:icon, iconLeft:iconLeft, idPrefix:idPrefix);
   /// Neutral Anchor
   LButton.neutralAnchorIcon(String name, String label, LIcon icon,
-      {String href, String target:NewWindow.NAME_BLANK, bool iconLeft: false, String idPrefix})
+      {String href, String target:NewWindow.NAME_BLANK,
+      bool iconLeft: true, String idPrefix})
     : this(new AnchorElement(href:(href == null ? "#" : href)) ..target = target,
         name, label,
-        buttonClasses: [C_BUTTON__NEUTRAL], icon:icon, iconLeft:iconLeft, idPrefix:idPrefix);
+        buttonClasses: [C_BUTTON__NEUTRAL], icon:icon,
+        iconLeft:iconLeft, idPrefix:idPrefix);
 
   /// (Neutral) Icon Button with More
   LButton.more(String name, String label, LIcon icon, String assistiveText, {String idPrefix})
@@ -295,9 +302,11 @@ class LButton
     : this(new ButtonElement(), name, label,
         buttonClasses: [C_BUTTON__BRAND], idPrefix:idPrefix);
   /// Brand Button with Icon
-  LButton.brandIcon(String name, String label, LIcon icon, {bool iconLeft: false, String idPrefix})
+  LButton.brandIcon(String name, String label, LIcon icon,
+      {bool iconLeft: true, String idPrefix})
     : this(new ButtonElement(), name, label,
-        buttonClasses: [C_BUTTON__BRAND], icon:icon, iconLeft:iconLeft, idPrefix:idPrefix);
+        buttonClasses: [C_BUTTON__BRAND], icon:icon,
+        iconLeft:iconLeft, idPrefix:idPrefix);
   /// Brand Button
   LButton.brandAnchor(String name, String label,
       {String href, String target:NewWindow.NAME_BLANK, String idPrefix})
@@ -315,9 +324,11 @@ class LButton
     : this(new ButtonElement(), name, label,
   buttonClasses: [C_BUTTON__DESTRUCTIVE], idPrefix:idPrefix);
   /// Destructive Button with Icon
-  LButton.destructiveIcon(String name, String label, LIcon icon, {bool iconLeft: false, String idPrefix})
+  LButton.destructiveIcon(String name, String label, LIcon icon,
+      {bool iconLeft: true, String idPrefix})
     : this(new ButtonElement(), name, label,
-      buttonClasses: [C_BUTTON__DESTRUCTIVE], icon:icon, iconLeft:iconLeft, idPrefix:idPrefix);
+        buttonClasses: [C_BUTTON__DESTRUCTIVE], icon:icon,
+        iconLeft:iconLeft, idPrefix:idPrefix);
 
 
   /// Icon Only - bare
@@ -483,14 +494,17 @@ class LButton
     _icon.classes.add(C_BUTTON__ICON_INVERSE);
   }
 
+  /// Button in selected state
+  bool get selected => element.classes.contains(LButton.C_IS_SELECTED);
+
   /// Set Selected State
-  void set state (bool selected) {
-    if (selected) {
-      element.classes.add(C_IS_SELECTED);
+  void set selected (bool newValue) {
+    if (newValue) {
       element.classes.remove(C_NOT_SELECTED);
+      element.classes.add(C_IS_SELECTED);
     } else {
-      element.classes.add(C_IS_SELECTED);
-      element.classes.remove(C_NOT_SELECTED);
+      element.classes.remove(C_IS_SELECTED);
+      element.classes.add(C_NOT_SELECTED);
     }
   }
 
@@ -688,21 +702,6 @@ class LButtonStateful
     element.append(state.element);
   }
 
-  /// Selected
-  bool get selected {
-    return element.classes.contains(LButton.C_IS_SELECTED);
-  }
-  /// Selected
-  void set selected(bool newValue) {
-    if (newValue) {
-      element.classes.remove(LButton.C_NOT_SELECTED);
-      element.classes.add(LButton.C_IS_SELECTED);
-    } else {
-      element.classes.add(LButton.C_NOT_SELECTED);
-      element.classes.remove(LButton.C_IS_SELECTED);
-    }
-  } // set selected
-
   /// toggle state - return new state
   bool toggle() {
     bool newState = !selected;
@@ -757,18 +756,6 @@ class LButtonStatefulIcon
     selected = false;
   } // LButtonStatefulIcon
 
-
-  bool get selected => element.classes.contains(LButton.C_IS_SELECTED);
-  /// Selected
-  void set selected(bool newValue) {
-    if (newValue) {
-      element.classes.remove(LButton.C_NOT_SELECTED);
-      element.classes.add(LButton.C_IS_SELECTED);
-    } else {
-      element.classes.add(LButton.C_NOT_SELECTED);
-      element.classes.remove(LButton.C_IS_SELECTED);
-    }
-  } // set selected
 
   /// toggle state - return new state
   bool toggle() {

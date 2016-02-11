@@ -21,17 +21,14 @@ class LObjectHome
   static final Logger _log = new Logger("LObjectHome");
 
 
-  /// Top Row - Icon - Title - Label - Follow - Actions
-  final DivElement _header = new DivElement()
-    ..classes.addAll([LGrid.C_GRID, LGrid.C_WRAP, LGrid.C_GRID__ALIGN_SPREAD]);
-  /// Top row left
-  final DivElement _headerLeft = new DivElement()
-    ..classes.addAll([LGrid.C_COL, LGrid.C_ALIGN_BOTTOM]); //
+  static const String C_HOME_POPIN = "home-popin";
+
+  /// Top row left - Record Type
   final ParagraphElement _headerLeftRecordType = new ParagraphElement()
     ..classes.add(LText.C_TEXT_HEADING__LABEL);
 
-  /// Filter List
-  final LObjectHomeFilter filterList = new LObjectHomeFilter();
+  /// Home Filter
+  LObjectHomeFilter homeFilter;
 
   final DivElement _headerCenter = new DivElement()
     ..classes.addAll([LGrid.C_COL, LGrid.C_ALIGN_BOTTOM]);
@@ -41,8 +38,14 @@ class LObjectHome
   final DivElement _headerRight = new DivElement()
     ..classes.addAll([LGrid.C_COL, LGrid.C_NO_FLEX, LGrid.C_ALIGN_BOTTOM]);
   LDropdown _sort;
-  LButton _graph;
-  LButton _filter;
+
+  /// Graph Pop-in
+  final LButton graphButton = new LButton.iconContainer("graph",
+      new LIconUtility(LIconUtility.CHART), lObjectHomeShowGraph());
+  /// Filter Pop-in
+  final LButton filterButton = new LButton.iconContainer("filter",
+      new LIconUtility(LIconUtility.FILTERLIST), lObjectHomeShowFilter());
+
   LDropdown _viewLayout;
   final LButtonGroup _actionButtonGroup = new LButtonGroup();
 
@@ -57,36 +60,42 @@ class LObjectHome
    * Object Home
    */
   LObjectHome(TableSortClicked this.sortClicked,
-      {String this.idPrefix,
-      void onGraphClick(MouseEvent evt)}) {
+      {String this.idPrefix}) {
     if (idPrefix != null && idPrefix.isNotEmpty) {
       element.id = "${idPrefix}-home";
       _headerLeftRecordType.id = "${idPrefix}-record-type";
       _actionButtonGroup.id = "${idPrefix}-action-group";
     }
-    // -- Header Row
-    element.append(_header);
-    // div .slds-col
-    // - p
-    _header.append(_headerLeft);
-    _headerLeft.append(_headerLeftRecordType);
+
+    homeFilter = new LObjectHomeFilter(idPrefix);
+
+    /// Top Row - Icon - Title - Label - Follow - Actions
+    final DivElement header = new DivElement()
+      ..classes.addAll([LGrid.C_GRID, LGrid.C_WRAP, LGrid.C_GRID__ALIGN_SPREAD]);
+    element.append(header);
+
+    // Top row left
+    final DivElement headerLeft = new DivElement()
+      ..classes.addAll([LGrid.C_COL, LGrid.C_ALIGN_BOTTOM]); //
+    header.append(headerLeft);
+    headerLeft.append(_headerLeftRecordType);
     // - div .slds-grid
     DivElement headerLeftGrid = new DivElement()
       ..classes.add(LGrid.C_GRID);
-    _headerLeft.append(headerLeftGrid);
+    headerLeft.append(headerLeftGrid);
     // query options/settings
-    headerLeftGrid.append(filterList.lookup.element);
-    headerLeftGrid.append(filterList.settings.element);
+    headerLeftGrid.append(homeFilter.lookup.element);
+    headerLeftGrid.append(homeFilter.settings.element);
 
     _headerFind = new LInputSearch("find", idPrefix:idPrefix, withClearValue:true);
     _headerFind.placeholder = lObjectHomeFind();
     _headerFind.maxWidth = "20rem";
     _headerCenter.append(_headerFind.element);
-    _header.append(_headerCenter);
+    header.append(_headerCenter);
 
     // -- Header Row right
     _headerRight.style.marginLeft = "auto"; // TEMP right align
-    _header.append(_headerRight);
+    header.append(_headerRight);
     DivElement _headerRightGrid = new DivElement()
       ..classes.add(LGrid.C_GRID);
     _headerRight.append(_headerRightGrid);
@@ -99,17 +108,12 @@ class LObjectHome
       _headerRightGrid.append(_sort.element);
     }
     // graph
-    if (onGraphClick != null) {
-      _graph = new LButton.iconContainer("graph",
-          new LIconUtility(LIconUtility.CHART), "Show Graph");
-      _graph.onClick.listen(onGraphClick);
-      _headerRightGrid.append(_graph.element);
-    }
+    graphButton.setIdPrefix(idPrefix);
+    _headerRightGrid.append(graphButton.element);
     // filter
-    _filter = new LButton.iconContainer("filter",
-        new LIconUtility(LIconUtility.FILTERLIST), "Show Filter");
-    _headerRightGrid.append(_filter.element);
-    //
+    filterButton.setIdPrefix(idPrefix);
+    _headerRightGrid.append(filterButton.element);
+    // layout - table/cards/..
     _viewLayout = new LDropdown.selectIcon(idPrefix:idPrefix);
     _viewLayout.right = true;
     _viewLayout.headingLabel = lObjectHomeLayoutDisplay();
@@ -134,7 +138,7 @@ class LObjectHome
 
   /// Object Home from UI
   void setUi(UI ui) {
-    if (ui.hasLabel()) { // // TODO plural
+    if (ui.hasLabel()) { // TODO plural
       recordType = ui.label + "s";
     } else {
       recordType = ui.table.label + "s";
@@ -154,6 +158,7 @@ class LObjectHome
         _sort.dropdown.addDropdownItem(item);
       _sort.dropdown.editorChange = onSortChange;
     }
+    homeFilter.setUi(ui);
   } // setUi
 
   /// fatal load
@@ -162,12 +167,6 @@ class LObjectHome
     element.children.clear();
     element.append(new DivElement()
       ..text = error);
-  }
-
-  bool get graphEnabled => _graph != null && _graph.show;
-  void set graphEnabled (bool newValue) {
-    if (_graph != null)
-      _graph.show = newValue;
   }
 
   /// Sort Dropdown selected
@@ -233,6 +232,9 @@ class LObjectHome
   static String lObjectHomeFind() => Intl.message("Find in View", name: "lObjectHomeFind");
 
   static String lObjectHomeSort() => Intl.message("Sort by", name: "lObjectHomeSort");
+
+  static String lObjectHomeShowGraph() => Intl.message("Show Graph", name: "lObjectHomeShowGraph");
+  static String lObjectHomeShowFilter() => Intl.message("Show Filter", name: "lObjectHomeShowFilter");
 
   static String lObjectHomeSave() => Intl.message("Save", name: "lObjectHomeSave", args: []);
 

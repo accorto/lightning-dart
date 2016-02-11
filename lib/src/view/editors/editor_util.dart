@@ -20,7 +20,7 @@ class EditorUtil {
   /**
    * Create Editor from column
    */
-  static LEditor createfromColumn(String name, DataColumn dataColumn, bool inGrid,
+  static LEditor createFromColumn(String name, DataColumn dataColumn, bool inGrid,
       {String idPrefix, DataRecord data, DEntry entry, bool isAlternativeDisplay:false}) {
     bool html5 = Settings.getAsBool(Settings.NATIVE_HTML5, defaultValue: ClientEnv.isMobileUserAgent);
     LEditor editor = null;
@@ -190,7 +190,7 @@ class EditorUtil {
       ..name = tableName
       ..columnList.add(column);
     DataColumn dataColumn = new DataColumn(table, column, null, null);
-    return createfromColumn(columnName, dataColumn, inGrid, idPrefix:idPrefix, data:data, entry:entry);
+    return createFromColumn(columnName, dataColumn, inGrid, idPrefix:idPrefix, data:data, entry:entry);
   }
 
   /// Render Value
@@ -206,7 +206,7 @@ class EditorUtil {
       key = "${dataColumn.table.name}.${dataColumn.name}";
     LEditor editor = _dataTypeEditorMap[key];
     if (editor == null) {
-      editor = createfromColumn(dataColumn.name, dataColumn, true);
+      editor = createFromColumn(dataColumn.name, dataColumn, true);
       _dataTypeEditorMap[key] = editor;
     }
     return editor.render(value, false);
