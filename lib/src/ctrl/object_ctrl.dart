@@ -590,7 +590,7 @@ class ObjectCtrl
     if (newValue) {
       showFilter = false;
       if (_graph == null) { // init
-        _graph = new GraphElement(datasource, _table, true);
+        _graph = new GraphPanel(datasource, _table, true);
         _graph.homeGraphButton = _header.graphButton;
         element.insertBefore(_graph.element, _content.element);
       }
@@ -601,7 +601,7 @@ class ObjectCtrl
     }
     _header.graphButton.selected = newValue;
   }
-  GraphElement _graph;
+  GraphPanel _graph;
 
   /// Filter Icon Click
   void onFilterClick(MouseEvent evt) {
