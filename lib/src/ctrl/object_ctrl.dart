@@ -82,7 +82,6 @@ class ObjectCtrl
       }
       _header.loading = false;
 
-      // TODO _header.filterList.addFilter()
       if (queryExecute)
         _doQuery();
     })
@@ -184,18 +183,18 @@ class ObjectCtrl
     return completer.future;
   }
 
-  /// Filter changed - query
+  /// Saved Query (Filter) Lookup changed - query
   void onFilterSelectionChange(String name, SavedQuery savedQuery) {
     _log.config("onFilterSelectionChange ${tableName} ${name}");
     _doQuery();
   }
 
   void _doQuery() {
-    String filter = _header.homeFilter.filterValue;
-    _log.config("doQuery ${tableName} ${filter}");
+    SavedQuery savedQuery = _header.homeFilter.savedQuery;
+    _log.config("doQuery ${tableName} ${savedQuery == null ? "" : savedQuery.name}");
     _content.loading = true;
     _header.summary = "${objectCtrlQuerying()} ...";
-    datasource.query()
+    datasource.query(savedQuery)
     .then((DataResponse response) {
       _header.summary = "${objectCtrlProcessing()} ...";
       display();

@@ -53,6 +53,7 @@ class LObjectHomeFilterLookup {
     element.append(label);
     label.append(_h1);
     label.append(_button.element);
+    label.onClick.listen(onLabelClick);
 
     element.append(_dropdown);
     _dropdown.append(_dropdownHeader);
@@ -61,8 +62,10 @@ class LObjectHomeFilterLookup {
     _dropdownHeaderFindInput.onKeyUp.listen(onSearchKeyUp);
     _dropdownHeaderFind.append(_dropdownHeaderFindInput);
     _dropdownHeader.append(_dropdownHeaderLabel);
+    //
     _dropdownElement = new LDropdownElement(_dropdown, name: "filter"); // adds List
     _dropdownElement.selectMode = true;
+    _dropdownElement.required = true;
     _dropdownElement.editorChange = onEditorChange;
   } // LObjectHomeLookup
 
@@ -77,7 +80,10 @@ class LObjectHomeFilterLookup {
     _dropdownElement.dOptionList = options;
   } // setOptions
 
-
+  /// display dropdown toggle
+  void onLabelClick(MouseEvent evt) {
+    _dropdownElement.show = !_dropdownElement.show;
+  }
 
   void onSearchKeyUp(KeyboardEvent evt) {
     lookupUpdateList(false);
@@ -108,7 +114,7 @@ class LObjectHomeFilterLookup {
       }
     }
     if (count == 0 && _dropdownElement._dropdownItemList.isNotEmpty) {
-      //  input.setCustomValidity("No matching options"); // TODO Trl
+      //  input.setCustomValidity("No matching options");
       _dropdownHeaderFind.classes.add(LForm.C_HAS_ERROR);
     } else {
       //  input.setCustomValidity("");
@@ -126,8 +132,8 @@ class LObjectHomeFilterLookup {
     if (details is ListItem) {
       ListItem value = (details as ListItem);
       _h1.text = value.label;
-      if (editorChange != null)
-        editorChange("", newValue, null, null); // callback
+      if (editorChange != null) // LObjectHomeFilter.onSavedQueryChange
+        editorChange(name, newValue, null, null); // callback
     }
   }
 

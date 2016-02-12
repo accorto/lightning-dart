@@ -37,7 +37,7 @@ class LSelect
    * Select Editor
    */
   LSelect(String name, {String idPrefix, bool multiple:false, bool this.inGrid:false}) {
-    createStandard(this);
+    createStandard(this, inGrid: inGrid);
     input.name = name;
     id = createId(idPrefix, name);
     input.multiple = multiple;
@@ -48,7 +48,7 @@ class LSelect
 
   /// Select Editor
   LSelect.from(DataColumn dataColumn, {String idPrefix, bool multiple:false, bool this.inGrid:false}) {
-    createStandard(this);
+    createStandard(this, inGrid: inGrid);
     DColumn tableColumn = dataColumn.tableColumn;
     input.name = tableColumn.name;
     id = createId(idPrefix, input.name);
@@ -112,12 +112,27 @@ class LSelect
   }
 
   /// String Value
-
-  String get value => input.value;
+  String get value {
+    if (multiple) {
+      List<String> list = valueList;
+      return list.join(",");
+    }
+    return input.value;
+  }
   void set value (String newValue) {
     validateOptions();
     input.value = newValue;
   }
+
+  /// get values as list
+  List<String> get valueList {
+    List<String> list = new List<String>();
+    for (OptionElement op in input.selectedOptions) {
+      list.add(op.value);
+    }
+    return list;
+  }
+
   /// notification that dependent changed
   void onDependentOnChanged(DEntry dependentEntity) {
     super.onDependentOnChanged(dependentEntity);

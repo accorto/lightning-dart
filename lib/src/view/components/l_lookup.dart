@@ -199,7 +199,6 @@ class LLookup
     _formElement.help = newValue;
   }
 
-
   String get hint => _formElement.hint;
   void set hint(String newValue) {
     _formElement.hint = newValue;

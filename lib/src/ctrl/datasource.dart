@@ -114,10 +114,10 @@ class Datasource
 
 
   /// query
-  Future<DataResponse> query({bool setBusy:true}) {
+  Future<DataResponse> query(SavedQuery savedQuery, {bool setBusy:true}) {
     Completer<DataResponse> completer = new Completer<DataResponse>();
     //
-    DataRequest req = _createRequest(DataRequestType.QUERY);
+    DataRequest req = _createRequest(DataRequestType.QUERY, savedQuery);
     //
     execute_data(req, setBusy:setBusy)
     .then((DataResponse response) {
@@ -133,9 +133,9 @@ class Datasource
   } // query
 
   /// query count
-  Future<int> queryCount () {
+  Future<int> queryCount (SavedQuery savedQuery) {
     Completer<int> completer = new Completer<int>();
-    DataRequest req = _createRequest(DataRequestType.QUERYCOUNT);
+    DataRequest req = _createRequest(DataRequestType.QUERYCOUNT, savedQuery);
     //
     execute_data(req, setBusy:false)
     .then((DataResponse response){
@@ -151,7 +151,7 @@ class Datasource
   Future<DataResponse> save(DRecord record) {
     Completer<DataResponse> completer = new Completer<DataResponse>();
     //
-    DataRequest req = _createRequest(DataRequestType.SAVE);
+    DataRequest req = _createRequest(DataRequestType.SAVE, null);
     req.recordList.add(record);
     //
     execute_data(req)
@@ -171,7 +171,7 @@ class Datasource
   Future<DataResponse> saveAll(List<DRecord> records) {
     Completer<DataResponse> completer = new Completer<DataResponse>();
     //
-    DataRequest req = _createRequest(DataRequestType.SAVE);
+    DataRequest req = _createRequest(DataRequestType.SAVE, null);
     req.recordList.addAll(records);
     //
     execute_data(req)
@@ -191,7 +191,7 @@ class Datasource
   Future<DataResponse> delete(DRecord record) {
     Completer<DataResponse> completer = new Completer<DataResponse>();
     //
-    DataRequest req = _createRequest(DataRequestType.DELETE);
+    DataRequest req = _createRequest(DataRequestType.DELETE, null);
     req.recordList.add(record);
     //
     execute_data(req)
@@ -211,7 +211,7 @@ class Datasource
   Future<DataResponse> deleteAll(List<DRecord> records) {
     Completer<DataResponse> completer = new Completer<DataResponse>();
     //
-    DataRequest req = _createRequest(DataRequestType.DELETE);
+    DataRequest req = _createRequest(DataRequestType.DELETE, null);
     req.recordList.addAll(records);
     //
     execute_data(req)
@@ -315,8 +315,7 @@ class Datasource
   /**
    * Create Request with query info
    */
-  DataRequest _createRequest(DataRequestType type,
-      {SavedQuery querySaved}) {
+  DataRequest _createRequest(DataRequestType type, SavedQuery savedQuery) {
     // see WbDatasource
     DataRequest req = new DataRequest()
       ..tableName = tableName
@@ -325,8 +324,8 @@ class Datasource
       ..queryLimit = cacheSize;
 
     // Saved Query
-    if (querySaved != null) {
-      req.querySaved = querySaved;
+    if (savedQuery != null) {
+      req.savedQuery = savedQuery;
     }
 
     // Query

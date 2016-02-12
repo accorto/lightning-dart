@@ -81,10 +81,7 @@ class DataRequest extends GeneratedMessage {
     ..pp(15, 'queryFilter', PbFieldType.PM, DFilter.$checkItem, DFilter.create)
     ..a(16, 'queryFilterLogic', PbFieldType.OS)
     ..pp(17, 'querySort', PbFieldType.PM, DSort.$checkItem, DSort.create)
-    ..a(18, 'querySaved', PbFieldType.OM, SavedQuery.getDefault, SavedQuery.create)
-    ..p(19, 'queryGroup', PbFieldType.PS)
-    ..a(20, 'isQuerySave', PbFieldType.OB)
-    ..a(21, 'querySavedName', PbFieldType.OS)
+    ..a(18, 'savedQuery', PbFieldType.OM, SavedQuery.getDefault, SavedQuery.create)
     ..a(25, 'fkId', PbFieldType.OS)
     ..a(26, 'fkParentColumnName', PbFieldType.OS)
     ..a(27, 'fkParentValue', PbFieldType.OS)
@@ -183,72 +180,60 @@ class DataRequest extends GeneratedMessage {
 
   List<DSort> get querySortList => $_get(15, 17, null);
 
-  SavedQuery get querySaved => $_get(16, 18, null);
-  void set querySaved(SavedQuery v) { setField(18, v); }
-  bool hasQuerySaved() => $_has(16, 18);
-  void clearQuerySaved() => clearField(18);
+  SavedQuery get savedQuery => $_get(16, 18, null);
+  void set savedQuery(SavedQuery v) { setField(18, v); }
+  bool hasSavedQuery() => $_has(16, 18);
+  void clearSavedQuery() => clearField(18);
 
-  List<String> get queryGroupList => $_get(17, 19, null);
-
-  bool get isQuerySave => $_get(18, 20, false);
-  void set isQuerySave(bool v) { $_setBool(18, 20, v); }
-  bool hasIsQuerySave() => $_has(18, 20);
-  void clearIsQuerySave() => clearField(20);
-
-  String get querySavedName => $_get(19, 21, '');
-  void set querySavedName(String v) { $_setString(19, 21, v); }
-  bool hasQuerySavedName() => $_has(19, 21);
-  void clearQuerySavedName() => clearField(21);
-
-  String get fkId => $_get(20, 25, '');
-  void set fkId(String v) { $_setString(20, 25, v); }
-  bool hasFkId() => $_has(20, 25);
+  String get fkId => $_get(17, 25, '');
+  void set fkId(String v) { $_setString(17, 25, v); }
+  bool hasFkId() => $_has(17, 25);
   void clearFkId() => clearField(25);
 
-  String get fkParentColumnName => $_get(21, 26, '');
-  void set fkParentColumnName(String v) { $_setString(21, 26, v); }
-  bool hasFkParentColumnName() => $_has(21, 26);
+  String get fkParentColumnName => $_get(18, 26, '');
+  void set fkParentColumnName(String v) { $_setString(18, 26, v); }
+  bool hasFkParentColumnName() => $_has(18, 26);
   void clearFkParentColumnName() => clearField(26);
 
-  String get fkParentValue => $_get(22, 27, '');
-  void set fkParentValue(String v) { $_setString(22, 27, v); }
-  bool hasFkParentValue() => $_has(22, 27);
+  String get fkParentValue => $_get(19, 27, '');
+  void set fkParentValue(String v) { $_setString(19, 27, v); }
+  bool hasFkParentValue() => $_has(19, 27);
   void clearFkParentValue() => clearField(27);
 
-  String get fkRestrictionSql => $_get(23, 28, '');
-  void set fkRestrictionSql(String v) { $_setString(23, 28, v); }
-  bool hasFkRestrictionSql() => $_has(23, 28);
+  String get fkRestrictionSql => $_get(20, 28, '');
+  void set fkRestrictionSql(String v) { $_setString(20, 28, v); }
+  bool hasFkRestrictionSql() => $_has(20, 28);
   void clearFkRestrictionSql() => clearField(28);
 
-  List<DRecord> get recordList => $_get(24, 30, null);
+  List<DRecord> get recordList => $_get(21, 30, null);
 
-  String get validationCallout => $_get(25, 31, '');
-  void set validationCallout(String v) { $_setString(25, 31, v); }
-  bool hasValidationCallout() => $_has(25, 31);
+  String get validationCallout => $_get(22, 31, '');
+  void set validationCallout(String v) { $_setString(22, 31, v); }
+  bool hasValidationCallout() => $_has(22, 31);
   void clearValidationCallout() => clearField(31);
 
-  DEntry get columnChanged => $_get(26, 32, null);
+  DEntry get columnChanged => $_get(23, 32, null);
   void set columnChanged(DEntry v) { setField(32, v); }
-  bool hasColumnChanged() => $_has(26, 32);
+  bool hasColumnChanged() => $_has(23, 32);
   void clearColumnChanged() => clearField(32);
 
-  String get exportTitle => $_get(27, 35, '');
-  void set exportTitle(String v) { $_setString(27, 35, v); }
-  bool hasExportTitle() => $_has(27, 35);
+  String get exportTitle => $_get(24, 35, '');
+  void set exportTitle(String v) { $_setString(24, 35, v); }
+  bool hasExportTitle() => $_has(24, 35);
   void clearExportTitle() => clearField(35);
 
-  List<String> get exportColumnNameList => $_get(28, 36, null);
+  List<String> get exportColumnNameList => $_get(25, 36, null);
 
-  DataExportType get exportType => $_get(29, 37, null);
+  DataExportType get exportType => $_get(26, 37, null);
   void set exportType(DataExportType v) { setField(37, v); }
-  bool hasExportType() => $_has(29, 37);
+  bool hasExportType() => $_has(26, 37);
   void clearExportType() => clearField(37);
 
-  List<String> get emailRecipientList => $_get(30, 38, null);
+  List<String> get emailRecipientList => $_get(27, 38, null);
 
-  String get emailMessage => $_get(31, 39, '');
-  void set emailMessage(String v) { $_setString(31, 39, v); }
-  bool hasEmailMessage() => $_has(31, 39);
+  String get emailMessage => $_get(28, 39, '');
+  void set emailMessage(String v) { $_setString(28, 39, v); }
+  bool hasEmailMessage() => $_has(28, 39);
   void clearEmailMessage() => clearField(39);
 }
 
@@ -412,10 +397,7 @@ const DataRequest$json = const {
     const {'1': 'query_filter', '3': 15, '4': 3, '5': 11, '6': '.DFilter'},
     const {'1': 'query_filter_logic', '3': 16, '4': 1, '5': 9},
     const {'1': 'query_sort', '3': 17, '4': 3, '5': 11, '6': '.DSort'},
-    const {'1': 'query_saved', '3': 18, '4': 1, '5': 11, '6': '.SavedQuery'},
-    const {'1': 'query_group', '3': 19, '4': 3, '5': 9},
-    const {'1': 'is_query_save', '3': 20, '4': 1, '5': 8, '7': 'false'},
-    const {'1': 'query_saved_name', '3': 21, '4': 1, '5': 9},
+    const {'1': 'saved_query', '3': 18, '4': 1, '5': 11, '6': '.SavedQuery'},
     const {'1': 'fk_id', '3': 25, '4': 1, '5': 9},
     const {'1': 'fk_parent_column_name', '3': 26, '4': 1, '5': 9},
     const {'1': 'fk_parent_value', '3': 27, '4': 1, '5': 9},

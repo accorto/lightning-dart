@@ -153,7 +153,7 @@ class FkDialog {
     _log.config("executeSearch start ${tableName} ${_queryRestriction}");
 
     _table.loading = true;
-    _datasource.query(setBusy:false)
+    _datasource.query(null, setBusy:false)
     .then((DataResponse response){
       _log.config("executeSearch end ${tableName} ${_queryRestriction}");
       _table.loading = false;

@@ -80,7 +80,7 @@ class LPicklist
     _plDiv.append(_plButton.element);
     _plButtonLabel.text = placeholder;
     //
-    createStandard(this);
+    createStandard(this, inGrid:inGrid);
     element.append(_plDiv);
     //
     _dropdown = new LDropdownElement(

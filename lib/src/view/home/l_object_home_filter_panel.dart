@@ -19,19 +19,28 @@ class ObjectHomeFilterPanel {
   Element element = new Element.aside()
     ..classes.add(LObjectHome.C_HOME_POPIN);
 
-  /// button on object Home
-  LButton homeFilterButton;
-
+  /// name editor
+  LInput _nameEditor;
   /// Filter List
   UListElement _filters = new UListElement()
     ..classes.addAll([LList.C_LIST__VERTICAL, LList.C_HAS_CARDS__SPACE, LMargin.C_VERTICAL__MEDIUM]);
   /// filter item list
   final List<ObjectHomeFilterItem> _filterItemList = new List<ObjectHomeFilterItem>();
 
+  /// sync Table
+  LTable syncTable;
+  LButtonStatefulIcon _syncTableButton;
+
+  /// Saved Query
   SavedQuery _savedQuery;
 
   final String idPrefix;
   int _optionSeq = 0;
+
+  /// button on object Home
+  LButton homeFilterButton;
+  /// Callback
+  EditorChange editorChange;
 
   /// Pop-In Panel
   ObjectHomeFilterPanel(String this.idPrefix) {
@@ -39,30 +48,42 @@ class ObjectHomeFilterPanel {
     element.id = id;
 
     // header
-    SpanElement text = new SpanElement()
-      ..classes.addAll([LText.C_TEXT_HEADING__SMALL, LMargin.C_TOP__SMALL, LMargin.C_LEFT__MEDIUM])
-      ..text = "Filter";
+    _syncTableButton = new LButtonStatefulIcon("syncTable",
+        objectHomeFilterPanelSyncTable(),
+        new LIconUtility(LIconUtility.TABLE),
+        idPrefix: id,
+        onButtonClick: onSyncButtonClick)
+      ..small = true
+      ..selected = false
+      ..element.style.verticalAlign = "top";
+
+    DivElement text = new DivElement()
+      ..classes.addAll([LText.C_TEXT_HEADING__SMALL, LMargin.C_TOP__XX_SMALL, LMargin.C_LEFT__MEDIUM])
+      ..style.display = "inline-block"
+      ..text = objectHomeFilterPanel();
 
     LButton close = new LButton.iconBare("close",
         new LIconUtility(LIconUtility.RIGHT),
         LModal.lModalClose(),
         idPrefix: id)
       ..classes.add(LFloat.C_FLOAT__RIGHT);
-    close.onClick.listen(onClickCancel);
+    close.onClick.listen(onCancelClick);
 
     LButton buttonAdd = new LButton.neutralIcon("addFilter",
         objectHomeFilterPanelAddFilter(),
         new LIconUtility(LIconUtility.NEW),
         idPrefix: id)
-      ..onClick.listen(onClickAdd);
+      ..onClick.listen(onAddClick);
     LButton buttonExecute = LModal.createExecuteButton(label: objectHomeFilterPanelExecute(), idPrefix: id)
       ..classes.add(LFloat.C_FLOAT__RIGHT)
-      ..onClick.listen(onClickExecute);
+      ..onClick.listen(onExecuteClick);
     DivElement header1 = new DivElement()
       ..classes.add(LMargin.C_TOP__SMALL)
       ..append(buttonAdd.element)
       ..append(buttonExecute.element);
     Element header = new Element.header()
+      ..classes.add(LMargin.C_BOTTOM__X_SMALL)
+      ..append(_syncTableButton.element)
       ..append(close.element)
       ..append(text)
       ..append(header1);
@@ -72,21 +93,21 @@ class ObjectHomeFilterPanel {
 
     // footer
     LButton buttonCancel = LModal.createCancelButton(idPrefix: id)
-      ..onClick.listen(onClickCancel)
+      ..onClick.listen(onCancelClick)
       ..classes.add(LFloat.C_FLOAT__LEFT);
-    LInput name = new LInput("filterName", EditorI.TYPE_TEXT, idPrefix: id, inGrid: true)
+    _nameEditor = new LInput("filterName", EditorI.TYPE_TEXT, idPrefix: id, inGrid: true)
       ..placeholder = objectHomeFilterPanelSaveName()
       ..title = objectHomeFilterPanelSaveName()
       ..element.classes.addAll([LFloat.C_FLOAT__RIGHT, LMargin.C_RIGHT__X_SMALL])
       ..maxWidth = "10rem";
     LButton buttonSave = LModal.createSaveButton(label: objectHomeFilterPanelSave(), idPrefix: id)
       ..classes.add(LFloat.C_FLOAT__RIGHT)
-      ..onClick.listen(onClickSave);
+      ..onClick.listen(onSaveClick);
     Element footer = new Element.footer()
       ..classes.add(LMargin.C_VERTICAL__MEDIUM)
       ..append(buttonCancel.element)
       ..append(buttonSave.element)
-      ..append(name.element);
+      ..append(_nameEditor.element);
     element.append(footer);
   } // ObjectFilterElement
 
@@ -96,24 +117,54 @@ class ObjectHomeFilterPanel {
   }
   DTable _table;
 
-
   /// Display [savedQuery]
-  void displaySavedQuery(SavedQuery savedQuery) {
+  void set savedQuery (SavedQuery savedQuery) {
     _savedQuery = savedQuery;
-    display(_savedQuery.filterList);
-  }
-  /// Display [filterList]
-  void display(List<DFilter> filterList) {
     _optionSeq = 0;
     _filterItemList.clear();
     _filters.children.clear(); // ul
-    for (DFilter filter in filterList) {
-      addFilter(filter);
+    _nameEditor.value = "";
+
+    if (_savedQuery != null) {
+      _nameEditor.value = _savedQuery.name;
+      for (DFilter filter in _savedQuery.filterList) {
+        _addFilter(filter);
+      }
     }
-  }
+    if (_filterItemList.isEmpty) {
+      _addFilter(new DFilter());
+    }
+  } // saved query
+
+  /// get updated saved query
+  SavedQuery get savedQuery {
+    List<DFilter> filters = getFilters();
+    if (filters == null) {
+      return null;
+    }
+
+    if (_savedQuery == null) {
+      _savedQuery = new SavedQuery();
+    } else {
+      _savedQuery.clearIsUpsert();
+      _savedQuery.filterList.clear();
+      _savedQuery.clearFilterLogic();
+      _savedQuery.sortList.clear();
+      _savedQuery.clearSqlWhere();
+    }
+    String name = _nameEditor.value;
+    if (name == null || name.isEmpty)
+      name = "queryOnly";
+    _savedQuery.name = name;
+    _savedQuery.tableName = _table.name;
+    //
+    _savedQuery.filterList.addAll(filters);
+
+    return _savedQuery;
+  } // savedQuery
 
   /// Add Filter to list and display
-  void addFilter(DFilter filter) {
+  void _addFilter(DFilter filter) {
     _optionSeq++;
     String prefix = "${idPrefix}-o-${_optionSeq}";
     ObjectHomeFilterItem item = new ObjectHomeFilterItem(_table, filter, prefix, onItemDelete);
@@ -141,20 +192,77 @@ class ObjectHomeFilterPanel {
   }
 
   /// add new filter
-  void onClickAdd(MouseEvent evt) {
-    addFilter(new DFilter());
+  void onAddClick(MouseEvent evt) {
+    _addFilter(new DFilter());
   }
 
   /// cancel (close)
-  void onClickCancel(MouseEvent evt) {
+  void onCancelClick(MouseEvent evt) {
     show = false;
   }
 
-  void onClickSave(MouseEvent evt) {
+  /// save click
+  void onSaveClick(MouseEvent evt) {
+    SavedQuery sq = savedQuery;
+    if (editorChange != null && sq != null) {
+      sq.isUpsert = true;
+      editorChange("panel", sq.name, null, sq); // LObjectHomeFilter.onSavedQueryChange
+    }
+  }
+  /// execute click
+  void onExecuteClick(MouseEvent evt) {
+    SavedQuery sq = savedQuery;
+    if (editorChange != null && sq != null) {
+      editorChange("panel", sq.name, null, sq); // LObjectHomeFilter.onSavedQueryChange
+    }
+  }
 
+  /// get filters or null if error
+  List<DFilter> getFilters() {
+    List<DFilter> list = new List<DFilter>();
+    for (ObjectHomeFilterItem item in _filterItemList) {
+      DFilter filter = item.getFilter();
+      if (filter == null && item.isError) {
+        list = null;
+      }
+      if (list != null && filter != null) {
+        list.add(filter);
+      }
+    }
+    return list;
+  } // getFilters
+
+
+  /// Sync Table Button clicked
+  void onSyncButtonClick(MouseEvent evt) {
+    doSyncTable(null);
   }
-  void onClickExecute(MouseEvent evt) {
+
+  /// sync table
+  bool get isSyncTable {
+    return syncTable != null && _syncTableButton != null && _syncTableButton.selected;
   }
+
+  /// Sync Table
+  void doSyncTable(String by) {
+    if (syncTable != null) {
+      if (by != null && by.isEmpty) {
+        by = null;
+      }
+      if (isSyncTable) {
+      } else {
+        by = null;
+        syncTable.graphSelect(null);
+      }
+      if (by != syncTable.groupByColumnName) {
+        syncTable.groupByColumnName = by;
+      }
+    }
+  } // doSyncTable
+
+
+  static String objectHomeFilterPanel() => Intl.message("Filter", name: "objectHomeFilterPanel");
+  static String objectHomeFilterPanelSyncTable() => Intl.message("Sync with Table", name: "objectHomeFilterPanelSyncTable");
 
   static String objectHomeFilterPanelAddFilter() => Intl.message("Add Filter", name: "objectHomeFilterPanelAddFilter");
 

@@ -85,7 +85,6 @@ class UI extends GeneratedMessage {
     ..pp(34, 'queryColumn', PbFieldType.PM, UIQueryColumn.$checkItem, UIQueryColumn.create)
     ..pp(35, 'savedQuery', PbFieldType.PM, SavedQuery.$checkItem, SavedQuery.create)
     ..a(40, 'isAlwaysQuery', PbFieldType.OB)
-    ..a(41, 'defaultQuery', PbFieldType.OM, SavedQuery.getDefault, SavedQuery.create)
     ..a(44, 'isGridFind', PbFieldType.OB, true)
     ..a(45, 'isIncludeStats', PbFieldType.OB, true)
     ..pp(50, 'filter', PbFieldType.PM, DFilter.$checkItem, DFilter.create)
@@ -237,24 +236,19 @@ class UI extends GeneratedMessage {
   bool hasIsAlwaysQuery() => $_has(29, 40);
   void clearIsAlwaysQuery() => clearField(40);
 
-  SavedQuery get defaultQuery => $_get(30, 41, null);
-  void set defaultQuery(SavedQuery v) { setField(41, v); }
-  bool hasDefaultQuery() => $_has(30, 41);
-  void clearDefaultQuery() => clearField(41);
-
-  bool get isGridFind => $_get(31, 44, true);
-  void set isGridFind(bool v) { $_setBool(31, 44, v); }
-  bool hasIsGridFind() => $_has(31, 44);
+  bool get isGridFind => $_get(30, 44, true);
+  void set isGridFind(bool v) { $_setBool(30, 44, v); }
+  bool hasIsGridFind() => $_has(30, 44);
   void clearIsGridFind() => clearField(44);
 
-  bool get isIncludeStats => $_get(32, 45, true);
-  void set isIncludeStats(bool v) { $_setBool(32, 45, v); }
-  bool hasIsIncludeStats() => $_has(32, 45);
+  bool get isIncludeStats => $_get(31, 45, true);
+  void set isIncludeStats(bool v) { $_setBool(31, 45, v); }
+  bool hasIsIncludeStats() => $_has(31, 45);
   void clearIsIncludeStats() => clearField(45);
 
-  List<DFilter> get filterList => $_get(33, 50, null);
+  List<DFilter> get filterList => $_get(32, 50, null);
 
-  List<DSort> get sortList => $_get(34, 51, null);
+  List<DSort> get sortList => $_get(33, 51, null);
 }
 
 class _ReadonlyUI extends UI with ReadonlyMessageMixin {}
@@ -1136,7 +1130,6 @@ const UI$json = const {
     const {'1': 'query_column', '3': 34, '4': 3, '5': 11, '6': '.UIQueryColumn'},
     const {'1': 'saved_query', '3': 35, '4': 3, '5': 11, '6': '.SavedQuery'},
     const {'1': 'is_always_query', '3': 40, '4': 1, '5': 8, '7': 'false'},
-    const {'1': 'default_query', '3': 41, '4': 1, '5': 11, '6': '.SavedQuery'},
     const {'1': 'is_grid_find', '3': 44, '4': 1, '5': 8, '7': 'true'},
     const {'1': 'is_include_stats', '3': 45, '4': 1, '5': 8, '7': 'true'},
     const {'1': 'filter', '3': 50, '4': 3, '5': 11, '6': '.DFilter'},

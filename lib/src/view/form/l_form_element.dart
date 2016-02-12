@@ -22,7 +22,7 @@ class LFormElement {
   DivElement _elementControl;
   /// Label Span (cb)
   SpanElement _labelSpan;
-  /// Hint
+  /// Hint (adds some px below input)
   final SpanElement _hintSpan = new SpanElement()
     ..classes.add(LForm.C_FORM_ELEMENT__HELP);
 
@@ -358,11 +358,6 @@ class LFormElement {
   String _hint;
   void _hintDisplay(String text) {
     _hintSpan.text = text == null ? "" : text; // __help
-    if (text == null || text.isEmpty) {
-      _hintSpan.classes.add(LVisibility.C_HIDE);
-    } else {
-      _hintSpan.classes.remove(LVisibility.C_HIDE);
-    }
   }
 
 

@@ -398,7 +398,13 @@ class RequestResponse {
         window.location.reload();
       });
     }
-    modal.showInElement(AppsMain.modals);
+    Element parent = null;
+    if (AppsMain.instance != null) {
+      parent = AppsMain.modals;
+    } else {
+      parent = document.body;
+    }
+    modal.showInElement(parent);
   } // _showModal
 
 

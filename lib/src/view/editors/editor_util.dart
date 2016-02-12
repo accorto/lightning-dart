@@ -21,7 +21,10 @@ class EditorUtil {
    * Create Editor from column
    */
   static LEditor createFromColumn(String name, DataColumn dataColumn, bool inGrid,
-      {String idPrefix, DataRecord data, DEntry entry, bool isAlternativeDisplay:false}) {
+      {String idPrefix,
+      DataRecord data, DEntry entry,
+      bool isAlternativeDisplay:false,
+      bool isFilter:false}) {
     bool html5 = Settings.getAsBool(Settings.NATIVE_HTML5, defaultValue: ClientEnv.isMobileUserAgent);
     LEditor editor = null;
     if (dataColumn != null) {
@@ -52,8 +55,13 @@ class EditorUtil {
       } else if (dataType == DataType.CODE) {
 
       } else if (dataType == DataType.COLOR) {
-        editor = new LInputColor.from(dataColumn,
-            idPrefix: idPrefix, inGrid: inGrid);
+        if (isFilter) {
+          editor = new LInput.from(dataColumn, EditorI.TYPE_TEXT,
+              idPrefix: idPrefix, inGrid: inGrid);
+        } else {
+          editor = new LInputColor.from(dataColumn,
+              idPrefix: idPrefix, inGrid: inGrid);
+        }
       } else if (dataType == DataType.CURRENCY) {
         editor = new LInputNumber.from(dataColumn, EditorI.TYPE_NUMBER,
             idPrefix: idPrefix, inGrid: inGrid);
@@ -89,7 +97,13 @@ class EditorUtil {
       } else if (dataType == DataType.IM) {
         // TODO im editor
       } else if (dataType == DataType.IMAGE) {
-        editor = new LInputImage.from(dataColumn, idPrefix: idPrefix, inGrid: inGrid);
+        if (isFilter) {
+          editor = new LInput.from(dataColumn, EditorI.TYPE_TEXT,
+              idPrefix: idPrefix, inGrid: inGrid);
+        } else {
+          editor = new LInputImage.from(dataColumn,
+              idPrefix: idPrefix, inGrid: inGrid);
+        }
       } else if (dataType == DataType.INT) {
         editor = new LInputNumber.from(dataColumn, EditorI.TYPE_NUMBER,
             idPrefix: idPrefix, inGrid: inGrid);
@@ -100,11 +114,16 @@ class EditorUtil {
         editor = new LInput.from(dataColumn, EditorI.TYPE_PASSWORD,
             idPrefix: idPrefix, inGrid: inGrid);
       } else if (dataType == DataType.PHONE) {
-        editor = new LInput.from(dataColumn,
-            EditorI.TYPE_TEL, idPrefix: idPrefix, inGrid: inGrid);
+        editor = new LInput.from(dataColumn, EditorI.TYPE_TEL,
+            idPrefix: idPrefix, inGrid: inGrid);
       } else if (dataType == DataType.PICK) {
-        if (isAlternativeDisplay && !inGrid) {
-          editor = new LPath.from(dataColumn, idPrefix: idPrefix);
+        if (isFilter) {
+          editor = new LSelect.from(dataColumn, multiple: true,
+              idPrefix: idPrefix, inGrid: inGrid)
+            ..size = 4;
+        } else if (isAlternativeDisplay && !inGrid) {
+          editor = new LPath.from(dataColumn,
+              idPrefix: idPrefix);
         } else if (html5) {
           editor = new LSelect.from(dataColumn, multiple: false,
               idPrefix: idPrefix, inGrid: inGrid);
@@ -119,8 +138,14 @@ class EditorUtil {
         editor = new LSelect.from(dataColumn,
             idPrefix: idPrefix, inGrid: inGrid);
       } else if (dataType == DataType.PICKMULTI) {
-        editor = new LSelect.from(dataColumn, multiple: true,
-            idPrefix: idPrefix, inGrid: inGrid);
+        if (isFilter) {
+          editor = new LSelect.from(dataColumn, multiple: true,
+              idPrefix: idPrefix, inGrid: inGrid)
+            ..size = 4;
+        } else {
+          editor = new LSelect.from(dataColumn, multiple: true,
+              idPrefix: idPrefix, inGrid: inGrid);
+        }
       } else if (dataType == DataType.PICKMULTICHOICE) {
         editor = new LSelect.from(dataColumn, multiple: false,
             idPrefix: idPrefix, inGrid: inGrid);
@@ -130,7 +155,8 @@ class EditorUtil {
       } else if (dataType == DataType.RATING) {
         // TODO rating editor
       } else if (dataType == DataType.TAG) {
-        editor = new LLookupSelect.multiFrom(dataColumn, idPrefix: idPrefix, inGrid: inGrid);
+        editor = new LLookupSelect.multiFrom(dataColumn,
+            idPrefix: idPrefix, inGrid: inGrid);
       } else if (dataType == DataType.TENANT) {
         editor = createLookupCall(dataColumn, idPrefix, inGrid);
       } else if (dataType == DataType.TEXT) {
@@ -149,8 +175,10 @@ class EditorUtil {
         editor = createLookupCall(dataColumn, idPrefix, inGrid);
       }
       // fallback
-      if (editor == null)
-        editor = new LInput.from(dataColumn, DataTypeUtil.getEditorType(dataType), idPrefix:idPrefix, inGrid:inGrid);
+      if (editor == null) {
+        editor = new LInput.from(dataColumn, DataTypeUtil.getEditorType(dataType),
+            idPrefix: idPrefix, inGrid: inGrid);
+      }
     } // dataColumn
 
     // editor fallback (no dataColumn) - text

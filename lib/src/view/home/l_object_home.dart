@@ -101,8 +101,10 @@ class LObjectHome
     _headerRight.append(_headerRightGrid);
 
     // sort
-    _sort = new LDropdown.icon("sort", new LIconUtility(LIconUtility.SORT),
-      idPrefix:idPrefix, assistiveText:lObjectHomeSort());
+    _sort = new LDropdown.icon("sort",
+        new LIconUtility(LIconUtility.SORT),
+        idPrefix:idPrefix,
+        assistiveText:lObjectHomeSort());
     if (sortClicked != null) {
       _sort.right = true;
       _headerRightGrid.append(_sort.element);

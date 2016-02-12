@@ -12,8 +12,22 @@ part of lightning_dart;
 class ObjectHomeFilterItem
     extends LTile {
 
-  static final Logger _log = new Logger("ObjectHomeFilterItem");
+  /// date operation
+  static List<DOP> DATE_OPERATIONS = [DOP.D_DAY, DOP.D_WEEK, DOP.D_MONTH, DOP.D_QUARTER, DOP.D_YEAR];
+  /// date operation values
+  static List<DOP> DATE_VALUES = [DOP.D_LAST, DOP.D_THIS, DOP.D_NEXT];
 
+  /// Operation from String
+  static DOP opFromString(String opString) {
+    for (DOP oo in DOP.values) {
+      if (oo.name == opString) {
+        return oo;
+      }
+    }
+    return null;
+  }
+
+  static final Logger _log = new Logger("ObjectHomeFilterItem");
 
   /// List Element
   final LIElement li = new LIElement()
@@ -27,8 +41,9 @@ class ObjectHomeFilterItem
   final String idPrefix;
   DColumn column;
   DOP op;
+  List<DOption> _operationList;
 
-  LPicklist _columnNameEditor;
+  LLookup _columnNameEditor;
   LPicklist _operationEditor;
   LPicklist _operationDateEditor;
   LEditor _valueEditor;
@@ -65,22 +80,33 @@ class ObjectHomeFilterItem
     _detail = createDetail([LTile.C_TILE__DETAIL]);
     element.append(_detail);
 
-    _columnNameEditor = new LPicklist("columnName",
-        idPrefix: idPrefix)
+    _columnNameEditor = new LLookup("columnName",
+        idPrefix: idPrefix, withClearValue: true)
       ..label = lObjectHomeFilterItemColumnName()
+      ..placeholder = lObjectHomeFilterItemColumnName()
       ..readOnly = filter.isReadOnly
       ..editorChange = onColumnNameChange
       ..required = false;
     _columnNameEditor.dOptionList = OptionUtil.columnOptions(table);
-    _detail.append(_columnNameEditor.element);
 
     _operationEditor = new LPicklist("operation",
-        idPrefix: idPrefix)
-      ..label = lObjectHomeFilterItemOperation()
+        idPrefix: idPrefix, inGrid: true)
+      ..title = lObjectHomeFilterItemOperation()
       ..readOnly = filter.isReadOnly
       ..editorChange = onOperationChange
       ..required = true
       ..show = false;
+
+    _operationDateEditor = new LPicklist("operationDate",
+        idPrefix: idPrefix, inGrid: true)
+      ..readOnly = filter.isReadOnly
+      ..required = true
+      ..show = false;
+    _operationDateEditor.dOptionList = _getOperationDateOptions();
+    _operationDateEditor.value = DOP.D_THIS.name;
+    //
+    _detail.append(_columnNameEditor.element);
+    _detail.append(_operationDateEditor.element);
     _detail.append(_operationEditor.element);
 
     // data
@@ -90,11 +116,102 @@ class ObjectHomeFilterItem
     //if (filter.hasFilterValue())
 
 
+    _isError = false;
   } // ObjectFilterItem
 
   /// Detail div - (body) .tile__detail
   DivElement get detail => _detail;
   UListElement get detailList => null;
+
+  /// get updated Filter
+  DFilter getFilter() {
+    _isError = false;
+    // column
+    if (column == null) {
+      return null;
+    }
+    filter.columnName = column.name;
+    filter.dataType = column.dataType;
+    // operation
+    if (op == null) {
+      op = opFromString(_operationEditor.value);
+    }
+    if (op == null) {
+      return null;
+    }
+    filter.operation = op;
+    filter.clearOperationDate();
+    filter.clearFilterValue();
+    filter.clearFilterValueTo();
+    filter.filterInList.clear();
+    if (op == DOP.ISNULL || op == DOP.NOTNULL) {
+      return filter;
+    }
+    // date value
+    if (DATE_OPERATIONS.contains(op)) {
+      String opValue = _operationDateEditor.value;
+      DOP oo = opFromString(opValue);
+      if (DATE_VALUES.contains(oo)) {
+        filter.operation = oo;
+      } else {
+        filter.operation = DOP.D_THIS;
+        _operationDateEditor.value = DOP.D_THIS.name;
+      }
+      return filter;
+    }
+    // value
+    if (_valueEditor == null) {
+      _isError = true;
+      return null;
+    }
+    String valueString = _valueEditor.value;
+    if (valueString == null || valueString.isEmpty) {
+      if (column.isMandatory) {
+        _valueEditor.doValidate();
+        _isError = true;
+        return null;
+      } else {
+        filter.operation = DOP.ISNULL;
+        operation = DOP.ISNULL;
+        return filter;
+      }
+    }
+    if (!_valueEditor.doValidate()) {
+      _isError = false;
+      return null;
+    }
+    filter.filterValue = valueString;
+    // value list
+    if (_valueEditor is LSelect) {
+      LSelect select = _valueEditor as LSelect;
+      List<String> list = select.valueList;
+      if (list.length > 1) {
+        if (op == DOP.EQ) {
+          op = DOP.IN;
+        } else if (op == DOP.NE) {
+          op = DOP.NOTIN;
+        }
+      }
+      if (op == DOP.IN || op == DOP.NOTIN) {
+        filter.clearFilterValue();
+        filter.filterInList.addAll(list);
+      }
+    }
+
+    // value to
+    if (op == DOP.BETWEEN && _valueEditorTo != null) {
+      String valueToString = _valueEditorTo.value;
+      if (!_valueEditorTo.doValidate()) {
+        _isError = false;
+        return null;
+      }
+      filter.filterValue = valueToString;
+    }
+    return filter;
+  } // getFilter
+  bool _isError = false;
+  bool get isError => _isError;
+  bool get isEmpty => column == null;
 
   /// column name change
   void onColumnNameChange(String name, String newValue, DEntry entry, var details) {
@@ -102,7 +219,9 @@ class ObjectHomeFilterItem
     columnName = newValue;
   }
 
-  /// set column name
+  /**
+   * set column name
+   */
   void set columnName (String newValue) {
     bool change = filter.columnName != newValue;
     column = DataUtil.findColumn(table, null, newValue);
@@ -122,112 +241,112 @@ class ObjectHomeFilterItem
       }
     }
     _log.fine("columnName=${column == null ? "-" : column.name} (${_columnNameEditor.value})");
-    _setOperationOptions();
+    _columnNameSet();
   } // setColumnName
 
   /// set operations options
-  void _setOperationOptions() {
+  void _columnNameSet() {
     if (column == null) {
       _operationEditor.show = false;
+      _operationSet();
       return;
     }
-
-    List<DOption> list = new List<DOption>();
+    _operationList = new List<DOption>();
     DataType dt = column.dataType;
     DOP defaultOperation = DOP.EQ;
-    list.add(new DOption()
+    _operationList.add(new DOption()
       ..value = DOP.EQ.name
       ..label = "=\u2003 ${filterOpEquals()}");
     if (dt != DataType.BOOLEAN) {
-      list.add(new DOption()
+      _operationList.add(new DOption()
         ..value = DOP.NE.name
         ..label = "\u2260\u2003 ${filterOpNotEquals()}");
       if (DataTypeUtil.isStringStrict(dt)) {
-        list.add(new DOption()
+        _operationList.add(new DOption()
           ..value = DOP.LIKE.name
           ..label = "\u2248\u2003 ${filterOpLike()}");
-        list.add(new DOption()
+        _operationList.add(new DOption()
           ..value = DOP.NOTLIKE.name
           ..label = "\u2249\u2003 ${filterOpNotLike()}");
         defaultOperation = DOP.LIKE;
       }
       if (DataTypeUtil.isPick(dt)) {
-        list.add(new DOption()
+        _operationList.add(new DOption()
           ..value = DOP.IN.name
           ..label = "\u2208\u2003 ${filterOpIn()}");
-        list.add(new DOption()
+        _operationList.add(new DOption()
           ..value = DOP.NOTIN.name
           ..label = "\u2209\u2003 ${filterOpNotIn()}");
       } else if (!DataTypeUtil.isFk(dt)) {
-        list.add(new DOption()
+        _operationList.add(new DOption()
           ..value = DOP.GE.name
           ..label = "\u2265\u2003 ${filterOpGreaterEquals()}");
-        list.add(new DOption()
+        _operationList.add(new DOption()
           ..value = DOP.GT.name
           ..label = ">\u2003 ${filterOpGreater()}");
-        list.add(new DOption()
+        _operationList.add(new DOption()
           ..value = DOP.LE.name
           ..label = "\u2264\u2003 ${filterOpLessEquals()}");
-        list.add(new DOption()
+        _operationList.add(new DOption()
           ..value = DOP.LT.name
           ..label = "<\u2003 ${filterOpLess()}");
-        list.add(new DOption()
+        _operationList.add(new DOption()
           ..value = DOP.BETWEEN.name
           ..label = "|..|\u2002 ${filterOpBetween()}");
       }
       if (dt == DataType.DATE || dt == DataType.DATETIME) {
-        list.add(new DOption()
+        _operationList.add(new DOption()
           ..value = DOP.D_DAY.name
           ..label = filterOpDateDay());
-        list.add(new DOption()
+        _operationList.add(new DOption()
           ..value = DOP.D_WEEK.name
           ..label = filterOpDateWeek());
-        list.add(new DOption()
+        _operationList.add(new DOption()
           ..value = DOP.D_MONTH.name
           ..label = filterOpDateMonth());
-        list.add(new DOption()
+        _operationList.add(new DOption()
           ..value = DOP.D_QUARTER.name
           ..label = filterOpDateQuarter());
-        list.add(new DOption()
+        _operationList.add(new DOption()
           ..value = DOP.D_YEAR.name
           ..label = filterOpDateYear());
         defaultOperation = DOP.D_DAY;
       }
     }
     if (!column.isMandatory) {
-      list.add(new DOption()
+      _operationList.add(new DOption()
         ..value = DOP.ISNULL.name
         ..label = "\u2205\u2003 ${filterOpNull()}");
-      list.add(new DOption()
+      _operationList.add(new DOption()
         ..value = DOP.NOTNULL.name
         ..label = "\u2203\u2003 ${filterOpNotNull()}");
     }
     _operationEditor.show = true;
-    _operationEditor.dOptionList = list;
+    _operationEditor.dOptionList = _operationList;
 
     // set value
-    if (filter.hasOperation()) {
-      operation = filter.operation;
-    } else if (defaultOperation != null) {
+    if (defaultOperation != null) {
       operation = defaultOperation;
+    } else if (filter.hasOperation()) {
+      operation = filter.operation;
     } else {
       operation = DOP.EQ;
     }
-  } // setOperationOptions
+  } // columnNameSet
 
 
   /// column name change
   void onOperationChange(String name, String newValue, DEntry entry, var details) {
     _log.config("onOperationChange ${newValue}");
-    for (DOP oo in DOP.values) {
-      if (oo.name == newValue) {
-        operation = oo;
-        return;
-      }
+    DOP oo = opFromString(newValue);
+    if (oo != null) {
+      operation = oo;
     }
   }
 
-  /// set operation
+  /**
+   * set operation
+   */
   void set operation (DOP newValue) {
     op = newValue;
     if (op == null) {
@@ -237,11 +356,11 @@ class ObjectHomeFilterItem
       _operationEditor.value = op.name;
     }
     _log.fine("operation=${op} (${_operationEditor.value})");
-    _setValueOptions();
+    _operationSet();
   }
 
   /// set value options
-  void _setValueOptions() {
+  void _operationSet() {
     // remove previous
     if (_valueEditor != null) {
       _valueEditor.element.remove();
@@ -249,24 +368,56 @@ class ObjectHomeFilterItem
     if (_valueEditorTo != null) {
       _valueEditorTo.element.remove();
     }
+    _operationDateEditor.show = false;
 
     // no option or no value
     if (column == null || op == null || op == DOP.ISNULL || op == DOP.NOTNULL) {
       return;
     }
-    // set editor
-    DataColumn dataColumn = new DataColumn(table, column, null, null);
-    _valueEditor = EditorUtil.createFromColumn("value", dataColumn, false, idPrefix: idPrefix);
-    _detail.append(_valueEditor.element);
-
-    // set value
-    if (filter.hasFilterValue()) {
-      _valueEditor.value = filter.filterValue;
+    if (DATE_OPERATIONS.contains(op)) {
+      _operationDateEditor.show = true;
+      return;
     }
 
+    // set editor
+    DataColumn dataColumn = new DataColumn(table, column, null, null);
+    _valueEditor = EditorUtil.createFromColumn("value", dataColumn, true,
+        idPrefix: idPrefix, isFilter: true);
+    _valueEditor.readOnly = false;
+    _valueEditor.defaultValue = "";
+    if (_valueEditor is LSelect) {
 
-  } // setValueOptions
+    }
+    _detail.append(_valueEditor.element);
+    // set value
+    _valueEditor.value = filter.filterValue;
+    //
+    if (op == DOP.BETWEEN) {
+      _valueEditorTo = EditorUtil.createFromColumn("valueTo", dataColumn, true,
+          idPrefix: idPrefix, isFilter: true);
+      _valueEditorTo.readOnly = false;
+      _valueEditorTo.defaultValue = "";
+      _detail.append(_valueEditorTo.element);
+      _valueEditorTo.value = filter.filterValueTo;
+    }
 
+  } // operationSet
+
+
+  /// Date Op Values
+  List<DOption> _getOperationDateOptions() {
+    List<DOption> list = new List<DOption>();
+    list.add(new DOption()
+      ..value = DOP.D_LAST.name
+      ..label = filterOpDateLast());
+    list.add(new DOption()
+      ..value = DOP.D_THIS.name
+      ..label = filterOpDateThis());
+    list.add(new DOption()
+      ..value = DOP.D_NEXT.name
+      ..label = filterOpDateNext());
+    return list;
+  }
 
   static String lObjectHomeFilterItemDelete() => Intl.message("Delete", name: "lObjectHomeFilterItemDelete");
 

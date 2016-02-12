@@ -37,7 +37,7 @@ class LObjectHomeFilter {
   /// Callback on Change
   FilterSelectionChange filterSelectionChange;
   /// Saved Queries
-  final List<SavedQuery> _savedQueries = new List<SavedQuery>();
+  final List<SavedQuery> _savedQueryList = new List<SavedQuery>();
 
   /// Lookup
   final LObjectHomeFilterLookup lookup = new LObjectHomeFilterLookup();
@@ -64,12 +64,9 @@ class LObjectHomeFilter {
   LObjectHomeFilter(String idPrefix) {
     filterPanel = new ObjectHomeFilterPanel(idPrefix);
     filterButton.setIdPrefix(idPrefix);
-
     //
-    lookup.editorChange = onEditorChange;
-    addFilter(null); // init list
-    filterValue = ALL;
-
+    lookup.editorChange = onSavedQueryChange;
+    filterPanel.editorChange = onSavedQueryChange;
     /// Settings
     settings.classes.add(LMargin.C_LEFT__LARGE);
     settings.headingLabel = lObjectHomeFilter();
@@ -83,6 +80,17 @@ class LObjectHomeFilter {
   /// Set UI
   void setUi(UI ui) {
     filterPanel.setUi(ui);
+    savedQueryList = ui.savedQueryList;
+    for (SavedQuery sq in ui.savedQueryList) {
+      if (sq.isDefault) {
+        filterPanel.savedQuery = sq;
+        filterValue = sq.name;
+        return;
+      }
+    }
+    // no default query
+    filterPanel.savedQuery = null;
+    filterValue = ALL;
   }
 
   /// Filter Value/Name
@@ -91,12 +99,10 @@ class LObjectHomeFilter {
   void set filterValue (String newValue) {
     lookup.value = newValue;
   }
-
-
-  /// Get saved query
+  /// Get selected saved query
   SavedQuery get savedQuery {
     String value = filterValue;
-    for (SavedQuery query in _savedQueries) {
+    for (SavedQuery query in _savedQueryList) {
       if (query.savedQueryId == value) {
         return query;
       }
@@ -104,42 +110,60 @@ class LObjectHomeFilter {
     return null;
   } // getSavedQuery
 
-  /// Add new Filter
-  void addFilter(SavedQuery savedQuery) {
-    if (savedQuery != null) {
-      _savedQueries.add(savedQuery);
+
+  /// Set Filter List
+  void set savedQueryList(List<SavedQuery> savedQueryList) {
+    _savedQueryList.clear();
+    if (savedQueryList != null) {
+      _savedQueryList.addAll(savedQueryList);
     }
     List<DOption> options = new List<DOption>();
     options.add(new DOption()
+      ..value = ALL
+      ..label = lObjectHomeFilterAll());
+    options.add(new DOption()
       ..value = RECENT
       ..label = lObjectHomeFilterRecent());
-    for (SavedQuery query in _savedQueries) {
+    //
+    for (SavedQuery query in _savedQueryList) {
       options.add(new DOption()
         ..value = query.savedQueryId
         ..label = query.name);
     }
-    options.add(new DOption()
-      ..value = ALL
-      ..label = lObjectHomeFilterAll());
     lookup.options = options;
   }
 
-  /// Lookup changed
-  void onEditorChange(String name, String newValue, DEntry entry, var details) {
-    if (filterSelectionChange != null) {
-      if (newValue == RECENT || newValue == ALL) {
+
+  /// Saved Query Lookup selection changed
+  /// - update panel
+  /// - execute query  ObjectCtrl.onFilterSelectionChange
+  void onSavedQueryChange(String name, String newValue, DEntry entry, var details) {
+    if (details is SavedQuery) {
+      filterPanel.savedQuery = details;
+      filterValue = newValue;
+      if (filterSelectionChange != null)
+        filterSelectionChange(newValue, details);
+      return;
+    }
+
+    if (newValue == ALL || newValue == RECENT) {
+      filterPanel.savedQuery = null;
+      filterValue = newValue;
+      if (filterSelectionChange != null)
         filterSelectionChange(newValue, null);
-      } else {
-        for (SavedQuery query in _savedQueries) {
-          if (query.savedQueryId == newValue) {
+    } else {
+      for (SavedQuery query in _savedQueryList) {
+        if (query.savedQueryId == newValue) {
+          filterPanel.savedQuery = query;
+          filterValue = newValue;
+          if (filterSelectionChange != null)
             filterSelectionChange(newValue, query);
-            break;
-          }
+          return;
         }
-        _log.info("onEditorChange - not found ${newValue}");
       }
     }
-  } // onEditorChange
+    _log.info("onSavedQueryChange - not found ${newValue}");
+  } // onSavedQueryChange
 
 
   static String lObjectHomeFilter() => Intl.message("Filter", name: "lObjectHomeFilter");

@@ -532,6 +532,7 @@ class SavedQuery extends GeneratedMessage {
     ..pp(10, 'filter', PbFieldType.PM, DFilter.$checkItem, DFilter.create)
     ..a(11, 'filterLogic', PbFieldType.OS)
     ..pp(13, 'sort', PbFieldType.PM, DSort.$checkItem, DSort.create)
+    ..a(14, 'isUpsert', PbFieldType.OB)
   ;
 
   SavedQuery() : super();
@@ -593,6 +594,11 @@ class SavedQuery extends GeneratedMessage {
   void clearFilterLogic() => clearField(11);
 
   List<DSort> get sortList => $_get(9, 13, null);
+
+  bool get isUpsert => $_get(10, 14, false);
+  void set isUpsert(bool v) { $_setBool(10, 14, v); }
+  bool hasIsUpsert() => $_has(10, 14);
+  void clearIsUpsert() => clearField(14);
 }
 
 class _ReadonlySavedQuery extends SavedQuery with ReadonlyMessageMixin {}
@@ -819,6 +825,7 @@ const SavedQuery$json = const {
     const {'1': 'filter', '3': 10, '4': 3, '5': 11, '6': '.DFilter'},
     const {'1': 'filter_logic', '3': 11, '4': 1, '5': 9},
     const {'1': 'sort', '3': 13, '4': 3, '5': 11, '6': '.DSort'},
+    const {'1': 'is_upsert', '3': 14, '4': 1, '5': 8, '7': 'false'},
   ],
 };
 
