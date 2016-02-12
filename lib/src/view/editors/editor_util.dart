@@ -96,13 +96,16 @@ class EditorUtil {
         // TODO geo editor
       } else if (dataType == DataType.IM) {
         // TODO im editor
-      } else if (dataType == DataType.IMAGE) {
+      } else if (dataType == DataType.IMAGE) { // Image
         if (isFilter) {
           editor = new LInput.from(dataColumn, EditorI.TYPE_TEXT,
               idPrefix: idPrefix, inGrid: inGrid);
-        } else {
+        } else if (name.contains(new RegExp(r'image', caseSensitive: false))) {
           editor = new LInputImage.from(dataColumn,
               idPrefix: idPrefix, inGrid: inGrid);
+        } else {
+          editor = new LInputFile.from(dataColumn,
+            idPrefix: idPrefix, inGrid: inGrid);
         }
       } else if (dataType == DataType.INT) {
         editor = new LInputNumber.from(dataColumn, EditorI.TYPE_NUMBER,

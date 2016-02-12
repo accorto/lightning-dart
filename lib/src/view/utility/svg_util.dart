@@ -73,11 +73,13 @@ class SvgUtil {
 
       // existing requests
       List<SvgUtilDirect> list = _requestMap[symbolSvgUrl];
-      _log.fine("requests=${list.length}");
-      for (SvgUtilDirect dir in list) {
-        svgDirectUpdate(dir.svgElement, sym, dir.symbolName);
+      if (list != null) {
+        _log.fine("requests=${list.length}");
+        for (SvgUtilDirect dir in list) {
+          svgDirectUpdate(dir.svgElement, sym, dir.symbolName);
+        }
+        _requestMap.remove(symbolSvgUrl);
       }
-      _requestMap.remove(symbolSvgUrl);
     })
     .catchError((error, stackTrace){
       _log.warning(symbolSvgUrl, error, stackTrace);
@@ -105,7 +107,7 @@ class SvgUtil {
       } else {
         Element clone = path.clone(true);
         // if use has title, we loose it
-        if (svgElement.children.length == 1) {
+        if (svgElement.children.length <= 1) {
           svgElement.children.clear(); // remove use
           svgElement.append(clone); // add path
         } else {

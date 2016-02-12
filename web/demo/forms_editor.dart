@@ -15,7 +15,7 @@ class FormsEditor extends DemoFeature {
     "any input can have a clear value icon, then the icon is on the left",
     "date editors in date picker"],
   issues: [],
-  plans: ["address, geo, file, timezone, currency"]);
+  plans: ["address, geo, currency"]);
 
 
   LComponent get content {
@@ -89,6 +89,19 @@ class FormsEditor extends DemoFeature {
     LInputColor colorInput = new LInputColor("color")
       ..label = "Color";
     form.addEditor(colorInput, marginClass:marginClass);
+
+    LInputImage imageInput = new LInputImage("image")
+      ..label = "Image";
+    form.addEditor(imageInput, marginClass:marginClass);
+
+    LInputFile fileInput = new LInputFile("file")
+      ..label = "File";
+    form.addEditor(fileInput, marginClass:marginClass);
+
+    LInputImage imageInput2 = new LInputImage("image2")
+      ..label = "Image 2"
+      ..value = "standard|client";
+    form.addEditor(imageInput2, marginClass:marginClass);
 
     return form;
   }

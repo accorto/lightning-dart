@@ -9,6 +9,9 @@ part of lightning_dart;
 /**
  * File Input
  * - attaches content as binary data to record
+ *
+ * https://developer.mozilla.org/en-US/docs/Using_files_from_web_applications
+ * https://www.w3.org/TR/html-markup/input.file.html
  */
 class LInputFile extends LInput {
 

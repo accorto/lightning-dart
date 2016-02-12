@@ -9,6 +9,7 @@ part of lightning_dart;
 
 /**
  * Image Input
+ * https://www.w3.org/TR/html-markup/input.image.html
  */
 class LInputImage extends LInput {
 
@@ -18,6 +19,7 @@ class LInputImage extends LInput {
   static final RegExp regExpImage = new RegExp(r'^(http|data:)');
   static final RegExp regExpImage2 = new RegExp(r'\.(png|jpg|gif|svg)$');
 
+  LIcon _icon;
 
   /// File Input
   LInputImage(String name, {String idPrefix, bool inGrid:false, bool withClearValue:false})
@@ -36,6 +38,33 @@ class LInputImage extends LInput {
     input.onClick.listen(onInputClick);
   }
 
+  String get value => _value;
+  void set value(String newValue) {
+    _value = newValue;
+    input.alt = " "; // otherwise shows submit
+    input.src = "";
+    input.classes.remove(LVisibility.C_HIDE);
+    if (_icon != null)
+      _icon.element.remove();
+    //
+    if (_value != null && _value.isNotEmpty) {
+      input.alt = _value;
+      if (_value.length > 40) {
+        input.alt = _value.substring(0,40) + "..";
+      }
+      if (_value.contains(regExpImage) || _value.contains(regExpImage2)) {
+        input.src = _value;
+      } else if (_value.contains(LIcon.regExpIconSpec)) {
+        _icon = LIcon.create(_value, // size: 32px
+            color: LIcon.C_ICON_TEXT_DEFAULT);
+        _icon.element.style.border = "1px solid #d8dde6";
+        input.parent.insertBefore(_icon.element, input);
+        input.classes.add(LVisibility.C_HIDE);
+       }
+    }
+  }
+  String _value;
+
   /// value is rendered
   bool get isValueRenderElement => true;
 
@@ -49,7 +78,7 @@ class LInputImage extends LInput {
       }
       // icon
       if (theValue.contains(LIcon.regExpIconSpec)) {
-        return LIcon.create(theValue, size: LIcon.C_ICON__X_SMALL,
+        return LIcon.create(theValue, // size: 32px
             color: LIcon.C_ICON_TEXT_DEFAULT)
             .element;
       }
@@ -58,7 +87,6 @@ class LInputImage extends LInput {
         ..classes.add(LText.C_TRUNCATE)
         ..text = theValue;
     }
-
     return new DivElement();
   }
 
@@ -68,7 +96,7 @@ class LInputImage extends LInput {
     _log.config("onInputClick ${name}");
     if (readOnly || disabled)
       return;
-
+    // TODO edit Image
   }
 
   /// set readOnly via disabled
