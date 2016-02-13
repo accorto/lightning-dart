@@ -183,20 +183,22 @@ class LTable
 
   /// scroll body with fixed header
   void onScrollTableWrapper(Event evt) {
-    int top = _wrapper.getBoundingClientRect().top;
-    //_log.config("scroll top=${_wrapper.scrollTop} left=${_wrapper.scrollLeft} "
-    //    "clientTop=${_wrapper.clientTop} offsetTop=${_wrapper.offsetTop} scrollTop=${_wrapper.scrollTop} top=${top}");
     if (_theadHeight == null) {
-      _theadHeight = _thead.getBoundingClientRect().height;
+      //Rectangle wrapRect = _wrapper.getBoundingClientRect();
+      Rectangle headRect = _thead.getBoundingClientRect();
+      int top = _wrapper.offsetTop; //wrapRect.top;
+      _theadHeight = headRect.height;
+      _log.fine("scroll ${top} top=${_wrapper.scrollTop} left=${_wrapper.scrollLeft}"
+          " clientTop=${_wrapper.clientTop} offsetTop=${_wrapper.offsetTop}");
       // (1) keep header on top - issue: checkboxes and action dropdown
       //_thead.style.background = "white";
       //_thead.style.transform = "translateY(${_wrapper.scrollTop}px)";
 
       // (2) convert to fixed
       _fixTableLayout();
-      _wrapper.style.marginTop = "${_theadHeight}px";
+      _wrapper.style.marginTop = "${_theadHeight}px"; // move table down
       _thead.style.position = "absolute";
-      _thead.style.top = "${top}px";
+      _thead.style.top = "${top}px"; // move head up
     } // init
     _thead.style.left = "-${_wrapper.scrollLeft}px";
   }
