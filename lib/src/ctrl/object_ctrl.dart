@@ -124,17 +124,15 @@ class ObjectCtrl
     String filter = _header.homeFilter.filterValue;
     SavedQuery query = _header.homeFilter.savedQuery;
     _log.config("onFilterChange ${tableName} ${newValue} ${filter}");
-    if (newValue != AppsAction.NEW && (filter == LObjectHomeFilter.RECENT || filter == LObjectHomeFilter.ALL)) {
-      AppsAction filterNew = AppsAction.createYes(onFilterNewConfirmed);
-      LConfirmation conf = new LConfirmation("fn",
-          title: objectCtrlFilterNew(),
-          text: objectCtrlFilterNewText(),
-          actions:[filterNew],
-          addCancel: true);
-      conf.showInElement(element);
-      return;
+    if (newValue == AppsAction.NEW) {
+      _header.homeFilter.savedQuery = new SavedQuery();
+      _header.homeFilter.filterPanel.show = true;
     }
-    if (newValue == AppsAction.DELETE) {
+    else if (filter == LObjectHomeFilter.ALL || filter == LObjectHomeFilter.RECENT) {
+      _header.filterButton.element.click();
+      _header.homeFilter.filterPanel.show = true;
+    }
+    else if (newValue == AppsAction.DELETE) {
       LIElement li = new LIElement()
         ..text = filter;
       UListElement ul = new UListElement()
@@ -149,14 +147,8 @@ class ObjectCtrl
           actions:[filterDelete],
           addCancel: true);
       conf.showInElement(element);
-      return;
     }
-    if (newValue == AppsAction.NEW) {
-      query = new SavedQuery();
-    }
-    ObjectFilter fe = new ObjectFilter(datasource.tableDirect, query, onFilterUpdated);
-    fe.modal.showInElement(element);
-  }
+  } // onFilterChange
 
   void onFilterDeleteConfirmed(String value, DRecord record, DEntry entry, var actionVar) {
     if (value == AppsAction.YES && actionVar is SavedQuery) {
@@ -165,22 +157,10 @@ class ObjectCtrl
     }
   }
 
-  void onFilterNewConfirmed(String value, DRecord record, DEntry entry, var actionVar) {
+  @deprecated
+  void onFilterNewConfirmedXX(String value, DRecord record, DEntry entry, var actionVar) {
     if (value == AppsAction.YES) {
-      ObjectFilter fe = new ObjectFilter(datasource.tableDirect, new SavedQuery(), onFilterUpdated);
-      fe.modal.showInElement(element);
     }
-  }
-
-  /// callback after filter updated
-  Future<SResponse> onFilterUpdated(SavedQuery query) {
-    _log.config("onFilterUpdated NIY");
-    Completer<SResponse> completer = new Completer<SResponse>();
-    // TODO add query to lookup + set active
-    // save query
-    // execute query
-    completer.completeError(null);
-    return completer.future;
   }
 
   /// Saved Query (Filter) Lookup changed - query
@@ -263,12 +243,13 @@ class ObjectCtrl
 
   /// display summary
   void _displaySummary({String findString, int findCount, int graphSelectCount}) {
+    String prefix = datasource.isFiltered ? objectCtrlFiltered() + ": " : "";
     if (datasource.recordList == null || datasource.recordList.isEmpty) {
-      _header.summary = objectCtrlNoRecords();
+      _header.summary = prefix + objectCtrlNoRecords();
     } else if (datasource.recordList.length == 1) {
-      _header.summary = objectCtrl1Record();
+      _header.summary = prefix + objectCtrl1Record();
     } else if (datasource.recordSorting.isEmpty) {
-      String info = "${datasource.recordList.length} ${objectCtrlRecords()}";
+      String info = "${prefix}${datasource.recordList.length} ${objectCtrlRecords()}";
       if (findString != null && findString.isNotEmpty) {
         info += " (${findCount} ${objectCtrlMatching()} '${findString}')";
       }
@@ -278,11 +259,11 @@ class ObjectCtrl
       _header.summary = info;
     } else {
       datasource.updateSortLabels();
-      String info = "${datasource.recordList.length} ${objectCtrlRecords()} ${LUtil.DOT_SPACE} ${objectCtrlSortedBy()}";
-      String prefix = " ";
+      String info = "${prefix}${datasource.recordList.length} ${objectCtrlRecords()} ${LUtil.DOT_SPACE} ${objectCtrlSortedBy()}";
+      String prefix2 = " ";
       for (RecordSort sort in datasource.recordSorting.list) {
-        info += prefix + sort.columnLabel + (sort.isAscending ? LUtil.SORT_ASC : LUtil.SORT_DESC);
-        prefix = LUtil.DOT_SPACE;
+        info += prefix2 + sort.columnLabel + (sort.isAscending ? LUtil.SORT_ASC : LUtil.SORT_DESC);
+        prefix2 = LUtil.DOT_SPACE;
       }
       if (findString != null && findString.isNotEmpty) {
         info += " (${findCount} ${objectCtrlMatching()} '${findString}')";
@@ -318,6 +299,8 @@ class ObjectCtrl
       _table.setRecords(datasource.recordList, recordAction: onAppsActionRecord); // urv click
       _content.add(_table);
       _table.setResponsiveScroll(0);
+    } else {
+      _table.setRecords(datasource.recordList, recordAction: onAppsActionRecord); // urv click
     }
     if (_table.element.parent == null) {
       _content.add(_table);
@@ -628,6 +611,7 @@ class ObjectCtrl
 
   static String objectCtrlMatching() => Intl.message("matching", name: "objectCtrlMatching");
 
+  static String objectCtrlFiltered() => Intl.message("Filtered", name: "objectCtrlFiltered");
   static String objectCtrlNoRecords() => Intl.message("No records", name: "objectCtrlNoRecords");
   static String objectCtrlNoRecordInfo() => Intl.message("No records to display - change Filter or create New", name: "objectCtrlNoRecordInfo");
   // query

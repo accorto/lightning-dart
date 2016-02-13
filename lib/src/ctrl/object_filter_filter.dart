@@ -7,7 +7,7 @@
 part of lightning_ctrl;
 
 /**
- * Filter Rows
+ * Filter Rows - deprecated
  */
 class ObjectFilterFilter extends TableCtrl {
 

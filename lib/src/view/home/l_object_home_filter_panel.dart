@@ -15,12 +15,16 @@ class ObjectHomeFilterPanel {
 
   static final Logger _log = new Logger("ObjectHomeFilterPanel");
 
+  static const NAME_TEMP = "temp";
+
   /// element
   Element element = new Element.aside()
     ..classes.add(LObjectHome.C_HOME_POPIN);
 
   /// name editor
   LInput _nameEditor;
+  LButton _buttonSave;
+
   /// Filter List
   UListElement _filters = new UListElement()
     ..classes.addAll([LList.C_LIST__VERTICAL, LList.C_HAS_CARDS__SPACE, LMargin.C_VERTICAL__MEDIUM]);
@@ -100,13 +104,14 @@ class ObjectHomeFilterPanel {
       ..title = objectHomeFilterPanelSaveName()
       ..element.classes.addAll([LFloat.C_FLOAT__RIGHT, LMargin.C_RIGHT__X_SMALL])
       ..maxWidth = "10rem";
-    LButton buttonSave = LModal.createSaveButton(label: objectHomeFilterPanelSave(), idPrefix: id)
+    _nameEditor.editorChange = onNameEditorChange;
+    _buttonSave = LModal.createSaveButton(label: objectHomeFilterPanelSave(), idPrefix: id)
       ..classes.add(LFloat.C_FLOAT__RIGHT)
       ..onClick.listen(onSaveClick);
     Element footer = new Element.footer()
       ..classes.add(LMargin.C_VERTICAL__MEDIUM)
       ..append(buttonCancel.element)
-      ..append(buttonSave.element)
+      ..append(_buttonSave.element)
       ..append(_nameEditor.element);
     element.append(footer);
   } // ObjectFilterElement
@@ -124,9 +129,13 @@ class ObjectHomeFilterPanel {
     _filterItemList.clear();
     _filters.children.clear(); // ul
     _nameEditor.value = "";
+    _buttonSave.disabled = true;
 
     if (_savedQuery != null) {
-      _nameEditor.value = _savedQuery.name;
+      if (_savedQuery.name.isNotEmpty && _savedQuery.name != NAME_TEMP) {
+        _nameEditor.value = _savedQuery.name;
+        _buttonSave.disabled = false;
+      }
       for (DFilter filter in _savedQuery.filterList) {
         _addFilter(filter);
       }
@@ -154,7 +163,7 @@ class ObjectHomeFilterPanel {
     }
     String name = _nameEditor.value;
     if (name == null || name.isEmpty)
-      name = "queryOnly";
+      name = NAME_TEMP;
     _savedQuery.name = name;
     _savedQuery.tableName = _table.name;
     //
@@ -172,6 +181,11 @@ class ObjectHomeFilterPanel {
     _filters.append(item.li); // wrapper
   }
 
+  /// Name changed - enable save
+  void onNameEditorChange(String name, String newValue, DEntry entry, var details) {
+    String theValue = _nameEditor.value;
+    _buttonSave.disabled = theValue.isEmpty;
+  }
 
   /// Showing
   bool get show => element.parent != null // attached

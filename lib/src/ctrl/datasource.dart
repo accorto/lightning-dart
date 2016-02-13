@@ -316,6 +316,7 @@ class Datasource
    * Create Request with query info
    */
   DataRequest _createRequest(DataRequestType type, SavedQuery savedQuery) {
+    _isFiltered = false;
     // see WbDatasource
     DataRequest req = new DataRequest()
       ..tableName = tableName
@@ -326,13 +327,16 @@ class Datasource
     // Saved Query
     if (savedQuery != null) {
       req.savedQuery = savedQuery;
+      _isFiltered = savedQuery.filterList.isNotEmpty;
     }
 
     // Query
     if (queryParentList.isNotEmpty)
       req.queryFilterList.addAll(queryParentList);
-    if (queryFilterList.isNotEmpty) // search
+    if (queryFilterList.isNotEmpty) {// search
       req.queryFilterList.addAll(queryFilterList);
+      _isFiltered = true;
+    }
     if (queryFilterLogic != null && queryFilterLogic.isNotEmpty) {
       // add parent?
       req.queryFilterLogic = queryFilterLogic;
@@ -364,6 +368,8 @@ class Datasource
     return req;
   } // createRequest
 
+  bool get isFiltered => _isFiltered;
+  bool _isFiltered = false;
 
   /**
    * Send Data Request to Server

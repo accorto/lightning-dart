@@ -12,7 +12,7 @@ part of lightning_ctrl;
 typedef Future<SResponse> FilterUpdated(SavedQuery query);
 
 /**
- * Filter Dialog
+ * Filter Dialog - deprecated
  */
 class ObjectFilter {
 

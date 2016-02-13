@@ -38,6 +38,8 @@ class LObjectHomeFilter {
   FilterSelectionChange filterSelectionChange;
   /// Saved Queries
   final List<SavedQuery> _savedQueryList = new List<SavedQuery>();
+  /// current query
+  SavedQuery _savedQuery;
 
   /// Lookup
   final LObjectHomeFilterLookup lookup = new LObjectHomeFilterLookup();
@@ -83,14 +85,12 @@ class LObjectHomeFilter {
     savedQueryList = ui.savedQueryList;
     for (SavedQuery sq in ui.savedQueryList) {
       if (sq.isDefault) {
-        filterPanel.savedQuery = sq;
-        filterValue = sq.name;
+        savedQuery = sq;
         return;
       }
     }
     // no default query
-    filterPanel.savedQuery = null;
-    filterValue = ALL;
+    savedQuery = null;
   }
 
   /// Filter Value/Name
@@ -101,6 +101,9 @@ class LObjectHomeFilter {
   }
   /// Get selected saved query
   SavedQuery get savedQuery {
+    if (_savedQuery != null) {
+      return _savedQuery;
+    }
     String value = filterValue;
     for (SavedQuery query in _savedQueryList) {
       if (query.savedQueryId == value) {
@@ -109,6 +112,17 @@ class LObjectHomeFilter {
     }
     return null;
   } // getSavedQuery
+  /// set saved query
+  void set savedQuery (SavedQuery sq) {
+    _savedQuery = sq;
+    if (sq == null) {
+      filterPanel.savedQuery = null;
+      filterValue = ALL;
+    } else {
+      filterPanel.savedQuery = sq;
+      filterValue = sq.name;
+    }
+  }
 
 
   /// Set Filter List
@@ -131,6 +145,7 @@ class LObjectHomeFilter {
         ..label = query.name);
     }
     lookup.options = options;
+    _savedQuery = null;
   }
 
 
@@ -138,7 +153,9 @@ class LObjectHomeFilter {
   /// - update panel
   /// - execute query  ObjectCtrl.onFilterSelectionChange
   void onSavedQueryChange(String name, String newValue, DEntry entry, var details) {
+    _savedQuery = null;
     if (details is SavedQuery) {
+      _savedQuery = details;
       filterPanel.savedQuery = details;
       filterValue = newValue;
       if (filterSelectionChange != null)

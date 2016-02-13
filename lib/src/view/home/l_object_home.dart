@@ -87,9 +87,10 @@ class LObjectHome
     headerLeftGrid.append(homeFilter.lookup.element);
     headerLeftGrid.append(homeFilter.settings.element);
 
-    _headerFind = new LInputSearch("find", idPrefix:idPrefix, withClearValue:true);
-    _headerFind.placeholder = lObjectHomeFind();
-    _headerFind.maxWidth = "20rem";
+    _headerFind = new LInputSearch("find", idPrefix:idPrefix, withClearValue:true)
+      ..placeholder = lObjectHomeFind()
+      ..removeHint()
+      ..maxWidth = "20rem";
     _headerCenter.append(_headerFind.element);
     header.append(_headerCenter);
 

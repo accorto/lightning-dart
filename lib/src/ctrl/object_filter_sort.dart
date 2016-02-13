@@ -8,7 +8,7 @@ part of lightning_ctrl;
 
 
 /**
- * Sort and Group By Table
+ * Sort and Group By Table - deprecated
  */
 class ObjectFilterSort extends TableCtrl {
 
