@@ -169,12 +169,13 @@ class LTable
     if (_wrapper == null)
       responsiveOverflow = true; // X
     if (height == 0) {
-      Rectangle rect = _wrapper.getBoundingClientRect();
+      Rectangle wrapRect = _wrapper.getBoundingClientRect();
       int winHeight = window.innerHeight;
       int docHeight = document.body.getBoundingClientRect().height;
-      int hdr = rect.top;
-      int ftr = docHeight - hdr - rect.height;
+      int hdr = wrapRect.top;
+      int ftr = docHeight - hdr - wrapRect.height;
       height = winHeight - hdr - ftr;
+      _log.fine("setResponsiveScroll height=${height} win=${winHeight} doc=${docHeight} wrap${wrapRect}");
     }
     _wrapper.style.overflowY = "auto";
     _wrapper.style.height = "${height}px";
