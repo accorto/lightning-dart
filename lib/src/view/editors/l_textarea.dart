@@ -9,7 +9,8 @@ part of lightning_dart;
 /**
  * Text Area Input
  */
-class LTextArea extends LEditor with LFormElement {
+class LTextArea
+    extends LEditor with LFormElement {
 
   /// Input Element
   final TextAreaElement input = new TextAreaElement();
@@ -35,6 +36,7 @@ class LTextArea extends LEditor with LFormElement {
     _initEditor();
   }
 
+  /// initialize listeners
   void _initEditor() {
     if (inGrid) {
       rows = 1;
@@ -49,7 +51,7 @@ class LTextArea extends LEditor with LFormElement {
     }
 
     /// Changes
-    input.onChange.listen(onInputChange);
+    input.onInput.listen(onInputChange);
     input.onKeyUp.listen(onInputKeyUp);
   } // initializeEditor
 

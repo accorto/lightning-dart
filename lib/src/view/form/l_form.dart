@@ -539,7 +539,7 @@ class LForm
         }
       }
     }
-    _log.fine(info);
+    _log.finer(info);
     if (_debugElement != null) {
       _debugElement.text = info;
     }

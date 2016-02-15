@@ -512,6 +512,10 @@ abstract class EditorI {
       return;
     doValidate();
     String theValue = value;
+    if (theValue == _lastInputChange) {
+      //_log.fine("onInputChange ${name}=${theValue} (NoChange)");
+      return;
+    }
     _log.config("onInputChange ${name}=${theValue}");
     if (data != null && _entry != null) {
       data.updateEntry(_entry, theValue);
@@ -520,7 +524,9 @@ abstract class EditorI {
     if (editorChange != null) {
       editorChange(name, theValue, _entry, null);
     }
+    _lastInputChange = theValue;
   } // onInputChange
+  String _lastInputChange;
 
   /**
    * Input Key Up
@@ -546,11 +552,11 @@ abstract class EditorI {
           newValue = defaultValue;
         }
       }
-      _log.config("onInputKeyPress ${name}=${value} - ESC newValue=${newValue}");
-      onInputChange(evt);
       value = newValue == null ? "" : newValue;
+      _log.config("onInputKeyUp ${name}=${value} - ESC newValue=${newValue}");
+      onInputChange(evt);
     } else if (kc == KeyCode.ENTER) {
-      _log.config("onInputKeyPress ${name}=${value} - autoSubmit=${autoSubmit != null}");
+      _log.config("onInputKeyUp ${name}=${value} - autoSubmit=${autoSubmit != null}");
       if (autoSubmit != null) {
         autoSubmit(evt);
       } else {
@@ -558,9 +564,10 @@ abstract class EditorI {
         focusNextInput();
       }
     } else {
+      //_log.fine("onInputKeyUp ${name}=${value}");
       onInputChange(evt);
     }
-  } // onInputKeyPress
+  } // onInputKeyUp
   /// focus next slds-input element within form
   bool focusNextInput() {
     return false;

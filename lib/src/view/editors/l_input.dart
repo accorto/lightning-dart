@@ -70,8 +70,10 @@ class LInput
     } else if (type == EditorI.TYPE_EMAIL) {
       autocapitalize = "none";
     }
-    /// Changes
-    input.onChange.listen(onInputChange);
+    // Changes - sequence: onInput - onKeyUp - onChange
+    // onInputChange -> DataRecord.onEditorChange -> LForm.onRecordChange
+    input.onInput.listen(onInputChange); // first input/textarea only
+    //input.onChange.listen(onInputChange); // last/focus lost - also select
 
     /// not a button, checkbox, ..
     if (!EditorI.TYPES_NOLABEL.contains(type)) {
