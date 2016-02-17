@@ -92,8 +92,6 @@ class ObjectCtrl
     });
   } // ObjectCtrl
 
-  // ObjectCtrl
-
   /// table name
   String get tableName => datasource.tableName;
 
@@ -296,15 +294,13 @@ class ObjectCtrl
       _table.recordDeleted = onRecordDeleted;
       _table.recordsDeleted = onRecordsDeleted;
       _table.graphSelectionChange = onGraphSelectionChange;
-      _table.setRecords(datasource.recordList, recordAction: onAppsActionRecord); // urv click
       _content.add(_table);
-      _table.setResponsiveScroll(0);
-    } else {
-      _table.setRecords(datasource.recordList, recordAction: onAppsActionRecord); // urv click
     }
     if (_table.element.parent == null) {
       _content.add(_table);
     }
+    _table.setRecords(datasource.recordList, recordAction: onAppsActionRecord); // urv click
+    _table.setResponsiveScroll(0);
   } // displayTable
   TableCtrl _table;
 
@@ -375,8 +371,7 @@ class ObjectCtrl
   /// Application Action New (if not table)
   void onAppsActionNew(String value, DRecord record, DEntry entry, var actionVar) {
     _log.config("onAppsActionNew ${tableName} ${value}");
-    DataRecord data = new DataRecord(null)
-      ..table = datasource.tableDirect;
+    DataRecord data = new DataRecord(datasource.tableDirect, null);
     DRecord parentRecord = null;
     DRecord newRecord = data.newRecord(parentRecord);
     //

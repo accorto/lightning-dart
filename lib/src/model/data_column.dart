@@ -151,7 +151,6 @@ class DataColumn {
       return true;
     }
     if (data != null) {
-      data.table = table;
       if (data.isReadOnly) {
         return true; // record level
       }

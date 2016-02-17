@@ -64,7 +64,7 @@ class LCardCompactEntry
   void display(UI ui, {bool useQueryColumnList:false}) {
     if (record == null)
       return;
-    DataRecord data = new DataRecord(null, value: record);
+    DataRecord data = new DataRecord(ui.table, null, value: record);
     if (useQueryColumnList && ui.queryColumnList.isNotEmpty) {
       for (UIQueryColumn qc in ui.queryColumnList) {
         String label = qc.columnName;

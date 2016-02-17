@@ -166,9 +166,14 @@ class LTable
   /// Y scroll - call after attached to dom
   /// - if [height] == 0, calculate remainder
   void setResponsiveScroll (int height) {
-    if (_wrapper == null)
+    if (_wrapper == null) {
       responsiveOverflow = true; // X
+    }
     if (height == 0) {
+      if (_onScrollSubscription != null) {
+        _wrapper.style.overflowY = "visible";
+        _wrapper.style.removeProperty("height");
+      }
       Rectangle wrapRect = _wrapper.getBoundingClientRect();
       int winHeight = window.innerHeight;
       int docHeight = document.body.getBoundingClientRect().height;
@@ -179,8 +184,11 @@ class LTable
     }
     _wrapper.style.overflowY = "auto";
     _wrapper.style.height = "${height}px";
-    _wrapper.onScroll.listen(onScrollTableWrapper);
+    if (_onScrollSubscription == null) {
+      _onScrollSubscription = _wrapper.onScroll.listen(onScrollTableWrapper);
+    }
   }
+  StreamSubscription _onScrollSubscription;
 
   /// scroll body with fixed header
   void onScrollTableWrapper(Event evt) {

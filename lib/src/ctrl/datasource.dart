@@ -43,9 +43,9 @@ class Datasource
   /// Cache Size
   int cacheSize = 0;
   /// record List
-  List<DRecord> recordList;
+  final List<DRecord> recordList = new List<DRecord>();
   /// Statistics List
-  List<DStatistics> statisticList;
+  final List<DStatistics> statisticList = new List<DStatistics>();
 
   /// Filter List
   final List<DFilter> queryFilterList = new List<DFilter>();
@@ -121,9 +121,7 @@ class Datasource
     //
     execute_data(req, setBusy:setBusy)
     .then((DataResponse response) {
-      totalRows = response.totalRows;
-      recordList = response.recordList;
-      statisticList = response.statisticList;
+      setRecords(response.totalRows, response.recordList, response.statisticList);
       completer.complete(response);
     })
     .catchError((error, stackTrace) {
@@ -131,6 +129,24 @@ class Datasource
     });
     return completer.future;
   } // query
+
+  /// set Records
+  void setRecords(int total, List<DRecord> list, List<DStatistics> statistics) {
+    recordList.clear();
+    if (list != null) {
+      recordList.addAll(list);
+    }
+    if (total == null) {
+      totalRows = recordList.length;
+    } else {
+      totalRows = total;
+    }
+    statisticList.clear();
+    if (statistics != null) {
+      statisticList.addAll(statistics);
+    }
+  }
+
 
   /// query count
   Future<int> queryCount (SavedQuery savedQuery) {
@@ -156,9 +172,7 @@ class Datasource
     //
     execute_data(req)
     .then((DataResponse response) {
-      totalRows = response.totalRows;
-      recordList = response.recordList;
-      statisticList = response.statisticList;
+      setRecords(response.totalRows, response.recordList, response.statisticList);
       completer.complete(response);
     })
     .catchError((error, stackTrace) {
@@ -176,9 +190,7 @@ class Datasource
     //
     execute_data(req)
     .then((DataResponse response) {
-      totalRows = response.totalRows;
-      recordList = response.recordList;
-      statisticList = response.statisticList;
+      setRecords(response.totalRows, response.recordList, response.statisticList);
       completer.complete(response);
     })
     .catchError((error, stackTrace) {
@@ -196,9 +208,7 @@ class Datasource
     //
     execute_data(req)
     .then((DataResponse response) {
-      totalRows = response.totalRows;
-      recordList = response.recordList;
-      statisticList = response.statisticList;
+      setRecords(response.totalRows, response.recordList, response.statisticList);
       completer.complete(response);
     })
     .catchError((error, stackTrace) {
@@ -216,9 +226,7 @@ class Datasource
     //
     execute_data(req)
     .then((DataResponse response) {
-      totalRows = response.totalRows;
-      recordList = response.recordList;
-      statisticList = response.statisticList;
+      setRecords(response.totalRows, response.recordList, response.statisticList);
       completer.complete(response);
     })
     .catchError((error, stackTrace) {
@@ -248,7 +256,7 @@ class Datasource
     .then((DataResponse resp) {
       ServiceTracker track = new ServiceTracker(resp.response, "new_${list.tableName}", "#${resp.contextChangeList.length}");
       // copy values
-      DataRecord data = new DataRecord(null, value: record);
+      DataRecord data = new DataRecord(tableDirect, null, value: record);
       for (DKeyValue nv in resp.contextChangeList) {
         String name = nv.key;
         DEntry dataEntry = data.getEntry(null, name, true);
@@ -295,7 +303,7 @@ class Datasource
     // - Window Context (general context is on server)
     if (parentContext.isNotEmpty)
       req.contextList.addAll(parentContext);
-    final DataRecord data = new DataRecord(null, value: record);
+    final DataRecord data = new DataRecord(tableDirect, null, value: record);
     req.contextList.addAll(data.asContext(list.windowNo));
 
     execute_data(req, info:validationCallout, setBusy:false)

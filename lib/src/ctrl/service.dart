@@ -207,8 +207,11 @@ class Service {
   String handleSuccess(String subject, SResponse sresponse, int length) {
     sresponse.clientReceiptTime = new Int64(new DateTime.now().millisecondsSinceEpoch); // ${ClientEnv.numberFormat_1.format(length/1024)}k
     String details = "${sresponse.trxType}=${sresponse.trxNo} ${subject} ${ServiceTracker.formatDuration(sresponse)} bytes=${length}";
-    if (_setBusy && onServerSuccess != null)
+    if (_setBusy && onServerSuccess != null) {
       onServerSuccess(sresponse, details);
+    } else {
+      PageSimple.instance.addStatusMessage(new StatusMessage.response(sresponse, details));
+    }
     if (sendNotification != null) {
       sendNotification(sresponse.isSuccess ? ServiceResponse.Ok : ServiceResponse.Error,
         subject, sresponse.msg, sresponse.clientReceiptTime, details);
@@ -229,9 +232,14 @@ class Service {
         onServerError(subject);
       else
         onServerError("${subject}: ${message}");
+    } else {
+      StatusMessage sm = new StatusMessage.error(subject, message, StatusMessage.ERROR, null);
+      PageSimple.instance.addStatusMessage(sm);
     }
-    if(sendNotification != null)
-      sendNotification(ServiceResponse.Failure, subject, message, null, null);
+    if(sendNotification != null) {
+      sendNotification(ServiceResponse.Failure,
+          subject, message, null, null);
+    }
     return message;
   } // handleError
 

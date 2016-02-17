@@ -47,6 +47,7 @@ class FormCtrl
       String type: LForm.C_FORM__STACKED,
       String idPrefix})
     : super(element == null ? new FormElement() : element, name, type, idPrefix:idPrefix) {
+    table = ui.table;
   } // FormUtil
 
 

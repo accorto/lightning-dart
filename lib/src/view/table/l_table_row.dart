@@ -82,7 +82,10 @@ class LTableRow
     if (idPrefix != null && idPrefix.isNotEmpty)
       rowElement.id = "${idPrefix}-${type}-${rowNo}";
 
-    data = new DataRecord(onRecordChange);
+    DTable table = null;
+    if (dataColumns != null && dataColumns.isNotEmpty)
+      table = dataColumns.first.table;
+    data = new DataRecord(table, onRecordChange);
 
     // Row Select nor created as LTableCell but maintained by row directly
     if (rowSelect) {

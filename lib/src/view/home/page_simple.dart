@@ -87,34 +87,15 @@ class PageSimple
     busy = true;
   }
   /// Info Server Communication Success (busy/msg)
-  void onServerSuccess(SResponse response, String dataDetail) {
+  void onServerSuccess(SResponse response, String details) {
     busy = false;
-    if (response.isSuccess) {
-      setStatusSuccess(response.msg, detail: response.info, dataDetail: dataDetail);
-    } else {
-      setStatusWarning(response.msg, detail: response.info, dataDetail: dataDetail);
-    }
+    setStatus(new StatusMessage.response(response, details));
     _statusElement.id = STATUS_ID_OK;
   }
   /// Info Server Communication Error
   void onServerError(var error) {
     busy = false;
-    setStatusError("${error}");
-    if (error is Event && error.target is HttpRequest) {
-      HttpRequest request = error.target;
-      String msg = null;
-      try {
-        msg = request.responseText;
-      } catch (ex) {}
-      try {
-        if (msg == null || msg.isEmpty)
-          msg = request.statusText;
-        else if (request.statusText.isNotEmpty)
-          msg += " " + request.statusText;
-      } catch (ex) {}
-      if (msg != null && msg.isNotEmpty)
-        setStatusError(msg);
-    }
+    setStatus(new StatusMessage.errorInfo(error));
     _statusElement.id = STATUS_ID_ERROR;
   } // onServerError
 
@@ -123,15 +104,15 @@ class PageSimple
     setStatus(new StatusMessage.info(message, detail, dataSuccess, dataDetail));
   }
   /// Success Status with check
-  void setStatusSuccess(String message, {String detail, String dataSuccess: "true", String dataDetail}) {
+  void setStatusSuccess(String message, {String detail, String dataSuccess: Html0.V_TRUE, String dataDetail}) {
     setStatus(new StatusMessage.success(message, detail, dataSuccess, dataDetail));
   }
   /// Warning Status with triangle
-  void setStatusWarning(String message, {String detail, String dataSuccess: "false", String dataDetail}) {
+  void setStatusWarning(String message, {String detail, String dataSuccess: Html0.V_FALSE, String dataDetail}) {
     setStatus(new StatusMessage.warning(message, detail,  dataSuccess, dataDetail));
   }
   /// Error Status with fire
-  void setStatusError(String message, {String detail, String dataSuccess: "error", String dataDetail}) {
+  void setStatusError(String message, {String detail, String dataSuccess: StatusMessage.ERROR, String dataDetail}) {
     setStatus(new StatusMessage.error(message, detail, dataSuccess, dataDetail));
   }
   /// Default Status
@@ -146,6 +127,11 @@ class PageSimple
     setStatus(null);
   }
 
+  /// Add Status Message directly but don't show
+  void addStatusMessage(StatusMessage sm) {
+    statusMessages.add(sm);
+  }
+
   /**
    * Show Status Message
    */
@@ -156,7 +142,7 @@ class PageSimple
     }
     if (sm != null) {
       if (sm.dataSuccess != StatusMessage._BUSY) {
-        statusMessages.add(sm);
+        addStatusMessage(sm);
       }
       _statusToast = new LToast(
           label: sm.message, idPrefix: "status", icon: sm.icon,
@@ -184,6 +170,8 @@ class StatusMessage {
 
   /// dataSuccess
   static const String _BUSY = "busy";
+  /// Data Success value
+  static const String ERROR = "error";
 
   String color;
   LIcon icon;
@@ -195,6 +183,42 @@ class StatusMessage {
   /// Default/Detail constructor
   StatusMessage(String this.color, LIcon this.icon, String this.message,
                 String this.detail, String this.dataSuccess, String this.dataDetail);
+
+  /// Message from Server Response
+  StatusMessage.response(SResponse response, String details) {
+    if (response.isSuccess) {
+      color = LTheme.C_THEME__SUCCESS;
+      dataSuccess = Html0.V_TRUE;
+    } else {
+      color = LTheme.C_THEME__WARNING;
+      dataSuccess = Html0.V_FALSE;
+    }
+    message = response.msg;
+    detail = response.info;
+    dataDetail = dataDetail;
+    if (details != null && details.isNotEmpty)
+      dataDetail = details;
+  }
+
+  /// message from error
+  StatusMessage.errorInfo(var error) {
+    color = LTheme.C_THEME__ERROR;
+    dataSuccess = ERROR;
+    //
+    message = "${error}";
+    if (error is Event && error.target is HttpRequest) {
+      HttpRequest request = error.target;
+      try {
+        detail = request.responseText;
+      } catch (ex) {}
+      try {
+        if (detail == null || detail.isEmpty)
+          detail = request.statusText;
+        else if (request.statusText.isNotEmpty)
+          detail += " " + request.statusText;
+      } catch (ex) {}
+    }
+  }
 
   /// Info (dark blue)
   StatusMessage.info(String this.message,

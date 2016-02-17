@@ -81,8 +81,13 @@ class LObjectHomeFilter {
 
   /// Set UI
   void setUi(UI ui) {
+    FilterSelectionChange temp = filterSelectionChange;
+    filterSelectionChange = null; // otherwise queries
+    //
     filterPanel.setUi(ui);
     savedQueryList = ui.savedQueryList;
+    //
+    filterSelectionChange = temp;
     for (SavedQuery sq in ui.savedQueryList) {
       if (sq.isDefault) {
         savedQuery = sq;

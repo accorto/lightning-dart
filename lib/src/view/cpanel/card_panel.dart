@@ -142,8 +142,10 @@ class CardPanel
     _panelColumnList.clear();
 
     // get options from table column
+    DTable table = null;
     if (_ui != null) {
-      DColumn column = DataUtil.getTableColumn(_ui.table, columnName);
+      table = _ui.table;
+      DColumn column = DataUtil.getTableColumn(table, columnName);
       for (DOption option in column.pickValueList) {
         _addColumn( new CardPanelColumn(option.value, option.label, idPrefix:idPrefix));
       }
@@ -168,7 +170,7 @@ class CardPanel
 
     /// Add Records to Columns
     for (DRecord record in recordList) {
-      DataRecord data = new DataRecord(null, value: record);
+      DataRecord data = new DataRecord(table, null, value: record);
       String columnValue = data.getValue(name:columnName);
       LCardCompactEntry card;
       for (CardPanelColumn pcolumn in _panelColumnList) {

@@ -140,10 +140,14 @@ class LForm
   /// optional Buttons
   DivElement buttonDiv;
 
+  /// Get Data Container
+  final DataRecord data = new DataRecord(null, null);
+
   /**
    * Form - type = C_FORM__HORIZONTAL, C_FORM__STACKED, C_FORM__INLINE
    */
-  LForm(Element this.element, String name, String type, {String idPrefix}) {
+  LForm(Element this.element, String name, String type,
+      {String idPrefix}) {
     element.classes.add(type);
     if (element is FormElement) {
       FormElement form = (element as FormElement);
@@ -153,7 +157,7 @@ class LForm
       form.onReset.listen(onFormReset);
     }
     element.id = LComponent.createId(idPrefix, name);
-    _data = new DataRecord(onRecordChange);
+    data.onRecordChange = onRecordChange;
   } // LForm
 
   LForm.horizontal(String name, {String idPrefix})
@@ -166,6 +170,16 @@ class LForm
   /// Set Id
   void set id (String newValue) {
     element.id = newValue;
+  }
+
+  /* set data record [recordChange]
+  void set recordChange(RecordChange recordChange) {
+    data.onRecordChange = recordChange;
+  } */
+
+  /// set data record table
+  void set table(DTable table) {
+    data.table = table;
   }
 
   /// Set Section
@@ -197,8 +211,8 @@ class LForm
     } else {
       _section.addEditor(editor, element, newRow, width, fillRemainingRow, height);
     }
-    editor.data = _data;
-    editor.entry = _data.getEntry(editor.id, editor.name, true, createDefault:editor.value);
+    editor.data = data;
+    editor.entry = data.getEntry(editor.id, editor.name, true, createDefault:editor.value);
     editor.onFocus.listen(onEditorFocus); // close other dropdowns
   } // addEditor
 
@@ -263,19 +277,16 @@ class LForm
       (element as FormElement).method = newValue;
   }
 
-  /// Get Data Container
-  DataRecord get data => _data;
-  DataRecord _data;
 
   /// Data Record
-  DRecord get record => _data.record;
+  DRecord get record => data.record;
   /// Data Record
   void set record (DRecord record) {
     setRecord(record, 0);
   }
   /// Data Record/Row No + Display
   void setRecord (DRecord record, int rowNo) {
-    _data.setRecord(record, rowNo);
+    data.setRecord(record, rowNo);
     display();
   }
 
@@ -285,14 +296,14 @@ class LForm
       _buttonSave.disabled = !data.changed;
     }
     for (LEditor editor in editorList) {
-      editor.data = _data;
-      editor.entry = _data.getEntry(editor.id, editor.name, true);
+      editor.data = data;
+      editor.entry = data.getEntry(editor.id, editor.name, true);
     }
   } // display
 
   /// editor changed
   void onRecordChange(DRecord record, DEntry columnChanged, int rowNo) {
-    bool changed = _data.checkChanged();
+    bool changed = data.checkChanged();
     String name = columnChanged == null ? "-" : columnChanged.columnName;
     _log.config("onRecordChange - ${name} - changed=${changed}");
     if (_buttonSave != null && _buttonSaveChangeOnly) {
@@ -360,7 +371,7 @@ class LForm
     }
     //
     if (_buttonSaveChangeOnly) {
-      _buttonSave.disabled = !_data.changed;
+      _buttonSave.disabled = !data.changed;
     } else {
       _buttonSave.disabled = false;
     }

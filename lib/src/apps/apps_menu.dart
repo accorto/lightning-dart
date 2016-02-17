@@ -25,6 +25,7 @@ class AppsMenu
   /// Menu Element
   final Element element = new Element.nav()
     ..classes.addAll([LGrid.C_COL, LGrid.C_SHRINK_NONE, LTheme.C_THEME__ALT_INVERSE, C_APPS_MENU])
+    ..style.zIndex = "1" // LTable scrolling header
     ..id = "a-menu";
 
   /// Show Button

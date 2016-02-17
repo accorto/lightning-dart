@@ -116,8 +116,7 @@ class TableCtrl
 
   /// Add New Record at End
   DRecord addNewRecord() {
-    DataRecord data = new DataRecord(null)
-      ..table = ui.table;
+    DataRecord data = new DataRecord(ui.table, null);
     DRecord parentRecord = null;
     DRecord record = data.newRecord(parentRecord);
     recordList.add(record);

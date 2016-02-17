@@ -179,7 +179,7 @@ class DemoData extends Datasource {
     uiu = new UiUtilDemo(ui);
     UiUtil.validate(ui);
     _exampleList = createRecordList(uiu: uiu);
-    recordList = _exampleList;
+    setRecords(_exampleList.length, _exampleList, null);
   }
 
   /// simulate server

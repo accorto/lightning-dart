@@ -154,6 +154,14 @@ class LTab
   Element get currentContent => _currentContent;
   Element _currentContent;
 
+  /// Current Tab Content or null
+  LTabContent get currentTabContent {
+    if (_contentList.length > _currentPos) {
+      return _contentList[_currentPos];
+    }
+    return null;
+  }
+
   /**
    * Select Tab By Position [pos] 0..x returns false if not found
    */

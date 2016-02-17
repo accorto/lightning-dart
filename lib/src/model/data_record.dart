@@ -30,8 +30,7 @@ class DataRecord {
 
     // (1) link column name
     if (linkColumnName != null && linkColumnName.isNotEmpty) {
-      DataRecord data = new DataRecord(null, value: record);
-      String value = data.getValue(name: linkColumnName);
+      String value = DataRecord.getColumnValue(record, linkColumnName);
       filter
         ..columnName = linkColumnName
         ..filterValue = value
@@ -86,9 +85,11 @@ class DataRecord {
       sb.write("\n");
       sb.write(record.urvRest);
     }
-    DataRecord data = new DataRecord(null, value: record);
-    sb.write("\nTenant=");
-    sb.write(data.getValue(name: "Tenant"));
+    String tenantName = getColumnValue(record, "Tenant");
+    if (tenantName != null && tenantName.isNotEmpty) {
+      sb.write("\nTenant=");
+      sb.write(tenantName);
+    }
     return sb.toString();
   } // whoInfo
 
@@ -243,6 +244,26 @@ class DataRecord {
     return setEntryValue(dataEntry, newValue, setOriginal:false);
   } // setColumnValue
 
+
+  /// id - record map
+  static Map<String, DRecord> recordMap(List<DRecord> list) {
+    Map<String, DRecord> map = new Map<String, DRecord>();
+    int countEmpty = 0;
+    for (DRecord record in list) {
+      String id = record.recordId;
+      if (id.isEmpty) {
+        countEmpty++;
+      } else {
+        map[id] = record;
+      }
+    }
+    if (list.length != map.length) {
+      _log.info("recordMap length=${map.length} - list=${list.length} empty=${countEmpty}");
+    }
+    return map;
+  } // recordMap
+
+
   /// Null Value indicator (Dto.NULLVALUE)
   static const String NULLVALUE = "::NullValue::";
   /// Column Name IsActive
@@ -257,32 +278,21 @@ class DataRecord {
   // Log
   static final Logger _log = new Logger("DataRecord");
 
+  // table
+  DTable table;
+  /// callback to data owner
+  RecordChange onRecordChange;
   /// The actual Record
   DRecord _record = new DRecord();
   /// row number
   int rowNo = 0;
-  /// callback to data owner
-  RecordChange onRecordChange;
 
   /**
    * Data Record with [value] and optional [onRecordChange] callback to data list
    */
-  DataRecord(RecordChange this.onRecordChange, {DRecord value}) {
-    setRecord(value, 0);
-  }
-
-  void reset() {
-    setRecord(null, -1);
-    onRecordChange = null;
-  }
-
-  void set(DataRecord other) {
-    if (other == null) {
-      reset();
-    } else {
-      setRecord(other.record, other.rowNo);
-      onRecordChange = other.onRecordChange;
-    }
+  DataRecord(DTable this.table, RecordChange this.onRecordChange,
+      {DRecord value, int rowNo: -1}) {
+    setRecord(value, rowNo);
   }
 
   /// Set current record
@@ -319,11 +329,11 @@ class DataRecord {
       if (_record.hasIsReadOnlyCalc() && _record.isReadOnlyCalc)
         return true;
     }
-    if (_table == null) {
+    if (table == null) {
       _log.warning("isReadOnly #${rowNo} - table not set");
-    } else if (_table.hasReadOnlyLogic()) {
+    } else if (table.hasReadOnlyLogic()) {
       if (_cacheRO == null || changed)
-        _cacheRO = DataContext.evaluateBool(_record, _table, _table.readOnlyLogic);
+        _cacheRO = DataContext.evaluateBool(_record, table, table.readOnlyLogic);
       if (_cacheRO)
         return true;
     }
@@ -404,7 +414,7 @@ class DataRecord {
    */
   DRecord newRecord(DRecord parentRecord) {
     setRecord(null, -1); // create new
-    if (_table == null) {
+    if (table == null) {
       _log.warning("newRecord #${rowNo} - table not set");
     } else {
       _record.tableId = table.tableId;
@@ -413,15 +423,15 @@ class DataRecord {
     //
     if (parentRecord != null)
       _record.parent = parentRecord;
-    DataRecord parentData = new DataRecord(null, value: parentRecord);
     // set defaults from table column
-    if(_table != null) {
-      for (DColumn col in _table.columnList) {
+    if (table != null) {
+      for (DColumn col in table.columnList) {
         if (col.isParentKey) {
           if (parentRecord == null) {
             if (col.isMandatory)
               _log.warning("newRecord #${rowNo} (${table.name}) - no parent record");
           } else {
+            DataRecord parentData = new DataRecord(null, null, value: parentRecord);
             DEntry parentEntry = parentData.getEntry(col.columnId, col.name, false);
             if (parentEntry == null) {
               _log.warning("newRecord #${rowNo} (${table.name}) - no parent record entry ${col.name}");
@@ -453,11 +463,11 @@ class DataRecord {
   /// copy record - make sure that Table is set
   DRecord copyRecord(DRecord currentRecord) {
     setRecord(null, -1);
-    DataRecord currentData = new DataRecord(null, value: currentRecord);
-    if (_table == null) {
+    DataRecord currentData = new DataRecord(table, null, value: currentRecord);
+    if (table == null) {
       _log.warning("copyRecord #${rowNo} - table not set");
     } else {
-      for (DColumn col in _table.columnList) {
+      for (DColumn col in table.columnList) {
         if (!col.isCopied || DataUtil.isStdColumn(col))
           continue;
         String value = currentData.getValue(id: col.columnId, name: col.name);
@@ -693,17 +703,6 @@ class DataRecord {
     }
   } // onEditorChanged
 
-  /// Table for Record ... or null
-  DTable get table {
-//    if (_table == null && _record.hasTableName()) {
-//      _table = ServiceUi.getTable(_record.tableName);
-//    }
-    return _table;
-  }
-  void set table (DTable newValue) {
-    _table = newValue;
-  }
-  DTable _table;
 
   /**
    * Get Record as context with [windowNo] window prefix
