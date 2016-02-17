@@ -46,7 +46,7 @@ class Timezone {
       .catchError((error, stackTrace) {
         _log.warning("loadTz(2) for ${url}");
         // Stop waiting
-        TZ.tzListJson.add(new TZ("{}"));
+        TZ.tzListJson = new List<TZ>();
         completer.complete(false);
       });
     });

@@ -59,7 +59,8 @@ class Tabs extends DemoFeature {
       ..columnList.add(column);
     DataColumn dataColumn = new DataColumn(table,column,null,null);
     LEditor pathEditor = EditorUtil.createFromColumn("path", dataColumn, false, isAlternativeDisplay: true);
-    LForm form = new LForm.stacked("form-path");
+    LForm form = new LForm.stacked("form-path")
+      ..table = table;
     FormSection formSection = new FormSection(1);
     form.setSection(formSection);
     form.addEditor(pathEditor);
