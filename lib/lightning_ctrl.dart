@@ -52,6 +52,8 @@ part 'src/apps/apps_menu.dart';
 part 'src/apps/apps_new_window.dart';
 part 'src/apps/apps_page.dart';
 part 'src/apps/apps_settings.dart';
+part 'src/apps/apps_settings_cache.dart';
+part 'src/apps/apps_settings_env.dart';
 part 'src/apps/apps_settings_tab.dart';
 
 part 'src/ctrl/datasource.dart';

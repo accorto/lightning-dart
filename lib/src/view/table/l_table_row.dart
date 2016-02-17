@@ -373,25 +373,27 @@ class LTableRow
         } else { // all, sel or field
           LEditor editor = EditorUtil.createFromColumn(name, dataColumn, true,
             idPrefix:rowElement.id, data:data, entry:entry); // no isAlternativeDisplay
-          if (editor.isValueRenderElement) {
+          if (editor.isValueRenderElement) { // checkbox
             addCellEditor(editor, value, value, align, isEditModeField);
-          } else if (editor.isValueDisplay && entry != null && entry.hasValueDisplay()) {
+          }
+          else if (editor.isValueDisplay && entry != null && entry.hasValueDisplay()) { // rendered already
             addCellEditor(editor, entry.valueDisplay, value, align, isEditModeField);
-          } else if (editor.isValueDisplay && value != null && value.isNotEmpty) {
+          }
+          else if (editor.isValueDisplay && value != null && value.isNotEmpty) { // need to render
             LTableCell cell = addCellEditor(editor, "<${value}>", value, align, isEditModeField);
-            if (isEditModeField) {
-              editor.render(value, false)
-              .then((String display){
-                cell.contentText = display;
-                if (entry != null) {
-                  entry.valueDisplay = display;
-                }
-              })
-              .catchError((error, stackTrace){
-                cell.contentText = "${error}";
-              });
-            }
-          } else {
+            editor.render(value, false)
+            .then((String display){
+              cell.contentText = display;
+              if (entry != null) { // future render
+                entry.valueDisplay = display;
+              }
+            })
+            .catchError((error, stackTrace){
+              cell.contentText = "${error}";
+              cell.cellElement.attributes["error"] = "${error}";
+            });
+          }
+          else { //
             addCellEditor(editor, value, value, align, isEditModeField);
           }
         }

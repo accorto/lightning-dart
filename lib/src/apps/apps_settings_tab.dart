@@ -9,7 +9,7 @@ part of lightning_ctrl;
 /**
  * Settings Tab
  */
-class AppSettingsTab
+class AppsSettingsTab
     extends LTabContent {
 
   static const String ID = "set";
@@ -27,7 +27,7 @@ class AppSettingsTab
 
 
   /// Settings Tab
-  AppSettingsTab() : super(ID, appsSettingsTabLabel()) {
+  AppsSettingsTab() : super(ID, appsSettingsTabLabel()) {
     _buttonReset.onClick.listen(onResetClick);
     _buttonSave.onClick.listen(onSaveClick);
     _buttonDiv.append(_buttonReset.element);
@@ -82,7 +82,7 @@ class AppSettingsTab
   static String appsSettingsTabLabel() => Intl.message("Settings", name: "appsSettingsTabLabel");
   static String appsSettingsTabSaved() => Intl.message("Settings saved", name: "appsSettingsTabSaved");
 
-} // AppSettingsTab
+} // AppsSettingsTab
 
 
 /**

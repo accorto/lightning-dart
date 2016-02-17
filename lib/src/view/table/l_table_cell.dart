@@ -56,8 +56,11 @@ class LTableCell {
    * Set Content Text
    */
   void set contentText(String text) {
-    if (content != null)
+    if (content != null) {
       content.text = text;
+     } else {
+      cellElement.text = text;
+    }
   }
 
   /// render Statistics

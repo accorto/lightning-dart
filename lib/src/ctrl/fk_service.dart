@@ -141,30 +141,26 @@ class FkService
     DFK fk = _map[key];
     if (fk != null) {
       completer.complete(fk);
-      return completer.future;
-    }
-    if (fkTableName == null || fkTableName.isEmpty) {
+    } else if (fkTableName == null || fkTableName.isEmpty) {
       completer.completeError(new Exception("NoTable"));
-      return completer.future;
-    }
-    if (id == null || id.isEmpty) {
+    } else if (id == null || id.isEmpty) {
       completer.completeError(new Exception("NoId"));
-      return completer.future;
     }
-    //
-    FkServiceRequest sr = new FkServiceRequest()
-      ..tableName = fkTableName
-      ..id = id
-      ..parentColumnName = parentColumnName
-      ..parentValue = parentValue
-      ..completer = completer;
+    else {
+      FkServiceRequest sr = new FkServiceRequest()
+        ..tableName = fkTableName
+        ..id = id
+        ..parentColumnName = parentColumnName
+        ..parentValue = parentValue
+        ..completer = completer;
 
-    if (_isSimilarRequestActive(sr)) {
-      //  _log.fine("getFkFuture - found similar for ${sr}");
-      _pendingRequests.add(sr);
-    } else {
-      _activeRequests.add(sr); // don't wait until submit finished
-      _submit(sr);
+      if (_isSimilarRequestActive(sr)) {
+        //  _log.fine("getFkFuture - found similar for ${sr}");
+        _pendingRequests.add(sr);
+      } else {
+        _activeRequests.add(sr); // don't wait until submit finished
+        _submit(sr);
+      }
     }
     return completer.future;
   } // getFkFuture
@@ -310,7 +306,7 @@ class FkService
     String srTableName = sr.tableName;
     //String srCompareString = sr.compareString;
     //
-    int serviced = 0;
+    int completed = 0;
     List<FkServiceRequest> newPendingRequests = new List<FkServiceRequest>();
     List<FkServiceRequest> submitList = new List<FkServiceRequest>();
 
@@ -319,7 +315,7 @@ class FkService
         if (req.id == null) { // list request
           if (req.completerList != null) {
             req.completerList.complete(fkList);
-            serviced++;
+            completed++;
           } else {
             newPendingRequests.add(req); // copy
           }
@@ -341,7 +337,7 @@ class FkService
             }
           } else {
             req.completer.complete(fk); // done
-            serviced++;
+            completed++;
           }
         }
       } else {
@@ -353,7 +349,7 @@ class FkService
     for (FkServiceRequest req in submitList) {
       _submit(req);
     }
-    _log.fine("checkSimilarRequests ${sr.compareString} serviced=${serviced} submitted=${submitList.length}"
+    _log.fine("checkSimilarRequests ${sr.compareString} completed=${completed} reSubmitted=${submitList.length}"
         " - pending=${_pendingRequests.length} active=${_activeRequests.length}");
   } // checkSimilarRequests
 

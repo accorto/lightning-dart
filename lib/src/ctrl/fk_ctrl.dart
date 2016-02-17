@@ -106,16 +106,13 @@ class FkCtrl
     if (newValue == null || newValue.isEmpty) {
       completer.complete("");
     } else {
-      bool found = false;
       if (FkService.instance != null) {
         DFK fk = FkService.instance.getFk(tableName, newValue);
-        if (fk != null) {
+        if (fk != null) { // in cache
           completer.complete(fk.drv);
-          found = true;
-        }
-        if (!found) {
+        } else { // get
           FkService.instance.getFkFuture(tableName, newValue)
-          .then((DFK fk2){
+          .then((DFK fk2) {
             if (fk2 != null) {
               completer.complete(fk2.drv);
               if (entry != null) {
@@ -136,18 +133,20 @@ class FkCtrl
             completer.completeError(error, stackTrace);
           });
         }
-      } else {
+      } else { // no fkService
+        String dvalue = null;
         for (LLookupItem item in lookupItemList) {
           if (item.value == newValue) {
-            completer.complete(item.label);
-            found = true;
+            dvalue = item.label;
             break;
           }
         }
-        if (!found) {
+        if (dvalue == null || dvalue.isEmpty) {
           completer.completeError("~~${newValue}~~");
           if (setValidity)
             input.setCustomValidity("${LLookup.lLookupInvalidValue()}=${newValue}");
+        } else {
+          completer.complete(dvalue);
         }
       } // no fkService
     } // not empty
@@ -163,7 +162,7 @@ class FkCtrl
       } else {
         String dd = renderSync(vv, false);
         if (!dd.startsWith("<")) {
-          entry.valueDisplay = vv;
+          entry.valueDisplay = dd;
         }
       }
     }

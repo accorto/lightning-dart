@@ -202,10 +202,11 @@ abstract class EditorI {
    */
   Future<String> render(String newValue, bool setValidity) {
     Completer<String> completer = new Completer<String>();
-    if (DataUtil.isEmpty(newValue))
+    if (DataUtil.isEmpty(newValue)) {
       completer.complete("");
-    else
+    } else {
       completer.complete(contextReplace(newValue));
+    }
     return completer.future;
   }
   /// Replace context in value
