@@ -168,6 +168,12 @@ class PageSimple
  */
 class StatusMessage {
 
+  /// Busy Status (working)
+  static StatusMessage busy = new StatusMessage(
+      LTheme.C_THEME__ALT_INVERSE, new LIconUtility(LIconUtility.SPINNER),
+      "... ${LSpinner.lSpinnerWorking()} ...",
+      null, _BUSY, null);
+
   /// dataSuccess
   static const String _BUSY = "busy";
   /// Data Success value
@@ -186,6 +192,20 @@ class StatusMessage {
 
   /// Message from Server Response
   StatusMessage.response(SResponse response, String details) {
+    _initResponse(response, details);
+  }
+
+  /// Message from Server Response (success as info)
+  StatusMessage.responseInfo(SResponse response, String details) {
+    _initResponse(response, details);
+    if (response.isSuccess) {
+      color = LTheme.C_THEME__INFO;
+      icon = new LIconUtility(LIconUtility.INFO);
+    }
+  }
+
+  /// init info from response
+  void _initResponse(SResponse response, String details) {
     if (response.isSuccess) {
       color = LTheme.C_THEME__SUCCESS;
       dataSuccess = Html0.V_TRUE;
@@ -199,6 +219,7 @@ class StatusMessage {
     if (details != null && details.isNotEmpty)
       dataDetail = details;
   }
+
 
   /// message from error
   StatusMessage.errorInfo(var error) {
@@ -251,11 +272,5 @@ class StatusMessage {
                        String this.detail, String this.dataSuccess, String this.dataDetail) {
     color = LTheme.C_THEME__ERROR;
   }
-
-  /// Busy Status (working)
-  static StatusMessage busy = new StatusMessage(
-      LTheme.C_THEME__ALT_INVERSE, new LIconUtility(LIconUtility.SPINNER),
-      "... ${LSpinner.lSpinnerWorking()} ...",
-      null, _BUSY, null);
 
 } // StatusMessage

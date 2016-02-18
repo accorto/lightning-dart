@@ -39,6 +39,10 @@ class DataTypeUtil {
         || (dt == DataType.CURRENCY) || (dt == DataType.QUANTITY)
         || (dt == DataType.DECIMAL) || (dt == DataType.RATING);
   }
+  /// Data Type Duration
+  static bool isDuration(DataType dt) {
+    return (dt == DataType.DURATION) || (dt == DataType.DURATIONHOUR);
+  }
   /// Data Type Number
   static bool isInt(DataType dt) {
     return (dt == DataType.INT) || (dt == DataType.RATING);

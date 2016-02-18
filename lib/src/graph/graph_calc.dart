@@ -22,7 +22,7 @@ class GraphCalc
       : super(tableName, column);
 
 
-  /// Display
+  /// Display - horizontal/vertical or flow
   void display(EngineBase engine, bool displayHorizontal) {
     if ((dateColumn != null
         || (byList.isNotEmpty && byList.first.byValueList.isNotEmpty))
@@ -34,14 +34,26 @@ class GraphCalc
       return;
     }
 
-    ParagraphElement p = new ParagraphElement()
-      ..classes.add(LMargin.C_BOTTOM__SMALL);
     if (count == 0) {
-      p.text = "- ${StatCalc.statCalcNoData()} -";
+      ParagraphElement p = new ParagraphElement()
+        ..classes.add(LMargin.C_BOTTOM__SMALL)
+        ..text = "- ${StatCalc.statCalcNoData()} -";
+      engine.element.append(p);
     } else {
-      p.text = toString();
+      DListUtil info = new DListUtil();
+      engine.element.append(info.element);
+      info.add(LTableSumCell.tableSumCellCount(), count);
+      info.add(LTableSumCell.tableSumCellNull(), nullCount);
+      if (hasMinMax) {
+        info.add(LTableSumCell.tableSumCellMin(), this.min);
+        info.add(LTableSumCell.tableSumCellMax(), this.max);
+      }
+      if (hasSum) {
+        info.add(LTableSumCell.tableSumCellAvg(), avg.toStringAsFixed(1));
+        info.add(LTableSumCell.tableSumCellSum(), this.sum.toStringAsFixed(1));
+      }
     }
-    engine.element.append(p);
+    //engine.element.style.minHeight = "inherit"; // 300px
   } // display
 
 } // GraphCalc

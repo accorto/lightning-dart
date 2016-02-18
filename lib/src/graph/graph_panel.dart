@@ -103,7 +103,8 @@ class GraphPanel {
 
     _whatPickList = new LPicklist(_NAME_WHAT, idPrefix: id)
       ..label = StatCalc.statCalcWhat()
-      ..small = true;
+      ..small = true
+      ..minWidth = "150px";
     _whatPickList.addDOption(new DOption()
       ..value = StatCalc.COUNT_COLUMN_NAME
       ..label = StatCalc.statCalcWhatCount());
@@ -113,7 +114,8 @@ class GraphPanel {
     _byPickList = new LPicklist(_NAME_BY, idPrefix: id)
       ..label = StatCalc.statCalcBy()
       ..small = true
-      ..placeholder = StatCalc.statCalcByTitle();
+      ..placeholder = StatCalc.statCalcByTitle()
+      ..minWidth = "150px";
     _byPickList.addDOption(new DOption()
       ..value = _VALUE_NONE
       ..label = StatCalc.statCalcByNone());
@@ -161,11 +163,19 @@ class GraphPanel {
         ..value = col.name
         ..label = col.label;
       DataType dt = col.dataType;
-      if (DataTypeUtil.isNumber(dt)) {
+
+      if (DataTypeUtil.isNumber(dt) || DataTypeUtil.isDuration(dt)) {
         whatList.add(colOption);
-      } else if (DataTypeUtil.isPick(dt) || DataTypeUtil.isFk(dt)) {
+      }
+      else if (DataTypeUtil.isPick(dt)) {
         byList.add(colOption);
         _groupByColumnNames.add(col.name);
+      }
+      else if (DataTypeUtil.isFk(dt)) {
+        byList.add(colOption);
+        _groupByColumnNames.add(col.name);
+        if (col.hasFkReference()) // init value list
+          FkService.instance.getFkMapFuture(col.fkReference);
       } else if (DataTypeUtil.isDate(dt)) {
         dateList.add(colOption);
       }
@@ -182,6 +192,7 @@ class GraphPanel {
     for (DOption colOption in dateList)
       _datePickList.addDOption(colOption);
 
+    _log.config("initForm what=${whatList.length} by=${byList.length} date=${dateList.length}");
     return form;
   } // initForm
 
@@ -244,7 +255,7 @@ class GraphPanel {
       _enginePanel.calc(whatColumn);
     }
     //
-    _enginePanel.calculate(records, dateColumn, byPeriod);
+    _enginePanel.calculateDate(records, dateColumn, byPeriod);
     _enginePanel.display(_displayHorizontal);
     //
     doSyncTable(by);

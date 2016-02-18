@@ -108,11 +108,13 @@ class StatCalc
       // value
       num valueNum = null;
       if (valueString != null && valueString.isNotEmpty) {
-        if (DataTypeUtil.isNumber(column.dataType)) {
+        if (DataTypeUtil.isNumber(column.dataType) || column.dataType == DataType.DURATIONHOUR) {
           valueNum = double.parse(valueString, (String value2) {
             _log.warning("calculatePoint ${tableName}.${key}(${label}): invalid value=${value2}");
             return null;
           });
+        } else if (column.dataType == DataType.DURATION) {
+          // TODO convert duration
         } else if (DataTypeUtil.isDate(column.dataType)) {
           valueNum = int.parse(valueString, onError: (String value2) {
             _log.warning("calculatePoint ${tableName}.${key}(${label}): invalid value=${value2}");
@@ -138,8 +140,8 @@ class StatCalc
       for (StatBy by in byList) {
         by.calculateRecord(record, valueNum, valueString, recordDate);
       }
-    } else {
-      _log.finer("calculatePoint ${key} NoMatch value=${valueNum} ${recordDate}");
+    //} else {
+    //  _log.finer("calculatePoint ${key} NoMatch value=${valueNum} ${recordDate}");
     }
   } // calculatePoint
 
@@ -155,7 +157,7 @@ class StatCalc
           return false;
         }
       }
-      else if (match.columnName == dateColumn.name) {
+      else if (dateColumn != null && match.columnName == dateColumn.name) {
         if (!match.dateMatch(recordDate, dateString)) {
           return false;
         }
@@ -257,7 +259,7 @@ class StatCalc
   String toStringX(String linePrefix) {
     String s = "${super.toStringX(linePrefix)}";
     for (StatBy by in byList) {
-      s += "\n" + by.toStringX("${linePrefix}. ");
+      s += "\n" + by.toStringX("${linePrefix}. "); // update labels
     }
     return s;
   }

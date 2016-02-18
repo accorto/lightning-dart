@@ -114,6 +114,22 @@ class FkService
     return completer.future;
   } // getFkMapFuture
 
+  /// get fk map or null
+  Map<String,String> getFkMap(String fkTableName) {
+    if (fkTableName == null || fkTableName.isEmpty) {
+      return null;
+    }
+    List<DFK> list = getFkList(fkTableName, null);
+    if (list != null) {
+      Map<String,String> map = new Map<String,String>();
+      for (DFK fk in list) {
+        map[fk.id] = fk.drv;
+      }
+      return map;
+    }
+    return null;
+  } // getFkMap
+
 
 
   /// is the table complete

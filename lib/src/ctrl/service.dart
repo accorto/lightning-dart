@@ -210,7 +210,7 @@ class Service {
     if (_setBusy && onServerSuccess != null) {
       onServerSuccess(sresponse, details);
     } else {
-      PageSimple.instance.addStatusMessage(new StatusMessage.response(sresponse, details));
+      PageSimple.statusMessages.add(new StatusMessage.responseInfo(sresponse, details));
     }
     if (sendNotification != null) {
       sendNotification(sresponse.isSuccess ? ServiceResponse.Ok : ServiceResponse.Error,
@@ -234,7 +234,7 @@ class Service {
         onServerError("${subject}: ${message}");
     } else {
       StatusMessage sm = new StatusMessage.error(subject, message, StatusMessage.ERROR, null);
-      PageSimple.instance.addStatusMessage(sm);
+      PageSimple.statusMessages.add(sm);
     }
     if(sendNotification != null) {
       sendNotification(ServiceResponse.Failure,

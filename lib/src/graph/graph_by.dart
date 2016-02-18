@@ -7,7 +7,7 @@
 part of lightning_ctrl;
 
 /**
- * Stat (Group) By
+ * Stat (Group) By for FK handling
  */
 class GraphBy
     extends StatBy {
@@ -19,15 +19,7 @@ class GraphBy
    */
   GraphBy(String key, String label, Map<String,String> keyLabelMap)
     : super(key, label, keyLabelMap) {
-
-    if (keyLabelMap == null) {
-      _log.config("keyMap for FK=${key}");
-      FkService.instance.getFkMapFuture(key) // columnName
-      .then((Map<String, String> map) {
-        keyLabelMap = map;
-        needLabelUpdate = true;
-      });
-    }
+    _init();
   } // GraphBy
 
   /**
@@ -35,16 +27,34 @@ class GraphBy
    */
   GraphBy.column(DColumn column)
       : super.column(column) {
-
-    if (keyLabelMap == null) {
-      _log.config("keyMap for FK=${key}");
-      FkService.instance.getFkMapFuture(key) // columnName
-      .then((Map<String, String> map) {
-        keyLabelMap = map;
-        needLabelUpdate = true;
-      });
-    }
+    _init();
   } // GraphBy
 
+  /// Initiate FK query
+  void _init() {
+    if (keyLabelMap == null && FkService.instance != null) {
+      String fkTableName = key; // column name
+      if (column != null) {
+        fkTableName = column.fkReference;
+        if (fkTableName.isEmpty) {
+          fkTableName = key;
+          _log.warning("keyMap for FK=${key} - no FkReference");
+        } else {
+          _log.config("keyMap for FK=${key} - ${fkTableName}");
+        }
+      } else {
+        _log.info("keyMap for FK=${key} - no Column.FkReference");
+      }
+      keyLabelMap = FkService.instance.getFkMap(fkTableName);
+      needLabelUpdate = true;
+      if (keyLabelMap == null) {
+        FkService.instance.getFkMapFuture(fkTableName)
+            .then((Map<String, String> map) {
+          keyLabelMap = map;
+          needLabelUpdate = true;
+        });
+      }
+    }
+  }
 
 } // GraphBy

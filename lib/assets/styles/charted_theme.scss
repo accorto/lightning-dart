@@ -46,6 +46,9 @@
   width: 100%;
 }
 // 2rd level
+.chart-host {
+  display: block;
+}
 .chart-host-h {
   display: block;
   width: 70%;
@@ -55,6 +58,10 @@
   width: 100%;
 }
 // 2rd level
+.chart-legend-host {
+  display: block;
+  overflow-y: auto;
+}
 .chart-legend-host-h {
   display: block;
   width: 30%;

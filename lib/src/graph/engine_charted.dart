@@ -22,10 +22,6 @@ class EngineCharted
   final Element element = new Element.article()
     ..classes.add("chart-wrapper");
 
-  /// chart height in px
-  int chartHeight = 300;
-
-
   DivElement _wrapper = new DivElement()
     ..classes.add("chart-title-wrapper");
   HeadingElement _title = new HeadingElement.h2()
@@ -103,7 +99,7 @@ class EngineCharted
 
       rendered = true;
       _graphType = _TYPE_STACKED;
-      _createLayout(displayHorizontal);
+      int width = _createLayout(displayHorizontal);
 
       // config
       List<int> measures = new List<int>();
@@ -119,7 +115,7 @@ class EngineCharted
         ..legend = new ChartLegend(_legendHost,
             showValues: true,
             title: by.label);
-      int width = _chartHost.clientWidth; // scale down
+
       if (config.minimumSize.width > width) { // 400x300
         int height = 300*(width~/400);
         config.minimumSize = new Rect.size(width, height);
@@ -208,7 +204,7 @@ class EngineCharted
       return false; // no data
     }
     _graphType = _TYPE_BAR;
-    _createLayout(displayHorizontal);
+    int width = _createLayout(displayHorizontal);
 
     ChartSeries series = new ChartSeries(_calc.tableName, [1],
         new BarChartRenderer(alwaysAnimate: true));
@@ -218,7 +214,7 @@ class EngineCharted
       ..legend = new ChartLegend(_legendHost,
           showValues: true,
           title: _calc.label);
-    int width = _chartHost.clientWidth; // scale down
+
     if (config.minimumSize.width > width) { // 400x300
       int height = 300*(width~/400);
       config.minimumSize = new Rect.size(width, height);
@@ -288,7 +284,7 @@ class EngineCharted
 
       rendered = true;
       _graphType = _TYPE_PIE;
-      _createLayout(displayHorizontal);
+      int width = _createLayout(displayHorizontal);
       //
       by.updateLabels();
 
@@ -301,12 +297,12 @@ class EngineCharted
         ..legend = new ChartLegend(_legendHost,
             title: by.label,
             showValues: true);
-      int width = _chartHost.clientWidth;
+
       if (config.minimumSize.width > width) { // 400x300
         int height = 300*(width~/400);
         config.minimumSize = new Rect.size(width, height);
       }
-      _log.fine("renderPie size=${config.minimumSize}"); // x y w h
+      _log.fine("renderPie size=${config.minimumSize} hostWidth=${width}"); // x y w h
       int height = config.minimumSize.height;
       if (height > 0)
         _legendHost.style.maxHeight = "${height}px";
@@ -382,14 +378,16 @@ class EngineCharted
     return value;
   } */
 
-  /// create Charted layout
-  void _createLayout(bool displayHorizontal) {
+  /// create Charted layout - horizontal/vertical or flow - return width
+  int _createLayout(bool displayHorizontal) {
     if (_chartHost == null) {
       DivElement chartHostWrapper = new DivElement()
         ..classes.addAll(["chart-host-wrapper"]);
       element.append(chartHostWrapper);
 
-      String vh = displayHorizontal ? "-h" : "-v";
+      String vh = "";
+      if (displayHorizontal != null)
+        displayHorizontal ? "-h" : "-v";
       _chartHost = new DivElement()
         ..classes.add("chart-host${vh}")
         ..dir = "ltr";
@@ -398,6 +396,16 @@ class EngineCharted
         ..classes.add("chart-legend-host${vh}");
       chartHostWrapper.append(_legendHost);
     }
+    int width = _chartHost.clientWidth;
+    if (displayHorizontal == null) {
+      if (width == 0)
+        width = element.clientWidth;
+    } else if (displayHorizontal) {
+    } else { // vertical
+      if (width == 0)
+        width = element.clientWidth;
+    }
+    return width;
   }
   DivElement _legendHost;
   DivElement _chartHost;

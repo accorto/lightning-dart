@@ -32,6 +32,9 @@
   flex-wrap: wrap;
   width: 100%; }
 
+.chart-host {
+  display: block; }
+
 .chart-host-h {
   display: block;
   width: 70%; }
@@ -39,6 +42,10 @@
 .chart-host-v {
   display: block;
   width: 100%; }
+
+.chart-legend-host {
+  display: block;
+  overflow-y: auto; }
 
 .chart-legend-host-h {
   display: block;

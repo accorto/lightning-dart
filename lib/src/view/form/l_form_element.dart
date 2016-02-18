@@ -361,13 +361,24 @@ class LFormElement {
   }
 
 
-  /// set width of control (editor, hint, ..)
+  /// set max width of control (editor, hint, ..)
   void set maxWidth (String newValue) {
     if (_elementControl != null) {
       if (newValue == null || newValue.isEmpty) {
         _elementControl.style.removeProperty("maxWidth");
       } else {
         _elementControl.style.maxWidth = newValue;
+      }
+    }
+  }
+
+  /// set min width of control (editor, hint, ..)
+  void set minWidth (String newValue) {
+    if (_elementControl != null) {
+      if (newValue == null || newValue.isEmpty) {
+        _elementControl.style.removeProperty("minWidth");
+      } else {
+        _elementControl.style.minWidth = newValue;
       }
     }
   }

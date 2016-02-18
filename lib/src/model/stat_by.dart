@@ -31,9 +31,11 @@ class StatBy
   /// stat (group) by
   StatBy.column(DColumn column) : super (column.name, column.label) {
     this.column = column;
-    keyLabelMap = new Map<String, String>();
-    for (DOption option in column.pickValueList) {
-      keyLabelMap[option.value] = option.label;
+    if (column.pickValueList.isNotEmpty) {
+      keyLabelMap = new Map<String, String>();
+      for (DOption option in column.pickValueList) {
+        keyLabelMap[option.value] = option.label;
+      }
     }
   }
 

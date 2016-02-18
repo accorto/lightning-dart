@@ -7,7 +7,7 @@
 part of lightning_ctrl;
 
 /**
- * Graph Engine Panel
+ * Graph Engine Panel ("Metric")
  * - host and interface to Engine
  * - part of graph element
  */
@@ -24,6 +24,11 @@ class GraphEnginePanel
   /// KPI / Element name/id
   final String id;
   final String tableName;
+
+  /// default date column
+  DColumn dateColumn;
+  /// default by period
+  ByPeriod byPeriod;
 
   final List<GraphCalc> _calcList = new List<GraphCalc>();
   final List<StatMatch> _matchList = new List<StatMatch>();
@@ -103,8 +108,18 @@ class GraphEnginePanel
    * Calculate  Value
    * see [TableStatistics.calculate]
    */
-  void calculate(List<DRecord> recordList,
-      DColumn dateColumn, ByPeriod byPeriod) {
+  void calculateDate(List<DRecord> recordList,
+      DColumn dateColumn,
+      ByPeriod byPeriod) {
+    this.dateColumn = dateColumn;
+    this.byPeriod = byPeriod;
+    calculate(recordList);
+  }
+  /**
+   * Calculate  Value
+   * see [TableStatistics.calculate]
+   */
+  void calculate(List<DRecord> recordList) {
     _log.config("calculate '${tableName}' records=${recordList.length} calc=${_calcList.length} by=${_byList.length} match=${_matchList.length}");
 
     // reset
@@ -128,7 +143,7 @@ class GraphEnginePanel
     for (StatCalc what in _calcList) {what.dump();}
   } // calculate
 
-  /// display
+  /// display - horizontal/vertical or flow
   void display(bool displayHorizontal) {
     engine.reset();
     for (GraphCalc calc in _calcList) {

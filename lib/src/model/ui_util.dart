@@ -160,9 +160,14 @@ class UiUtil {
   }
 
   /// add existing column to UI
-  void addColumn(DColumn col, {String displayLogic, bool mandatory,
-      bool isAlternativeDisplay, int width}) {
-    ui.table.columnList.add(col);
+  void addColumn(DColumn col,
+      {String displayLogic,
+      bool mandatory,
+      bool isAlternativeDisplay,
+      int width,
+      bool addColToTable:true}) {
+    if (addColToTable)
+      ui.table.columnList.add(col);
     if (_panel == null)
       addPanel();
 
@@ -214,8 +219,11 @@ class UiUtil {
 
 
   /// add grid/panel column if missing
-  void addIfMissing(String columnName, {bool mandatory, bool readOnly,
-      bool isAlternativeDisplay, int width}) {
+  void addIfMissing(String columnName,
+      {bool mandatory,
+      bool readOnly,
+      bool isAlternativeDisplay,
+      int width}) {
     // exists?
     for (UIPanel panel in ui.panelList) {
       for (UIPanelColumn pc in panel.panelColumnList) {
@@ -238,8 +246,11 @@ class UiUtil {
       if (col.name == columnName) {
         if (readOnly != null)
           col.isReadOnly = readOnly;
-        addColumn(col, mandatory:mandatory,
-            isAlternativeDisplay:isAlternativeDisplay, width:width);
+        addColumn(col,
+            mandatory: mandatory,
+            isAlternativeDisplay: isAlternativeDisplay,
+            width: width,
+            addColToTable: false);
         return;
       }
     }
