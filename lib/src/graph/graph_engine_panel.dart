@@ -14,7 +14,7 @@ part of lightning_ctrl;
 class GraphEnginePanel
     extends LComponent {
 
-  static final Logger _log = new Logger("GraphPanel");
+  static final Logger _log = new Logger("GraphEnginePanel");
 
   /// chart engine
   final EngineBase engine = new EngineCharted();
@@ -32,7 +32,7 @@ class GraphEnginePanel
 
   final List<GraphCalc> _calcList = new List<GraphCalc>();
   final List<StatMatch> _matchList = new List<StatMatch>();
-  final List<GraphBy> _byList = new List<GraphBy>();
+  final List<StatBy> _byList = new List<StatBy>();
 
   /**
    * Graph Engine Panel
@@ -94,14 +94,14 @@ class GraphEnginePanel
   }
 
   /// add Group By
-  void by(String columnName, String label, Map<String, String> keyLabelMap) {
-    _log.fine("by ${columnName} ${keyLabelMap.keys}");
-    _byList.add(new GraphBy(columnName, label, keyLabelMap));
+  void byX(String columnName, String label, KeyValueMap keyLabelMap) {
+    _log.fine("byX ${columnName} ${keyLabelMap.keys}");
+    _byList.add(new StatBy(columnName, label, keyLabelMap));
   } // by
   /// add Group By
   void byColumn(DColumn column) {
     _log.fine("by ${column.name}");
-    _byList.add(new GraphBy.column(column));
+    _byList.add(new StatBy.column(column));
   } // by
 
   /**
@@ -140,7 +140,9 @@ class GraphEnginePanel
       }
     }
     //
-    for (StatCalc what in _calcList) {what.dump();}
+    for (StatCalc what in _calcList) {
+      what.dump();
+    }
   } // calculate
 
   /// display - horizontal/vertical or flow

@@ -44,7 +44,7 @@ class TableStatistics {
 
   /**
    * Calculate Value
-   * see [GraphPanel.calculate]
+   * see [GraphEnginePanel.calculate]
    * adds group by records to [recordList]
    * returns true if records were added
    */
@@ -54,7 +54,7 @@ class TableStatistics {
       {bool matchOnly:false}) {
     _log.config("calculate '${tableName}' records=${recordList.length} calc=${calcList.length} by=${byList.length}");
 
-    // reset
+    // reset - sets byList
     List<StatMatch> matchList = new List<StatMatch>();
     for (StatCalc what in calcList) {
       what.resetCalc(byList, matchList, dateColumn, byPeriod);
@@ -81,8 +81,12 @@ class TableStatistics {
       return false;
     }
 
+    // group records
     Map<DEntry, DRecord> groupRecords = new Map<DEntry, DRecord>();
     for (StatCalc what in calcList) {
+      for (StatBy whatBy in what.byList) {
+        whatBy.updateLabels();
+      }
       what.dump();
       if (_dateColumnNames.contains(what.key)) {
         continue; // don't add date values

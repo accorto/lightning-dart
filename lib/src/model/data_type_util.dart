@@ -59,7 +59,7 @@ class DataTypeUtil {
 
   /// Data Type Alignment
   static bool isRightAligned(DataType dt) {
-    return isNumber(dt) || dt == DataType.DURATION;
+    return isNumber(dt) || isDuration(dt);
   }
   /// Data Type Alignment
   static bool isCenterAligned(DataType dt) {

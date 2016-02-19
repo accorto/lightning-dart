@@ -174,8 +174,8 @@ class GraphPanel {
       else if (DataTypeUtil.isFk(dt)) {
         byList.add(colOption);
         _groupByColumnNames.add(col.name);
-        if (col.hasFkReference()) // init value list
-          FkService.instance.getFkMapFuture(col.fkReference);
+        if (col.hasFkReference())
+          KeyValueMap.getForColumn(col); // seed
       } else if (DataTypeUtil.isDate(dt)) {
         dateList.add(colOption);
       }

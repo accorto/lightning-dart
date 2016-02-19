@@ -84,7 +84,6 @@ part 'src/ctrl/table_layout.dart';
 part 'src/ctrl/timezone.dart';
 part 'src/ctrl/ui_service.dart';
 
-part 'src/graph/graph_by.dart';
 part 'src/graph/graph_calc.dart';
 part 'src/graph/graph_engine_panel.dart';
 part 'src/graph/graph_panel.dart';

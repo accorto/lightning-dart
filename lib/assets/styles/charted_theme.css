@@ -98,7 +98,7 @@
   width: 100%;
   display: flex;
   font-size: 14px;
-  margin-bottom: 14px;
+  margin-bottom: 7px;
   position: relative;
   cursor: default; }
 
@@ -125,8 +125,11 @@
 .chart-legend-label {
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 120px;
+  max-width: 150px;
   flex: 1; }
+
+.chart-legend-value {
+  margin-left: .5rem; }
 
 .chart-legend-color,
 .chart-legend-more-color {

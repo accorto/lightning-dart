@@ -161,12 +161,12 @@ class FkCtrl
         entry.clearValueDisplay();
       } else {
         String dd = renderSync(vv, false);
-        if (!dd.startsWith("<")) {
+        if (!dd.startsWith("<")) { // KeyValueMap.keyNotFound
           entry.valueDisplay = dd;
         }
       }
     }
-  }
+  } // valueDisplayUpdate
 
   /// Dependent On Changed
   void onDependentOnChanged(DEntry dependentEntry) {

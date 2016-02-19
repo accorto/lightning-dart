@@ -16,10 +16,9 @@ class StatPoint {
 
   /// key (column name)
   final String key;
-  /// label (can update)
-  String label;
   /// Meta Info
   DColumn column;
+  /// Meta Info
   DColumn dateColumn;
 
   /// by Date criteria
@@ -37,7 +36,17 @@ class StatPoint {
   /**
    * Metric point with [key] (columnName, name) and [label]
    */
-  StatPoint(String this.key, String this.label);
+  StatPoint(String this.key, String label) {
+    _label = label;
+  }
+
+  /// label (can update)
+  String get label => _label;
+  void set label(String newValue) {
+    _label = newValue;
+  }
+  String _label;
+
 
   /// reset
   void reset() {

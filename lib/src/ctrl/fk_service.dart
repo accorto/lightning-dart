@@ -39,7 +39,54 @@ class FkService
    * FK Service
    */
   FkService(String this.dataUri, String this.uiUri) {
+    KeyValueMap.keyValueFill = onKeyValueFill;
+    KeyValueMap.keyValueValue = onKeyValueValue;
   } // FkService
+
+
+  /// Get Value for id [key] of [fkTableName]
+  Future<String> onKeyValueValue(String fkTableName, String key) {
+    Completer<String> completer = new Completer<String>();
+    List<DFK> list = _tableComplete[fkTableName];
+    if (list == null) {
+      getFkFuture(fkTableName, key)
+      .then((DFK fk){
+        completer.complete(fk.drv);
+      })
+      .catchError((){
+        completer.complete(KeyValueMap.keyNotFoundOnServer(key));
+      });
+    } else {
+      for (DFK fk in list) {
+        if (fk.urv == key) {
+          completer.complete(fk.drv);
+          return completer.future;
+        }
+      }
+      completer.complete(KeyValueMap.keyNotFoundOnServer(key));
+    }
+    return completer.future;
+  }
+
+  /// Fill Key Value Map
+  void onKeyValueFill(KeyValueMap keyValueMap) {
+    String fkTableName = keyValueMap.name;
+    List<DFK> list = _tableComplete[fkTableName];
+    if (list == null) {
+      getFkListFuture(fkTableName, null, null, null)
+      .then((List<DFK> list) {
+        keyValueMap.loadFks(list, isComplete(fkTableName));
+        _log.config("onKeyValueFill ${fkTableName} #${list.length}");
+      })
+      .catchError((error, stackTrace) {
+        _log.warning("onKeyValueFill ${fkTableName}", error, stackTrace);
+      });
+    } else {
+      keyValueMap.loadFks(list, true);
+      _log.config("onKeyValueFill ${fkTableName} #${list.length} (cache)");
+    }
+  } // onKeyValueFill
+
 
 
   /**
@@ -79,58 +126,6 @@ class FkService
     }
     return completer.future;
   } // getFkListFuture
-
-  /**
-   * Retrieve from server if necessary
-   */
-  Future<Map<String,String>> getFkMapFuture(String fkTableName) {
-    Completer<Map<String,String>> completer = new Completer<Map<String,String>>();
-    if (fkTableName == null || fkTableName.isEmpty) {
-      completer.complete(new Map<String,String>());
-      return completer.future;
-    }
-    List<DFK> list = getFkList(fkTableName, null);
-    if (list != null) {
-      Map<String,String> map = new Map<String,String>();
-      for (DFK fk in list) {
-        map[fk.id] = fk.drv;
-      }
-      completer.complete(map);
-    }
-    else {
-      getFkListFuture(fkTableName, null, null, null)
-      .then((List<DFK> list) {
-        Map<String, String> map = new Map<String, String>();
-        for (DFK fk in list) {
-          map[fk.id] = fk.drv;
-        }
-        completer.complete(map);
-      })
-      .catchError((error, stackTrace) {
-        completer.complete(new Map<String, String>());
-        _log.warning("getFkMapFuture ${fkTableName}", error, stackTrace);
-      });
-    }
-    return completer.future;
-  } // getFkMapFuture
-
-  /// get fk map or null
-  Map<String,String> getFkMap(String fkTableName) {
-    if (fkTableName == null || fkTableName.isEmpty) {
-      return null;
-    }
-    List<DFK> list = getFkList(fkTableName, null);
-    if (list != null) {
-      Map<String,String> map = new Map<String,String>();
-      for (DFK fk in list) {
-        map[fk.id] = fk.drv;
-      }
-      return map;
-    }
-    return null;
-  } // getFkMap
-
-
 
   /// is the table complete
   bool isComplete(String tableName) {
@@ -189,7 +184,7 @@ class FkService
       addRecord(record);
   }
 
-    /**
+  /**
    * Add/update to Cache
    */
   DFK addRecord (DRecord record) {
@@ -304,8 +299,8 @@ class FkService
       if (fk == null) {
         fk = new DFK()
           ..id = sr.id
-          ..drv = "NotFound=${sr.tableName}${URV_ID}${sr.id}"
-          ..urv = "#";
+          ..drv = KeyValueMap.keyNotFoundOnServer("${sr.tableName}${URV_ID}${sr.id}")
+          ..urv = sr.id;
       }
       sr.completer.complete(fk);
     }
@@ -343,9 +338,9 @@ class FkService
                 submitList.add(req); // re-issue
               } else {
                 fk = new DFK()
-                  ..id = sr.id
-                  ..drv = "NotFound=${req.tableName}${URV_ID}${req.id}"
-                  ..urv = "#";
+                  ..id = req.id
+                  ..drv = KeyValueMap.keyNotFoundOnServer("${req.tableName}${URV_ID}${req.id}")
+                  ..urv = req.id;
                 req.completer.complete(fk);
               }
             } else {

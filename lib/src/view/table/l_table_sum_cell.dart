@@ -80,7 +80,7 @@ class LTableSumCell
         dt = new DateTime.fromMillisecondsSinceEpoch(statCalc.avg.toInt(), isUtc:isUtc);
         info.add(tableSumCellAvg(), df.format(dt));
       }
-    } else {
+    } else { // duration
       if (statCalc.hasMinMax) {
         info.add(tableSumCellMin(), statCalc.min);
         info.add(tableSumCellMax(), statCalc.max);

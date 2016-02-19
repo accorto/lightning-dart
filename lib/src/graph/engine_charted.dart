@@ -115,15 +115,7 @@ class EngineCharted
         ..legend = new ChartLegend(_legendHost,
             showValues: true,
             title: by.label);
-
-      if (config.minimumSize.width > width) { // 400x300
-        int height = 300*(width~/400);
-        config.minimumSize = new Rect.size(width, height);
-      }
-      _log.fine("renderStacked size=${config.minimumSize}"); // x y w h
-      int height = config.minimumSize.height;
-      if (height > 0)
-        _legendHost.style.maxHeight = "${height}px";
+      _setChartSize(config, width);
 
       // data
       _data = new ChartData(_stackedColumns(by), _stackedRows(by));
@@ -131,7 +123,9 @@ class EngineCharted
       // area
       _createState();
       CartesianArea area = new CartesianArea(_chartHost, _data, config,
-          state:_state, useTwoDimensionAxes:false, useRowColoring:false);
+          state:_state,
+          useTwoDimensionAxes:false,
+          useRowColoring:false);
       area.theme = new EngineChartedTheme();
       _createDefaultCartesianBehaviors().forEach((behavior) {
         area.addChartBehavior(behavior);
@@ -214,27 +208,21 @@ class EngineCharted
       ..legend = new ChartLegend(_legendHost,
           showValues: true,
           title: _calc.label);
-
-    if (config.minimumSize.width > width) { // 400x300
-      int height = 300*(width~/400);
-      config.minimumSize = new Rect.size(width, height);
-    }
-    _log.fine("renderBar size=${config.minimumSize}"); // x y w h
-    int height = config.minimumSize.height;
-    if (height > 0)
-      _legendHost.style.maxHeight = "${height}px";
+    _setChartSize(config, width);
 
     // area
     _createState();
     CartesianArea area = new CartesianArea(_chartHost, _data, config,
-        state:_state, useTwoDimensionAxes:false, useRowColoring:false);
+        state:_state,
+        useTwoDimensionAxes:false,
+        useRowColoring:true); // different color per bar
     area.theme = new EngineChartedTheme();
     _createDefaultCartesianBehaviors().forEach((behavior) {
       area.addChartBehavior(behavior);
     });
     area.draw();
     return true;
-  } // renderStackedPlain
+  } // renderBar
 
   /// bar column list
   List<ChartColumnSpec> _pointColumns(GraphCalc calc) {
@@ -297,15 +285,7 @@ class EngineCharted
         ..legend = new ChartLegend(_legendHost,
             title: by.label,
             showValues: true);
-
-      if (config.minimumSize.width > width) { // 400x300
-        int height = 300*(width~/400);
-        config.minimumSize = new Rect.size(width, height);
-      }
-      _log.fine("renderPie size=${config.minimumSize} hostWidth=${width}"); // x y w h
-      int height = config.minimumSize.height;
-      if (height > 0)
-        _legendHost.style.maxHeight = "${height}px";
+      _setChartSize(config, width);
 
       _data = new ChartData(_byColumns(by.label, by), _byRows(by));
 
@@ -406,11 +386,24 @@ class EngineCharted
         width = element.clientWidth;
     }
     return width;
-  }
+  } // createLayout
   DivElement _legendHost;
   DivElement _chartHost;
 
+  /// set chart host size
+  void _setChartSize(ChartConfig config, int width) {
+    if (config.minimumSize.width > width) { // 400x300
+      int height = 300*(width~/400);
+      config.minimumSize = new Rect.size(width, height);
+    }
+    int height = config.minimumSize.height;
+    if (height > 0) {
+      _legendHost.style.maxHeight = "${height}px";
+    }
+    _log.fine("setChartSize size=${config.minimumSize} hostWidth=${width} height=${height}"); // x y w h
+  } // setChartSize
 
+  /// create State
   ChartState _createState() {
     if (_state == null) {
       _state = new ChartState();
@@ -429,7 +422,7 @@ class EngineCharted
     }
     dumpData();
     return _state;
-  }
+  } // createState
   ChartState _state;
   ChartData _data;
 

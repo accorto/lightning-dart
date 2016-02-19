@@ -21,9 +21,13 @@ class AppsSettingsCache
   AppsSettingsCache() : super(ID, appsSettingsCacheLabel()) {
     LButton buttonDetails = new LButton.neutralIcon("details", "Details",
         new LIconUtility(LIconUtility.CASES), iconLeft:true, idPrefix:ID)
-      ..onClick.listen(onClickDetails);
+      ..onClick.listen((Event evt){
+        _showDetails = !_showDetails;
+        showingNow();
+      });
     _buttonDiv.append(buttonDetails.element);
   }
+  bool _showDetails = false;
 
   /// recreate / refresh
   void showingNow() {
@@ -33,7 +37,13 @@ class AppsSettingsCache
     element.append(table.element);
     element.append(_buttonDiv);
 
-    // Fk
+    _cacheKVM(table);
+    table.addRowHdrData("", "");
+    _cacheFk(table);
+  } // showingNow
+
+  /// FK
+  void _cacheFk(LTable table) {
     FkService fkService = FkService.instance;
     if (fkService == null) {
       table.addRowDataList([new Element.tag("strong")..text = "No FkService", null, null]);
@@ -44,50 +54,50 @@ class AppsSettingsCache
       table.addRowHdrDataList("Pending Requests", [fkService._pendingRequests.length, null]);
       table.addRowHdrDataList("Complete Tables", [fkService._tableComplete.length, null]);
       table.addRowHdrDataList("Entries", [fkService._map.length, null]);
-    }
-    //table.addRowHdrData("", "");
-  } // showingNow
 
-  /// Details
-  void onClickDetails(Event evt) {
-    showingNow();
-    FkService fkService = FkService.instance;
-    if (fkService == null)
-      return;
+      if (_showDetails) {
+        table.addRowHdrDataList("Active Requests", [fkService._activeRequests.length, null]);
+        for (FkServiceRequest req in fkService._activeRequests) {
+          String info = null;
+          if (req.completer != null) {
+            info = "fk";
+          }
+          if (req.completerList != null) {
+            if (info == null)
+              info = "fkList";
+            else
+              info += "+List";
+          }
+          table.addRowDataList([req.trxNo, req.compareString, info]);
+        }
 
-    LTable table = new LTable("cacheDetail");
-    element.classes.add(LScrollable.C_SCROLLABLE__X);
-    element.append(table.element);
+        table.addRowHdrDataList("Pending Requests", [fkService._pendingRequests.length, null]);
+        for (FkServiceRequest req in fkService._activeRequests) {
+          table.addRowDataList([req.trxNo, req.compareString, null]);
+        }
 
-    table.addRowHdrDataList("Active Requests", [fkService._activeRequests.length, null]);
-    for (FkServiceRequest req in fkService._activeRequests) {
-      String info = null;
-      if (req.completer != null) {
-        info = "fk";
+        table.addRowHdrDataList("Complete Tables", [fkService._tableComplete.length, null]);
+        fkService._tableComplete.forEach((String name, List<DFK> list) {
+          table.addRowDataList(["- ${name}", list.length, null]);
+          for (DFK fk in list) {
+            table.addRowDataList([null, fk.urv, fk.drv]);
+          }
+        });
       }
-      if (req.completerList != null) {
-        if (info == null)
-          info = "fkList";
-        else
-          info += "+List";
-      }
-      table.addRowDataList([req.trxNo, req.compareString, info]);
     }
+  } // cacheFk
 
-    table.addRowHdrDataList("Pending Requests", [fkService._pendingRequests.length, null]);
-    for (FkServiceRequest req in fkService._activeRequests) {
-      table.addRowDataList([req.trxNo, req.compareString, null]);
+  /// Key Value Maps
+  void _cacheKVM(LTable table) {
+    table.addRowDataList([new Element.tag("strong")..text = "Key Value Maps", null, null]);
+    table.addRowHdrDataList(KeyValueMap.keyValueFill == null ? "Not Active" : "Active", [KeyValueMap.table_map.length]);
+
+    if (_showDetails) {
+      KeyValueMap.table_map.forEach((String name, KeyValueMap kvm){
+        table.addRowDataList([name, kvm.length, kvm.isComplete]);
+      });
     }
-
-    table.addRowHdrDataList("Complete Tables", [fkService._tableComplete.length, null]);
-    fkService._tableComplete.forEach((String name, List<DFK> list) {
-      table.addRowDataList(["- ${name}", list.length, null]);
-      for (DFK fk in list) {
-        table.addRowDataList([null, fk.urv, fk.drv]);
-      }
-    });
-
-  } // onClickDetails
+  } // cacheKVM
 
 
   static String appsSettingsCacheLabel() => Intl.message("Cache", name: "appsSettingsCacheLabel");

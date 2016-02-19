@@ -122,7 +122,7 @@
   width: 100%;
   display: flex;
   font-size: 14px;
-  margin-bottom: 14px;
+  margin-bottom: 7px; // from 14
   position: relative;
   cursor: default;
 }
@@ -130,11 +130,9 @@
 .chart-legend-title {
   color: #838383;
 }
-
 .chart-legend-subtitle {
   color: #C1C1C1;
 }
-
 .chart-legend-selected,
 .chart-legend-hover {
   color: #434343;
@@ -147,16 +145,19 @@
   font-size: 14px;
   margin-top: 10px;
 }
-
 .chart-legend-more-row:first-child {
   margin-top: 0;
 }
 
+// chart-legend-row
 .chart-legend-label {
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 120px;
+  max-width: 150px;
   flex: 1;
+}
+.chart-legend-value {
+  margin-left: .5rem;
 }
 
 .chart-legend-color,

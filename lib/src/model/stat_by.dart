@@ -15,35 +15,31 @@ class StatBy
   static final Logger _log = new Logger("StatBy");
 
   /// Values
-  List<StatPoint> byValueList = new List<StatPoint>();
+  final List<StatPoint> byValueList = new List<StatPoint>();
   /// Key-Value Map
-  Map<String,String> keyLabelMap;
+  KeyValueMap keyLabelMap;
   /// Need Label Update
   bool needLabelUpdate = true;
 
   /**
    * Stat (Group) By
    */
-  StatBy(String key, String label, Map<String,String> this.keyLabelMap)
+  StatBy(String key, String label, KeyValueMap this.keyLabelMap)
       : super (key, label) {
   } // GroupBy
 
   /// stat (group) by
   StatBy.column(DColumn column) : super (column.name, column.label) {
     this.column = column;
-    if (column.pickValueList.isNotEmpty) {
-      keyLabelMap = new Map<String, String>();
-      for (DOption option in column.pickValueList) {
-        keyLabelMap[option.value] = option.label;
-      }
-    }
+    keyLabelMap = KeyValueMap.getForColumn(column);
   }
 
   /// clone w/o value
   StatBy clone() {
-    return new StatBy(key, label, keyLabelMap)
+    return new StatBy(key, _label, keyLabelMap)
       ..byPeriod = byPeriod
-      ..column = column;
+      ..column = column
+      ..dateColumn = dateColumn;
   }
 
   /**
@@ -63,32 +59,48 @@ class StatBy
         break;
       }
     }
+    // create new by
     if (point == null) {
       point = new StatPoint(key0, null);
       point.byPeriod = byPeriod;
       byValueList.add(point);
+      if (keyLabelMap != null) {
+        if (keyLabelMap.containsKey(key0)) {
+          point.label = keyLabelMap[key0];
+        } else {
+          keyLabelMap.getValueAsync(key0)
+          .then((String value) {
+            point.label = value;
+          });
+        }
+      }
+      needLabelUpdate = true; // sort
     }
     point.calculate(valueNum, valueString, date);
-    needLabelUpdate = true;
   } // calculate
 
   /**
    * Update Labels + sort if required
    */
   void updateLabels() {
-    if (needLabelUpdate) {
+    if (needLabelUpdate && byValueList.isNotEmpty) {
+      bool labelMissing = false;
       for (StatPoint point in byValueList) {
         if (point.key.isEmpty)
           point.label = "-${statByNone()}-";
         else {
-          if (keyLabelMap == null || keyLabelMap.isEmpty)
-            point.label = point.key;
+          if (keyLabelMap == null) {
+            point.label = KeyValueMap.keyNotFound(point.key);
+            labelMissing = true;
+          }
           else {
-            String label = keyLabelMap[point.key];
-            if (label == null || label.isEmpty) {
-              point.label = "<${point.key}>";
-            } else {
-              point.label = label;
+            point.label = keyLabelMap[point.key];
+            if (!keyLabelMap.containsKey(point.key)) {
+              keyLabelMap.getValueAsync(point.key)
+              .then((String value) {
+                point.label = value;
+              });
+              labelMissing = true;
             }
           }
         }
@@ -97,7 +109,8 @@ class StatBy
       byValueList.sort((StatPoint one, StatPoint two) {
         return one.label.compareTo(two.label);
       });
-      needLabelUpdate = keyLabelMap == null || keyLabelMap.isEmpty;
+      _log.fine("updateLabels ${key} keyLabelMap=${keyLabelMap} labelMissing=${labelMissing}");
+      needLabelUpdate = labelMissing;
     }
   } // updateLabels
 
@@ -164,9 +177,8 @@ class StatBy
 
   /// Info
   String toString() {
-    String s = super.toString();
-    if (byValueList != null)
-      s += " byValueList=#${byValueList.length}";
+    String s = super.toString()
+      + " byValueList=#${byValueList.length} needLabelUpdate=${needLabelUpdate}";
     return s;
   }
 

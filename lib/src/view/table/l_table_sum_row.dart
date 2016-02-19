@@ -115,8 +115,10 @@ class LTableSumRow
         else if (DataTypeUtil.isRightAligned(dt))
           align = LTable.C_TEXT_RIGHT;
         //
-        if (DataTypeUtil.isNumber(dt)) {
+        if (DataTypeUtil.isNumber(dt) || dt == DataType.DURATIONHOUR) {
           value = calc.sum.toStringAsFixed(calc.decimalDigits);
+        } else if (dt == DataType.DURATION) {
+          value = calc.count.toString();
         } else {
           value = calc.count.toString();
         }

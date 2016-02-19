@@ -853,7 +853,7 @@ class LTable
   /// Set Group By Column - call display
   void set groupByColumnName (String newValue) {
     if (newValue != null
-      && (newValue.isEmpty || newValue == "-")) {
+        && (newValue.isEmpty || newValue == "-")) {
       newValue = null;
     }
     if (newValue == _groupByColumnName) {
