@@ -17,6 +17,18 @@ class NewWindow {
   static Uri get winUri {
     return ClientEnv.uriBase.replace(queryParameters: urlParameters);
   }
+  /// New Window URI with additional parameters
+  static Uri winUriWithParams(Map<String,String> params) {
+    Map<String,String> pp = new Map.from(urlParameters);
+    pp.addAll(params);
+    return ClientEnv.uriBase.replace(queryParameters: pp);
+  }
+  /// New Window URI with additional parameter
+  static Uri winUriWithParam(String key, String value) {
+    Map<String,String> pp = new Map.from(urlParameters);
+    pp[key] = value;
+    return ClientEnv.uriBase.replace(queryParameters: pp);
+  }
 
 
   /// new window
@@ -24,9 +36,12 @@ class NewWindow {
   /// top frameset
   static const String NAME_TOP = "_top";
 
-
+  /// new window button
   LButton button;
+  /// button element
   Element get element => button.element;
+  /// Window Options
+  final NewWindowOptions options = new NewWindowOptions();
 
   /**
    * New Window
@@ -34,7 +49,7 @@ class NewWindow {
   NewWindow({String idPrefix}) {
     button = new LButton.iconContainer("newWindow",
         new LIconUtility(LIconUtility.NEW_WINDOW),
-        newWindowText(), idPrefix:idPrefix);
+        newWindowOpen(), idPrefix:idPrefix);
     button.onClick.listen(onClick);
   } // NewButton
 
@@ -45,12 +60,14 @@ class NewWindow {
       evt.stopImmediatePropagation();
     }
     String url = winUri.toString();
-    String options = winOptions;
+    String optionInfo = options.toString();
     // _winBase =
-    window.open(url, winName, options);
+    window.open(url, winName, optionInfo);
+    if (PageSimple.instance != null) {
+      PageSimple.instance.setStatusInfo(newWindowOpened());
+    }
   }
   // WindowBase _winBase;
-
 
   String get winName => _winName;
   void set winName(String newValue) {
@@ -58,8 +75,30 @@ class NewWindow {
   }
   String _winName = NAME_BLANK;
 
+
+  static String newWindowOpen() => Intl.message("open in New Window", name: "newWindowOpen");
+  static String newWindowOpened() => Intl.message("opened in New Window", name: "newWindowOpened");
+
+} // NewWindow
+
+
+/**
+ * New Window Options
+ */
+class NewWindowOptions {
+
+  int winWidth;
+  int winHeight;
+  int winTop;
+  int winLeft;
+  bool winMenubar = true;
+  bool winToolbar = true;
+  bool winLocation = true;
+  bool winResizable = true;
+  bool winStatus = true;
+
   /// window options
-  String get winOptions {
+  String toString() {
     _options = null;
     if (winWidth != null && winWidth > 0)
       _addOption("width=${winWidth}");
@@ -94,18 +133,4 @@ class NewWindow {
   }
   String _options = null;
 
-  int winWidth;
-  int winHeight;
-  int winTop;
-  int winLeft;
-  bool winMenubar = true;
-  bool winToolbar = true;
-  bool winLocation = true;
-  bool winResizable = true;
-  bool winStatus = true;
-
-
-  static String newWindowText() => Intl.message("open in New Window", name: "newWindowText");
-
-
-} // NewWindow
+} // NewWindowOptions
