@@ -37,18 +37,44 @@ class AppsSettingsCache
     element.append(table.element);
     element.append(_buttonDiv);
 
+    _cacheUi(table);
+    table.addRowHdrData("", "");
     _cacheKVM(table);
     table.addRowHdrData("", "");
     _cacheFk(table);
   } // showingNow
 
+  /// UI
+  void _cacheUi(LTable table) {
+    UiService uiService = UiService.instance;
+    if (uiService == null) {
+      table.addRowDataList([new Element.tag("strong")..text = "No Ui Service", null, null]);
+    } else {
+      table.addRowDataList([new Element.tag("strong")..text = "Ui Service", null, null]);
+
+      if (_showDetails) {
+        table.addRowHdrDataList("Ui", [uiService._uiList.length, null]);
+        for (UI ui in uiService._uiList) {
+          table.addRowDataList([null, ui.name, ui.tableName]);
+        }
+        table.addRowHdrDataList("Table", [uiService._tableList.length, null]);
+        for (DTable dtable in uiService._tableList) {
+          table.addRowDataList([null, dtable.name, dtable.columnList.length]);
+        }
+      } else {
+        table.addRowHdrDataList("Ui", [uiService._uiList.length, null]);
+        table.addRowHdrDataList("Table", [uiService._tableList.length, null]);
+      }
+    }
+  } // cacheUi
+
   /// FK
   void _cacheFk(LTable table) {
     FkService fkService = FkService.instance;
     if (fkService == null) {
-      table.addRowDataList([new Element.tag("strong")..text = "No FkService", null, null]);
+      table.addRowDataList([new Element.tag("strong")..text = "No Fk Service", null, null]);
     } else {
-      table.addRowDataList([new Element.tag("strong")..text = "FkService", null, null]);
+      table.addRowDataList([new Element.tag("strong")..text = "Fk Service", null, null]);
 
       table.addRowHdrDataList("Active Requests", [fkService._activeRequests.length, null]);
       table.addRowHdrDataList("Pending Requests", [fkService._pendingRequests.length, null]);

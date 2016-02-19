@@ -257,9 +257,11 @@ class LInputNumber
   /// Decimal Digits
   void set decimalDigits (int newValue) {
     if (newValue > 0) {
+      if (newValue > 15)
+        newValue = 15;
       input.classes.add("decimal");
-      numberFormat = new NumberFormat("#,###,##0." + "0000000000000".substring(0,newValue), ClientEnv.localeName);
-      input.step = "0." + "0000000000000".substring(1,newValue) + "1";
+      numberFormat = new NumberFormat("#,###,##0." + "000000000000000".substring(0,newValue), ClientEnv.localeName);
+      input.step = "0." + "000000000000000".substring(1,newValue) + "1";
     } else {
       numberFormat = new NumberFormat("#,###,##0", ClientEnv.localeName);
       input.step = "1";

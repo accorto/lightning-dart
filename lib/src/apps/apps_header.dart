@@ -7,7 +7,7 @@
 part of lightning_ctrl;
 
 /**
- * Page Main Header - Logo (for the moment)
+ * Page Main Header - Logo+Title (for the moment)
  */
 class AppsHeader extends LComponent {
 
@@ -23,15 +23,17 @@ class AppsHeader extends LComponent {
 
     // Logo
     DivElement left = new DivElement()
-      ..classes.add(LGrid.C_COL);
+      ..classes.addAll([LGrid.C_COL, LGrid.C_GROW_NONE]);
     element.append(left);
     if (apps.icon != null) {
       left.append(apps.icon.element);
     }
     else if (apps.imageSrc != null) {
+      int height = 30;
+      if (apps.labelSub != null && apps.labelSub.isNotEmpty)
+        height = 52;
       ImageElement img = new ImageElement(src: apps.imageSrc)
-        ..style.maxHeight = "52px" // same height as Title+Sub
-        ..style.maxWidth = "300px"
+        ..style.height = "${height}px" // same height as Title(+Sub)
         ..alt = apps.label
         ..title = apps.label;
       left.append(img);
@@ -47,7 +49,7 @@ class AppsHeader extends LComponent {
       ..text = apps.label;
     center.append(h1);
     document.title = apps.label;
-    if (apps.labelSub != null) {
+    if (apps.labelSub != null && apps.labelSub.isNotEmpty) {
       DivElement sub = new DivElement()
         ..id = "a-label-sub"
         ..classes.add(LText.C_TEXT_HEADING__SMALL)
