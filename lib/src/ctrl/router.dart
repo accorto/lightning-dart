@@ -47,9 +47,10 @@ class Router {
     decode(String s) => Uri.decodeComponent(s.replaceAll('+', ' '));
 
     for (Match match in search.allMatches(query)) {
-      result[decode(match.group(1))] = decode(match.group(2));
+      String key = decode(match.group(1));
+      String value = decode(match.group(2));
+      result[key] = value;
     }
-
     return result;
   } //queryParams
 
@@ -76,6 +77,8 @@ class Router {
   final RouterPath routerPath = new RouterPath();
   /// initial window.location.href
   String initialHref;
+  /// initial path list
+  List<String> initialPathList = new List<String>();
 
   // Routes
   final List<Route> _routeList = new List<Route>();
@@ -110,12 +113,22 @@ class Router {
     // href=http://bizbase.s3-website-us-east-1.amazonaws.com/demo.html?a=b#c/d pathname=/demo.html search=?a=b hash=#c/d
     // baseUrl=http://bizbase.s3-website-us-east-1.amazonaws.com/ paths=[c, d] params={a: b}
 
+    // base url e.g. http://localhost:63342/
     _baseUrl = href;
     int index = _baseUrl.indexOf("/", 10);
-    if (index != -1)
-      _baseUrl = _baseUrl.substring(0, index+1);
-    else
+    if (index != -1) {
+      _baseUrl = _baseUrl.substring(0, index + 1);
+    } else {
       _baseUrl += '/';
+    }
+
+    // initial path
+    String initialPath = useHash ? hash : "${path}${hash}";
+    if (initialPath != null && initialPath.isNotEmpty) {
+      initialPath = cleanPath(initialPath, addPrefix: false);
+      if (initialPath.isNotEmpty)
+        initialPathList.add(initialPath);
+    }
 
     // Parameters
     queryParams = queryParamsFrom(search);
@@ -170,8 +183,9 @@ class Router {
   /**
    * Start listening (call route(null) to go to url)
    * - Called By AppsMain.set(AppsCtrl)
+   * - calls route
    */
-  RouterPath start() {
+  bool start() {
     if (_hashChangeSubscription == null) {
       _hashChangeSubscription = window.onHashChange.listen((_) {
         String path = window.location.hash;
@@ -193,18 +207,7 @@ class Router {
         }
       });
     }
-
-    // Router Path from URL
-    List<String> pp = paths;
-    if (pp.isNotEmpty) {
-      String key = pp.first;
-      Route route = findRouteWithPath(key);
-      if (route != null) {
-        routerPath.setRoutePath(route, paths: pp);
-      }
-    }
-    _log.info("start path=${routerPath.toPath()}");
-    return routerPath;
+    return route(null);
   } // start
 
   /// (Server) base URL ending with /
@@ -290,13 +293,27 @@ class Router {
   }
 
   /**
-   * Find route with matching [path] or default - return false if not routed or null if "stay there"
+   * Find route with matching [path] initial path or default
+   * - return false if not routed or null if "stay there"
    */
   bool route(final String path) {
     String thePath = path;
-    // Path
-    if (path == null)
-      thePath = useHash ? window.location.hash : "${window.location.pathname}${window.location.hash}";
+    // Path from initial list
+    if (path == null && initialPathList.isNotEmpty) {
+      thePath = initialPathList.removeLast();
+      List<String> pathList = RouterPath.getPathElements(thePath);
+      for (String path in RouterPath.getPathElements(thePath)) {
+        Route route = findRouteWithPath(path);
+        if (route == null) {
+          pathList.removeAt(0);
+        } else {
+          routerPath.setRoutePath(route, paths: pathList);
+          bool result = go();
+          if (result == null || result)
+            return result;
+        }
+      }
+    }
     thePath = cleanPath(thePath, addPrefix: false);
     // find route
     if (thePath.isNotEmpty) {
@@ -318,19 +335,6 @@ class Router {
   } // route
 
   /**
-   * Clean path (no /#)
-   */
-  String cleanPath(String path, {bool addPrefix: true}) {
-    String thePath = path;
-    while (thePath.startsWith(cleanPathPrefix)) // /#
-      thePath = thePath.substring(1);
-    if (addPrefix) {
-      return (useHash ? "#/" : "/") + thePath;
-    }
-    return thePath;
-  }
-
-  /**
    * GoTo route [routeName] with optional [value] and [map]
    * - return false if not found or rejected or full if "stay there"
    */
@@ -348,21 +352,20 @@ class Router {
    * Go to [routerPath] - return false if rejected or null if "stay there"
    */
   bool go () {
-    Route theRoute = routerPath.route;
     String thePath = routerPath.toPath();
-    if (theRoute.handler == null) {
+    if (routerPath.handler == null) {
       if (fallbackHandler == null) {
-        _log.log(Level.CONFIG, "go NoHandler for ${theRoute} path=${thePath}");
+        _log.log(Level.CONFIG, "go NoHandler for ${routerPath.route} path=${thePath}");
         return false;
       }
-      theRoute.handler = fallbackHandler;
-      _log.log(Level.CONFIG, "go FallbackHandler for ${theRoute} path=${thePath}");
+      routerPath.route.handler = fallbackHandler;
+      _log.log(Level.CONFIG, "go FallbackHandler for ${routerPath.route} path=${thePath}");
     } else {
-      _log.log(Level.CONFIG, "go ${theRoute} path=${thePath}");
+      _log.log(Level.CONFIG, "go ${routerPath.route} path=${thePath}");
     }
-    bool result = theRoute.handler(routerPath); // might be null
+    bool result = routerPath.handler(routerPath); // might return null
     if (result != null && result) {
-      updateWindow(thePath, theRoute.title);
+      updateWindow(thePath, routerPath.title);
     //  GoogleAnalytics.gaSendPageview(theRoute.path);
       //
       DateTime now = new DateTime.now();
@@ -381,11 +384,30 @@ class Router {
     for (Route r in _routeList) {
       if (name == r.name) {
         updateWindow(r.path, r.title, replace: replace, clean: clean);
+        initialPathList.add(r.path);
         return;
       }
     }
     _log.log(Level.CONFIG, "set ${name} not found");
   } // set
+
+  /**
+   * Clean path (no /#)
+   */
+  String cleanPath(String path, {bool addPrefix: true}) {
+    String thePath = path;
+    if (thePath == null || thePath.isEmpty) {
+      thePath = "";
+    } else {
+      while (thePath.startsWith(cleanPathPrefix)) { // /#
+        thePath = thePath.substring(1);
+      }
+    }
+    if (addPrefix) {
+      return (useHash ? "#/" : "/") + thePath;
+    }
+    return thePath;
+  } // cleanPath
 
   /**
    * Update Window directly
@@ -454,7 +476,7 @@ class Router {
 
   String toString() {
     return "Router useHash=${useHash} initialHref=${initialHref} "
-        " baseUrl=${_baseUrl} queryParam=${queryParams}"
+        " baseUrl=${_baseUrl} queryParams=${queryParams}"
         " currentPath=${_currentPath}" // currentPathTime=${_currentPathTime}""
         " routes=#${_routeList.length}"
         " [${routerPath}]";
@@ -527,201 +549,3 @@ class Router {
   }
 
 } // Router
-
-
-
-/** ** **
- * The Route
- */
-class Route {
-
-  /// Route Name
-  static final String NAME_DEFAULT = "default";
-  static const String NAME_LOGIN = "login";
-
-  /// name
-  String name;
-  /// path/key
-  String path;
-  /// optional title
-  String title;
-  /// handler
-  RouteEventHandler handler;
-  /// additional keys
-  List<String> keys;
-  /// keys required
-  bool keysRequired = false;
-
-  /**
-   * Route with [name], [path] (= key e.g. menu - without /)
-   * and [handler] with optional [title]
-   */
-  Route(String this.name, String this.path, String this.title, RouteEventHandler this.handler) {
-  }
-
-  @override
-  String toString() {
-    return "Route=${name}[path=${path} title=${title}]";
-  }
-} // Route
-
-
-
-/** ** **
- * List of hierarchy key/value elements
- * e.g. /key/value/key2/value2
- * where the first key is the route path
- */
-class RouterPath {
-
-  /// get Path Elements
-  static List<String> getPathElements(String pathHash) {
-    List<String> list = new List<String>();
-    if (pathHash == null || pathHash.isEmpty)
-      return list;
-    pathHash = pathHash.replaceAll("#", "/");
-    int index = pathHash.indexOf(".html");
-    if (index != -1) {
-      int index2 = pathHash.lastIndexOf("/", index);
-      if (index2 != null)
-        pathHash = pathHash.substring(0, index2+1) + pathHash.substring(index+5);
-    }
-    List<String> values = pathHash.split("/");
-    // remove empty
-    for (String path in values) {
-      if (path.isNotEmpty) {
-        list.add(path);
-      }
-    }
-    return list;
-  } // getPathElements
-
-
-  Route _route;
-  String _value;
-  Map<String,String> map;
-
-  /// The Route
-  Route get route => _route;
-
-  /**
-   * (Re) Set [route] path with optional [value] and [map]
-   */
-  void setRoute(Route route, {String value, Map<String,String> map}) {
-    _route = route;
-    _value = value;
-    this.map = map;
-  }
-
-  /**
-   * (Re) Set [route] path from [path] or [paths]
-   */
-  void setRoutePath(Route route, {String path, List<String> paths}) {
-    if (paths == null) {
-      paths = getPathElements(path);
-    }
-    String value = null;
-    if (route.path.isEmpty) {
-      value = paths.join("/");
-    } else {
-      if (paths.length > 1)
-        value = paths[1];
-    }
-    setRoute(route, value: value);
-    String key = null;
-    for (int i = 2; i < paths.length; i++) {
-      String p = paths[i];
-      if (key == null)
-        key = p;
-      else {
-        addPath(key, p);
-        key = null;
-      }
-    }
-    if (key != null) {
-      addPath(key, "");
-    }
-  } // setRouterPath
-
-  /**
-   * Add Path element
-   */
-  void addPath(String key, String value) {
-    if (key == null || _route == null)
-      return;
-    if (key == _route.path) {
-      _value = value;
-    } else {
-      if (map == null)
-        map = new Map<String,String>();
-      if (value == null || value.isEmpty)
-        map.remove(key);
-      else
-        map[key] = value;
-    }
-  } // addPath
-
-  /**
-   * Get Value for [key] (path element)
-   */
-  String get(String key) {
-    if (key == null || _route == null)
-      return null;
-    if (key == _route.path)
-      return _value;
-    if (map != null)
-      return map[key];
-    return null;
-  } // get
-
-
-  String get routeName => _route == null ? null : _route.name;
-  String get routePath => _route == null ? null : _route.path;
-
-  /**
-   * Get full Path
-   */
-  String toPath() {
-    StringBuffer sb = new StringBuffer();
-    if (_route != null) {
-      sb.write(_route.path);
-      if (_value != null && _value.isNotEmpty) {
-        sb.write("/${_value}");
-        _toPath(sb);
-      } else if (map != null && map.isNotEmpty) {
-        sb.write("/");
-        _toPath(sb);
-      }
-    }
-    return sb.toString();
-  } // toPath
-
-  /// add map to path ordered by route keys (if exist)
-  void _toPath(StringBuffer sb) {
-    if (map == null || map.isEmpty)
-      return;
-    if (_route.keys != null) {
-      for (String key in _route.keys) {
-        String value = map[key];
-        if (value == null || value.isEmpty) {
-          if (_route.keysRequired)
-            return;
-        } else {
-          sb.write("/${key}/${value}");
-        }
-      }
-    }
-    // additional unordered keys
-    map.forEach((String key, String value){
-      if (value != null && value.isNotEmpty) {
-        if (_route.keys == null || !_route.keys.contains(key))
-          sb.write("/${key}/${value}");
-      }
-    });
-  } // toPath
-
-  String toString() {
-    return "RouterPath [${_route}] value=${_value} map=${map}";
-  }
-
-} // RouterPath

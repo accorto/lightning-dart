@@ -30,6 +30,9 @@ abstract class AppsPage
   final LIcon icon;
   final String externalHref;
 
+  /// current router path
+  RouterPath routerPath;
+
   /**
    * Page element with Menu
    *

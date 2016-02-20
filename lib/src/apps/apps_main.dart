@@ -117,7 +117,6 @@ class AppsMain
     loggedIn = ClientEnv.session != null;
     //
     LightningCtrl.router.start();
-    LightningCtrl.router.route(null);
   } // set
   List<StreamSubscription<MouseEvent>> _subscriptions = new List<StreamSubscription<MouseEvent>>();
 
@@ -171,6 +170,7 @@ class AppsMain
       showError(appsMainShowPrevent(), page.label, error);
       return null;
     }
+    page.routerPath = path;
     if (page.internal) {
       _setPage(page);
       return true;

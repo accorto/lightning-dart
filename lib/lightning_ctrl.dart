@@ -75,7 +75,9 @@ part 'src/ctrl/record_ctrl_related.dart';
 part 'src/ctrl/record_ctrl_related_item.dart';
 
 part 'src/ctrl/remote_logger.dart';
+part 'src/ctrl/route.dart';
 part 'src/ctrl/router.dart';
+part 'src/ctrl/router_path.dart';
 part 'src/ctrl/service.dart';
 part 'src/ctrl/service_analytics.dart';
 part 'src/ctrl/service_tracker.dart';
