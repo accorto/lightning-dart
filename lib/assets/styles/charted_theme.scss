@@ -48,6 +48,7 @@
 // 2rd level
 .chart-host {
   display: block;
+//min-width: 300px;
 }
 .chart-host-h {
   display: block;
@@ -60,6 +61,7 @@
 // 2rd level
 .chart-legend-host {
   display: block;
+  min-width: 150px;
   overflow-y: auto;
 }
 .chart-legend-host-h {
