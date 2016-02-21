@@ -24,8 +24,11 @@ class EditorUtil {
       {String idPrefix,
       DataRecord data, DEntry entry,
       bool isAlternativeDisplay:false,
-      bool isFilter:false}) {
-    bool html5 = Settings.getAsBool(Settings.NATIVE_HTML5, defaultValue: ClientEnv.isMobileUserAgent);
+      bool isFilter:false,
+      bool html5}) {
+    if (html5 == null) {
+      html5 = Settings.getAsBool(Settings.NATIVE_HTML5, defaultValue: ClientEnv.isMobileUserAgent);
+    }
     LEditor editor = null;
     if (dataColumn != null) {
       name = dataColumn.name;
@@ -211,7 +214,8 @@ class EditorUtil {
   static LEditor createFromDataType(DataType dataType,
       {String columnName:"internal", tableName:"internal", String label,
       bool inGrid:true, String idPrefix,
-      DataRecord data, DEntry entry}) {
+      DataRecord data, DEntry entry,
+      bool html5}) {
     DColumn column = new DColumn()
       ..name = columnName
       ..dataType = dataType;
@@ -221,8 +225,9 @@ class EditorUtil {
       ..name = tableName
       ..columnList.add(column);
     DataColumn dataColumn = new DataColumn(table, column, null, null);
-    return createFromColumn(columnName, dataColumn, inGrid, idPrefix:idPrefix, data:data, entry:entry);
-  }
+    return createFromColumn(columnName, dataColumn, inGrid,
+        idPrefix:idPrefix, data:data, entry:entry, html5:html5);
+  } //createFromDataType
 
   /// Render Value
   static Future<String> render (DataColumn dataColumn, String value) {

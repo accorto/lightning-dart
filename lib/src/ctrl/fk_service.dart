@@ -24,11 +24,13 @@ class FkService
   final List<FkServiceRequest> _activeRequests = new List<FkServiceRequest>();
   List<FkServiceRequest> _pendingRequests = new List<FkServiceRequest>();
 
-  /// The Cache: tableName!id
-  final Map<String, DFK> _map = new Map<String, DFK>();
-  /// Cache Complete FKs <tableName, List>
-  final Map<String, List<DFK>> _tableComplete = new Map<String, List<DFK>>();
+  // The Cache: String key = "${record.tableName}${URV_ID}${record.recordId}";
+  //final Map<String, DFK> _map = new Map<String, DFK>();
 
+  /// Table Cache FKs <tableName, List>
+  final Map<String, List<DFK>> _tableFkMap = new Map<String, List<DFK>>();
+  /// List of complete tables
+  final Set<String> tableComplete = new Set<String>();
 
   /// Data Request Server Uri
   final String dataUri;
@@ -47,7 +49,7 @@ class FkService
   /// Get Value for id [key] of [fkTableName]
   Future<String> onKeyValueValue(String fkTableName, String key) {
     Completer<String> completer = new Completer<String>();
-    List<DFK> list = _tableComplete[fkTableName];
+    List<DFK> list = _tableFkMap[fkTableName];
     if (list == null) {
       getFkFuture(fkTableName, key)
       .then((DFK fk){
@@ -58,12 +60,18 @@ class FkService
       });
     } else {
       for (DFK fk in list) {
-        if (fk.urv == key) {
+        if (fk.id == key) {
           completer.complete(fk.drv);
           return completer.future;
         }
       }
-      completer.complete(KeyValueMap.keyNotFoundOnServer(key));
+      getFkFuture(fkTableName, key)
+      .then((DFK fk){
+        completer.complete(fk.drv);
+      })
+      .catchError((error){
+        completer.complete(KeyValueMap.keyNotFoundOnServer(key));
+      });
     }
     return completer.future;
   }
@@ -71,7 +79,7 @@ class FkService
   /// Fill Key Value Map
   void onKeyValueFill(KeyValueMap keyValueMap) {
     String fkTableName = keyValueMap.name;
-    List<DFK> list = _tableComplete[fkTableName];
+    List<DFK> list = _tableFkMap[fkTableName];
     if (list == null) {
       getFkListFuture(fkTableName, null, null, null)
       .then((List<DFK> list) {
@@ -82,21 +90,19 @@ class FkService
         _log.warning("onKeyValueFill ${fkTableName}", error, stackTrace);
       });
     } else {
-      keyValueMap.loadFks(list, true);
+      keyValueMap.loadFks(list, tableComplete.contains(fkTableName));
       _log.config("onKeyValueFill ${fkTableName} #${list.length} (cache)");
     }
   } // onKeyValueFill
 
-
-
   /**
-   * Get complete FK List from Cache direct
+   * Get FK List from Cache direct
    */
   List<DFK> getFkList(fkTableName, String restrictionSql) {
-    if (restrictionSql == null || restrictionSql.isEmpty) {
-      return _tableComplete[fkTableName]; // map
+    if (restrictionSql != null && restrictionSql.isNotEmpty) {
+      _tableFkMap["${fkTableName}_${restrictionSql}"];
     }
-    return _tableComplete["${fkTableName}_${restrictionSql}"]; // map
+    return _tableFkMap[fkTableName];
   }
 
   /**
@@ -129,15 +135,21 @@ class FkService
 
   /// is the table complete
   bool isComplete(String tableName) {
-    return _tableComplete.containsKey(tableName);
+    return tableComplete.contains(tableName);
   }
 
   /**
    * Get FK from Cache direct
    */
   DFK getFk(fkTableName, id) {
-    String key = "${fkTableName}${URV_ID}${id}";
-    return _map[key];
+    List<DFK> list = _tableFkMap[fkTableName];
+    if (list != null) {
+      for (DFK fk in list) {
+        if (fk.id == id)
+          return fk;
+      }
+    }
+    return null;
   }
 
   /**
@@ -147,9 +159,8 @@ class FkService
       String id,
       {String parentColumnName, String parentValue}) {
     Completer<DFK> completer = new Completer<DFK>();
-    // try cache (again)
-    String key = "${fkTableName}${URV_ID}${id}";
-    DFK fk = _map[key];
+    // try cache
+    DFK fk = getFk(fkTableName, id);
     if (fk != null) {
       completer.complete(fk);
     } else if (fkTableName == null || fkTableName.isEmpty) {
@@ -179,24 +190,56 @@ class FkService
   /**
    * Add records to Cache
    */
-  void addRecords (List<DRecord> records) {
-    for (DRecord record in records)
-      addRecord(record);
-  }
+  void addRecords (List<DRecord> records, bool allSameTable) {
+    if (allSameTable && records.isNotEmpty) {
+      String tableName = records.first.tableName;
+      List<DFK> fkList = _tableFkMap[tableName];
+      if (fkList == null) {
+        fkList = new List<DFK>();
+        _tableFkMap[tableName] = fkList;
+      }
+      if (fkList.isEmpty) {
+        for (DRecord record in records) {
+          DFK fk = DataRecord.createFk(record);
+          fkList.add(fk);
+        }
+      } else {
+        for (DRecord record in records) {
+         addRecord(record, fkList: fkList);
+        }
+      }
+    } else {
+      for (DRecord record in records) {
+        addRecord(record);
+      }
+    }
+  } // addRecords
 
   /**
    * Add/update to Cache
    */
-  DFK addRecord (DRecord record) {
+  DFK addRecord (DRecord record, {List<DFK> fkList}) {
     if (record.recordId.isEmpty)
       return null;
-    DFK fk = new DFK()
-      ..tableName = record.tableName
-      ..id = record.recordId
-      ..urv = record.urv
-      ..drv = record.drv;
-    String key = "${record.tableName}${URV_ID}${record.recordId}";
-    _map[key] = fk;
+    DFK fk = DataRecord.createFk(record);
+    // get list
+    if (fkList == null) {
+      String tableName = record.tableName;
+      fkList = _tableFkMap[tableName];
+      if (fkList == null) {
+        fkList = new List<DFK>();
+        _tableFkMap[tableName] = fkList;
+      }
+    }
+    // remove old
+    String id = record.recordId;
+    for (int i = 0; i < fkList.length; i++) {
+      if (fkList[i].id == id) {
+        fkList.removeAt(i);
+        break;
+      }
+    }
+    fkList.add(fk);
     return fk;
   } // addRecord
 
@@ -206,10 +249,20 @@ class FkService
   DFK removeRecord (DRecord record) {
     if (record.recordId.isEmpty)
       return null;
-    _tableComplete.remove(record.tableName);
-    // TODO remove tableName_xx
-    String key = "${record.tableName}${URV_ID}${record.recordId}";
-    return _map.remove(key);
+
+    String tableName = record.tableName;
+    List<DFK> fkList = _tableFkMap[tableName];
+    if (fkList != null) {
+      String id = record.recordId;
+      for (int i = 0; i < fkList.length; i++) {
+        DFK fk = fkList[i];
+        if (fk.id == id) {
+          fkList.removeAt(i);
+          return fk;
+        }
+      }
+    }
+    return null;
   } // removeRecord
 
 
@@ -277,25 +330,37 @@ class FkService
    */
   void _updateCache(FkServiceRequest sr, List<DFK> fkList,
       bool fkComplete, String errorMessage) {
-    // update cache
-    for (DFK fk in fkList) {
-      if (!fk.hasTableName())
-        fk.tableName = sr.tableName;
-      String key = "${sr.tableName}${URV_ID}${fk.id}";
-      _map[key] = fk;
-    }
-    // FK complete
-    if (fkComplete) {
-      if (sr.restrictionSql == null || sr.restrictionSql.isEmpty) {
-        _tableComplete[sr.tableName] = fkList; // map
+
+    // update Cache
+    if (errorMessage == null) {
+      String tableName = sr.tableName;
+      List<DFK> cacheList = _tableFkMap[tableName];
+      if (cacheList == null) {
+        _tableFkMap[tableName] = fkList;
       } else {
-        _tableComplete["${sr.tableName}_${sr.restrictionSql}"] = fkList; // map
+        for (DFK fk in fkList) {
+          String id = fk.id;
+          for (int i = 0; i < cacheList.length; i++) {
+            DFK fk = cacheList[i];
+            if (fk.id == id) {
+              fkList.removeAt(i);
+              break;
+            }
+          }
+          cacheList.add(fk);
+        }
       }
-    }
+      // FK complete
+      if (sr.restrictionSql != null && sr.restrictionSql.isNotEmpty) {
+        _tableFkMap["${tableName}_${sr.restrictionSql}"] = fkList;
+      } else if (fkComplete) {
+        tableComplete.add(sr.tableName);
+      }
+    } // update cache
 
     // complete request
     if (sr.completer != null) {
-      DFK fk = getFk(sr.tableName, sr.id);
+      DFK fk = getFk(sr.tableName, sr.id); // cach updated cache
       if (fk == null) {
         fk = new DFK()
           ..id = sr.id
@@ -382,7 +447,7 @@ class FkService
 
 
   /// FK Status Info
-  String get statusInfo => "cache=${_map.length} requests active=${_activeRequests.length} pending=${_pendingRequests.length}";
+  String get statusInfo => "requests active=${_activeRequests.length} pending=${_pendingRequests.length}";
   int get activeRequestCount => _activeRequests.length;
   List<String> get _activeRequestNames {
     List<String> names = new List<String>();
@@ -402,36 +467,24 @@ class FkService
   }
   String get pendingRequestInfo => "${_pendingRequests.length} ${_pendingRequestNames}";
 
-  /// FK Entry Map length
-  int get cacheLength => _map.length;
   /// Cached Table Length
-  int get cacheTableLength => _tableComplete.length;
+  //int get cacheTableLength => _tableComplete.length;
   /// Cached Tables count and details
-  String get cacheTableInfo {
-    return "${_tableComplete.length} ${cacheTableNames}";
-  }
+  //String get cacheTableInfo {
+  //  return "${_tableComplete.length} ${cacheTableNames}";
+  // }
+  /*
   List<String> get cacheTableNames {
     List<String> names = new List<String>();
-    _tableComplete.forEach((String name, List<DFK> fks) {
+    _tableFkMap.forEach((String name, List<DFK> fks) {
       names.add("${name}(${fks.length})");
     });
     names.sort((String one, String two) {
       return one.compareTo(two);
     });
     return names;
-  }
-
-/* Add Tab with Service Info
-  static void addServiceFkTab(BsTab tab) {
-    DivElement content = tab.addTab("srvFk", "Service FK", iconClass: EditorFk.ICON);
-    MiniTable mt = new MiniTable(responsive: true);
-    content.append(mt.element);
-
-    mt.addRowHdrDatas("Active Requests", [_activeRequests.length, activeRequestNames]);
-    mt.addRowHdrDatas("Pending Requests", [_pendingRequests.length, pendingRequestNames]);
-    mt.addRowHdrData("Cache Entities", cacheLength);
-    mt.addRowHdrDatas("Cache Tables", [_tableComplete.length, cacheTableNames]);
   } */
+
 
 
 } // FkService

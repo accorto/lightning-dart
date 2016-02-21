@@ -78,8 +78,7 @@ class AppsSettingsCache
 
       table.addRowHdrDataList("Active Requests", [fkService._activeRequests.length, null]);
       table.addRowHdrDataList("Pending Requests", [fkService._pendingRequests.length, null]);
-      table.addRowHdrDataList("Complete Tables", [fkService._tableComplete.length, null]);
-      table.addRowHdrDataList("Entries", [fkService._map.length, null]);
+      table.addRowHdrDataList("Tables", [fkService._tableFkMap.length, null]);
 
       if (_showDetails) {
         table.addRowHdrDataList("Active Requests", [fkService._activeRequests.length, null]);
@@ -102,9 +101,10 @@ class AppsSettingsCache
           table.addRowDataList([req.trxNo, req.compareString, null]);
         }
 
-        table.addRowHdrDataList("Complete Tables", [fkService._tableComplete.length, null]);
-        fkService._tableComplete.forEach((String name, List<DFK> list) {
-          table.addRowDataList(["- ${name}", list.length, null]);
+        table.addRowHdrDataList("Tables", [fkService._tableFkMap.length, null]);
+        fkService._tableFkMap.forEach((String name, List<DFK> list) {
+          table.addRowDataList(["- ${name}", list.length,
+            fkService.isComplete(name) ? "conplete" : "-"]);
           for (DFK fk in list) {
             table.addRowDataList([null, fk.urv, fk.drv]);
           }

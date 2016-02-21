@@ -628,7 +628,6 @@ class DataUtil {
     return fkTableName;
   } // getFkTableName
 
-
   /**
    * Get Column with [columnName] from [table]
    */

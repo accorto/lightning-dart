@@ -177,6 +177,29 @@ class DataRecord {
     return null;
   } // columnValueFk
 
+  /// Create FK from Record
+  static DFK createFk(DRecord record, {DTable table}) {
+    DFK fk = new DFK()
+      ..tableName = record.tableName
+      ..id = record.recordId
+      ..urv = record.urv
+      ..drv = record.drv;
+    /// add drv/urv entries
+    if (table != null) {
+      for (DColumn col in table.columnList) {
+        if ((col.hasUniqueSeqNo() && col.uniqueSeqNo > 0)
+            || (col.hasDisplaySeqNo() && col.displaySeqNo > 0)) {
+          for (DEntry entry in record.entryList) {
+            if (col.name == entry.columnName) {
+              fk.entryList.add(entry);
+              break;
+            }
+          }
+        }
+      }
+    }
+    return fk;
+  } // createFk
 
   /**
    * Get value (original) of entry - if [returnEmpty] returns "" for null
