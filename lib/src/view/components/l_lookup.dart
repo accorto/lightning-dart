@@ -452,8 +452,11 @@ class LLookup
       } else {
         showDropdown = false;
       }
-    } else if (kc == KeyCode.ENTER) {
+      onInputChange(evt);
+    } else if (kc == KeyCode.ENTER || kc == KeyCode.TAB) {
       lookupUpdateList(false, true);
+      onInputChange(evt);
+      focusNextInput();
     } else {
       lookupUpdateList(false, false);
     }
