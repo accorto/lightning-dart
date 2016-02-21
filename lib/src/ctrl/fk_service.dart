@@ -328,31 +328,31 @@ class FkService
   /**
    * Update Cache - callback from submit
    */
-  void _updateCache(FkServiceRequest sr, List<DFK> fkList,
+  void _updateCache(FkServiceRequest sr, List<DFK> newFkList,
       bool fkComplete, String errorMessage) {
 
     // update Cache
     if (errorMessage == null) {
       String tableName = sr.tableName;
-      List<DFK> cacheList = _tableFkMap[tableName];
-      if (cacheList == null) {
-        _tableFkMap[tableName] = fkList;
+      List<DFK> fkList = _tableFkMap[tableName];
+      if (fkList == null) {
+        _tableFkMap[tableName] = newFkList;
       } else {
-        for (DFK fk in fkList) {
+        for (DFK fk in newFkList) {
           String id = fk.id;
-          for (int i = 0; i < cacheList.length; i++) {
-            DFK fk = cacheList[i];
+          for (int i = 0; i < fkList.length; i++) {
+            DFK fk = fkList[i];
             if (fk.id == id) {
               fkList.removeAt(i);
               break;
             }
           }
-          cacheList.add(fk);
+          fkList.add(fk);
         }
       }
       // FK complete
       if (sr.restrictionSql != null && sr.restrictionSql.isNotEmpty) {
-        _tableFkMap["${tableName}_${sr.restrictionSql}"] = fkList;
+        _tableFkMap["${tableName}_${sr.restrictionSql}"] = newFkList;
       } else if (fkComplete) {
         tableComplete.add(sr.tableName);
       }
@@ -370,11 +370,11 @@ class FkService
       sr.completer.complete(fk);
     }
     if (sr.completerList != null) {
-      sr.completerList.complete(fkList);
+      sr.completerList.complete(newFkList);
     }
     _activeRequests.remove(sr);
-    _log.config("updateCache ${sr.compareString} #${fkList.length} complete=${fkComplete}");
-    _checkSimilarRequests(sr, fkList, errorMessage);
+    _log.config("updateCache ${sr.compareString} #${newFkList.length} complete=${fkComplete}");
+    _checkSimilarRequests(sr, newFkList, errorMessage);
   } // updateCache
 
   /// Check similar requests for completed [sr]
