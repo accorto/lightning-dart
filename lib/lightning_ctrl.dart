@@ -129,13 +129,16 @@ class LightningCtrl {
 
   /// Router Instance
   static final Router router = new Router();
+  static String productCode;
+  static String productLabel;
 
   /**
    * Initialize Logging, Locale, Intl, Date
-   * optional [serverUri] to overwrite target
+   * [serverUri] e.g. "/"
    */
-  static Future<List<Future>> init({String serverUri: "/"}) {
-
+  static Future<List<Future>> init(String productCode, String productLabel, String serverUri) {
+    LightningCtrl.productCode = productCode;
+    LightningCtrl.productLabel = productLabel;
     Completer<List<Future>> completer = new Completer<List<Future>>();
     List<Future> futures = new List<Future>();
     if (Service.trxNo != -1) { // // already initialized

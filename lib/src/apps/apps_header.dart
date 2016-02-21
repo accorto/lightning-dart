@@ -7,7 +7,8 @@
 part of lightning_ctrl;
 
 /**
- * Page Main Header - Logo+Title (for the moment)
+ * Page Main Header
+ * - icon/image - label/labelSub - info
  */
 class AppsHeader extends LComponent {
 
@@ -23,15 +24,14 @@ class AppsHeader extends LComponent {
 
     // Logo
     DivElement left = new DivElement()
-      ..classes.addAll([LGrid.C_COL, LGrid.C_GROW_NONE]);
+      ..classes.addAll([LGrid.C_COL, LGrid.C_GROW_NONE, LMargin.C_BOTTOM__X_SMALL]);
     element.append(left);
     if (apps.icon != null) {
       left.append(apps.icon.element);
     }
     else if (apps.imageSrc != null) {
       int height = 30;
-      if (apps.labelSub != null && apps.labelSub.isNotEmpty)
-        height = 52;
+      //if (apps.labelSub != null && apps.labelSub.isNotEmpty) height = 52;
       ImageElement img = new ImageElement(src: apps.imageSrc)
         ..style.height = "${height}px" // same height as Title(+Sub)
         ..alt = apps.label
@@ -41,7 +41,7 @@ class AppsHeader extends LComponent {
 
     // Title
     DivElement center = new DivElement()
-      ..classes.add(LGrid.C_COL__PADDED);
+      ..classes.addAll([LGrid.C_COL__PADDED_LARGE, LMargin.C_BOTTOM__X_SMALL]);
     element.append(center);
     HeadingElement h1 = new HeadingElement.h1()
       ..id = "a-label"

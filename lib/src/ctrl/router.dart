@@ -185,7 +185,7 @@ class Router {
    * - Called By AppsMain.set(AppsCtrl)
    * - calls route
    */
-  bool start() {
+  void start() {
     if (_hashChangeSubscription == null) {
       _hashChangeSubscription = window.onHashChange.listen((_) {
         String path = window.location.hash;
@@ -206,8 +206,8 @@ class Router {
           route(path);
         }
       });
+      route(null);
     }
-    return route(null);
   } // start
 
   /// (Server) base URL ending with /
@@ -418,9 +418,9 @@ class Router {
 
     if (title != null && title.isNotEmpty) {
       if (ClientEnv.session != null && ClientEnv.session.hasTenantName()) {
-        document.title = "${title} - ${ClientEnv.session.tenantName}";
+        document.title = "${title} - ${ClientEnv.session.tenantName} - ${LightningCtrl.productLabel}";
       } else {
-        document.title = title;
+        document.title = "${title} - ${LightningCtrl.productLabel}";
       }
     }
 

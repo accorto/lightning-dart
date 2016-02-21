@@ -25,8 +25,6 @@ typedef void SendNotification(ServiceResponse level, String subject, String info
  */
 class Service {
 
-  /** Product Name */
-  static String productName = "Accorto";
   /** Client UUID */
   static String clientId = "-";
   /** Server Url */

@@ -29,7 +29,7 @@ main() async {
   PageSimple page = null;
   Datasource dataSource = null;
   if (dataSource == null) {
-    LightningCtrl.init()
+    LightningCtrl.init("LightningWorkspace", "Lightning", "/")
     .then((_){
       page = LightningCtrl.createPageSimple();
       return WorkspaceLogin.login();

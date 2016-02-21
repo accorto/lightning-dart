@@ -120,6 +120,12 @@ class AppsMain
   } // set
   List<StreamSubscription<MouseEvent>> _subscriptions = new List<StreamSubscription<MouseEvent>>();
 
+  /// update header
+  void updateHeader() {
+    if (_currentApps != null)
+      _header.set(_currentApps);
+  }
+
   /// on menu click
   void onMenuClick (Event evt) {
     Element target = evt.target;
