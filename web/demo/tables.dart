@@ -20,7 +20,7 @@ class Tables extends DemoFeature {
 
     LTable table = new LTable("t2")
       ..bordered = borderedOption
-      ..responsiveOverflow = responsiveOverflowOption;
+      ..responsiveOverflow = responsiveOverflowOption ? LTableResponsive.OVERFLOW_X : LTableResponsive.NONE;
     if (responsiveStackedOption)
       table.responsiveStacked = responsiveStackedOption;
     if (responsiveStackedHorizontalOption) // overwrites stacked

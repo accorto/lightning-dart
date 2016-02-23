@@ -87,6 +87,7 @@ abstract class LNotification extends LComponent {
     _color = color;
     if (_color != null && _color.isNotEmpty)
       notify.classes.add(color);
+    notify.style.zIndex = "2"; // LTable foot=1
 
     // close
     close = new LButton(new ButtonElement(), "close", null, idPrefix:idPrefix,

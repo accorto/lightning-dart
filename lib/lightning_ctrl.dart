@@ -161,6 +161,14 @@ class LightningCtrl {
     // FK
     EditorUtil.createLookupCall = FkCtrl.createLookup;
     //
+    SettingItem si = Settings.setting(Settings.TEST_MODE);
+    si.onChange.listen((String newValue) {
+      ClientEnv.testMode = (newValue == Settings.VALUE_TRUE);
+      if (PageSimple.instance != null) {
+        PageSimple.instance.updateTestMode();
+      }
+    });
+    //
     completer.complete(Future.wait(futures));
     return completer.future;
   } // init

@@ -44,7 +44,7 @@ class LTableRow
   final Map<String,String> nameLabelMap;
   /// Name list by column #
   final List<String> nameList;
-  /// Record Action
+  /// Record Action (edit)
   AppsActionTriggered recordAction;
   /// Meta Data
   final List<DataColumn> dataColumns;

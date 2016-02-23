@@ -75,10 +75,20 @@ class PageSimple
     } else {
       element.parent.append(_statusElement);
     }
-    // Status
-    _statusElement.classes.add(ClientEnv.testMode ? "status-test" : "status-info");
-} // PageSimple
+    updateTestMode();
+  } // PageSimple
 
+  /// Test Mode Update
+  void updateTestMode() {
+    // status info
+    if (ClientEnv.testMode) {
+      _statusElement.classes.remove("status-info");
+      _statusElement.classes.add("status-test");
+    } else {
+      _statusElement.classes.remove("status-test");
+      _statusElement.classes.add("status-info");
+    }
+  }
 
   /// Server Start (busy)
   void onServerStart(String trxName, String info) {

@@ -43,8 +43,11 @@ class AppsSettingsTab
     element.append(table.element);
 
     for (SettingItem item in Settings.settingList) {
-      AppSettingsTabLine line = new AppSettingsTabLine(item);
+      if (item.name == Settings.TEST_MODE) {
+        item.value = ClientEnv.testMode; // triggers listener in LightningDart.init
+      }
 
+      AppSettingsTabLine line = new AppSettingsTabLine(item);
       TableRowElement tr = table.addRowDataList([item.label, line.editor]);
       if (item.description != null)
         tr.title = item.description;

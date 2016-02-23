@@ -61,7 +61,8 @@ main() async {
  */
 void start(PageSimple page, Datasource dataSource) {
   if (dataSource == null) {
-    dataSource = new DemoData();
+    dataSource = new DemoData()
+      ..setCount = 3;
   }
   ObjectCtrl ctrl = new ObjectCtrl(dataSource);
 

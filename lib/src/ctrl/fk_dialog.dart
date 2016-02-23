@@ -70,7 +70,7 @@ class FkDialog {
     _modal.append(_status);
     //
     _table = new LTable(idPrefix)
-      ..responsiveOverflow = true
+      ..responsiveOverflow = LTableResponsive.OVERFLOW_X
       ..editMode = LTable.EDIT_SELECT_SINGLE
       ..tableSelectClicked = onTableSelectClicked;
     _modal.add(_table);

@@ -22,8 +22,9 @@ class DemoData extends Datasource {
 
 
   /// Prefilled Data Source
-  static Datasource createDatasource() {
+  static Datasource createDatasource(int setCount) {
     DemoData ds = new DemoData();
+    ds.setCount = setCount;
     ds.prefillDemo();
     return ds;
   }
@@ -103,15 +104,20 @@ class DemoData extends Datasource {
 
 
   /// create Record List
-  static List<DRecord> createRecordList({UiUtilDemo uiu}) {
+  static List<DRecord> createRecordList(int sets, {UiUtilDemo uiu}) {
     List<DRecord> list = new List<DRecord>();
-    list.add(createRecord("Joe",    "new",  "San Francisco",  22, 12.3, new DateTime.utc(2015, 1, 1)));
-    list.add(createRecord("John",   "paid", "San Jose",       23, 2.34, new DateTime.utc(2015, 1, 4)));
-    list.add(createRecord("Jorg",   "paid", "Redwood City",   24, 22.3, new DateTime.utc(2015, 1, 9)));
-    list.add(createRecord("Jorge",  "due",  "Santa Clara",    24, 42.3, new DateTime.utc(2015, 2, 1)));
-    list.add(createRecord("George", "due",  "San Mateo",      26, 12.3, new DateTime.utc(2015, 2, 4)));
-    list.add(createRecord("Josh",   "new",  "San Jose",       26, 52.3, new DateTime.utc(2015, 2, 9)));
-    list.add(createRecord("Oddie",  null,   null,             23, 32.3, new DateTime.utc(2015, 6, 1)));
+    for (int i = 0; i < sets; i++) {
+      String p = "";
+      if (i > 0)
+        p = i.toString();
+      list.add(createRecord("Joe"+p,    "new",  "San Francisco",  22, 12.3, new DateTime.utc(2015, 1, 1)));
+      list.add(createRecord("John"+p,   "paid", "San Jose",       23, 2.34, new DateTime.utc(2015, 1, 4)));
+      list.add(createRecord("Jorg"+p,   "paid", "Redwood City",   24, 22.3, new DateTime.utc(2015, 1, 9)));
+      list.add(createRecord("Jorge"+p,  "due",  "Santa Clara",    24, 42.3, new DateTime.utc(2015, 2, 1)));
+      list.add(createRecord("George"+p, "due",  "San Mateo",      26, 12.3, new DateTime.utc(2015, 2, 4)));
+      list.add(createRecord("Josh"+p,   "new",  "San Jose",       26, 52.3, new DateTime.utc(2015, 2, 9)));
+      list.add(createRecord("Oddie"+p,  null,   null,             23, 32.3, new DateTime.utc(2015, 6, 1)));
+    }
 
     if (uiu != null) {
       for (DRecord record in list) {
@@ -167,6 +173,8 @@ class DemoData extends Datasource {
   List<DRecord> _exampleList;
   /// UI Utility
   UiUtilDemo uiu;
+  /// set count
+  int setCount = 1;
 
   /**
    * Demo Data Source
@@ -178,7 +186,7 @@ class DemoData extends Datasource {
     ui = createUI();
     uiu = new UiUtilDemo(ui);
     UiUtil.validate(ui);
-    _exampleList = createRecordList(uiu: uiu);
+    _exampleList = createRecordList(setCount, uiu: uiu);
     setRecords(_exampleList.length, _exampleList, null);
   }
 
@@ -207,8 +215,9 @@ class DemoData extends Datasource {
       ui = createUI();
     if (uiu == null)
       uiu = new UiUtilDemo(ui);
-    if (_exampleList == null)
-      _exampleList = createRecordList(uiu: uiu);
+    if (_exampleList == null) {
+      _exampleList = createRecordList(setCount, uiu: uiu);
+    }
 
     Completer<DataResponse> completer = new Completer<DataResponse>();
 

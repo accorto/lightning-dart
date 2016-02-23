@@ -28,7 +28,7 @@ class CardPanels extends DemoFeature {
     cpanel.addGroupOption(new DOption()
       ..value = DemoData.COL_TOWN
       ..label = "Town");
-    cpanel.setRecords(DemoData.createRecordList());
+    cpanel.setRecords(DemoData.createRecordList(1));
 
     div.add(cpanel);
     return div;

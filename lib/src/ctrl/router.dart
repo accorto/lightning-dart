@@ -172,7 +172,7 @@ class Router {
         queryParams[P_TEST] = config[P_TEST];
       }
     }
-    if (!ClientEnv.testMode) {
+    if (!ClientEnv.testMode) { // don't overwrite if test mode
       ClientEnv.testMode = queryParams[P_TEST] == "true";
     }
   } // loadConfig

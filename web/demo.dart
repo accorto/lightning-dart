@@ -229,12 +229,18 @@ class ExampleWorkspace extends AppsPage {
   static final LIcon formIcon = new LIconAction(LIconAction.FLOW);
 
   Element element = new DivElement();
+  ObjectCtrl ctrl;
 
   ExampleWorkspace() : super ("wb", "wb", formIcon, "Workspace", "Lightning Dart Workspace Example") {
-    DemoData datasource = new DemoData();
-    ObjectCtrl ctrl = new ObjectCtrl(datasource);
+    DemoData datasource = new DemoData()
+      ..setCount = 1;
+    ctrl = new ObjectCtrl(datasource);
     element.append(ctrl.element);
   } // ExampleWorkspace
+
+  void showingNow() {
+    ctrl.showingNow();
+  }
 
 } // ExampleWorkspace
 

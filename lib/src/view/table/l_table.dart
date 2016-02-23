@@ -69,18 +69,22 @@ class LTable
 
   /// Table Element
   Element get element {
-    if (_wrapper != null)
-      return _wrapper;
+    if (_wrapper1 != null)
+      return _wrapper1;
     return _table;
   }
   /// Table id (not wrapper)
   String get id => _table.id;
   /// responsive wrapper
-  DivElement _wrapper;
+  DivElement _wrapper1;
+  /// responsive wrapper
+  //DivElement _wrapper2;
 
   /// Table Element
   final TableElement _table = new TableElement()
     ..classes.add(C_TABLE);
+  TableElement _tableHead;
+  TableElement _tableFoot;
 
   TableSectionElement _thead;
   TableSectionElement _tbody;
@@ -146,88 +150,253 @@ class LTable
   }
 
   /// responsive overflow scrollable-x wrapper with table
-  bool get responsiveOverflow => _wrapper != null;
-  /// responsive overflow scrollable-x wrapper with table
-  void set responsiveOverflow (bool newValue) {
-    if (newValue) {
-      if (_wrapper == null) {
-        _wrapper = new DivElement()
+  LTableResponsive get responsiveOverflow => _overflow;
+  /// responsive overflow - wrapper for table
+  void set responsiveOverflow (LTableResponsive newValue) {
+    _overflow = newValue;
+    if (_overflow == LTableResponsive.NONE) {
+      _table.remove();
+      _wrapper1 = null;
+      //_wrapper2 = null;
+      if (_tableHead != null && _thead != null) {
+        _thead.remove();
+        _table.append(_thead);
+      }
+      _tableHead = null;
+      if (_tableFoot != null && _tfoot != null) {
+        _tfoot.remove();
+        _table.append(_tfoot);
+      }
+      _tableFoot = null;
+    } else {
+      //if (_wrapper2 == null) {
+      //  _wrapper2 = new DivElement()
+      //    ..classes.add("r-table-wrap2")
+      //    ..style.position = "relative"
+      //    ..append(_table);
+      //}
+      if (_wrapper1 == null) {
+        _wrapper1 = new DivElement()
+          ..classes.add("r-table-wrap1")
           ..classes.add(LScrollable.C_SCROLLABLE__X)
+          ..style.position = "relative"
           ..append(_table);
       }
-    } else if (_wrapper != null) {
+
+      // head
+      if (_overflow == LTableResponsive.OVERFLOW_HEAD || _overflow == LTableResponsive.OVERFLOW_HEAD_FOOT) {
+        if (_tableHead == null) {
+          _tableHead = new TableElement()
+            ..classes.add("r-table-head")
+            ..classes.addAll(_table.classes)
+            ..style.position = "absolute"
+            ..style.top = "0"
+            ..style.left = "0"
+            ..style.zIndex = "1";
+        }
+        _tableHead.remove();
+        _wrapper1.append(_tableHead);
+        if (_thead != null) {
+          _thead.remove();
+          _tableHead.append(_thead);
+        }
+      } else {
+        if (_thead != null) {
+          _thead.remove();
+          _table.append(_thead);
+        }
+        _tableHead = null;
+      }
+
+      // body
       _table.remove();
-      _wrapper = null;
+      _wrapper1.append(_table);
+
+      // foot
+      if (_overflow == LTableResponsive.OVERFLOW_HEAD_FOOT) {
+        if (_tableFoot == null) {
+          _tableFoot = new TableElement()
+            ..classes.add("r-table-foot")
+            ..classes.addAll(_table.classes)
+            ..style.position = "absolute"
+            ..style.bottom = "0"
+            ..style.left = "0"
+            ..style.zIndex = "1";
+        }
+        _tableFoot.remove();
+        _wrapper1.append(_tableFoot);
+        if (_tfoot != null) {
+          _tfoot.remove();
+          _tableFoot.append(_tfoot);
+        }
+      } else {
+        if (_tfoot != null) {
+          _tfoot.remove();
+          _table.append(_tfoot);
+        }
+        _tableFoot = null;
+      }
     }
-  }
-  /// Scroll Wrapper
-  Element get wrapper => _wrapper;
+    _overflowSync();
+  } // set responsiveOverflow
+  LTableResponsive _overflow = LTableResponsive.NONE;
 
   /// Y scroll - call after attached to dom
   /// - if [height] == 0, calculate remainder
   void setResponsiveScroll (int height) {
-    if (_wrapper == null) {
-      responsiveOverflow = true; // X
+    if (_overflow == LTableResponsive.NONE || _overflow == LTableResponsive.OVERFLOW_X) {
+      responsiveOverflow = LTableResponsive.OVERFLOW_HEAD;
     }
+    _scrollHeight = height;
+    if (_onScrollSubscription == null) {
+      _onScrollSubscription = _wrapper1.onScroll.listen(onScrollTableWrapper);
+    }
+    showingNow();
+  }
+  StreamSubscription _onScrollSubscription;
+  int _scrollHeight;
+
+  /// Showing now - sync
+  void showingNow() {
+    if (_overflow == LTableResponsive.NONE || _overflow == LTableResponsive.OVERFLOW_X) {
+      return;
+    }
+    int height = _scrollHeight;
     if (height == 0) {
       if (_onScrollSubscription != null) {
-        _wrapper.style.overflowY = "visible";
-        _wrapper.style.removeProperty("height");
+        _wrapper1.style.overflowY = "visible";
+        _wrapper1.style.removeProperty("height");
       }
-      Rectangle wrapRect = _wrapper.getBoundingClientRect();
+      Rectangle wrapRect = _wrapper1.getBoundingClientRect();
       int winHeight = window.innerHeight;
       int docHeight = document.body.getBoundingClientRect().height;
       int hdr = wrapRect.top;
       int ftr = docHeight - hdr - wrapRect.height;
       height = winHeight - hdr - ftr;
-      _log.fine("setResponsiveScroll height=${height} win=${winHeight} doc=${docHeight} wrap${wrapRect}");
+      _log.config("showingNow height=${height} win=${winHeight} doc=${docHeight} wrap${wrapRect}");
+    } else {
+      _log.config("showingNow height=${height}");
     }
-    _wrapper.style.overflowY = "auto";
-    _wrapper.style.height = "${height}px";
-    if (_onScrollSubscription == null) {
-      _onScrollSubscription = _wrapper.onScroll.listen(onScrollTableWrapper);
-    }
-  }
-  StreamSubscription _onScrollSubscription;
+    _wrapper1.style.overflowY = "auto";
+    _wrapper1.style.height = "${height}px";
+    _overflowSync();
+  } // showingNow
 
   /// scroll body with fixed header
   void onScrollTableWrapper(Event evt) {
-    if (_theadHeight == null) {
-      //Rectangle wrapRect = _wrapper.getBoundingClientRect();
-      Rectangle headRect = _thead.getBoundingClientRect();
-      int top = _wrapper.offsetTop; //wrapRect.top;
-      _theadHeight = headRect.height;
-      _log.fine("scroll ${top} top=${_wrapper.scrollTop} left=${_wrapper.scrollLeft}"
-          " clientTop=${_wrapper.clientTop} offsetTop=${_wrapper.offsetTop}");
-      // (1) keep header on top - issue: checkboxes and action dropdown
-      //_thead.style.background = "white";
-      //_thead.style.transform = "translateY(${_wrapper.scrollTop}px)";
-
-      // (2) convert to fixed
-      _fixTableLayout();
-      _wrapper.style.marginTop = "${_theadHeight}px"; // move table down
-      _thead.style.position = "absolute";
-      _thead.style.top = "${top}px"; // move head up
-    } // init
-    _thead.style.left = "-${_wrapper.scrollLeft}px";
-  }
-  int _theadHeight;
-
-  /// fix table Layout
-  void _fixTableLayout() {
-    // must be displayed
-    Element colgroup = new Element.tag("colgroup");
-    Element tr = _thead.children.first;
-    for (Element th in tr.children) {
-      int width = th.getBoundingClientRect().width;
-      th.style.minWidth = "${width}px"; // required if detached
-      Element col = new Element.tag("col")
-        ..style.width = "${width}px";
-      colgroup.children.add(col);
+    int top = _wrapper1.scrollTop;
+    int width = _wrapper1.offsetWidth;
+    if (_tableHead != null) {
+      _tableHead.style.top = "${top}px";
     }
-    _table.children.add(colgroup);
-    _table.style.tableLayout = "fixed"; // auto
-  }
+    if (_tableFoot != null) {
+      _tableFoot.style.bottom = "-${top}px";
+    }
+    if (_lastWidth != width) {
+      _overflowSync();
+      _lastWidth = width;
+    }
+    _log.finer("onScrollTableWrapper"
+        " scroll t=${_wrapper1.scrollTop} h=${_wrapper1.scrollHeight} l=${_wrapper1.scrollLeft} w=${_wrapper1.scrollWidth}"
+        " offset t=${_wrapper1.offsetTop} h=${_wrapper1.offsetHeight} l=${_wrapper1.offsetLeft} w=${_wrapper1.offsetWidth}"
+    );
+  } // onScrollTableWrapper
+  int _lastWidth;
+
+  /// sync column width
+  void _overflowSync() {
+    // count
+    int rowCount = 0;
+    int colCount = 0;
+    Element tr = null;
+    _table.style.tableLayout = "auto";
+    if (_tbody != null && _tbody.children.isNotEmpty) {
+      tr = _tbody.children.first;
+      rowCount++;
+      colCount = tr.children.length;
+    }
+    Element tr_h = null;
+    if (_tableHead != null) {
+      _tableHead.style.tableLayout = "auto";
+      if (_thead != null && _thead.children.isNotEmpty) {
+        tr_h = _thead.children.first;
+        rowCount++;
+        if (colCount == 0) {
+          colCount = tr_h.children.length;
+        } else if (colCount != tr_h.children.length) {
+          tr_h = null;
+          rowCount--;
+        }
+      }
+    }
+    Element tr_f = null;
+    if (_tableHead != null) {
+      _tableHead.style.tableLayout = "auto";
+      if (_tfoot != null && _tfoot.children.isNotEmpty) {
+        tr_f = _tfoot.children.first;
+        rowCount++;
+        if (colCount == 0) {
+          colCount = tr_f.children.length;
+        } else if (colCount != tr_f.children.length) {
+          tr_f = null;
+          rowCount--;
+        }
+      }
+    }
+    if (rowCount < 2) {
+      return; // nothing to do
+    }
+    // for each column
+    String info = "overflowSync";
+    for (int c = 0; c < colCount; c++) {
+      int width = 0;
+      Element td = null;
+      if (tr != null) {
+        td = tr.children[c];
+        td.style.removeProperty("width");
+        int w = td.offsetWidth;
+        if (w > width)
+          width = w;
+      }
+      Element td_h = null;
+      if (tr_h != null) {
+        td_h = tr_h.children[c];
+        td_h.style.removeProperty("width");
+        int w = td_h.offsetWidth;
+        if (w > width)
+          width = w;
+      }
+      Element td_f = null;
+      if (tr_f != null) {
+        td_f = tr_f.children[c];
+        td_f.style.removeProperty("width");
+        int w = td_f.offsetWidth;
+        if (w > width)
+          width = w;
+      }
+      info += " " + width.toString();
+      if (width == 0) {
+        _lastWidth = null;
+        return;
+      }
+      String widthString = "${width}px";
+      if (td != null) {
+        td.style.width = widthString;
+      }
+      if (td_h != null) {
+          td_h.style.width = widthString;
+      }
+      if (td_f != null) {
+        td_f.style.width = widthString;
+      }
+    }
+    _table.style.tableLayout = "fixed";
+    if (_tableHead != null)
+      _tableHead.style.tableLayout = "fixed";
+    if (_tableFoot != null)
+      _tableFoot.style.tableLayout = "fixed";
+    _log.fine(info);
+  } // overflowSync
 
   /// Table bordered
   bool get bordered => element.classes.contains(C_TABLE__BORDERED);
@@ -258,8 +427,12 @@ class LTable
    * for responsive - use row.addHeaderCell to add name-label info
    */
   LTableHeaderRow addHeadRow(bool enableSort, {bool primary:true}) {
-    if (_thead == null)
-      _thead = _table.createTHead();
+    if (_thead == null) {
+      if (_tableHead == null)
+        _thead = _table.createTHead();
+      else
+        _thead = _tableHead.createTHead();
+    }
     LTableHeaderRow row = null;
     if (primary) {
       _headerRow = new LTableHeaderRow(_thead.addRow(),
@@ -442,7 +615,7 @@ class LTable
         row.show = true;
       }
       if (_withStatistics && _statisticsRow != null) {
-        _statisticsRow.setStatistics(_statistics, label: lTableStatisticTotal());
+        _statisticsRow.setStatistics(_statistics, null, lTableStatisticTotal(), _tableActions.isNotEmpty);
       }
       if (graphSelectionChange != null)
         graphSelectionChange(null);
@@ -459,7 +632,7 @@ class LTable
     }
     if (_withStatistics && _statisticsRow != null) {
       TableStatistics temp = _statistics.summary(recordList);
-      _statisticsRow.setStatistics(temp, label: lTableStatisticGraphSelect());
+      _statisticsRow.setStatistics(temp, null, lTableStatisticGraphSelect(), _tableActions.isNotEmpty);
     }
     if (graphSelectionChange != null)
       graphSelectionChange(count);
@@ -521,8 +694,12 @@ class LTable
 
   /// Add Table Foot Row
   LTableRow addFootRow() {
-    if (_tfoot == null)
-      _tfoot = _table.createTFoot();
+    if (_tfoot == null) {
+      if (_tableFoot == null)
+        _tfoot = _table.createTFoot();
+      else
+        _tfoot = _tableFoot.createTFoot();
+    }
     LTableRow row = new LTableRow(_tfoot.addRow(),
         _tfootRows.length,
         idPrefix,
@@ -542,8 +719,12 @@ class LTable
     TableRowElement tr = null;
     int rowNo = 0;
     if (foot) {
-      if (_tfoot == null)
-        _tfoot = _table.createTFoot();
+      if (_tfoot == null) {
+        if (_tableFoot == null)
+          _tfoot = _table.createTFoot();
+        else
+          _tfoot = _tableFoot.createTFoot();
+      }
       tr = _tfoot.addRow();
       rowNo = _tfootRows.length;
     } else {
@@ -620,7 +801,11 @@ class LTable
 
   /// Reset Table Structure
   void resetStructure() {
-    element.children.clear();
+    _table.children.clear();
+    if (_tableHead != null)
+      _tableHead.children.clear();
+    if (_tableFoot != null)
+      _tableFoot.children.clear();
     _thead = null;
     _tbody = null;
     _tfoot = null;
@@ -631,6 +816,7 @@ class LTable
     //
     nameLabelMap.clear();
     nameList.clear();
+    responsiveOverflow = _overflow;
   }
 
 
@@ -674,8 +860,9 @@ class LTable
     // Statistics
     if (_statistics != null && _withStatistics) {
       _statisticsRow = addStatRow(true); // LTableSumRow
-      _statisticsRow.setStatistics(_statistics);
+      _statisticsRow.setStatistics(_statistics, null, null, _tableActions.isNotEmpty);
     }
+    _overflowSync();
   } // display
   LTableSumRow _statisticsRow;
 
@@ -704,8 +891,12 @@ class LTable
    * Add Plain Headings
    */
   void addHeadings(List<String> thTexts) {
-    if (_thead == null)
-      _thead = _table.createTHead();
+    if (_thead == null) {
+      if (_tableHead == null)
+        _thead = _table.createTHead();
+      else
+        _thead = _tableHead.createTHead();
+    }
     TableRowElement tr = _thead.addRow();
     for (String thText in thTexts) {
       Element th = new Element.th();
@@ -902,3 +1093,11 @@ class LTable
 
 
 } // LTable
+
+
+enum LTableResponsive {
+  NONE,
+  OVERFLOW_X,
+  OVERFLOW_HEAD,
+  OVERFLOW_HEAD_FOOT
+}

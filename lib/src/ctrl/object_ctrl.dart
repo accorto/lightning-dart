@@ -180,6 +180,7 @@ class ObjectCtrl
     });
   } // doQuery
 
+
   // display
   void display() {
     _content.clear();
@@ -288,7 +289,7 @@ class ObjectCtrl
           editMode: LTable.EDIT_FIELD,
           alwaysOneEmptyLine: false)
         ..bordered = true
-        ..responsiveOverflow = true
+        ..responsiveOverflow = LTableResponsive.OVERFLOW_HEAD_FOOT
         ..withStatistics = true;
       _table.recordSaved = onRecordSaved;
       _table.recordDeleted = onRecordDeleted;
@@ -338,6 +339,14 @@ class ObjectCtrl
     }
   } // displayTable
   LCardCompact _cardCompact;
+
+  /// update display
+  void showingNow() {
+    if (_table != null) {
+      _table.showingNow();
+    }
+  }
+
 
 
   /// Sort Dropdown selected

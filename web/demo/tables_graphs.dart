@@ -20,10 +20,11 @@ class TablesGraphs extends DemoFeature {
     CDiv div = new CDiv()
       ..classes.add(LMargin.C_HORIZONTAL__MEDIUM);
 
-    Datasource datasource = DemoData.createDatasource();
+    int setCount = 3;
+    Datasource datasource = DemoData.createDatasource(setCount);
     LTable table = new LTable("tg")
       ..bordered = true
-      ..responsiveOverflow = true
+      ..responsiveOverflow = responsiveOverflowOption
       ..withStatistics = statisticsOption
       ..editMode = LTable.EDIT_RO;
     if (responsiveStackedOption)
@@ -45,6 +46,8 @@ class TablesGraphs extends DemoFeature {
     table.setRecords(datasource.recordList);
     div.add(table);
     div.append(new HRElement());
+    if (setCount > 1)
+      table.setResponsiveScroll(400);
 
     //
     GraphPanel graph = new GraphPanel(datasource, table, false);
@@ -90,6 +93,8 @@ class TablesGraphs extends DemoFeature {
   bool responsiveStackedOption = false;
   bool responsiveStackedHorizontalOption = false;
   bool actionOption = false;
+  LTableResponsive responsiveOverflowOption = LTableResponsive.OVERFLOW_HEAD_FOOT;
+
 
   EditorI optionStatisticsCb() {
     LCheckbox cb = new LCheckbox("statisticsO", idPrefix: id)

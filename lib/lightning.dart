@@ -211,7 +211,7 @@ class LightningDart {
       window.console.info(logObject);
     else if (rec.level == Level.CONFIG)
       window.console.debug(logObject);
-    else
+    else if (ClientEnv.testMode)
       window.console.log(logObject);
   } // onLogRecord
 

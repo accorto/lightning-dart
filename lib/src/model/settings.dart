@@ -16,6 +16,7 @@ class Settings {
   static const String EXPERT_MODE = "expertMode";
   static const String ICON_IMAGE = "iconImg";
   static const String GEO_ENABLED = "geoEnabled";
+  static const String TEST_MODE = "testMode";
 
   static const String VALUE_TRUE = "true";
   static const String VALUE_FALSE = "false";
@@ -53,6 +54,10 @@ class Settings {
       add(EXPERT_MODE, VALUE_FALSE,
           label:"Expert Mode",
           description: "Show detailed information",
+          dataType: EditorI.TYPE_CHECKBOX);
+      add(TEST_MODE, VALUE_FALSE,
+          label:"Test Mode",
+          description: "Show debug information",
           dataType: EditorI.TYPE_CHECKBOX);
     }
   } // init

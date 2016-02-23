@@ -40,8 +40,9 @@ class LTableSumRow
 
   /// set Record statistics
   void setStatistics(TableStatistics statistics,
-      {AppsActionTriggered recordAction,
-      String label}) {
+      AppsActionTriggered recordAction,
+      String label,
+      bool hasAction) {
     this.statistics = statistics;
     this.recordAction = recordAction;
     //
@@ -52,6 +53,9 @@ class LTableSumRow
     //
     rowElement.children.clear();
     display();
+    if (hasAction) {
+      rowElement.addCell();
+    }
   }
   TableStatistics statistics;
 
@@ -59,8 +63,7 @@ class LTableSumRow
   /// display stat record
   void display() {
     for (String name in nameList) {
-      TableCellElement tc = new Element.td();
-      rowElement.append(tc);
+      TableCellElement tc = rowElement.addCell();
 
       if (name == null) { // select column
         LIconUtility icon = new LIconUtility(
