@@ -86,6 +86,32 @@ class UiUtil {
     return new UiUtil(ui);
   } // copy
 
+
+  /// Find Grid Column in UI
+  static UIGridColumn findGridColumn(UI ui, String columnName) {
+    for (UIGridColumn gc in ui.gridColumnList) {
+      if (gc.columnName == columnName) {
+        return gc;
+      }
+    }
+    return null;
+  }
+  /// Find Panel Column in UI
+  static UIPanelColumn findPanelColumn(UI ui, String columnName, UIGridColumn gc) {
+    if (gc != null && gc.panelColumn != null) {
+      return gc.panelColumn;
+    }
+    for (UIPanel panel in ui.panelList) {
+      for (UIPanelColumn pc in panel.panelColumnList) {
+        if (pc.columnName == columnName) {
+          return pc;
+        }
+      }
+    }
+    return null;
+  } // findPanelColumn
+
+
   /// The UI
   final UI ui;
   /// The Table
@@ -163,6 +189,7 @@ class UiUtil {
   void addColumn(DColumn col,
       {String displayLogic,
       bool mandatory,
+      bool readOnly,
       bool isAlternativeDisplay,
       int width,
       bool addColToTable:true}) {
@@ -175,6 +202,8 @@ class UiUtil {
     UIPanelColumn pc = _createPanelColumn(col);
     if (displayLogic != null && displayLogic.isNotEmpty)
       pc.displayLogic = displayLogic;
+    if (readOnly != null)
+      pc.isReadOnly = readOnly;
     if (mandatory != null)
       pc.isMandatory = mandatory;
     if (isAlternativeDisplay != null)
@@ -224,32 +253,30 @@ class UiUtil {
       bool readOnly,
       bool isAlternativeDisplay,
       int width}) {
-    // exists?
-    for (UIPanel panel in ui.panelList) {
-      for (UIPanelColumn pc in panel.panelColumnList) {
-        if (pc.columnName == columnName) {
-          if (mandatory != null)
-            pc.isMandatory = mandatory;
-          if (isAlternativeDisplay != null)
-            pc.isAlternativeDisplay = isAlternativeDisplay;
-          if (width != null)
-            pc.width = width;
-          //
-          if (readOnly != null)
-            pc.column.isReadOnly = readOnly;
-          return; // exists (gc exists too)
-        }
-      }
+
+    // exists in grid with pc/gc
+    UIGridColumn gc = findGridColumn(ui, columnName);
+    UIPanelColumn pc = findPanelColumn(ui, columnName, gc);
+    if (pc != null) {
+      if (mandatory != null)
+        pc.isMandatory = mandatory;
+      if (isAlternativeDisplay != null)
+        pc.isAlternativeDisplay = isAlternativeDisplay;
+      if (width != null)
+        pc.width = width;
+      if (readOnly != null)
+        pc.isReadOnly = readOnly;
+      return; // found it
     }
+
     // find column + create
     for (DColumn col in ui.table.columnList) {
       if (col.name == columnName) {
-        if (readOnly != null)
-          col.isReadOnly = readOnly;
         addColumn(col,
             mandatory: mandatory,
             isAlternativeDisplay: isAlternativeDisplay,
             width: width,
+            readOnly: readOnly,
             addColToTable: false);
         return;
       }

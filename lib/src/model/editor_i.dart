@@ -311,10 +311,18 @@ abstract class EditorI {
     if (tableColumn.hasDefaultValue())
       defaultValue = tableColumn.defaultValue; // for mandatory
 
-    if (tableColumn.hasIsMandatory())
+    UIPanelColumn panelColumn = _dataColumn.uiPanelColumn;
+    if (panelColumn != null && panelColumn.hasIsMandatory()) {
+      required = panelColumn.isMandatory;
+    } else if (tableColumn.hasIsMandatory()) {
       required = tableColumn.isMandatory;
-    if (tableColumn.hasIsReadOnly())
+    }
+
+    if (panelColumn != null && panelColumn.hasIsReadOnly()) {
+      readOnly = panelColumn.isReadOnly;
+    } else if (tableColumn.hasIsReadOnly()) {
       readOnly = tableColumn.isReadOnly;
+    }
 
     if (tableColumn.hasColumnSize() && tableColumn.columnSize > 0)
       maxlength = tableColumn.columnSize;

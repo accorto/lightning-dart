@@ -83,7 +83,9 @@ class LRecordHome
 
       for (UIQueryColumn qc in ui.queryColumnList) {
         String columnName = qc.columnName;
-        DataColumn dataColumn = new DataColumn(ui.table, qc.column, null, null);
+        UIGridColumn gc = UiUtil.findGridColumn(ui, columnName);
+        UIPanelColumn pc = UiUtil.findPanelColumn(ui, columnName, gc);
+        DataColumn dataColumn = new DataColumn(ui.table, qc.column, pc, gc);
         if (dataColumn.tableColumn.displaySeqNo > 0)
           continue; // already displayed
         String label = qc.columnLabel;

@@ -99,23 +99,13 @@ class DataColumn {
 
   /// Label
   String get label {
+    if (uiPanelColumn != null && uiPanelColumn.hasLabel())
+      return uiPanelColumn.label;
     if (tableColumn.hasLabel()) {
       return tableColumn.label;
     }
-    // Panel Column Label
-    String pc = labelPanelColumn;
-    if (pc != null) {
-      return pc;
-    }
     return tableColumn.name; // fallback
   }
-  // Panel Column Label
-  String get labelPanelColumn {
-    if (uiPanelColumn != null && uiPanelColumn.hasLabel() && uiPanelColumn.label.isNotEmpty)
-      return uiPanelColumn.label;
-    return null;
-  }
-
   /// Column Name
   String get name => tableColumn.name;
 
@@ -146,8 +136,10 @@ class DataColumn {
     if (data.isNew && isEmpty(data) && isMandatory(data)) {
       return false;
     }
-    if (tableColumn.isReadOnly
-        || (uiPanelColumn != null && uiPanelColumn.isReadOnly)) {
+    if (uiPanelColumn != null && uiPanelColumn.hasIsReadOnly()) {
+      if (uiPanelColumn.isReadOnly) // ui overwrites
+        return true;
+    } else if (tableColumn.isReadOnly) { // default false
       return true;
     }
     if (data != null) {
@@ -179,8 +171,12 @@ class DataColumn {
    * Mandatory [data] optional context
    */
   bool isMandatory(DataRecord data) {
-    if (tableColumn.isMandatory || (uiPanelColumn != null && uiPanelColumn.isMandatory))
+    if (uiPanelColumn != null && uiPanelColumn.hasIsMandatory()) {
+      if (uiPanelColumn.isMandatory) // ui overwrites
+        return true;
+    } else if (tableColumn.isMandatory) { // default false
       return true;
+    }
     if (data != null) {
       if (isMandatoryDynamic()) {
         bool result = DataContext.evaluateBool(data.record, table, uiPanelColumn.mandatoryLogic);
@@ -201,9 +197,13 @@ class DataColumn {
    */
   bool isDisplayed(DataRecord data) {
     // inactive
-    if ((tableColumn.hasIsActive() && !tableColumn.isActive)
-    || (uiPanelColumn != null && uiPanelColumn.hasIsActive() && !uiPanelColumn.isActive))
+    if (uiPanelColumn != null && uiPanelColumn.hasIsActive()) {
+      if (!uiPanelColumn.isActive) // ui overwrites - default true
+        return false;
+    } else if (tableColumn.hasIsActive() && !tableColumn.isActive) { // default true
       return false;
+    }
+
     if (data != null) {
       if (isDisplayedDynamic()) {
         bool result = DataContext.evaluateBool(data.record, table, uiPanelColumn.displayLogic);
