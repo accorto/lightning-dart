@@ -23,15 +23,23 @@ class EditorUtil {
   static LEditor createFromColumn(String name, DataColumn dataColumn, bool inGrid,
       {String idPrefix,
       DataRecord data, DEntry entry,
-      bool isAlternativeDisplay:false,
+      bool isAlternativeDisplay,
       bool isFilter:false,
       bool html5}) {
+
     if (html5 == null) {
       html5 = Settings.getAsBool(Settings.NATIVE_HTML5, defaultValue: ClientEnv.isMobileUserAgent);
     }
+
     LEditor editor = null;
     if (dataColumn != null) {
       name = dataColumn.name;
+      if (isAlternativeDisplay == null) {
+        if (dataColumn.uiPanelColumn != null && dataColumn.uiPanelColumn.hasIsAlternativeDisplay())
+          isAlternativeDisplay = dataColumn.uiPanelColumn.isAlternativeDisplay;
+        else
+          isAlternativeDisplay = false;
+      }
       DataType dataType = dataColumn.tableColumn.dataType;
 
       if (dataType == DataType.STRING) {

@@ -22,7 +22,8 @@ class UiUtilDemo extends UiUtil {
 
   /// add column
   void addColumn(DColumn col, {List<String> examples, String displayLogic,
-      bool mandatory, bool isAlternativeDisplay, int width, bool addColToTable:true}) {
+      bool mandatory, bool readOnly,
+      bool isAlternativeDisplay, int width, bool addColToTable:true}) {
     super.addColumn(col, displayLogic:displayLogic, mandatory:mandatory,
         isAlternativeDisplay:isAlternativeDisplay, width:width, addColToTable:addColToTable);
 

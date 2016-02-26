@@ -50,6 +50,11 @@ class LTable
   static const String C_TEXT_CENTER = "slds-text-center";
   static const String C_TEXT_RIGHT = "slds-text-right";
 
+  /// space below edit table for dropdowns
+  static const String C_INFO_BOTTOM = "table-info-bottom";
+  /// space below edit table for dropdowns
+  static const String C_INFO_BOTTOM_SMALL = "table-info-bottom-small";
+
 
   /// Table Edit Mode - Read Only
   static const String EDIT_RO = "ro";

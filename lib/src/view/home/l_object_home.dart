@@ -89,7 +89,7 @@ class LObjectHome
 
     _headerFind = new LInputSearch("find", idPrefix:idPrefix, withClearValue:true)
       ..placeholder = lObjectHomeFind()
-      ..removeHint()
+      ..hintRemove()
       ..maxWidth = "20rem";
     _headerCenter.append(_headerFind.element);
     header.append(_headerCenter);

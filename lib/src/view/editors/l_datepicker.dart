@@ -68,6 +68,9 @@ class LDatepicker
   void _initEditor(String type) {
     html5 = false;
     element.onClick.listen(onInputClick); // w/o wrapper
+    if (inGrid) {
+      input.style.minWidth = "132px"; // default 120
+    }
     //
     _firstDayOfWeek = _formatter.dateSymbols.FIRSTDAYOFWEEK + 1; // zero based
     super._initEditor(type);
@@ -109,35 +112,12 @@ class LDatepicker
 
   /// Field Clicked - show dropdown
   void onInputClick(MouseEvent evt) {
-    if (_dropdown == null) {
-      _dropdown = new LDatePickerDropdown(name, id, _formatter, _firstDayOfWeek);
-      _dropdown.isUtc = isUtc;
-      _dropdown.editorChange = onDropdownChange;
-      _dropdown.show = false;
-    }
-    _dropdown.mode = _mode;
-    // attach
-    if (!_dropdown.show) { // not showing yet
-      Element next = element.nextElementSibling;
-      if (next != null)
-        element.parent.insertBefore(_dropdown.element, next);
-      else
-        element.parent.append(_dropdown.element);
-    }
-    // toggle
-    _dropdown.show = !_dropdown.show;
-    // value
-    _dropdown.value = value;
-    // detach
-    if (!_dropdown.show) { // not showing anymore
-      _dropdown.element.remove();
-    }
+    showDropdown = !showDropdown; // toggle
   } // onInputClicked
 
   /// Dropdown Changed
   void onDropdownChange(String name, String newValue, DEntry ignored, var details) {
-    _dropdown.show = false;
-    _dropdown.element.remove();
+    showDropdown = false;
     if (readOnly) {
       return;
     }
@@ -155,8 +135,26 @@ class LDatepicker
 
   /// Show/Hide Popup
   void set showDropdown (bool newValue) {
-    if (_dropdown != null)
+    if (newValue && _dropdown == null) { // create
+      _dropdown = new LDatePickerDropdown(name, id, _formatter, _firstDayOfWeek);
+      _dropdown.isUtc = isUtc;
+      _dropdown.editorChange = onDropdownChange;
+      _dropdown.show = false;
+    }
+    if (_dropdown != null) {
       _dropdown.show = newValue;
+      if (newValue) {
+        _dropdown.mode = _mode;
+        // attach
+        if (_dropdown.element.parent == null)
+          element.append(_dropdown.element); // element = slds-form-element
+        // set value
+        _dropdown.value = value;
+      } else {
+        _dropdown.element.remove();
+      }
+    }
   }
+  bool get showDropdown => _dropdown != null && _dropdown.show;
 
 } // LDatePicker

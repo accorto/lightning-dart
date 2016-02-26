@@ -252,7 +252,8 @@ class UiUtil {
       {bool mandatory,
       bool readOnly,
       bool isAlternativeDisplay,
-      int width}) {
+      int width,
+      DataType overwriteDataType}) {
 
     // exists in grid with pc/gc
     UIGridColumn gc = findGridColumn(ui, columnName);
@@ -266,20 +267,28 @@ class UiUtil {
         pc.width = width;
       if (readOnly != null)
         pc.isReadOnly = readOnly;
+      //
+      if (overwriteDataType != null) {
+        DColumn col = DataUtil.findColumn(ui.table, null, columnName);
+        if (col != null)
+          col.dataType = overwriteDataType;
+      }
       return; // found it
     }
 
     // find column + create
-    for (DColumn col in ui.table.columnList) {
-      if (col.name == columnName) {
-        addColumn(col,
-            mandatory: mandatory,
-            isAlternativeDisplay: isAlternativeDisplay,
-            width: width,
-            readOnly: readOnly,
-            addColToTable: false);
-        return;
+    DColumn col = DataUtil.findColumn(ui.table, null, columnName);
+    if (col != null) {
+      if (overwriteDataType != null) {
+        col.dataType = overwriteDataType;
       }
+      addColumn(col,
+          mandatory: mandatory,
+          isAlternativeDisplay: isAlternativeDisplay,
+          width: width,
+          readOnly: readOnly,
+          addColToTable: false);
+      return;
     }
     _log.warning("${ui.name} addIfMissing NotFound ${columnName}");
   } // addIfMissing

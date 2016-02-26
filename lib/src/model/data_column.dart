@@ -109,6 +109,14 @@ class DataColumn {
   /// Column Name
   String get name => tableColumn.name;
 
+  /// Title (description - help - label)
+  String get title {
+    if (tableColumn.hasDescription())
+      return tableColumn.description;
+    if (tableColumn.hasHelp())
+      return tableColumn.help;
+    return label;
+  }
 
   /// Active in Grid
   bool get isActiveGrid {

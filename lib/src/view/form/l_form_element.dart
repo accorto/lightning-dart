@@ -25,6 +25,7 @@ class LFormElement {
   /// Hint (adds some px below input)
   final SpanElement _hintSpan = new SpanElement()
     ..classes.add(LForm.C_FORM_ELEMENT__HELP);
+  bool _hintHide = false;
 
   /// Parent Editor
   EditorI editor;
@@ -48,7 +49,10 @@ class LFormElement {
       bool withClearValue:false, bool inGrid:false}) {
     this.editor = editor;
     _input = editor.input;
-    if (!inGrid) {
+    if (inGrid) {
+      _hintHide = true;
+      _hintSpan.classes.add(LVisibility.C_HIDE);
+    } else {
       _labelElement.classes.add(LForm.C_FORM_ELEMENT__LABEL);
       element.append(_labelElement);
     }
@@ -170,13 +174,6 @@ class LFormElement {
     _elementControl.append(pillContainer);
     element.append(_elementControl);
   } // createLookup
-
-  /// remove hint
-  void removeHint() {
-    if(_hintSpan != null)
-      _hintSpan.remove();
-  }
-
 
   /**
    * Checkbox Layout
@@ -357,7 +354,25 @@ class LFormElement {
   }
   String _hint;
   void _hintDisplay(String text) {
-    _hintSpan.text = text == null ? "" : text; // __help
+    if (text == null || text.isEmpty) {
+      _hintSpan.text = "";
+      if (_hintHide) {
+        _hintSpan.classes.add(LVisibility.C_HIDE);
+      }
+    } else {
+      _hintSpan.text = text; // __help
+      _hintSpan.classes.remove(LVisibility.C_HIDE);
+    }
+  }
+
+  /// hide hint
+  void hintHide() {
+    _hintHide = true;
+    hint = null;
+  }
+  /// remove hint
+  void hintRemove() {
+    _hintSpan.remove();
   }
 
 

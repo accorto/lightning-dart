@@ -55,7 +55,7 @@ class LTableRow
   /// Callback when delete
   RecordDeleted recordDeleted;
   /// Editors
-  List<LEditor> editors;
+  List<LEditor> editorList;
   /// On Table Row Select Clicked
   TableSelectClicked tableSelectClicked;
   /// row select
@@ -249,9 +249,10 @@ class LTableRow
       String value,
       String align,
       bool editModeField) {
-    if (editors == null)
-      editors = new List<LEditor>();
-    editors.add(editor);
+    if (editorList == null)
+      editorList = new List<LEditor>();
+    editor.onFocus.listen(onEditorFocus); // close other dropdowns
+    editorList.add(editor);
 
     if (editModeField) {
       if (editor.isValueRenderElement) {
@@ -495,8 +496,8 @@ class LTableRow
     bool changed = data.checkChanged();
     String name = columnChanged == null ? "-" : columnChanged.columnName;
     _log.config("onRecordChange - ${name} - changed=${changed}");
-    if (editors != null) {
-      for (EditorI editor in editors) {
+    if (editorList != null) {
+      for (EditorI editor in editorList) {
         if (editor.hasDependentOn) {
           for (EditorIDependent edDep in editor.dependentOnList) {
             if (name == edDep.columnName) {
@@ -508,5 +509,20 @@ class LTableRow
       } // for all editors
     }
   } // onRecordChange
+
+  /// Editor Focused - close other editor dropdowns
+  void onEditorFocus(FocusEvent evt) {
+    String id = "";
+    if (evt != null) {
+      Element target = evt.target;
+      id = target.id;
+    }
+    for (LEditor ed in editorList) {
+      // _log.fine("onEditorFocus ${id} - ${ed.id}");
+      if (id != ed.id) {
+        ed.showDropdown = false;
+      }
+    }
+  } // onEditorFocus
 
 } // LTableRow

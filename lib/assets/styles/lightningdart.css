@@ -6280,6 +6280,8 @@ input[type=number]::-webkit-inner-spin-button.decimal {
   background-color: #eef1f6;
   box-shadow: none;
   cursor: not-allowed; }
+.slds-textarea {
+  padding: 0.4rem 0.75rem; }
 .slds-section-title {
   -webkit-user-select: none;
      -moz-user-select: none;
@@ -6353,6 +6355,22 @@ input[type=number]::-webkit-inner-spin-button.decimal {
   padding: .5rem;
   background: white;
   border: 1px solid #EFEFEF; }
+.slds-table > tbody > tr > td {
+  vertical-align: top; }
+.slds-table .slds-form-element textarea {
+  min-width: 100px; }
+.slds-table .slds-form-element input {
+  min-width: 120px; }
+.slds-table .slds-lookup {
+  min-width: 150px; }
+.table-info-bottom {
+  margin: 1.5rem 1.5rem 2rem 1.5rem;
+  min-height: 3rem; }
+.slds-datepicker .day {
+  padding: 0.25rem !important;
+  box-shadow: none !important; }
+  .slds-datepicker .day abbr {
+    font-weight: bold; }
 .text-error {
   color: #c23934;
   stroke: #c23934; }

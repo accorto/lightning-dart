@@ -21,14 +21,14 @@ class LTextArea
    * Text Area Input
    */
   LTextArea(String name, {String idPrefix, bool this.inGrid:false}) {
-    createStandard(this);
+    createStandard(this, inGrid:inGrid);
     input.name = name;
     id = createId(idPrefix, name);
     _initEditor();
   }
 
   LTextArea.from(DataColumn dataColumn, {String idPrefix, bool this.inGrid:false}) {
-    createStandard(this);
+    createStandard(this, inGrid:inGrid);
     input.name = dataColumn.name;
     id = createId(idPrefix, input.name);
     //
@@ -41,10 +41,12 @@ class LTextArea
     if (inGrid) {
       rows = 1;
       input.onFocus.listen((Event evt){
-        rows = 3;
+        input.rows = 3;
+        input.cols = 40;
       });
       input.onBlur.listen((Event evt){
-        rows = 1;
+        input.rows = 1;
+        input.attributes.remove("cols");
       });
     } else {
       rows = 3;

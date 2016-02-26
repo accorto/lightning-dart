@@ -27,13 +27,10 @@ class LDatePickerDropdown {
     ..attributes[Html0.ARIA_HIDDEN] = "true"
     ..attributes[LDatepicker.DATA_SELECTION] = LDatepicker.DATA_SELECTION_SINGLE;
 
-  final DivElement _grid = new DivElement()
-    ..classes.addAll([LDatepicker.C_DATEPICKER__FILTER, LGrid.C_GRID]);
 
-  final DivElement _month = new DivElement()
-    ..classes.addAll([LDatepicker.C_DATEPICKER__FILTER__MONTH, LGrid.C_GRID, LGrid.C_GRID__ALIGN_SPREAD, LSizing.C_SIZE__3_OF_4]);
   final DivElement _monthPrev = new DivElement()
     ..classes.add(LGrid.C_ALIGN_MIDDLE);
+
   final LButton _monthPrevButton = new LButton(new ButtonElement(), "prev", null,
       buttonClasses: [LButton.C_BUTTON__ICON_CONTAINER],
       icon: new LIconUtility(LIconUtility.LEFT, className: LButton.C_BUTTON__ICON, size: LButton.C_BUTTON__ICON__SMALL),
@@ -49,8 +46,6 @@ class LDatePickerDropdown {
       buttonClasses: [LButton.C_BUTTON__ICON_CONTAINER],
       icon: new LIconUtility(LIconUtility.RIGHT, className: LButton.C_BUTTON__ICON, size: LButton.C_BUTTON__ICON__SMALL),
       assistiveText: lDatePickerDropdownNext());
-  final DivElement _year = new DivElement()
-    ..classes.addAll([LPicklist.C_PICKLIST, LPicklist.C_PICKLIST__FLUID, LGrid.C_SHRINK_NONE]);
 
   final SelectElement _yearSelect = new SelectElement()
     ..name = "year"
@@ -60,12 +55,6 @@ class LDatePickerDropdown {
     ..classes.add(LDatepicker.C_DATEPICKER__MONTH)
     ..attributes[Html0.ROLE] = Html0.ROLE_GRID;
 
-  final SpanElement _prev_label = new SpanElement()
-    ..classes.add(LText.C_ASSISTIVE_TEXT)
-    ..text = lDatePickerDropdownPrev();
-  final SpanElement _next_label = new SpanElement()
-    ..classes.add(LText.C_ASSISTIVE_TEXT)
-    ..text = lDatePickerDropdownNext();
 
   final DateTime _today = new DateTime.now();
   int _yearFirst = 1915;
@@ -79,27 +68,32 @@ class LDatePickerDropdown {
    * Date Picker Dropdown
    */
   LDatePickerDropdown(String this.name, String idPrefix, DateFormat this.dateFormat, int this.firstDayOfWeek) {
+    // header
+    final DivElement _grid = new DivElement()
+      ..classes.addAll([LDatepicker.C_DATEPICKER__FILTER, LGrid.C_GRID]);
     element.append(_grid);
+    // header parts
+    final DivElement _month = new DivElement()
+      ..classes.addAll([LDatepicker.C_DATEPICKER__FILTER__MONTH, LGrid.C_GRID, LGrid.C_GRID__ALIGN_SPREAD, LSizing.C_SIZE__3_OF_4]);
     _grid.append(_month);
+    final DivElement _year = new DivElement()
+      ..classes.addAll([LPicklist.C_PICKLIST, LPicklist.C_PICKLIST__FLUID, LGrid.C_SHRINK_NONE]);
+    _grid.append(_year);
+
+    // - month
     _month.append(_monthPrev);
     _monthPrev.append(_monthPrevButton.element);
     _monthLabel.id = LComponent.createId(idPrefix, "month");
     _month.append(_monthLabel);
     _month.append(_monthNext);
     _monthNext.append(_monthNextButton.element);
-    _grid.append(_year);
+    // - year
     _year.append(_yearSelect);
     // _cal.attributes[Html0.ARIA_LABELLEDBY] = _monthLabel.id;
+
     // Table
     element.append(_cal);
     //
-    _prev_label.id = LComponent.createId(idPrefix, "prev");
-    // _monthPrev.attributes[Html0.ARIA_LABELLEDBY] = _prev_label.id;
-    element.append(_prev_label);
-    _next_label.id = LComponent.createId(idPrefix, "next");
-    // _monthNext.attributes[Html0.ARIA_LABELLEDBY] = _next_label.id;
-    element.append(_next_label);
-
     _initYear();
     // Events
     _monthPrevButton.onClick.listen((MouseEvent evt) {
@@ -304,6 +298,7 @@ class LDatePickerDropdown {
         ..title = dayNames[day]
         ..text = dayAbbr[day];
       TableCellElement th = new Element.th()
+        ..classes.add("day") // margin overwritten if in table
         ..append(abbr);
       headRow.append(th);
     }
@@ -330,6 +325,7 @@ class LDatePickerDropdown {
           ..classes.add(LDatepicker.C_DAY)
           ..text = theDay.day.toString();
         TableCellElement dayElement = row.addCell()
+          ..classes.add("day") // margin overwritten if in table
           ..attributes["headers"] = dayNames[day]
           ..attributes[Html0.ROLE] = Html0.ROLE_GRIDCELL
           ..attributes[Html0.ARIA_SELECTED] = "false"

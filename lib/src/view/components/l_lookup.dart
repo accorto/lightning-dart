@@ -204,7 +204,8 @@ class LLookup
     _formElement.hint = newValue;
   }
 
-  void removeHint() => _formElement.removeHint();
+  void hintHide() => _formElement.hintHide();
+  void hintRemove() => _formElement.hintRemove();
 
   /// Small Editor/Label
   void set small(bool newValue) {
