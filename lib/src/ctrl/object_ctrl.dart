@@ -148,7 +148,7 @@ class ObjectCtrl
     }
   } // onFilterChange
 
-  void onFilterDeleteConfirmed(String value, DRecord record, DEntry entry, var actionVar) {
+  void onFilterDeleteConfirmed(String value, DataRecord data, DEntry entry, var actionVar) {
     if (value == AppsAction.YES && actionVar is SavedQuery) {
       SavedQuery query = actionVar as SavedQuery;
       _log.config("onFilterDeleteConfirmed ${tableName} ${value} ${query.name}");
@@ -280,10 +280,11 @@ class ObjectCtrl
   void _displayTable() {
     if (_table == null) {
       _table = new TableCtrl(idPrefix: id,
+          rowSelect: true,
+          recordSorting: datasource.recordSorting,
+          recordAction: onAppsActionRecord, // urv click
           tableUi: datasource.ui,
           optionCreateNew: true,
-          optionRowSelect: true,
-          recordSorting: datasource.recordSorting,
           optionLayout: true,
           optionEdit: true,
           editMode: LTable.EDIT_FIELD,
@@ -300,7 +301,7 @@ class ObjectCtrl
     if (_table.element.parent == null) {
       _content.add(_table);
     }
-    _table.setRecords(datasource.recordList, recordAction: onAppsActionRecord); // urv click
+    _table.setRecords(datasource.recordList);
     _table.setResponsiveScroll(0);
   } // displayTable
   TableCtrl _table;
@@ -372,13 +373,13 @@ class ObjectCtrl
 
 
   /// Application Action Record - clicked on urv
-  void onAppsActionRecord(String value, DRecord record, DEntry entry, var actionVar) {
-    _log.config("onAppsActionRecord ${tableName} ${value} ${record.recordId}");
-    _switchRecordCtrl(record, RecordCtrl.EDIT_FIELD);
+  void onAppsActionRecord(String value, DataRecord data, DEntry entry, var actionVar) {
+    _log.config("onAppsActionRecord ${tableName} ${value} ${data}");
+    _switchRecordCtrl(data, RecordCtrl.EDIT_FIELD);
   } // onAppsActionRecord
 
   /// Application Action New (if not table)
-  void onAppsActionNew(String value, DRecord record, DEntry entry, var actionVar) {
+  void onAppsActionNew(String value, DataRecord data, DEntry entry, var actionVar) {
     _log.config("onAppsActionNew ${tableName} ${value}");
     DataRecord data = new DataRecord(datasource.tableDirect, null);
     DRecord parentRecord = null;
@@ -392,7 +393,7 @@ class ObjectCtrl
 
 
   /// Application Action Refresh/Requery
-  void onAppsActionRefresh(String value, DRecord record, DEntry entry, var actionVar) {
+  void onAppsActionRefresh(String value, DataRecord data, DEntry entry, var actionVar) {
     _log.config("onAppsActionRefresh ${tableName}");
     _doQuery();
   }
@@ -443,16 +444,16 @@ class ObjectCtrl
 
 
   /// Application Action Delete
-  void onAppsActionDelete(String value, DRecord record, DEntry entry, var actionVar) {
-    if (record != null) {
+  void onAppsActionDelete(String value, DataRecord data, DEntry entry, var actionVar) {
+    if (data != null) {
       _log.config("onAppsActionDelete ${tableName} ${value}");
       LIElement li = new LIElement()
-          ..text = record.drv;
+          ..text = data.record.drv;
       UListElement ul = new UListElement()
         ..classes.add(LList.C_LIST__DOTTED)
         ..append(li);
       AppsAction deleteYes = AppsAction.createYes(onAppsActionDeleteConfirmed)
-        ..actionVar = record;
+        ..actionVar = data.record;
       LConfirmation conf = new LConfirmation("ds",
           title: TableCtrl.tableCtrlDelete1Record(),
           text:TableCtrl.tableCtrlDelete1RecordText(),
@@ -463,7 +464,7 @@ class ObjectCtrl
     }
   } // onAppsActionDelete
   /// Application Action Delete Confirmed
-  void onAppsActionDeleteConfirmed(String value, DRecord record, DEntry entry, var actionVar) {
+  void onAppsActionDeleteConfirmed(String value, DataRecord data, DEntry entry, var actionVar) {
     if (actionVar is DRecord && value == AppsAction.YES) {
       DRecord record = actionVar;
       _log.info("onAppsActionDeleteConfirmed ${tableName} ${value} id=${record.recordId}");
@@ -472,7 +473,7 @@ class ObjectCtrl
   } // onAppsActionDeleteConfirmed
 
   /// Application Action Delete Selected Records
-  void onAppsActionDeleteSelected(String value, DRecord record, DEntry entry, var actionVar) {
+  void onAppsActionDeleteSelected(String value, DataRecord data, DEntry entry, var actionVar) {
     _log.config("onAppsActionDeleteSelected ${tableName} ${value}");
     List<DRecord> records = selectedRecords;
     if (records == null || records.isEmpty) {
@@ -498,7 +499,7 @@ class ObjectCtrl
     }
   }
   /// Application Action Delete Selected Record Confirmed
-  void onAppsActionDeleteSelectedConfirmed(String value, DRecord record, DEntry entry, var actionVar) {
+  void onAppsActionDeleteSelectedConfirmed(String value, DataRecord data, DEntry entry, var actionVar) {
     if (actionVar is List<DRecord> && value == AppsAction.YES) {
       List<DRecord> records = actionVar;
       _log.info("onAppsActionDeleteSelectedConfirmed ${tableName} ${value} #${records.length}");
@@ -508,9 +509,9 @@ class ObjectCtrl
 
 
   /// Application Action Edit
-  void onAppsActionEdit(String value, DRecord record, DEntry entry, var actionVar) {
-    _log.config("onAppsActionEdit ${tableName} ${value} id=${record.recordId}");
-    _switchRecordCtrl(record, RecordCtrl.EDIT_RW);
+  void onAppsActionEdit(String value, DataRecord data, DEntry entry, var actionVar) {
+    _log.config("onAppsActionEdit ${tableName} ${value} ${data}");
+    _switchRecordCtrl(data, RecordCtrl.EDIT_RW);
     // ObjectEdit oe = new ObjectEdit(ui);
     // oe.setRecord(record, );
     // oe.recordSaved = onRecordSaved;
@@ -518,7 +519,7 @@ class ObjectCtrl
   }
 
   /// Switch to Record Edit mode
-  void _switchRecordCtrl(DRecord record, String editMode) {
+  void _switchRecordCtrl(DataRecord data, String editMode) {
     if (recordCtrl == null) {
       recordCtrl = new RecordCtrl(datasource.ui);
       recordCtrl._details.recordSaved = onRecordSaved;
@@ -538,7 +539,7 @@ class ObjectCtrl
       element.parent.append(recordCtrl.element);
     }
     recordCtrl.editMode = editMode;
-    recordCtrl.record = record;
+    recordCtrl.record = data.record;
     showRecord = true;
   }
   DivElement _recordCtrlBack;
@@ -560,7 +561,7 @@ class ObjectCtrl
 
 
   /// Application Action Compact Layout
-  void onAppsActionCompactLayout(String value, DRecord record, DEntry entry, var actionVar) {
+  void onAppsActionCompactLayout(String value, DataRecord data, DEntry entry, var actionVar) {
     _log.config("onAppsActionCompactLayout ${tableName} ${value}");
   }
 

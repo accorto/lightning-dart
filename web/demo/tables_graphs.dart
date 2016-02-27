@@ -32,11 +32,11 @@ class TablesGraphs extends DemoFeature {
     if (responsiveStackedHorizontalOption) // overwrites stacked
       table.responsiveStackedHorizontal = responsiveStackedHorizontalOption;
     if (actionOption) {
-      table.addTableAction(new AppsAction("ta", "Table Action", (String value, DRecord record, DEntry entry, var actionVar){
+      table.addTableAction(new AppsAction("ta", "Table Action", (String value, DataRecord data, DEntry entry, var actionVar){
           print("Table Action ${value}");
         })
       );
-      table.addRowAction(new AppsAction("ra", "Row Action", (String value, DRecord record, DEntry entry, var actionVar){
+      table.addRowAction(new AppsAction("ra", "Row Action", (String value, DataRecord data, DEntry entry, var actionVar){
           print("Row Action ${value}");
         })
       );

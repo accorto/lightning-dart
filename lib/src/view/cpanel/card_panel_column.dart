@@ -40,8 +40,8 @@ class CardPanelColumn
   }
 
   /// Add Record - create card
-  LCardCompactEntry addRecord(DRecord record, AppsActionTriggered recordAction) {
-    LCardCompactEntry card = new LCardCompactEntry.from(record, recordAction: recordAction);
+  LCardCompactEntry addRecord(DataRecord data, AppsActionTriggered recordAction) {
+    LCardCompactEntry card = new LCardCompactEntry.from(data, recordAction: recordAction);
     cardList.add(card);
 
     _listElement.append(card.element);

@@ -15,36 +15,22 @@ class LTableSumRow
   /**
    * Table Summary Row
    */
-  LTableSumRow(TableRowElement element,
-      int rowNo,
-      String idPrefix,
+  LTableSumRow(LTable ltable, TableRowElement rowElement,
+      int rowIndex,
       String cssClass,
-      bool rowSelect,
-      List<String> nameList,
-      Map<String,String> nameLabelMap,
-      String type,
-      List<DataColumn> dataColumns)
-      : super (element,
-        rowNo,
-        idPrefix,
+      String type)
+      : super (ltable, rowElement,
+        rowIndex,
         null, // rowValue
         cssClass,
-        rowSelect,
-        nameList,
-        nameLabelMap,
         type,
-        null, // actions
-        dataColumns);
-
+        null); // actions
 
 
   /// set Record statistics
-  void setStatistics(TableStatistics statistics,
-      AppsActionTriggered recordAction,
-      String label,
-      bool hasAction) {
+  void setStatistics(TableStatistics statistics, String label,
+      bool addTrailingCell) {
     this.statistics = statistics;
-    this.recordAction = recordAction;
     //
     if (label == null)
       data.record.clearDrv();
@@ -53,7 +39,7 @@ class LTableSumRow
     //
     rowElement.children.clear();
     display();
-    if (hasAction) {
+    if (addTrailingCell) {
       rowElement.addCell();
     }
   }
@@ -62,7 +48,7 @@ class LTableSumRow
 
   /// display stat record
   void display() {
-    for (String name in nameList) {
+    for (String name in ltable.nameList) {
       TableCellElement tc = rowElement.addCell();
 
       if (name == null) { // select column
@@ -100,7 +86,7 @@ class LTableSumRow
         DEntry entry = data.getEntry(null, name, false);
         if (entry != null) {
           value = DataRecord.getEntryValue(entry);
-          align = _displayAlign(dataColumn);
+          align = getDisplayAlign(dataColumn);
           //
           _displayRo(name, value, align, dataColumn, entry, false, tc:tc);
         }
@@ -146,6 +132,7 @@ class LTableSumRow
   /// add group by cell
   LTableCell addCell(Element content,
       String name,
+      String label,
       String value,
       String align,
       DataColumn dataColumn,
@@ -155,7 +142,7 @@ class LTableSumRow
     if (content != null)
       content.classes.add("cell-by");
     return super.addCell(content,
-        name, value, align, dataColumn,
+        name, label, value, align, dataColumn,
         fieldEdit:fieldEdit, addStatistics:addStatistics, tc:tc);
   }
 

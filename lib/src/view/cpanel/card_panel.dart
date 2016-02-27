@@ -175,12 +175,12 @@ class CardPanel
       LCardCompactEntry card;
       for (CardPanelColumn pcolumn in _panelColumnList) {
         if (pcolumn.value == columnValue) {
-          card = pcolumn.addRecord(record, recordAction);
+          card = pcolumn.addRecord(data, recordAction);
           break;
         }
       }
       if (card == null) {
-        card = otherColumn.addRecord(record, recordAction);
+        card = otherColumn.addRecord(data, recordAction);
       }
       if (_ui == null) {
         card.displayRecord();

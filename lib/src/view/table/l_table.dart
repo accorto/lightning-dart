@@ -74,16 +74,14 @@ class LTable
 
   /// Table Element
   Element get element {
-    if (_wrapper1 != null)
-      return _wrapper1;
+    if (_wrapper != null)
+      return _wrapper;
     return _table;
   }
   /// Table id (not wrapper)
   String get id => _table.id;
   /// responsive wrapper
-  DivElement _wrapper1;
-  /// responsive wrapper
-  //DivElement _wrapper2;
+  DivElement _wrapper;
 
   /// Table Element
   final TableElement _table = new TableElement()
@@ -96,6 +94,7 @@ class LTable
   TableSectionElement _tfoot;
   final List<LTableHeaderRow> _theadRows = new List<LTableHeaderRow>();
   final List<LTableRow> _tbodyRows = new List<LTableRow>();
+  List<LTableRow> get i_bodyRows => _tbodyRows;
   final List<LTableRow> _tfootRows = new List<LTableRow>();
 
 
@@ -105,18 +104,18 @@ class LTable
   final List<String> nameList = new List<String>();
 
   /// Actions
-  List<AppsAction> _tableActions = new List<AppsAction>();
-  List<AppsAction> _rowActions = new List<AppsAction>();
+  final List<AppsAction> tableActions = new List<AppsAction>();
+  final List<AppsAction> rowActions = new List<AppsAction>();
 
   /// Record Sort List
   final List<DRecord> recordList = new List<DRecord>();
-  /// Record action (click on drv)
-  AppsActionTriggered recordAction;
+  /// Record action (click on drv) - display urv
+  final AppsActionTriggered recordAction;
   /// Table Row Select callback
   TableSelectClicked tableSelectClicked;
 
   /// Row Select
-  final bool optionRowSelect;
+  final bool rowSelect;
   /// Record Sort List
   RecordSortList recordSorting;
   /// IdPrefix
@@ -128,8 +127,9 @@ class LTable
    * Table
    */
   LTable(String this.idPrefix,
-      {bool this.optionRowSelect:true,
-      RecordSortList this.recordSorting}) {
+      {bool this.rowSelect:true,
+      RecordSortList this.recordSorting,
+      AppsActionTriggered this.recordAction}) {
     _table.id = LComponent.createId(idPrefix, "table");
     if (recordSorting == null)
       this.recordSorting = new RecordSortList();
@@ -161,7 +161,7 @@ class LTable
     _overflow = newValue;
     if (_overflow == LTableResponsive.NONE) {
       _table.remove();
-      _wrapper1 = null;
+      _wrapper = null;
       //_wrapper2 = null;
       if (_tableHead != null && _thead != null) {
         _thead.remove();
@@ -180,8 +180,8 @@ class LTable
       //    ..style.position = "relative"
       //    ..append(_table);
       //}
-      if (_wrapper1 == null) {
-        _wrapper1 = new DivElement()
+      if (_wrapper == null) {
+        _wrapper = new DivElement()
           ..classes.add("r-table-wrap1")
           ..classes.add(LScrollable.C_SCROLLABLE__X)
           ..style.position = "relative"
@@ -200,7 +200,7 @@ class LTable
             ..style.zIndex = "1";
         }
         _tableHead.remove();
-        _wrapper1.append(_tableHead);
+        _wrapper.append(_tableHead);
         if (_thead != null) {
           _thead.remove();
           _tableHead.append(_thead);
@@ -215,7 +215,7 @@ class LTable
 
       // body
       _table.remove();
-      _wrapper1.append(_table);
+      _wrapper.append(_table);
 
       // foot
       if (_overflow == LTableResponsive.OVERFLOW_HEAD_FOOT) {
@@ -229,7 +229,7 @@ class LTable
             ..style.zIndex = "1";
         }
         _tableFoot.remove();
-        _wrapper1.append(_tableFoot);
+        _wrapper.append(_tableFoot);
         if (_tfoot != null) {
           _tfoot.remove();
           _tableFoot.append(_tfoot);
@@ -254,7 +254,7 @@ class LTable
     }
     _scrollHeight = height;
     if (_onScrollSubscription == null) {
-      _onScrollSubscription = _wrapper1.onScroll.listen(onScrollTableWrapper);
+      _onScrollSubscription = _wrapper.onScroll.listen(onScrollTableWrapper);
     }
     showingNow();
   }
@@ -269,10 +269,10 @@ class LTable
     int height = _scrollHeight;
     if (height == 0) {
       if (_onScrollSubscription != null) {
-        _wrapper1.style.overflowY = "visible";
-        _wrapper1.style.removeProperty("height");
+        _wrapper.style.overflowY = "visible";
+        _wrapper.style.removeProperty("height");
       }
-      Rectangle wrapRect = _wrapper1.getBoundingClientRect();
+      Rectangle wrapRect = _wrapper.getBoundingClientRect();
       int winHeight = window.innerHeight;
       int docHeight = document.body.getBoundingClientRect().height;
       int hdr = wrapRect.top;
@@ -282,15 +282,15 @@ class LTable
     } else {
       _log.config("showingNow height=${height}");
     }
-    _wrapper1.style.overflowY = "auto";
-    _wrapper1.style.height = "${height}px";
+    _wrapper.style.overflowY = "auto";
+    _wrapper.style.height = "${height}px";
     _overflowSync();
   } // showingNow
 
   /// scroll body with fixed header
   void onScrollTableWrapper(Event evt) {
-    int top = _wrapper1.scrollTop;
-    int width = _wrapper1.offsetWidth;
+    int top = _wrapper.scrollTop;
+    int width = _wrapper.offsetWidth;
     if (_tableHead != null) {
       _tableHead.style.top = "${top}px";
     }
@@ -302,8 +302,8 @@ class LTable
       _lastWidth = width;
     }
     _log.finer("onScrollTableWrapper"
-        " scroll t=${_wrapper1.scrollTop} h=${_wrapper1.scrollHeight} l=${_wrapper1.scrollLeft} w=${_wrapper1.scrollWidth}"
-        " offset t=${_wrapper1.offsetTop} h=${_wrapper1.offsetHeight} l=${_wrapper1.offsetLeft} w=${_wrapper1.offsetWidth}"
+        " scroll t=${_wrapper.scrollTop} h=${_wrapper.scrollHeight} l=${_wrapper.scrollLeft} w=${_wrapper.scrollWidth}"
+        " offset t=${_wrapper.offsetTop} h=${_wrapper.offsetHeight} l=${_wrapper.offsetLeft} w=${_wrapper.offsetWidth}"
     );
   } // onScrollTableWrapper
   int _lastWidth;
@@ -431,53 +431,52 @@ class LTable
    * Add Table Head Row
    * for responsive - use row.addHeaderCell to add name-label info
    */
-  LTableHeaderRow addHeadRow(bool enableSort, {bool primary:true}) {
+  LTableHeaderRow addHeadRow(bool enableSort, {bool primary:true, LTableHeaderRow row}) {
+    if (primary) {
+      if (row == null) {
+        row = new LTableHeaderRow(this, createHeadRow(),
+            headRowIndex,
+            LText.C_TEXT_HEADING__LABEL,
+            enableSort ? onTableSortClicked : null,
+            tableActions);
+        if (rowSelect && _theadRows.isEmpty) {
+          row.selectCb.onClick.listen((MouseEvent evt) {
+            selectAll(row.selectCb.checked);
+          });
+        }
+      }
+      _headerRow = row;
+    } else if (row == null) {
+      row = new LTableRow(this, createHeadRow(),
+          headRowIndex,
+          null, // rowValue
+          LText.C_TEXT_HEADING__LABEL,
+          LTableRow.TYPE_HEAD,
+          null);
+    }
+    row.editMode = _editMode;
+    _theadRows.add(row);
+    // add urv
+    if (recordAction != null && _ui != null) {
+      row.addHeaderCell(DataRecord.URV, _ui.table.label);
+    }
+    return row;
+  } // addHeadRow
+  LTableHeaderRow _headerRow;
+
+  /// create/add head row
+  TableRowElement createHeadRow() {
     if (_thead == null) {
       if (_tableHead == null)
         _thead = _table.createTHead();
       else
         _thead = _tableHead.createTHead();
     }
-    LTableHeaderRow row = null;
-    if (primary) {
-      _headerRow = new LTableHeaderRow(_thead.addRow(),
-          _theadRows.length,
-          idPrefix,
-          LText.C_TEXT_HEADING__LABEL,
-          optionRowSelect,
-          nameList,
-          nameLabelMap,
-          enableSort ? onTableSortClicked : null,
-          _tableActions,
-          dataColumns);
-      if (optionRowSelect && _theadRows.isEmpty) {
-        _headerRow.selectCb.onClick.listen((MouseEvent evt) {
-          selectAll(_headerRow.selectCb.checked);
-        });
-      }
-      row = _headerRow;
-    } else {
-      row = new LTableRow(_thead.addRow(),
-          _tbodyRows.length,
-          idPrefix,
-          null, // rowValue
-          LText.C_TEXT_HEADING__LABEL,
-          optionRowSelect,
-          nameList,
-          nameLabelMap,
-          LTableRow.TYPE_HEAD,
-          null, // rowAction
-          dataColumns);
-    }
-    row.editMode = _editMode;
-    _theadRows.add(row);
-    // add urv
-    if (_ui != null) {
-      row.addHeaderCell(DataRecord.URV, _ui.table.label);
-    }
-    return row;
-  } // addHeadRow
-  LTableHeaderRow _headerRow;
+    _headRowIndex++;
+    return _thead.addRow();
+  }
+  int get headRowIndex => _headRowIndex;
+  int _headRowIndex = -1;
 
   /// Table Sort = shift - multiple
   void onTableSortClicked(String name, bool asc, DataType dataType, MouseEvent evt) {
@@ -536,7 +535,7 @@ class LTable
   void _sort(bool sortRemoteOk, bool redisplay) {
     if (_tbodyRows.length > 1) {
       if (sortRemoteOk && recordSorting.sortRemote()) {
-        for (AppsAction action in _tableActions) {
+        for (AppsAction action in tableActions) {
           if (action.value == AppsAction.REFRESH) {
             action.callback(null, null, null, null);
             return;
@@ -620,7 +619,8 @@ class LTable
         row.show = true;
       }
       if (_withStatistics && _statisticsRow != null) {
-        _statisticsRow.setStatistics(_statistics, null, lTableStatisticTotal(), _tableActions.isNotEmpty);
+        _statisticsRow.setStatistics(_statistics, lTableStatisticTotal(),
+            rowSelect && tableActions.isNotEmpty);
       }
       if (graphSelectionChange != null)
         graphSelectionChange(null);
@@ -637,7 +637,8 @@ class LTable
     }
     if (_withStatistics && _statisticsRow != null) {
       TableStatistics temp = _statistics.summary(recordList);
-      _statisticsRow.setStatistics(temp, null, lTableStatisticGraphSelect(), _tableActions.isNotEmpty);
+      _statisticsRow.setStatistics(temp, lTableStatisticGraphSelect(),
+          rowSelect && tableActions.isNotEmpty);
     }
     if (graphSelectionChange != null)
       graphSelectionChange(count);
@@ -663,7 +664,7 @@ class LTable
    * Add Table Action - needs to be called before creating header
    */
   void addTableAction(AppsAction action) {
-    _tableActions.add(action);
+    tableActions.add(action);
     if (_theadRows.isNotEmpty) {
       _theadRows.first.addActions([action]);
     }
@@ -673,81 +674,80 @@ class LTable
    * Add Row Action - needs to be called before creating header
    */
   void addRowAction(AppsAction action) {
-    _rowActions.add(action);
+    rowActions.add(action);
   }
 
   /// Create and Add Table Body Row
-  LTableRow addBodyRow({String rowValue}) {
-    if (_tbody == null)
-      _tbody = _table.createTBody();
-    LTableRow row = new LTableRow(_tbody.addRow(),
-        _tbodyRows.length,
-        idPrefix,
-        rowValue,
-        LButton.C_HINT_PARENT,
-        optionRowSelect,
-        nameList,
-        nameLabelMap,
-        LTableRow.TYPE_BODY,
-        _rowActions,
-        dataColumns);
+  LTableRow addBodyRow({String rowValue, LTableRow row}) {
+    if (row == null) {
+      row = new LTableRow(this, createBodyRow(),
+          bodyRowIndex,
+          rowValue,
+          LButton.C_HINT_PARENT,
+          LTableRow.TYPE_BODY,
+          rowActions);
+    }
     row.editMode = _editMode;
     row.tableSelectClicked = onTableRowSelectClicked;
     _tbodyRows.add(row);
     return row;
   }
+  /// create/add body row
+  TableRowElement createBodyRow() {
+    if (_tbody == null)
+      _tbody = _table.createTBody();
+    _bodyRowIndex++;
+    return _tbody.addRow();
+  }
+  int get bodyRowIndex => _bodyRowIndex;
+  int _bodyRowIndex = -1;
 
   /// Add Table Foot Row
-  LTableRow addFootRow() {
+  LTableRow addFootRow({LTableRow row}) {
+    if (row == null) {
+      row = new LTableRow(
+          this,
+          createFootRow(),
+          footRowIndex,
+          null, // rowValue
+          LButton.C_HINT_PARENT,
+          LTableRow.TYPE_FOOT,
+          null); // rowAction
+    }
+    _tfootRows.add(row);
+    return row;
+  }
+
+  /// create/add foot row
+  TableRowElement createFootRow() {
     if (_tfoot == null) {
       if (_tableFoot == null)
         _tfoot = _table.createTFoot();
       else
         _tfoot = _tableFoot.createTFoot();
     }
-    LTableRow row = new LTableRow(_tfoot.addRow(),
-        _tfootRows.length,
-        idPrefix,
-        null, // rowValue
-        LButton.C_HINT_PARENT,
-        optionRowSelect,
-        nameList,
-        nameLabelMap,
-        LTableRow.TYPE_FOOT,
-        null, // rowAction
-        dataColumns);
-    _tfootRows.add(row);
-    return row;
+    _footRowIndex++;
+    return _tfoot.addRow();
   }
+  int get footRowIndex => _footRowIndex;
+  int _footRowIndex = -1;
+
   /// add sum row to Footer or Body
   LTableSumRow addStatRow(bool foot) {
     TableRowElement tr = null;
     int rowNo = 0;
     if (foot) {
-      if (_tfoot == null) {
-        if (_tableFoot == null)
-          _tfoot = _table.createTFoot();
-        else
-          _tfoot = _tableFoot.createTFoot();
-      }
-      tr = _tfoot.addRow();
-      rowNo = _tfootRows.length;
+      tr = createFootRow();
+      rowNo = footRowIndex;
     } else {
-      if (_tbody == null)
-        _tbody = _table.createTBody();
-      tr = _tbody.addRow();
-      rowNo = _tbodyRows.length;
+      tr = createBodyRow();
+      rowNo = bodyRowIndex;
     }
     //
-    LTableSumRow row = new LTableSumRow(tr,
+    LTableSumRow row = new LTableSumRow(this, tr,
         rowNo,
-        idPrefix,
         LButton.C_HINT_PARENT,
-        false, // rowSelect
-        nameList,
-        nameLabelMap,
-        foot ? LTableRow.TYPE_FOOT : LTableRow.TYPE_BODY,
-        dataColumns);
+        foot ? LTableRow.TYPE_FOOT : LTableRow.TYPE_BODY);
     //
     if (foot)
       _tfootRows.add(row);
@@ -786,6 +786,7 @@ class LTable
         dataColumns.add(DataColumn.fromUi(_ui, col.name, tableColumn:col));
       }
     }
+
     // Header
     LTableHeaderRow row = addHeadRow(true);
     for (DataColumn dataColumn in dataColumns) {
@@ -799,6 +800,10 @@ class LTable
   UI _ui;
   /// overwrite for fixed ui
   UI get ui => _ui;
+  /// set ui - does not initialize - use [setUi]
+  void set ui (UI ui) {
+    _ui = ui;
+  }
   /// Table Meta Data
   final List<DataColumn> dataColumns = new List<DataColumn>();
   /// Statistics
@@ -818,6 +823,9 @@ class LTable
     _theadRows.clear();
     _tbodyRows.clear();
     _tfootRows.clear();
+    _headRowIndex = -1;
+    _bodyRowIndex = -1;
+    _footRowIndex = -1;
     //
     nameLabelMap.clear();
     nameList.clear();
@@ -825,11 +833,10 @@ class LTable
   }
 
 
-  /// Set Records - [recordAction] click on drv/urv
-  void setRecords(List<DRecord> records, {AppsActionTriggered recordAction}) {
+  /// Set Records
+  void setRecords(List<DRecord> records) {
     recordList.clear();
     recordList.addAll(records);
-    this.recordAction = recordAction;
     display();
     if (_headerRow != null) {
       _headerRow.setSorting(recordSorting);
@@ -841,10 +848,7 @@ class LTable
     if (_tbody != null) {
       _tbody.children.clear();
       _tbodyRows.clear();
-    }
-    if (_tfoot != null) {
-      _tfoot.children.clear();
-      _tfootRows.clear();
+      _bodyRowIndex = -1;
     }
     bool needSort = _displayCalculateStatistics();
     //_log.fine("display records=${recordList.length}");
@@ -854,18 +858,25 @@ class LTable
         LTableSumRow row = addStatRow(false);
         row.setRecord(record, i++);
       } else {
-        LTableRow row = addBodyRow(
-            rowValue: record.recordId); // adds to _tbodyRows
-        row.setRecord(record, i++, recordAction: recordAction);
+        LTableRow row = addBodyRow(rowValue: record.recordId); // adds to _tbodyRows
+        row.setRecord(record, i++);
       }
     }
     if (needSort) {
       _sortGroupBy(); // LTableRow
     }
+
     // Statistics
-    if (_statistics != null && _withStatistics) {
-      _statisticsRow = addStatRow(true); // LTableSumRow
-      _statisticsRow.setStatistics(_statistics, null, null, _tableActions.isNotEmpty);
+    if (_withStatistics && _statistics != null) {
+      if (_statisticsRow == null)
+        _statisticsRow = addStatRow(true); // LTableSumRow
+      _statisticsRow.setStatistics(_statistics, null,
+          rowSelect && tableActions.isNotEmpty);
+    } else {
+      if (_statisticsRow != null) {
+        _statisticsRow.rowElement.remove();
+        _tfootRows.remove(_statisticsRow);
+      }
     }
     _overflowSync();
   } // display
@@ -896,13 +907,7 @@ class LTable
    * Add Plain Headings
    */
   void addHeadings(List<String> thTexts) {
-    if (_thead == null) {
-      if (_tableHead == null)
-        _thead = _table.createTHead();
-      else
-        _thead = _tableHead.createTHead();
-    }
-    TableRowElement tr = _thead.addRow();
+    TableRowElement tr = createHeadRow();
     for (String thText in thTexts) {
       Element th = new Element.th();
       tr.append(th);
@@ -916,9 +921,7 @@ class LTable
    * Add Plain Body Row with header element and data element
    */
   void addRowHdrData(String thText, dynamic tdValue, {int colSpan:0}) {
-    if (_tbody == null)
-      _tbody = _table.createTBody();
-    TableRowElement tr = _tbody.addRow();
+    TableRowElement tr = createBodyRow();
 
     Element th = new Element.th();
     tr.append(th);
@@ -947,9 +950,7 @@ class LTable
    * Add Plain Body Row with header text and values, colSpan for values
    */
   void addRowHdrDataList(String thText, List<dynamic> tdValues, {int colSpan:0}) {
-    if (_tbody == null)
-      _tbody = _table.createTBody();
-    TableRowElement tr = _tbody.addRow();
+    TableRowElement tr = createBodyRow();
 
     Element th = new Element.th();
     tr.append(th);
@@ -982,9 +983,7 @@ class LTable
    * Add Plain Body Row
    */
   TableRowElement addRowDataList(List<dynamic> tdValues) {
-    if (_tbody == null)
-      _tbody = _table.createTBody();
-    TableRowElement tr = _tbody.addRow();
+    TableRowElement tr = createBodyRow();
 
     for (dynamic tdValue in tdValues) {
       TableCellElement td = tr.addCell();

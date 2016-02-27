@@ -425,7 +425,7 @@ class DataRecord {
   } // checkChanged
 
   /// URV (rest)
-  String get urv => _record.urvRest;
+  String get urvRest => _record.urvRest;
   /// Record Id
   String get recordId => _record.recordId;
 
@@ -745,7 +745,10 @@ class DataRecord {
 
   @override
   String toString() {
-    return "DataRecord@${recordId}[urv=${urv}, changed=${changed}]";
+    if (record.hasUrvRest()) {
+      return "DataRecord@${recordId}[urv=${urvRest}, changed=${changed}]";
+    }
+    return "DataRecord@${recordId}[changed=${changed}]";
   }
 
 } // DataRecord

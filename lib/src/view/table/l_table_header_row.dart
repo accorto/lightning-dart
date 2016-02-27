@@ -18,30 +18,21 @@ class LTableHeaderRow
   /**
    * Table Header Row
    */
-  LTableHeaderRow(TableRowElement element,
-      int rowNo,
-      String idPrefix,
+  LTableHeaderRow(LTable ltable, TableRowElement element,
+      int rowIndex,
       String cssClass,
-      bool rowSelect,
-      List<String> nameList,
-      Map<String,String> nameLabelMap,
       this.tableSortClicked,
-      List<AppsAction> tableActions,
-      List<DataColumn> dataColumns)
-      : super (element,
-        rowNo,
-        idPrefix,
+      List<AppsAction> tableActions)
+      : super (ltable, element,
+        rowIndex,
         null, // rowValue
         cssClass,
-        rowSelect,
-        nameList,
-        nameLabelMap,
         LTableRow.TYPE_HEAD,
-        tableActions,
-        dataColumns) {
-    if (rowSelect)
-      nameList.add(null);
-  }
+        tableActions) {
+    if (ltable.rowSelect)
+      ltable.nameList.add(null);
+
+  } // LTableHeaderRow
 
   /**
    * Add Cell with Header Text
@@ -58,13 +49,13 @@ class LTableHeaderRow
       //int index = rowElement.children.length -1;
       //while (nameList.length < index)
       //  nameList.add(null);
-      nameList.add(name);
-      nameLabelMap[name] = label;
+      ltable.nameList.add(name);
+      ltable.nameLabelMap[name] = label;
     }
 
     TableCellElement tc = new Element.th()
       ..attributes["scope"] = "col";
-    if (_actionCell == null) {
+    if (_actionCell == null || !ltable.rowSelect) {
       rowElement.append(tc);
     } else {
       rowElement.insertBefore(tc, _actionCell.cellElement);

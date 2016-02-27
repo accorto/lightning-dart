@@ -385,7 +385,7 @@ class RequestResponse {
       modal.append(p);
     }
     //
-    LTable details = new LTable("error-details", optionRowSelect:false);
+    LTable details = new LTable("error-details", rowSelect:false);
     modal.add(details);
     details.addRowHdrData("Status", "${status} ${statusText}");
     details.addRowHdrData("Url", window.location.href);

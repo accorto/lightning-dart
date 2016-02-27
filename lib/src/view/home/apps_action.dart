@@ -7,9 +7,9 @@
 part of lightning_dart;
 
 /**
- * Action was Triggered with action [value] (name) - potentially providing [record] and/or [entry] context
+ * Action was Triggered with action [value] (name) - potentially providing [data] and/or [entry] context
  */
-typedef void AppsActionTriggered(String value, DRecord record, DEntry entry, var actionVar);
+typedef void AppsActionTriggered(String value, DataRecord data, DEntry entry, var actionVar);
 
 
 /**
@@ -106,8 +106,6 @@ class AppsAction {
   AppsActionTriggered callback;
   /// Option Info
   DOption option;
-  /// Action Specific Variable
-  var actionVar;
   /// show label in buttons
   bool showLabel = true;
   /// Action Icon
@@ -117,6 +115,16 @@ class AppsAction {
   /// Button Classes e.g. [LButton.C_BUTTON__NEUTRAL], [C_BUTTON__BRAND];
   List<String> buttonClasses;
 
+  /// Action Specific Variable
+  var actionVar;
+  /// Data
+  DataRecord data;
+  DRecord get record => data == null ? null : data.record;
+  void set record (DRecord newValue) {
+    if (data == null)
+      data = new DataRecord(null, null);
+    data.setRecord(newValue, 0);
+  }
 
   /// Apps Action from option
   AppsAction.from(DOption this.option,
@@ -129,6 +137,15 @@ class AppsAction {
     option = new DOption()
       ..value = value
       ..label = label;
+  }
+
+  /// clone bit without data / actionVar
+  AppsAction clone() {
+    return new AppsAction.from(option, callback)
+      ..icon = icon
+      ..showLabel = showLabel
+      ..assistiveText = assistiveText
+      ..buttonClasses = buttonClasses;
   }
 
   String get value => option.value;
@@ -150,8 +167,7 @@ class AppsAction {
 
   /// as Button - [createClick] to call [callback]
   LButton asButton(bool createOnClick,
-      {DataRecord data,
-      String idPrefix,
+      {String idPrefix,
       bool recreate:false}) {
 
     if (_btn != null && !recreate) {
@@ -168,10 +184,7 @@ class AppsAction {
     if (createOnClick && callback != null) {
       _btn.onClick.listen((MouseEvent evt){
         if (!disabled) {
-          if (data != null)
-            callback(value, data.record, null, actionVar);
-          else
-            callback(value, null, null, actionVar);
+          callback(value, data, null, actionVar);
         }
       });
     }

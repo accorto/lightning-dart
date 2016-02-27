@@ -16,7 +16,7 @@ class LCardCompactEntry
 
 
   /// The record
-  DRecord record;
+  DataRecord data;
 
   final AppsActionTriggered recordAction;
 
@@ -31,11 +31,11 @@ class LCardCompactEntry
   /**
    * Card Entry
    */
-  LCardCompactEntry.from(DRecord record, {Element button, AppsActionTriggered this.recordAction})
-      : super(record.drv) {
-    this.record = record;
-    element.attributes[Html0.DATA_VALUE] = record.recordId;
-    titleLink.href = "#${record.urv}";
+  LCardCompactEntry.from(DataRecord data, {Element button, AppsActionTriggered this.recordAction})
+      : super(data.record.drv) {
+    this.data = data;
+    element.attributes[Html0.DATA_VALUE] = data.record.recordId;
+    titleLink.href = "#${data.record.urv}";
     _init(button);
   } // LCardCompactEntry
 
@@ -47,7 +47,7 @@ class LCardCompactEntry
     if (recordAction != null) {
       titleLink.onClick.listen((MouseEvent evt) {
         evt.preventDefault();
-        recordAction("record", record, null, null);
+        recordAction("record", data, null, null);
       });
     }
   } // init
@@ -55,16 +55,15 @@ class LCardCompactEntry
   /// add action
   void addActions(List<AppsAction> actions, {Object actionReference}) {
     super.addActions(actions,
-      actionReference: actionReference == null ? record : actionReference);
+      actionReference: actionReference == null ? data : actionReference);
   }
 
   /**
    * [addEntry] based on UI - queryColumnList or gridColumnList
    */
   void display(UI ui, {bool useQueryColumnList:false}) {
-    if (record == null)
+    if (data == null)
       return;
-    DataRecord data = new DataRecord(ui.table, null, value: record);
     if (useQueryColumnList && ui.queryColumnList.isNotEmpty) {
       for (UIQueryColumn qc in ui.queryColumnList) {
         String label = qc.columnName;
@@ -101,9 +100,9 @@ class LCardCompactEntry
    * [addEntry] based on [record]
    */
   void displayRecord() {
-    if (record == null)
+    if (data == null)
       return;
-    for (DEntry entry in record.entryList) {
+    for (DEntry entry in data.record.entryList) {
       String label = entry.columnName;
       String value = DataRecord.getEntryValue(entry);
       if (entry.hasValueDisplay())

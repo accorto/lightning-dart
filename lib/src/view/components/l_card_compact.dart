@@ -77,7 +77,8 @@ class LCardCompact
     clearEntries();
     int i = 0;
     for (DRecord record in records) {
-      LCardCompactEntry entry = _createEntry(record, i++, recordAction);
+      DataRecord dd = new DataRecord(_ui.table, null, value:record, rowNo: i++);
+      LCardCompactEntry entry = _createEntry(dd, recordAction);
       addEntry(entry);
     }
   } // display
@@ -86,9 +87,9 @@ class LCardCompact
   /**
    * Create Card Entry
    */
-  LCardCompactEntry _createEntry(DRecord record, int rowNo, AppsActionTriggered recordAction) {
+  LCardCompactEntry _createEntry(DataRecord data, AppsActionTriggered recordAction) {
     // action drop down
-    LCardCompactEntry entry = new LCardCompactEntry.from(record, recordAction:recordAction);
+    LCardCompactEntry entry = new LCardCompactEntry.from(data, recordAction:recordAction);
     entry.addActions(_rowActions);
     entry.display(_ui);
     return entry;
@@ -110,12 +111,12 @@ class LCardCompact
     } else if (action.callback == null) {
       _log.info("onActionChange ${action.value} - no callback");
     } else {
-      DRecord record = null;
-      if (details.reference is DRecord)
-        record = details.reference as DRecord;
-      if (record != null) {
-        _log.fine("onActionChange ${action.value} - ${record.urv}");
-        action.callback(action.value, record, null, action.actionVar);
+      DataRecord data = null;
+      if (details.reference is DataRecord)
+        data = details.reference as DataRecord;
+      if (data != null) {
+        _log.fine("onActionChange ${action.value} - ${data}");
+        action.callback(action.value, data, null, action.actionVar);
       } else {
         _log.info("onActionChange ${action.value} - no record");
       }

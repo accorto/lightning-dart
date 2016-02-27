@@ -15,7 +15,7 @@ class LTableActionCell
   static final Logger _log = new Logger("LTableActionCell");
 
   /// create action button
-  static LButton createButton(String idPrefix){
+  static LButton _createButton(String idPrefix){
     return new LButton(new ButtonElement(), "action", null, idPrefix:idPrefix,
         buttonClasses: [LButton.C_BUTTON__ICON_BORDER_FILLED, LButton.C_BUTTON__ICON_X_SMALL],
         icon: new LIconUtility(LIconUtility.DOWN, color: LButton.C_BUTTON__ICON__HINT, size: LButton.C_BUTTON__ICON__SMALL),
@@ -27,32 +27,32 @@ class LTableActionCell
   /// The Dropdown
   LDropdown dropdown;
   /// Parent Row
-  LTableRow row;
+  final LTableRow row;
   /// Actions for row
   final List<AppsAction> _actions = new List<AppsAction>();
 
   /**
    * Action Table Cell
    */
-  LTableActionCell(TableCellElement element, LButton button, DataColumn dataColumn,
-      {String dropdownDirection:LDropdown.C_DROPDOWN__RIGHT})
-      : super(element, button.element, "action", null, null, null, dataColumn, false) {
-    this.button = button;
+  LTableActionCell(LTableRow this.row, TableCellElement element,
+      LButton btn, bool atEnd)
+      : super(element, btn.element, "action", null, null, null, null, false) {
+    this.button = btn;
     cellElement.classes.add(LTable.C_ROW_ACTION);
+
+    //String dropdownDirection:LDropdown.C_DROPDOWN__RIGHT
+
     dropdown = new LDropdown(button, button.id,
-        dropdownClasses: [dropdownDirection, LDropdown.C_DROPDOWN__ACTIONS]);
+        dropdownClasses: [atEnd ? LDropdown.C_DROPDOWN__RIGHT : LDropdown.C_DROPDOWN__LEFT,
+          LDropdown.C_DROPDOWN__ACTIONS]);
     cellElement.append(dropdown.element);
     dropdown.dropdown.editorChange = onActionChange;
   } // LTableActionCell
 
   /// Add Action
-  void addAction(AppsAction action, {DRecord reference}) {
+  void addAction(AppsAction action) {
     _actions.add(action);
-    LDropdownItem item = action.asDropdown(false);
-    if (row != null)
-      item.reference = row.record;
-    if (reference != null)
-      item.reference = reference;
+    LDropdownItem item = action.asDropdown(false, recreate: true);
     dropdown.dropdown.addDropdownItem(item);
   }
 
@@ -71,17 +71,18 @@ class LTableActionCell
     } else if (action.callback == null) {
       _log.info("onActionChange ${action.value} - no callback");
     } else {
-      DRecord record = null;
-      if (item.reference is DRecord)
-        record = item.reference as DRecord;
-      if (record == null && row != null)
-        record = row.record;
-      if (record != null) {
-        _log.fine("onActionChange ${action.value} - ${record.urv}");
+      DataRecord data = action.data;
+      if (data == null && row != null)
+        data = row.data;
+      if (data != null) {
+        _log.fine("onActionChange ${action.value} - ${data}");
       } else {
         _log.info("onActionChange ${action.value} - no record");
       }
-      action.callback(action.value, record, null, action.actionVar);
+      var actionVar = action.actionVar;
+      if (actionVar == null)
+        actionVar = row;
+      action.callback(action.value, data, null, actionVar);
     }
   } // onActionChange
 

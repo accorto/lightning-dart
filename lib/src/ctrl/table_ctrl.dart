@@ -33,15 +33,20 @@ class TableCtrl
    * - provide [appsActionNewCallback] to overwrite creating new row (inline)
    */
   TableCtrl({String idPrefix,
+      bool rowSelect:true,
+      RecordSortList recordSorting,
+      AppsActionTriggered recordAction, // record urv click
       UI tableUi,
       bool this.optionCreateNew:true,
-      bool optionRowSelect:true,
-      RecordSortList recordSorting,
       bool this.optionLayout:true,
       bool this.optionEdit:true,
       String editMode: LTable.EDIT_RO,
-      bool this.alwaysOneEmptyLine:false})
-    : super(idPrefix, optionRowSelect:optionRowSelect, recordSorting:recordSorting) {
+      bool this.alwaysOneEmptyLine:false
+      })
+      : super(idPrefix,
+          rowSelect:rowSelect,
+          recordSorting:recordSorting,
+          recordAction:recordAction) {
     this.editMode = editMode;
     //
     addActions();
@@ -78,7 +83,7 @@ class TableCtrl
     // Table Actions
     if (optionCreateNew)
       addTableAction(AppsAction.createNew(onAppsActionNew));
-    if (optionRowSelect)
+    if (rowSelect)
       addTableAction(AppsAction.createDeleteSelected(onAppsActionDeleteSelected));
     if (optionLayout)
       addTableAction(AppsAction.createLayout(onAppsActionTableLayout));
@@ -101,7 +106,7 @@ class TableCtrl
   }
 
   /// Application Action New
-  void onAppsActionNew(String value, DRecord record, DEntry entry, var actionVar) {
+  void onAppsActionNew(String value, DataRecord data, DEntry entry, var actionVar) {
     DRecord record = addNewRecord();
     _log.config("onAppsActionNew ${tableName} ${value}  #${recordList.length}");
     if (editMode == LTable.EDIT_ALL || editMode == LTable.EDIT_SEL)
@@ -124,26 +129,26 @@ class TableCtrl
   }
 
   /// Application Action Edit
-  void onAppsActionEdit(String value, DRecord record, DEntry entry, var actionVar) {
-    _log.config("onAppsActionEdit ${tableName} ${value} id=${record.recordId}");
+  void onAppsActionEdit(String value, DataRecord data, DEntry entry, var actionVar) {
+    _log.config("onAppsActionEdit ${tableName} ${value} ${data}");
      ObjectEdit oe = new ObjectEdit(ui);
-     oe.setRecord(record, 0);
+     oe.setRecord(data.record, 0);
      oe.recordSaved = recordSaved;
      oe.modal.showInElement(element);
   }
 
 
   /// Application Action Delete
-  void onAppsActionDelete(String value, DRecord record, DEntry entry, var actionVar) {
-    if (record != null) {
+  void onAppsActionDelete(String value, DataRecord data, DEntry entry, var actionVar) {
+    if (data != null) {
       _log.config("onAppsActionDelete ${tableName} ${value}");
       LIElement li = new LIElement()
-        ..text = record.drv;
+        ..text = data.record.drv;
       UListElement ul = new UListElement()
         ..classes.add(LList.C_LIST__DOTTED)
         ..append(li);
       AppsAction deleteYes = AppsAction.createYes(onAppsActionDeleteConfirmed)
-        ..actionVar = record;
+        ..actionVar = data.record;
       LConfirmation conf = new LConfirmation("tds",
           title: tableCtrlDelete1Record(),
           text: tableCtrlDelete1RecordText(),
@@ -154,7 +159,7 @@ class TableCtrl
     }
   } // onAppsActionDelete
   /// Application Action Delete Confirmed
-  void onAppsActionDeleteConfirmed(String value, DRecord record, DEntry entry, var actionVar) {
+  void onAppsActionDeleteConfirmed(String value, DataRecord data, DEntry entry, var actionVar) {
     if (actionVar is DRecord && value == AppsAction.YES) {
       DRecord record = actionVar;
       _log.info("onAppsActionDeleteConfirmed ${tableName} ${value} id=${record.recordId}");
@@ -173,7 +178,7 @@ class TableCtrl
 
 
   /// Application Action Delete Selected Records
-  void onAppsActionDeleteSelected(String value, DRecord record, DEntry entry, var actionVar) {
+  void onAppsActionDeleteSelected(String value, DataRecord data, DEntry entry, var actionVar) {
     _log.config("onAppsActionDeleteSelected ${tableName} ${value}");
     List<DRecord> records = selectedRecords;
     if (records == null || records.isEmpty) {
@@ -199,7 +204,7 @@ class TableCtrl
     }
   }
   /// Application Action Delete Selected Record Confirmed
-  void onAppsActionDeleteSelectedConfirmed(String value, DRecord record, DEntry entry, var actionVar) {
+  void onAppsActionDeleteSelectedConfirmed(String value, DataRecord data, DEntry entry, var actionVar) {
     if (actionVar is List<DRecord> && value == AppsAction.YES) {
       List<DRecord> records = actionVar;
       _log.info("onAppsActionDeleteSelectedConfirmed ${tableName} ${value} #${records.length}");
@@ -221,7 +226,7 @@ class TableCtrl
 
 
   /// Application Action Table Layout
-  void onAppsActionTableLayout(String value, DRecord record, DEntry entry, var actionVar) {
+  void onAppsActionTableLayout(String value, DataRecord data, DEntry entry, var actionVar) {
     _log.config("onAppsActionTableLayout ${ui.tableName} ${value}");
     TableLayout layout = new TableLayout(ui, onAppsActionTableLayoutUpdated);
     layout.modal.showInComponent(this);
@@ -235,8 +240,8 @@ class TableCtrl
   }
 
   /// move record up
-  void onAppsActionTableUp(String value, DRecord record, DEntry entry, var actionVar) {
-    int index = recordList.indexOf(record);
+  void onAppsActionTableUp(String value, DataRecord data, DEntry entry, var actionVar) {
+    int index = recordList.indexOf(data.record);
     if (index > 0) {
       DRecord thisRecord = recordList[index];
       DRecord previousRecord = recordList[index-1];
@@ -248,8 +253,8 @@ class TableCtrl
     }
   }
   /// move record down
-  void onAppsActionTableDown(String value, DRecord record, DEntry entry, var actionVar) {
-    int index = recordList.indexOf(record);
+  void onAppsActionTableDown(String value, DataRecord data, DEntry entry, var actionVar) {
+    int index = recordList.indexOf(data.record);
     if (index >= 0 && index < recordList.length-1) {
       DRecord thisRecord = recordList[index];
       DRecord nextRecord = recordList[index + 1];
