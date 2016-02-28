@@ -264,7 +264,8 @@ class LTab
 /**
  * Tab Content
  */
-class LTabContent {
+class LTabContent
+    extends LComponent {
 
   final String label;
   final String name;

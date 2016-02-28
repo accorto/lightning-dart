@@ -56,6 +56,8 @@ class TableCtrl
       setUi(ui);
     }
     //
+    infoText = "";
+    infoSize = false;
     resetContent();
   } // ObjectTable
 

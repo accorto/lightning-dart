@@ -97,7 +97,10 @@ class DataColumn {
     assert (tableColumn != null);
   }
 
-  /// Label
+  /// Column Name
+  String get name => tableColumn.name;
+
+  /// Label - Panel-Column-Name
   String get label {
     if (uiPanelColumn != null && uiPanelColumn.hasLabel())
       return uiPanelColumn.label;
@@ -106,8 +109,14 @@ class DataColumn {
     }
     return tableColumn.name; // fallback
   }
-  /// Column Name
-  String get name => tableColumn.name;
+  /// Label for Grid
+  String get labelGrid {
+    if (uiGridColumn != null && uiGridColumn.hasLabel()) {
+      return uiGridColumn.label;
+    }
+    return label;
+  }
+
 
   /// Title (description - help - label)
   String get title {

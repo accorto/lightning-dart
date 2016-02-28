@@ -40,7 +40,7 @@ class LTableHeaderRow
    * - name/label are used for responsive
    */
   LTableHeaderCell addHeaderCell(String name, String label,
-      {String value, String align, DataColumn dataColumn}) {
+      {String title, String value, String align, DataColumn dataColumn}) {
     SpanElement span = new SpanElement()
       ..classes.add(LText.C_TRUNCATE)
       ..text = label == null ? "" : label;
@@ -63,7 +63,7 @@ class LTableHeaderRow
     if (dataColumn == null) {
       dataColumn = findColumn(name);
     }
-    LTableHeaderCell cell = new LTableHeaderCell(tc, span, name, label, value, align, tableSortClicked, dataColumn);
+    LTableHeaderCell cell = new LTableHeaderCell(tc, span, name, label, title, value, align, tableSortClicked, dataColumn);
     _cells.add(cell);
     return cell;
   } // addHeaderCell
@@ -74,7 +74,8 @@ class LTableHeaderRow
    * Add Grid Column
    */
   void addGridColumn(DataColumn dataColumn) {
-    addHeaderCell(dataColumn.name, dataColumn.label, dataColumn:dataColumn);
+    addHeaderCell(dataColumn.name, dataColumn.labelGrid, dataColumn:dataColumn,
+        align:getDisplayAlign(dataColumn), title: dataColumn.title);
   }
 
   /// Set Sorting

@@ -51,9 +51,7 @@ class LTable
   static const String C_TEXT_RIGHT = "slds-text-right";
 
   /// space below edit table for dropdowns
-  static const String C_INFO_BOTTOM = "table-info-bottom";
-  /// space below edit table for dropdowns
-  static const String C_INFO_BOTTOM_SMALL = "table-info-bottom-small";
+  static const String C_INFO_BOTTOM = "r-table-info";
 
 
   /// Table Edit Mode - Read Only
@@ -70,7 +68,6 @@ class LTable
   static const String EDIT_ALL = "all";
 
   static final Logger _log = new Logger("LTable");
-
 
   /// Table Element
   Element get element {
@@ -135,7 +132,7 @@ class LTable
       this.recordSorting = new RecordSortList();
   } // LTable
 
-  /// Responsive Stacked
+  /// Responsive Stacked (not horizontal)
   bool get responsiveStacked => element.classes.contains(C_MAX_MEDIUM_TABLE__STACKED);
   void set responsiveStacked (bool newValue) {
     element.classes.remove(C_MAX_MEDIUM_TABLE__STACKED_HORIZONTAL);
@@ -144,7 +141,7 @@ class LTable
     else
       element.classes.remove(C_MAX_MEDIUM_TABLE__STACKED);
   }
-  /// Responsive Stacked Horizontal
+  /// Responsive Stacked Horizontal (not responsive)
   bool get responsiveStackedHorizontal => element.classes.contains(C_MAX_MEDIUM_TABLE__STACKED_HORIZONTAL);
   void set responsiveStackedHorizontal (bool newValue) {
     element.classes.remove(C_MAX_MEDIUM_TABLE__STACKED);
@@ -174,17 +171,11 @@ class LTable
       }
       _tableFoot = null;
     } else {
-      //if (_wrapper2 == null) {
-      //  _wrapper2 = new DivElement()
-      //    ..classes.add("r-table-wrap2")
-      //    ..style.position = "relative"
-      //    ..append(_table);
-      //}
       if (_wrapper == null) {
         _wrapper = new DivElement()
-          ..classes.add("r-table-wrap1")
+          ..classes.add("r-table-wrap")
           ..classes.add(LScrollable.C_SCROLLABLE__X)
-          ..style.position = "relative"
+          //..style.position = "relative"
           ..append(_table);
       }
 
@@ -194,10 +185,10 @@ class LTable
           _tableHead = new TableElement()
             ..classes.add("r-table-head")
             ..classes.addAll(_table.classes)
-            ..style.position = "absolute"
+            //..style.position = "absolute"
+            //..style.zIndex = "1"
             ..style.top = "0"
-            ..style.left = "0"
-            ..style.zIndex = "1";
+            ..style.left = "0";
         }
         _tableHead.remove();
         _wrapper.append(_tableHead);
@@ -223,10 +214,10 @@ class LTable
           _tableFoot = new TableElement()
             ..classes.add("r-table-foot")
             ..classes.addAll(_table.classes)
-            ..style.position = "absolute"
+            //..style.position = "absolute"
+            //..style.zIndex = "1"
             ..style.bottom = "0"
-            ..style.left = "0"
-            ..style.zIndex = "1";
+            ..style.left = "0";
         }
         _tableFoot.remove();
         _wrapper.append(_tableFoot);
@@ -242,6 +233,8 @@ class LTable
         _tableFoot = null;
       }
     }
+    if (_info != null)
+      infoText = infoText; // re-attach
     _overflowSync();
   } // set responsiveOverflow
   LTableResponsive _overflow = LTableResponsive.NONE;
@@ -407,23 +400,13 @@ class LTable
   bool get bordered => element.classes.contains(C_TABLE__BORDERED);
   /// Table bordered
   void set bordered (bool newValue) {
-    element.classes.remove(C_TABLE__STRIPED);
-    if (newValue) {
-      element.classes.add(C_TABLE__BORDERED);
-    } else {
-      element.classes.remove(C_TABLE__BORDERED);
-    }
+    element.classes.toggle(C_TABLE__BORDERED, newValue);
   }
   /// Table striped
   bool get striped => element.classes.contains(C_TABLE__STRIPED);
   /// Table striped
   void set striped (bool newValue) {
-    element.classes.remove(C_TABLE__BORDERED);
-    if (newValue) {
-      element.classes.add(C_TABLE__STRIPED);
-    } else {
-      element.classes.remove(C_TABLE__STRIPED);
-    }
+    element.classes.toggle(C_TABLE__STRIPED, newValue);
   }
 
 
@@ -1084,6 +1067,66 @@ class LTable
       graphSelectionChange(null);
     return removeList.isNotEmpty;
   } // clearRecordListGroupBy
+
+
+  /// Show Info Element (below table)
+  void set infoShow (bool newValue) {
+    if (newValue) {
+      if (_info == null) {
+        infoText = "";
+      }
+    } else if (_info != null) {
+      _info.remove();
+      _info = null;
+    }
+  }
+  Element _info;
+  bool get infoShow => _info != null && _info.parent != null;
+
+  // show Info Element (below table) with text
+  void set infoText (String newValue) {
+    if (newValue == null) {
+      if (_info != null) {
+        _info.remove();
+        _info = null;
+      }
+    } else {
+      if (_info == null) {
+        _info = new DivElement()
+          ..classes.add(C_INFO_BOTTOM);
+      } else {
+        _info.remove();
+      }
+      // add to wrapper or below table/wrapper
+      if (_wrapper == null || _overflow == LTableResponsive.OVERFLOW_HEAD_FOOT) {
+        Element ee = _wrapper == null ? _table : _wrapper;
+        if (ee.parent != null) {
+          if (ee.parent.children.length == 1) {
+            ee.parent.append(_info);
+          } else {
+            ee.parent.insertBefore(_info, _table.nextElementSibling);
+          }
+        }
+      } else {
+        _wrapper.append(_info);
+      }
+      _info.text = newValue;
+    }
+  }
+  String get infoText => _info == null ? null : _info.text;
+
+  /// set info size - true=10rem|false=2rem|null=6rem - set after show/text
+  void set infoSize (bool large) {
+    if (_info != null) {
+      if (large != null) {
+        _info.classes.toggle("large", large);
+        _info.classes.toggle("small", !large);
+      } else {
+        _info.classes.removeAll(["large", "small"]);
+      }
+    }
+  } // info size
+
 
   static String lTableRowSelectAll() => Intl.message("Select All", name: "lTableRowSelectAll", args: []);
   static String lTableRowSelectRow() => Intl.message("Select Row", name: "lTableRowSelectRow", args: []);

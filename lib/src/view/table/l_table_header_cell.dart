@@ -19,6 +19,7 @@ class LTableHeaderCell
       Element content,
       String name,
       String label,
+      String title,
       String value,
       String align,
       TableSortClicked tableSortClicked,
@@ -44,6 +45,8 @@ class LTableHeaderCell
         tableSortClicked(name, sortAsc, dataType, evt);
       });
     }
+    if (title != null)
+      element.title = title;
   } // LTableHeaderCell
 
   /// Sortable

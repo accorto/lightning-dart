@@ -190,6 +190,8 @@ class UiUtil {
       {String displayLogic,
       bool mandatory,
       bool readOnly,
+      String label,
+      String labelGrid,
       bool isAlternativeDisplay,
       int width,
       bool addColToTable:true}) {
@@ -206,6 +208,8 @@ class UiUtil {
       pc.isReadOnly = readOnly;
     if (mandatory != null)
       pc.isMandatory = mandatory;
+    if (label != null)
+      pc.label = label;
     if (isAlternativeDisplay != null)
       pc.isAlternativeDisplay = isAlternativeDisplay;
     if (width != null)
@@ -221,6 +225,8 @@ class UiUtil {
     if (col.hasColumnId())
       gc.columnId = col.columnId;
     gc.seqNo = (ui.gridColumnList.length + 1);
+    if (labelGrid != null)
+      gc.label = labelGrid;
     ui.gridColumnList.add(gc);
   } // addColumn
 
@@ -251,6 +257,8 @@ class UiUtil {
   void addIfMissing(String columnName,
       {bool mandatory,
       bool readOnly,
+      String label,
+      String labelGrid,
       bool isAlternativeDisplay,
       int width,
       DataType overwriteDataType}) {
@@ -267,6 +275,10 @@ class UiUtil {
         pc.width = width;
       if (readOnly != null)
         pc.isReadOnly = readOnly;
+      if (label != null)
+        pc.label = label;
+      if (labelGrid != null && gc != null)
+        gc.label = labelGrid;
       //
       if (overwriteDataType != null) {
         DColumn col = DataUtil.findColumn(ui.table, null, columnName);
@@ -284,9 +296,11 @@ class UiUtil {
       }
       addColumn(col,
           mandatory: mandatory,
+          readOnly: readOnly,
+          label: label,
+          labelGrid: labelGrid,
           isAlternativeDisplay: isAlternativeDisplay,
           width: width,
-          readOnly: readOnly,
           addColToTable: false);
       return;
     }

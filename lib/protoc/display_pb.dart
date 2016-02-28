@@ -349,8 +349,9 @@ class UIGridColumn extends GeneratedMessage {
     ..a(2, 'column', PbFieldType.OM, DColumn.getDefault, DColumn.create)
     ..a(3, 'columnId', PbFieldType.OS)
     ..a(4, 'columnName', PbFieldType.OS)
-    ..a(5, 'seqNo', PbFieldType.O3)
-    ..a(6, 'isActive', PbFieldType.OB, true)
+    ..a(7, 'isActive', PbFieldType.OB, true)
+    ..a(10, 'seqNo', PbFieldType.O3)
+    ..a(11, 'label', PbFieldType.OS)
     ..a(12, 'width', PbFieldType.O3)
     ..a(15, 'panelColumn', PbFieldType.OM, UIPanelColumn.getDefault, UIPanelColumn.create)
     ..a(50, 'updateFlag', PbFieldType.OS)
@@ -392,29 +393,34 @@ class UIGridColumn extends GeneratedMessage {
   bool hasColumnName() => $_has(3, 4);
   void clearColumnName() => clearField(4);
 
-  int get seqNo => $_get(4, 5, 0);
-  void set seqNo(int v) { $_setUnsignedInt32(4, 5, v); }
-  bool hasSeqNo() => $_has(4, 5);
-  void clearSeqNo() => clearField(5);
+  bool get isActive => $_get(4, 7, true);
+  void set isActive(bool v) { $_setBool(4, 7, v); }
+  bool hasIsActive() => $_has(4, 7);
+  void clearIsActive() => clearField(7);
 
-  bool get isActive => $_get(5, 6, true);
-  void set isActive(bool v) { $_setBool(5, 6, v); }
-  bool hasIsActive() => $_has(5, 6);
-  void clearIsActive() => clearField(6);
+  int get seqNo => $_get(5, 10, 0);
+  void set seqNo(int v) { $_setUnsignedInt32(5, 10, v); }
+  bool hasSeqNo() => $_has(5, 10);
+  void clearSeqNo() => clearField(10);
 
-  int get width => $_get(6, 12, 0);
-  void set width(int v) { $_setUnsignedInt32(6, 12, v); }
-  bool hasWidth() => $_has(6, 12);
+  String get label => $_get(6, 11, '');
+  void set label(String v) { $_setString(6, 11, v); }
+  bool hasLabel() => $_has(6, 11);
+  void clearLabel() => clearField(11);
+
+  int get width => $_get(7, 12, 0);
+  void set width(int v) { $_setUnsignedInt32(7, 12, v); }
+  bool hasWidth() => $_has(7, 12);
   void clearWidth() => clearField(12);
 
-  UIPanelColumn get panelColumn => $_get(7, 15, null);
+  UIPanelColumn get panelColumn => $_get(8, 15, null);
   void set panelColumn(UIPanelColumn v) { setField(15, v); }
-  bool hasPanelColumn() => $_has(7, 15);
+  bool hasPanelColumn() => $_has(8, 15);
   void clearPanelColumn() => clearField(15);
 
-  String get updateFlag => $_get(8, 50, '');
-  void set updateFlag(String v) { $_setString(8, 50, v); }
-  bool hasUpdateFlag() => $_has(8, 50);
+  String get updateFlag => $_get(9, 50, '');
+  void set updateFlag(String v) { $_setString(9, 50, v); }
+  bool hasUpdateFlag() => $_has(9, 50);
   void clearUpdateFlag() => clearField(50);
 }
 
@@ -542,8 +548,8 @@ class UIPanelColumn extends GeneratedMessage {
     ..a(2, 'column', PbFieldType.OM, DColumn.getDefault, DColumn.create)
     ..a(3, 'columnId', PbFieldType.OS)
     ..a(4, 'columnName', PbFieldType.OS)
-    ..a(5, 'isActive', PbFieldType.OB, true)
-    ..a(6, 'externalKey', PbFieldType.OS)
+    ..a(5, 'externalKey', PbFieldType.OS)
+    ..a(7, 'isActive', PbFieldType.OB, true)
     ..a(8, 'isExpert', PbFieldType.OB)
     ..a(10, 'seqNo', PbFieldType.O3)
     ..a(11, 'label', PbFieldType.OS)
@@ -596,15 +602,15 @@ class UIPanelColumn extends GeneratedMessage {
   bool hasColumnName() => $_has(3, 4);
   void clearColumnName() => clearField(4);
 
-  bool get isActive => $_get(4, 5, true);
-  void set isActive(bool v) { $_setBool(4, 5, v); }
-  bool hasIsActive() => $_has(4, 5);
-  void clearIsActive() => clearField(5);
+  String get externalKey => $_get(4, 5, '');
+  void set externalKey(String v) { $_setString(4, 5, v); }
+  bool hasExternalKey() => $_has(4, 5);
+  void clearExternalKey() => clearField(5);
 
-  String get externalKey => $_get(5, 6, '');
-  void set externalKey(String v) { $_setString(5, 6, v); }
-  bool hasExternalKey() => $_has(5, 6);
-  void clearExternalKey() => clearField(6);
+  bool get isActive => $_get(5, 7, true);
+  void set isActive(bool v) { $_setBool(5, 7, v); }
+  bool hasIsActive() => $_has(5, 7);
+  void clearIsActive() => clearField(7);
 
   bool get isExpert => $_get(6, 8, false);
   void set isExpert(bool v) { $_setBool(6, 8, v); }
@@ -1161,8 +1167,9 @@ const UIGridColumn$json = const {
     const {'1': 'column', '3': 2, '4': 1, '5': 11, '6': '.DColumn'},
     const {'1': 'column_id', '3': 3, '4': 1, '5': 9},
     const {'1': 'column_name', '3': 4, '4': 1, '5': 9},
-    const {'1': 'seq_no', '3': 5, '4': 1, '5': 5},
-    const {'1': 'is_active', '3': 6, '4': 1, '5': 8, '7': 'true'},
+    const {'1': 'is_active', '3': 7, '4': 1, '5': 8, '7': 'true'},
+    const {'1': 'seq_no', '3': 10, '4': 1, '5': 5},
+    const {'1': 'label', '3': 11, '4': 1, '5': 9},
     const {'1': 'width', '3': 12, '4': 1, '5': 5},
     const {'1': 'panel_column', '3': 15, '4': 1, '5': 11, '6': '.UIPanelColumn'},
     const {'1': 'update_flag', '3': 50, '4': 1, '5': 9},
@@ -1198,8 +1205,8 @@ const UIPanelColumn$json = const {
     const {'1': 'column', '3': 2, '4': 1, '5': 11, '6': '.DColumn'},
     const {'1': 'column_id', '3': 3, '4': 1, '5': 9},
     const {'1': 'column_name', '3': 4, '4': 1, '5': 9},
-    const {'1': 'is_active', '3': 5, '4': 1, '5': 8, '7': 'true'},
-    const {'1': 'external_key', '3': 6, '4': 1, '5': 9},
+    const {'1': 'external_key', '3': 5, '4': 1, '5': 9},
+    const {'1': 'is_active', '3': 7, '4': 1, '5': 8, '7': 'true'},
     const {'1': 'is_expert', '3': 8, '4': 1, '5': 8, '7': 'false'},
     const {'1': 'seq_no', '3': 10, '4': 1, '5': 5},
     const {'1': 'label', '3': 11, '4': 1, '5': 9},
