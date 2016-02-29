@@ -175,7 +175,7 @@ class EditorUtil {
         editor = createLookupCall(dataColumn, idPrefix, inGrid);
       } else if (dataType == DataType.TEXT) {
         editor = new LTextArea.from(dataColumn,
-            idPrefix: idPrefix, inGrid: inGrid);
+            idPrefix: idPrefix, inGrid: inGrid, oneLine: isAlternativeDisplay);
       } else if (dataType == DataType.TIME) {
         editor = new LInputDate.from(dataColumn, EditorI.TYPE_TIME,
             idPrefix: idPrefix, inGrid: inGrid);

@@ -20,25 +20,25 @@ class LTextArea
   /**
    * Text Area Input
    */
-  LTextArea(String name, {String idPrefix, bool this.inGrid:false}) {
+  LTextArea(String name, {String idPrefix, bool this.inGrid:false, bool oneLine:false}) {
     createStandard(this, inGrid:inGrid);
     input.name = name;
     id = createId(idPrefix, name);
-    _initEditor();
+    _initEditor(oneLine);
   }
 
-  LTextArea.from(DataColumn dataColumn, {String idPrefix, bool this.inGrid:false}) {
+  LTextArea.from(DataColumn dataColumn, {String idPrefix, bool this.inGrid:false, bool oneLine:false}) {
     createStandard(this, inGrid:inGrid);
     input.name = dataColumn.name;
     id = createId(idPrefix, input.name);
     //
     this.dataColumn = dataColumn;
-    _initEditor();
+    _initEditor(oneLine);
   }
 
   /// initialize listeners
-  void _initEditor() {
-    if (inGrid) {
+  void _initEditor(bool oneLine) {
+    if (inGrid || oneLine) {
       rows = 1;
       input.onFocus.listen((Event evt){
         input.rows = 3;
