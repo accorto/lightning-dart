@@ -24,6 +24,8 @@ class Forms2 extends DemoFeature {
 
     FormCtrl form = new FormCtrl("formA", ui(columnCount));
     form.buildPanels();
+    form.showTrace();
+
     div.add(form);
 
     return div;
@@ -98,6 +100,26 @@ class Forms2 extends DemoFeature {
       ..webLinkUrl = "https://www.accorto.com";
     uiu.ui.processList.add(prc);
 
+    // Currency
+    col = new DColumn()
+      ..name = "Currency"
+      ..label = "Currency"
+      ..dataType = DataType.PICK
+      ..isMandatory = true
+      ..defaultValue = "EUR";
+    col.pickValueList.add(new DOption()..value = "USD" ..label = "USD");
+    col.pickValueList.add(new DOption()..value = "CAD" ..label = "CAD");
+    col.pickValueList.add(new DOption()..value = "EUR" ..label = "EUR");
+    uiu.table.columnList.add(col);
+
+    /// Amount
+    LInputNumber.currencyColumnName = "Currency";
+    col = new DColumn()
+      ..name = "CurrencyAmt"
+      ..label = "Currency Amount"
+      ..dataType = DataType.CURRENCY
+      ..isMandatory = true;
+    uiu.addColumn(col);
 
     return uiu.ui;
   } // uiSavedQuery

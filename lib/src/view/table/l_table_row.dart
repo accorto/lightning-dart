@@ -333,6 +333,7 @@ class LTableRow
   void setRecord(DRecord record, int rowNo) {
     data.setRecord(record, rowNo);
     display();
+    ltable.displayFoot(); //update
   }
   /// get record or null if empty
   DRecord get record {
@@ -497,6 +498,7 @@ class LTableRow
         }
       } // for all editors
     }
+    ltable.displayFoot(); // update
   } // onRecordChange
 
   /// Editor Focused - close other editor dropdowns
@@ -513,5 +515,10 @@ class LTableRow
       }
     }
   } // onEditorFocus
+
+  /// string info
+  String toString() {
+    return "LTableRow@${rowElement.id}[${data.recordId} selected=${data.selected}]";
+  }
 
 } // LTableRow

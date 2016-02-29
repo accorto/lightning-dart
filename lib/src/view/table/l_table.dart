@@ -660,8 +660,11 @@ class LTable
     rowActions.add(action);
   }
 
-  /// Create and Add Table Body Row
-  LTableRow addBodyRow({String rowValue, LTableRow row}) {
+  /// Create and Add Table Body Row and set [record]
+  /// - with optionally existing [row]
+  LTableRow addBodyRow({String rowValue, LTableRow row, DRecord record, int rowNo}) {
+    if (rowValue == null && record != null)
+      rowValue = record.recordId;
     if (row == null) {
       row = new LTableRow(this, createBodyRow(),
           bodyRowIndex,
@@ -673,6 +676,11 @@ class LTable
     row.editMode = _editMode;
     row.tableSelectClicked = onTableRowSelectClicked;
     _tbodyRows.add(row);
+    if (record != null) {
+      if (rowNo == null)
+        rowNo = _tbodyRows.length - 1;
+      row.setRecord(record, rowNo);
+    }
     return row;
   }
   /// create/add body row
@@ -684,6 +692,51 @@ class LTable
   }
   int get bodyRowIndex => _bodyRowIndex;
   int _bodyRowIndex = -1;
+
+  /// Delete Body Row with [record]
+  LTableRow deleteBodyRow(DRecord record) {
+    for (int i = 0; i < _tbodyRows.length; i++) {
+      LTableRow row = _tbodyRows[i];
+      if (row.record == record) {
+        String info = "deleteBodyRow ${record.urv} #${i}";
+        row.rowElement.remove(); // dom
+        _tbodyRows.removeAt(i); // table row
+        if (!recordList.remove(record))
+          info += " NOT found in recordList";
+        displayFoot();
+        _log.config(info);
+        return row;
+      }
+    }
+    return null;
+  } // deleteBodyRow
+
+  /// action row delete - override for server delete
+  void onActionRowDelete(String value, DataRecord data, DEntry entry, var actionVar) {
+    LTableRow row = deleteBodyRow(data.record);
+    _log.config("onActionRowDelete row=${row}");
+  } // onLineActionDelete
+
+  /// action row reset
+  void onActionRowReset(String value, DataRecord data, DEntry entry, var actionVar) {
+    _log.config("onActionRowReset ${actionVar}");
+    if (actionVar is LTableRow) {
+      actionVar.data.resetRecord();
+      actionVar.display();
+    } else {
+      data.resetRecord();
+    }
+    displayFoot();
+  }
+
+  /// get Body Row with record
+  LTableRow getBodyRow(DRecord record) {
+    for (LTableRow row in _tbodyRows) {
+      if (row.record == record)
+        return row;
+    }
+    return null;
+  }
 
   /// Add Table Foot Row
   LTableRow addFootRow({LTableRow row}) {
@@ -715,11 +768,11 @@ class LTable
   int get footRowIndex => _footRowIndex;
   int _footRowIndex = -1;
 
-  /// add sum row to Footer or Body
-  LTableSumRow addStatRow(bool foot) {
+  /// add sum row to Body (with a [record]) or Footer
+  LTableSumRow addStatRow(DRecord record) {
     TableRowElement tr = null;
     int rowNo = 0;
-    if (foot) {
+    if (record == null) {
       tr = createFootRow();
       rowNo = footRowIndex;
     } else {
@@ -730,14 +783,16 @@ class LTable
     LTableSumRow row = new LTableSumRow(this, tr,
         rowNo,
         LButton.C_HINT_PARENT,
-        foot ? LTableRow.TYPE_FOOT : LTableRow.TYPE_BODY);
+        record == null ? LTableRow.TYPE_FOOT : LTableRow.TYPE_BODY);
     //
-    if (foot)
+    if (record == null) {
       _tfootRows.add(row);
-    else
+    } else {
       _tbodyRows.add(row);
+      row.setRecord(record, _tbodyRows.length - 1);
+    }
     return row;
-  }
+  } // addStatRow
 
   /// Select/Unselect All Body Rows
   void selectAll(bool select) {
@@ -826,6 +881,12 @@ class LTable
     }
   } // setRecords
 
+  /// clear all records
+  void clearRecords() {
+    setRecords(new List<DRecord>());
+    displayFoot();
+  }
+
   /// Display Records (calculates statistics)
   void display() {
     if (_tbody != null) {
@@ -835,14 +896,11 @@ class LTable
     }
     bool needSort = _displayCalculateStatistics();
     //_log.fine("display records=${recordList.length}");
-    int i = 0;
     for (DRecord record in recordList) {
       if (record.hasIsGroupBy()) {
-        LTableSumRow row = addStatRow(false);
-        row.setRecord(record, i++);
+        addStatRow(record);
       } else {
-        LTableRow row = addBodyRow(rowValue: record.recordId); // adds to _tbodyRows
-        row.setRecord(record, i++);
+        addBodyRow(record: record); // adds to _tbodyRows
       }
     }
     if (needSort) {
@@ -852,7 +910,7 @@ class LTable
     // Statistics
     if (_withStatistics && _statistics != null) {
       if (_statisticsRow == null)
-        _statisticsRow = addStatRow(true); // LTableSumRow
+        _statisticsRow = addStatRow(null); // LTableSumRow
       _statisticsRow.setStatistics(_statistics, null,
           rowSelect && tableActions.isNotEmpty);
     } else {
@@ -864,6 +922,15 @@ class LTable
     _overflowSync();
   } // display
   LTableSumRow _statisticsRow;
+
+  /// update / display footer
+  /// - [LTableRow#setRecord] [LTableRow#onRecordChange]
+  void displayFoot() {
+    for (LTableRow row in _tfootRows) {
+      row.display();
+    }
+  } // displayFooter
+
 
   /// Table selected row count
   int get selectedRowCount {
@@ -885,6 +952,7 @@ class LTable
     }
     return records;
   }
+
 
   /**
    * Add Plain Headings

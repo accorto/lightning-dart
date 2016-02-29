@@ -84,7 +84,6 @@ class FormCtrl
     }
   } // build
 
-
   /// are there any processes
   bool get hasProcesses => ui.processList.isNotEmpty;
 

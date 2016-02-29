@@ -6241,6 +6241,11 @@ a.slds-button--inverse:focus {
     top: 0;
     tab-index: -1;
     color: #9faab5; }
+    .slds-input-has-prefix .slds-input__prefix.currency {
+      border: none;
+      background: transparent;
+      left: .25rem;
+      height: 2.125rem; }
   .slds-input-has-prefix--left .slds-input__prefix {
     left: 0.75rem; }
   .slds-input-has-prefix--left .slds-input,

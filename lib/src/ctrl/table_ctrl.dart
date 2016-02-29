@@ -103,17 +103,18 @@ class TableCtrl
   void resetContent() {
     recordList.clear(); // override
     if (alwaysOneEmptyLine)
-      addNewRecord();
+      addBodyRow(record: createNewRecord());
     display();
   }
 
   /// Application Action New
   void onAppsActionNew(String value, DataRecord data, DEntry entry, var actionVar) {
-    DRecord record = addNewRecord();
     _log.config("onAppsActionNew ${tableName} ${value}  #${recordList.length}");
     if (editMode == LTable.EDIT_ALL || editMode == LTable.EDIT_SEL)
-      display();
-    else {
+      addBodyRow(record: createNewRecord());
+    else { // display Form
+      DRecord record = createNewRecord();
+      recordList.add(record);
       ObjectEdit oe = new ObjectEdit(ui);
       oe.setRecord(record, -1);
       oe.recordSaved = recordSaved;
@@ -121,12 +122,11 @@ class TableCtrl
     }
   }
 
-  /// Add New Record at End
-  DRecord addNewRecord() {
+  /// create new Record
+  DRecord createNewRecord() {
     DataRecord data = new DataRecord(ui.table, null);
     DRecord parentRecord = null;
     DRecord record = data.newRecord(parentRecord);
-    recordList.add(record);
     return record;
   }
 
@@ -168,10 +168,10 @@ class TableCtrl
       if (recordDeleted != null) {
         recordDeleted(record)
         .then((SResponse response) {
-          recordList.remove(record);
-          if (alwaysOneEmptyLine && recordList.isEmpty)
-            addNewRecord();
-          display();
+          deleteBodyRow(record);
+          if (alwaysOneEmptyLine && recordList.isEmpty) {
+            addBodyRow(record: createNewRecord());
+          }
           _log.config("onAppsActionDeleteConfirmed ${tableName} ${value}  #${recordList.length}");
         });
       }
@@ -214,10 +214,11 @@ class TableCtrl
         recordsDeleted(records)
         .then((SResponse response) {
           for (DRecord sel in records) {
-            recordList.remove(sel);
+            deleteBodyRow(sel);
           }
-          if (alwaysOneEmptyLine && recordList.isEmpty)
-            addNewRecord();
+          if (alwaysOneEmptyLine && recordList.isEmpty) {
+            addBodyRow(record: createNewRecord());
+          }
           _log.config("onAppsActionDeleteSelectedConfirmed ${tableName} ${value} deleted=${records.length}  #${recordList.length}");
           display();
         });

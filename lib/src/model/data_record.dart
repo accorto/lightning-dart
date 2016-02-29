@@ -667,10 +667,11 @@ class DataRecord {
    * Reset Record (all entries)
    */
   void resetRecord() {
-    _record.isChanged = false;
     for (DEntry entry in _record.entryList) {
       resetEntry(entry);
     }
+    _record.clearIsChanged();
+    //_record.clearIsSelected();
   } // resetRecord
 
   /**
@@ -696,7 +697,7 @@ class DataRecord {
         dataEntry.clearValue();
       }
       dataEntry.clearValueDisplay();
-      dataEntry.isChanged = false;
+      dataEntry.clearIsChanged();
       resetCached();
     }
   } // resetEntry

@@ -13,6 +13,8 @@ part of lightning_dart;
 class LInputNumber
     extends LInput {
 
+  static final Logger _log = new Logger("LInputNumber");
+
   /// Currency Column Name
   static String currencyColumnName;
 
@@ -213,45 +215,6 @@ class LInputNumber
     }
   } // column
 
-  // currency column
-  void _columnCurrency() {
-    if (currencyColumnName == null || dataColumn == null)
-      return;
-    // get currency column
-    DColumn curColumn = dataColumn.getTableColumn(currencyColumnName);
-    if (curColumn == null)
-      return;
-    // Currency Select
-    _currencySelect = new SelectElement()
-      ..name = currencyColumnName
-      ..id = createId(id, name)
-      ..classes.add(LForm.C_INPUT__PREFIX)
-      ..style.left = "0"
-      ..style.height = "2.125rem"
-    //..style.borderColor = "" // this or background
-      ..style.background = "transparent";
-    // get currency values
-    for (DOption op in curColumn.pickValueList) {
-      _currencySelect.append(OptionUtil.element(op));
-    }
-    if (_currencySelect.options.isEmpty) {
-      _currencySelect = null;
-      return;
-    }
-    if (_currencySelect.options.length == 1) {
-      _currencySelect.disabled = true;
-    }
-    createStandardLeftElement(null);
-    // set width (3rem - 5px)
-    num width = _currencySelect.getBoundingClientRect().width;
-    // set input width: calc(100% - 3rem); margin-left: 3rem
-    int space = width.toInt() + 5; // margin
-    input.style
-      ..marginLeft = "${space}px"
-      ..width = "calc(100% - ${space}px)";
-  } // columnCurrency
-
-
   /// Decimal Digits
   int get decimalDigits => numberFormat.maximumFractionDigits;
   /// Decimal Digits
@@ -268,11 +231,99 @@ class LInputNumber
     }
     numberFormat.minimumFractionDigits = newValue;
     numberFormat.maximumFractionDigits = newValue;
-
   } // decimalDigits
+
+
+  // currency column
+  void _columnCurrency() {
+    if (currencyColumnName == null || dataColumn == null)
+      return;
+    // get currency column
+    DColumn curColumn = dataColumn.getTableColumn(currencyColumnName);
+    if (curColumn == null || curColumn.pickValueList.isEmpty)
+      return;
+    // Currency Select
+    _currencySelect = new SelectElement()
+      ..name = currencyColumnName
+      ..id = createId(id, currencyColumnName)
+      ..classes.addAll([LForm.C_INPUT__PREFIX, "currency"]);
+    // get currency values
+    for (DOption op in curColumn.pickValueList) {
+      _currencySelect.append(OptionUtil.element(op));
+    }
+    createStandardLeftElement(null);
+    // set width (3rem - 5px)
+    num width = _currencySelect.getBoundingClientRect().width;
+    // set input width: calc(100% - 3rem); margin-left: 3rem
+    int space = width.toInt() + 5; // margin
+    input.style
+      ..marginLeft = "${space}px"
+      ..width = "calc(100% - ${space}px)";
+    //
+    if (_currencySelect.options.length == 1) {
+      _currencySelect.disabled = true;
+    } else {
+      _currencySelect.onInput.listen(onInputCurrency);
+      if (curColumn.hasDefaultValue()) {
+        _currencySelect.value = curColumn.defaultValue;
+      }
+    }
+    if (data != null) {
+      DEntry entryC = data.getEntry(null, currencyColumnName, true);
+      data.updateEntry(entryC, valueCurrency);
+    }
+  } // columnCurrency
 
   /// Left Side Element (called early in constructor from LFormElement.createStandard)
   Element getLeftElement() => _currencySelect;
+
+  /// set value - also for currency
+  void set entry (DEntry newValue) {
+    super.entry = newValue;
+    if (_currencySelect != null) {
+      valueCurrency = data.getValue(name: currencyColumnName);
+    }
+  }
+
+    /// currency or null
+  String get valueCurrency {
+    if (_currencySelect != null)
+      return _currencySelect.value;
+    return null;
+  }
+
+  void set valueCurrency (String newValue) {
+    if (_currencySelect != null && newValue != null)
+      _currencySelect.value = newValue;
+  }
+
+  /// Currency Changed
+  void onInputCurrency(Event evt) {
+    String theValue = valueCurrency;
+    if (theValue == null)
+      return;
+    _log.config("onInputCurrency ${name}=${theValue}");
+    if (data != null) {
+      DEntry entryC = data.getEntry(null, currencyColumnName, true);
+      data.updateEntry(entryC, theValue);
+      if (editorChange != null) {
+        editorChange(name, theValue, entryC, null);
+      }
+    }
+  } // onInputCurrency
+
+
+  void set readOnly(bool newValue) {
+    super.readOnly = newValue;
+    if (_currencySelect != null)
+      _currencySelect.disabled = (newValue || disabled);
+  }
+
+  void set disabled(bool newValue) {
+    super.disabled = newValue;
+    if (_currencySelect != null)
+      _currencySelect.disabled = (newValue || readOnly);
+  }
 
   String toString() {
     return "LInputNumber@${name} text=${input.text} digits=${decimalDigits} html5=${html5}";

@@ -398,6 +398,9 @@ class LFormElement {
     }
   }
 
+  /// get element control directly (internal)
+  Element get i_formElementControl => _elementControl;
+
   /**
    * Update Field Status display
    */
