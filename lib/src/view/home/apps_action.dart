@@ -27,6 +27,7 @@ class AppsAction {
   static const String REFRESH = "refresh";
 
   static const String LAYOUT = "layout";
+  static const String INFO = "info";
 
   static const String UP = "up";
   static const String DOWN = "down";
@@ -76,6 +77,11 @@ class AppsAction {
   static AppsAction createLayout(AppsActionTriggered callback) {
     return new AppsAction(LAYOUT, appsActionLayout(), callback)
       ..icon = new LIconUtility(LIconUtility.LAYOUT);
+  }
+  /// Standard Info Action
+  static AppsAction createInfo(AppsActionTriggered callback) {
+    return new AppsAction(INFO, appsActionInfo(), callback)
+      ..icon = new LIconUtility(LIconUtility.INFO);
   }
 
   /// Standard Seq Action
@@ -233,6 +239,7 @@ class AppsAction {
   static String appsActionDeleteSelected() => Intl.message("Delete Selected", name: "appsActionDeleteSelected");
 
   static String appsActionLayout() => Intl.message("Layout", name: "appsActionLayout");
+  static String appsActionInfo() => Intl.message("Info", name: "appsActionInfo");
 
   static String appsActionUp() => Intl.message("Up", name: "appsActionUp");
   static String appsActionDown() => Intl.message("Down", name: "appsActionDown");

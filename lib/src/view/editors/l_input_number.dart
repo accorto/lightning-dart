@@ -281,7 +281,7 @@ class LInputNumber
   void set entry (DEntry newValue) {
     super.entry = newValue;
     if (_currencySelect != null) {
-      valueCurrency = data.getValue(name: currencyColumnName);
+      valueCurrency = data.getValue(currencyColumnName);
     }
   }
 

@@ -311,7 +311,7 @@ class LModal
    * Set Footer Actions
    */
   void addFooterActions(List<AppsAction> actions,
-      {bool addCancel:false, String cancelLabelOverride}) {
+      {bool addCancel:false, String cancelLabelOverride, bool hideOnAction:true}) {
     if (addCancel) {
       addFooterCancel(cancelLabel:cancelLabelOverride);
     }
@@ -319,7 +319,8 @@ class LModal
       for (AppsAction action in actions) {
         action.buttonClasses = [LButton.C_BUTTON__NEUTRAL];
         LButton btn = action.asButton(true, idPrefix: id);
-        btn.onClick.listen(onClickRemove);
+        if (hideOnAction)
+          btn.onClick.listen(onClickRemove);
         footer.append(btn.element);
       }
     }

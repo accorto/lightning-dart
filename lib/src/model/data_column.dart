@@ -164,7 +164,9 @@ class DataColumn {
         return true; // record level
       }
       if (isReadOnlyDynamic()) {
-        bool result = DataContext.evaluateBool(data.record, table, uiPanelColumn.readOnlyLogic);
+        if (data.table == null)
+          data.table = table;
+        bool result = DataContext.evaluateBool(data, uiPanelColumn.readOnlyLogic);
         _log.warning("isReadOnly ${tableColumn.name} ${result} - ${uiPanelColumn.readOnlyLogic}");
         return result;
       }
@@ -196,7 +198,9 @@ class DataColumn {
     }
     if (data != null) {
       if (isMandatoryDynamic()) {
-        bool result = DataContext.evaluateBool(data.record, table, uiPanelColumn.mandatoryLogic);
+        if (data.table == null)
+          data.table = table;
+        bool result = DataContext.evaluateBool(data, uiPanelColumn.mandatoryLogic);
         _log.warning("isMandatory ${tableColumn.name} ${result} - ${uiPanelColumn.mandatoryLogic}");
         return result;
       }
@@ -223,7 +227,9 @@ class DataColumn {
 
     if (data != null) {
       if (isDisplayedDynamic()) {
-        bool result = DataContext.evaluateBool(data.record, table, uiPanelColumn.displayLogic);
+        if (data.table == null)
+          data.table = table;
+        bool result = DataContext.evaluateBoolEx(data, uiPanelColumn.displayLogic);
         // _log.warning("isDisplayed ${tableColumn.name} ${result} - ${uiPanelColumn.displayLogic}");
         return result;
       }

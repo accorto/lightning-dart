@@ -750,7 +750,7 @@ class EditorIDependent {
   /// is the current value changed
   bool isCurrentValueChanged(DataRecord data) {
     lastValue = currentValue;
-    currentValue = data.getValue(name: columnName);
+    currentValue = data.getValue(columnName);
     return currentValueChanged;
   }
 

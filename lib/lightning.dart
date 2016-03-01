@@ -140,7 +140,7 @@ part 'src/view/home/l_related_list.dart';
 part 'src/view/home/new_window.dart';
 part 'src/view/home/page_simple.dart';
 
-part 'src/view/utility/dl_util.dart';
+part 'src/view/utility/dlist_util.dart';
 part 'src/view/utility/html0.dart';
 part 'src/view/utility/l_util.dart';
 part 'src/view/utility/option_util.dart';

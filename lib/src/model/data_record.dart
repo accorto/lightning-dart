@@ -94,49 +94,6 @@ class DataRecord {
   } // whoInfo
 
   /**
-   * Popup with Record Info
-   */
-//  static void infoDisplay(DRecord record) {
-//    if (record == null)
-//      return;
-//    MiniTable table = new MiniTable();
-//    table.element.style.fontSize = "smaller";
-//
-//    table.addRowHdrDatas("Urv", [record.urv, record.urv != record.urvRest ? record.urvRest : "", ""]);
-//    table.addRowHdrData("Who", record.who, colSpan: 3);
-//    table.addRowHdrDatas("Query", [record.query, record.tableName, record.recordId]);
-//
-//    table.addRowData([
-//      "Revision=${record.revision}",
-//      record.isSelected ? "selected" : "",
-//      record.isChanged ? "changed" : "",
-//      ""]);
-//    table.addRowData([
-//      record.isReadOnly ? "r/o" : "r/w",
-//      record.isReadOnlyCalc ? "r/o calc" : "",
-//      record.isMandatoryCalc ? "mandatory calc" : "",
-//      ""]);
-//
-//    if (record.hasParent()) {
-//      table.addRowHdrDatas("Parent", [record.parent.drv, record.parent.urv, record.parent.query]);
-//    }
-//    table.addRowData(["stat=#${record.statList.length}",
-//      record.isGroupBy ? "groupBy" : "",
-//      record.isMatchFind ? "match" : "",
-//      ""]);
-//
-//    table.addRowHeadings(["Column", "Value", "Original", "Display"]);
-//    for (DEntry entry in record.entryList) {
-//      table.addRowData([entry.columnName, entry.value, entry.isChanged ? entry.clearValueOriginal() : "", entry.clearValueDisplay()]);
-//    }
-//
-//    new BizConfirm(type: BizConfirm.TYPE_INFO,
-//        title: record.drv,
-//        messageElement: table.element)
-//    .show();
-//  } // infoDisplay
-
-  /**
    * Get value as String for [columnName] or null if not found
    */
   static String getColumnValue(DRecord record, String columnName) {
@@ -356,7 +313,7 @@ class DataRecord {
       _log.warning("isReadOnly #${rowNo} - table not set");
     } else if (table.hasReadOnlyLogic()) {
       if (_cacheRO == null || changed)
-        _cacheRO = DataContext.evaluateBool(_record, table, table.readOnlyLogic);
+        _cacheRO = DataContext.evaluateBool(this, table.readOnlyLogic);
       if (_cacheRO)
         return true;
     }
@@ -493,7 +450,7 @@ class DataRecord {
       for (DColumn col in table.columnList) {
         if (!col.isCopied || DataUtil.isStdColumn(col))
           continue;
-        String value = currentData.getValue(id: col.columnId, name: col.name);
+        String value = currentData.getValueOf(id: col.columnId, name: col.name);
         if ((value == null || value.isEmpty) && col.hasDefaultValue())
           value = col.defaultValue;
         if (value != null && value.isNotEmpty) {
@@ -509,23 +466,27 @@ class DataRecord {
   /**
    * Get value by [id] or column [name] (key)
    */
-  String getValue({String id, String name}) {
+  String getValueOf({String id, String name}) {
     return getEntryValue(getEntry(id, name, false));
+  }
+  /// get value of [name]
+  String getValue(String name) {
+    return getEntryValue(getEntry(null, name, false));
   }
   /**
    * Get value as int by [id] or column [name] (key)
    * Returns 0 if invalid or null
    */
-  int getValueAsInt({String id, String name}) {
-    String value = getEntryValue(getEntry(id, name, false));
+  int getValueAsInt(String name) {
+    String value = getEntryValue(getEntry(null, name, false));
     return DataUtil.asInt(value);
   }
   /**
    * Get value as int by [id] or column [name] (key)
    * Returns false if invalid or null
    */
-  bool getValueAsBool({String id, String name}) {
-    String value = getEntryValue(getEntry(id, name, false));
+  bool getValueAsBool(String name) {
+    String value = getEntryValue(getEntry(null, name, false));
     return DataUtil.asBool(value);
   }
 

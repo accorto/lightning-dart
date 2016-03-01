@@ -171,7 +171,7 @@ class CardPanel
     /// Add Records to Columns
     for (DRecord record in recordList) {
       DataRecord data = new DataRecord(table, null, value: record);
-      String columnValue = data.getValue(name:columnName);
+      String columnValue = data.getValue(columnName);
       LCardCompactEntry card;
       for (CardPanelColumn pcolumn in _panelColumnList) {
         if (pcolumn.value == columnValue) {

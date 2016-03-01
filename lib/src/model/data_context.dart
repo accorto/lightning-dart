@@ -231,11 +231,23 @@ class DataContext {
 
 
   /************************************
-   * Evaluate [logic] (not empty)
+   * Evaluate [logic] (not empty) - thows Exception
    * - default false, e.g. record.IsApi
    */
-  static bool evaluateBool(final DRecord record, final DTable table, final String logic) {
-    if (record.entryList.isEmpty)
+  static bool evaluateBool(final DataRecord data, final String logic) {
+    try {
+      Object retValue = evaluateBoolEx(data, logic);
+      bool rr = retValue is bool ? retValue : "true" == retValue;
+      _log.finer("evaluateBool urv=${data.record.urv} logic=${logic} = ${rr}");
+      return rr;
+    } catch (e) {
+      _log.warning("evaluateBool ${e}: urv=${data.record.urv} logoc=${logic}");
+    }
+    return false;
+  }
+  /// execute evaluation
+  static Object evaluateBoolEx(final DataRecord data, final String logic) {
+    if (data.isEmpty)
       return false;
     // indicators
     bool isBizLogic = logic.contains("record");
@@ -244,7 +256,7 @@ class DataContext {
     if (!isBizLogic
         && (ClientEnv.ctx.containsKey("ScriptType") // == "Compiere")
           || isCompiereLogic)) {
-      Map<String,String> context = getContext(record);
+      Map<String,String> context = getContext(data.record);
       return _evaluateBool2(logic.trim(), context);
     }
 
@@ -252,23 +264,17 @@ class DataContext {
     // Exception: constructor not a function
     //    <script src="packages/lightning/assets/ldart.js"></script>
     var biz = new JsObject(context['LDART']);
-    if (logic.contains("record"))
-      biz.callMethod('set', ['record', getJsRecord(record, table)]);
-    if (logic.contains("parent") && record.hasParent())
-      biz.callMethod('set', ['parent', getJsParent(record, table)]);
-    if (logic.contains("context"))
+    if (logic.contains("record")) {
+      biz.callMethod('set', ['record', _getJsRecord(data, logic)]);
+    }
+    if (logic.contains("parent") && data.record.hasParent()) {
+      biz.callMethod('set', ['parent', _getJsParent(data, logic)]);
+    }
+    if (logic.contains("context")) {
       biz.callMethod('set', ['context', new JsObject.jsify(ClientEnv.ctx)]);
+    }
     // var rr = biz['record'];
-    try {
-      Object retValue = biz.callMethod("evaluate", [logic]);
-      bool rr = retValue is bool ? retValue : "true" == retValue;
-      _log.finer("evaluateBool urv=${record.urv} logic=${logic} = ${rr}");
-      return rr;
-    }
-    catch (e) {
-      _log.warning("evaluateBool ${e}: urv=${record.urv} logoc=${logic}");
-    }
-    return false;
+    return biz.callMethod("evaluate", [logic]);
   } // evaluate
 
   /**
@@ -292,14 +298,17 @@ class DataContext {
 
 
   // convert record to JS Object
-  static JsObject getJsRecord(final DRecord record, final DTable table) {
-    Map map = asJsMap(record, table);
+  static JsObject _getJsRecord(final DataRecord data, final String logic) {
+    Map map = _asJsMap(data, logic);
     return new JsObject.jsify(map);
   } // getJsRecord
 
   // convert parent to JS Object
-  static JsObject getJsParent(final DRecord record, final DTable table) {
-    Map parent = asJsMap(record.parent, table);
+  static JsObject _getJsParent(final DataRecord data, final String logic) {
+    DRecord record = data.record.parent;
+    DTable table = null; // TODO get table for parent
+    DataRecord dataParent = new DataRecord(table, null, value:record);
+    Map parent = _asJsMap(dataParent, logic);
     return new JsObject.jsify(parent);
   } // getJsParent
 
@@ -309,13 +318,21 @@ class DataContext {
    * or also boolean, int, double, date.
    * Passwords are not included
    */
-  static Map<String,dynamic> asJsMap(final DRecord record, final DTable table, {bool asStringValues:false}) {
+  static Map<String,dynamic> _asJsMap(final DataRecord data, final String logic,
+      {bool asStringValues:false}) {
+    DRecord record = data.record;
     Map<String,Object> map = new Map<String,dynamic>();
     if (record == null || record.entryList.isEmpty) {
       return map;
     }
+    List<String> terms = logic.split(new RegExp(r'[.|=|*|+|\-|/|!|&|\|| ]', caseSensitive:false));
+    Set<String> termSet = new Set.from(terms);
+    DTable table = data.table;
     for (DEntry entry in record.entryList) {
       String columnName = entry.columnName;
+      if (!termSet.contains(columnName)) {
+        continue;
+      }
       DColumn col = DataUtil.findColumn(table, entry.columnId, columnName);
       DataType dt = col == null ? DataType.STRING : col.dataType;
       if (dt == DataType.PASSWORD)
