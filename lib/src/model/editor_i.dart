@@ -395,10 +395,9 @@ abstract class EditorI {
   List<EditorIDependent> _dependentOnList;
   /// Extract variables in logic
   void _addDependentOnLogic(String logic) {
-    Set<String> variables = DataContext.contextVariableList(logic);
-    if (variables != null) {
-      for (String variable in variables)
-        _addDependentOn(variable);
+    Set<String> variables = DataContext.contextVariableSet(logic, true);
+    for (String variable in variables) {
+      _addDependentOn(variable);
     }
   }
 
@@ -525,7 +524,7 @@ abstract class EditorI {
       //_log.fine("onInputChange ${name}=${theValue} (NoChange)");
       return;
     }
-    _log.config("onInputChange ${name}=${theValue}");
+    _log.fine("onInputChange ${name}=${theValue}");
     if (data != null && _entry != null) {
       data.updateEntry(_entry, theValue);
       valueDisplayUpdate();

@@ -141,7 +141,8 @@ class DataRecord {
       ..id = record.recordId
       ..urv = record.urv
       ..drv = record.drv;
-    /// add drv/urv entries
+    fk.entryList.addAll(record.entryList);
+    /* add drv/urv entries
     if (table != null) {
       for (DColumn col in table.columnList) {
         if ((col.hasUniqueSeqNo() && col.uniqueSeqNo > 0)
@@ -154,7 +155,7 @@ class DataRecord {
           }
         }
       }
-    }
+    } */
     return fk;
   } // createFk
 

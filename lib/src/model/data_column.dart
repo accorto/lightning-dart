@@ -167,7 +167,7 @@ class DataColumn {
         if (data.table == null)
           data.table = table;
         bool result = DataContext.evaluateBool(data, uiPanelColumn.readOnlyLogic);
-        _log.warning("isReadOnly ${tableColumn.name} ${result} - ${uiPanelColumn.readOnlyLogic}");
+        _log.fine("isReadOnly ${tableColumn.name} ${result} - ${uiPanelColumn.readOnlyLogic}");
         return result;
       }
     }

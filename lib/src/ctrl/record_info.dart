@@ -20,12 +20,13 @@ class RecordInfo {
   final UI ui;
   DataRecord data;
 
-  LInput _logic = new LInput("logic", EditorI.TYPE_TEXT, idPrefix: _ID, withClearValue: true);
+  LTextArea _logic = new LTextArea("logic", idPrefix: _ID);
   LBox _result = new LBox()
     ..classes.addAll([LMargin.C_TOP__X_SMALL]);
 
   TableElement _table = new TableElement()
-    ..id = "info-table";
+    ..id = "info-table"
+    ..classes.addAll([LTable.C_TABLE]);
 
   /**
    * Record Info
@@ -81,9 +82,9 @@ class RecordInfo {
     }
 
     _logic
-      ..label = "Test Logic expression"
-      ..placeholder = "logic"
-      ..help = "e.g. record.Name == 'a'";
+      ..label = "Test Logic expression (case sensitive)"
+      ..help = "e.g. record.Name == 'a'"
+      ..rows = 1;
     _logic.element.classes.add(LMargin.C_TOP__MEDIUM);
 
     LButton btnBool = new LButton.neutral("evalBool", "Evaluate Boolean", idPrefix: _ID);
@@ -131,8 +132,9 @@ class RecordInfo {
       TableRowElement tr = _table.addRow();
       tr.addCell().text = entry.columnName;
       tr.addCell().text = DataRecord.getEntryValue(entry);
+      tr.addCell().text = entry.valueDisplay;
     }
-  }
+  } // onActionShowDetails
 
 
 

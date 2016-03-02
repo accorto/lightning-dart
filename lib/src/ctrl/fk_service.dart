@@ -43,6 +43,7 @@ class FkService
   FkService(String this.dataUri, String this.uiUri) {
     KeyValueMap.keyValueFill = onKeyValueFill;
     KeyValueMap.keyValueValue = onKeyValueValue;
+    DataContext.valueOf = getValueOf;
   } // FkService
 
 
@@ -265,6 +266,52 @@ class FkService
     return null;
   } // removeRecord
 
+
+  /**
+   * Get Value of fkTable.columnName
+   * - get fkTable => table.fkColumnName
+   * - get record from fkColumnValue
+   * returns value or empty if found
+   * see [DataContext#getJsValueOf]
+   */
+  String getValueOf(DTable table, String fkColumnName, String fkColumnValue, String columnName) {
+    // try shortcut
+    List<DFK> fkList = _tableFkMap[fkColumnName];
+    // search for table
+    String fkTableName = null;
+    if (fkList == null) {
+      DColumn col = DataUtil.getTableColumn(table, fkColumnName);
+      if (col == null) {
+        _log.fine("getValueOf column ${fkColumnName} NotFound table=${table}");
+        return null;
+      }
+      if (col.hasFkReference()) {
+        fkTableName = col.fkReference;
+      } else {
+        _log.fine("getValueOf column ${fkColumnName} NoFkReference column=${col}");
+        return null;
+      }
+      fkList = _tableFkMap[fkTableName];
+    }
+    if (fkList == null) {
+      _log.fine("getValueOf table=${fkTableName} for ${fkColumnName} NotFound");
+      return null;
+    }
+
+    for (DFK fk in fkList) {
+      if (fk.urv == fkColumnValue) { // record found
+        for (DEntry entry in fk.entryList) {
+          if (entry.columnName == columnName) {
+            return DataRecord.getEntryValue(entry, returnEmpty: false);
+          }
+        }
+        _log.fine("getValueOf ${fkColumnName}=${fkColumnValue} column ${columnName} NotFound");
+        return null;
+      }
+    }
+    _log.fine("getValueOf record ${fkColumnName}=${fkColumnValue} NotFound");
+    return null;
+  } // getValueOf
 
   /**
    * Similar requests active

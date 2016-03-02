@@ -7,6 +7,14 @@
 part of lightning_model;
 
 /**
+ * Get Value of fkTable.columnName
+ * - get fkTable => table.fkColumnName
+ * - get record from fkColumnValue
+ */
+typedef String ValueOf(DTable table, String fkColumnName, String fkColumnValue, String columnName);
+
+
+/**
  * Context
  */
 class DataContext {
@@ -14,6 +22,8 @@ class DataContext {
 
   static Logger _log = new Logger("DataContext");
 
+  /// get value of (set in FkService)
+  static ValueOf valueOf;
 
   /// has the logic a variable - context - record - parent
   static bool hasVariable(String logic, {bool checkContext: true, bool checkRecord: true, bool checkParent: true}) {
@@ -107,23 +117,35 @@ class DataContext {
   } // contextReplace
 
   /// Context indicator
-  static final RegExp _CONTEXT = new RegExp(r'context\.[a-zA-Z_0-9]+');
+  static final RegExp _CONTEXT = new RegExp(r'context\.[a-zA-Z_0-9]+', multiLine:true);
   /// Record indicator
-  static final RegExp _RECORD = new RegExp(r'record\.[a-zA-Z_0-9]+');
+  static final RegExp _RECORD = new RegExp(r'record\.[a-zA-Z_0-9]+', multiLine:true);
   /// Record indicator
-  static final RegExp _PARENT = new RegExp(r'parent\.[a-zA-Z_0-9]+');
+  static final RegExp _PARENT = new RegExp(r'parent\.[a-zA-Z_0-9]+', multiLine:true);
+  /// ValueOf RegEx: valueOf.fkColumnName.columnName
+  static final RegExp _VALUEOF = new RegExp(r'([\w]+)\.([\w]+)\.([\w]+)', multiLine:true);
 
-  /// Get record variable names in [logic]
-  static Set<String> contextVariableList(String logic) {
-    if (logic == null || logic.isEmpty)
-      return null;
+
+  /// Get record / valueOf variable names in [logic]
+  static Set<String> contextVariableSet(String logic, bool recordAndValue) {
     Set<String> variables = new Set<String>();
+    if (logic == null || logic.isEmpty)
+      return variables;
     for (Match match in _RECORD.allMatches(logic)) {
       String var1 = match.input.substring(match.start, match.end);
       variables.add(var1.substring(7)); // remove record. prefix
     }
+    if (!recordAndValue)
+      return variables;
+    for (Match match in _VALUEOF.allMatches(logic)) {
+      String ref = match.group(0);
+      int i1 = ref.indexOf(".");
+      int i2 = ref.lastIndexOf(".");
+      String fkColumnName = ref.substring(i1+1, i2);
+      variables.add(fkColumnName);
+    }
     return variables;
-  }
+  } // contextVariableList
 
 
   /**
@@ -264,13 +286,16 @@ class DataContext {
     // Exception: constructor not a function
     //    <script src="packages/lightning/assets/ldart.js"></script>
     var biz = new JsObject(context['LDART']);
-    if (logic.contains("record")) {
+    if (logic.contains(_RECORD)) {
       biz.callMethod('set', ['record', _getJsRecord(data, logic)]);
     }
-    if (logic.contains("parent") && data.record.hasParent()) {
+    if (logic.contains(_VALUEOF)) {
+      biz.callMethod('set', ['valueOf', _getJsValueOf(data, logic)]);
+    }
+    if (data.record.hasParent() && logic.contains(_PARENT)) {
       biz.callMethod('set', ['parent', _getJsParent(data, logic)]);
     }
-    if (logic.contains("context")) {
+    if (logic.contains(_CONTEXT)) {
       biz.callMethod('set', ['context', new JsObject.jsify(ClientEnv.ctx)]);
     }
     // var rr = biz['record'];
@@ -320,13 +345,12 @@ class DataContext {
    */
   static Map<String,dynamic> _asJsMap(final DataRecord data, final String logic,
       {bool asStringValues:false}) {
-    DRecord record = data.record;
     Map<String,Object> map = new Map<String,dynamic>();
+    DRecord record = data.record;
     if (record == null || record.entryList.isEmpty) {
       return map;
     }
-    List<String> terms = logic.split(new RegExp(r'[.|=|*|+|\-|/|!|&|\|| ]', caseSensitive:false));
-    Set<String> termSet = new Set.from(terms);
+    Set<String> termSet = contextVariableSet(logic, false);
     DTable table = data.table;
     for (DEntry entry in record.entryList) {
       String columnName = entry.columnName;
@@ -368,6 +392,7 @@ class DataContext {
         map[columnName] = value;
       }
     }
+    //_log.finest("asJsMap terms=${termSet} map=${map}");
     return map;
   } // asJsMap
 
@@ -545,6 +570,42 @@ class DataContext {
     }
     return null;
   } // evaluateBool2Values
+
+  /**
+   * Create Map for valueOf.fkColumnName.columnName
+   */
+  static JsObject _getJsValueOf(final DataRecord data, final String logic,
+      {bool asStringValues:false}) {
+    Map<String,Object> map = new Map<String,dynamic>();
+    DRecord record = data.record;
+    if (record == null || record.entryList.isEmpty) {
+      return new JsObject.jsify(map);
+    }
+    for (Match match in _VALUEOF.allMatches(logic)) {
+      String ref = match.group(0);
+      int i1 = ref.indexOf(".");
+      int i2 = ref.lastIndexOf(".");
+      String fkColumnName = ref.substring(i1+1, i2);
+      String columnName = ref.substring(i2+1);
+
+      // valueOf.fkColumnName
+      Map<String, dynamic> colMap = map[fkColumnName];
+      if (colMap == null) {
+        colMap = new Map<String, dynamic>();
+        map[fkColumnName] = colMap;
+      }
+
+      String fkColumnNameValue = data.getValue(fkColumnName);
+      String columnNameValue = null;
+      if (fkColumnNameValue != null && fkColumnNameValue.isNotEmpty && valueOf != null)
+        columnNameValue = valueOf(data.table, fkColumnName, fkColumnNameValue, columnName);
+      // valueOf.fkColumnName.columnName
+      colMap[columnName] = columnNameValue;
+      _log.finest("getJsValueOf ${fkColumnName}=${fkColumnNameValue} ${columnName}=${columnNameValue}");
+    }
+    //_log.finest("getJsValueOf map=${map}");
+    return new JsObject.jsify(map);
+  } // getJsValueOf
 
 
 } // DataContext
