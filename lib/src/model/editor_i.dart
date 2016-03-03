@@ -184,13 +184,13 @@ abstract class EditorI {
   void valueDisplayUpdate() {
     if (isValueDisplay && _entry != null) {
       String vv = valueDisplay;
-      if (vv == null || vv.isEmpty) {
+      if (vv == null || vv.isEmpty || vv.startsWith("<")) { // KeyValueMap.keyNotFound
         _entry.clearValueDisplay();
       } else {
         _entry.valueDisplay = vv;
       }
     }
-  }
+  } // valueDisplayUpdate
 
   /// rendered in an Element - see also DataColumn.isValueRenderElement
   bool get isValueRenderElement => false;
@@ -355,7 +355,7 @@ abstract class EditorI {
         _addDependentOnLogic(pc.mandatoryLogic);
       }
     }
-  } // column
+  } // set dataColumn
   /// Optional data column
   DataColumn get dataColumn => _dataColumn;
   DataColumn _dataColumn;

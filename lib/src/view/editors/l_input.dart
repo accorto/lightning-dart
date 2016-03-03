@@ -38,7 +38,8 @@ class LInput
   /**
    * Input Editor
    */
-  LInput.from(DataColumn dataColumn, String type, {String idPrefix, bool this.inGrid:false, bool withClearValue:false}) {
+  LInput.from(DataColumn dataColumn, String type,
+      {String idPrefix, bool this.inGrid:false, bool withClearValue:false}) {
     createStandard(this, withClearValue:withClearValue, inGrid:inGrid);
     input.name = dataColumn.name;
     input.id = createId(idPrefix, input.name);
@@ -79,7 +80,7 @@ class LInput
     if (!EditorI.TYPES_NOLABEL.contains(type)) {
       input.onKeyUp.listen(onInputKeyUp);
     }
-  } // initializeEditor
+  } // initEditor
 
   /// Editor Id
   void updateId(String idPrefix) {

@@ -53,7 +53,7 @@ class FkDialog {
    * Fk Search Dialog
    */
   FkDialog(String this.tableName, bool this.isDependent) {
-    String idPrefix = "fk_${tableName}";
+    String idPrefix = "fkd_${tableName}";
     _modal = new LModal(idPrefix);
     _modal.setHeader(fkDialogTitle()); // temp
     //
@@ -141,6 +141,16 @@ class FkDialog {
       }
     } // parent restriction
 
+    // restrictions
+    String restrictionSql = lookup.restrictionSql;
+    if (restrictionSql != null && restrictionSql.isNotEmpty) {
+      DFilter filter = new DFilter()
+          ..columnName = "sql"
+          ..operation = DOP.SQL
+          ..filterDirectQuery = restrictionSql;
+      _datasource.queryFilterList.add(filter);
+    }
+
     // name restriction
     _queryRestriction = _editorFind.value;
     if (_queryRestriction != null && _queryRestriction.isNotEmpty) {
@@ -167,7 +177,7 @@ class FkDialog {
 
 
   /// Show after setting parent values
-  void show(FkCtrl lookup) {
+  void show(FkCtrl lookup) { // assumes modal dialog
     this.lookup = lookup;
     _modal.setHeader("${fkDialogTitle()} ${lookup.label}",icon: new LIconUtility(LIconUtility.SEARCH));
     _modal.showInElement(AppsMain.modals);

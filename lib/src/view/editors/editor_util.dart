@@ -6,7 +6,9 @@
 
 part of lightning_dart;
 
-typedef LLookup CreateLookup(DataColumn dataColumn, String idPrefix, bool inGrid);
+/// Creat Lookup
+typedef LEditor CreateLookup(DataColumn dataColumn, bool inGrid,
+      String idPrefix, bool isAlternativeDisplay, bool isFilter);
 
 
 /**
@@ -102,7 +104,7 @@ class EditorUtil {
         editor = new LInput.from(dataColumn, EditorI.TYPE_EMAIL,
             idPrefix: idPrefix, inGrid: inGrid);
       } else if (dataType == DataType.FK) {
-        editor = createLookupCall(dataColumn, idPrefix, inGrid);
+        editor = createLookupCall(dataColumn, inGrid, idPrefix, isAlternativeDisplay, isFilter);
       } else if (dataType == DataType.GEO) {
         // TODO geo editor
       } else if (dataType == DataType.IM) {
@@ -172,7 +174,7 @@ class EditorUtil {
         editor = new LLookupSelect.multiFrom(dataColumn,
             idPrefix: idPrefix, inGrid: inGrid);
       } else if (dataType == DataType.TENANT) {
-        editor = createLookupCall(dataColumn, idPrefix, inGrid);
+        editor = createLookupCall(dataColumn, inGrid, idPrefix, isAlternativeDisplay, isFilter);
       } else if (dataType == DataType.TEXT) {
         editor = new LTextArea.from(dataColumn,
             idPrefix: idPrefix, inGrid: inGrid, oneLine: isAlternativeDisplay);
@@ -186,7 +188,7 @@ class EditorUtil {
         editor = new LInput.from(dataColumn, EditorI.TYPE_URL,
             idPrefix: idPrefix, inGrid: inGrid);
       } else if (dataType == DataType.USER) {
-        editor = createLookupCall(dataColumn, idPrefix, inGrid);
+        editor = createLookupCall(dataColumn, inGrid, idPrefix, isAlternativeDisplay, isFilter);
       }
       // fallback
       if (editor == null) {
@@ -214,7 +216,8 @@ class EditorUtil {
   } // createFromColumn
 
   /// create lookup
-  static LLookup createLookup(DataColumn dataColumn, String idPrefix, bool inGrid) {
+  static LLookup createLookup(DataColumn dataColumn, bool inGrid,
+      String idPrefix, bool isAlternativeDisplay, bool isFilter) {
     return new LLookup.from(dataColumn, idPrefix:idPrefix, inGrid:inGrid);
   }
 

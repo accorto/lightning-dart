@@ -59,6 +59,8 @@ part 'src/apps/apps_settings_tab.dart';
 part 'src/ctrl/datasource.dart';
 part 'src/ctrl/fk_ctrl.dart';
 part 'src/ctrl/fk_dialog.dart';
+part 'src/ctrl/fk_multi.dart';
+part 'src/ctrl/fk_multi_dialog.dart';
 part 'src/ctrl/fk_service.dart';
 part 'src/ctrl/fk_service_request.dart';
 

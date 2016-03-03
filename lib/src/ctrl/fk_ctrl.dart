@@ -13,12 +13,18 @@ class FkCtrl
     extends LLookup {
 
   /// create fk lookup
-  static LLookup createLookup(DataColumn dataColumn, String idPrefix, bool inGrid) {
+  static LEditor createLookup(DataColumn dataColumn, bool inGrid,
+        String idPrefix, bool isAlternativeDisplay, bool isFilter) {
+
     if (dataColumn.tableColumn.hasFkReference()) {
+      if (isAlternativeDisplay)
+        return new FkMulti.from(dataColumn, idPrefix: idPrefix, inGrid: inGrid);
       return new FkCtrl.from(dataColumn, idPrefix: idPrefix, inGrid: inGrid);
     }
     String columnName = dataColumn.tableColumn.name;
     if (columnName.contains(_regExpId)) {
+      if (isAlternativeDisplay)
+        return new FkMulti.from(dataColumn, idPrefix: idPrefix, inGrid: inGrid);
       return new FkCtrl.from(dataColumn, idPrefix: idPrefix, inGrid: inGrid);
     }
     _log.warning("createLookup ${dataColumn.name}: NoFkReference");
@@ -153,21 +159,6 @@ class FkCtrl
     return completer.future;
   } // render
 
-  /// update display value
-  void valueDisplayUpdate() {
-    if (entry != null) {
-      String vv = value;
-      if (vv == null || vv.isEmpty) {
-        entry.clearValueDisplay();
-      } else {
-        String dd = renderSync(vv, false);
-        if (!dd.startsWith("<")) { // KeyValueMap.keyNotFound
-          entry.valueDisplay = dd;
-        }
-      }
-    }
-  } // valueDisplayUpdate
-
   /// Dependent On Changed
   void onDependentOnChanged(DEntry dependentEntry) {
     super.onDependentOnChanged(dependentEntry);
@@ -228,12 +219,14 @@ class FkCtrl
   /// On Icon Click
   void onIconClick(Event evt) {
     _log.config("onIconClick ${name}");
-    if (readOnly)
+    if (readOnly || disabled) {
       return;
+    }
     if (_dialog == null) {
       _dialog = FkDialog.getDialog(tableName, parents != null && parents.isNotEmpty);
     }
     _dialog.show(this);
+    showDropdown = false;
   }
   FkDialog _dialog;
 

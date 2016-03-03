@@ -51,8 +51,9 @@ class DataRecord {
       } else {
         // pass-though ?
         filter
-          ..columnName = record.tableName
+          ..columnName = record.tableName // "sql"
           ..operation = DOP.SQL;
+        // filter.filterDirectQuery
         _log.warning("getParentFilter ${tableName} query ${query}");
       }
     }
