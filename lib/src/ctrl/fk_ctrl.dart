@@ -53,6 +53,10 @@ class FkCtrl
    */
   FkCtrl.from(DataColumn dataColumn, {String idPrefix, bool inGrid:false})
       : super.from(dataColumn, idPrefix:idPrefix, inGrid:inGrid) {
+    if (inGrid) {
+      input.classes.remove(LInput.C_W160);
+      input.classes.add(LInput.C_W180);
+    }
     if (dataColumn.tableColumn.hasFkReference()) {
       tableName = dataColumn.tableColumn.fkReference;
     } else {
@@ -122,16 +126,13 @@ class FkCtrl
             if (fk2 != null) {
               completer.complete(fk2.drv);
               if (entry != null) {
-                if (entry.hasValue()) {
-                  if (entry.value == fk2.id) {
-                    entry.valueDisplay = fk2.drv;
-                  }
-                } else if (entry.valueOriginal == fk2.id) {
+                String cmp = DataRecord.getEntryValue(entry);
+                if (cmp == fk2.id) { // might have changed
                   entry.valueDisplay = fk2.drv;
                 }
               }
             } else {
-              completer.complete("!!${newValue}!!");
+              completer.complete(KeyValueMap.keyNotFoundOnServer(newValue));
             }
           })
           .catchError((error, stackTrace) {
@@ -219,14 +220,16 @@ class FkCtrl
   /// On Icon Click
   void onIconClick(Event evt) {
     _log.config("onIconClick ${name}");
+    evt.preventDefault();
+    evt.stopPropagation();
+    showDropdown = false;
     if (readOnly || disabled) {
       return;
     }
     if (_dialog == null) {
       _dialog = FkDialog.getDialog(tableName, parents != null && parents.isNotEmpty);
     }
-    _dialog.show(this);
-    showDropdown = false;
+    _dialog.show(this); // sets value and calls onInputChange(null)
   }
   FkDialog _dialog;
 

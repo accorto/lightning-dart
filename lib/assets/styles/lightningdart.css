@@ -6244,8 +6244,9 @@ a.slds-button--inverse:focus {
     .slds-input-has-prefix .slds-input__prefix.currency {
       border: none;
       background: transparent;
-      left: .25rem;
-      height: 2.125rem; }
+      left: 0;
+      height: 2.125rem;
+      color: inherit; }
   .slds-input-has-prefix--left .slds-input__prefix {
     left: 0.75rem; }
   .slds-input-has-prefix--left .slds-input,
@@ -6363,9 +6364,25 @@ input[type=number]::-webkit-inner-spin-button.decimal {
 .slds-table > tbody > tr > td {
   vertical-align: top; }
 .slds-table .slds-form-element textarea {
-  min-width: 100px; }
+  min-width: 100px;
+  -webkit-transition: .5s;
+          transition: .5s; }
+  .slds-table .slds-form-element textarea:focus {
+    min-width: 180px; }
 .slds-table .slds-form-element input {
   min-width: 120px; }
+.slds-table .slds-form-element .w80 {
+  min-width: 80px; }
+.slds-table .slds-form-element .w100 {
+  min-width: 100px; }
+.slds-table .slds-form-element .w140 {
+  min-width: 140px; }
+.slds-table .slds-form-element .w160 {
+  min-width: 160px; }
+.slds-table .slds-form-element .w180 {
+  min-width: 180px; }
+.slds-table .slds-form-element .w200 {
+  min-width: 200px; }
 .slds-table .slds-lookup {
   min-width: 150px; }
 .slds-datepicker .day {

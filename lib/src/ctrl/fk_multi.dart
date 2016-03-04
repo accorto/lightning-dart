@@ -18,26 +18,19 @@ class FkMulti
   final LIcon _icon = new LIconUtility(LIconUtility.JUSTIFY_TEXT);
 
   /// Multi FK Lookup
-  FkMulti(String name,
-      {String idPrefix, bool inGrid: false, bool withClearValue: false})
-      : super (name, EditorI.TYPE_FK, idPrefix: idPrefix, inGrid: inGrid, withClearValue: withClearValue) {
-    _init();
-  } // FkMulti
-
-  /// Multi FK Lookup
   FkMulti.from(DataColumn dataColumn,
       {String idPrefix, bool inGrid: false, bool withClearValue: false})
       : super.from (dataColumn, EditorI.TYPE_FK, idPrefix: idPrefix, inGrid: inGrid, withClearValue: withClearValue) {
-    _init();
-  } // FkMulti
-
-  void _init() {
+    if (inGrid) {
+      input.classes.remove(LInput.C_W160);
+      input.classes.add(LInput.C_W200);
+    }
     input.readOnly = true;
     input.style.background = "transparent";
     input.style.cursor = "pointer";
     input.onClick.listen(onInputClick);
     _icon.element.onClick.listen(onInputClick);
-  }
+  } // FkMulti
 
   /// Search Icon
   LIcon getIconRight() => _icon;
@@ -117,7 +110,8 @@ class FkMulti
       return "";
     String display = null;
     bool hasValue = false;
-    for (DEntry ee in _entryList) {
+    for (int i = 0; i < _entryList.length; i++) {
+      DEntry ee = _entryList[i];
       String dd = "";
       String vv = DataRecord.getEntryValue(ee);
       if (vv != null && vv.isNotEmpty) {
@@ -125,8 +119,14 @@ class FkMulti
         if (ee.hasValueDisplay()) {
           dd = ee.valueDisplay;
         } else {
-          // TODO lookup
-          dd = KeyValueMap.keyNotFound(vv);
+          // sync lookup
+          DFK fk = FkService.instance.getFk(getFkTableName(i), vv);
+          if (fk == null) {
+            dd = KeyValueMap.keyNotFound(vv);
+          } else {
+            dd = fk.drv;
+            ee.valueDisplay = dd;
+          }
         }
       }
       if (display == null) {
@@ -145,19 +145,70 @@ class FkMulti
     Completer<String> completer = new Completer<String>();
     if (DataUtil.isEmpty(newValue)) {
       completer.complete("");
-    } else {
-      String cmp = null;
-      if (_entryList.isEmpty)
-        cmp = DataRecord.getEntryValue(_entryList.first);
-      if (cmp == newValue) {
-        // render one..three
-      } else {
-        // render newValue only
-      }
-      completer.complete(contextReplace(newValue));
+      return completer.future;
     }
+    String cmp = null;
+    if (_entryList.isNotEmpty)
+      cmp = DataRecord.getEntryValue(_entryList.first);
+    if (cmp != newValue) {
+      return renderColumn(new DEntry()..value = newValue, _columnList.first);
+    }
+
+    List<Future<String>> futureList = new List<Future<String>>();
+    for (int i = 0; i < _entryList.length; i++) {
+      futureList.add(renderColumn(_entryList[i], _columnList[i]));
+    }
+    Future.wait(futureList)
+    .then((List<String> responseList){
+      String display = null;
+      for (String dd in responseList) {
+        if (display == null)
+          display = dd;
+        else
+          display += LUtil.DOT_SPACE + dd;
+      }
+      completer.complete(display);
+    });
+
     return completer.future;
   } // render
+
+  /// render column
+  Future<String> renderColumn(DEntry newEntry, DColumn column) {
+    String newValue = DataRecord.getEntryValue(newEntry);
+    Completer<String> completer = new Completer<String>();
+    if (DataUtil.isEmpty(newValue)) {
+      completer.complete("");
+      return completer.future;
+    }
+    String fkTableName = column.fkReference;
+    if (fkTableName == null || fkTableName.isEmpty)
+      fkTableName = column.name;
+
+    DFK fk = FkService.instance.getFk(fkTableName, newValue);
+    if (fk != null) {
+      completer.complete(fk.drv);
+      newEntry.valueDisplay = fk.drv;
+    } else {
+      FkService.instance.getFkFuture(fkTableName, newValue)
+      .then((DFK fk2) {
+        if (fk2 != null) {
+          completer.complete(fk2.drv);
+          String cmp = DataRecord.getEntryValue(newEntry);
+          if (cmp == fk2.id) { // might have changed
+            newEntry.valueDisplay = fk2.drv;
+          }
+        } else {
+          completer.complete(KeyValueMap.keyNotFoundOnServer(newValue));
+        }
+      })
+      .catchError((error, stackTrace) {
+        _log.warning("renderColumn ${name} table=${fkTableName} value=${newValue}", error, stackTrace);
+        completer.completeError(error, stackTrace);
+      });
+    }
+    return completer.future;
+  } // renderColumn
 
   /// Get Entry at Level
   DEntry getEntryAtLevel(int level) {
@@ -165,6 +216,16 @@ class FkMulti
       return null;
     }
     return _entryList[level];
+  }
+
+  String getFkTableName(int level) {
+    if (_columnList.isEmpty || level < 0 || level >= _columnList.length) {
+      return null;
+    }
+    DColumn col = _columnList[level];
+    if (col.hasFkReference())
+      return col.fkReference;
+    return col.name; //
   }
 
   /// Get Value at Level
@@ -181,9 +242,26 @@ class FkMulti
     if (_dialog == null) {
       _dialog = new FkMultiDialog(name, _columnList);
     }
-    _dialog.show(this);
+    _dialog.show(this); // calls setValues
   }
   FkMultiDialog _dialog;
 
+  /// Set Values
+  void setValues(List<String> valueList) {
+    for (int i = 0; i < _entryList.length; i++) {
+      DEntry entry = _entryList[i];
+      String newValue = valueList[i];
+      DataRecord.setEntryValue(entry, newValue);
+    }
+    String newValue = valueList.first;
+    render(newValue, false)
+    .then((String display){
+      _valueDisplay = display;
+      input.value = _valueDisplay;
+    });
+    if (editorChange != null) {
+      editorChange(name, newValue, entry, null);
+    }
+  } // setValues
 
 } // FkMulti

@@ -47,6 +47,8 @@ class LTextArea
       input.onBlur.listen((Event evt){
         input.rows = 1;
         input.attributes.remove("cols");
+        input.style.removeProperty("height"); // manual resize
+        input.style.removeProperty("width");
       });
     } else {
       rows = 3;

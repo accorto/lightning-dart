@@ -490,7 +490,11 @@ abstract class EditorI {
   } // updateData
 
   /// Clear Value
-  void onClearValue(Event ignored) {
+  void onClearValue(Event optional) {
+    if (optional != null) {
+      optional.preventDefault();
+      optional.stopPropagation();
+    }
     if (readOnly || disabled) {
       return;
     }
@@ -499,7 +503,7 @@ abstract class EditorI {
       data.updateEntry(_entry, "");
       valueDisplayUpdate();
     }
-    onInputChange(ignored); // validates
+    onInputChange(optional); // validates
     input.focus();
   } // clearValue
 

@@ -206,12 +206,16 @@ class LInputNumber
       decimalDigits = newValue.tableColumn.decimalDigits; // explicit
     } else if (dataType == DataType.AMOUNT || dataType == DataType.CURRENCY) {
       decimalDigits = 2;
+      if (inGrid)
+        input.classes.add(LInput.C_W160);
     } else if  (dataType == DataType.QUANTITY || dataType == DataType.DECIMAL) {
       decimalDigits = 1;
     } else if  (dataType == DataType.NUMBER) { // float
       decimalDigits = 3;
     } else { // DataType.INT, DataType.RATING
       decimalDigits = 0;
+      if (inGrid)
+        input.classes.add(LInput.C_W80);
     }
   } // column
 
@@ -222,7 +226,6 @@ class LInputNumber
     if (newValue > 0) {
       if (newValue > 15)
         newValue = 15;
-      input.classes.add("decimal");
       numberFormat = new NumberFormat("#,###,##0." + "000000000000000".substring(0,newValue), ClientEnv.localeName);
       input.step = "0." + "000000000000000".substring(1,newValue) + "1";
     } else {
@@ -252,13 +255,11 @@ class LInputNumber
       _currencySelect.append(OptionUtil.element(op));
     }
     createStandardLeftElement(null);
-    // set width (3rem - 5px)
-    num width = _currencySelect.getBoundingClientRect().width;
-    // set input width: calc(100% - 3rem); margin-left: 3rem
-    int space = width.toInt() + 5; // margin
     input.style
-      ..marginLeft = "${space}px"
-      ..width = "calc(100% - ${space}px)";
+      ..marginLeft = "0" // "${space}px"
+      ..width = "100%"; // """calc(100% - ${space}px)";
+    if (inGrid)
+      input.classes.add(LInput.C_W160);
     //
     if (_currencySelect.options.length == 1) {
       _currencySelect.disabled = true;

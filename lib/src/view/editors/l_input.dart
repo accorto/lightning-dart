@@ -15,6 +15,13 @@ class LInput
   /// Logger
   static final Logger _log = new Logger("LInput");
 
+  // standard width in table 120px
+  static const String C_W80 = "w80";
+  static const String C_W100 = "w100";
+  static const String C_W140 = "w140";
+  static const String C_W160 = "w160";
+  static const String C_W180 = "w180";
+  static const String C_W200 = "w200";
 
   /// Input Element
   final InputElement input = new InputElement();

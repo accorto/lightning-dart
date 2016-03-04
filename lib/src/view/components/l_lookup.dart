@@ -105,10 +105,14 @@ class LLookup
       bool multiple:false,
       bool singleScope: true,
       bool typeahead: true,
-      bool withClearValue:false,
+      bool withClearValue,
       bool this.inGrid:false}) {
+    if (withClearValue == null)
+      withClearValue = !inGrid && !dataColumn.tableColumn.isMandatory;
     _initEditor(dataColumn.name, idPrefix, multiple, singleScope, typeahead, withClearValue);
     this.dataColumn = dataColumn;
+    if (inGrid)
+      input.classes.add(LInput.C_W160);
   }
 
   /// Init Lookup
@@ -293,10 +297,30 @@ class LLookup
   void set required (bool newValue) {
     input.required = newValue;
     _formElement.required = newValue;
-    if (newValue && input.value.isEmpty && _lookupItemList.isNotEmpty) {
-      value = _lookupItemList.first.value;
+    if (newValue) {
+      if (_lookupItemList.isNotEmpty) {
+        LLookupItem first = _lookupItemList.first;
+        if (first.value.isEmpty) {
+          first.element.remove(); // _lookupList
+          _lookupItemList.removeAt(0);
+        }
+      }
+      if (input.value.isEmpty && _lookupItemList.isNotEmpty) {
+        value = _lookupItemList.first.value; // set value
+      }
+    } else { // optional
+      if (_lookupItemList.isNotEmpty) {
+        LLookupItem first = _lookupItemList.first;
+        if (first.value.isNotEmpty) {
+          LLookupItem optional = new LLookupItem(new DOption());
+          optional.createId(id);
+          _lookupItemList.insert(0, optional);
+          _lookupList.insertBefore(optional.element, _lookupList.firstChild);
+          optional.onClick.listen(onItemClick);
+        }
+      }
     }
-  }
+  } // required
 
   bool get readOnly => input.readOnly;
   void set readOnly (bool newValue) {
@@ -449,22 +473,28 @@ class LLookup
       if (evt.ctrlKey || evt.altKey || evt.metaKey) {
         _value = "";
         input.value = "";
-        lookupUpdateList(false, false);
+        lookupUpdateList(false, false, null);
       } else {
         showDropdown = false;
       }
       onInputChange(evt);
     } else if (kc == KeyCode.ENTER || kc == KeyCode.TAB) {
-      lookupUpdateList(false, true);
+      lookupUpdateList(false, true, null);
       onInputChange(evt);
       focusNextInput();
     } else {
-      lookupUpdateList(false, false);
+      if (kc == KeyCode.UP) {
+        lookupUpdateList(false, false, true);
+      } else if (kc == KeyCode.DOWN) {
+        lookupUpdateList(false, false, false);
+      } else {
+        lookupUpdateList(false, false, null);
+      }
     }
   } // onInputKeyUp
 
   /// update lookup list and display
-  int lookupUpdateList(bool showAll, bool selectFirst) {
+  int lookupUpdateList(bool showAll, bool selectFirstOrSelected, bool moveUp) {
     String restriction = input.value;
     RegExp exp = null;
     if (!showAll && restriction.isNotEmpty) {
@@ -472,6 +502,7 @@ class LLookup
     }
     int count = 0;
     LLookupItem first = null;
+    LLookupItem selected = null;
     for (LLookupItem item in _lookupItemList) {
       if (exp == null) {
         item.show = true;
@@ -490,7 +521,10 @@ class LLookup
       }
       else { // no match
         item.show = false;
+        item.selected = false;
       }
+      if (item.selected)
+        selected = item;
     }
     if (count == 0 && _lookupItemList.isNotEmpty) {
       input.setCustomValidity(lLookupNoMatch());
@@ -499,13 +533,65 @@ class LLookup
     }
     doValidate();
     _log.fine("lookupUpdateList ${name} '${restriction}' ${count} of ${_lookupItemList.length}");
-    if (selectFirst && first != null) {
-      _valueItem = first;
-      value = first.value;
-      showDropdown = false;
-    } else {
-      showDropdown = true;
+    bool newShow = true;
+    if (selectFirstOrSelected) {
+      if (selected != null) {
+        _valueItem = selected;
+        value = selected.value;
+        newShow = false;
+      }
+      else if (first != null) {
+        _valueItem = first;
+        value = first.value;
+        newShow = false;
+      }
     }
+
+    // move selection up/down
+    if (_showDropdown && moveUp != null) {
+      if (moveUp) {
+        LLookupItem previous = null;
+        for (LLookupItem item in _lookupItemList) {
+          if (item.show) {
+            if (item.selected) {
+              if (previous != null) {
+                selected.selected = false;
+                previous.selected = true;
+                _valueItem = previous;
+                break;
+              }
+            } else {
+              previous = item;
+            }
+          }
+        }
+      } else { // move down
+        selected = null;
+        first = null;
+        for (LLookupItem item in _lookupItemList) {
+          if (item.show) {
+            if (first == null)
+              first = item;
+            if (item.selected) {
+              selected = item;
+            } else {
+              if (selected != null) {
+                selected.selected = false;
+                item.selected = true;
+                _valueItem = item;
+                break;
+              }
+            }
+          }
+        }
+        if (selected == null && first != null) {
+          first.selected = true;
+          _valueItem = first;
+        }
+      }
+    }
+
+    showDropdown = newShow;
     return count;
   } // lookupUpdateList
 

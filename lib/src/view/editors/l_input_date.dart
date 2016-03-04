@@ -54,6 +54,9 @@ class LInputDate
   }
   /// Init Date
   void _initDate(String type) {
+    if (inGrid) {
+      input.classes.add(LInput.C_W140); // 132 min
+    }
     if (html5) {
       input.type = _validateType(_type);
     } else {

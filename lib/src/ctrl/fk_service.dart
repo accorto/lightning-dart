@@ -142,7 +142,9 @@ class FkService
   /**
    * Get FK from Cache direct
    */
-  DFK getFk(fkTableName, id) {
+  DFK getFk(String fkTableName, String id) {
+    if (fkTableName == null || id == null)
+      return null;
     List<DFK> list = _tableFkMap[fkTableName];
     if (list != null) {
       for (DFK fk in list) {
@@ -151,7 +153,7 @@ class FkService
       }
     }
     return null;
-  }
+  } // getFk
 
   /**
    * Retrieve from server if necessary
