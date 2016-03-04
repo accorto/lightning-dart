@@ -67,10 +67,7 @@ class LDatepicker
   @override
   void _initEditor(String type) {
     html5 = false;
-    element.onClick.listen(onInputClick); // w/o wrapper
-    if (inGrid) {
-      input.style.minWidth = "132px"; // default 120
-    }
+    input.onClick.listen(onInputClick); // w/o wrapper
     //
     _firstDayOfWeek = _formatter.dateSymbols.FIRSTDAYOFWEEK + 1; // zero based
     super._initEditor(type);
@@ -123,7 +120,7 @@ class LDatepicker
     }
     value = newValue;
     String theValue = value;
-    _log.config("onInputChange ${name}=${theValue}");
+    _log.config("onDropdownChange ${name}=${theValue}");
     if (data != null && entry != null) {
       data.updateEntry(entry, theValue);
       valueDisplayUpdate();

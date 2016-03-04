@@ -47,18 +47,23 @@ class LDatePickerDropdown {
       icon: new LIconUtility(LIconUtility.RIGHT, className: LButton.C_BUTTON__ICON, size: LButton.C_BUTTON__ICON__SMALL),
       assistiveText: lDatePickerDropdownNext());
 
-  final SelectElement _yearSelect = new SelectElement()
+  final InputElement _yearInput = new InputElement(type: EditorI.TYPE_NUMBER)
     ..name = "year"
-    ..classes.add(LForm.C_SELECT); // LPicklist.C_PICKLIST__LABEL
+    ..classes.add(LForm.C_INPUT)
+    ..style.border = "none"
+    ..style.textAlign = "center"
+    ..step = "1"
+    ..min = "1900"
+    ..max = "2050";
 
   final TableElement _cal = new TableElement()
     ..classes.add(LDatepicker.C_DATEPICKER__MONTH)
     ..attributes[Html0.ROLE] = Html0.ROLE_GRID;
 
+  final AnchorElement _todayLink = new AnchorElement(href:"#")
+    ..text = lDatePickerDropdownToday();
 
   final DateTime _today = new DateTime.now();
-  int _yearFirst = 1915;
-  int _yearLast = 2045;
 
   final String name;
   final DateFormat dateFormat;
@@ -88,13 +93,11 @@ class LDatePickerDropdown {
     _month.append(_monthNext);
     _monthNext.append(_monthNextButton.element);
     // - year
-    _year.append(_yearSelect);
+    _year.append(_yearInput);
     // _cal.attributes[Html0.ARIA_LABELLEDBY] = _monthLabel.id;
 
     // Table
     element.append(_cal);
-    //
-    _initYear();
     // Events
     _monthPrevButton.onClick.listen((MouseEvent evt) {
       _monthDelta(-1);
@@ -102,16 +105,11 @@ class LDatePickerDropdown {
     _monthNextButton.onClick.listen((MouseEvent evt) {
       _monthDelta(1);
     });
+    _year.onInput.listen(onYearInput);
     _cal.onClick.listen(onCalClick);
+    _todayLink.onClick.listen(onTodayClick);
   } // LDatePickerDropdown
 
-  /// initiate year options
-  void _initYear() {
-    for (int i = _yearFirst; i <= _yearLast; i++) {
-      _yearSelect.append(new OptionElement(data:i.toString(), value:i.toString()));
-    }
-    _yearSelect.onChange.listen(onYearChange);
-  }
 
   /// Select Mode
   String mode = LDatepicker.MODE_SINGLE;
@@ -177,27 +175,39 @@ class LDatePickerDropdown {
 
   /// Move -1/+1 months
   void _monthDelta(int delta) {
-    _log.fine("monthDelta ${delta}");
-    _date = _date.add(new Duration(days: delta*28)); // 4 weeks
+    int yy = _date.year;
+    int mm = _date.month + delta;
+    int dd = _date.day;
+    while (mm < DateTime.JANUARY) {
+      mm += 12;
+      yy--;
+    }
+    while (mm > DateTime.DECEMBER) {
+      mm -= 12;
+      yy++;
+    }
+    _date = new DateTime(yy, mm, dd);
+    _log.fine("monthDelta ${delta} - ${_date}");
     _buildCalendar();
   }
 
   /// Year Change
-  void onYearChange(Event evt) {
-    String y = _yearSelect.value;
+  void onYearInput(Event evt) {
+    String y = _yearInput.value;
     if (y != null && y.isNotEmpty) {
       int yyyy = int.parse(y, onError: (String s){
         _log.warning("onYearChange ${y}");
         return _date.year;
       });
       _date = new DateTime(yyyy, _date.month, _date.day);
+      _log.config("onYearInput ${y} - ${_date}");
       _buildCalendar();
     }
   } // onYearChange
 
   /// Select/Click on Calendar
-  void onCalClick(MouseEvent event) {
-    Element target = event.target;
+  void onCalClick(MouseEvent evt) {
+    Element target = evt.target;
     String dateString = target.attributes[Html0.DATA_VALUE];
     if (dateString == null) {
       target = target.parent;
@@ -253,6 +263,15 @@ class LDatePickerDropdown {
     }
   } // onCalClick
 
+  /// today Clicked
+  void onTodayClick(MouseEvent evt) {
+    evt.preventDefault();
+    evt.stopPropagation();
+    _date = new DateTime.now();
+    _date = new DateTime(_date.year, _date.month, _date.day);
+    _log.fine("onClickToday - ${_date}");
+    _buildCalendar();
+  }
 
   /// Build+Display Calendar
   void _buildCalendar() {
@@ -268,21 +287,7 @@ class LDatePickerDropdown {
     List<String> monthNames = dateFormat.dateSymbols.MONTHS;
     _monthLabel.text = monthNames[month-1];
     // Year
-    const int buffer = 1; // additional years to add
-    if (year < _yearFirst) {
-      OptionElement firstYearElement = _yearSelect.options.first;
-      for (int i = year-buffer; i <= _yearFirst-1; i++) {
-        _yearSelect.insertBefore(new OptionElement(data:i.toString(), value:i.toString()), firstYearElement);
-      }
-      _yearFirst = year;
-    } else if (year > _yearLast) {
-      for (int i = _yearLast+1; i <= year+buffer; i++) {
-        _yearSelect.append(new OptionElement(data:i.toString(), value:i.toString()));
-      }
-      _yearLast = year;
-    }
-    _yearSelect.value = year.toString();
-
+    _yearInput.value = year.toString();
   } // buildCalendar
 
   /// build first row S..S
@@ -315,8 +320,9 @@ class LDatePickerDropdown {
       weekStart = weekStart.subtract(DAY);
 
     DateTime theDay = weekStart;
+    TableRowElement row;
     do {
-      TableRowElement row = tbody.addRow();
+      row = tbody.addRow();
       for (int i = 0; i < 7; i++) {
         int day = firstDayOfWeek + i;
         if (day >= DateTime.SUNDAY)
@@ -357,6 +363,10 @@ class LDatePickerDropdown {
       }
       weekStart = weekStart.add(WEEK);
     } while (weekStart.month == _date.month);
+    row = tbody.addRow();
+    row.addCell()
+      ..colSpan = 7
+      ..append(_todayLink);
   } // _buildCalendarDays
 
 
@@ -376,5 +386,7 @@ class LDatePickerDropdown {
 
   static String lDatePickerDropdownPrev() => Intl.message("Go to previous month", name: "lDatePickerDropdownPrev");
   static String lDatePickerDropdownNext() => Intl.message("Go to next month", name: "lDatePickerDropdownNext");
+
+  static String lDatePickerDropdownToday() => Intl.message("today", name: "lDatePickerDropdownToday");
 
 } // LDatePickerDropdown
