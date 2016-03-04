@@ -8,6 +8,10 @@ part of lightning_ctrl;
 
 /**
  * Graph Presentation via Charted
+ *
+ * Planned Improvements:
+ * - values added Legend: DefaultCartesianAreaImpl._updateLegend
+ * - remove 0 value lines in Hover: Hovercard._getMeasuresData -> _createHovercardItem
  */
 class EngineCharted
     extends EngineBase {
@@ -18,6 +22,8 @@ class EngineCharted
   static const String _TYPE_BAR = "bar";
   static const String _TYPE_STACKED = "stacked";
 
+  /// Sum Unicode SUMMATION 2211 (large) SIGMA 03A3 (smaller)
+  static const String SUMMATION ="\u{03A3}";
 
   final Element element = new Element.article()
     ..classes.add("chart-wrapper");
@@ -111,10 +117,12 @@ class EngineCharted
           new StackedBarChartRenderer(alwaysAnimate: true));
       Iterable<ChartSeries> seriesList = [series];
       Iterable<int> dimensionList = [0];
+      String vv = by.hasSum ? by.sum.toStringAsFixed(1) : by.count.toStringAsFixed(0);
+      String tt = "${by.label} - ${calc.label} ${SUMMATION} ${vv}";
       ChartConfig config = new ChartConfig(seriesList, dimensionList)
         ..legend = new ChartLegend(_legendHost,
             showValues: true,
-            title: by.label);
+            title: tt);
       _setChartSize(config, width);
 
       // data
@@ -281,13 +289,15 @@ class EngineCharted
               statsMode: PieChartRenderer.STATS_VALUE_PERCENTAGE,
               showLabels: true,
               sortDataByValue: false));
+      String vv = by.hasSum ? by.sum.toStringAsFixed(1) : by.count.toStringAsFixed(0);
+      String tt = "${by.label} - ${calc.label} ${SUMMATION} ${vv}";
       ChartConfig config = new ChartConfig([series], [0])
         ..legend = new ChartLegend(_legendHost,
-            title: by.label,
+            title: tt,
             showValues: true);
       _setChartSize(config, width);
 
-      _data = new ChartData(_byColumns(by.label, by), _byRows(by));
+      _data = new ChartData(_byColumns(calc.label, by), _byRows(by));
 
       _createState();
       LayoutArea area = new LayoutArea(_chartHost, _data, config,
@@ -302,20 +312,25 @@ class EngineCharted
   } // renderPie
 
   /// pie column list
-  List<ChartColumnSpec> _byColumns(String label, StatBy by) {
+  List<ChartColumnSpec> _byColumns(String whatLabel, StatBy by) {
     List<ChartColumnSpec> list = new List<ChartColumnSpec>();
     by.updateLabels();
-    ChartColumnSpec column = new ChartColumnSpec(label:label, type: ChartColumnSpec.TYPE_STRING);
+    ChartColumnSpec column = new ChartColumnSpec(label:by.label, type: ChartColumnSpec.TYPE_STRING);
     list.add(column);
     _metaColList.add(by);
-    for (StatPoint point in by.byValueList) {
+
+    column = new ChartColumnSpec(label:whatLabel, type: ChartColumnSpec.TYPE_NUMBER);
+    list.add(column);
+    _metaColList.add(by);
+
+    /* for (StatPoint point in by.byValueList) {
       FormatFunction formatter = _format2num;
       column = new ChartColumnSpec(label:point.label,
           type: ChartColumnSpec.TYPE_NUMBER,
           formatter:formatter);
       list.add(column);
       _metaColList.add(point);
-    }
+    }*/
     return list;
   }
 
@@ -340,7 +355,7 @@ class EngineCharted
   /// Helper method to create default behaviors for cartesian chart demos.
   Iterable<ChartBehavior> _createDefaultCartesianBehaviors() =>
       new List.from([
-        new Hovercard(isMultiValue: true),
+        new Hovercard(showDimensionTitle: true, isMouseTracking: true, isMultiValue: true),
         new AxisLabelTooltip()
       ]);
 
