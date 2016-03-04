@@ -147,11 +147,7 @@ class LDatePickerDropdown {
     else if (!_date.isUtc)
       _date = _date.toUtc();
     _date = new DateTime.utc(_date.year, _date.month, _date.day); // normalize
-    if (mode == LDatepicker.MODE_WEEK_FIRST || mode == LDatepicker.MODE_WEEK_LAST) {
-      while (_date.weekday != firstDayOfWeek)
-        _date = _date.subtract(DAY);
-      _dateTo = _date.add(new Duration(days:6));
-    }
+    _setDateTo();
     _buildCalendar();
   }
   /// Get Date (utc)
@@ -186,8 +182,9 @@ class LDatePickerDropdown {
       mm -= 12;
       yy++;
     }
-    _date = new DateTime(yy, mm, dd);
-    _log.fine("monthDelta ${delta} - ${_date}");
+    _date = new DateTime.utc(yy, mm, dd);
+    _setDateTo();
+    _log.fine("monthDelta ${delta} - ${_date} ${_dateTo}");
     _buildCalendar();
   }
 
@@ -199,8 +196,9 @@ class LDatePickerDropdown {
         _log.warning("onYearChange ${y}");
         return _date.year;
       });
-      _date = new DateTime(yyyy, _date.month, _date.day);
-      _log.config("onYearInput ${y} - ${_date}");
+      _date = new DateTime.utc(yyyy, _date.month, _date.day);
+      _setDateTo();
+      _log.fine("onYearInput ${y} - ${_date} ${dateTo}");
       _buildCalendar();
     }
   } // onYearChange
@@ -265,12 +263,21 @@ class LDatePickerDropdown {
 
   /// today Clicked
   void onTodayClick(MouseEvent evt) {
-    evt.preventDefault();
+    evt.preventDefault(); // link
     evt.stopPropagation();
-    _date = new DateTime.now();
-    _date = new DateTime(_date.year, _date.month, _date.day);
-    _log.fine("onClickToday - ${_date}");
+    _date = new DateTime.utc(_today.year, _today.month, _today.day);
+    _setDateTo();
+    _log.fine("onClickToday - ${_date} ${_dateTo}");
     _buildCalendar();
+  }
+
+  /// adjust date set date to if first|last
+  void _setDateTo() {
+    if (mode == LDatepicker.MODE_WEEK_FIRST || mode == LDatepicker.MODE_WEEK_LAST) {
+      while (_date.weekday != firstDayOfWeek)
+        _date = _date.subtract(DAY);
+      _dateTo = _date.add(new Duration(days:6));
+    }
   }
 
   /// Build+Display Calendar
