@@ -44,24 +44,43 @@ class TableLayout {
   /// from UI to Editor
   void fromUi() {
     List<DOption> options = new List<DOption>();
+    List<String> columnNames = new List<String>();
     for (UIGridColumn gc in ui.gridColumnList) {
-      DOption option = new DOption()
-        ..value = gc.column.name
-        ..label = gc.column.label;
-      if (gc.hasUiGridColumnId())
-        option.id = gc.uiGridColumnId;
-      if (gc.hasIsActive()) {
-        option.isActive = gc.isActive;
-      } else {
-        option.isActive = true;
-      }
-      if (gc.hasSeqNo())
-        option.seqNo = gc.seqNo;
-      //
-      options.add(option);
+      options.add(_fromUiGridColumn(gc));
+      columnNames.add((gc.columnName));
+    }
+    for (DColumn column in ui.table.columnList) {
+      if (!column.isActive || columnNames.contains(column.name))
+        continue;
+      options.add(_fromUiColumn(column));
     }
     multi.options = options;
   } // fromUi
+
+  DOption _fromUiGridColumn(UIGridColumn gc) {
+    DOption option = new DOption()
+      ..value = gc.column.name
+      ..label = gc.column.label
+      ..iconImage = DataTypeUtil.getIconImage(gc.column.dataType);
+    if (gc.hasUiGridColumnId())
+      option.id = gc.uiGridColumnId;
+    if (gc.hasIsActive()) {
+      option.isActive = gc.isActive;
+    } else {
+      option.isActive = true;
+    }
+    if (gc.hasSeqNo())
+      option.seqNo = gc.seqNo;
+    return option;
+  }
+  DOption _fromUiColumn(DColumn column) {
+    DOption option = new DOption()
+      ..value = column.name
+      ..label = column.label
+      ..iconImage = DataTypeUtil.getIconImage(column.dataType);
+    option.isActive = false;
+    return option;
+  }
 
   /// from Editor to UI
   void toUi() {

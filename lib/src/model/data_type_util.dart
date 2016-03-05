@@ -182,6 +182,17 @@ class DataTypeUtil {
     return tableColumn;
   } // toColumn
 
+  /// get icon image
+  static String getIconImage(DataType dt) {
+    DataTypeUtil util = getDataTypeUtil(dt, false);
+    if (util != null) {
+      String img = util.iconImage;
+      if (img.isNotEmpty)
+        return img;
+    }
+    return "utility|puzzle";
+  }
+
   /**
    * Get (first) Data Type Info for [dataType]
    */
@@ -207,42 +218,43 @@ class DataTypeUtil {
     if (_dataTypes != null)
       return;
     _dataTypes = new List<DataTypeUtil>();
-    _STRING =      new DataTypeUtil(DataType.STRING,    EditorI.TYPE_TEXT,      "");
+    _STRING =      new DataTypeUtil(DataType.STRING,    EditorI.TYPE_TEXT,      "utility|text_background_color");
     _dataTypes.add(_STRING);
-    _dataTypes.add(new DataTypeUtil(DataType.ADDRESS,   EditorI.TYPE_ADDRESS,   ""));
-    _dataTypes.add(new DataTypeUtil(DataType.AMOUNT,    EditorI.TYPE_DECIMAL,   ""));
-    _dataTypes.add(new DataTypeUtil(DataType.BOOLEAN,   EditorI.TYPE_CHECKBOX,  ""));
-    _dataTypes.add(new DataTypeUtil(DataType.CODE,      EditorI.TYPE_CODE,      ""));
-    _dataTypes.add(new DataTypeUtil(DataType.COLOR,     EditorI.TYPE_COLOR,     ""));
-    _dataTypes.add(new DataTypeUtil(DataType.CURRENCY,  EditorI.TYPE_DECIMAL,   ""));
-    _dataTypes.add(new DataTypeUtil(DataType.DATA,      EditorI.TYPE_FILE,      ""));
-    _dataTypes.add(new DataTypeUtil(DataType.DATE,      EditorI.TYPE_DATE,      ""));
-    _dataTypes.add(new DataTypeUtil(DataType.DATETIME,  EditorI.TYPE_DATETIME,  ""));
-    _dataTypes.add(new DataTypeUtil(DataType.DECIMAL,   EditorI.TYPE_DECIMAL,   ""));
-    _dataTypes.add(new DataTypeUtil(DataType.DURATION,  EditorI.TYPE_DURATION,  ""));
-    _dataTypes.add(new DataTypeUtil(DataType.EMAIL,     EditorI.TYPE_EMAIL,     ""));
-    _dataTypes.add(new DataTypeUtil(DataType.FK,        EditorI.TYPE_FK,        ""));
-    _dataTypes.add(new DataTypeUtil(DataType.GEO,       EditorI.TYPE_ADDRESS,   ""));
-    _dataTypes.add(new DataTypeUtil(DataType.IM,        EditorI.TYPE_EMAIL,     ""));
-    _dataTypes.add(new DataTypeUtil(DataType.IMAGE,     EditorI.TYPE_FILE,      ""));
-    _dataTypes.add(new DataTypeUtil(DataType.INT,       EditorI.TYPE_NUMBER,    ""));
-    _dataTypes.add(new DataTypeUtil(DataType.NUMBER,    EditorI.TYPE_DECIMAL,   ""));
-    _dataTypes.add(new DataTypeUtil(DataType.PASSWORD,  EditorI.TYPE_PASSWORD,  ""));
-    _dataTypes.add(new DataTypeUtil(DataType.PHONE,     EditorI.TYPE_TEL,       ""));
-    _dataTypes.add(new DataTypeUtil(DataType.PICK,      EditorI.TYPE_SELECT,    ""));
-    _dataTypes.add(new DataTypeUtil(DataType.PICKAUTO,  EditorI.TYPE_SELECTAUTO, ""));
-    _dataTypes.add(new DataTypeUtil(DataType.PICKCHOICE, EditorI.TYPE_SELECTCHOICE, ""));
-    _dataTypes.add(new DataTypeUtil(DataType.PICKMULTI, EditorI.TYPE_SELECT,    ""));
-    _dataTypes.add(new DataTypeUtil(DataType.PICKMULTICHOICE, EditorI.TYPE_SELECTCHOICE, ""));
-    _dataTypes.add(new DataTypeUtil(DataType.QUANTITY,  EditorI.TYPE_DECIMAL,   ""));
-    _dataTypes.add(new DataTypeUtil(DataType.RATING,    EditorI.TYPE_RANGE,     ""));
-    _dataTypes.add(new DataTypeUtil(DataType.TAG,       EditorI.TYPE_TAG,       ""));
-    _dataTypes.add(new DataTypeUtil(DataType.TENANT,    EditorI.TYPE_FK,        ""));
-    _dataTypes.add(new DataTypeUtil(DataType.TEXT,      EditorI.TYPE_TEXTAREA,  ""));
-    _dataTypes.add(new DataTypeUtil(DataType.TIME,      EditorI.TYPE_TIME,      ""));
-    _dataTypes.add(new DataTypeUtil(DataType.TIMEZONE,  EditorI.TYPE_TIMEZONE,  ""));
-    _dataTypes.add(new DataTypeUtil(DataType.URL,       EditorI.TYPE_URL,       ""));
-    _dataTypes.add(new DataTypeUtil(DataType.USER,      EditorI.TYPE_FK,        ""));
+    _dataTypes.add(new DataTypeUtil(DataType.ADDRESS,   EditorI.TYPE_ADDRESS,   "utility|checkin"));
+    _dataTypes.add(new DataTypeUtil(DataType.AMOUNT,    EditorI.TYPE_DECIMAL,   "utility|summarydetail"));
+    _dataTypes.add(new DataTypeUtil(DataType.BOOLEAN,   EditorI.TYPE_CHECKBOX,  "utility|check"));
+    _dataTypes.add(new DataTypeUtil(DataType.CODE,      EditorI.TYPE_CODE,      "utility|insert_tag_field"));
+    _dataTypes.add(new DataTypeUtil(DataType.COLOR,     EditorI.TYPE_COLOR,     "utility|palette"));
+    _dataTypes.add(new DataTypeUtil(DataType.CURRENCY,  EditorI.TYPE_DECIMAL,   "utility|moneybag"));
+    _dataTypes.add(new DataTypeUtil(DataType.DATA,      EditorI.TYPE_FILE,      "utility|attach"));
+    _dataTypes.add(new DataTypeUtil(DataType.DATE,      EditorI.TYPE_DATE,      "utility|dayview"));
+    _dataTypes.add(new DataTypeUtil(DataType.DATETIME,  EditorI.TYPE_DATETIME,  "utility|event"));
+    _dataTypes.add(new DataTypeUtil(DataType.DECIMAL,   EditorI.TYPE_DECIMAL,   "utility|chart"));
+    _dataTypes.add(new DataTypeUtil(DataType.DURATION,  EditorI.TYPE_DURATION,  "utility|trail"));
+    _dataTypes.add(new DataTypeUtil(DataType.DURATIONHOUR,EditorI.TYPE_DURATION,"utility|trail"));
+    _dataTypes.add(new DataTypeUtil(DataType.EMAIL,     EditorI.TYPE_EMAIL,     "utility|email"));
+    _dataTypes.add(new DataTypeUtil(DataType.FK,        EditorI.TYPE_FK,        "utility|link"));
+    _dataTypes.add(new DataTypeUtil(DataType.GEO,       EditorI.TYPE_ADDRESS,   "utility|checkin"));
+    _dataTypes.add(new DataTypeUtil(DataType.IM,        EditorI.TYPE_EMAIL,     "utility|chat"));
+    _dataTypes.add(new DataTypeUtil(DataType.IMAGE,     EditorI.TYPE_FILE,      "utility|image"));
+    _dataTypes.add(new DataTypeUtil(DataType.INT,       EditorI.TYPE_NUMBER,    "utility|add"));
+    _dataTypes.add(new DataTypeUtil(DataType.NUMBER,    EditorI.TYPE_DECIMAL,   "utility|feed"));
+    _dataTypes.add(new DataTypeUtil(DataType.PASSWORD,  EditorI.TYPE_PASSWORD,  "utility|lock"));
+    _dataTypes.add(new DataTypeUtil(DataType.PHONE,     EditorI.TYPE_TEL,       "utility|call"));
+    _dataTypes.add(new DataTypeUtil(DataType.PICK,      EditorI.TYPE_SELECT,    "utility|picklist"));
+    _dataTypes.add(new DataTypeUtil(DataType.PICKAUTO,  EditorI.TYPE_SELECTAUTO, "utility|rows"));
+    _dataTypes.add(new DataTypeUtil(DataType.PICKCHOICE, EditorI.TYPE_SELECTCHOICE, "utility|left_align_text"));
+    _dataTypes.add(new DataTypeUtil(DataType.PICKMULTI, EditorI.TYPE_SELECT,    "utility|picklist"));
+    _dataTypes.add(new DataTypeUtil(DataType.PICKMULTICHOICE, EditorI.TYPE_SELECTCHOICE, "utility|richtextbulletedlist"));
+    _dataTypes.add(new DataTypeUtil(DataType.QUANTITY,  EditorI.TYPE_DECIMAL,   "utility|bucket"));
+    _dataTypes.add(new DataTypeUtil(DataType.RATING,    EditorI.TYPE_RANGE,     "utility|favorite"));
+    _dataTypes.add(new DataTypeUtil(DataType.TAG,       EditorI.TYPE_TAG,       "utility|bookmark"));
+    _dataTypes.add(new DataTypeUtil(DataType.TENANT,    EditorI.TYPE_FK,        "utility|company"));
+    _dataTypes.add(new DataTypeUtil(DataType.TEXT,      EditorI.TYPE_TEXTAREA,  "utility|note"));
+    _dataTypes.add(new DataTypeUtil(DataType.TIME,      EditorI.TYPE_TIME,      "utility|clock"));
+    _dataTypes.add(new DataTypeUtil(DataType.TIMEZONE,  EditorI.TYPE_TIMEZONE,  "utility|location"));
+    _dataTypes.add(new DataTypeUtil(DataType.URL,       EditorI.TYPE_URL,       "utility|world"));
+    _dataTypes.add(new DataTypeUtil(DataType.USER,      EditorI.TYPE_FK,        "utility|identity"));
   } // init
   static List<DataTypeUtil> _dataTypes;
   static DataTypeUtil _STRING;
@@ -253,8 +265,8 @@ class DataTypeUtil {
   /// Html type +
   final String editorType;
   /// Icon
-  final String iconClass;
+  final String iconImage;
   /// Data Type Util
-  DataTypeUtil(DataType this.dataType, String this.editorType, String this.iconClass);
+  DataTypeUtil(DataType this.dataType, String this.editorType, String this.iconImage);
 
 } // DataTypeUtil
