@@ -24,11 +24,14 @@ class TableLayout {
    * Table Layout Dialog
    */
   TableLayout(UI this.ui, void callback()) {
-    String label = "${tableLayout()} ${ui.name} (${ui.table.label})";
-    modal.setHeader(label);
+    modal.large = true;
+    String label = "${tableLayout()}: ${ui.table.label}";
+    modal.setHeader(label, icon: new LIconUtility(LIconUtility.LAYOUT));
+    // multi
     multi.selectedIndicator = LPicklistMulti.SELECTED_INDICATOR_ACTIVE;
     multi.label = tableLayoutColumns();
     modal.add(multi);
+    // footer
     LButton save = modal.addFooterButtons();
     save.onClick.listen((MouseEvent evt){
       toUi();

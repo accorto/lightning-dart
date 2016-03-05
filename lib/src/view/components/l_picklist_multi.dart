@@ -11,11 +11,11 @@ part of lightning_dart;
  * Multi Select / Pick List
  * (two lists with add/remove up/down)
  * - attributes: active, seqNo
- *
- * TODO: Draggable
  */
 class LPicklistMulti
       extends LComponent {
+
+  static final Logger _log = new Logger("LPicklistMulti");
 
   static const SELECTED_INDICATOR_SELECTED = "s";
   static const SELECTED_INDICATOR_ACTIVE = "a";
@@ -26,7 +26,7 @@ class LPicklistMulti
     ..classes.addAll([LPicklist.C_PICKLIST__DRAGGABLE, LGrid.C_GRID]);
 
   final DivElement _formLeft = new DivElement()
-    ..classes.add(LForm.C_FORM_ELEMENT);
+    ..classes.addAll([LForm.C_FORM_ELEMENT, LGrid.C_SHRINK_NONE]);
   final SpanElement _formLeftLabel = new SpanElement()
     ..classes.add(LForm.C_FORM_ELEMENT__LABEL);
   final DivElement _formLeftPl = new DivElement()
@@ -35,7 +35,7 @@ class LPicklistMulti
     ..classes.addAll([LPicklist.C_PICKLIST__OPTIONS, LPicklist.C_PICKLIST__OPTIONS__MULTI, "shown"]);
 
   final DivElement _buttonsLeft = new DivElement()
-    ..classes.addAll([LGrid.C_GRID, LGrid.C_GRID__VERTICAL]);
+    ..classes.addAll([LGrid.C_GRID, LGrid.C_GRID__VERTICAL, LGrid.C_SHRINK_NONE]);
   final LButton _buttonRemove = new LButton.iconContainer("remove",
     new LIconUtility(LIconUtility.LEFT),
     lPicklistMultiRemove());
@@ -44,7 +44,7 @@ class LPicklistMulti
     lPicklistMultiAdd());
 
   final DivElement _formRight = new DivElement()
-    ..classes.add(LForm.C_FORM_ELEMENT);
+    ..classes.addAll([LForm.C_FORM_ELEMENT, LGrid.C_SHRINK_NONE]);
   final SpanElement _formRightLabel = new SpanElement()
     ..classes.add(LForm.C_FORM_ELEMENT__LABEL);
   final DivElement _formRightPl = new DivElement()
@@ -53,7 +53,7 @@ class LPicklistMulti
     ..classes.addAll([LPicklist.C_PICKLIST__OPTIONS, LPicklist.C_PICKLIST__OPTIONS__MULTI, "shown"]);
 
   final DivElement _buttonsRight = new DivElement()
-    ..classes.addAll([LGrid.C_GRID, LGrid.C_GRID__VERTICAL]);
+    ..classes.addAll([LGrid.C_GRID, LGrid.C_GRID__VERTICAL, LGrid.C_SHRINK_NONE]);
   final LButton _buttonUp = new LButton.iconContainer("up",
     new LIconUtility(LIconUtility.UP),
     lPicklistMultiUp());
@@ -97,6 +97,14 @@ class LPicklistMulti
     _buttonRemove.onClick.listen(onButtonRemove);
     _buttonUp.onClick.listen(onButtonUp);
     _buttonDown.onClick.listen(onButtonDown);
+
+    // DnD
+    _formLeftPlList.onDragOver.listen(onDragOverList);
+    _formRightPlList.onDragOver.listen(onDragOverList);
+    _formLeftPlList.onDragLeave.listen(onDragLeaveList);
+    _formRightPlList.onDragLeave.listen(onDragLeaveList);
+    _formLeftPlList.onDrop.listen(onDropList);
+    _formRightPlList.onDrop.listen(onDropList);
   } // LPicklistMulti
 
   /// Label available - selected
@@ -117,7 +125,8 @@ class LPicklistMulti
     _rightItems.clear();
     int seqNo = 1;
     for (DOption option in options) {
-      LPicklistMultiItem item = new LPicklistMultiItem(option);
+      LPicklistMultiItem item = new LPicklistMultiItem(option)
+        ..element.onDrop.listen(onDropItem);
       if (isOptionSelected(option)) {
         _rightItems.add(item);
         setOptionSelected(option, true);
@@ -128,7 +137,7 @@ class LPicklistMulti
         option.seqNo = 0;
       }
     }
-    redisplay();
+    _redisplay();
   } // setOptions
 
   /// Get Options
@@ -186,7 +195,7 @@ class LPicklistMulti
       _leftItems.remove(item);
       _rightItems.add(item);
     }
-    redisplay();
+    _redisplay();
   }
   /// Remove from Selected
   void onButtonRemove(MouseEvent evt) {
@@ -203,7 +212,7 @@ class LPicklistMulti
       _rightItems.remove(item);
       _leftItems.add(item);
     }
-    redisplay();
+    _redisplay();
   }
   /// Move selected on Selected up
   void onButtonUp(MouseEvent evt) {
@@ -212,7 +221,7 @@ class LPicklistMulti
         item.option.seqNo = item.option.seqNo - 15;
       }
     }
-    redisplay();
+    _redisplay();
   }
   /// Move selected in Selected down
   void onButtonDown(MouseEvent evt) {
@@ -221,23 +230,26 @@ class LPicklistMulti
         item.option.seqNo = item.option.seqNo + 15;
       }
     }
-    redisplay();
+    _redisplay();
   }
 
   /// Resort and re-display
-  void redisplay() {
+  void _redisplay() {
     // Available
     _formLeftPlList.children.clear();
+    _formLeftPlList.style.removeProperty("background");
     _leftItems.sort((LPicklistMultiItem one, LPicklistMultiItem two){
       return one.option.label.compareTo(two.option.label);
     });
     for (LPicklistMultiItem item in _leftItems) {
       _formLeftPlList.append(item.element);
       item.option.seqNo = 0;
+      item.dragOver = false;
     }
 
     // Selected
     _formRightPlList.children.clear();
+    _formRightPlList.style.removeProperty("background");
     _rightItems.sort((LPicklistMultiItem one, LPicklistMultiItem two){
       return one.option.seqNo.compareTo(two.option.seqNo);
     });
@@ -245,9 +257,122 @@ class LPicklistMulti
     for (LPicklistMultiItem item in _rightItems) {
       _formRightPlList.append(item.element);
       item.option.seqNo = (seqNo++ * 10);
+      item.dragOver = false;
     }
     element.focus(); // remove focus from items
   } // redisplay
+
+
+  /// drag over
+  void onDragOverList(MouseEvent evt) {
+    evt.preventDefault();
+    evt.dataTransfer.dropEffect = 'move';
+    Element target = evt.target;
+    if (target == _formLeftPlList || target == _formRightPlList) {
+      target.style.background = "azure";
+    }
+  }
+  void onDragLeaveList(MouseEvent evt) {
+    Element target = evt.target;
+    target.style.removeProperty("background");
+  }
+  /// drop it
+  void onDropList(MouseEvent evt) {
+    evt.stopPropagation();
+    Element target = evt.target;
+    bool selected = target == _formRightPlList;
+    String valueDropped = evt.dataTransfer.getData("text/plain");
+    _log.config("onDropList ${valueDropped} selected=${selected}");
+    if (valueDropped == null || valueDropped.isEmpty) {
+      _redisplay();
+      return;
+    }
+    LPicklistMultiItem item = getItem(valueDropped, removeFromList: true);
+    if (item == null) {
+      _log.fine("onDropList NotFound ${valueDropped}");
+      _redisplay();
+      return;
+    }
+    if (selected) {
+      item.option.seqNo = _rightItems.length * 1000; // end
+      _rightItems.add(item);
+    } else {
+      _leftItems.add(item);
+    }
+    _redisplay();
+  } // onDropList
+
+  /// drop it
+  void onDropItem(MouseEvent evt) {
+    evt.stopPropagation();
+    Element target = evt.target;
+    String valueTarget = target.attributes[Html0.DATA_VALUE];
+    if (valueTarget == null) { // span
+      target = target.parent;
+      valueTarget = target.attributes[Html0.DATA_VALUE];
+      if (valueTarget == null) { // span
+        target = target.parent;
+        valueTarget = target.attributes[Html0.DATA_VALUE];
+      }
+    }
+    String valueDropped = evt.dataTransfer.getData("text/plain");
+    _log.config("onDropItem ${valueDropped} on ${valueTarget}");
+    if (valueDropped == null || valueDropped.isEmpty
+        || valueTarget == null || valueTarget.isEmpty
+        || valueDropped == valueTarget) {
+      _redisplay();
+      return;
+    }
+    LPicklistMultiItem item = getItem(valueDropped, removeFromList: true);
+    if (item == null) {
+      _log.fine("onDropItem NotFound ${valueDropped}");
+      _redisplay();
+      return;
+    }
+    for (LPicklistMultiItem ii in _leftItems) {
+      if (ii.value == valueTarget) {
+        _leftItems.add(item);
+        _redisplay();
+        return;
+      }
+    }
+    for (LPicklistMultiItem ii in _rightItems) {
+      if (ii.value == valueTarget) {
+        item.option.seqNo = ii.option.seqNo - 15; // before
+        _rightItems.add(item);
+        _redisplay();
+        return;
+      }
+    }
+    _log.warning("onDropItem NotFound ${valueTarget}");
+    _leftItems.add(item);
+    _redisplay();
+  } // onDropItem
+
+  /// find item
+  LPicklistMultiItem getItem(String value, {bool removeFromList:false}) {
+    for (LPicklistMultiItem ii in _leftItems) {
+      if (ii.value == value) {
+        if (removeFromList)
+          _leftItems.remove(ii);
+        return ii;
+      }
+    }
+    for (LPicklistMultiItem ii in _rightItems) {
+      if (ii.value == value) {
+        if (removeFromList)
+          _rightItems.remove(ii);
+        return ii;
+      }
+    }
+    return null;
+  } // getDroppedItem
+
+
+  /// string info
+  String toString() {
+    return "LPicklistMulti[available=${_leftItems.length} selected=${_rightItems.length}]";
+  }
 
 
   static String lPicklistMultiAdd() => Intl.message("Add", name: "lPicklistMultiAdd");
@@ -269,33 +394,45 @@ class LPicklistMultiItem {
   /// List Item Element
   final LIElement element = new LIElement()
     ..classes.addAll([LPicklist.C_PICKLIST__ITEM])
-  //  ..draggable = true
+    ..draggable = true
     ..attributes[Html0.ROLE] = Html0.ROLE_OPTION
-    ..attributes[Html0.ARIA_SELECTED] = "false"
+    ..attributes[Html0.ARIA_SELECTED] = Html0.V_FALSE
     ..tabIndex = -1;
   final SpanElement _span = new SpanElement()
     ..classes.add(LText.C_TRUNCATE);
   final SpanElement _label = new SpanElement();
 
+  /// The item option
   final DOption option;
 
   /**
    * Multi Picklist Item
    */
-  LPicklistMultiItem(DOption this.option) {
+  LPicklistMultiItem(DOption this.option, {LIcon icon}) {
     element.append(_span);
+    if (icon == null && option.hasIconImage()) {
+      icon = LIcon.create(option.iconImage);
+    }
+    if (icon != null) {
+      icon.classes.addAll([LIcon.C_ICON__X_SMALL, LIcon.C_ICON_TEXT_DEFAULT, LMargin.C_RIGHT__X_SMALL]);
+      _span.append(icon.element);
+    }
     _span.append(_label);
     //
     element.onClick.listen((Event evt) {
       selected = !selected; // toggle
     });
-    //
     label = option.label;
+    // DnD
+    element.onDragStart.listen(onDragStart);
+    element.onDragOver.listen(onDragOver);
+    element.onDragLeave.listen(onDragLeave);
+    element.attributes[Html0.DATA_VALUE] = value;
   } // LPicklistMultiItem
 
 
   /// selected for action
-  bool get selected => element.attributes[Html0.ARIA_SELECTED] == "true";
+  bool get selected => element.attributes[Html0.ARIA_SELECTED] == Html0.V_TRUE;
   /// selected for action
   void set selected (bool newValue) {
     element.attributes[Html0.ARIA_SELECTED] = newValue.toString();
@@ -304,6 +441,36 @@ class LPicklistMultiItem {
   String get label => _label.text;
   void set label (String newValue) {
     _label.text = newValue;
+  }
+
+  String get value => option.value;
+
+  /// Drag Start
+  void onDragStart(MouseEvent evt) {
+    evt.dataTransfer.effectAllowed = 'move'; // none, copy, copyLink, copyMove, link, linkMove, move, all, uninitialized
+    evt.dataTransfer.setData('text/plain', value);
+  }
+  /// drag over
+  void onDragOver(MouseEvent evt) {
+    evt.preventDefault();
+    evt.dataTransfer.dropEffect = 'move';
+    dragOver = true;
+  }
+  void onDragLeave(MouseEvent evt) {
+    dragOver = false;
+  }
+
+  /// drag over indicator
+  void set dragOver (bool newValue) {
+    if (newValue)
+      element.style.background = "cyan";
+    else
+      element.style.removeProperty("background");
+  }
+
+  /// string info
+  String toString() {
+    return "LPicklistMultiItem@${value}[selected=${selected}]";
   }
 
 } // LPicklistMultiItem

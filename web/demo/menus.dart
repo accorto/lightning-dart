@@ -76,9 +76,9 @@ class Menus extends DemoFeature {
     div.appendHR();
 
     List<DOption> options = new List<DOption>()
-      ..add(new DOption()..value = "o1" ..label = "Option 1")
-      ..add(new DOption()..value = "o2" ..label = "Option 2" ..isSelected = true )
-      ..add(new DOption()..value = "o3" ..label = "Option 3" ..isSelected = true );
+      ..add(new DOption()..value = "o1" ..label = "Option 1" ..iconImage = "utility|bucket")
+      ..add(new DOption()..value = "o2" ..label = "Option 2" ..isSelected = true ..iconImage = "utility|crossfilter")
+      ..add(new DOption()..value = "o3" ..label = "Option 3" ..isSelected = true ..iconImage = "utility|frozen");
     LPicklistMulti multi = new LPicklistMulti()
       ..classes.add(LMargin.C_HORIZONTAL__MEDIUM)
       ..label = "Choices"
