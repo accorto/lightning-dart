@@ -38,6 +38,7 @@ class DisplayRequest extends GeneratedMessage {
     ..a(6, 'listPattern', PbFieldType.OS)
     ..a(7, 'isNoCache', PbFieldType.OB)
     ..pp(10, 'display', PbFieldType.PM, UIInfo.$checkItem, UIInfo.create)
+    ..pp(14, 'updatedUi', PbFieldType.PM, UI.$checkItem, UI.create)
     ..a(15, 'uiId', PbFieldType.OS)
     ..a(16, 'updatedLabel', PbFieldType.OS)
     ..a(17, 'updatedTenantId', PbFieldType.OS)
@@ -89,45 +90,47 @@ class DisplayRequest extends GeneratedMessage {
 
   List<UIInfo> get displayList => $_get(4, 10, null);
 
-  String get uiId => $_get(5, 15, '');
-  void set uiId(String v) { $_setString(5, 15, v); }
-  bool hasUiId() => $_has(5, 15);
+  List<UI> get updatedUiList => $_get(5, 14, null);
+
+  String get uiId => $_get(6, 15, '');
+  void set uiId(String v) { $_setString(6, 15, v); }
+  bool hasUiId() => $_has(6, 15);
   void clearUiId() => clearField(15);
 
-  String get updatedLabel => $_get(6, 16, '');
-  void set updatedLabel(String v) { $_setString(6, 16, v); }
-  bool hasUpdatedLabel() => $_has(6, 16);
+  String get updatedLabel => $_get(7, 16, '');
+  void set updatedLabel(String v) { $_setString(7, 16, v); }
+  bool hasUpdatedLabel() => $_has(7, 16);
   void clearUpdatedLabel() => clearField(16);
 
-  String get updatedTenantId => $_get(7, 17, '');
-  void set updatedTenantId(String v) { $_setString(7, 17, v); }
-  bool hasUpdatedTenantId() => $_has(7, 17);
+  String get updatedTenantId => $_get(8, 17, '');
+  void set updatedTenantId(String v) { $_setString(8, 17, v); }
+  bool hasUpdatedTenantId() => $_has(8, 17);
   void clearUpdatedTenantId() => clearField(17);
 
-  String get updatedRoleId => $_get(8, 18, '');
-  void set updatedRoleId(String v) { $_setString(8, 18, v); }
-  bool hasUpdatedRoleId() => $_has(8, 18);
+  String get updatedRoleId => $_get(9, 18, '');
+  void set updatedRoleId(String v) { $_setString(9, 18, v); }
+  bool hasUpdatedRoleId() => $_has(9, 18);
   void clearUpdatedRoleId() => clearField(18);
 
-  String get updatedUserId => $_get(9, 19, '');
-  void set updatedUserId(String v) { $_setString(9, 19, v); }
-  bool hasUpdatedUserId() => $_has(9, 19);
+  String get updatedUserId => $_get(10, 19, '');
+  void set updatedUserId(String v) { $_setString(10, 19, v); }
+  bool hasUpdatedUserId() => $_has(10, 19);
   void clearUpdatedUserId() => clearField(19);
 
-  String get uiUpdateFlag => $_get(10, 20, '');
-  void set uiUpdateFlag(String v) { $_setString(10, 20, v); }
-  bool hasUiUpdateFlag() => $_has(10, 20);
+  String get uiUpdateFlag => $_get(11, 20, '');
+  void set uiUpdateFlag(String v) { $_setString(11, 20, v); }
+  bool hasUiUpdateFlag() => $_has(11, 20);
   void clearUiUpdateFlag() => clearField(20);
 
-  List<UIGridColumn> get updatedGridColumnList => $_get(11, 30, null);
+  List<UIGridColumn> get updatedGridColumnList => $_get(12, 30, null);
 
-  List<UIPanel> get updatedPanelList => $_get(12, 31, null);
+  List<UIPanel> get updatedPanelList => $_get(13, 31, null);
 
-  List<UIProcess> get updatedProcessList => $_get(13, 32, null);
+  List<UIProcess> get updatedProcessList => $_get(14, 32, null);
 
-  List<UILink> get updatedLinkList => $_get(14, 33, null);
+  List<UILink> get updatedLinkList => $_get(15, 33, null);
 
-  List<UIQueryColumn> get updatedQueryColumnList => $_get(15, 34, null);
+  List<UIQueryColumn> get updatedQueryColumnList => $_get(16, 34, null);
 }
 
 class _ReadonlyDisplayRequest extends DisplayRequest with ReadonlyMessageMixin {}
@@ -218,6 +221,7 @@ const DisplayRequest$json = const {
     const {'1': 'list_pattern', '3': 6, '4': 1, '5': 9},
     const {'1': 'is_no_cache', '3': 7, '4': 1, '5': 8, '7': 'false'},
     const {'1': 'display', '3': 10, '4': 3, '5': 11, '6': '.UIInfo'},
+    const {'1': 'updated_ui', '3': 14, '4': 3, '5': 11, '6': '.UI'},
     const {'1': 'ui_id', '3': 15, '4': 1, '5': 9},
     const {'1': 'updated_label', '3': 16, '4': 1, '5': 9},
     const {'1': 'updated_tenant_id', '3': 17, '4': 1, '5': 9},
@@ -254,22 +258,22 @@ const DisplayService$messageJson = const {
   '.CRequest': CRequest$json,
   '.CEnv': CEnv$json,
   '.UIInfo': UIInfo$json,
-  '.UIGridColumn': UIGridColumn$json,
+  '.UI': UI$json,
+  '.DTable': DTable$json,
   '.DColumn': DColumn$json,
   '.DOption': DOption$json,
   '.DKeyValue': DKeyValue$json,
+  '.UIGridColumn': UIGridColumn$json,
   '.UIPanelColumn': UIPanelColumn$json,
   '.UIPanel': UIPanel$json,
   '.UIProcess': UIProcess$json,
   '.DProperty': DProperty$json,
   '.UILink': UILink$json,
   '.UIQueryColumn': UIQueryColumn$json,
-  '.DisplayResponse': DisplayResponse$json,
-  '.SResponse': SResponse$json,
-  '.UI': UI$json,
-  '.DTable': DTable$json,
   '.SavedQuery': SavedQuery$json,
   '.DFilter': DFilter$json,
   '.DSort': DSort$json,
+  '.DisplayResponse': DisplayResponse$json,
+  '.SResponse': SResponse$json,
 };
 

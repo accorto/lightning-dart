@@ -51,7 +51,7 @@ class UiService
     if (ui != null) {
       completer.complete(ui);
     } else {
-      _submit(null, uiName, tableName)
+      _submitGet(null, uiName, tableName)
       .then((DisplayResponse response){ // cache already updated
         ui = getUi(uiName:uiName, tableName:tableName);
         if (ui != null)
@@ -84,7 +84,7 @@ class UiService
     if (table != null) {
       completer.complete(table);
     } else {
-      _submit(null, null, tableName)
+      _submitGet(null, null, tableName)
       .then((DisplayResponse response){ // cache already updated
         table = getTable(tableName);
         if (table != null)
@@ -99,11 +99,8 @@ class UiService
     return completer.future;
   } // getTable
 
-
-  /**
-   * Execute Display Request
-   */
-  Future<DisplayResponse> _submit(String uiId, String uiName, String tableName) {
+  /// submit Get request
+  Future<DisplayResponse> _submitGet(String uiId, String uiName, String tableName) {
     DisplayRequest request = new DisplayRequest()
       ..type = DisplayRequestType.GET;
     String info = "ui";
@@ -119,7 +116,13 @@ class UiService
       info = "ui_table_${tableName}";
     }
     request.displayList.add(uiInfo);
+    return _submit(request, info);
+  } // submitGet
 
+  /**
+   * Execute Display Request
+   */
+  Future<DisplayResponse> _submit(DisplayRequest request, String info) {
     request.request = createCRequest(uiUri, info);
     Completer<DisplayResponse> completer = new Completer<DisplayResponse>();
 
@@ -223,5 +226,41 @@ class UiService
     }
   } // update
 
+  /**
+   * Save UI
+   */
+  Future<DisplayResponse> save (UI saveUi) {
+    updateUi(saveUi);
+
+    UI ui = saveUi.clone();
+    // remove table/column references
+    ui.clearTable();
+    // grid columns
+    ui.gridColumnList.removeWhere((UIGridColumn gc){
+      return !gc.isActive;
+    });
+    for (UIGridColumn gc in ui.gridColumnList) {
+      gc.clearColumn();
+      gc.clearPanelColumn();
+    }
+    // panels
+    ui.panelList.removeWhere((UIPanel panel){
+      return !panel.isActive;
+    });
+    for (UIPanel panel in ui.panelList) {
+      panel.panelColumnList.removeWhere((UIPanelColumn pc){
+        return !pc.isActive;
+      });
+      for (UIPanelColumn pc in panel.panelColumnList) {
+        pc.clearColumn();
+      }
+    }
+
+    // submit
+    DisplayRequest request = new DisplayRequest()
+      ..type = DisplayRequestType.UPDATE
+      ..updatedUiList.add(ui);
+    return _submit(request, "update");
+  } // save
 
 } // UiService
