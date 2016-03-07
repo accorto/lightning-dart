@@ -32,5 +32,17 @@ class LBadge extends LComponent {
   LBadge.shade(String label) : this(label, theme: LTheme.C_THEME__SHADE);
   /// Inverse Theme
   LBadge.inverse(String label) : this(label, theme: LTheme.C_THEME__INVERSE);
+  /// Inverse Theme
+  LBadge.altInverse(String label) : this(label, theme: LTheme.C_THEME__ALT_INVERSE);
+
+  /// Info Theme
+  LBadge.info(String label) : this(label, theme: LTheme.C_THEME__INFO);
+  /// Warning Theme
+  LBadge.warning(String label) : this(label, theme: LTheme.C_THEME__WARNING);
+  /// Success Theme
+  LBadge.success(String label) : this(label, theme: LTheme.C_THEME__SUCCESS);
+  /// Error Theme
+  LBadge.error(String label) : this(label, theme: LTheme.C_THEME__ERROR);
+
 
 }

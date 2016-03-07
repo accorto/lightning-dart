@@ -34,6 +34,8 @@ class LForm
   static const String C_FORM_ELEMENT__LABEL = "slds-form-element__label";
   /// slds-form-element__control (div): Initializes form element control - Control can contain an <input>, <textarea>, <select>
   static const String C_FORM_ELEMENT__CONTROL = "slds-form-element__control";
+  /// slds-form-element__icon (div): The icon wrapper for an icon within a form element, this icon is usually used to indicate an error or field level help
+  static const String C_FORM_ELEMENT__ICON = "slds-form-element__icon";
   /// slds-input (input): Initializes text input
   static const String C_INPUT = "slds-input";
   /// slds-input--small (slds-input): Applies styles for a smaller text input
@@ -48,6 +50,10 @@ class LForm
   static const String C_INPUT_HAS_ICON__LEFT = "slds-input-has-icon--left";
   /// slds-input-has-icon--right (slds-input-has-icon): Positions .slds-input__icon to the right of the text input
   static const String C_INPUT_HAS_ICON__RIGHT = "slds-input-has-icon--right";
+  /// slds-input-has-fixed-addon (The <div contains both the .slds-form-element__addon and the <input): Use on input container to let it know there is fixed text to the left or right of the input
+  static const String C_INPUT_HAS_FIXED_ADDON = "slds-input-has-fixed-addon";
+  /// slds-form-element__addon (any element): Class for fixed text that sits to the left or right of an <input>
+  static const String C_FORM_ELEMENT__ADDON = "slds-form-element__addon";
   /// slds-textarea (textarea): Initializes textarea
   static const String C_TEXTAREA = "slds-textarea";
   /// slds-select (select): Initializes select
@@ -64,30 +70,28 @@ class LForm
   static const String C_FORM__HORIZONTAL = "slds-form--horizontal";
   /// slds-form--stacked (form): Vertically aligns form label and control, provides spacing between form elements - This is the default
   static const String C_FORM__STACKED = "slds-form--stacked";
-  /// slds-form--inline (form): horizontally align multiple form elements on the same axis
+  /// slds-form--inline (form): Horizontally align multiple form elements on the same axis
   static const String C_FORM__INLINE = "slds-form--inline";
   /// slds-form--compound (form): Creates a form that consists of multiple form groups - Groups are placed in fieldsets and small labels are used for inputs
   static const String C_FORM__COMPOUND = "slds-form--compound";
   /// slds-form-element__row (div): Use to create rows of form elements in a compound form - Wrap form elements in this class
   static const String C_FORM_ELEMENT__ROW = "slds-form-element__row";
-  /// slds-form--compound--horizontal (slds-form--compound): Layout modifier for compound forms - Positions form labels to the left of the form control
-  static const String C_FORM__COMPOUND__HORIZONTAL = "slds-form--compound--horizontal";
+
+  /// .is-required (slds-form-element): Applied to .slds-form-element when form element is required
+  static const String C_IS_REQUIRED = "is-required";
+  /// slds-required (attr): Class used on required asterick
+  static const String C_REQUIRED = "slds-required";
+  /// slds-has-error (slds-form-element): Applied to .slds-form-element when form element has errors
+  static const String C_HAS_ERROR = "slds-has-error";
+
 
   /// select container
   static const String C_SELECT_CONTAINER = "slds-select_container";
 
-  /// top label (top 0)
-  static const String C_FORM_ELEMENT__LABEL__TOP = "slds-form-element__label--top";
-  /// marker only
-  static const String C_FORM_ELEMENT__LABEL__SMALL = "slds-form-element__label--small";
-
   /// marker
   static const String C_FORM_ELEMENT__GROUP = "slds-form-element--group";
   /// font-size 0.75rem
-  static const String C_FORM_ELEMENT__HELPER = "slds-form-element--helper";
-
-  static const String C_HAS_ERROR = "slds-has-error";
-  static const String C_IS_REQUIRED = "slds-is-required";
+  static const String C_FORM_ELEMENT__HELPER = "slds-form-element__helper";
 
   /// Help Block
   static const String C_FORM_ELEMENT__HELP = "slds-form-element__help";

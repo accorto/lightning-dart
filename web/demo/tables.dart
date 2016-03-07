@@ -10,9 +10,9 @@ class Tables extends DemoFeature {
 
   Tables()
   : super("data-tables", "Data Tables",
-  sldsStatus: DemoFeature.SLDS_PROTOTYPE,
+  sldsStatus: DemoFeature.SLDS_DEV_READY,
   devStatus: DemoFeature.STATUS_COMPLETE,
-  hints: ["sorting works with Records, not as here when when cells are populated directly", "see workspace demo"],
+  hints: ["sorting requires Records, not populated directly", "Responsive is Prototype"],
   issues: [],
   plans: []);
 

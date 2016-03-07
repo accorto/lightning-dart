@@ -18,7 +18,7 @@ class LRadio {
     ..classes.add(LForm.C_FORM_ELEMENT);
 
   final LegendElement _legend = new LegendElement()
-    ..classes.addAll([LForm.C_FORM_ELEMENT__LABEL, LForm.C_FORM_ELEMENT__LABEL__TOP]);
+    ..classes.addAll([LForm.C_FORM_ELEMENT__LABEL]);//, LForm.C_FORM_ELEMENT__LABEL__TOP]);
 
   final DivElement _control = new DivElement()
     ..classes.add(LForm.C_FORM_ELEMENT__CONTROL);

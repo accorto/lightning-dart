@@ -11,9 +11,24 @@ part of lightning_dart;
  */
 class LSpinner {
 
+  /// slds-spinner (div): This is the gray base class for spinner
+  static const String C_SPINNER = "slds-spinner";
+  /// slds-spinner_container (outer <div): This container creates a full overlay to dim the page when needed
+  static const String C_SPINNER_CONTAINER = "slds-spinner_container";
+  /// slds-spinner--small (slds-spinner): This is the small spinner
   static const String C_SPINNER__SMALL = "slds-spinner--small";
+  /// slds-spinner--medium (slds-spinner): This is the medium spinner
   static const String C_SPINNER__MEDIUM = "slds-spinner--medium";
+  /// slds-spinner--large (slds-spinner): This is the large spinner
   static const String C_SPINNER__LARGE = "slds-spinner--large";
+  /// slds-spinner--brand (slds-spinner): This creates the blue brand spinner
+  static const String C_SPINNER__BRAND = "slds-spinner--brand";
+  /// slds-spinner--inverse (slds-spinner): This is the inverse spinner
+  static const String C_SPINNER__INVERSE = "slds-spinner--inverse";
+  /// slds-spinner__dot-a (div): This creates two of the circles
+  static const String C_SPINNER__DOT_A = "slds-spinner__dot-a";
+  /// slds-spinner__dot-b (div): This creates two of the circles
+  static const String C_SPINNER__DOT_B = "slds-spinner__dot-b";
 
   static const String SRC_BASE = "/assets/images/spinners/slds_spinner.gif";
   static const String SRC_BRAND = "/assets/images/spinners/slds_spinner_brand.gif";

@@ -13,8 +13,8 @@ class DateTimes extends DemoFeature {
 
   DateTimes()
       : super("datetimes", "DateTime",
-      sldsPath: "datepickers",
-      sldsStatus: DemoFeature.SLDS_PROTOTYPE,
+      sldsPath: "",
+      sldsStatus: DemoFeature.SLDS_NA,
       devStatus: DemoFeature.STATUS_PARTIAL,
       hints: ["Date is internally maintained in UTC",
         "DateTime and Time in local time"]);

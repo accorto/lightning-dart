@@ -33,7 +33,7 @@ class Lookups extends DemoFeature {
     l1.listItemList = generateListItems(10);
     form.addEditor(l1);
 
-    form.append(new HRElement());
+    form.append(new HRElement()..style.backgroundColor = "black");
     LLookup l2 = new LLookupSelect.single("l2")
       ..label = "Single Select Lookup"
       ..placeholder = "Single Select Lookup Placeholder"
@@ -43,7 +43,7 @@ class Lookups extends DemoFeature {
     l2.listItemList = generateListItems(10, iconLeft: true);
     form.addEditor(l2);
 
-    form.append(new HRElement());
+    form.append(new HRElement()..style.backgroundColor = "black");
     LLookup l3 = new LLookupSelect.multi("l3")
       ..label = "Multi Select Lookup"
       ..placeholder = "Multi Select Lookup Placeholder"
@@ -53,7 +53,7 @@ class Lookups extends DemoFeature {
     l3.listItemList = generateListItems(10, iconLeft: true);
     form.addEditor(l3);
 
-    form.append(new HRElement());
+    form.append(new HRElement()..style.backgroundColor = "black");
     LLookup l4 = new LLookupTimezone("tz")
       ..label = "Timezone"
       ..readOnly = fieldReadOnly // demo toggle

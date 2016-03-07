@@ -10,7 +10,7 @@ class Feeds extends DemoFeature {
 
   Feeds()
       : super("feeds", "Feeds",
-                  sldsStatus: DemoFeature.SLDS_PROTOTYPE,
+                  sldsStatus: DemoFeature.SLDS_DEV_READY,
                   devStatus: DemoFeature.STATUS_NIY,
                   hints: [],
                   issues: [],

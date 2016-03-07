@@ -41,7 +41,7 @@ class GraphEnginePanel
       String this.tableName,
       List<String> groupByColumnNames,
       {String title, String subTitle}) {
-    element.id = id;
+    element.id = "${id}-panel";
     if (groupByColumnNames != null)
       engine.groupByColumnNames = groupByColumnNames;
     if (title != null)

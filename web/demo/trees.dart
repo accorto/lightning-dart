@@ -9,7 +9,7 @@ part of lightning_dart.demo;
 class Trees extends DemoFeature {
 
   Trees() : super ("trees", "Trees",
-  sldsStatus: DemoFeature.SLDS_PROTOTYPE,
+  sldsStatus: DemoFeature.SLDS_DEV_READY,
   devStatus: DemoFeature.STATUS_NIY,
   hints: [],
   issues: [],

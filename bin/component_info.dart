@@ -12,7 +12,7 @@ import 'dart:convert';
  * Read Component Info and create constants
  */
 void main() {
-  readLine().listen(processLine3);
+  readLine().listen(processLine1);
 }
 
 Stream readLine() => stdin

@@ -11,8 +11,8 @@ class TablesGraphs extends DemoFeature {
   TablesGraphs() : super("tableGraphs", "Data Tables(2)",
       sldsPath: "",
       sldsStatus: "n/a",
-      devStatus: DemoFeature.STATUS_PARTIAL,
-      hints: [],
+      devStatus: DemoFeature.STATUS_COMPLETE,
+      hints: ["Linked Table and Graph"],
       issues: [],
       plans: []);
 

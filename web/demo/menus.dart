@@ -8,13 +8,14 @@ part of lightning_dart.demo;
 
 class Menus extends DemoFeature {
 
-  Menus() : super("menus", "Menus",
-  sldsStatus: DemoFeature.SLDS_PROTOTYPE,
+  Menus() : super("menus", "Menus/Pick",
+  sldsStatus: DemoFeature.SLDS_DEV_READY,
   devStatus: DemoFeature.STATUS_COMPLETE,
   hints: ["same api as select, lookup and dropdown"],
   issues: [],
-  plans: []);
+  plans: ["Picklist Multi Select"]);
 
+  bool openOnClickOnly = false;
 
   LComponent get content {
     CDiv div = new CDiv();
@@ -26,7 +27,8 @@ class Menus extends DemoFeature {
     div.add(divDD);
 
     LDropdown dd = new LDropdown.action(idPrefix: "dd0")
-      ..left = true;
+      ..left = true
+      ..openOnClickOnly = openOnClickOnly;
     dd.dropdown.addDropdownItem(LDropdownItem.create(label: "Menu Item One"));
     dd.dropdown.addDropdownItem(LDropdownItem.create(label: "Action Two"));
     dd.dropdown.addDropdownItem(LDropdownItem.create(label: "Action Three"));
@@ -34,14 +36,16 @@ class Menus extends DemoFeature {
     divDD.add(dd);
 
     dd = new LDropdown.settings(idPrefix: "dd1")
-      ..left = true;
+      ..left = true
+      ..openOnClickOnly = openOnClickOnly;
     dd.dropdown.addDropdownItem(LDropdownItem.create(label: "Menu Item One"));
     dd.dropdown.addDropdownItem(LDropdownItem.create(label: "Setting Two"));
     dd.dropdown.addDropdownItem(LDropdownItem.create(label: "Setting Three"));
     dd.dropdown.addDropdownItem(LDropdownItem.create(label: "Setting Four")..divider = true);
     divDD.add(dd);
 
-    dd = new LDropdown.settings(idPrefix: "dd2");
+    dd = new LDropdown.settings(idPrefix: "dd2")
+      ..openOnClickOnly = openOnClickOnly;
     dd.headingLabel = "List View Controls";
     dd.dropdown.nubbinTop = true;
     dd.dropdown.addDropdownItem(LDropdownItem.create(label: "Rename...")..disabled = true);
@@ -50,7 +54,8 @@ class Menus extends DemoFeature {
     dd.dropdown.addDropdownItem(LDropdownItem.create(label: "Discard Changes to List"));
     divDD.add(dd);
 
-    dd = new LDropdown.selectIcon(idPrefix: "dd3");
+    dd = new LDropdown.selectIcon(idPrefix: "dd3")
+      ..openOnClickOnly = openOnClickOnly;
     dd.headingLabel = "Display As";
     dd.dropdown.addDropdownItem(LDropdownItem.create(
         label: "Table", value: "table", icon: new LIconUtility(LIconUtility.TABLE)));
@@ -106,6 +111,20 @@ class Menus extends DemoFeature {
       ..label = "Choices"
       ..options = options;
     ''';
+  }
+
+  EditorI optionOpenOnClickOnly() {
+    LCheckbox cb = new LCheckbox("co", idPrefix: id)
+      ..label = "Dropdown open on click only";
+    cb.input.onClick.listen((MouseEvent evt){
+      openOnClickOnly = cb.input.checked;
+      optionChanged();
+    });
+    return cb;
+  }
+
+  List<EditorI> get options {
+    return [optionOpenOnClickOnly()];
   }
 
 }

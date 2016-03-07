@@ -15,7 +15,7 @@ class LFormFieldSet extends LComponent {
     ..classes.add(LForm.C_FORM__COMPOUND);
 
   final LegendElement _legend = new LegendElement()
-    ..classes.addAll([LForm.C_FORM_ELEMENT__LABEL, LForm.C_FORM_ELEMENT__LABEL__TOP]);
+    ..classes.addAll([LForm.C_FORM_ELEMENT__LABEL]); //, LForm.C_FORM_ELEMENT__LABEL__TOP]);
 
   final DivElement _control = new DivElement()
     ..classes.add(LForm.C_FORM_ELEMENT__CONTROL);
@@ -49,14 +49,14 @@ class LFormFieldSet extends LComponent {
   void set vertical (bool newValue) {
     if (newValue) {
       element.classes.add(LForm.C_FORM__COMPOUND);
-      element.classes.remove(LForm.C_FORM__COMPOUND__HORIZONTAL);
+    //  element.classes.remove(LForm.C_FORM__COMPOUND__HORIZONTAL);
     } else {
       element.classes.remove(LForm.C_FORM__COMPOUND);
-      element.classes.add(LForm.C_FORM__COMPOUND__HORIZONTAL);
+    //  element.classes.add(LForm.C_FORM__COMPOUND__HORIZONTAL);
     }
   }
   /// Form Layout Horizontal
-  bool get horizontal => element.classes.contains(LForm.C_FORM__COMPOUND__HORIZONTAL);
+  bool get horizontal => !vertical;
   /// Form Layout Horizontal
   void set horizontal (bool newValue) {
     vertical = !newValue;

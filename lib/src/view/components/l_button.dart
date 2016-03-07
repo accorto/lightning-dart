@@ -24,8 +24,8 @@ class LButton
   static const String C_BUTTON__DESTRUCTIVE = "slds-button--destructive";
   /// slds-button--inverse (slds-button): Creates the inverse style for dark backgrounds
   static const String C_BUTTON__INVERSE = "slds-button--inverse";
-  /// slds-button--icon-bare (slds-button): Creates a button that looks like a plain icon - This is 1rem×1rem like an icon, not a regular button
-  static const String C_BUTTON__ICON_BARE = "slds-button--icon-bare";
+  /// slds-button--icon(-bare) (slds-button): Creates a button that looks like a plain icon - This is 1rem×1rem like an icon, not a regular button
+  static const String C_BUTTON__ICON_BARE = "slds-button--icon";
   /// slds-button--icon-container (slds-button): Creates a button that looks like a plain icon - This is 2.25rem×2.25rem like a button
   static const String C_BUTTON__ICON_CONTAINER = "slds-button--icon-container";
   /// slds-button--icon-border (slds-button): Creates an icon button with a border - There is no background color until hover for this style

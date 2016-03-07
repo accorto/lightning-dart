@@ -15,6 +15,7 @@ abstract class DemoFeature
 
   static const String SLDS_DEV_READY = "dev ready";
   static const String SLDS_PROTOTYPE = "prototype";
+  static const String SLDS_NA = "n/a";
 
   static const String STATUS_COMPLETE = "complete";
   static const String STATUS_PARTIAL = "partial";
@@ -67,7 +68,7 @@ abstract class DemoFeature
     LBadge slds = new LBadge(sldsStatus);
     slds.element.title ="SLDS Status";
     col1.append(slds.element);
-    LBadge status = new LBadge.inverse(devStatus);
+    LBadge status = new LBadge.info(devStatus);
     status.element.title ="Development/Implementation Status";
     col1.append(status.element);
     ParagraphElement ref = new ParagraphElement()

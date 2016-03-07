@@ -294,10 +294,9 @@ class LTable
       _overflowSync();
       _lastWidth = width;
     }
-    _log.finer("onScrollTableWrapper"
-        " scroll t=${_wrapper.scrollTop} h=${_wrapper.scrollHeight} l=${_wrapper.scrollLeft} w=${_wrapper.scrollWidth}"
-        " offset t=${_wrapper.offsetTop} h=${_wrapper.offsetHeight} l=${_wrapper.offsetLeft} w=${_wrapper.offsetWidth}"
-    );
+    //_log.finer("onScrollTableWrapper"
+    //    " scroll t=${_wrapper.scrollTop} h=${_wrapper.scrollHeight} l=${_wrapper.scrollLeft} w=${_wrapper.scrollWidth}"
+    //    " offset t=${_wrapper.offsetTop} h=${_wrapper.offsetHeight} l=${_wrapper.offsetLeft} w=${_wrapper.offsetWidth}");
   } // onScrollTableWrapper
   int _lastWidth;
 

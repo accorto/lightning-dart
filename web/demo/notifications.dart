@@ -11,7 +11,7 @@ class Notifications extends DemoFeature {
   final PageSimple wrap;
 
   Notifications(PageSimple this.wrap) : super ("notifications", "Notifications",
-  sldsStatus: DemoFeature.SLDS_PROTOTYPE,
+  sldsStatus: DemoFeature.SLDS_DEV_READY,
   devStatus: DemoFeature.STATUS_COMPLETE,
   hints: ["click x to dismiss"],
   issues: [],

@@ -10,11 +10,11 @@ class CardPanels extends DemoFeature {
 
   CardPanels() : super("cardPanels", "Card Panels",
       sldsPath: "",
-      sldsStatus: "n/a",
-      devStatus: DemoFeature.STATUS_PARTIAL,
+      sldsStatus: DemoFeature.SLDS_NA,
+      devStatus: DemoFeature.STATUS_COMPLETE,
       hints: [],
       issues: [],
-      plans: ["Drag+Drop"]);
+      plans: ["Drag+Drop to change status"]);
 
 
   LComponent get content {
@@ -22,13 +22,14 @@ class CardPanels extends DemoFeature {
       ..classes.add(LMargin.C_HORIZONTAL__MEDIUM);
 
     CardPanel cpanel = new CardPanel("cpanel");
-    cpanel.addGroupOption(new DOption()
+    cpanel.addGroupByOption(new DOption()
       ..value = DemoData.COL_STATUS
       ..label = "Status");
-    cpanel.addGroupOption(new DOption()
+    cpanel.addGroupByOption(new DOption()
       ..value = DemoData.COL_TOWN
       ..label = "Town");
     cpanel.setRecords(DemoData.createRecordList(1));
+    cpanel.groupBy = DemoData.COL_STATUS;
 
     div.add(cpanel);
     return div;
@@ -38,13 +39,14 @@ class CardPanels extends DemoFeature {
   String get source {
     return '''
     CardPanel cpanel = new CardPanel("cpanel");
-    cpanel.addGroupOption(new DOption()
+    cpanel.addGroupByOption(new DOption()
       ..value = DemoData.COL_STATUS
       ..label = "Status");
-    cpanel.addGroupOption(new DOption()
+    cpanel.addGroupByOption(new DOption()
       ..value = DemoData.COL_TOWN
       ..label = "Town");
-    cpanel.setRecords(DemoData.createRecordList());
+    cpanel.setRecords(DemoData.createRecordList(1));
+    cpanel.groupBy = DemoData.COL_STATUS;
     ''';
   }
 

@@ -17,13 +17,12 @@ part of lightning_dart;
 class LPicklist
     extends LEditor with LFormElement, LSelectI {
 
-  /// slds-picklist - Initializes picklist | Required
+  /// slds-picklist (div): Initializes picklist
   static const String C_PICKLIST = "slds-picklist";
-  /// slds-picklist--fluid - Forces width of picklist and picklist dropdown to inherit width of its content
+  /// slds-picklist--fluid (slds-picklist): Forces width of picklist and picklist dropdown to inherit width of its content
   static const String C_PICKLIST__FLUID = "slds-picklist--fluid";
-  /// slds-picklist__label - Custom select | Required
+  /// slds-picklist__label (button): Custom select
   static const String C_PICKLIST__LABEL = "slds-picklist__label";
-
 
   /// slds-picklist--draggable - Initializes draggable picklists | Required
   static const String C_PICKLIST__DRAGGABLE = "slds-picklist--draggable";
@@ -85,8 +84,7 @@ class LPicklist
     //
     _dropdown = new LDropdownElement(
         new DivElement()
-          ..classes.addAll([LDropdown.C_DROPDOWN, LDropdown.C_DROPDOWN__LEFT,
-            LDropdown.C_DROPDOWN__MENU])
+          ..classes.addAll([LDropdown.C_DROPDOWN, LDropdown.C_DROPDOWN__LEFT])
           ..style.marginTop = "0",
         name:name, idPrefix:id);
     _dropdown.selectMode = true;

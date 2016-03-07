@@ -10,7 +10,7 @@ class Modals extends DemoFeature {
 
   Modals()
   : super("modals", "Modals",
-  sldsStatus: DemoFeature.SLDS_PROTOTYPE,
+  sldsStatus: DemoFeature.SLDS_DEV_READY,
   devStatus: DemoFeature.STATUS_COMPLETE,
   hints: ["you can add html elements instead of simple text",
     "you can drag modals (grap header)"],
@@ -24,7 +24,8 @@ class Modals extends DemoFeature {
     LModal modal = new LModal("m")
       ..setHeader("The Modal", tagLine: "You can drag me!")
       ..addContentText("Some Text to add - you can also add any components or elements")
-      ..addFooterButtons();
+      ..addFooterButtons()
+      ..content.classes.add(LPadding.C_AROUND__MEDIUM);
     LButton trigger = new LButton.neutral("x", "Click to show Modal");
     trigger.onClick.listen((MouseEvent evt){
       modal.showInComponent(div);
@@ -35,7 +36,8 @@ class Modals extends DemoFeature {
     LModal modal2 = new LModal("m2")
       ..setHeader("The Second Modal", tagLine: "You can drag me!")
       ..addContentText("Some Text to add - you can also add any components or elements")
-      ..addFooterButtons();
+      ..addFooterButtons()
+      ..content.classes.add(LPadding.C_AROUND__MEDIUM);
     LButton trigger2 = new LButton.neutral("x2", "Second Modal")
       ..classes.add(LMargin.C_TOP__MEDIUM);
     trigger2.onClick.listen((MouseEvent evt){

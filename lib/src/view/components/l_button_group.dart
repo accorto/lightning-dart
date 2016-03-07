@@ -121,7 +121,7 @@ class LButtonGroup extends LComponent {
       if (name == null || name.isEmpty)
         name = "button-group";
       DivElement dd = new DivElement()
-        ..classes.addAll([LDropdown.C_DROPDOWN, LDropdown.C_DROPDOWN__RIGHT, LDropdown.C_DROPDOWN__ACTIONS, LDropdown.C_DROPDOWN__MENU]);
+        ..classes.addAll([LDropdown.C_DROPDOWN, LDropdown.C_DROPDOWN__RIGHT, LDropdown.C_DROPDOWN__ACTIONS]);
       LDropdownElement dde = new LDropdownElement(dd, name:name);
       element.append(dde.element);
       for (LDropdownItem ddi in dropdownItems) {

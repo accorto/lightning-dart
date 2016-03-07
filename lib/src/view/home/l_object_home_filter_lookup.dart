@@ -32,7 +32,7 @@ class LObjectHomeFilterLookup {
       assistiveText:lObjectHomeLookupMore());
 
   DivElement _dropdown = new DivElement()
-    ..classes.addAll([LDropdown.C_DROPDOWN, LDropdown.C_DROPDOWN__LEFT, LDropdown.C_DROPDOWN__SMALL, LDropdown.C_DROPDOWN__MENU]);
+    ..classes.addAll([LDropdown.C_DROPDOWN, LDropdown.C_DROPDOWN__LEFT, LDropdown.C_DROPDOWN__SMALL]);
   DivElement _dropdownHeader = new DivElement()
     ..classes.add(LDropdown.C_DROPDOWN__HEADER);
   DivElement _dropdownHeaderFind = new DivElement()

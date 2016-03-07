@@ -9,9 +9,9 @@ part of lightning_dart.demo;
 class Spinners extends DemoFeature {
 
   Spinners() : super ("spinners", "Spinners",
-  sldsStatus: DemoFeature.SLDS_PROTOTYPE,
+  sldsStatus: DemoFeature.SLDS_DEV_READY,
   devStatus: DemoFeature.STATUS_COMPLETE,
-  hints: ["Use Standalone or set busy or loading in any component"],
+  hints: ["Busy blocks window", "Loading blocks component", "available in all components"],
   issues: [],
   plans: []);
 

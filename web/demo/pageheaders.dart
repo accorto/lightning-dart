@@ -10,8 +10,8 @@ class PageHeaders extends DemoFeature {
 
   PageHeaders()
   : super("page-headers", "Page Headers",
-  sldsStatus: DemoFeature.SLDS_PROTOTYPE,
-  devStatus: DemoFeature.STATUS_INITIAL,
+  sldsStatus: DemoFeature.SLDS_DEV_READY,
+  devStatus: DemoFeature.STATUS_PARTIAL,
   hints: ["see example workspace"],
   issues: [],
   plans: []);

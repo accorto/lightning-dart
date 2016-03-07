@@ -22,7 +22,12 @@ class Badges extends DemoFeature {
     div.add(new LBadge("base badge"));
     div.add(new LBadge.def("default badge"));
     div.add(new LBadge.shade("shade badge"));
-    div.add(new LBadge.inverse("inverse badge"));
+    div.add(new LBadge.inverse("inverse"));
+    div.add(new LBadge.altInverse("alt inverse"));
+    div.add(new LBadge.info("info"));
+    div.add(new LBadge.warning("warning"));
+    div.add(new LBadge.success("success"));
+    div.add(new LBadge.error("error"));
 
     return div;
   }

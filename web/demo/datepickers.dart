@@ -13,11 +13,11 @@ class Datepickers extends DemoFeature {
 
   Datepickers()
   : super("datepickers", "Datepickers",
-  sldsStatus: DemoFeature.SLDS_PROTOTYPE,
+  sldsStatus: DemoFeature.SLDS_DEV_READY,
   devStatus: DemoFeature.STATUS_COMPLETE,
   hints: ["date constants (e.g. month names) are translated"],
   issues: ["css: week select with crossing month boundary"],
-  plans: ["date ranges"]);
+  plans: ["independent date ranges"]);
 
   LComponent get content {
     LForm form = new LForm.stacked("date-form")

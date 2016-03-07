@@ -10,7 +10,7 @@ class Publishers extends DemoFeature {
 
   Publishers()
   : super("publishers", "Publishers",
-  sldsStatus: DemoFeature.SLDS_PROTOTYPE,
+  sldsStatus: DemoFeature.SLDS_DEV_READY,
   devStatus: DemoFeature.STATUS_NIY,
   hints: [],
   issues: [],

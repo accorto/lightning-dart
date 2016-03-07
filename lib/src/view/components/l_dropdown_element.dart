@@ -78,13 +78,28 @@ class LDropdownElement
     }
   }
 
-  /// Small
+  /// Width Small
   bool get small => element.classes.contains(LDropdown.C_DROPDOWN__SMALL);
   void set small (bool newValue) {
+    element.classes.removeAll(LDropdown.C_SIZE_LIST);
     if (newValue) {
       element.classes.add(LDropdown.C_DROPDOWN__SMALL);
-    } else {
-      element.classes.remove(LDropdown.C_DROPDOWN__SMALL);
+    }
+  }
+  /// Width Medium
+  bool get medium => element.classes.contains(LDropdown.C_DROPDOWN__MEDIUM);
+  void set medium (bool newValue) {
+    element.classes.removeAll(LDropdown.C_SIZE_LIST);
+    if (newValue) {
+      element.classes.add(LDropdown.C_DROPDOWN__MEDIUM);
+    }
+  }
+  /// Width Large
+  bool get large => element.classes.contains(LDropdown.C_DROPDOWN__LARGE);
+  void set large (bool newValue) {
+    element.classes.removeAll(LDropdown.C_SIZE_LIST);
+    if (newValue) {
+      element.classes.add(LDropdown.C_DROPDOWN__LARGE);
     }
   }
 

@@ -75,7 +75,7 @@ class CardPanel
 
 
   /// Add Column Group Option
-  void addGroupOption(DOption option) {
+  void addGroupByOption(DOption option) {
     _groupPicklist.addDOption(option);
   }
 
@@ -91,7 +91,7 @@ class CardPanel
             ..label = col.label;
         if (col.hasColumnId())
           option.id = col.columnId;
-        addGroupOption(option);
+        addGroupByOption(option);
       }
     }
 
@@ -100,6 +100,16 @@ class CardPanel
   UI _ui;
   /// overwrite for fixed ui
   UI get ui => _ui;
+
+
+  /// group by value
+  String get groupBy => _groupPicklist.value;
+  /// set group by and display
+  void set groupBy (String newValue) {
+    _groupPicklist.value = newValue;
+    display();
+  }
+
 
   /// parameter changed
   void onFormRecordChange(DRecord record, DEntry columnChanged, int rowNo) {
@@ -134,7 +144,7 @@ class CardPanel
    * Display
    */
   void display() {
-    String columnName = _groupPicklist.value;
+    String columnName = groupBy;
     if (columnName == null || columnName.isEmpty)
       return;
 

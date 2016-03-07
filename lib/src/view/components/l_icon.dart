@@ -39,26 +39,28 @@ part of lightning_dart;
  */
 class LIcon {
 
-  /// slds-icon - Defines an svg as an icon | Required
+  /// slds-icon (svg): Defines an svg as an icon - By default icons have a white fill color
   static const String C_ICON = "slds-icon";
-  /// slds-icon-text-default - Creates a text-colored fill color for utility icons |
+  /// slds-icon-text-default (slds-icon): Creates a text-colored fill color for utility icons
   static const String C_ICON_TEXT_DEFAULT = "slds-icon-text-default";
-  /// slds-icon-text-warning - Creates a warning colored fill color |
+  /// slds-icon-text-warning (slds-icon): Creates a warning colored fill color
   static const String C_ICON_TEXT_WARNING = "slds-icon-text-warning";
+  /// slds-icon--x-small (slds-icon): Creates a 1rem×1rem icon
+  static const String C_ICON__X_SMALL = "slds-icon--x-small";
+  /// slds-icon--small (slds-icon): Creates a 1.5rem×1.5rem icon
+  static const String C_ICON__SMALL = "slds-icon--small";
+  /// slds-icon--large (slds-icon): Creates a 3rem×3rem icon
+  static const String C_ICON__LARGE = "slds-icon--large";
+  /// slds-icon_container (outer span): Creates the rounded square background - Used when an icon with a background color is accompanied by .slds-assistive-text and also receives a background-color class
+  static const String C_ICON_CONTAINER = "slds-icon_container";
+  /// slds-icon_container--circle (slds-icon_container): Creates a circular icon shape
+  static const String C_ICON_CONTAINER__CIRCLE = "slds-icon_container--circle";
+
+
   /// slds-icon-text-error - Creates a error colored fill color |
   static const String C_ICON_TEXT_ERROR = "slds-icon-text-error";
   /// slds-icon-text-success - Creates a success colored fill color |
   static const String C_ICON_TEXT_SUCCESS = "slds-icon-text-success";
-  /// slds-icon--x-small - Creates a 1rem by 1rem icon |
-  static const String C_ICON__X_SMALL = "slds-icon--x-small";
-  /// slds-icon--small - Creates a 1.5rem by 1.5rem icon |
-  static const String C_ICON__SMALL = "slds-icon--small";
-  /// slds-icon--large - Creates a 3rem by 3rem icon |
-  static const String C_ICON__LARGE = "slds-icon--large";
-  /// slds-icon__container - Creates the rounded square background |
-  static const String C_ICON__CONTAINER = "slds-icon__container";
-  /// slds-icon__container--circle - Creates a circular icon shape |
-  static const String C_ICON__CONTAINER__CIRCLE = "slds-icon__container--circle";
 
   /// slds-icon--selected - Creates icon when a user selects a .slds-dropdown__item
   static const String C_ICON__SELECTED = "slds-icon--selected";
@@ -157,13 +159,13 @@ class LIcon {
   String packagePrefix;
 
   /**
-   * svg
+   * svg icon
    * - use
    * [linkName] for use href #name - e.g. add
    * [linkPrefix] for use href - e.g. SPRITE_ACTION/CUSTOM/UTILITY/...
    * [className] optional className, e.g. C_ICON
    * [size] optional C_ICON__TYNY/SMALL/MEDIUM/LARGE
-   * [color] optional C_ICON_TEXT_DEFAULT/WARNING
+   * [color] optional C_ICON_TEXT_DEFAULT/WARNING/ERROR
    * [addlCss] additional css classes
    * [packagePrefix] package lib, e.g. [HREF_PREFIX] - packages/lightning
    */
@@ -188,9 +190,9 @@ class LIcon {
     this.linkName = linkName; // sets use
     //
     element.append(_use);
-    if (Settings.getAsBool(Settings.ICON_IMAGE, defaultValue: SvgUtil.createDirect(false))) {
-      SvgUtil.svgDirect(element, "${packagePrefix}${linkPrefix}", linkName);
-    }
+    //if (Settings.getAsBool(Settings.ICON_IMAGE, defaultValue: SvgUtil.createDirect(false))) {
+    //  SvgUtil.svgDirect(element, "${packagePrefix}${linkPrefix}", linkName);
+    //}
   } // LIcon
 
   /// Copy Icon
@@ -275,7 +277,7 @@ class LIconSpan extends LComponent {
 
   /// the span element
   final SpanElement element = new SpanElement()
-    ..classes.add(LIcon.C_ICON__CONTAINER);
+    ..classes.add(LIcon.C_ICON_CONTAINER);
 
   /**
    * Standard Icon Span
@@ -332,7 +334,7 @@ class LIconSpan extends LComponent {
       element.classes.add(spanClass);
     }
     if (circle) {
-      element.classes.add(LIcon.C_ICON__CONTAINER__CIRCLE);
+      element.classes.add(LIcon.C_ICON_CONTAINER__CIRCLE);
     }
     element.append(icon.element);
     //
@@ -353,12 +355,15 @@ class LIconSpan extends LComponent {
  */
 class LIconAction extends LIcon {
 
+  static const String ADD_CONTACT = "add_contact";
   static const String ANNOUNCEMENT = "announcement";
   static const String APEX = "apex";
   static const String APPROVAL = "approval";
   static const String BACK = "back";
   static const String CALL = "call";
   static const String CANVAS = "canvas";
+  static const String CHANGE_OWNER = "change_owner";
+  static const String CHANGE_RECORD_TYPE = "change_record_type";
   static const String CHECK = "check";
   static const String CLONE = "clone";
   static const String CLOSE = "close";
@@ -367,8 +372,9 @@ class LIconAction extends LIcon {
   static const String DESCRIPTION = "description";
   static const String DIAL_IN = "dial_in";
   static const String DOWNLOAD = "download";
-  static const String EDIT_GROUPS = "edit_groups";
   static const String EDIT = "edit";
+  static const String EDIT_GROUPS = "edit_groups";
+  static const String EDIT_RELATIONSHIP = "edit_relationship";
   static const String EMAIL = "email";
   static const String FALLBACK = "fallback";
   static const String FILTER = "filter";
@@ -378,6 +384,7 @@ class LIconAction extends LIcon {
   static const String FREEZE_USER = "freeze_user";
   static const String GOAL = "goal";
   static const String GOOGLE_NEWS = "google_news";
+  static const String INFO = "info";
   static const String JOIN_GROUP = "join_group";
   static const String LEAD_CONVERT = "lead_convert";
   static const String LEAVE_GROUP = "leave_group";
@@ -386,6 +393,7 @@ class LIconAction extends LIcon {
   static const String MANAGE_PERM_SETS = "manage_perm_sets";
   static const String MAP = "map";
   static const String MORE = "more";
+  static const String NEW = "new";
   static const String NEW_ACCOUNT = "new_account";
   static const String NEW_CAMPAIGN = "new_campaign";
   static const String NEW_CASE = "new_case";
@@ -397,16 +405,19 @@ class LIconAction extends LIcon {
   static const String NEW_NOTE = "new_note";
   static const String NEW_NOTEBOOK = "new_notebook";
   static const String NEW_OPPORTUNITY = "new_opportunity";
+  static const String NEW_PERSON_ACCOUNT = "new_person_account";
   static const String NEW_TASK = "new_task";
-  static const String NEW = "new";
   static const String PASSWORD_UNLOCK = "password_unlock";
   static const String PREVIEW = "preview";
   static const String PRIORITY = "priority";
   static const String QUESTION_POST_ACTION = "question_post_action";
   static const String QUOTE = "quote";
   static const String RECORD = "record";
+  static const String REFRESH = "refresh";
   static const String REJECT = "reject";
+  static const String REMOVE = "remove";
   static const String RESET_PASSWORD = "reset_password";
+  static const String SHARE = "share";
   static const String SHARE_FILE = "share_file";
   static const String SHARE_LINK = "share_link";
   static const String SHARE_POLL = "share_poll";
@@ -414,111 +425,12 @@ class LIconAction extends LIcon {
   static const String SHARE_THANKS = "share_thanks";
   static const String SORT = "sort";
   static const String SUBMIT_FOR_APPROVAL = "submit_for_approval";
-  static const String UPDATE_STATUS = "update_status";
   static const String UPDATE = "update";
+  static const String UPDATE_STATUS = "update_status";
+  static const String UPLOAD = "upload";
+  static const String USER = "user";
   static const String USER_ACTIVATION = "user_activation";
   static const String WEB_LINK = "web_link";
-  static const String NEW_CUSTOM1 = "new_custom1";
-  static const String NEW_CUSTOM2 = "new_custom2";
-  static const String NEW_CUSTOM3 = "new_custom3";
-  static const String NEW_CUSTOM4 = "new_custom4";
-  static const String NEW_CUSTOM5 = "new_custom5";
-  static const String NEW_CUSTOM6 = "new_custom6";
-  static const String NEW_CUSTOM7 = "new_custom7";
-  static const String NEW_CUSTOM8 = "new_custom8";
-  static const String NEW_CUSTOM9 = "new_custom9";
-  static const String NEW_CUSTOM10 = "new_custom10";
-  static const String NEW_CUSTOM11 = "new_custom11";
-  static const String NEW_CUSTOM12 = "new_custom12";
-  static const String NEW_CUSTOM13 = "new_custom13";
-  static const String NEW_CUSTOM14 = "new_custom14";
-  static const String NEW_CUSTOM15 = "new_custom15";
-  static const String NEW_CUSTOM16 = "new_custom16";
-  static const String NEW_CUSTOM17 = "new_custom17";
-  static const String NEW_CUSTOM18 = "new_custom18";
-  static const String NEW_CUSTOM19 = "new_custom19";
-  static const String NEW_CUSTOM20 = "new_custom20";
-  static const String NEW_CUSTOM21 = "new_custom21";
-  static const String NEW_CUSTOM22 = "new_custom22";
-  static const String NEW_CUSTOM23 = "new_custom23";
-  static const String NEW_CUSTOM24 = "new_custom24";
-  static const String NEW_CUSTOM25 = "new_custom25";
-  static const String NEW_CUSTOM26 = "new_custom26";
-  static const String NEW_CUSTOM27 = "new_custom27";
-  static const String NEW_CUSTOM28 = "new_custom28";
-  static const String NEW_CUSTOM29 = "new_custom29";
-  static const String NEW_CUSTOM30 = "new_custom30";
-  static const String NEW_CUSTOM31 = "new_custom31";
-  static const String NEW_CUSTOM32 = "new_custom32";
-  static const String NEW_CUSTOM33 = "new_custom33";
-  static const String NEW_CUSTOM34 = "new_custom34";
-  static const String NEW_CUSTOM35 = "new_custom35";
-  static const String NEW_CUSTOM36 = "new_custom36";
-  static const String NEW_CUSTOM37 = "new_custom37";
-  static const String NEW_CUSTOM38 = "new_custom38";
-  static const String NEW_CUSTOM39 = "new_custom39";
-  static const String NEW_CUSTOM40 = "new_custom40";
-  static const String NEW_CUSTOM41 = "new_custom41";
-  static const String NEW_CUSTOM42 = "new_custom42";
-  static const String NEW_CUSTOM43 = "new_custom43";
-  static const String NEW_CUSTOM44 = "new_custom44";
-  static const String NEW_CUSTOM45 = "new_custom45";
-  static const String NEW_CUSTOM46 = "new_custom46";
-  static const String NEW_CUSTOM47 = "new_custom47";
-  static const String NEW_CUSTOM48 = "new_custom48";
-  static const String NEW_CUSTOM49 = "new_custom49";
-  static const String NEW_CUSTOM50 = "new_custom50";
-  static const String NEW_CUSTOM51 = "new_custom51";
-  static const String NEW_CUSTOM52 = "new_custom52";
-  static const String NEW_CUSTOM53 = "new_custom53";
-  static const String NEW_CUSTOM54 = "new_custom54";
-  static const String NEW_CUSTOM55 = "new_custom55";
-  static const String NEW_CUSTOM56 = "new_custom56";
-  static const String NEW_CUSTOM57 = "new_custom57";
-  static const String NEW_CUSTOM58 = "new_custom58";
-  static const String NEW_CUSTOM59 = "new_custom59";
-  static const String NEW_CUSTOM60 = "new_custom60";
-  static const String NEW_CUSTOM61 = "new_custom61";
-  static const String NEW_CUSTOM62 = "new_custom62";
-  static const String NEW_CUSTOM63 = "new_custom63";
-  static const String NEW_CUSTOM64 = "new_custom64";
-  static const String NEW_CUSTOM65 = "new_custom65";
-  static const String NEW_CUSTOM66 = "new_custom66";
-  static const String NEW_CUSTOM67 = "new_custom67";
-  static const String NEW_CUSTOM68 = "new_custom68";
-  static const String NEW_CUSTOM69 = "new_custom69";
-  static const String NEW_CUSTOM70 = "new_custom70";
-  static const String NEW_CUSTOM71 = "new_custom71";
-  static const String NEW_CUSTOM72 = "new_custom72";
-  static const String NEW_CUSTOM73 = "new_custom73";
-  static const String NEW_CUSTOM74 = "new_custom74";
-  static const String NEW_CUSTOM75 = "new_custom75";
-  static const String NEW_CUSTOM76 = "new_custom76";
-  static const String NEW_CUSTOM77 = "new_custom77";
-  static const String NEW_CUSTOM78 = "new_custom78";
-  static const String NEW_CUSTOM79 = "new_custom79";
-  static const String NEW_CUSTOM80 = "new_custom80";
-  static const String NEW_CUSTOM81 = "new_custom81";
-  static const String NEW_CUSTOM82 = "new_custom82";
-  static const String NEW_CUSTOM83 = "new_custom83";
-  static const String NEW_CUSTOM84 = "new_custom84";
-  static const String NEW_CUSTOM85 = "new_custom85";
-  static const String NEW_CUSTOM86 = "new_custom86";
-  static const String NEW_CUSTOM87 = "new_custom87";
-  static const String NEW_CUSTOM88 = "new_custom88";
-  static const String NEW_CUSTOM89 = "new_custom89";
-  static const String NEW_CUSTOM90 = "new_custom90";
-  static const String NEW_CUSTOM91 = "new_custom91";
-  static const String NEW_CUSTOM92 = "new_custom92";
-  static const String NEW_CUSTOM93 = "new_custom93";
-  static const String NEW_CUSTOM94 = "new_custom94";
-  static const String NEW_CUSTOM95 = "new_custom95";
-  static const String NEW_CUSTOM96 = "new_custom96";
-  static const String NEW_CUSTOM97 = "new_custom97";
-  static const String NEW_CUSTOM98 = "new_custom98";
-  static const String NEW_CUSTOM99 = "new_custom99";
-  static const String NEW_CUSTOM100 = "new_custom100";
-
 
   /// Icon Prefix for  *
   static const String C_ICON_ACTION_ = "slds-icon-action-";
@@ -550,23 +462,24 @@ class LIconStandard extends LIcon {
   static const String ANSWER_PRIVATE = "answer_private";
   static const String ANSWER_PUBLIC = "answer_public";
   static const String APPROVAL = "approval";
-  static const String APPS_ADMIN = "apps_admin";
   static const String APPS = "apps";
+  static const String APPS_ADMIN = "apps_admin";
   static const String ARTICLE = "article";
-  static const String AVATAR_LOADING = "avatar_loading";
   static const String AVATAR = "avatar";
+  static const String AVATAR_LOADING = "avatar_loading";
   static const String CALIBRATION = "calibration";
-  static const String CALL_HISTORY = "call_history";
   static const String CALL = "call";
-  static const String CAMPAIGN_MEMBERS = "campaign_members";
+  static const String CALL_HISTORY = "call_history";
   static const String CAMPAIGN = "campaign";
+  static const String CAMPAIGN_MEMBERS = "campaign_members";
   static const String CANVAS = "canvas";
+  static const String CASE = "case";
   static const String CASE_CHANGE_STATUS = "case_change_status";
   static const String CASE_COMMENT = "case_comment";
   static const String CASE_EMAIL = "case_email";
   static const String CASE_LOG_A_CALL = "case_log_a_call";
   static const String CASE_TRANSCRIPT = "case_transcript";
-  static const String CASE = "case";
+  static const String CLIENT = "client";
   static const String COACHING = "coaching";
   static const String CONNECTED_APPS = "connected_apps";
   static const String CONTACT = "contact";
@@ -576,26 +489,31 @@ class LIconStandard extends LIcon {
   static const String DEFAULT = "default";
   static const String DOCUMENT = "document";
   static const String DRAFTS = "drafts";
-  static const String EMAIL_CHATTER = "email_chatter";
   static const String EMAIL = "email";
+  static const String EMAIL_IQ = "email_IQ";
+  static const String EMAIL_CHATTER = "email_chatter";
   static const String EMPTY = "empty";
   static const String ENDORSEMENT = "endorsement";
+  static const String ENVIRONMENT_HUB = "environment_hub";
   static const String EVENT = "event";
   static const String FEED = "feed";
   static const String FEEDBACK = "feedback";
   static const String FILE = "file";
   static const String FLOW = "flow";
-  static const String GENERILOADING = "generiloading";
+  static const String FOLDER = "folder";
+  static const String GENERIC_LOADING = "generic_loading";
   static const String GOALS = "goals";
   static const String GROUP_LOADING = "group_loading";
   static const String GROUPS = "groups";
+  static const String HIERARCHY = "hierarchy";
   static const String HOME = "home";
+  static const String HOUSEHOLD = "household";
   static const String INSIGHTS = "insights";
+  static const String INVESTMENT_ACCOUNT = "investment_account";
   static const String LEAD = "lead";
   static const String LINK = "link";
   static const String LOG_A_CALL = "log_a_call";
   static const String MARKETING_ACTIONS = "marketing_actions";
-  static const String MARKETING_RESOURCES = "marketing_resources";
   static const String METRICS = "metrics";
   static const String NEWS = "news";
   static const String NOTE = "note";
@@ -603,6 +521,7 @@ class LIconStandard extends LIcon {
   static const String ORDERS = "orders";
   static const String PEOPLE = "people";
   static const String PERFORMANCE = "performance";
+  static const String PERSON_ACCOUNT = "person_account";
   static const String PHOTO = "photo";
   static const String POLL = "poll";
   static const String PORTAL = "portal";
@@ -626,12 +545,14 @@ class LIconStandard extends LIcon {
   static const String TASK = "task";
   static const String TASK2 = "task2";
   static const String TEAM_MEMBER = "team_member";
-  static const String THANKS_LOADING = "thanks_loading";
   static const String THANKS = "thanks";
+  static const String THANKS_LOADING = "thanks_loading";
   static const String TODAY = "today";
   static const String TOPIC = "topic";
   static const String UNMATCHED = "unmatched";
   static const String USER = "user";
+  static const String WORK_ORDER = "work_order";
+  static const String WORK_ORDER_ITEM = "work_order_item";
 
   /// Icon Prefix for Standard
   static const String C_ICON_STANDARD_ = "slds-icon-standard-";
@@ -657,10 +578,10 @@ class LIconStandard extends LIcon {
  */
 class LIconUtility extends LIcon {
 
-  static const String THREEDOTS = "3dots";
   static const String ADD = "add";
   static const String ADDUSER = "adduser";
   static const String ANNOUNCEMENT = "announcement";
+  static const String ANSWER = "answer";
   static const String APPS = "apps";
   static const String ARROWDOWN = "arrowdown";
   static const String ARROWUP = "arrowup";
@@ -691,23 +612,32 @@ class LIconUtility extends LIcon {
   static const String COMPANY = "company";
   static const String CONNECTED_APPS = "connected_apps";
   static const String CONTRACT = "contract";
+  static const String CONTRACT_ALT = "contract_alt";
   static const String COPY = "copy";
   static const String CROSSFILTER = "crossfilter";
   static const String CUSTOM_APPS = "custom_apps";
   static const String CUT = "cut";
   static const String DASH = "dash";
+  static const String DATADOTCOM = "datadotcom";
   static const String DAYVIEW = "dayview";
   static const String DELETE = "delete";
   static const String DEPRECATE = "deprecate";
+  static const String DESCRIPTION = "description";
   static const String DESKTOP = "desktop";
   static const String DOWN = "down";
   static const String DOWNLOAD = "download";
   static const String EDIT = "edit";
+  static const String EDIT_FORM = "edit_form";
   static const String EMAIL = "email";
+  static const String END_CALL = "end_call";
+  static const String ERECT_WINDOW = "erect_window";
   static const String ERROR = "error";
   static const String EVENT = "event";
   static const String EXPAND = "expand";
+  static const String EXPAND_ALT = "expand_alt";
   static const String FAVORITE = "favorite";
+  static const String FEED = "feed";
+  static const String FILE = "file";
   static const String FILTER = "filter";
   static const String FILTERLIST = "filterList";
   static const String FORWARD = "forward";
@@ -725,32 +655,40 @@ class LIconUtility extends LIcon {
   static const String JUSTIFY_TEXT = "justify_text";
   static const String KANBAN = "kanban";
   static const String KNOWLEDGE_BASE = "knowledge_base";
+  static const String LAYERS = "layers";
   static const String LAYOUT = "layout";
-  static const String LEFT_ALIGN_TEXT = "left_align_text";
   static const String LEFT = "left";
+  static const String LEFT_ALIGN_TEXT = "left_align_text";
   static const String LIKE = "like";
   static const String LINK = "link";
   static const String LIST = "list";
   static const String LOCATION = "location";
   static const String LOCK = "lock";
+  static const String LOG_A_CALL = "log_a_call";
   static const String LOGOUT = "logout";
   static const String MAGICWAND = "magicwand";
   static const String MATRIX = "matrix";
+  static const String METRICS = "metrics";
+  static const String MINIMIZE_WINDOW = "minimize_window";
+  static const String MONEYBAG = "moneybag";
   static const String MONTHLYVIEW = "monthlyview";
   static const String MOVE = "move";
-  static const String NEW_WINDOW = "new_window";
+  static const String MUTED = "muted";
   static const String NEW = "new";
+  static const String NEW_WINDOW = "new_window";
   static const String NEWS = "news";
+  static const String NOTE = "note";
   static const String NOTEBOOK = "notebook";
   static const String NOTIFICATION = "notification";
   static const String OFFICE365 = "office365";
   static const String OFFLINE = "offline";
-  static const String OPEN_FOLDER = "open_folder";
   static const String OPEN = "open";
+  static const String OPEN_FOLDER = "open_folder";
   static const String OPENED_FOLDER = "opened_folder";
-  static const String PACKAGE_ORG_BETA = "package_org_beta";
-  static const String PACKAGE_ORG = "package_org";
+  static const String OVERFLOW = "overflow";
   static const String PACKAGE = "package";
+  static const String PACKAGE_ORG = "package_org";
+  static const String PACKAGE_ORG_BETA = "package_org_beta";
   static const String PAGE = "page";
   static const String PALETTE = "palette";
   static const String PASTE = "paste";
@@ -758,6 +696,7 @@ class LIconUtility extends LIcon {
   static const String PHONE_LANDSCAPE = "phone_landscape";
   static const String PHONE_PORTRAIT = "phone_portrait";
   static const String PHOTO = "photo";
+  static const String PICKLIST = "picklist";
   static const String POWER = "power";
   static const String PREVIEW = "preview";
   static const String PRIORITY = "priority";
@@ -766,6 +705,7 @@ class LIconUtility extends LIcon {
   static const String PUZZLE = "puzzle";
   static const String QUESTION = "question";
   static const String QUESTIONS_AND_ANSWERS = "questions_and_answers";
+  static const String RECORD = "record";
   static const String REDO = "redo";
   static const String REFRESH = "refresh";
   static const String RELATE = "relate";
@@ -773,21 +713,23 @@ class LIconUtility extends LIcon {
   static const String REMOVE_LINK = "remove_link";
   static const String REPLACE = "replace";
   static const String REPLY = "reply";
+  static const String RESET_PASSWORD = "reset_password";
   static const String RETWEET = "retweet";
   static const String RICHTEXTBULLETEDLIST = "richtextbulletedlist";
   static const String RICHTEXTINDENT = "richtextindent";
   static const String RICHTEXTNUMBEREDLIST = "richtextnumberedlist";
   static const String RICHTEXTOUTDENT = "richtextoutdent";
-  static const String RIGHT_ALIGN_TEXT = "right_align_text";
   static const String RIGHT = "right";
+  static const String RIGHT_ALIGN_TEXT = "right_align_text";
   static const String ROTATE = "rotate";
   static const String ROWS = "rows";
   static const String SALESFORCE1 = "salesforce1";
   static const String SEARCH = "search";
   static const String SETTINGS = "settings";
-  static const String SETUP_ASSISTANT_GUIDE = "setup_assistant_guide";
   static const String SETUP = "setup";
+  static const String SETUP_ASSISTANT_GUIDE = "setup_assistant_guide";
   static const String SHARE = "share";
+  static const String SHARE_POST = "share_post";
   static const String SHIELD = "shield";
   static const String SIDE_LIST = "side_list";
   static const String SIGNPOST = "signpost";
@@ -797,6 +739,7 @@ class LIconUtility extends LIcon {
   static const String SORT = "sort";
   static const String SPINNER = "spinner";
   static const String STANDARD_OBJECTS = "standard_objects";
+  static const String STOP = "stop";
   static const String STRIKETHROUGH = "strikethrough";
   static const String SUCCESS = "success";
   static const String SUMMARY = "summary";
@@ -805,24 +748,33 @@ class LIconUtility extends LIcon {
   static const String TABLE = "table";
   static const String TABLET_LANDSCAPE = "tablet_landscape";
   static const String TABLET_PORTRAIT = "tablet_portrait";
+  static const String TABSET = "tabset";
+  static const String TASK = "task";
   static const String TEXT_BACKGROUND_COLOR = "text_background_color";
   static const String TEXT_COLOR = "text_color";
+  static const String THREEDOTS = "threedots";
   static const String TILE_CARD_LIST = "tile_card_list";
   static const String TOPIC = "topic";
+  static const String TOUCH_ACTION = "touch_action";
   static const String TRAIL = "trail";
   static const String UNDELETE = "undelete";
   static const String UNDEPRECATE = "undeprecate";
   static const String UNDERLINE = "underline";
   static const String UNDO = "undo";
   static const String UNLOCK = "unlock";
+  static const String UNMUTED = "unmuted";
   static const String UP = "up";
   static const String UPLOAD = "upload";
   static const String USER = "user";
+  static const String USER_ROLE = "user_role";
+  static const String VOLUME_HIGH = "volume_high";
+  static const String VOLUME_LOW = "volume_low";
+  static const String VOLUME_OFF = "volume_off";
   static const String WARNING = "warning";
   static const String WEEKLYVIEW = "weeklyview";
+  static const String WORLD = "world";
   static const String ZOOMIN = "zoomin";
   static const String ZOOMOUT = "zoomout";
-
 
   /**
    * Utility Icon with [linkName] like [ADD]
@@ -972,8 +924,10 @@ class LIconCustom extends LIcon {
  */
 class LIconDoctype extends LIcon {
 
+  static const String AI = "ai";
   static const String ATTACHMENT = "attachment";
   static const String AUDIO = "audio";
+  static const String BOX_NOTES = "box_notes";
   static const String CSV = "csv";
   static const String EPS = "eps";
   static const String EXCEL = "excel";
@@ -1004,7 +958,7 @@ class LIconDoctype extends LIcon {
   static const String WEBEX = "webex";
   static const String WORD = "word";
   static const String XML = "xml";
-
+  static const String ZIP = "zip";
 
   /**
    * Custom Icon - [name] e.g. LIconCustom.CUSTOM_1

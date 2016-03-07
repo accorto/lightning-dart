@@ -13,9 +13,9 @@ class FormsEditor extends DemoFeature {
   devStatus: DemoFeature.STATUS_COMPLETE,
   hints: ["if the input has an icon, by default it is displayed on the right",
     "any input can have a clear value icon, then the icon is on the left",
-    "date editors in date picker"],
+    "date editors see: date picker"],
   issues: [],
-  plans: ["address, geo, currency"]);
+  plans: ["address, geo"]);
 
 
   LComponent get content {

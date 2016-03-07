@@ -270,7 +270,9 @@ class CDiv extends LComponent {
   /// add horizontal rule [margin] top/bottom - default 2rem
   void appendHR({String margin}) {
     HRElement hr = new HRElement();
-    hr.style.margin = "${margin} 0 ";
+    if (margin != null)
+      hr.style.margin = "${margin} 0";
+    hr.style.backgroundColor = "black";
     element.append(hr);
   }
   /// add horizontal rule with .5rem top/bottom margin

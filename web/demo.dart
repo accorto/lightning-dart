@@ -27,6 +27,7 @@ part 'demo/cards.dart';
 part 'demo/card_panels.dart';
 part 'demo/datepickers.dart';
 part 'demo/datetimes.dart';
+part 'demo/docked_composers.dart';
 part 'demo/feeds.dart';
 part 'demo/forms.dart';
 part 'demo/forms2.dart';
@@ -41,6 +42,7 @@ part 'demo/modals.dart';
 part 'demo/notifications.dart';
 part 'demo/pageheaders.dart';
 part 'demo/pills.dart';
+part 'demo/processes.dart';
 part 'demo/popovers.dart';
 part 'demo/publishers.dart';
 part 'demo/spinners.dart';
@@ -130,6 +132,7 @@ class DemoPage extends AppsPage {
     _addFeature(new TablesGraphs()..toc(toc, onlySelectedHide));
     _addFeature(new Datepickers()..toc(toc, onlySelectedHide));
     _addFeature(new DateTimes()..toc(toc, onlySelectedHide));
+    _addFeature(new DockedComposers()..toc(toc, onlySelectedHide));
     _addFeature(new Feeds()..toc(toc, onlySelectedHide));
     _addFeature(new Forms()..toc(toc, onlySelectedHide));
     _addFeature(new Forms2()..toc(toc, onlySelectedHide));
@@ -144,6 +147,7 @@ class DemoPage extends AppsPage {
     _addFeature(new Notifications(wrap)..toc(toc, onlySelectedHide));
     _addFeature(new PageHeaders()..toc(toc, onlySelectedHide));
     _addFeature(new Pills()..toc(toc, onlySelectedHide));
+    _addFeature(new Processes()..toc(toc, onlySelectedHide));
     _addFeature(new Popovers()..toc(toc, onlySelectedHide));
     _addFeature(new Publishers()..toc(toc, onlySelectedHide));
     _addFeature(new Spinners()..toc(toc, onlySelectedHide));
@@ -250,7 +254,7 @@ class ExampleWorkspace extends AppsPage {
  */
 class SupportLink extends AppsPage {
 
-  static final LIcon supportIcon = new LIconAction(LIconAction.NEW_CUSTOM86);
+  static final LIcon supportIcon = new LIconUtility(LIconUtility.HELP);
 
   final DivElement element = new DivElement();
 

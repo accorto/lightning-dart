@@ -21,7 +21,11 @@ class LFormElement {
   /// Element control for std layout
   DivElement _elementControl;
   /// Label Span (cb)
-  SpanElement _labelSpan;
+  final SpanElement _labelSpan = new SpanElement();
+  /// required flag
+  final Element _requiredElement = new Element.tag("abbr")
+    ..classes.add(LForm.C_REQUIRED)
+    ..title = lFormElementRequired();
   /// Hint (adds some px below input)
   final SpanElement _hintSpan = new SpanElement()
     ..classes.add(LForm.C_FORM_ELEMENT__HELP);
@@ -54,6 +58,8 @@ class LFormElement {
       _hintSpan.classes.add(LVisibility.C_HIDE);
     } else {
       _labelElement.classes.add(LForm.C_FORM_ELEMENT__LABEL);
+      _labelElement.append(_requiredElement);
+      _labelElement.append(_labelSpan);
       element.append(_labelElement);
     }
     //
@@ -156,6 +162,8 @@ class LFormElement {
   /// Create Layout for Lookup Select (pill)
   void createLookupSelect(DivElement pillContainer, LIcon icon, bool multiple) {
     element.children.clear();
+    _labelElement.append(_requiredElement);
+    _labelElement.append(_labelSpan);
     element.append(_labelElement);
     // element control
     _elementControl.children.clear();
@@ -194,8 +202,7 @@ class LFormElement {
     SpanElement faux = new SpanElement()
       ..classes.add(LForm.C_CHECKBOX__FAUX);
     _labelElement.append(faux);
-    _labelSpan = new SpanElement()
-      ..classes.add(LForm.C_FORM_ELEMENT__LABEL);
+    _labelSpan.classes.add(LForm.C_FORM_ELEMENT__LABEL);
     _labelElement.append(_labelSpan);
     element.append(_hintSpan); // __help
   } // createCheckbox
@@ -212,18 +219,11 @@ class LFormElement {
 
   /// Get Label
   String get label {
-    if (_labelSpan != null) {
-      return _labelSpan.text;
-    }
-    return _labelElement.text;
+    return _labelSpan.text;
   }
   /// Set Label
   void set label (String newValue) {
-    if (_labelSpan != null) {
-      _labelSpan.text = newValue;
-    } else {
-      _labelElement.text = newValue;
-    }
+    _labelSpan.text = newValue;
   }
 
   /// set Label value for input element
@@ -236,10 +236,10 @@ class LFormElement {
   void set small (bool newValue) {
     if (newValue) {
       _input.classes.add(LForm.C_INPUT__SMALL);
-      _labelElement.classes.add(LForm.C_FORM_ELEMENT__LABEL__SMALL);
+    //  _labelElement.classes.add(LForm.C_FORM_ELEMENT__LABEL__SMALL);
     } else {
       _input.classes.remove(LForm.C_INPUT__SMALL);
-      _labelElement.classes.remove(LForm.C_FORM_ELEMENT__LABEL__SMALL);
+    //  _labelElement.classes.remove(LForm.C_FORM_ELEMENT__LABEL__SMALL);
     }
   }
 
@@ -251,8 +251,12 @@ class LFormElement {
     _required = newValue;
     if (newValue) {
       element.classes.add(LForm.C_IS_REQUIRED);
+      _requiredElement.title = lFormElementRequired();
+      _requiredElement.text = "* ";
     } else {
       element.classes.remove(LForm.C_IS_REQUIRED);
+      _requiredElement.title = lFormElementNotRequired();
+      _requiredElement.text = "";
     }
     if (_input is InputElement)
       (_input as InputElement).required = newValue;
@@ -438,6 +442,8 @@ class LFormElement {
 
   /// trl
   static String lFormElementClear() => Intl.message("Clear Value", name: "lFormElementClear");
+  static String lFormElementRequired() => Intl.message("required", name: "lFormElementRequired");
+  static String lFormElementNotRequired() => Intl.message("optional", name: "lFormElementNotRequired");
 
 
 } // LFormElement
