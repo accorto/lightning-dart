@@ -187,23 +187,29 @@ class LFormElement {
    * Checkbox Layout
    *
    *    div       .from-element
-   *      label   .checkbox
-   *      input
-   *      span    .checkbox--faux
-   *      span    .form-element__label
+   *      div     .form-element__control
+   *        label .checkbox
+   *        input
+   *        span  .checkbox--faux
+   *        span  .form-element__label
    */
   void createCheckbox(EditorI editor) {
     this.editor = editor;
     _input = editor.input;
     _labelElement.classes.add(LForm.C_CHECKBOX);
-    element.append(_labelElement);
     //
-    _labelElement.append(_input);
     SpanElement faux = new SpanElement()
       ..classes.add(LForm.C_CHECKBOX__FAUX);
-    _labelElement.append(faux);
     _labelSpan.classes.add(LForm.C_FORM_ELEMENT__LABEL);
-    _labelElement.append(_labelSpan);
+    _labelElement
+        ..append(_input)
+        ..append(faux)
+        ..append(_labelSpan);
+    _elementControl = new DivElement()
+      ..classes.add(LForm.C_FORM_ELEMENT__CONTROL)
+      ..append(_labelElement);
+    element.append(_elementControl);
+
     element.append(_hintSpan); // __help
   } // createCheckbox
 

@@ -157,7 +157,7 @@ class PageSimple
       _statusToast = new LToast(
           label: sm.message, idPrefix: "status", icon: sm.icon,
           text: sm.detail, addDefaultIcon: true, color: sm.color);
-      _statusToast.showBottomRight(element, autohideSeconds: 10, onWindow: true);
+      _statusToast.showBottomRight(element, autohideSeconds: 10);
     }
     //
     element.attributes["data-success"] = (sm == null || sm.dataSuccess == null) ? "" : sm.dataSuccess;

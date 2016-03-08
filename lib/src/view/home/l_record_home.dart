@@ -27,7 +27,7 @@ class LRecordHome
   final ParagraphElement _headerLeftRecordType = new ParagraphElement()
     ..classes.add(LText.C_TEXT_HEADING__LABEL);
   final HeadingElement _headerLeftRecordTitle = new HeadingElement.h1()
-    ..classes.addAll([LText.C_TEXT_HEADING__MEDIUM, LMargin.C_RIGHT__SMALL, LText.C_TRUNCATE, LGrid.C_ALIGN_MIDDLE]);
+    ..classes.addAll([LPageHeader.C_PAGE_HEADER__TITLE, LMargin.C_RIGHT__SMALL, LText.C_TRUNCATE, LGrid.C_ALIGN_MIDDLE]);
   // Follow Button
   final LButton followButton;
 
@@ -78,7 +78,7 @@ class LRecordHome
     // Details
     if (ui.queryColumnList.isNotEmpty) {
       DivElement detail = new DivElement()
-        ..classes.addAll([LGrid.C_GRID, LPageHeader.C_PAGE_HEADER__DETAIL__ROW]);
+        ..classes.addAll([LGrid.C_GRID, LPageHeader.C_PAGE_HEADER__DETAIL_ROW]);
       element.append(detail);
 
       for (UIQueryColumn qc in ui.queryColumnList) {
@@ -156,6 +156,7 @@ class LRecordHome
   String get recordTitle => _headerLeftRecordTitle.text;
   /// Record Title Text
   void set recordTitle(String newValue) {
+    _headerLeftRecordTitle.title = newValue;
     _headerLeftRecordTitle.text = newValue;
   }
 

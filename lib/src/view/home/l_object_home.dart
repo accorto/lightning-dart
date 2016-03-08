@@ -81,11 +81,11 @@ class LObjectHome
     headerLeft.append(_headerLeftRecordType);
     // - div .slds-grid
     DivElement headerLeftGrid = new DivElement()
-      ..classes.add(LGrid.C_GRID);
+      ..classes.add(LGrid.C_GRID)
+      // query options/settings
+      ..append(homeFilter.lookup.element)
+      ..append(homeFilter.settings.element);
     headerLeft.append(headerLeftGrid);
-    // query options/settings
-    headerLeftGrid.append(homeFilter.lookup.element);
-    headerLeftGrid.append(homeFilter.settings.element);
 
     _headerFind = new LInputSearch("find", idPrefix:idPrefix, withClearValue:true)
       ..placeholder = lObjectHomeFind()

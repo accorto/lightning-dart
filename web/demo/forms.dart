@@ -12,8 +12,7 @@ class Forms extends DemoFeature {
   sldsStatus: DemoFeature.SLDS_DEV_READY,
   devStatus: DemoFeature.STATUS_COMPLETE,
   hints: [],
-  issues: ["css: horizontal checkbox right aligned",
-    "help popup position - see tooltip"],
+  issues: [],
   plans: []);
 
 
@@ -152,7 +151,6 @@ class Forms extends DemoFeature {
     LSelect select = new LSelect("oType", idPrefix: id)
       ..label = "Form Type"
       ..small = true;
-    select.input.style.width = "inherit";
     select.addOption(new OptionElement(data: "Stacked", value: LForm.C_FORM__STACKED));
     select.addOption(new OptionElement(data: "Horizontal", value: LForm.C_FORM__HORIZONTAL));
     select.addOption(new OptionElement(data: "Inline", value: LForm.C_FORM__INLINE));

@@ -190,9 +190,10 @@ class LIcon {
     this.linkName = linkName; // sets use
     //
     element.append(_use);
-    //if (Settings.getAsBool(Settings.ICON_IMAGE, defaultValue: SvgUtil.createDirect(false))) {
-    //  SvgUtil.svgDirect(element, "${packagePrefix}${linkPrefix}", linkName);
-    //}
+    // replace use with cymbol content
+    if (Settings.getAsBool(Settings.ICON_IMAGE, defaultValue: SvgUtil.createDirect(false))) {
+      SvgUtil.svgDirect(element, "${packagePrefix}${linkPrefix}", linkName);
+    }
   } // LIcon
 
   /// Copy Icon

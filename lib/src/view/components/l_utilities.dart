@@ -101,6 +101,7 @@ class LSizing {
  */
 class LMargin {
 
+  static const String C_TOP__NONE = "slds-m-top--none";
   static const String C_TOP__XXX_SMALL = "slds-m-top--xxx-small";
   static const String C_TOP__XX_SMALL = "slds-m-top--xx-small";
   static const String C_TOP__X_SMALL = "slds-m-top--x-small";
@@ -115,6 +116,7 @@ class LMargin {
   static const String C_RIGHT__MEDIUM = "slds-m-right--medium";
   static const String C_RIGHT__LARGE = "slds-m-right--large";
   static const String C_RIGHT__X_LARGE = "slds-m-right--x-large";
+  static const String C_BOTTOM__NONE = "slds-m-bottom--none";
   static const String C_BOTTOM__XXX_SMALL = "slds-m-bottom--xxx-small";
   static const String C_BOTTOM__XX_SMALL = "slds-m-bottom--xx-small";
   static const String C_BOTTOM__X_SMALL = "slds-m-bottom--x-small";
@@ -122,6 +124,7 @@ class LMargin {
   static const String C_BOTTOM__MEDIUM = "slds-m-bottom--medium";
   static const String C_BOTTOM__LARGE = "slds-m-bottom--large";
   static const String C_BOTTOM__X_LARGE = "slds-m-bottom--x-large";
+  static const String C_LEFT__NONE = "slds-m-left--none";
   static const String C_LEFT__XXX_SMALL = "slds-m-left--xxx-small";
   static const String C_LEFT__XX_SMALL = "slds-m-left--xx-small";
   static const String C_LEFT__X_SMALL = "slds-m-left--x-small";
@@ -129,6 +132,7 @@ class LMargin {
   static const String C_LEFT__MEDIUM = "slds-m-left--medium";
   static const String C_LEFT__LARGE = "slds-m-left--large";
   static const String C_LEFT__X_LARGE = "slds-m-left--x-large";
+  static const String C_VERTICAL__NONE = "slds-m-vertical--none";
   static const String C_VERTICAL__XXX_SMALL = "slds-m-vertical--xxx-small";
   static const String C_VERTICAL__XX_SMALL = "slds-m-vertical--xx-small";
   static const String C_VERTICAL__X_SMALL = "slds-m-vertical--x-small";
@@ -136,6 +140,7 @@ class LMargin {
   static const String C_VERTICAL__MEDIUM = "slds-m-vertical--medium";
   static const String C_VERTICAL__LARGE = "slds-m-vertical--large";
   static const String C_VERTICAL__X_LARGE = "slds-m-vertical--x-large";
+  static const String C_HORIZONTAL__NONE = "slds-m-horizontal--none";
   static const String C_HORIZONTAL__XXX_SMALL = "slds-m-horizontal--xxx-small";
   static const String C_HORIZONTAL__XX_SMALL = "slds-m-horizontal--xx-small";
   static const String C_HORIZONTAL__X_SMALL = "slds-m-horizontal--x-small";
@@ -143,6 +148,7 @@ class LMargin {
   static const String C_HORIZONTAL__MEDIUM = "slds-m-horizontal--medium";
   static const String C_HORIZONTAL__LARGE = "slds-m-horizontal--large";
   static const String C_HORIZONTAL__X_LARGE = "slds-m-horizontal--x-large";
+  static const String C_AROUND__NONE = "slds-m-around--none";
   static const String C_AROUND__XXX_SMALL = "slds-m-around--xxx-small";
   static const String C_AROUND__XX_SMALL = "slds-m-around--xx-small";
   static const String C_AROUND__X_SMALL = "slds-m-around--x-small";
@@ -159,6 +165,7 @@ class LMargin {
  */
 class LPadding {
 
+  static const String C_TOP__NONE = "slds-p-top--none";
   static const String C_TOP__XXX_SMALL = "slds-p-top--xxx-small";
   static const String C_TOP__XX_SMALL = "slds-p-top--xx-small";
   static const String C_TOP__X_SMALL = "slds-p-top--x-small";
@@ -166,6 +173,7 @@ class LPadding {
   static const String C_TOP__MEDIUM = "slds-p-top--medium";
   static const String C_TOP__LARGE = "slds-p-top--large";
   static const String C_TOP__X_LARGE = "slds-p-top--x-large";
+  static const String C_RIGHT__NONE = "slds-p-right--none";
   static const String C_RIGHT__XXX_SMALL = "slds-p-right--xxx-small";
   static const String C_RIGHT__XX_SMALL = "slds-p-right--xx-small";
   static const String C_RIGHT__X_SMALL = "slds-p-right--x-small";
@@ -173,6 +181,7 @@ class LPadding {
   static const String C_RIGHT__MEDIUM = "slds-p-right--medium";
   static const String C_RIGHT__LARGE = "slds-p-right--large";
   static const String C_RIGHT__X_LARGE = "slds-p-right--x-large";
+  static const String C_BOTTOM__NONE = "slds-p-bottom--none";
   static const String C_BOTTOM__XXX_SMALL = "slds-p-bottom--xxx-small";
   static const String C_BOTTOM__XX_SMALL = "slds-p-bottom--xx-small";
   static const String C_BOTTOM__X_SMALL = "slds-p-bottom--x-small";
@@ -180,6 +189,7 @@ class LPadding {
   static const String C_BOTTOM__MEDIUM = "slds-p-bottom--medium";
   static const String C_BOTTOM__LARGE = "slds-p-bottom--large";
   static const String C_BOTTOM__X_LARGE = "slds-p-bottom--x-large";
+  static const String C_LEFT__NONE = "slds-p-left--none";
   static const String C_LEFT__XXX_SMALL = "slds-p-left--xxx-small";
   static const String C_LEFT__XX_SMALL = "slds-p-left--xx-small";
   static const String C_LEFT__X_SMALL = "slds-p-left--x-small";
@@ -187,6 +197,7 @@ class LPadding {
   static const String C_LEFT__MEDIUM = "slds-p-left--medium";
   static const String C_LEFT__LARGE = "slds-p-left--large";
   static const String C_LEFT__X_LARGE = "slds-p-left--x-large";
+  static const String C_VERTICAL__NONE = "slds-p-vertical--none";
   static const String C_VERTICAL__XXX_SMALL = "slds-p-vertical--xxx-small";
   static const String C_VERTICAL__XX_SMALL = "slds-p-vertical--xx-small";
   static const String C_VERTICAL__X_SMALL = "slds-p-vertical--x-small";
@@ -194,6 +205,7 @@ class LPadding {
   static const String C_VERTICAL__MEDIUM = "slds-p-vertical--medium";
   static const String C_VERTICAL__LARGE = "slds-p-vertical--large";
   static const String C_VERTICAL__X_LARGE = "slds-p-vertical--x-large";
+  static const String C_HORIZONTAL__NONE = "slds-p-horizontal--none";
   static const String C_HORIZONTAL__XXX_SMALL = "slds-p-horizontal--xxx-small";
   static const String C_HORIZONTAL__XX_SMALL = "slds-p-horizontal--xx-small";
   static const String C_HORIZONTAL__X_SMALL = "slds-p-horizontal--x-small";
@@ -201,6 +213,7 @@ class LPadding {
   static const String C_HORIZONTAL__MEDIUM = "slds-p-horizontal--medium";
   static const String C_HORIZONTAL__LARGE = "slds-p-horizontal--large";
   static const String C_HORIZONTAL__X_LARGE = "slds-p-horizontal--x-large";
+  static const String C_AROUND__NONE = "slds-p-around--none";
   static const String C_AROUND__XXX_SMALL = "slds-p-around--xxx-small";
   static const String C_AROUND__XX_SMALL = "slds-p-around--xx-small";
   static const String C_AROUND__X_SMALL = "slds-p-around--x-small";

@@ -11,21 +11,19 @@ part of lightning_dart;
  */
 class LMedia extends LComponent {
 
-  /// slds-media - Defines the overall media object | Required
+  /// slds-media: Defines the overall media object - Can be applied to any outer element and will be as wide as its parent container
   static const String C_MEDIA = "slds-media";
-  /// slds-media__figure - Defines the figure area | Required
+  /// slds-media__figure: Defines the figure area - Apply this class to the first element inside the .slds-media and contains the image, icon, svg or video
   static const String C_MEDIA__FIGURE = "slds-media__figure";
-  /// icon/image right
-  static const String C_MEDIA__FIGURE__REVERSE = "slds-media__figure--reverse";
-  /// slds-media__body - Defines the body area | Required
+  /// slds-media__body: Defines the body area - Apply this class to the second element inside the .slds-media and contains the text or other content
   static const String C_MEDIA__BODY = "slds-media__body";
-  /// slds-media--center - Aligns the content in the .slds-media__body to the middle of the .slds-media__figure
+  /// slds-media--center (slds-media): Aligns the content in the .slds-media__body to the middle of the .slds-media__figure
   static const String C_MEDIA__CENTER = "slds-media--center";
-  /// slds-media--reverse - Reverses the media object so that the figure is on the right
-  //static const String C_MEDIA__REVERSE = "slds-media--reverse";
-  /// slds-media--double - Allows you to add a figure on both the right and left sides
-  //static const String C_MEDIA__DOUBLE = "slds-media--double";
-  /// slds-media--responsive - .slds-media__figure and .slds-media__body stack on smaller screens
+  /// slds-media--reverse (slds-media): Reverses the media object so that the figure is on the right
+  static const String C_MEDIA__REVERSE = "slds-media--reverse";
+  /// slds-media--double (slds-media): Allows you to add a figure on both the right and left sides - Both figures are added prior to the .slds-media__body
+  static const String C_MEDIA__DOUBLE = "slds-media--double";
+  /// slds-media--responsive (slds-media): .slds-media__figure and .slds-media__body stack on smaller screens
   static const String C_MEDIA__RESPONSIVE = "slds-media--responsive";
 
   /// Alternative Media Styles
@@ -98,7 +96,7 @@ class LMedia extends LComponent {
   void setImageRight(ImageElement img) {
     if (_figureRight == null) {
       _figureRight = new DivElement()
-        ..classes.addAll([C_MEDIA__FIGURE, C_MEDIA__FIGURE__REVERSE]);
+        ..classes.addAll([C_MEDIA__FIGURE, C_MEDIA__REVERSE]);
       element.append(_figureRight);
     } else {
       _figureRight.children.clear();
@@ -125,7 +123,7 @@ class LMedia extends LComponent {
   void setIconRight(LIcon icon) {
     if (_figureRight == null) {
       _figureRight = new DivElement()
-        ..classes.addAll([C_MEDIA__FIGURE, C_MEDIA__FIGURE__REVERSE]);
+        ..classes.addAll([C_MEDIA__FIGURE, C_MEDIA__REVERSE]);
       element.append(_figureRight);
     } else {
       _figureRight.children.clear();
@@ -148,11 +146,11 @@ class LMedia extends LComponent {
     if (newValue) {
       element.append(body);
       element.append(_figure);
-      _figure.classes.add(C_MEDIA__FIGURE__REVERSE);
+      _figure.classes.add(C_MEDIA__REVERSE);
     } else {
       element.append(_figure);
       element.append(body);
-      _figure.classes.remove(C_MEDIA__FIGURE__REVERSE);
+      _figure.classes.remove(C_MEDIA__REVERSE);
     }
   }
   /// Responsive

@@ -121,13 +121,10 @@ abstract class LComponent {
       }
       element.classes.add(_C_BUSY);
       LSpinner spinner = new LSpinner.brand(size: LSpinner.C_SPINNER__LARGE);
-      DivElement div = new DivElement()
-        ..classes.add("center-center")
-        ..append(spinner.element);
       _busy = new DivElement()
         ..classes.add("busy-backdrop")
         ..classes.add("busy-backdrop--open")
-        ..append(div);
+        ..append(spinner.element);
       element.append(_busy);
     }
     else {
@@ -152,24 +149,17 @@ abstract class LComponent {
   void set loading (bool newValue) {
     if (newValue) {
       element.classes.add(_C_LOADING);
-      LSpinner spinner = new LSpinner.base(size: LSpinner.C_SPINNER__SMALL);
-      DivElement div = new DivElement()
-        ..classes.add("center-center")
-        ..append(spinner.element);
-      _loading = new DivElement()
-        ..classes.add("loading-backdrop")
-        ..classes.add("loading-backdrop--open")
-        ..append(div);
-      element.append(_loading);
+      _loading = new LSpinner.base(size: LSpinner.C_SPINNER__SMALL);
+      element.append(_loading.element);
     } else {
       element.classes.remove(_C_LOADING);
       if (_loading != null) {
-        _loading.remove();
+        _loading.element.remove();
       }
       _loading = null;
     }
   }
-  DivElement _loading;
+  LSpinner _loading;
 
   /// Focus
   void focus() {

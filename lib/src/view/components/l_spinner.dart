@@ -30,20 +30,40 @@ class LSpinner {
   /// slds-spinner__dot-b (div): This creates two of the circles
   static const String C_SPINNER__DOT_B = "slds-spinner__dot-b";
 
-  static const String SRC_BASE = "/assets/images/spinners/slds_spinner.gif";
-  static const String SRC_BRAND = "/assets/images/spinners/slds_spinner_brand.gif";
-  static const String SRC_INVERSE = "/assets/images/spinners/slds_spinner_inverse.gif";
+  //static const String SRC_BASE = "/assets/images/spinners/slds_spinner.gif";
+  //static const String SRC_BRAND = "/assets/images/spinners/slds_spinner_brand.gif";
+  //static const String SRC_INVERSE = "/assets/images/spinners/slds_spinner_inverse.gif";
 
 
   /// Spinner Element
-  final DivElement element = new DivElement();
+  final DivElement element = new DivElement()
+    ..classes.add(C_SPINNER_CONTAINER);
+  final DivElement spinner = new DivElement()
+    ..attributes[Html0.ARIA_HIDDEN] = "false"
+    ..attributes[Html0.ROLE] = Html0.ROLE_ALERT;
+
   /// Spinner Image
   final ImageElement img = new ImageElement();
 
   /**
    * Spinner [size] css - [src] image
    */
-  LSpinner(String size, String src, {String altText}) {
+  LSpinner(String brand, String size, {String altText}) {
+    if (brand != null)
+      spinner.classes.add(brand);
+    spinner
+      ..classes.add(C_SPINNER)
+      ..append(new DivElement()..classes.add(C_SPINNER__DOT_A))
+      ..append(new DivElement()..classes.add(C_SPINNER__DOT_B));
+    if (size != null)
+      spinner.classes.add(size);
+    if (altText == null)
+      element.title = lSpinnerWorking() + " ...";
+    else
+      element.title = altText;
+    element.append(spinner);
+
+    /*
     element.classes.add(size);
     img.src = LIcon.HREF_PREFIX + src;
     if (altText == null)
@@ -51,35 +71,36 @@ class LSpinner {
     else
       img.alt = altText;
     element.append(img);
-  }
+    */
+  } // LSpinner
 
   /// Base Spinner
   LSpinner.base({String size: C_SPINNER__MEDIUM})
-    : this(size, SRC_BASE);
+    : this(null, size);
   /// Brand Spinner
   LSpinner.brand({String size: C_SPINNER__MEDIUM})
-    : this(size, SRC_BRAND);
+    : this(C_SPINNER__BRAND, size);
   /// Inverse Spinner
   LSpinner.inverse({String size: C_SPINNER__MEDIUM})
-    : this(size, SRC_INVERSE);
+    : this(C_SPINNER__INVERSE, size);
 
 
   void set large (bool newValue) {
     if (newValue) {
-      element.classes.removeAll([C_SPINNER__MEDIUM, C_SPINNER__SMALL]);
-      element.classes.add(C_SPINNER__LARGE);
+      spinner.classes.removeAll([C_SPINNER__MEDIUM, C_SPINNER__SMALL]);
+      spinner.classes.add(C_SPINNER__LARGE);
     }
   }
   void set medium (bool newValue) {
     if (newValue) {
-      element.classes.removeAll([C_SPINNER__LARGE, C_SPINNER__SMALL]);
-      element.classes.add(C_SPINNER__MEDIUM);
+      spinner.classes.removeAll([C_SPINNER__LARGE, C_SPINNER__SMALL]);
+      spinner.classes.add(C_SPINNER__MEDIUM);
     }
   }
   void set small (bool newValue) {
     if (newValue) {
-      element.classes.removeAll([C_SPINNER__MEDIUM, C_SPINNER__LARGE]);
-      element.classes.add(C_SPINNER__SMALL);
+      spinner.classes.removeAll([C_SPINNER__MEDIUM, C_SPINNER__LARGE]);
+      spinner.classes.add(C_SPINNER__SMALL);
     }
   }
 

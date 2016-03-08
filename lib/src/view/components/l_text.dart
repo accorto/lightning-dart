@@ -33,9 +33,17 @@ class LText {
   static const String C_TEXT_ALIGN__CENTER = "slds-text-align--center";
   /// slds-text-align--right (Any text): Aligns text right
   static const String C_TEXT_ALIGN__RIGHT = "slds-text-align--right";
-  /// slds-section-title: Interactive titles with icons that open and close sections - These are typically on a form
+  /// slds-section: Container for a collapsable sub section through interaction with the section title - These are typically on a form, if content exists to be expanded, applying the .slds-is-open will expand .slds-section__body
+  static const String C_SECTION = "slds-section";
+  /// slds-section__title: Title of a section, can contain an interactive button icon to expand/collapse sub section(s)
+  static const String C_SECTION__TITLE = "slds-section__title";
+  /// slds-section__title-action: Interactive titles with icons that open and close sections
+  static const String C_SECTION__TITLE_ACTION = "slds-section__title-action";
+  /// slds-section__content: Content of a section that can be expanded/collapse through interaction with the .slds-section__title-action
+  static const String C_SECTION__CONTENT = "slds-section__content";
+  /// slds-section-title (DEPRECATED): Interactive titles with icons that open and close sections - These are typically on a form
   static const String C_SECTION_TITLE = "slds-section-title";
-  /// slds-section-title--divider: Titles that also act as a divider - These are typically on a form
+  /// slds-section-title--divider (DEPRECATED): Titles that also act as a divider with a grey background - These are typically on a form
   static const String C_SECTION_TITLE__DIVIDER = "slds-section-title--divider";
   /// slds-type-focus (container): Creates a faux link with interactions - This is used when an actual anchor element can not be used. For example — when a heading and button are next to each other and both need the text underline
   static const String C_TYPE_FOCUS = "slds-type-focus";

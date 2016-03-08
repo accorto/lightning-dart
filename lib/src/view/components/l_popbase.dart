@@ -38,6 +38,11 @@ abstract class LPopbase
 
   bool _clickShow = false;
 
+  /// set theme
+  void set theme (String newValue) {
+    pop.classes.add(newValue);
+  }
+
   void set nubbin (String newValue) {
     pop.classes.removeAll(LPopover._NUBBINS);
     _nubbin = newValue;
@@ -103,15 +108,16 @@ abstract class LPopbase
   void _showPrep(Element target, bool showOnHover, bool showOnClick) {
     this.target = target;
     //
-    wrapper = new DivElement();
-    wrapper.style.position = "relative";
-    wrapper.style.display = "inline-block";
-    wrapper.append(target);
-    wrapper.append(pop);
+    wrapper = new DivElement()
+      ..classes.add("pop-wrapper")
+      ..style.position = "relative"
+      ..style.display = "inline-block"
+      ..append(target)
+      ..append(pop);
 
-    pop.style.float = "left";
-    pop.style.position = "absolute";
-    pop.style.textAlign = "left"; // footer is right aligned
+    pop.style
+      ..position = "absolute"
+      ..textAlign = "left"; // footer is right aligned
 
     hide();
     // trigger
@@ -139,7 +145,6 @@ abstract class LPopbase
 
   // do show
   void _show() {
-    Rectangle targetRect = target.getBoundingClientRect();
     // Contained in Modal (cuts off)
     Rectangle contentRect = null;
     Element parent = target.parent;
@@ -155,12 +160,17 @@ abstract class LPopbase
     if (popWidth != null) {
       pop.style.width = popWidth;
     } else {
-      pop.style.maxWidth = "20rem";
+      pop.style.width = "20rem";
     }
     // should calculate max required with from content
+
+    // calc position
+    pop.style
+      ..left = "0"
+      ..top = "0";
+    Rectangle targetRect = target.getBoundingClientRect();
     Rectangle elementRect = pop.getBoundingClientRect();
     //_log.fine("element ${elementRect}");
-
     const double nubHeight = 12.0;
     const double nubWidth = 12.0;
 
@@ -168,18 +178,20 @@ abstract class LPopbase
     if (LPopover._NUBBINS_BOTTOM.contains(_nubbin)) {
       double top = -(elementRect.height + nubHeight);
       pop.style.top = "${top.toInt()}px"; // negative - push up
-      num left = -(elementRect.width - targetRect.width) / 2;
       // enough room on left side?
+      num left = -(elementRect.width - targetRect.width) / 2;
       num deltaLeft = targetRect.left + left;
       if (contentRect != null)
         deltaLeft -= contentRect.left;
       if (deltaLeft > 0) { // enough room on left side
         pop.style.left = "${left.toInt()}px";
+        //_log.finer("show above center left=${left} deltaLeft=${deltaLeft} popLeft=${elementRect.left} targetLeft=${targetRect.left} contentLeft=${contentRect == null ? "-" : contentRect.left}");
       } else {
         left = elementRect.left - targetRect.left; // |- flush left
         if (contentRect != null)
           left += contentRect.left;
         pop.style.left = "${left}px";
+        //_log.fine("show above left left=${left} deltaLeft=${deltaLeft} popLeft=${elementRect.left} targetLeft=${targetRect.left} contentLeft=${contentRect == null ? "-" : contentRect.left}");
         nubbin = LPopover.C_NUBBIN__BOTTOM_LEFT;
 
         // num popLeft = (targetRect.width / 2) - left;

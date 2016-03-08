@@ -23,7 +23,6 @@ class LCard extends LComponent {
   static const String C_TILE = "slds-tile";
 
   static const String C_CARD__COMPACT = "slds-card--compact";
-  static const String C_CARD__EMPTY = "slds-card--empty";
 
 
   /// Card element

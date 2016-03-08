@@ -3,8 +3,9 @@
 Version numbers are based on the Salesforce Lightning Design System (SLDS) css Framework version numbers. 
 Intermediate Patches, Functionality improvements via +x prefix.
 
-## head
+## 1.0.0 (2015-03-__)
 
+- #21 FK Hierarchy Lookup 
 - #40 Data Graph
 - #38 Card Panel
 - #36 IE type restrictions

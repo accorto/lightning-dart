@@ -24,7 +24,7 @@ class LObjectHomeFilterLookup {
 
   /// label
   HeadingElement _h1 = new HeadingElement.h1()
-    ..classes.addAll([LText.C_TEXT_HEADING__MEDIUM, LText.C_TRUNCATE]);
+    ..classes.addAll([LPageHeader.C_PAGE_HEADER__TITLE, LText.C_TRUNCATE]);
   /// Drop down Button
   LButton _button = new LButton(new ButtonElement(), "more", null,
       icon: new LIconUtility(LIconUtility.DOWN),
@@ -131,6 +131,7 @@ class LObjectHomeFilterLookup {
   void onEditorChange(String name, String newValue, DEntry entry, var details) {
     if (details is ListItem) {
       ListItem value = (details as ListItem);
+      _h1.title = value.label;
       _h1.text = value.label;
       if (editorChange != null) // LObjectHomeFilter.onSavedQueryChange
         editorChange(name, newValue, null, null); // callback

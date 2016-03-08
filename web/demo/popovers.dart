@@ -41,14 +41,16 @@ class Popovers extends DemoFeature {
 
     pop = new LPopover()
       ..headText = "A Popbelow"
-      ..bodyText = "Some Text, tell me what to show here, so that it is not that boring";
+      ..bodyText = "Some Info Text, tell me what to show here, so that it is not that boring"
+      ..theme = LTheme.C_THEME__INFO;
     button = new LButton.neutral("btnB", "See Below");
     pop.showBelow(button);
     buttonLine.add(pop);
 
     pop = new LPopover()
       ..headText = "Right Popover"
-      ..bodyText = "Some Text, tell me what to show here, so that it is not that boring";
+      ..bodyText = "Some Warning Text, tell me what to show here, so that it is not that boring"
+      ..theme = LTheme.C_THEME__WARNING;
     button = new LButton.neutral("btnR", "See Right");
     pop.showRight(button);
     buttonLine.add(pop);
@@ -81,13 +83,15 @@ class Popovers extends DemoFeature {
     buttonLine.add(tt); // tooltip is wrapper for button
 
     tt = new LTooltip()
-      ..bodyText = "Another Below Tooltip with some info";
+      ..bodyText = "Another Below Info Tooltip with some info"
+      ..theme = LTheme.C_THEME__INFO;
     button = new LButton.neutral("btnB", "See Below");
     tt.showBelow(button);
     buttonLine.add(tt); // tooltip is wrapper for button
 
     tt = new LTooltip()
-      ..bodyText = "Another Below Tooltip with some info";
+      ..bodyText = "Another Below Warning Tooltip with some info"
+      ..theme = LTheme.C_THEME__WARNING;
     button = new LButton.neutral("btnR", "See Right");
     tt.showRight(button); // shows button
     buttonLine.add(tt);

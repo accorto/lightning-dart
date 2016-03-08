@@ -31,7 +31,7 @@ class LTooltip
    * Tooltip
    */
   LTooltip() {
-    element.append(body);
+    pop.append(body);
   }
   void set bodyText (String text) {
     body.text = text;

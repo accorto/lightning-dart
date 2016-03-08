@@ -94,29 +94,27 @@ class SvgUtil {
     } else {
       String viewBox = sym.getAttribute("viewBox"); // as text
       svgElement.setAttribute("viewBox", viewBox);
-      // find path in symbol
-      Element path = null;
-      for (var p in sym.childNodes) { // might be text (space)
-        if (p is svg.PathElement) {
-          path = p;
-          break;
-        }
-      }
-      if (path == null) {
-        svgElement.setAttribute("data-info", "NoPath ${symbolName}");
-      } else {
-        Element clone = path.clone(true);
-        // if use has title, we loose it
+      try {
+        // remove use
         if (svgElement.children.length <= 1) {
-          svgElement.children.clear(); // remove use
-          svgElement.append(clone); // add path
+          svgElement.children.clear();
         } else {
-          for (var use in svgElement.children) {
-            if (use is svg.UseElement) {
-              use.replaceWith(clone); // replace use
+          for (var ee in svgElement.children) {
+            if (ee is svg.UseElement) {
+              svgElement.children.remove(ee);
+              break;
             }
           }
         }
+        // add symbol content
+        Element clone = sym.clone(true);
+        for (var ee in clone.children) {
+          if (ee is svg.SvgElement) {
+            svgElement.append(ee);
+          }
+        }
+      } catch (error, stackTrace) {
+        _log.warning(symbolName, error, stackTrace);
       }
     }
   } // svgDirectUpdate

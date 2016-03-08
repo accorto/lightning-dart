@@ -144,7 +144,7 @@ abstract class LNotification extends LComponent {
 
   /// Close clicked - Remove Alert
   void onCloseClick(MouseEvent evt) {
-    element.remove();
+    hide();
   }
 
   /// show
@@ -152,7 +152,7 @@ abstract class LNotification extends LComponent {
     parent.append(element);
     if (autohideSeconds != null && autohideSeconds > 0) {
       new Timer(new Duration(seconds: autohideSeconds), (){
-        element.remove();
+        hide();
       });
     }
   } // show
@@ -176,9 +176,9 @@ abstract class LNotification extends LComponent {
   /**
    * Show Bottom Right in parent or window
    */
-  void showBottomRight (Element parent, {int autohideSeconds, bool onWindow:true}) {
+  void showBottomRight (Element parent, {int autohideSeconds}) {
     element.style
-      ..position = "absolute"
+      ..position = "fixed"
       ..bottom = "0"
       ..right = "0"
       ..removeProperty("top")
@@ -186,14 +186,15 @@ abstract class LNotification extends LComponent {
     showIn(parent, autohideSeconds:autohideSeconds);
 
     Rectangle thisRect = element.getBoundingClientRect();
-    int winH = window.innerHeight;
-    if (onWindow) {
+    /*  if (onWindow) {
+      int winH = window.innerHeight;
       int winScrollY = window.scrollY;
       int top = winH - thisRect.height + winScrollY - 10; // margin
       element.style
+        ..position = "absolute"
         ..top = "${top}px"
         ..removeProperty("bottom");
-    }
+    } */
     // fit onto screen
     int winW = window.innerWidth;
     if (thisRect.width > winW) {
@@ -206,7 +207,7 @@ abstract class LNotification extends LComponent {
     // print("win=${winW}x${winH} rect=${element.getBoundingClientRect()}");
   } // show
 
-  /// Hide Notification
+  /// Remove Notification
   void hide() {
     element.remove();
   }

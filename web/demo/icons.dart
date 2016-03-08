@@ -27,6 +27,7 @@ class Icons extends DemoFeature {
     div.add(new LIconSpan.standard(LIconStandard.ACCOUNT, size:LIcon.C_ICON__X_SMALL));
     div.add(new LIconSpan.custom(LIconCustom.CUSTOM_1, size:LIcon.C_ICON__X_SMALL));
     div.add(new LIconSpan.doctype(LIconDoctype.XML, size:LIcon.C_ICON__X_SMALL));
+    div.appendText(" x small");
 
     div.appendHrSmall();
     div.add(new LIconSpan.utility(LIconUtility.ANNOUNCEMENT, size:LIcon.C_ICON__SMALL));
@@ -34,6 +35,7 @@ class Icons extends DemoFeature {
     div.add(new LIconSpan.standard(LIconStandard.ACCOUNT, size:LIcon.C_ICON__SMALL));
     div.add(new LIconSpan.custom(LIconCustom.CUSTOM_1, size:LIcon.C_ICON__SMALL));
     div.add(new LIconSpan.doctype(LIconDoctype.XML, size:LIcon.C_ICON__SMALL));
+    div.appendText(" small");
 
     div.appendHrSmall();
     div.add(new LIconSpan.utility(LIconUtility.ANNOUNCEMENT));
@@ -48,6 +50,7 @@ class Icons extends DemoFeature {
     div.add(new LIconSpan.standard(LIconStandard.ACCOUNT, size:LIcon.C_ICON__LARGE));
     div.add(new LIconSpan.custom(LIconCustom.CUSTOM_1, size:LIcon.C_ICON__LARGE));
     div.add(new LIconSpan.doctype(LIconDoctype.XML, size:LIcon.C_ICON__LARGE));
+    div.appendText(" large");
 
     div.appendHrSmall();
     div.add(new LIconSpan.utility(LIconUtility.ANNOUNCEMENT, size:LIcon.C_ICON__SMALL, circle:true));
@@ -55,6 +58,7 @@ class Icons extends DemoFeature {
     div.add(new LIconSpan.standard(LIconStandard.ACCOUNT, size:LIcon.C_ICON__SMALL, circle:true));
     div.add(new LIconSpan.custom(LIconCustom.CUSTOM_1, size:LIcon.C_ICON__SMALL, circle:true));
     div.add(new LIconSpan.doctype(LIconDoctype.XML, size:LIcon.C_ICON__SMALL, circle:true));
+    div.appendText(" small");
 
     div.appendHrSmall();
     div.add(new LIconSpan.utility(LIconUtility.ANNOUNCEMENT, circle:true));

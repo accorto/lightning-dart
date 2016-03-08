@@ -18,34 +18,35 @@ typedef void ModalClose();
 class LModal
     extends LComponent {
 
-  /// slds-modal - Positions the modal to stretch to page edges | Required
+  /// slds-modal (div): Positions the modal to stretch to page edges
   static const String C_MODAL = "slds-modal";
-  /// slds-fade-in-open - Allows the modal to be visible. | Required
+  /// slds-fade-in-open (slds-modal): Allows the modal to be visible. - Apply this class to a modal with JavaScript to make it visible.
   static const String C_FADE_IN_OPEN = "slds-fade-in-open";
-  /// slds-modal--large - Widens the modal to take more horizontal space
+  /// slds-modal--large (slds-modal): Widens the modal to take more horizontal space
   static const String C_MODAL__LARGE = "slds-modal--large";
-  /// slds-modal__container - Centers and sizes the modal horizontally and confines modal within viewport height | Required
+  /// slds-modal__container (div): Centers and sizes the modal horizontally and confines modal within viewport height - This should be nested immediately inside .slds-modal with nothing else nested on the same level.
   static const String C_MODAL__CONTAINER = "slds-modal__container";
-  /// slds-modal__header - Creates the Modal Header container. | Required
+  /// slds-modal__header (div): Creates the Modal Header container. - This should be nested immediately inside .slds-modal__container as the first element.
   static const String C_MODAL__HEADER = "slds-modal__header";
-  /// slds-modal__close - Positions the close button to the top right outside of the modal. | Required
+  /// slds-modal__close (slds-button): Positions the close button to the top right outside of the modal. - Use JavaScript to make clicking this button remove the modal. This button contains a Close Action Icon.
   static const String C_MODAL__CLOSE = "slds-modal__close";
-  /// slds-modal__content - Creates the scrollable content area for the modal. | Required
+  /// slds-modal__content (div): Creates the scrollable content area for the modal. - Either .slds-modal__content or .slds-modal__menu must be used. If you’re using this class, you do not need the other. This should be nested immediately inside .slds-modal_container and immediately after .slds-modal__header.
   static const String C_MODAL__CONTENT = "slds-modal__content";
-  /// slds-modal__menu - Creates the shaded menu area for the modal. | Required
+  /// slds-modal__menu (div): Creates the shaded menu area for the modal. - Either .slds-modal__menu or .slds-modal__content must be used. If you’re using this class, you do not need the other. This should be nested immediately inside .slds-modal_container and immediately after .slds-modal__header.
   static const String C_MODAL__MENU = "slds-modal__menu";
-  /// slds-modal__footer - Creates the Modal Footer container. | Required
+  /// slds-modal__footer (div): Creates the Modal Footer container. - This should be nested immediately inside .slds-modal_container and immediately after .slds-modal__container. Nothing should follow it. Note that by default, elements will be aligned to the right.
   static const String C_MODAL__FOOTER = "slds-modal__footer";
-  /// slds-modal__footer--directional - Makes buttons inside the footer spread to both left and right.
+  /// slds-modal__footer--directional (slds-modal__footer): Makes buttons inside the footer spread to both left and right. - This is only needed when you have two buttons that indicate a back and forward navigation.
   static const String C_MODAL__FOOTER__DIRECTIONAL = "slds-modal__footer--directional";
-  /// slds-backdrop - Creates the shaded backdrop used behind the modal. | Required
+  /// slds-backdrop (div): Creates the shaded backdrop used behind the modal. - This should follow after the .slds-modal as an empty element.
   static const String C_BACKDROP = "slds-backdrop";
-  /// slds-modal-backdrop - Creates the shaded backdrop used behind the modal. | Required
-  static const String C_MODAL_BACKDROP = "slds-modal-backdrop";
-  /// slds-backdrop--open - Allows the backdrop to be visible. | Required
+  /// slds-modal-backdrop (div): Creates the shaded backdrop used behind the modal. - Deprecated
+  //static const String C_MODAL_BACKDROP = "slds-modal-backdrop";
+  /// slds-backdrop--open (slds-modal-backdrop): Allows the backdrop to be visible. - Apply this class to a modal backdrop with JavaScript to make it visible.
   static const String C_BACKDROP__OPEN = "slds-backdrop--open";
-  /// slds-modal-backdrop--open - Allows the backdrop to be visible.
-  static const String C_MODAL_BACKDROP__OPEN = "slds-modal-backdrop--open";
+  /// slds-modal-backdrop--open (slds-modal-backdrop): Allows the backdrop to be visible. - Deprecated
+  //static const String C_MODAL_BACKDROP__OPEN = "slds-modal-backdrop--open";
+
 
   /// slds-modal--prompt - Initializes Prompt style notification | Required
   static const String C_MODAL__PROMPT = "slds-modal--prompt"; // notification

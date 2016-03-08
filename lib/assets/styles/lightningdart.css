@@ -7073,7 +7073,6 @@ a.slds-button--inverse:focus {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(255, 255, 255, 0.75);
   z-index: 9200; }
   .busy-backdrop--open {
     visibility: visible;
@@ -7082,25 +7081,6 @@ a.slds-button--inverse:focus {
             transition: opacity 0.4s linear; }
 .loading {
   position: relative; }
-.loading-backdrop {
-  -webkit-transition-duration: 0.4s;
-          transition-duration: 0.4s;
-  opacity: 0;
-  visibility: hidden;
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.75);
-  z-index: 9100; }
-  .loading-backdrop--open {
-    visibility: visible;
-    opacity: 1;
-    -webkit-transition: opacity 0.4s linear;
-            transition: opacity 0.4s linear; }
 .center-center {
   height: 100%;
   display: -webkit-box;
@@ -7187,9 +7167,14 @@ a.slds-button--inverse:focus {
     .slds-input-has-prefix .slds-input__prefix.currency {
       border: none;
       background: transparent;
-      left: 0;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      left: 10px;
       height: 2.125rem;
       color: inherit; }
+      .slds-input-has-prefix .slds-input__prefix.currency select::-ms-expand {
+        display: none; }
   .slds-input-has-prefix--left .slds-input__prefix {
     left: 0.75rem; }
   .slds-input-has-prefix--left .slds-input,
