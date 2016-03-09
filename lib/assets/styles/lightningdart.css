@@ -7125,6 +7125,11 @@ a.slds-button--inverse:focus {
     fill: white; }
   .slds-button--icon-container.slds-is-selected:hover .slds-button__icon, .slds-button--icon-container.slds-is-selected:focus .slds-button__icon {
     fill: white; }
+.pop-wrapper {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  min-width: .5rem; }
 .cpanel {
   margin: 0.5rem 0.75rem; }
 .cpanel-column {

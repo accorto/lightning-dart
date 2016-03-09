@@ -34,40 +34,8 @@ class LTab
   static const String C_TABS__SCOPED__LINK = "slds-tabs--scoped__link";
   /// slds-tabs--scoped__content (div): Styles each tab content wrapper
   static const String C_TABS__SCOPED__CONTENT = "slds-tabs--scoped__content";
-  /// slds-tabs--path (div): Initializes default tabset
-  static const String C_TABS__PATH = "slds-tabs--path";
-  /// slds-tabs--path__nav (ul): Creates the container for the default tabs
-  static const String C_TABS__PATH__NAV = "slds-tabs--path__nav";
-  /// slds-tabs--path__item (li): Styles each list item as a single tab
-  static const String C_TABS__PATH__ITEM = "slds-tabs--path__item";
-  /// slds-tabs--path__link (a): Styles each <a> element in the <li>
-  static const String C_TABS__PATH__LINK = "slds-tabs--path__link";
-  /// slds-tabs--path__content (div): Styles each tab content wrapper
-  static const String C_TABS__PATH__CONTENT = "slds-tabs--path__content";
-  /// slds-tabs--path__stage (span): Contains the check mark when the stage is completed - This class is only required in the sales path tabs and is contained inside the .slds-tabs--path__link
-  static const String C_TABS__PATH__STAGE = "slds-tabs--path__stage";
-  /// slds-tabs--path__title (span): Contains the name of the stage - This class is only required in the sales path tabs and is contained inside the .slds-tabs--path__link
-  static const String C_TABS__PATH__TITLE = "slds-tabs--path__title";
-  /// slds-is-complete (slds-tabs--path__item): Creates the completed stage of the sales path
-  static const String C_IS_COMPLETE = "slds-is-complete";
-  /// slds-is-current (slds-tabs--path__item): Creates the current stage of the sales path
-  static const String C_IS_CURRENT = "slds-is-current";
-  /// slds-is-incomplete (slds-tabs--path__item): Creates the incomplete stage of the sales path
-  static const String C_IS_INCOMPLETE = "slds-is-incomplete";
-  /// slds-is-active (slds-tabs--path__item): Creates the active stage of the sales path - This class must be placed on the item programatically when the guidance section is used
-  static const String C_IS_ACTIVE = "slds-is-active";
   /// slds-tabs__item--overflow (slds-tabs__item): Styles an overflow tab item - This is used on a tab containing an overflow dropdown menu
   static const String C_TABS__ITEM__OVERFLOW = "slds-tabs__item--overflow";
-  /// slds-dropdown-trigger (slds-tabs--default__item--overflow): Initializes tab item as menu
-  static const String C_DROPDOWN_TRIGGER = "slds-dropdown-trigger";
-  /// slds-dropdown--overflow (slds-dropdown): Applies size settings on tab item menu - Only used within an overflow tab item.
-  static const String C_DROPDOWN__OVERFLOW = "slds-dropdown--overflow";
-  /// slds-active (slds-tabs__item): Applies the active state to a tab list item - Required on the <li> element that is associated with the active tab panel
-  static const String C_ACTIVE = "slds-active";
-  /// slds-show (slds-tabs__content): Shows the tab panel
-  static const String C_SHOW = "slds-show";
-  /// slds-hide (slds-tabs__content): Hide the tab panel
-  static const String C_HIDE = "slds-hide";
 
 
   static final Logger _log = new Logger("LTab");

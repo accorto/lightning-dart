@@ -24,8 +24,7 @@ class Modals extends DemoFeature {
     LModal modal = new LModal("m")
       ..setHeader("The Modal", tagLine: "You can drag me!")
       ..addContentText("Some Text to add - you can also add any components or elements")
-      ..addFooterButtons()
-      ..content.classes.add(LPadding.C_AROUND__MEDIUM);
+      ..addFooterButtons();
     LButton trigger = new LButton.neutral("x", "Click to show Modal");
     trigger.onClick.listen((MouseEvent evt){
       modal.showInComponent(div);
@@ -36,8 +35,7 @@ class Modals extends DemoFeature {
     LModal modal2 = new LModal("m2")
       ..setHeader("The Second Modal", tagLine: "You can drag me!")
       ..addContentText("Some Text to add - you can also add any components or elements")
-      ..addFooterButtons()
-      ..content.classes.add(LPadding.C_AROUND__MEDIUM);
+      ..addFooterButtons();
     LButton trigger2 = new LButton.neutral("x2", "Second Modal")
       ..classes.add(LMargin.C_TOP__MEDIUM);
     trigger2.onClick.listen((MouseEvent evt){

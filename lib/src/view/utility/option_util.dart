@@ -61,7 +61,8 @@ class OptionUtil {
   static OptionElement element(DOption option) {
     OptionElement element = new OptionElement()
       ..label = option.label
-      ..value = option.value;
+      ..value = option.value
+      ..text = option.label; // FF requires
     if (option.hasId())
       element.id = option.id;
     if (option.hasIsDefault() && option.isDefault)

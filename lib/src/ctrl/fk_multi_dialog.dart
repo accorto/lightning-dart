@@ -61,7 +61,7 @@ class FkMultiDialog {
   /// Show after setting parent values
   void show(FkMulti multi) { // assumes modal dialog
     this.multi = multi;
-    _modal.setHeader("${FkDialog.fkDialogTitle()} ${multi.label}",icon: new LIconUtility(LIconUtility.JUSTIFY_TEXT));
+    _modal.setHeader("${FkDialog.fkDialogTitle()} ${multi.label}",icon: new LIconUtility(LIconUtility.OVERFLOW));
     _modal.showInElement(AppsMain.modals);
     //
     // fill lookups

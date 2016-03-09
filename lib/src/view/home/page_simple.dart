@@ -76,7 +76,15 @@ class PageSimple
       element.parent.append(_statusElement);
     }
     updateTestMode();
+    //
+    window.onResize.listen(onWindowResize);
   } // PageSimple
+
+  /// window resize
+  void onWindowResize(Event evt) {
+    //_log.fine("onWindowResize w=${window.innerWidth} h=${window.innerHeight}");
+    _statusElement.title = "w=${window.innerWidth} h=${window.innerHeight}";
+  }
 
   /// Test Mode Update
   void updateTestMode() {
@@ -165,6 +173,7 @@ class PageSimple
     //
     _statusElement.text = (sm == null) ? "."
         : "${sm.message}; \ndetail=${sm.detail}; \ndataSuccess=${sm.dataSuccess}; \ndataDetail=${sm.dataDetail};";
+    _statusElement.title = "w=${window.innerWidth} h=${window.innerHeight}";
   } // setStatus
   /// Status Toast
   LToast _statusToast;

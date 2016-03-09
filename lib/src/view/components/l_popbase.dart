@@ -14,11 +14,6 @@ abstract class LPopbase
 
   static final Logger _log = new Logger("LPopbase");
 
-  /// css for positioning
-  //static CssStyleSheet _cssStyleSheet;
-  /// Css Rule for this
-  //CssStyleRule _cssRule;
-
   /// Popup Element
   DivElement get element {
     if (wrapper != null)
@@ -110,8 +105,6 @@ abstract class LPopbase
     //
     wrapper = new DivElement()
       ..classes.add("pop-wrapper")
-      ..style.position = "relative"
-      ..style.display = "inline-block"
       ..append(target)
       ..append(pop);
 
@@ -145,15 +138,6 @@ abstract class LPopbase
 
   // do show
   void _show() {
-    // Contained in Modal (cuts off)
-    Rectangle contentRect = null;
-    Element parent = target.parent;
-    while (parent != null && contentRect == null) {
-      if (parent.classes.contains(LModal.C_MODAL__CONTENT)) {
-        contentRect = parent.getBoundingClientRect();
-      }
-      parent = parent.parent;
-    }
     //
     pop.classes.remove(LVisibility.C_HIDE);
     // explicit width
@@ -162,90 +146,67 @@ abstract class LPopbase
     } else {
       pop.style.width = "20rem";
     }
-    // should calculate max required with from content
+    // Contained in Modal (cuts off)
+    Rectangle contentRect = null;
+    Element parent = target.parent;
+    while (parent != null && contentRect == null) {
+      if (parent.classes.contains(LModal.C_MODAL__CONTENT)) {
+        contentRect = parent.getBoundingClientRect(); // popover (not tooltip)
+      }
+      parent = parent.parent;
+    }
 
     // calc position
     pop.style
       ..left = "0"
       ..top = "0";
     Rectangle targetRect = target.getBoundingClientRect();
-    Rectangle elementRect = pop.getBoundingClientRect();
+    Rectangle popRect = pop.getBoundingClientRect();
     //_log.fine("element ${elementRect}");
     const double nubHeight = 12.0;
     const double nubWidth = 12.0;
 
     // show above
     if (LPopover._NUBBINS_BOTTOM.contains(_nubbin)) {
-      double top = -(elementRect.height + nubHeight);
+      double top = -(popRect.height + nubHeight);
       pop.style.top = "${top.toInt()}px"; // negative - push up
       // enough room on left side?
-      num left = -(elementRect.width - targetRect.width) / 2;
+      num left = -(popRect.width - targetRect.width) / 2;
       num deltaLeft = targetRect.left + left;
       if (contentRect != null)
         deltaLeft -= contentRect.left;
       if (deltaLeft > 0) { // enough room on left side
         pop.style.left = "${left.toInt()}px";
-        //_log.finer("show above center left=${left} deltaLeft=${deltaLeft} popLeft=${elementRect.left} targetLeft=${targetRect.left} contentLeft=${contentRect == null ? "-" : contentRect.left}");
+        //_log.finer("show above center left=${left} deltaLeft=${deltaLeft} popLeft=${popRect.left} targetLeft=${targetRect.left} contentLeft=${contentRect == null ? "-" : contentRect.left}");
       } else {
-        left = elementRect.left - targetRect.left; // |- flush left
-        if (contentRect != null)
-          left += contentRect.left;
+        left = popRect.left - targetRect.left; // |- flush left
         pop.style.left = "${left}px";
-        //_log.fine("show above left left=${left} deltaLeft=${deltaLeft} popLeft=${elementRect.left} targetLeft=${targetRect.left} contentLeft=${contentRect == null ? "-" : contentRect.left}");
+        //_log.fine("show above left left=${left} deltaLeft=${deltaLeft} popLeft=${popRect.left} targetLeft=${targetRect.left} contentLeft=${contentRect == null ? "-" : contentRect.left}");
         nubbin = LPopover.C_NUBBIN__BOTTOM_LEFT;
-
-        // num popLeft = (targetRect.width / 2) - left;
-        // set pseudo before/after element css left
-        //_setCssPseudoClass(popLeft);
       }
     }
     // show below
     else if (LPopover._NUBBINS_TOP.contains(_nubbin)) {
       double top = targetRect.height + nubHeight;
       pop.style.top = "${top.toInt()}px";
-      double left = -(elementRect.width - targetRect.width) / 2;
+      double left = -(popRect.width - targetRect.width) / 2;
       pop.style.left = "${left.toInt()}px";
     }
     // show right
     else if (LPopover._NUBBINS_LEFT.contains(_nubbin)) {
-      double top = -(elementRect.height - targetRect.height) / 2;
+      double top = -(popRect.height - targetRect.height) / 2;
       pop.style.top = "${top.toInt()}px";
       double left = targetRect.width + nubWidth;
       pop.style.left = "${left.toInt()}px";
     }
     // show left
     else if (LPopover._NUBBINS_RIGHT.contains(_nubbin)) {
-      double top = -(elementRect.height - targetRect.height) / 2;
+      double top = -(popRect.height - targetRect.height) / 2;
       pop.style.top = "${top.toInt()}px";
-      double left = - (elementRect.width + nubWidth);
+      double left = - (popRect.width + nubWidth);
       pop.style.left = "${left.toInt()}px";
     }
   } // show
-
-  /* set css for pseudo classes
-  void _setCssPseudoClass(num popLeft) {
-    //String id = _content.id;
-    //if (id == null || id.isEmpty) {
-    //  id = LComponent.createId(null, null, autoPrefixId: "pop");
-    //  _content.id = id;
-    //}
-    // List<CssRule> rulesB = window.getMatchedCssRules(_content, ':before');
-    // modifies css class - need to create new rule
-
-    //if (_cssRule == null) {
-    //  if (_cssStyleSheet == null) {
-    //    StyleElement se = new StyleElement();
-    //    document.head.append(se);
-    //    _cssStyleSheet = se.sheet as CssStyleSheet;
-    //  }
-    //  _cssStyleSheet.addRule("#${id}:before, #${id}:after", "left: ${popLeft}px");
-    //  int length = _cssStyleSheet.cssRules.length;
-    //  _cssRule = _cssStyleSheet.cssRules[length - 1];
-    //} else {
-    //  _cssRule.style.left = "${popLeft}px";
-    //}
-  } // setCssPseudoClass */
-
 
   /// Showing
   bool get show => !pop.classes.contains(LVisibility.C_HIDE);

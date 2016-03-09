@@ -327,7 +327,7 @@ class LFormElement {
     _help = newValue;
     if (_helpTip == null && _help != null && _help.isNotEmpty) {
       LButton _helpButton = new LButton.iconBare("${editor.name}-help",
-        new LIconUtility(LIconUtility.INFO), "Help")
+        new LIconUtility(LIconUtility.INFO), "")
         ..classes.add(LMargin.C_RIGHT__XX_SMALL)
         ..typeButton = true;
       _helpButton.tabIndex = -1;

@@ -186,7 +186,7 @@ class UiUtil {
   }
 
   /// add existing column to UI
-  void addColumn(DColumn col,
+  UIPanelColumn addColumn(DColumn col,
       {String displayLogic,
       bool mandatory,
       bool readOnly,
@@ -228,6 +228,8 @@ class UiUtil {
     if (labelGrid != null)
       gc.label = labelGrid;
     ui.gridColumnList.add(gc);
+    //
+    return pc;
   } // addColumn
 
   /// create/clone panel column
@@ -254,7 +256,7 @@ class UiUtil {
 
 
   /// add grid/panel column if missing
-  void addIfMissing(String columnName,
+  UIPanelColumn addIfMissing(String columnName,
       {bool mandatory,
       bool readOnly,
       String label,
@@ -285,7 +287,7 @@ class UiUtil {
         if (col != null)
           col.dataType = overwriteDataType;
       }
-      return; // found it
+      return pc; // found it
     }
 
     // find column + create
@@ -294,7 +296,7 @@ class UiUtil {
       if (overwriteDataType != null) {
         col.dataType = overwriteDataType;
       }
-      addColumn(col,
+      return addColumn(col,
           mandatory: mandatory,
           readOnly: readOnly,
           label: label,
@@ -302,9 +304,9 @@ class UiUtil {
           isAlternativeDisplay: isAlternativeDisplay,
           width: width,
           addColToTable: false);
-      return;
     }
     _log.warning("${ui.name} addIfMissing NotFound ${columnName}");
+    return null;
   } // addIfMissing
 
   /// Add Query Column

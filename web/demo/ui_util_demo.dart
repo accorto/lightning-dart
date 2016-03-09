@@ -21,10 +21,10 @@ class UiUtilDemo extends UiUtil {
 
 
   /// add column
-  void addColumn(DColumn col, {List<String> examples, String displayLogic,
+  UIPanelColumn addColumn(DColumn col, {List<String> examples, String displayLogic,
       bool mandatory, bool readOnly, String label, String labelGrid,
       bool isAlternativeDisplay, int width, bool addColToTable:true}) {
-    super.addColumn(col, displayLogic:displayLogic, mandatory:mandatory,
+    UIPanelColumn pc = super.addColumn(col, displayLogic:displayLogic, mandatory:mandatory,
         isAlternativeDisplay:isAlternativeDisplay, width:width, addColToTable:addColToTable);
 
     // -- data
@@ -39,6 +39,7 @@ class UiUtilDemo extends UiUtil {
         record.entryList.add(entry);
       }
     }
+    return pc;
   } // addColumn
 
 

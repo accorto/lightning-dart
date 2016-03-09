@@ -124,7 +124,7 @@ class LModal
   final DivElement header = new DivElement()
     ..classes.add(C_MODAL__HEADER);
   final CDiv content = new CDiv()
-    ..classes.add(C_MODAL__CONTENT);
+    ..classes.addAll([C_MODAL__CONTENT, LPadding.C_AROUND__MEDIUM]);
   final DivElement footer = new DivElement()
     ..classes.add(C_MODAL__FOOTER);
   /// The backdrop

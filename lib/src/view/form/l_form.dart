@@ -397,15 +397,15 @@ class LForm
   /// Error Indicator
   LPopover addErrorIndicator() {
     if (_errorBtn == null) {
-      _errorBtn = new LButton.iconBare("formError",
-          new LIconUtility(LIconUtility.ERROR), lFormError(), idPrefix: id);
-      _errorBtn.icon.classes.add(LText.C_TEXT_ERROR);
+      _errorBtn = new LButton.iconContainer("formError",
+          new LIconUtility(LIconUtility.WARNING, size: LIcon.C_ICON__SMALL), lFormError(), idPrefix: id);
+      _errorBtn.icon.classes.add(LText.C_TEXT_WARNING);
       _errorBtn.classes.add(LVisibility.C_HIDE); // button hide
       //
       _errorPop = new LPopover()
         ..headText = lFormError();
       _errorPop.showAbove(_errorBtn, showOnClick:true, showOnHover:true);
-      _errorPop.wrapper.classes.add(LMargin.C_HORIZONTAL__X_SMALL);
+      //_errorPop.wrapper.classes.add(LMargin.C_HORIZONTAL__X_SMALL);
       //
       if (buttonDiv == null)
         add(_errorPop);

@@ -11,7 +11,7 @@ class Processes extends DemoFeature {
   Processes() : super ("process", "Process",
       sldsStatus: DemoFeature.SLDS_PROTOTYPE,
       devStatus: DemoFeature.STATUS_PARTIAL,
-      hints: [],
+      hints: ["API like Select"],
       issues: [],
       plans: ["Coaching, Wizard"]);
 
@@ -26,12 +26,10 @@ class Processes extends DemoFeature {
     options.add(OptionUtil.option("closed", "Closed"));
     // Quick + easy
     LPath path = new LPath("path")
-      ..label = "Sales Path";
+      ..label = "Sales Path (stand alone)";
     path.dOptionList = options;
-    //path.element.classes.add(LMargin.C_HORIZONTAL__LARGE);
-    //div.append(path.element);
     div.append(new DivElement()
-      ..classes.add(LMargin.C_HORIZONTAL__LARGE)
+      ..classes.add(LMargin.C_HORIZONTAL__SMALL)
       ..style.width = "300px"
       ..append(path.element));
 
@@ -39,7 +37,7 @@ class Processes extends DemoFeature {
     div.appendHR();
     DColumn column = new DColumn()
       ..name = "path"
-      ..label = "Sales Path"
+      ..label = "Sales Path (in Form)"
       ..dataType = DataType.PICK
       ..pickValueList.addAll(options);
     DTable table = new DTable()

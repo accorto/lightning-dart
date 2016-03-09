@@ -15,7 +15,7 @@ class FkMulti
 
   static final Logger _log = new Logger("FkMulti");
 
-  final LIcon _icon = new LIconUtility(LIconUtility.JUSTIFY_TEXT);
+  final LIcon _icon = new LIconUtility(LIconUtility.OVERFLOW);
 
   /// Multi FK Lookup
   FkMulti.from(DataColumn dataColumn,

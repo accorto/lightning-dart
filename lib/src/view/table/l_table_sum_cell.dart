@@ -41,7 +41,8 @@ class LTableSumCell
       ..appendText(value);
 
     // pop content
-    LPopover pop = new LPopover();
+    LPopover pop = new LPopover()
+      ..popWidth = "10rem";
     pop.headText = statCalc.column.label;
     DListUtil info = _info();
     pop.body.append(info.element);

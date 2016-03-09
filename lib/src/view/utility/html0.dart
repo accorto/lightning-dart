@@ -86,6 +86,8 @@ class Html0 {
   static const String ROLE_GRID = "grid";
   /// Aria Attribute role Value
   static const String ROLE_GRIDCELL = "gridcell";
+  /// Aria Attribute role Value
+  static const String ROLE_APPLICATION = "application";
 
 
   /// Attribute Aria Labelled By (id) https://www.w3.org/TR/wai-aria/states_and_properties#aria-labelledby
