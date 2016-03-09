@@ -76,6 +76,7 @@ part 'src/view/components/l_picklist_multi.dart';
 part 'src/view/components/l_pill.dart';
 part 'src/view/components/l_popbase.dart';
 part 'src/view/components/l_popover.dart';
+part 'src/view/components/l_process.dart';
 part 'src/view/components/l_scrollable.dart';
 part 'src/view/components/l_spinner.dart';
 part 'src/view/components/l_tab.dart';
@@ -86,6 +87,7 @@ part 'src/view/components/l_tile_generic.dart';
 part 'src/view/components/l_tooltip.dart';
 part 'src/view/components/l_utilities.dart';
 part 'src/view/components/l_visibility.dart';
+part 'src/view/components/l_wizard.dart';
 part 'src/view/components/list_item.dart';
 
 part 'src/view/cpanel/card_panel.dart';
@@ -168,7 +170,7 @@ part 'src/view/utility/svg_util.dart';
 class LightningDart {
 
   /// SLDS Version + rel
-  static const VERSION = "v1.0.0_pre";
+  static const VERSION = "v1.0.0";
   /** Timestamp */
   static String devTimestamp = "-";
 

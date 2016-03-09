@@ -1,6 +1,6 @@
 name: lightning
 description: Lightning Dart UI Components based on Salesforce Lightning Design System
-version: 0.12.1
+version: 1.0.0
 author: Accorto Lightning <lightning@accorto.com>
 homepage: http://lightningdart.com
 documentation:
