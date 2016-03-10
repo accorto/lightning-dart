@@ -46,7 +46,7 @@ class PreferenceLocal
 
   @override
   Future<bool> open() {
-    var completer = new Completer();
+    var completer = new Completer<bool>();
     _log.finer("open ${dbName}.${storeName} local=${_map is Storage}");
     _isOpen = true;
     completer.complete(true);
@@ -91,7 +91,7 @@ class PreferenceLocal
 
   @override
   Future<Map<String,String>> _getMap() {
-    var completer = new Completer();
+    var completer = new Completer<Map<String, String>>();
     Map<String, String> mm = new Map<String, String>();
     _map.forEach((String key, String value){
       String plainKey = _keyFrom(key);
@@ -104,7 +104,7 @@ class PreferenceLocal
 
   @override
   Future<Map<String, String>> _getMapList(Iterable<String> keys) {
-    var completer = new Completer();
+    var completer = new Completer<Map<String, String>>();
     Map<String, String> mm = new Map<String, String>();
     for (String key in keys) {
       mm[key] = _map[_keyTo(key)];

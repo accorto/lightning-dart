@@ -195,7 +195,7 @@ class LPicklist
     if (details == null) {
       _setValue(null);
     } else if (details is ListItem) {
-      _setValue(details as ListItem);
+      _setValue(details); // as ListItem);
     }
     if (!_settingValue && editorChange != null) {  // this is the actual editor
       editorChange(name, newValue, entry, details);
@@ -209,6 +209,11 @@ class LPicklist
     _defaultValue = newValue;
   }
   String _defaultValue;
+
+  /// if supported, set value by synonym (any entity value)
+  bool setValueSynonym (String newValue) {
+    return _dropdown.setValueSynonym(newValue);
+  } // setValueSynonym
 
 
   /// base editor methods

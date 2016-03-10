@@ -21,7 +21,7 @@ class LLookupTimezone
 
 
   /// Search Icon
-  final LIcon icon = new LIconUtility(LIconUtility.LOCATION)
+  LIcon get icon => new LIconUtility(LIconUtility.LOCATION)
     ..title = lLookupTimezoneDefault();
 
   DivElement _dock = new DivElement()

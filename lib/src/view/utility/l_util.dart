@@ -132,7 +132,7 @@ class LUtil {
   }
 
   /// convert [data] map to json string
-  static String toJsonString(Map<String,String> data) {
+  static String toJsonString(Map<String,dynamic> data) {
     StringBuffer sb = new StringBuffer();
     String sep = "{";
     data.forEach((K,V){

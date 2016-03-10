@@ -71,13 +71,15 @@ class LBreadcrumb extends LComponent {
     LIElement li = null;
     int count = 0;
     List<LIElement> toremove = new List<LIElement>();
-    for (LIElement ee in _list.children) {
-      if (count == level) {
-        li = ee;
-      } else if (removeKinds && count > level) {
-        toremove.add(ee);
+    for (Element ee in _list.children) {
+      if (ee is LIElement) {
+        if (count == level) {
+          li = ee;
+        } else if (removeKinds && count > level) {
+          toremove.add(ee);
+        }
+        count++;
       }
-      count++;
     }
     // remove
     for (LIElement ee in toremove)

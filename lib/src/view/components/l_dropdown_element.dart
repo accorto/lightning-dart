@@ -312,6 +312,23 @@ class LDropdownElement
     return null;
   } // render
 
+
+  /// if supported, set value by synonym (any entity value)
+  bool setValueSynonym (String newValue) {
+    if (newValue == null || newValue.isEmpty) {
+      value = newValue;
+      return true;
+    }
+    for (LDropdownItem item in _dropdownItemList) {
+      if (OptionUtil.isSynonym(item.option, newValue)) {
+        value = item.value;
+        return true;
+      }
+    }
+    return false;
+  } // setValueSynonym
+
+
   String toString() {
     return "DropdownElement[${name} #${_dropdownItemList.length}]";
   }

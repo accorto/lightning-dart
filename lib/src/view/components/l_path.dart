@@ -97,21 +97,23 @@ class LPath
   void set value (String newValue) {
     fixWidth();
     bool found = false;
-    for (LPathItem item in _itemList) {
-      if (item.value == newValue) {
-        item.stage = LPathItemStage.CURRENT;
-        item.active = false;
-        found = true;
-        if (!item.optionDisplayed) {
-          item.optionDisplayed = true; // override to display
-          rebuildPath();
+    for (LProcessItem item in _itemList) {
+      if (item is LPathItem) {
+        if (item.value == newValue) {
+          item.stage = LPathItemStage.CURRENT;
+          item.active = false;
+          found = true;
+          if (!item.optionDisplayed) {
+            item.optionDisplayed = true; // override to display
+            rebuildPath();
+          }
+        } else if (found) {
+          item.stage = LPathItemStage.INCOMPLETE;
+          item.active = setActive;
+        } else {
+          item.stage = LPathItemStage.COMPLETE;
+          item.active = false;
         }
-      } else if (found) {
-        item.stage = LPathItemStage.INCOMPLETE;
-        item.active = setActive;
-      } else {
-        item.stage = LPathItemStage.COMPLETE;
-        item.active = false;
       }
     }
     //
@@ -119,8 +121,10 @@ class LPath
       _value = newValue;
     } else {
       _value = null;
-      for (LPathItem item in _itemList) {
-        item.stage = LPathItemStage.INCOMPLETE;
+      for (LProcessItem item in _itemList) {
+        if (item is LPathItem) {
+          item.stage = LPathItemStage.INCOMPLETE;
+        }
       }
     }
   } // set value
@@ -150,7 +154,7 @@ class LPath
     if (newValue == null || newValue.isEmpty) {
       return "";
     }
-    for (LPathItem item in _itemList) {
+    for (LProcessItem item in _itemList) {
       if (item.value == newValue) {
         return item.label;
       }
@@ -189,7 +193,7 @@ class LPath
   /// rebuild path ul > li
   void rebuildPath() {
     _nav.children.clear();
-    for (LPathItem item in _itemList) {
+    for (LProcessItem item in _itemList) {
       if (item.optionDisplayed) {
         _nav.append(item.element);
       }

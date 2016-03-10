@@ -74,20 +74,24 @@ class LInputFile extends LInput {
       File file = input.files.first;
       var reader = new FileReader();
       reader.onLoad.listen((e) {
-        List<int> result = reader.result; // readAsArrayBuffer()
-        // new ImageElement(src: reader.result):
-        double size = file.size / 1024;
-        String info = "${file.name} ${size.toStringAsFixed(1)}k";
-        _log.info("onInputChange ${info}");
-        hint = info;
-        if (data != null) {
-          data.record.attachmentList.clear();
-          data.record.attachmentNameList.clear();
-          data.record.attachmentList.add(result);
-          data.record.attachmentNameList.add(file.name);
+        Object resultObject = reader.result;
+        if (resultObject is List<int>) {
+          List<int> result = resultObject;
+          double size = file.size / 1024;
+          String info = "${file.name} ${size.toStringAsFixed(1)}k";
+          _log.info("onInputChange ${info}");
+          hint = info;
+          if (data != null) {
+            data.record.attachmentList.clear();
+            data.record.attachmentNameList.clear();
+            data.record.attachmentList.add(result);
+            data.record.attachmentNameList.add(file.name);
+          }
+          if (inputFileResult != null)
+            inputFileResult(result, file.name, file.size);
+        } else {
+          _log.warning("onInputChange ${resultObject}");
         }
-        if (inputFileResult != null)
-          inputFileResult(result, file.name, file.size);
       });
       // reader.readAsDataUrl(file);
       reader.readAsArrayBuffer(file);

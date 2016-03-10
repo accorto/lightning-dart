@@ -37,7 +37,7 @@ class PreferenceSQL
       return new Future.error(
           new UnsupportedError('WebSQL is not supported'));
     }
-    var completer = new Completer();
+    var completer = new Completer<bool>();
     _db = window.openDatabase(dbName, version, dbName, estimatedSize);
     _log.finer("open ${dbName}.${storeName}");
     _initDb(completer);
@@ -107,7 +107,7 @@ class PreferenceSQL
 
   @override
   Future<Map<String,String>> _getMap() {
-    var completer = new Completer();
+    var completer = new Completer<Map<String, String>>();
     var sql = 'SELECT id,value FROM $storeName';
 
     _db.transaction((txn) {
@@ -128,7 +128,7 @@ class PreferenceSQL
 
   @override
   Future<Map<String, String>> _getMapList(Iterable<String> keys) {
-    var completer = new Completer();
+    var completer = new Completer<Map<String, String>>();
     var sql = 'SELECT id,value FROM $storeName';
 
     _db.transaction((txn) {

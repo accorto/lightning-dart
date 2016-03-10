@@ -42,6 +42,13 @@ class ListItem
     if (!option.isActive)
       this.disabled = true;
     //
+    if (option.hasIconImage()) {
+      if (rightIcon == null) {
+        rightIcon = LIcon.create(option.iconImage);
+      } else if (leftIcon == null) { // used for select
+        leftIcon = LIcon.create(option.iconImage);
+      }
+    }
     this.leftIcon = leftIcon;
     this.rightIcon = rightIcon; // rebuilds
   }

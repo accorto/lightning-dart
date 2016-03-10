@@ -502,7 +502,7 @@ class LTableRow
   } // onRecordChange
 
   /// Editor Focused - close other editor dropdowns
-  void onEditorFocus(FocusEvent evt) {
+  void onEditorFocus(Event evt) {
     String id = "";
     if (evt != null) {
       Element target = evt.target;

@@ -55,7 +55,7 @@ class LWizard
   /// set value
   void set value (String newValue) {
     bool found = false;
-    for (LWizardItem item in _itemList) {
+    for (LProcessItem item in _itemList) {
       item.active = false;
       if (item.value == newValue) {
         item.active = true;
@@ -66,7 +66,7 @@ class LWizard
     if (found) {
       _value = newValue;
       int active = 0;
-      for (LWizardItem item in _itemList) {
+      for (LProcessItem item in _itemList) {
         active++;
         if (item.active) {
           break;
@@ -112,7 +112,7 @@ class LWizard
   /// rebuild path ul > li
   void rebuildPath() {
     _nav.children.clear();
-    for (LWizardItem item in _itemList) {
+    for (LProcessItem item in _itemList) {
       if (item.optionDisplayed) {
         _nav.append(item.element);
       }

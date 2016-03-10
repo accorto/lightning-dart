@@ -54,8 +54,17 @@ class LButtonGroup extends LComponent {
     element.id = newValue;
   }
 
-  /// add and attach button
-  void add(LButton button, {bool append: true}) {
+  /// add component
+  void add(LComponent component) {
+    if (component is LButton) {
+      addButton(component);
+    } else {
+      super.add(component);
+    }
+  }
+
+  /// add and append button
+  void addButton(LButton button, {bool append:true}) {
     button.classes.add(inverse ? LButton.C_BUTTON__INVERSE : LButton.C_BUTTON__NEUTRAL);
     _buttonList.add(button);
     if (append)

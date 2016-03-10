@@ -127,7 +127,7 @@ abstract class PreferenceStorage {
     _checkOpen();
     return _save(key, value);
   }
-  Future _save(String key, String value);
+  Future<String> _save(String key, String value);
 
   /// Returns a Future with the value or null for a [key]
   Future<String> dbGet(String key) {

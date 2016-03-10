@@ -127,5 +127,5 @@ class SvgUtil {
 class SvgUtilDirect {
   final svg.SvgSvgElement svgElement;
   final String symbolName;
-  SvgUtilDirect(svg.SvgElement this.svgElement, String this.symbolName);
+  SvgUtilDirect(svg.SvgSvgElement this.svgElement, String this.symbolName);
 }

@@ -290,7 +290,7 @@ class LDropdown
   /// Editor Change callback
   void onEditorChange(String name, String newValue, DEntry ignored, var details) {
     if (details is ListItem) {
-      _setValue(details as ListItem);
+      _setValue(details); // as ListItem);
     }
     if (editorChange != null) // if this were an EditorI
       editorChange(name, newValue, ignored, details);

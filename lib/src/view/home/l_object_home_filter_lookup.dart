@@ -130,7 +130,7 @@ class LObjectHomeFilterLookup {
    */
   void onEditorChange(String name, String newValue, DEntry entry, var details) {
     if (details is ListItem) {
-      ListItem value = (details as ListItem);
+      ListItem value = details; // as ListItem);
       _h1.title = value.label;
       _h1.text = value.label;
       if (editorChange != null) // LObjectHomeFilter.onSavedQueryChange

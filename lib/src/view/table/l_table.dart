@@ -425,29 +425,28 @@ class LTable
    * Add Table Head Row
    * for responsive - use row.addHeaderCell to add name-label info
    */
-  LTableHeaderRow addHeadRow(bool enableSort, {bool primary:true, LTableHeaderRow row}) {
-    if (primary) {
-      if (row == null) {
-        row = new LTableHeaderRow(this, createHeadRow(),
-            headRowIndex,
-            LText.C_TEXT_HEADING__LABEL,
-            enableSort ? onTableSortClicked : null,
-            tableActions);
-        if (rowSelect && _theadRows.isEmpty) {
-          row.selectCb.onClick.listen((MouseEvent evt) {
-            selectAll(row.selectCb.checked);
-          });
-        }
+  LTableHeaderRow addHeadRow(bool enableSort, {LTableHeaderRow row}) {
+    if (row == null) {
+      row = new LTableHeaderRow(this, createHeadRow(),
+          headRowIndex,
+          LText.C_TEXT_HEADING__LABEL,
+          enableSort ? onTableSortClicked : null,
+          tableActions);
+      if (rowSelect && _theadRows.isEmpty) {
+        row.selectCb.onClick.listen((MouseEvent evt) {
+          selectAll(row.selectCb.checked);
+        });
       }
-      _headerRow = row;
-    } else if (row == null) {
+    }
+    _headerRow = row;
+    /* } else if (row == null) {
       row = new LTableRow(this, createHeadRow(),
           headRowIndex,
           null, // rowValue
           LText.C_TEXT_HEADING__LABEL,
           LTableRow.TYPE_HEAD,
           null);
-    }
+    } */
     row.editMode = _editMode;
     _theadRows.add(row);
     // add urv

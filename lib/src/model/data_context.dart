@@ -306,7 +306,7 @@ class DataContext {
    * Create [theRecord] as String Map
    */
   static Map<String,String> asStringMap(DRecord record) {
-    Map<String,String> map = new Map<String,dynamic>();
+    Map<String,String> map = new Map<String,String>();
     if (record == null || record.entryList.isEmpty) {
       return map;
     }
@@ -576,7 +576,7 @@ class DataContext {
    */
   static JsObject _getJsValueOf(final DataRecord data, final String logic,
       {bool asStringValues:false}) {
-    Map<String,Object> map = new Map<String,dynamic>();
+    Map<String,dynamic> map = new Map<String,dynamic>();
     DRecord record = data.record;
     if (record == null || record.entryList.isEmpty) {
       return new JsObject.jsify(map);

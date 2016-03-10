@@ -95,7 +95,17 @@ class OptionUtil {
     return one.label.compareTo(two.label);
   }
 
-  /// Get [table] Column name/label list
+  /// is the newValue a synonym of the option
+  static bool isSynonym(DOption option, String newValue) {
+    if (option == null || newValue == null || newValue.isEmpty)
+      return false;
+    if (option.value == newValue || option.label == newValue || option.id == newValue)
+      return true;
+
+    return false;
+  } // isSynonym
+
+  /// Get sorted [table] Column name/label list
   static List<DOption> columnOptions(DTable table) {
     if (table == null)
       return null;
@@ -104,10 +114,11 @@ class OptionUtil {
     }
     _lastTableName = table.name;
     _lastColumnList = new List<DOption>();
-    for (DColumn col in table.columnList) {
+    for (DColumn column in table.columnList) {
       DOption op = new DOption()
-          ..value = col.name
-          ..label = col.label;
+          ..value = column.name
+          ..label = column.label
+          ..iconImage = DataTypeUtil.getIconImage(column.dataType);
       _lastColumnList.add(op);
     }
     _lastColumnList.sort(compareLabel);

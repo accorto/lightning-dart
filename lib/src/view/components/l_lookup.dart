@@ -59,7 +59,7 @@ class LLookup
   final InputElement input = new InputElement(type: EditorI.TYPE_TEXT);
 
   /// Search Icon
-  final LIcon icon = new LIconUtility(LIconUtility.SEARCH);
+  LIcon get icon => new LIconUtility(LIconUtility.SEARCH);
 
   /// Lookup form + menu
   final DivElement _lookupMenu = new DivElement()
@@ -289,9 +289,35 @@ class LLookup
     return KeyValueMap.keyNotFound(newValue);
   } // render
 
-  String get defaultValue => null; // ignore
+  String get defaultValue => _defaultValue;
   void set defaultValue (String newValue) {
+    _defaultValue = newValue;
   }
+  String _defaultValue;
+
+  /// if supported, set value by synonym (any entity value)
+  bool setValueSynonym (String newValue) {
+    if (newValue == null || newValue.isEmpty) {
+      value = newValue;
+      return true;
+    }
+    for (LLookupItem item in _lookupItemList) {
+      if (OptionUtil.isSynonym(item.option, newValue)) {
+        value = item.value;
+        return true;
+      }
+    }
+    return false;
+  } // setValueSynonym
+
+
+  /// allows value to set by synonym (alternative representations)
+  bool get hasValueSynonym => true;
+  /// if supported, set value by synonym (alternative representations)
+  void set valueSynonym (String newValue) {
+
+  } // setValueSynonym
+
 
   bool get required => input.required;
   void set required (bool newValue) {

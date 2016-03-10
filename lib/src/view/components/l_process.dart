@@ -119,7 +119,7 @@ abstract class LProcess
   /// Get options
   List<OptionElement> get options {
     List<OptionElement> retValue = new List<OptionElement>();
-    for (LPathItem item in _itemList) {
+    for (LProcessItem item in _itemList) {
       SelectOption so = item.asSelectOption();
       retValue.add(so.asOptionElement());
     }
@@ -148,7 +148,7 @@ abstract class LProcess
   /// get updated Option list
   List<SelectOption> get selectOptionList {
     List<SelectOption> retValue = new List<SelectOption>();
-    for (LPathItem item in _itemList) {
+    for (LProcessItem item in _itemList) {
       retValue.add(item.asSelectOption());
     }
     return retValue;

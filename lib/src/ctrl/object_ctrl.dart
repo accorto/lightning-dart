@@ -151,7 +151,7 @@ class ObjectCtrl
 
   void onFilterDeleteConfirmed(String value, DataRecord data, DEntry entry, var actionVar) {
     if (value == AppsAction.YES && actionVar is SavedQuery) {
-      SavedQuery query = actionVar as SavedQuery;
+      SavedQuery query = actionVar; // as SavedQuery;
       _log.config("onFilterDeleteConfirmed ${tableName} ${value} ${query.name}");
     }
   }

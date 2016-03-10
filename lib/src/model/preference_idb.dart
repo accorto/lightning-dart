@@ -102,7 +102,7 @@ class PreferenceIDB
 
   @override
   Future<Map<String, String>> _getMap() {
-    var completer = new Completer();
+    var completer = new Completer<Map<String, String>>();
     var trans = _db.transaction(storeName, 'readonly');
     var store = trans.objectStore(storeName);
     // Get everything in the store.
@@ -121,7 +121,7 @@ class PreferenceIDB
 
   @override
   Future<Map<String, String>> _getMapList(Iterable<String> keys) {
-    var completer = new Completer();
+    var completer = new Completer<Map<String, String>>();
     var trans = _db.transaction(storeName, 'readonly');
     var store = trans.objectStore(storeName);
     // Get everything in the store.
