@@ -45,7 +45,7 @@ class PreferenceIDB
         // All instances must be closed - otherwise blocked!
         _log.finest("open ${dbName}.${storeName} upgrade version=${db.version}");
         int version = db.version;
-        Future<Database> fdb = window.indexedDB.open(dbName,
+        Future<Database> fdb = window.indexedDB.open(dbName, // strong-mode issue
             version: version + 1,
             onUpgradeNeeded: (VersionChangeEvent e) {
               _log.finest("open ${dbName}.${storeName} upgarding to ${version+1}");
@@ -75,7 +75,7 @@ class PreferenceIDB
 
   @override
   Future<String> _save(String key, String value) {
-    return _doCommand((ObjectStore store) {
+    return _doCommand((ObjectStore store) { // strong-mode issue
       //_log.finest("IDB ${dbName}.${storeName} save ${key}=${value}");
       return store.put(value, key);
     });
@@ -94,7 +94,7 @@ class PreferenceIDB
 
   @override
   Future<String> _get(String key) {
-    return _doCommand((ObjectStore store) {
+    return _doCommand((ObjectStore store) { // strong-mode issue
       // _log.fine("IDB ${dbName}.${storeName} get ${key}");
       return store.getObject(key);
     }, 'readonly');
