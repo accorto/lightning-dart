@@ -404,13 +404,7 @@ class RequestResponse {
         window.location.reload();
       });
     }
-    Element parent = null;
-    if (AppsMain.instance != null) {
-      parent = AppsMain.modals;
-    } else {
-      parent = document.body;
-    }
-    modal.showInElement(parent);
+    modal.showModal();
   } // _showModal
 
 

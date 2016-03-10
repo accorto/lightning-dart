@@ -25,6 +25,7 @@ class AppsAction {
   /// reset/undo
   static const String RESET = "reset";
   static const String REFRESH = "refresh";
+  static const String IMPORT = "import";
 
   static const String LAYOUT = "layout";
   static const String INFO = "info";
@@ -71,6 +72,11 @@ class AppsAction {
   static AppsAction createRefresh(AppsActionTriggered callback) {
     return new AppsAction(REFRESH, appsActionRefresh(), callback)
       ..icon = new LIconUtility(LIconUtility.REFRESH);
+  }
+  /// Standard Import Action
+  static AppsAction createImport(AppsActionTriggered callback) {
+    return new AppsAction(IMPORT, appsActionImport(), callback)
+      ..icon = new LIconUtility(LIconUtility.UPLOAD);
   }
 
   /// Standard Layout Action
@@ -235,6 +241,7 @@ class AppsAction {
   static String appsActionSave() => Intl.message("Save", name: "appsActionSave");
   static String appsActionReset() => Intl.message("Reset", name: "appsActionReset");
   static String appsActionRefresh() => Intl.message("Refresh", name: "appsActionRefresh");
+  static String appsActionImport() => Intl.message("Import", name: "appsActionImport");
   static String appsActionDelete() => Intl.message("Delete", name: "appsActionDelete");
   static String appsActionDeleteSelected() => Intl.message("Delete Selected", name: "appsActionDeleteSelected");
 

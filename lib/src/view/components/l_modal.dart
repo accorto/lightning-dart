@@ -383,6 +383,11 @@ class LModal
       _position(evt);
   }
 
+  /// Show Modal Center or left/below evt target
+  void showModal({MouseEvent evt}) {
+    showInElement(PageSimple.modals, evt:evt);
+  }
+
   /// Position left/below
   void _position(MouseEvent evt) {
     // normalize

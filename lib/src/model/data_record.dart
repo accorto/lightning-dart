@@ -300,7 +300,6 @@ class DataRecord {
    * Record is read only (static + last calc)
    *    | table.readOnlyLogic
    *    | !active | processes
-   *
    */
   bool get isReadOnly {
     if (_record != null) {
@@ -429,7 +428,7 @@ class DataRecord {
             continue;
           DEntry entry = getEntry(col.columnId, col.name, true);
           entry.value = DataContext.contextReplace(this, col.defaultValue,
-          nullResultOk: true, emptyResultOk: true, columnName: col.name);
+            nullResultOk: true, emptyResultOk: true, columnName: col.name);
         }
         else if (col.name == C_ISACTIVE) {
           DEntry entry = getEntry(col.columnId, col.name, true);

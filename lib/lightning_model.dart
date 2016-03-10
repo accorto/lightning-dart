@@ -58,6 +58,7 @@ part 'src/model/data_type_util.dart';
 part 'src/model/data_util.dart';
 part 'src/model/duration_util.dart';
 part 'src/model/editor_i.dart';
+part 'src/model/file_csv.dart';
 part 'src/model/fk_record.dart';
 part 'src/model/key_value_map.dart';
 part 'src/model/preference.dart';

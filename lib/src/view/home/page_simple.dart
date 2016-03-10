@@ -36,6 +36,18 @@ class PageSimple
   /// Current Instance
   static PageSimple instance;
 
+  /// Parent Element for modal dialogs
+  static DivElement get modals {
+    if (_modalDiv == null) {
+      _modalDiv = new DivElement()
+        ..id = "modals";
+      document.body.append(_modalDiv);
+    }
+    return _modalDiv;
+  }
+  static DivElement _modalDiv;
+
+
   /// Search for classes to find main element
   static final List<String> MAIN_CLASSES = [LGrid.C_CONTAINER, LGrid.C_CONTAINER__FLUID,
     LGrid.C_CONTAINER__LARGE, LGrid.C_CONTAINER__MEDIUM, LGrid.C_CONTAINER__SMALL, LGrid.C_GRID];

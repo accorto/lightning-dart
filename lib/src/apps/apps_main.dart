@@ -24,8 +24,6 @@ class AppsMain
 
   /// Current Instance
   static AppsMain instance;
-  /// Modal Div
-  static DivElement get modals => instance._modalDiv;
 
   /// Login Required
   static bool loginRequired = false;
@@ -42,9 +40,6 @@ class AppsMain
     ..id = "a-content";
   /// Footer
   final CDiv _footer = new CDiv.footer(id:"a-footer");
-  /// Modal Div Area
-  final DivElement _modalDiv = new DivElement()
-    ..id = "a-modals";
 
   /// Current Apps
   AppsCtrl _currentApps;
@@ -84,7 +79,6 @@ class AppsMain
     //
     element.classes.remove(LGrid.C_GRID);
     element.append(mainGrid);
-    element.append(_modalDiv);
     //
     AppsPage.routeHandler = onRouteEnter;
     LightningCtrl.router.fallbackHandler = onRouteEnter;

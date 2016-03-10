@@ -24,7 +24,7 @@ class LCheckbox
    * (note that if id is not unique, it does not work!)
    */
   LCheckbox(String name, {String idPrefix, bool this.inGrid:false}) {
-    createCheckbox(this);
+    createCheckbox(this, inGrid);
     input.name = name;
     input.id = createId(idPrefix, name);
     _initEditor();
@@ -34,7 +34,7 @@ class LCheckbox
    * Checkbox Editor
    */
   LCheckbox.from(DataColumn dataColumn, {String idPrefix, bool this.inGrid:false}) {
-    createCheckbox(this);
+    createCheckbox(this, inGrid);
     input.name = dataColumn.name;
     input.id = createId(idPrefix, input.name);
     //
@@ -138,6 +138,10 @@ class LCheckbox
   ValidityState get inputValidationState => input.validity;
   /// Validation Message from Input
   String get inputValidationMsg => input.validationMessage;
+  /// set custom validity explicitly
+  void setCustomValidity(String newValue) {
+    input.setCustomValidity(newValue);
+  }
 
   /// Display
 

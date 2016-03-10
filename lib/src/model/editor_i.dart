@@ -55,14 +55,14 @@ abstract class EditorI {
   static const String TYPE_TEXTAREA = "textarea";
   /// Select timezone Editor Type (ext)
   static const String TYPE_TIMEZONE = "timezone";
-  /// Input type button
+  /// Input type phone
   static const String TYPE_TEL = "tel";
-  /// Input type button
+  /// Input type url
   static const String TYPE_URL = "url";
-  /// Input type button
-  static const String TYPE_SEARCH = "search";
   /// Input Number Range
   static const String TYPE_RANGE = "range";
+  /// Input type search
+  static const String TYPE_SEARCH = "search";
   /// Input Date
   static const String TYPE_DATE = "date"; // not in: IE, FF, S
   /// Input Date Time
@@ -605,6 +605,8 @@ abstract class EditorI {
   ValidityState get inputValidationState;
   /// Input Validation Message
   String get inputValidationMsg;
+  /// Set Custom Validity explicitly
+  void setCustomValidity(String newValue);
 
   /// Validation Status
   bool statusValid;

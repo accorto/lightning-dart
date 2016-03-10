@@ -180,7 +180,7 @@ class FkDialog {
   void show(FkCtrl lookup) { // assumes modal dialog
     this.lookup = lookup;
     _modal.setHeader("${fkDialogTitle()} ${lookup.label}",icon: new LIconUtility(LIconUtility.SEARCH));
-    _modal.showInElement(AppsMain.modals);
+    _modal.showModal();
     _table.selectAll(false); // previous selection
     //
     if (lookup.parentValues != null && lookup.parentValues.isNotEmpty) {

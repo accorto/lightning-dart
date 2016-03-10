@@ -110,7 +110,9 @@ abstract class LProcess
   ValidityState get inputValidationState => null;
   /// Validation Message from Input
   String inputValidationMsg = "";
-
+  /// set custom validity explicitly
+  void setCustomValidity(String newValue) {
+  }
 
   /// -- options --
 

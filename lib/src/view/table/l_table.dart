@@ -21,34 +21,46 @@ typedef void GraphSelectionChange(int count);
 class LTable
     extends LComponent {
 
-  /// slds-table - Initializes data table | Required
+  /// slds-table (table): Initializes data table
   static const String C_TABLE = "slds-table";
-  /// slds-table--bordered - Adds borders to the table |
+  /// slds-table--bordered (slds-table): Adds borders to the table
   static const String C_TABLE__BORDERED = "slds-table--bordered";
-  /// slds-table--striped - Adds stripes to alternating rows |
+  /// slds-table--striped (slds-table): Adds stripes to alternating rows
   static const String C_TABLE__STRIPED = "slds-table--striped";
-  /// slds-is-selected - Changes row to selected state |
+  /// slds-table--fixed-layout (slds-table): Styles for resizeable columns
+  static const String C_TABLE__FIXED_LAYOUT = "slds-table--fixed-layout";
+  /// slds-is-selected (tr): Changes row to selected state
   static const String C_IS_SELECTED = "slds-is-selected";
-  /// slds-is-sortable - Enables user interactions for sorting a column |
+  /// slds-is-sortable (th): Enables user interactions for sorting a column
   static const String C_IS_SORTABLE = "slds-is-sortable";
-  /// slds-cell-wrap - Forces text to wrap in a cell |
+  /// slds-is-resizable (th): Enables table cell to be resized
+  static const String C_IS_RESIZABLE = "slds-is-resizable";
+  /// slds-cell-wrap (td): Forces text to wrap in a cell
   static const String C_CELL_WRAP = "slds-cell-wrap";
-  /// slds-cell-shrink - Shrinks cell to width of content |
+  /// slds-cell-shrink (th, <td): Shrinks cell to width of content - Use if cell contains a checkbox or action menu
   static const String C_CELL_SHRINK = "slds-cell-shrink";
-  /// slds-no-row-hover - Removes hover state on row |
+  /// slds-no-row-hover (slds-table): Removes hover state on row - Rows have a hover state by default
   static const String C_NO_ROW_HOVER = "slds-no-row-hover";
-  /// slds-max-medium-table--stacked - Modifies table layout to accommodate smaller viewports |
+  /// slds-scrollable--x (parent div): Creates a scrollable container for a table on smaller viewports
+  static const String C_SCROLLABLE__X = "slds-scrollable--x";
+  /// slds-max-medium-table--stacked (slds-table): Modifies table layout by stacking cells to accommodate smaller viewports
   static const String C_MAX_MEDIUM_TABLE__STACKED = "slds-max-medium-table--stacked";
-  /// slds-max-medium-table--stacked-horizontal - Modifies table layout to accommodate smaller viewports |
+  /// slds-max-medium-table--stacked-horizontal (slds-table): Modifies table layout by displaying the header and row data side by side for smaller viewports
   static const String C_MAX_MEDIUM_TABLE__STACKED_HORIZONTAL = "slds-max-medium-table--stacked-horizontal";
-  /// slds-hint-parent - Highlights action overflow ribbons on row hover |
+  /// slds-hint-parent (tr): Highlights action overflow ribbons on row hover - When you have an overflow action menu
   static const String C_HINT_PARENT = "slds-hint-parent";
+
 
   static const String C_ROW_SELECT = "slds-row-select";
   static const String C_ROW_ACTION = "slds-row-action";
 
   static const String C_TEXT_CENTER = "slds-text-center";
   static const String C_TEXT_RIGHT = "slds-text-right";
+
+  static const String C_RESIZABLE = "slds-resizable";
+  static const String C_RESIZABLE__HANDLE = "slds-resizable__handle";
+  static const String C_RESIZABLE__DIVIDER = "slds-resizable__divider";
+
 
   /// space below edit table for dropdowns
   static const String C_INFO_BOTTOM = "r-table-info";

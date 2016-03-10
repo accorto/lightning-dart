@@ -90,7 +90,7 @@ class DataColumn {
   StatCalc statCol;
 
   /**
-   * Data Column Info with optional [table], [panelColumn] and [uiGridColumn]
+   * Data Column Info with optional [table], [uiPanelColumn] and [uiGridColumn]
    */
   DataColumn(DTable this.table, DColumn this.tableColumn,
       UIPanelColumn this.uiPanelColumn, UIGridColumn this.uiGridColumn) {

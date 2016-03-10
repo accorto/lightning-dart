@@ -242,7 +242,10 @@ class LSelect
   ValidityState get inputValidationState => input.validity;
   /// Validation Message from Input
   String get inputValidationMsg => input.validationMessage;
-
+  /// set custom validity explicitly
+  void setCustomValidity(String newValue) {
+    input.setCustomValidity(newValue);
+  }
   /// Display
 
   String get placeholder => null;

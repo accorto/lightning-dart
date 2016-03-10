@@ -6,6 +6,9 @@
 
 part of lightning_dart;
 
+/// result callback
+typedef void InputFileResult(List<int> result, String name, int size);
+
 /**
  * File Input
  * - attaches content as binary data to record
@@ -19,6 +22,9 @@ class LInputFile extends LInput {
   static const String ACCEPT_IMAGE = "image/*";
 
   static final Logger _log = new Logger("LInputFile");
+
+  /// callback when there is a result
+  InputFileResult inputFileResult;
 
   /// File Input
   LInputFile(String name, {String idPrefix, bool inGrid:false, bool withClearValue:false})
@@ -38,6 +44,8 @@ class LInputFile extends LInput {
   _initEditor(String type) {
     super._initEditor(type);
     input.style.color = "grey"; // file name
+    //input.onInput.listen(onInputChange);
+    input.onChange.listen(onInputChange);
   }
 
   /// This input element accepts a filename, which may only be programmatically set to the empty string
@@ -78,10 +86,13 @@ class LInputFile extends LInput {
           data.record.attachmentList.add(result);
           data.record.attachmentNameList.add(file.name);
         }
+        if (inputFileResult != null)
+          inputFileResult(result, file.name, file.size);
       });
       // reader.readAsDataUrl(file);
       reader.readAsArrayBuffer(file);
     }
   } // onInputChange
+
 
 } // LInputFile

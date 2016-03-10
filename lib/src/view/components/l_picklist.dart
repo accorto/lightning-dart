@@ -265,7 +265,9 @@ class LPicklist
   ValidityState get inputValidationState => null;
   /// Validation Message from Input
   String get inputValidationMsg => null;
-
+  /// set custom validity explicitly
+  void setCustomValidity(String newValue) {
+  }
 
   /// Get options
   List<OptionElement> get options => _dropdown.options;

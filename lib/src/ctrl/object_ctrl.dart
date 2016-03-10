@@ -75,11 +75,12 @@ class ObjectCtrl
       UiUtil.validate(ui);
       _header.setUi(ui);
       // actions
-      _header.addAction(AppsAction.createRefresh(onAppsActionRefresh)
-        ..showLabel = false);
       if (!ui.isReadOnly) {
         _header.addAction(AppsAction.createNew(onAppsActionNew));
       }
+      _header.addAction(AppsAction.createRefresh(onAppsActionRefresh));
+      _header.addAction(AppsAction.createImport(onAppsActionImport));
+      _header.setActionGroupLayout(-1);
       _header.loading = false;
 
       if (queryExecute)
@@ -398,8 +399,14 @@ class ObjectCtrl
     _doQuery();
   }
 
+  /// Application Action Import
+  void onAppsActionImport(String value, DataRecord data, DEntry entry, var actionVar) {
+    _log.config("onAppsActionImport ${tableName}");
+    new ObjectImport(datasource).show();
+  }
 
-    /// Record Saved (from new/table)
+
+  /// Record Saved (from new/table)
   Future<SResponse> onRecordSaved(DRecord record) {
     _log.config("onRecordSaved ${tableName}");
     Completer<SResponse> completer = new Completer<SResponse>();

@@ -62,7 +62,7 @@ class FkMultiDialog {
   void show(FkMulti multi) { // assumes modal dialog
     this.multi = multi;
     _modal.setHeader("${FkDialog.fkDialogTitle()} ${multi.label}",icon: new LIconUtility(LIconUtility.OVERFLOW));
-    _modal.showInElement(AppsMain.modals);
+    _modal.showModal();
     //
     // fill lookups
     for (int i = 0; i < _lookupList.length; i++) {

@@ -193,7 +193,7 @@ class LFormElement {
    *        span  .checkbox--faux
    *        span  .form-element__label
    */
-  void createCheckbox(EditorI editor) {
+  void createCheckbox(EditorI editor, bool inGrid) {
     this.editor = editor;
     _input = editor.input;
     _labelElement.classes.add(LForm.C_CHECKBOX);
@@ -210,6 +210,11 @@ class LFormElement {
       ..append(_labelElement);
     element.append(_elementControl);
 
+    if (inGrid) {
+      _labelSpan.remove();
+      _hintHide = true;
+      _hintSpan.classes.add(LVisibility.C_HIDE);
+    }
     element.append(_hintSpan); // __help
   } // createCheckbox
 

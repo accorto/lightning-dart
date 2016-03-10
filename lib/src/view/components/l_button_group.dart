@@ -31,6 +31,8 @@ class LButtonGroup extends LComponent {
   final LButton _more = new LButton(new ButtonElement(), "more", null,
       icon: new LIconUtility(LIconUtility.DOWN),
       assistiveText: lButtonGroupMore());
+  /// Dropdown
+  LDropdownElement _dropdown;
   /// Inverse Button Bar
   final bool inverse;
 
@@ -43,7 +45,8 @@ class LButtonGroup extends LComponent {
       _more.icon.classes.add(LButton.C_BUTTON__ICON_INVERSE);
     }
     _more.onClick.listen((MouseEvent evt) {
-      _more.element.classes.toggle(LVisibility.C_ACTIVE);
+      if (_dropdown != null)
+        _dropdown.show = !_dropdown.show;
     });
   } // LButton
 
@@ -122,14 +125,13 @@ class LButtonGroup extends LComponent {
         name = "button-group";
       DivElement dd = new DivElement()
         ..classes.addAll([LDropdown.C_DROPDOWN, LDropdown.C_DROPDOWN__RIGHT, LDropdown.C_DROPDOWN__ACTIONS]);
-      LDropdownElement dde = new LDropdownElement(dd, name:name);
-      element.append(dde.element);
+      _dropdown = new LDropdownElement(dd, name:name);
+      element.append(_dropdown.element);
       for (LDropdownItem ddi in dropdownItems) {
-        dde.addDropdownItem(ddi);
+        _dropdown.addDropdownItem(ddi);
       }
     }
   } // layout
-
 
   /// Trl
   static String lButtonGroupMore() => Intl.message("More", name: "lButtonGroupMore", args: []);
