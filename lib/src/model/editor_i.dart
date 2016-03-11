@@ -170,9 +170,9 @@ abstract class EditorI {
   /// Set Default value
   void set defaultValue (String newValue);
 
-  /// if supported, set value by synonym (alternative representations)
+  /// set value by synonym (alternative representations) - returns true if found - null if not supported
   bool setValueSynonym (String newValue) {
-    return false; // value not set
+    return null; // value not set
   }
 
   /// Is the value changed from original

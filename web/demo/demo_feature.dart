@@ -261,7 +261,7 @@ abstract class DemoFeature
         ..id = value
         ..value = value
         ..label = label;
-      ListItem li = new ListItem(option, leftIcon:leftIcon);
+      ListItem li = new ListItem(option, leftIcon, null, false);
       list.add(li);
       no += increment;
     }

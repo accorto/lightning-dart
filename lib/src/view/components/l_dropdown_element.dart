@@ -313,7 +313,7 @@ class LDropdownElement
   } // render
 
 
-  /// if supported, set value by synonym (any entity value)
+  /// set value by synonym (alternative representations) - returns true if found - null if not supported
   bool setValueSynonym (String newValue) {
     if (newValue == null || newValue.isEmpty) {
       value = newValue;
@@ -321,6 +321,7 @@ class LDropdownElement
     }
     for (LDropdownItem item in _dropdownItemList) {
       if (OptionUtil.isSynonym(item.option, newValue)) {
+        _log.config("setValueSynonym ${name}=${item.value}[${item.label}] value=${newValue}");
         value = item.value;
         return true;
       }

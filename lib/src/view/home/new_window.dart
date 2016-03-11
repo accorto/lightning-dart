@@ -32,9 +32,9 @@ class NewWindow {
 
 
   /// new window
-  static const String NAME_BLANK = "_blank";
+  static const String TARGET_BLANK = "_blank";
   /// top frameset
-  static const String NAME_TOP = "_top";
+  static const String TARGET_TOP = "_top";
 
   /// new window button
   LButton button;
@@ -73,7 +73,7 @@ class NewWindow {
   void set winName(String newValue) {
     _winName = newValue;
   }
-  String _winName = NAME_BLANK;
+  String _winName = TARGET_BLANK;
 
 
   static String newWindowOpen() => Intl.message("open in New Window", name: "newWindowOpen");

@@ -166,6 +166,8 @@ class FkDialog {
     _datasource.query(null, setBusy:false)
     .then((DataResponse response){
       _log.config("executeSearch end ${tableName} ${_queryRestriction}");
+      if (response.hasTable())
+        OptionUtil.updateSynonym(response.table);
       _table.loading = false;
       _table.setRecords(response.recordList);
       _totalRows = response.totalRows;

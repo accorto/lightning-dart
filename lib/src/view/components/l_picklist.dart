@@ -210,7 +210,7 @@ class LPicklist
   }
   String _defaultValue;
 
-  /// if supported, set value by synonym (any entity value)
+  /// set value by synonym (alternative representations) - returns true if found - null if not supported
   bool setValueSynonym (String newValue) {
     return _dropdown.setValueSynonym(newValue);
   } // setValueSynonym

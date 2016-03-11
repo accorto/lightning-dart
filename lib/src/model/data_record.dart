@@ -393,8 +393,8 @@ class DataRecord {
    * call DataService.recordNew
    * - table must be set
    */
-  DRecord newRecord(DRecord parentRecord) {
-    setRecord(null, -1); // create new
+  DRecord newRecord(DRecord parentRecord, {int rowNo:-1}) {
+    setRecord(null, rowNo); // create new
     if (table == null) {
       _log.warning("newRecord #${rowNo} - table not set");
     } else {

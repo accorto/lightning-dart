@@ -8,13 +8,19 @@ part of lightning_ctrl;
 
 /**
  * Import
+ * TODO line editor dropdown check
  */
 class ObjectImport {
 
+  static const String DOC = "https://support.accorto.com/support/solutions/articles/1000227178-import";
+
   static final Logger _log = new Logger("ObjectImport");
 
+  /// Modal
   final LModal _modal = new LModal("imp")
-    ..large = true;
+    ..large = true
+    ..helpHref = DOC;
+  /// File Editor
   LInputFile _fileInput;
   /// the table
   final TableElement _table = new TableElement()
@@ -23,15 +29,22 @@ class ObjectImport {
     ..classes.addAll([LMargin.C_TOP__MEDIUM, LScrollable.C_SCROLLABLE__Y])
     ..style.maxHeight = "150px";
 
+  /// data source
   final Datasource datasource;
+  /// all columns
   List<DColumn> _columnListAll;
+  /// column options
   final List<DOption> _optionList = new List<DOption>();
+  /// add column button
   LButton _addColumnButton;
 
+  /// first line is heading
+  bool _firstLineIsHeading = true;
+
   /// the pick list per column
-  final List<LLookup> _columnPicks = new List<LLookup>();
+  final List<LLookup> _headerColumnPicks = new List<LLookup>();
   /// the selected column from pick list
-  final List<DColumn> _columnList = new List<DColumn>();
+  final List<DColumn> _headerColumnList = new List<DColumn>();
 
   OListElement _todo = new OListElement()
     ..classes.add(LGrid.C_COL__PADDED)
@@ -79,8 +92,8 @@ class ObjectImport {
     _optionList.sort(OptionUtil.compareLabel);
     //
     _addColumnButton = new LButton.neutral("addColumn", "Add Column")
-      ..onClick.listen(onClickAddColumn);
-    _diagnostics();
+      ..onClick.listen(onAddColumnClick);
+    diagnostics();
   } // ObjectImport
 
   String get id => _modal.id;
@@ -110,32 +123,34 @@ class ObjectImport {
   /// create table
   void _createTable() {
     _table.children.clear();
-    _columnPicks.clear();
-    _columnList.clear();
+    _headerColumnPicks.clear();
+    _headerColumnList.clear();
     // header row
     _headTr = _table.createTHead().addRow()
       ..classes.add(LText.C_TEXT_HEADING__LABEL);
     // select
-    LCheckbox selectAll = new LCheckbox("selectAll")
-      ..title = "Select All Toggle";
+    _selectAll = new LCheckbox("selectAll")
+      ..title = "Check Lines for Import"
+      ..element.onClick.listen(onHeaderSelectClick);
     Element th = new Element.th()
       ..classes.add(LTable.C_CELL_SHRINK)
-      ..append(selectAll.element);
+      ..append(_selectAll.element);
     _headTr.append(th);
     // columns
     for (String headingCol in _csv.headingColumns) {
       th = _createTh(headingCol)
         ..append(new BRElement())
-        ..append(_createColPick(headingCol).element)
+        ..append(_createHeaderColumnPick(headingCol).element)
         ..append(new BRElement());
       _headTr.append(th); // see onClickAddColumn
     }
     _headColumnButton();
-    _diagnostics();
+    diagnostics();
     //
     _tbody = _table.createTBody();
     _createTableLines(true);
-  }
+  } // createTable
+  LCheckbox _selectAll;
   TableRowElement _headTr;
   TableSectionElement _tbody;
 
@@ -166,7 +181,7 @@ class ObjectImport {
       ..classes.add(LTable.C_IS_RESIZABLE)
       ..attributes["scope"] = "col"
       ..append(resizeDiv);
-    int colWidth = 180;
+    int colWidth = 200;
     resizeInput.value = colWidth.toString();
     th.style.width = "${colWidth}px";
     resizeInput.onInput.listen((Event evt) {
@@ -175,15 +190,22 @@ class ObjectImport {
     return th;
   } // createTh
 
-  // create Lookup Editor
-  LEditor _createColPick(String headingCol) {
-    int colNo = _columnPicks.length;
+  // create Column Lookup Editor
+  LEditor _createHeaderColumnPick(String headingCol) {
+    int colNo = _headerColumnPicks.length;
     LLookup pl = new LLookup("col-${colNo}", idPrefix: id, inGrid: true)
       ..required = false
       ..placeholder = "Map to Column"
       ..dOptionList = _optionList
-      ..editorChange = onEditorChange;
-    //
+      ..editorChange = onHeaderEditorChange
+      ..onFocus.listen(onHeaderEditorFocus);
+    for (LLookupItem item in pl.lookupItemList) {
+      item.a.style // fix header text
+          ..textTransform = "initial"
+          ..letterSpacing = "initial";
+    }
+
+    // set value if name, label, extKey matches
     DColumn column = null;
     for (DColumn col in _columnListAll) {
       if (col.name == headingCol || col.label == headingCol
@@ -193,8 +215,8 @@ class ObjectImport {
         break;
       }
     }
-    _columnPicks.add(pl);
-    _columnList.add(column);
+    _headerColumnPicks.add(pl);
+    _headerColumnList.add(column);
     return pl;
   } // createColPick
 
@@ -207,20 +229,20 @@ class ObjectImport {
   }
 
   /// add a new column
-  void onClickAddColumn(Event evt) {
+  void onAddColumnClick(Event evt) {
     _headTr.children.last.remove();
     Element th = _createTh("-")
       ..append(new BRElement())
-      ..append(_createColPick("-").element)
+      ..append(_createHeaderColumnPick("-").element)
       ..append(new BRElement());
     _headTr.append(th);
     _headColumnButton();
     _createTableLines(false);
-    _diagnostics();
+    diagnostics();
   } // onClickAddColumn
 
-  /// editor change
-  void onEditorChange(String name, String newValue, DEntry entry, var details) {
+  /// header editor change - create editors
+  void onHeaderEditorChange(String name, String newValue, DEntry entry, var details) {
     String no = name.replaceAll("col-", "");
     int index = int.parse(no, onError: (String s){
       return null;
@@ -229,8 +251,8 @@ class ObjectImport {
       _log.config("onEditorChange ${name} ${newValue} Index NotFound");
       return;
     }
-    if (index < 0 || index+1 >= _columnList.length) {
-      _log.config("onEditorChange ${name} ${newValue} index=${index} error max=${_columnList.length}");
+    if (index < 0 || index+1 >= _headerColumnList.length) {
+      _log.config("onEditorChange ${name} ${newValue} index=${index} error max=${_headerColumnList.length}");
       return;
     }
     DColumn column = null;
@@ -244,80 +266,70 @@ class ObjectImport {
       _log.config("onEditorChange ${name} ${newValue} Column NotFound");
       return;
     }
-    for (int i = 0; i < _columnList.length; i++) {
-      DColumn col = _columnList[i];
+    for (int i = 0; i < _headerColumnList.length; i++) {
+      DColumn col = _headerColumnList[i];
       if (col != null && col.name == column.name) {
         feedbackSet(new LAlert.warning(label: "${column.label}: already in column #${i+1}"));
         return;
       }
     }
     _log.config("onEditorChange ${name} ${newValue}");
-    _columnList[index] = column;
+    _headerColumnList[index] = column;
     _createTableLines(false);
   } // onEditorChange
+
+  /// Header Editor Focused - close other editor dropdowns
+  void onHeaderEditorFocus(Event evt) {
+    String id = "";
+    if (evt != null) {
+      Element target = evt.target;
+      id = target.id;
+    }
+    for (LEditor ed in _headerColumnPicks) {
+      // _log.fine("onEditorFocus ${id} - ${ed.id}");
+      if (id != ed.id) {
+        ed.showDropdown = false;
+      }
+    }
+  } // onEditorFocus
 
   /// re-create lines
   void _createTableLines(bool reset) {
     _tbody.children.clear();
     feedbackClear();
+    int start = _firstLineIsHeading ? 1 : 0;
     if (reset) {
-      _dataList.clear();
-      for (int i = 1; i < _csv.cells.length; i++) {
+      lineList.clear();
+      for (int lineNo = start; lineNo < _csv.cells.length; lineNo++) {
         DataRecord data = new DataRecord(datasource.tableDirect, null)
-          ..newRecord(null)
-          ..selected = true;
-        _dataList.add(data);
+          ..newRecord(null, rowNo: lineNo);
+        lineList.add(new ObjectImportLine(this, data, _csv.cells[lineNo], lineNo));
       }
     }
-
-    for (int i = 1; i < _csv.cells.length; i++) {
-      DataRecord data = _dataList[i-1];
-      List<String> cellLine = _csv.cells[i];
-      TableRowElement tr = _tbody.addRow()
-        ..classes.add(LTable.C_HINT_PARENT)
-        ..attributes[Html0.DATA_ID] = i.toString();
-      // select
-      LCheckbox cb = new LCheckbox("selected", inGrid: true)
-        ..value = data.selected.toString();
-      cb.input.onClick.listen((Event evt) {
-          data.selected = cb.input.checked;
-        });
-      tr.addCell()
-        ..append(cb.element);
-      // columns
-      for (int i = 0; i < _columnList.length; i++) {
-        String cellText = "";
-        if (i < cellLine.length)
-          cellText = cellLine[i];
-        //
-        TableCellElement td = tr.addCell()
-          ..classes.add(LText.C_TRUNCATE)
-          ..append(new SpanElement()
-              ..text = cellText)
-          ..append(new BRElement());
-        DColumn col = _columnList[i];
-        if (col != null) {
-          DataColumn dataColumn = new DataColumn(datasource.tableDirect, col, null, null);
-          LEditor ed = EditorUtil.createFromColumn("", dataColumn, true, data: data);
-          td.append(ed.element);
-          ed.value = cellText;
-          if (ed.value != cellText && ed.doValidate()) {
-            ed.setCustomValidity("value does not match");
-            ed.doValidate();
-          }
-        }
-      } // cols
-      tr.addCell(); // addColumn
+    // for each line
+    for (ObjectImportLine line in lineList) {
+      line.createLine(_tbody.addRow(), datasource.tableDirect, _headerColumnList);
     } // lines
-    _diagnostics();
+    diagnostics();
   } // createTableLines
-  List<DataRecord> _dataList = new List<DataRecord>();
+  final List<ObjectImportLine> lineList = new List<ObjectImportLine>();
+
+
+  /// check all lines
+  void onHeaderSelectClick(MouseEvent evt) {
+    _log.config("onHeaderSelectClick");
+    for (ObjectImportLine line in lineList) {
+      line.checkLine();
+    }
+    _selectAll.checked = false;
+    diagnostics();
+  }
 
   /// diagnostics
-  void _diagnostics() {
+  void diagnostics() {
     String mapInfo = "Map columns!";
     int mapCount = 0;
-    for (DColumn col in _columnList) {
+    for (DColumn col in _headerColumnList) {
       if (col != null)
         mapCount++;
     }
@@ -328,7 +340,7 @@ class ObjectImport {
         if (col.isCalculated || col.isReadOnly)
           continue;
         if (col.isMandatory) {
-          if (!_columnList.contains(col)) {
+          if (!_headerColumnList.contains(col)) {
             feedbackAdd(new LAlert.error(label: "Mandatory Column '${col.label}' not mapped"));
             mandatoryMissing++;
           }
@@ -340,11 +352,11 @@ class ObjectImport {
 
     // row
     String rowInfo = "Check values";
-    if (_dataList.isNotEmpty) {
+    if (lineList.isNotEmpty) {
       int selected = 0;
-      for (DataRecord data in _dataList) {
-        if (data.selected)
-          selected++;
+      for (ObjectImportLine line in lineList) {
+        if (line.data.selected)
+          selected++; // valid
       }
       rowInfo = "${selected} rows selected";
     }
@@ -369,9 +381,8 @@ class ObjectImport {
 
   void onSaveClick(MouseEvent evt) {
     _log.info("onSaveClick");
-
+    // TODO save import
   }
-
 
 
   static String objectImportTitle() => Intl.message("Import", name: "objectImportTitle");

@@ -121,6 +121,8 @@ class Datasource
     //
     execute_data(req, setBusy:setBusy)
     .then((DataResponse response) {
+      if (response.hasTable())
+        OptionUtil.updateSynonym(response.table);
       setRecords(response.totalRows, response.recordList, response.statisticList);
       completer.complete(response);
     })
@@ -155,6 +157,8 @@ class Datasource
     //
     execute_data(req, setBusy:false)
     .then((DataResponse response){
+      if (response.hasTable())
+        OptionUtil.updateSynonym(response.table);
       completer.complete(response.totalRows);
     })
     .catchError((error, stackTrace) {

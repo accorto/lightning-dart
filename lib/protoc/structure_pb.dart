@@ -238,6 +238,7 @@ class DColumn extends GeneratedMessage {
     ..a(35, 'isCopied', PbFieldType.OB, true)
     ..a(36, 'isCalculated', PbFieldType.OB)
     ..a(38, 'processExternalKey', PbFieldType.OS)
+    ..a(39, 'isSynonym', PbFieldType.OB)
     ..a(40, 'isPk', PbFieldType.OB)
     ..a(41, 'isParentKey', PbFieldType.OB)
     ..a(42, 'fkReference', PbFieldType.OS)
@@ -411,76 +412,81 @@ class DColumn extends GeneratedMessage {
   bool hasProcessExternalKey() => $_has(27, 38);
   void clearProcessExternalKey() => clearField(38);
 
-  bool get isPk => $_get(28, 40, false);
-  void set isPk(bool v) { $_setBool(28, 40, v); }
-  bool hasIsPk() => $_has(28, 40);
+  bool get isSynonym => $_get(28, 39, false);
+  void set isSynonym(bool v) { $_setBool(28, 39, v); }
+  bool hasIsSynonym() => $_has(28, 39);
+  void clearIsSynonym() => clearField(39);
+
+  bool get isPk => $_get(29, 40, false);
+  void set isPk(bool v) { $_setBool(29, 40, v); }
+  bool hasIsPk() => $_has(29, 40);
   void clearIsPk() => clearField(40);
 
-  bool get isParentKey => $_get(29, 41, false);
-  void set isParentKey(bool v) { $_setBool(29, 41, v); }
-  bool hasIsParentKey() => $_has(29, 41);
+  bool get isParentKey => $_get(30, 41, false);
+  void set isParentKey(bool v) { $_setBool(30, 41, v); }
+  bool hasIsParentKey() => $_has(30, 41);
   void clearIsParentKey() => clearField(41);
 
-  String get fkReference => $_get(30, 42, '');
-  void set fkReference(String v) { $_setString(30, 42, v); }
-  bool hasFkReference() => $_has(30, 42);
+  String get fkReference => $_get(31, 42, '');
+  void set fkReference(String v) { $_setString(31, 42, v); }
+  bool hasFkReference() => $_has(31, 42);
   void clearFkReference() => clearField(42);
 
-  String get parentColumnId => $_get(31, 43, '');
-  void set parentColumnId(String v) { $_setString(31, 43, v); }
-  bool hasParentColumnId() => $_has(31, 43);
+  String get parentColumnId => $_get(32, 43, '');
+  void set parentColumnId(String v) { $_setString(32, 43, v); }
+  bool hasParentColumnId() => $_has(32, 43);
   void clearParentColumnId() => clearField(43);
 
-  String get parentReference => $_get(32, 44, '');
-  void set parentReference(String v) { $_setString(32, 44, v); }
-  bool hasParentReference() => $_has(32, 44);
+  String get parentReference => $_get(33, 44, '');
+  void set parentReference(String v) { $_setString(33, 44, v); }
+  bool hasParentReference() => $_has(33, 44);
   void clearParentReference() => clearField(44);
 
-  String get restrictionSql => $_get(33, 45, '');
-  void set restrictionSql(String v) { $_setString(33, 45, v); }
-  bool hasRestrictionSql() => $_has(33, 45);
+  String get restrictionSql => $_get(34, 45, '');
+  void set restrictionSql(String v) { $_setString(34, 45, v); }
+  bool hasRestrictionSql() => $_has(34, 45);
   void clearRestrictionSql() => clearField(45);
 
-  String get pickListId => $_get(34, 46, '');
-  void set pickListId(String v) { $_setString(34, 46, v); }
-  bool hasPickListId() => $_has(34, 46);
+  String get pickListId => $_get(35, 46, '');
+  void set pickListId(String v) { $_setString(35, 46, v); }
+  bool hasPickListId() => $_has(35, 46);
   void clearPickListId() => clearField(46);
 
-  String get pickListName => $_get(35, 47, '');
-  void set pickListName(String v) { $_setString(35, 47, v); }
-  bool hasPickListName() => $_has(35, 47);
+  String get pickListName => $_get(36, 47, '');
+  void set pickListName(String v) { $_setString(36, 47, v); }
+  bool hasPickListName() => $_has(36, 47);
   void clearPickListName() => clearField(47);
 
-  int get pickListSize => $_get(36, 48, 0);
-  void set pickListSize(int v) { $_setUnsignedInt32(36, 48, v); }
-  bool hasPickListSize() => $_has(36, 48);
+  int get pickListSize => $_get(37, 48, 0);
+  void set pickListSize(int v) { $_setUnsignedInt32(37, 48, v); }
+  bool hasPickListSize() => $_has(37, 48);
   void clearPickListSize() => clearField(48);
 
-  bool get isPickListExtensible => $_get(37, 49, false);
-  void set isPickListExtensible(bool v) { $_setBool(37, 49, v); }
-  bool hasIsPickListExtensible() => $_has(37, 49);
+  bool get isPickListExtensible => $_get(38, 49, false);
+  void set isPickListExtensible(bool v) { $_setBool(38, 49, v); }
+  bool hasIsPickListExtensible() => $_has(38, 49);
   void clearIsPickListExtensible() => clearField(49);
 
-  int get uniqueSeqNo => $_get(38, 50, 0);
-  void set uniqueSeqNo(int v) { $_setUnsignedInt32(38, 50, v); }
-  bool hasUniqueSeqNo() => $_has(38, 50);
+  int get uniqueSeqNo => $_get(39, 50, 0);
+  void set uniqueSeqNo(int v) { $_setUnsignedInt32(39, 50, v); }
+  bool hasUniqueSeqNo() => $_has(39, 50);
   void clearUniqueSeqNo() => clearField(50);
 
-  int get displaySeqNo => $_get(39, 51, 0);
-  void set displaySeqNo(int v) { $_setUnsignedInt32(39, 51, v); }
-  bool hasDisplaySeqNo() => $_has(39, 51);
+  int get displaySeqNo => $_get(40, 51, 0);
+  void set displaySeqNo(int v) { $_setUnsignedInt32(40, 51, v); }
+  bool hasDisplaySeqNo() => $_has(40, 51);
   void clearDisplaySeqNo() => clearField(51);
 
-  List<DOption> get pickValueList => $_get(40, 60, null);
+  List<DOption> get pickValueList => $_get(41, 60, null);
 
-  String get tempExternalKey => $_get(41, 61, '');
-  void set tempExternalKey(String v) { $_setString(41, 61, v); }
-  bool hasTempExternalKey() => $_has(41, 61);
+  String get tempExternalKey => $_get(42, 61, '');
+  void set tempExternalKey(String v) { $_setString(42, 61, v); }
+  bool hasTempExternalKey() => $_has(42, 61);
   void clearTempExternalKey() => clearField(61);
 
-  String get updateFlag => $_get(42, 63, '');
-  void set updateFlag(String v) { $_setString(42, 63, v); }
-  bool hasUpdateFlag() => $_has(42, 63);
+  String get updateFlag => $_get(43, 63, '');
+  void set updateFlag(String v) { $_setString(43, 63, v); }
+  bool hasUpdateFlag() => $_has(43, 63);
   void clearUpdateFlag() => clearField(63);
 }
 
@@ -502,6 +508,7 @@ class DOption extends GeneratedMessage {
     ..a(16, 'cssClass', PbFieldType.OS)
     ..a(17, 'cssColor', PbFieldType.OS)
     ..pp(20, 'validation', PbFieldType.PM, DKeyValue.$checkItem, DKeyValue.create)
+    ..p(21, 'valueSynonym', PbFieldType.PS)
     ..a(30, 'updateFlag', PbFieldType.OS)
   ;
 
@@ -588,9 +595,11 @@ class DOption extends GeneratedMessage {
 
   List<DKeyValue> get validationList => $_get(13, 20, null);
 
-  String get updateFlag => $_get(14, 30, '');
-  void set updateFlag(String v) { $_setString(14, 30, v); }
-  bool hasUpdateFlag() => $_has(14, 30);
+  List<String> get valueSynonymList => $_get(14, 21, null);
+
+  String get updateFlag => $_get(15, 30, '');
+  void set updateFlag(String v) { $_setString(15, 30, v); }
+  bool hasUpdateFlag() => $_has(15, 30);
   void clearUpdateFlag() => clearField(30);
 }
 
@@ -1068,6 +1077,7 @@ const DColumn$json = const {
     const {'1': 'is_copied', '3': 35, '4': 1, '5': 8, '7': 'true'},
     const {'1': 'is_calculated', '3': 36, '4': 1, '5': 8, '7': 'false'},
     const {'1': 'process_external_key', '3': 38, '4': 1, '5': 9},
+    const {'1': 'is_synonym', '3': 39, '4': 1, '5': 8, '7': 'false'},
     const {'1': 'is_pk', '3': 40, '4': 1, '5': 8, '7': 'false'},
     const {'1': 'is_parent_key', '3': 41, '4': 1, '5': 8, '7': 'false'},
     const {'1': 'fk_reference', '3': 42, '4': 1, '5': 9},
@@ -1103,6 +1113,7 @@ const DOption$json = const {
     const {'1': 'css_class', '3': 16, '4': 1, '5': 9},
     const {'1': 'css_color', '3': 17, '4': 1, '5': 9},
     const {'1': 'validation', '3': 20, '4': 3, '5': 11, '6': '.DKeyValue'},
+    const {'1': 'value_synonym', '3': 21, '4': 3, '5': 9},
     const {'1': 'update_flag', '3': 30, '4': 1, '5': 9},
   ],
 };

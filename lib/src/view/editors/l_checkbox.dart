@@ -124,6 +124,12 @@ class LCheckbox
     input.autofocus = newValue;
   }
 
+  String get title => _labelElement.title;
+  void set title (String newValue) {
+    _labelElement.title = newValue; // input not displayed
+  }
+
+
   /// Validation
 
   int get maxlength => input.maxLength;

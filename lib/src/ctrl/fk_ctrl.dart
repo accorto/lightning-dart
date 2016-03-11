@@ -83,7 +83,7 @@ class FkCtrl
       if (complete != null) {
         fkCompleteList = complete;
         for (DFK fk in complete) {
-          LLookupItem item = new LLookupItem.fromFk(fk);
+          LLookupItem item = new LLookupItem.fromFk(fk, tableName);
           addLookupItem(item);
         }
         fkComplete = true;
@@ -91,7 +91,7 @@ class FkCtrl
         FkService.instance.getFkListFuture(tableName, restrictionSql, null, null)
         .then((List<DFK> fks) {
           for (DFK fk in fks) {
-            LLookupItem item = new LLookupItem.fromFk(fk);
+            LLookupItem item = new LLookupItem.fromFk(fk, tableName);
             addLookupItem(item);
           }
           fkComplete = FkService.instance.isComplete(tableName);
@@ -195,7 +195,7 @@ class FkCtrl
       for (DFK fk in fkCompleteList) {
         String rv = DataRecord.getColumnValueFk(fk, dependentName);
         if (rv != null && rv == dependentValue) { // parent match
-          LLookupItem item = new LLookupItem.fromFk(fk);
+          LLookupItem item = new LLookupItem.fromFk(fk, tableName);
           addLookupItem(item);
         }
       }
@@ -205,7 +205,7 @@ class FkCtrl
       FkService.instance.getFkListFuture(tableName, restrictionSql, dependentName, dependentValue)
       .then((List<DFK> fks) {
         for (DFK fk in fks) {
-          LLookupItem item = new LLookupItem.fromFk(fk);
+          LLookupItem item = new LLookupItem.fromFk(fk, tableName);
           addLookupItem(item);
         }
         _log.fine("onDependentOnChanged ${name} query count=${lookupItemList.length}");

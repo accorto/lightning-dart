@@ -261,6 +261,6 @@ class SupportLink extends AppsPage {
   SupportLink() : super("support", "support", supportIcon,
       "Doc + Support", "Lightning Dart Support",
       externalHref: "http://lightning.accorto.com", // support
-      target: NewWindow.NAME_BLANK);
+      target: NewWindow.TARGET_BLANK);
 
 }

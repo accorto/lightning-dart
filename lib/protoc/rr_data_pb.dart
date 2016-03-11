@@ -8,6 +8,7 @@ import 'dart:async';
 import 'package:protobuf/protobuf.dart';
 import 'rr_pb.dart';
 import 'data_pb.dart';
+import 'structure_pb.dart';
 
 class DataRequestType extends ProtobufEnum {
   static const DataRequestType QUERY = const DataRequestType._(1, 'QUERY');
@@ -251,6 +252,7 @@ class DataResponse extends GeneratedMessage {
     ..pp(12, 'contextChange', PbFieldType.PM, DKeyValue.$checkItem, DKeyValue.create)
     ..pp(15, 'fks', PbFieldType.PM, DFK.$checkItem, DFK.create)
     ..a(16, 'isFkComplete', PbFieldType.OB)
+    ..a(17, 'table', PbFieldType.OM, DTable.getDefault, DTable.create)
     ..pp(20, 'statistic', PbFieldType.PM, DStatistics.$checkItem, DStatistics.create)
     ..a(25, 'exportUrl', PbFieldType.OS)
   ;
@@ -312,11 +314,16 @@ class DataResponse extends GeneratedMessage {
   bool hasIsFkComplete() => $_has(9, 16);
   void clearIsFkComplete() => clearField(16);
 
-  List<DStatistics> get statisticList => $_get(10, 20, null);
+  DTable get table => $_get(10, 17, null);
+  void set table(DTable v) { setField(17, v); }
+  bool hasTable() => $_has(10, 17);
+  void clearTable() => clearField(17);
 
-  String get exportUrl => $_get(11, 25, '');
-  void set exportUrl(String v) { $_setString(11, 25, v); }
-  bool hasExportUrl() => $_has(11, 25);
+  List<DStatistics> get statisticList => $_get(11, 20, null);
+
+  String get exportUrl => $_get(12, 25, '');
+  void set exportUrl(String v) { $_setString(12, 25, v); }
+  bool hasExportUrl() => $_has(12, 25);
   void clearExportUrl() => clearField(25);
 }
 
@@ -426,6 +433,7 @@ const DataResponse$json = const {
     const {'1': 'context_change', '3': 12, '4': 3, '5': 11, '6': '.DKeyValue'},
     const {'1': 'fks', '3': 15, '4': 3, '5': 11, '6': '.DFK'},
     const {'1': 'is_fk_complete', '3': 16, '4': 1, '5': 8},
+    const {'1': 'table', '3': 17, '4': 1, '5': 11, '6': '.DTable'},
     const {'1': 'statistic', '3': 20, '4': 3, '5': 11, '6': '.DStatistics'},
     const {'1': 'export_url', '3': 25, '4': 1, '5': 9},
   ],
@@ -452,5 +460,8 @@ const DataService$messageJson = const {
   '.DataResponse': DataResponse$json,
   '.SResponse': SResponse$json,
   '.DFK': DFK$json,
+  '.DTable': DTable$json,
+  '.DColumn': DColumn$json,
+  '.DOption': DOption$json,
 };
 

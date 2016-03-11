@@ -360,6 +360,8 @@ class FkService
       ServiceTracker track = new ServiceTracker(response.response, info, details);
       if (response.response.isSuccess) {
         _log.info("received ${details}");
+        if (response.hasTable())
+          OptionUtil.updateSynonym(response.table);
         _updateCache(sr, response.fksList, response.isFkComplete, null);
       } else {
         _log.warning("received ${details} - ${response.response.msg}");

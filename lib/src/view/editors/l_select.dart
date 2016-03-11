@@ -177,15 +177,16 @@ class LSelect
   }
   String _defaultValue;
 
-  /// if supported, set value by synonym (any entity value)
+  /// set value by synonym (alternative representations) - returns true if found - null if not supported
   bool setValueSynonym (String newValue) {
     if (newValue == null || newValue.isEmpty) {
       value = newValue;
       return true;
     }
-    for (SelectOption soption in _selectOptionList) {
-      if (OptionUtil.isSynonym(soption.option, newValue)) {
-        value = soption.value;
+    for (SelectOption item in _selectOptionList) {
+      if (OptionUtil.isSynonym(item.option, newValue)) {
+        _log.config("setValueSynonym ${name}=${item.value}[${item.label}] value=${newValue}");
+        value = item.value;
         return true;
       }
     }

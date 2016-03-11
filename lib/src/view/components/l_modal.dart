@@ -195,6 +195,10 @@ class LModal
     header.append(h2);
     if (tagLine != null)
       header.append(tagLine);
+    //
+    if (_helpHref != null) {
+      header.append(LUtil.helpReference(_helpHref, true));
+    }
     // Close
     LButton buttonClose = new LButton(new ButtonElement(), "close", null, idPrefix: id,
         buttonClasses: [C_MODAL__CLOSE],
@@ -224,6 +228,14 @@ class LModal
         ..text = tagLine;
     setHeaderComponents(h2, p);
   } // setHeader
+
+  /// Help Link
+  String get helpHref => _helpHref;
+  /// Help Link
+  void set helpHref (String url) {
+    _helpHref = url;
+  }
+  String _helpHref;
 
   /**
    * Add to Content

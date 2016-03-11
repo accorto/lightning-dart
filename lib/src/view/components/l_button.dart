@@ -268,7 +268,7 @@ class LButton
         buttonClasses: [C_BUTTON__NEUTRAL], idPrefix:idPrefix);
   /// Neutral Anchor
   LButton.neutralAnchor(String name, String label,
-      {String href, String target:NewWindow.NAME_BLANK, String idPrefix})
+      {String href, String target:NewWindow.TARGET_BLANK, String idPrefix})
     : this(new AnchorElement(href:(href == null ? "#" : href)) ..target = target,
         name, label,
         buttonClasses: [C_BUTTON__NEUTRAL], idPrefix:idPrefix);
@@ -285,7 +285,7 @@ class LButton
         icon:icon, iconLeft:iconLeft, idPrefix:idPrefix);
   /// Neutral Anchor
   LButton.neutralAnchorIcon(String name, String label, LIcon icon,
-      {String href, String target:NewWindow.NAME_BLANK,
+      {String href, String target:NewWindow.TARGET_BLANK,
       bool iconLeft: true, String idPrefix})
     : this(new AnchorElement(href:(href == null ? "#" : href)) ..target = target,
         name, label,
@@ -309,7 +309,7 @@ class LButton
         iconLeft:iconLeft, idPrefix:idPrefix);
   /// Brand Button
   LButton.brandAnchor(String name, String label,
-      {String href, String target:NewWindow.NAME_BLANK, String idPrefix})
+      {String href, String target:NewWindow.TARGET_BLANK, String idPrefix})
     : this(new AnchorElement(href: (href == null ? "#" : href)) ..target = target,
         name, label,
         buttonClasses: [C_BUTTON__BRAND], idPrefix:idPrefix);
@@ -594,10 +594,10 @@ class LButton
     DOption option = asDOption();
     if (icon != null) {
       if (iconLeft)
-        return new ListItem(option, leftIcon: icon.copy());
-      return new ListItem(option, rightIcon: icon.copy());
+        return new ListItem(option, icon.copy(), null, false);
+      return new ListItem(option, null, icon.copy(), false);
     }
-    return new ListItem(option);
+    return new ListItem(option, null, null, false);
   } // asListItem
 
   /// Focus on Button

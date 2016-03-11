@@ -17,7 +17,7 @@ class LLookupItem
    * Lookup Option
    */
   LLookupItem(DOption option, {LIcon leftIcon, LIcon rightIcon})
-    : super(option, leftIcon:leftIcon, rightIcon:rightIcon) {
+    : super(option, leftIcon, rightIcon, false) {
 
     element
       ..classes.add(LLookup.C_LOOKUP__ITEM)
@@ -40,8 +40,8 @@ class LLookupItem
     : this(option.option);
 
   /// Lookup Item from FK
-  LLookupItem.fromFk(DFK dfk)
-    : this(OptionUtil.optionFromFk(dfk));
+  LLookupItem.fromFk(DFK dfk, String fkTableName)
+    : this(OptionUtil.optionFromFk(dfk, fkTableName));
 
 
   /// On Click

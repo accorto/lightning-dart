@@ -176,6 +176,8 @@ class ObjectCtrl
     datasource.query(savedQuery)
     .then((DataResponse response) {
       _header.summary = "${objectCtrlProcessing()} ...";
+      if (response.hasTable())
+        OptionUtil.updateSynonym(response.table);
       display();
       _content.loading = false;
     });

@@ -295,7 +295,7 @@ class LLookup
   }
   String _defaultValue;
 
-  /// if supported, set value by synonym (any entity value)
+  /// set value by synonym (alternative representations) - returns true if found - null if not supported
   bool setValueSynonym (String newValue) {
     if (newValue == null || newValue.isEmpty) {
       value = newValue;
@@ -303,6 +303,7 @@ class LLookup
     }
     for (LLookupItem item in _lookupItemList) {
       if (OptionUtil.isSynonym(item.option, newValue)) {
+        _log.config("setValueSynonym ${name}=${item.value}[${item.label}] value=${newValue}");
         value = item.value;
         return true;
       }
@@ -672,7 +673,7 @@ class LLookup
     showDropdown = false;
   } // onItemClick
 
-  /// Show/Hide Popup
+  /// Show/Hide Popup - see LForm.onEditorFocus
   void set showDropdown (bool newValue) {
     if (newValue && (readOnly || disabled)) {
       newValue = false;
@@ -732,6 +733,14 @@ class LLookup
     _formElement.updateStatusValidationState();
   }
 
+  /// fk table name
+  String get fkTableName {
+    if (dataColumn != null) {
+      if (dataColumn.tableColumn.hasFkReference())
+        return dataColumn.tableColumn.fkReference;
+    }
+    return null;
+  }
 
   String toString() {
     String theValue = entry == null ? value : DataRecord.getEntryValue(entry);

@@ -54,9 +54,9 @@ class UiService
       _submitGet(null, uiName, tableName)
       .then((DisplayResponse response){ // cache already updated
         ui = getUi(uiName:uiName, tableName:tableName);
-        if (ui != null)
+        if (ui != null) {
           completer.complete(ui);
-        else
+        } else
           completer.completeError(new Exception(response.response.msg));
       })
       .catchError((error, stackTrace) {
@@ -187,6 +187,7 @@ class UiService
     }
     // table
     if (ui.hasTable()) {
+      OptionUtil.updateSynonym(ui.table);
       found = false;
       for (int i = 0; i < _tableList.length; i++) {
         DTable cache = _tableList[i];
@@ -212,6 +213,7 @@ class UiService
 
   /// update table cache
   void updateTable(DTable table) {
+    OptionUtil.updateSynonym(table);
     bool found = false;
     for (int i = 0; i < _tableList.length; i++) {
       DTable cache = _tableList[i];

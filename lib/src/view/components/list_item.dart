@@ -29,7 +29,7 @@ class ListItem
   /**
    * List Item from Option (referenceId == href)
    */
-  ListItem(DOption option, {LIcon leftIcon, LIcon, rightIcon})
+  ListItem(DOption option, LIcon leftIcon, LIcon rightIcon, bool dropdown)
       : super(option) {
     element.append(a);
     this.id = option.id;
@@ -43,15 +43,22 @@ class ListItem
       this.disabled = true;
     //
     if (option.hasIconImage()) {
-      if (rightIcon == null) {
-        rightIcon = LIcon.create(option.iconImage);
-      } else if (leftIcon == null) { // used for select
+      if (leftIcon == null && !dropdown) { // used for select
         leftIcon = LIcon.create(option.iconImage);
+        leftIcon.classes.addAll([LIcon.C_ICON_TEXT_DEFAULT,
+          LMargin.C_RIGHT__SMALL, LGrid.C_SHRINK_NONE]);
+      } else if (rightIcon == null) {
+        rightIcon = LIcon.create(option.iconImage);
       }
     }
     this.leftIcon = leftIcon;
     this.rightIcon = rightIcon; // rebuilds
-  }
+
+    if (_rightIcon != null) {
+      _rightIcon.classes.addAll([LIcon.C_ICON_TEXT_DEFAULT,
+        LMargin.C_LEFT__SMALL, LGrid.C_SHRINK_NONE]);
+    }
+  } // ListItem
 
   /// Id
   void set id(String newValue) {
@@ -152,7 +159,7 @@ class ListItem
   void set rightIcon (LIcon rightIcon) {
     _rightIcon = rightIcon;
     if (rightIcon != null) {
-      _rightIcon.size = LIcon.C_ICON__SMALL;
+      _rightIcon.size = LIcon.C_ICON__X_SMALL;
       _rightIcon.classes.addAll([LIcon.C_ICON, LDropdown.C_ICON__RIGHT]);
     }
     _rebuild(null);
@@ -165,7 +172,7 @@ class ListItem
   void set leftIcon (LIcon leftIcon) {
     _leftIcon = leftIcon;
     if (leftIcon != null) {
-      _leftIcon.size = LIcon.C_ICON__SMALL;
+      _leftIcon.size = LIcon.C_ICON__X_SMALL;
       _leftIcon.classes.addAll([LIcon.C_ICON, LDropdown.C_ICON__LEFT]);
     }
     _rebuild(null);

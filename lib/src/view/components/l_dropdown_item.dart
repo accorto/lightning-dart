@@ -30,7 +30,7 @@ class LDropdownItem
    * Dropdown item (leftIcon is used for selection)
    */
   LDropdownItem(DOption option, {LIcon rightIcon})
-    : super(option, rightIcon:rightIcon) {
+    : super(option, null, rightIcon, true) {
 
     element
       ..classes.add(LDropdown.C_DROPDOWN__ITEM)
@@ -39,12 +39,6 @@ class LDropdownItem
     a
       ..classes.add(LText.C_TRUNCATE)
       ..tabIndex = -1;
-
-    if (_rightIcon != null) {
-      _rightIcon.size = LIcon.C_ICON__X_SMALL;
-      _rightIcon.classes.addAll([LIcon.C_ICON_TEXT_DEFAULT,
-        LMargin.C_LEFT__SMALL, LGrid.C_SHRINK_NONE]);
-    }
   } // LDropdownItem
 
   /// Dropdown Item from List

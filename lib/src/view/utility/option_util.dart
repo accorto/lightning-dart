@@ -48,14 +48,48 @@ class OptionUtil {
     return doption;
   }
 
+  /// fkTableName - synonym columns
+  static Map<String, List<String>> synonyms = new Map<String, List<String>>();
+
+  /// update value synonyms
+  static void updateSynonym(DTable table) {
+    List<String> synColumns = new List<String>();
+    for (DColumn col in table.columnList) {
+      if (col.isSynonym) {
+        synColumns.add(col.name);
+      }
+    }
+    if (synColumns.isEmpty) {
+      synonyms.remove(table.name);
+    } else {
+      synonyms[table.name] = synColumns;
+    }
+  } // updateSynonyms
+
   /// create DOption from FK
-  static DOption optionFromFk(DFK fk) {
+  static DOption optionFromFk(DFK fk, String fkTableName) {
     DOption doption = new DOption()
       ..id = fk.id
       ..value = fk.id // fk.urv
       ..label = fk.drv;
+    if (fkTableName != null && fkTableName.isNotEmpty) {
+      List<String> synonymColumns = synonyms[fkTableName];
+      if (synonymColumns != null && synonymColumns.isNotEmpty) {
+        for (DEntry entry in fk.entryList) {
+          if (synonymColumns.contains(entry.columnName)) {
+            String value = DataRecord.getEntryValue(entry);
+            if (value != null) {
+              doption.valueSynonymList.add(value);
+            }
+            if (entry.hasValueDisplay()) {
+              doption.valueSynonymList.add(entry.valueDisplay);
+            }
+          }
+        }
+      }
+    }
     return doption;
-  }
+  } // optionFromFk
 
   /// create Option Element
   static OptionElement element(DOption option) {
@@ -101,8 +135,7 @@ class OptionUtil {
       return false;
     if (option.value == newValue || option.label == newValue || option.id == newValue)
       return true;
-
-    return false;
+    return (option.valueSynonymList.contains(newValue));
   } // isSynonym
 
   /// Get sorted [table] Column name/label list

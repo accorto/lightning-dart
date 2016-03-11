@@ -117,7 +117,7 @@ class FkMultiDialog {
           && !FkRecord.matchNullColumnValue(fk, _level1columnName, level1columnValue)) {
         continue;
       }
-      options.add(OptionUtil.optionFromFk(fk));
+      options.add(OptionUtil.optionFromFk(fk, lookup.fkTableName));
     }
 
     lookup.dOptionList = options;

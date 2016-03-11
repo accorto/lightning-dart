@@ -188,6 +188,17 @@ class LUtil {
     return null;
   }
 
+  /// Help/Doc Reference
+  static Element helpReference(String url, bool topRight) {
+    AnchorElement a = new AnchorElement(href: url)
+        ..target = NewWindow.TARGET_BLANK
+        ..classes.add(topRight ? "topRight-help" : "text-help")
+        ..title = "Help";
+    LIcon icon = new LIconUtility(LIconUtility.HELP,
+        size: LIcon.C_ICON__X_SMALL, color: "icon-help");
+    a.append(icon.element);
+    return a;
+  }
 
   /// dump element dimensions (l,t)w*h
   static String dumpElement(Element e) =>
