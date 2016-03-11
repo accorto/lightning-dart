@@ -524,7 +524,7 @@ abstract class EditorI {
   EditorChange editorChange;
 
   /// Input changed
-  void onInputChange(Event ignored){
+  void onInputChange(Event ignored) {
     if (readOnly)
       return;
     doValidate();

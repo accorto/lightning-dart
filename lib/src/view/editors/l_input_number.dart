@@ -313,6 +313,13 @@ class LInputNumber
     }
   } // onInputCurrency
 
+  /// On Input Change
+  void onInputChange(Event evt) {
+    super.onInputChange(evt);
+    if (_currencySelect != null) {
+      onInputCurrency(evt); // unmodified currency
+    }
+  }
 
   void set readOnly(bool newValue) {
     super.readOnly = newValue;
