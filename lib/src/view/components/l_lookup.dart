@@ -111,6 +111,9 @@ class LLookup
       withClearValue = !inGrid && !dataColumn.tableColumn.isMandatory;
     _initEditor(dataColumn.name, idPrefix, multiple, singleScope, typeahead, withClearValue);
     this.dataColumn = dataColumn;
+    if (dataColumn.tableColumn.pickValueList.isNotEmpty) {
+      dOptionList = dataColumn.tableColumn.pickValueList;
+    }
     if (inGrid)
       input.classes.add(LInput.C_W160);
   }

@@ -71,7 +71,7 @@ class FkDialog {
     //
     _table = new LTable(idPrefix)
       ..responsiveOverflow = LTableResponsive.OVERFLOW_X
-      ..editMode = LTable.EDIT_SELECT_SINGLE
+      ..editMode = LTable.EDIT_RO_SELECT_SINGLE
       ..tableSelectClicked = onTableSelectClicked;
     _modal.add(_table);
     _table.element.style // wrapper

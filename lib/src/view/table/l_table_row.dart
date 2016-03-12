@@ -31,9 +31,9 @@ class LTableRow
   }
   static Map<String, LEditor> _renderEditorMap = new Map<String, LEditor>();
 
-  /// Table Element
+  /// Parent Table Element
   final LTable ltable;
-  /// Table Row
+  /// Table Row Element
   final TableRowElement rowElement;
   /// Row Type
   final String type;
@@ -80,16 +80,15 @@ class LTableRow
       selectCb = new InputElement(type: "checkbox");
       String selectLabel = type == TYPE_HEAD ? LTable.lTableRowSelectAll() : "${LTable.lTableRowSelectRow()} ${rowIndex + 1}";
       _label = new LabelElement()
-        ..classes.add(LForm.C_CHECKBOX);
-      _label.append(selectCb);
+        ..classes.add(LForm.C_CHECKBOX)
+        ..title = selectLabel
+        ..append(selectCb);
       _label.append(new SpanElement()
-        ..classes.add(LForm.C_CHECKBOX__FAUX)
-      );
+          ..classes.add(LForm.C_CHECKBOX__FAUX));
       _label.append(new SpanElement()
         ..classes.add(LForm.C_FORM_ELEMENT__LABEL)
         ..classes.add(LText.C_ASSISTIVE_TEXT)
-        ..text = selectLabel
-      );
+        ..text = selectLabel);
       // name/id
       selectCb.name = "sel-${type}-${rowIndex}";
       if (ltable.idPrefix == null) {
@@ -101,14 +100,14 @@ class LTableRow
       // th/td
       if (type == TYPE_HEAD) {
         TableCellElement tc = new Element.th()
-          ..classes.add(LTable.C_ROW_SELECT)
+          ..classes.add(LTable.C_CELL_SHRINK)
           ..attributes["scope"] = "col";
         rowElement.append(tc);
         tc.append(_label);
       } else {
-        TableCellElement tc = rowElement.addCell()
-          ..classes.add(LTable.C_ROW_SELECT);
-        tc.append(_label);
+        _selectCellElement = rowElement.addCell()
+          ..classes.add(LTable.C_CELL_SHRINK);
+        _selectCellElement.append(_label);
         selectCb.onClick.listen(onSelectClick);
       }
     }
@@ -116,6 +115,9 @@ class LTableRow
       addActions(rowActions);
     }
   } // LTableRow
+  TableCellElement _selectCellElement;
+
+  String get id => rowElement.id;
 
   /// clicked on selectCb
   void onSelectClick(MouseEvent evt) {
@@ -127,6 +129,9 @@ class LTableRow
     data.selected = selectCb.checked;
     if (tableSelectClicked != null)
       tableSelectClicked(data);
+    if (isEditModeSel) {
+      display(true); // update
+    }
   } // onSelectedClick
 
   /// Row Selected
@@ -199,7 +204,7 @@ class LTableRow
         evt.preventDefault();
         ltable.recordAction("record", data, null, null);
       });
-    } else if (isEditModeSelectSingleMulti) {
+    } else if (isEditModeROSelectSingleMulti) {
       a.onClick.listen(onRowSelectClick);
     }
     return addCell(a, DataRecord.URV, record.urv, null, null, null)
@@ -228,7 +233,7 @@ class LTableRow
     button.icon.classes.addAll([LButton.C_BUTTON__ICON, LButton.C_BUTTON__ICON__HINT, LButton.C_BUTTON__ICON__SMALL]);
 
     LTableCell tc = addCell(button.element, null, null, null, null, null);
-    tc.cellElement.classes.add(LTable.C_ROW_ACTION);
+    tc.cellElement.classes.add(LTable.C_CELL_SHRINK);
     return tc;
   }
 
@@ -293,7 +298,7 @@ class LTableRow
       if (_actionCell == null || !ltable.rowSelect) {
         rowElement.append(tc);
       } else {
-        rowElement.insertBefore(tc, _actionCell.cellElement);
+        rowElement.insertBefore(tc, _actionCellElement);
       }
     }
     if (fieldEdit) {
@@ -311,13 +316,14 @@ class LTableRow
     if (_actionCell == null) {
       bool atEnd = ltable.rowSelect;
       if (type == TYPE_HEAD) {
-        TableCellElement tc = new Element.th()
+        _actionCellElement = new Element.th()
           ..attributes["scope"] = "col";
-        rowElement.append(tc);
-        _actionCell = new LTableActionCell(this, tc,
+        rowElement.append(_actionCellElement);
+        _actionCell = new LTableActionCell(this, _actionCellElement,
             LTableActionCell._createButton(rowElement.id), atEnd);
       } else {
-        _actionCell = new LTableActionCell(this, rowElement.addCell(),
+        _actionCellElement = rowElement.addCell();
+        _actionCell = new LTableActionCell(this, _actionCellElement,
             LTableActionCell._createButton(rowElement.id), atEnd);
       }
     }
@@ -326,13 +332,14 @@ class LTableRow
       _actionCell.addAction(action);
     }
   }
+  TableCellElement _actionCellElement;
   LTableActionCell _actionCell;
 
 
   /// Set Record - [recordAction] click on urv
   void setRecord(DRecord record, int rowNo) {
     data.setRecord(record, rowNo);
-    display();
+    display(false);
     ltable.displayFoot(); //update
   }
   /// get record or null if empty
@@ -344,7 +351,16 @@ class LTableRow
   }
 
   /// (re) display values
-  void display() {
+  void display(bool redisplay) {
+    if (redisplay) {
+      editorList = new List<LEditor>();
+      rowElement.children.clear();
+      if (_selectCellElement != null)
+        rowElement.append(_selectCellElement);
+      if (_actionCellElement != null)
+        rowElement.append(_actionCellElement);
+    }
+    // for all columns
     for (String name in ltable.nameList) {
       if (name == null)
         continue;
@@ -358,7 +374,7 @@ class LTableRow
 
         if (isEditModeRO
             || data.isReadOnly
-            || isEditModeSelectSingleMulti
+            || isEditModeROSelectSingleMulti
             || (isEditModeSel && !selected)) {
           _displayRo(name, value, align, dataColumn, entry, true);
         } else { // all, sel or field
@@ -427,9 +443,9 @@ class LTableRow
     if (dataColumn != null) {
       DataType dt = dataColumn.tableColumn.dataType;
       if (DataTypeUtil.isCenterAligned(dt))
-        return LTable.C_TEXT_CENTER;
+        return LText.C_TEXT_ALIGN__CENTER;
       if (DataTypeUtil.isRightAligned(dt))
-        return LTable.C_TEXT_RIGHT;
+        return LText.C_TEXT_ALIGN__RIGHT;
     }
     return null;
   }
@@ -439,19 +455,15 @@ class LTableRow
     _editMode = newValue;
     if (type == TYPE_HEAD) {
       if (_label != null) {
-        if (isEditModeSelectSingle) {
-          _label.classes.add(LVisibility.C_HIDE);
-        } else {
-          _label.classes.remove(LVisibility.C_HIDE);
-        }
+        _label.classes.toggle(LVisibility.C_HIDDEN, isEditModeROSelectSingle);
       }
     } else if (type == TYPE_BODY) {
-      if (isEditModeSelectSingleMulti) {
+      if (isEditModeROSelectSingleMulti) {
         if (_rowClickSubscription == null)
           _rowClickSubscription = rowElement.onClick.listen(onRowSelectClick);
       }
       if (record != null) {
-        display(); // update
+        display(true); // update
       }
     }
   }
@@ -465,11 +477,11 @@ class LTableRow
   /// Table Edit Mode - Selected Rows
   bool get isEditModeSel => _editMode == LTable.EDIT_SEL;
   /// Table Edit Mode - R/O Select Single or Multiple Rows
-  bool get isEditModeSelectSingleMulti => _editMode == LTable.EDIT_SELECT_SINGLE || _editMode == LTable.EDIT_SELECT_MULTI;
+  bool get isEditModeROSelectSingleMulti => _editMode == LTable.EDIT_RO_SELECT_SINGLE || _editMode == LTable.EDIT_RO_SELECT_MULTI;
   /// Table Edit Mode - R/O Select Single Row
-  bool get isEditModeSelectSingle => _editMode == LTable.EDIT_SELECT_SINGLE;
+  bool get isEditModeROSelectSingle => _editMode == LTable.EDIT_RO_SELECT_SINGLE;
   /// Table Edit Mode - R/O Select Multiple Rows
-  bool get isEditModeSelectMulti => _editMode == LTable.EDIT_SELECT_MULTI;
+  bool get isEditModeROSelectMulti => _editMode == LTable.EDIT_RO_SELECT_MULTI;
 
 
   /// find column by name or null
@@ -501,20 +513,33 @@ class LTableRow
     ltable.displayFoot(); // update
   } // onRecordChange
 
-  /// Editor Focused - close other editor dropdowns
+  /// Editor Focused - close other editor dropdowns in row
   void onEditorFocus(Event evt) {
-    String id = "";
+    String cellId = "";
     if (evt != null) {
       Element target = evt.target;
-      id = target.id;
+      cellId = target.id;
     }
     for (LEditor ed in editorList) {
       // _log.fine("onEditorFocus ${id} - ${ed.id}");
-      if (id != ed.id) {
+      if (cellId != ed.id) {
         ed.showDropdown = false;
       }
     }
+    // close other row dropdowns
+    String rowId = rowElement.id;
+    for (LTableRow row in ltable._tbodyRows) {
+      if (row.rowElement.id != rowId)
+        row._removeDropdowns();
+    }
   } // onEditorFocus
+
+  /// remove dropdowns
+  void _removeDropdowns() {
+    for (LEditor ed in editorList) {
+      ed.showDropdown = false;
+    }
+  }
 
   /// string info
   String toString() {

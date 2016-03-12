@@ -14,7 +14,7 @@ class TablesGraphs extends DemoFeature {
       devStatus: DemoFeature.STATUS_COMPLETE,
       hints: ["Linked Table and Graph"],
       issues: [],
-      plans: []);
+      plans: ["resizable columns"]);
 
   LComponent get content {
     CDiv div = new CDiv()
@@ -26,7 +26,8 @@ class TablesGraphs extends DemoFeature {
       ..bordered = true
       ..responsiveOverflow = responsiveOverflowOption
       ..withStatistics = statisticsOption
-      ..editMode = LTable.EDIT_RO;
+      ..editMode = editModeOption;
+    div.add(table);
     if (responsiveStackedOption)
       table.responsiveStacked = responsiveStackedOption;
     if (responsiveStackedHorizontalOption) // overwrites stacked
@@ -44,7 +45,6 @@ class TablesGraphs extends DemoFeature {
     //
     table.setUi(datasource.ui);
     table.setRecords(datasource.recordList);
-    div.add(table);
     div.append(new HRElement());
     if (setCount > 1)
       table.setResponsiveScroll(400);
@@ -94,7 +94,25 @@ class TablesGraphs extends DemoFeature {
   bool responsiveStackedHorizontalOption = false;
   bool actionOption = false;
   LTableResponsive responsiveOverflowOption = LTableResponsive.OVERFLOW_HEAD_FOOT;
+  String editModeOption = LTable.EDIT_RO;
 
+  EditorI optionEditModeSelect() {
+    LSelect select = new LSelect("eMode", idPrefix: id)
+      ..label = "Edit Mode"
+      ..small = true
+      ..maxWidth = "10rem";
+    select.addOption(new OptionElement(data: "Read/Only", value: LTable.EDIT_RO));
+    select.addOption(new OptionElement(data: "Edit All", value: LTable.EDIT_ALL));
+    select.addOption(new OptionElement(data: "Edit Selected", value: LTable.EDIT_SEL));
+    select.addOption(new OptionElement(data: "Edit Field", value: LTable.EDIT_FIELD));
+    select.addOption(new OptionElement(data: "R/O Select Multi", value: LTable.EDIT_RO_SELECT_MULTI));
+    select.addOption(new OptionElement(data: "R/O Select Single", value: LTable.EDIT_RO_SELECT_SINGLE));
+    select.input.onChange.listen((Event evt){
+      editModeOption = select.value;
+      optionChanged();
+    });
+    return select;
+  }
 
   EditorI optionStatisticsCb() {
     LCheckbox cb = new LCheckbox("statisticsO", idPrefix: id)
@@ -137,6 +155,7 @@ class TablesGraphs extends DemoFeature {
 
   List<EditorI> get options {
     List<EditorI> list = new List<EditorI>();
+    list.add(optionEditModeSelect());
     list.add(optionStatisticsCb());
     list.add(optionResponsiveSCb());
     list.add(optionResponsiveSHCb());

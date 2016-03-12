@@ -58,7 +58,7 @@ class LTableHeaderRow
     if (_actionCell == null || !ltable.rowSelect) {
       rowElement.append(tc);
     } else {
-      rowElement.insertBefore(tc, _actionCell.cellElement);
+      rowElement.insertBefore(tc, _actionCellElement);
     }
     if (dataColumn == null) {
       dataColumn = findColumn(name);

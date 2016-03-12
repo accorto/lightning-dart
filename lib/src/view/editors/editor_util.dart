@@ -140,7 +140,7 @@ class EditorUtil {
         } else if (isAlternativeDisplay && !inGrid) {
           editor = new LPath.from(dataColumn,
               idPrefix: idPrefix);
-        } else if (html5 || inGrid) {
+        } else if (html5) {
           editor = new LSelect.from(dataColumn, multiple: false,
               idPrefix: idPrefix, inGrid: inGrid);
         } else {

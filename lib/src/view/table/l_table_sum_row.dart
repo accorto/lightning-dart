@@ -38,7 +38,7 @@ class LTableSumRow
       data.record.drv = label;
     //
     rowElement.children.clear();
-    display();
+    display(false);
     if (addTrailingCell) {
       rowElement.addCell();
     }
@@ -47,7 +47,8 @@ class LTableSumRow
 
 
   /// display stat record
-  void display() {
+  void display(bool redisplay) {
+    rowElement.children.clear();
     for (String name in ltable.nameList) {
       TableCellElement tc = rowElement.addCell();
 
@@ -100,9 +101,9 @@ class LTableSumRow
         String label = calc.column.label;
         DataType dt = calc.column.dataType;
         if (DataTypeUtil.isCenterAligned(dt))
-          align = LTable.C_TEXT_CENTER;
+          align = LText.C_TEXT_ALIGN__CENTER;
         else if (DataTypeUtil.isRightAligned(dt))
-          align = LTable.C_TEXT_RIGHT;
+          align = LText.C_TEXT_ALIGN__RIGHT;
         //
         if (DataTypeUtil.isNumber(dt) || dt == DataType.DURATIONHOUR) {
           value = calc.sum.toStringAsFixed(calc.decimalDigits);

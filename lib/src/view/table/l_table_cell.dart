@@ -69,7 +69,7 @@ class LTableCell {
         && dataColumn.statCol != null) {
       int percent = dataColumn.statCol.getPercent(value);
       if (percent > 0) {
-        content.classes.add(align == LTable.C_TEXT_RIGHT
+        content.classes.add(align == LText.C_TEXT_ALIGN__RIGHT
           ? "cell-stat-right" : "cell-stat-left");
         content.style.backgroundSize = "${percent}% auto";
       }

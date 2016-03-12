@@ -7399,7 +7399,7 @@ input[type=number]::-webkit-inner-spin-button.decimal {
     fill: #5eb4ff; }
 .slds-tabs--path {
   overflow: auto; }
-.slds-button {
-  white-space: nowrap; }
+body.modal-open {
+  overflow: hidden; }
 
 /*# sourceMappingURL=lightningdart.css.map */

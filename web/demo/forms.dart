@@ -150,7 +150,8 @@ class Forms extends DemoFeature {
   EditorI optionTypeSelect() {
     LSelect select = new LSelect("oType", idPrefix: id)
       ..label = "Form Type"
-      ..small = true;
+      ..small = true
+      ..maxWidth = "8rem";
     select.addOption(new OptionElement(data: "Stacked", value: LForm.C_FORM__STACKED));
     select.addOption(new OptionElement(data: "Horizontal", value: LForm.C_FORM__HORIZONTAL));
     select.addOption(new OptionElement(data: "Inline", value: LForm.C_FORM__INLINE));

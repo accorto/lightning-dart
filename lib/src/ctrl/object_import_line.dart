@@ -9,7 +9,8 @@ part of lightning_ctrl;
 /**
  * Object Import Line (table row)
  */
-class ObjectImportLine {
+class ObjectImportLine
+    extends LTableRow {
 
   static final Logger _log = new Logger("ObjectImportLine");
 
@@ -18,41 +19,28 @@ class ObjectImportLine {
   final DataRecord data;
   /// csv source
   final List<String> cellLine;
-  /// line no
-  final int lineNo;
 
-  /// editor per column
-  final List<LEditor> _editorList = new List<LEditor>();
   /// overwite per column
   final List<String> _overrideList = new List<String>();
   /// column meta data
   List<DColumn> _columnList;
-  /// select
-  LCheckbox _select;
 
   /// Import Line
-  ObjectImportLine(ObjectImport this.parent,
-      DataRecord this.data, List<String> this.cellLine, int this.lineNo) {
+  ObjectImportLine(ObjectImport this.parent, LTable ltable, TableRowElement rowElement,
+      int lineNo,
+      DataRecord this.data, List<String> this.cellLine)
+      : super(ltable, rowElement, lineNo, lineNo.toString(), null, LTableRow.TYPE_BODY, null) {
+
     // select
-    _select = new LCheckbox("selected", inGrid: true)
-      ..title = "Import Line";
-    _select.input
+    selectCb
       ..onClick.listen(onSelectClick)
       ..attributes[Html0.DATA_ID] = lineNo.toString();
   } // ObjectImportLine
 
   /// re-create TR line
-  void createLine(TableRowElement tr, DTable table, List<DColumn> columnList) {
+  void createLine(DTable table, List<DColumn> columnList) {
     _columnList = columnList;
-    String idPrefix = "imp-${lineNo}";
-    tr
-      ..id = idPrefix
-      ..classes.add(LTable.C_HINT_PARENT)
-      ..attributes[Html0.DATA_ID] = lineNo.toString();
-    tr.addCell()
-      ..append(_select.element);
-
-    _editorList.clear();
+    editorList = new List<LEditor>();
     _overrideList.clear();
     bool valid = true;
     for (int i = 0; i < _columnList.length; i++) {
@@ -60,46 +48,45 @@ class ObjectImportLine {
       if (i < cellLine.length)
         cellText = cellLine[i];
       //
-      TableCellElement td = tr.addCell()
-        ..id = "${idPrefix}-${i}"
-        ..classes.add(LText.C_TRUNCATE)
-        ..append(new SpanElement()
-          ..text = cellText)
-        ..append(new BRElement());
+      DataColumn dataColumn = null;
+      LEditor editor = null;
+      String name = null;
       DColumn col = _columnList[i];
-      if (col == null) {
-        _editorList.add(null);
-      } else {
-        DataColumn dataColumn = new DataColumn(table, col, null, null);
-        LEditor ed = EditorUtil.createFromColumn("", dataColumn, true,
-            idPrefix:idPrefix, data: data)
+      if (col != null) {
+        dataColumn = new DataColumn(table, col, null, null);
+        editor = EditorUtil.createFromColumn("", dataColumn, true,
+            idPrefix:rowElement.id, data: data)
           ..editorChange = onEditorChange
-          ..onFocus.listen(onEditorFocus);
-        td.append(ed.element);
-        _editorList.add(ed);
-        //
-        if (!checkLineValue(ed, cellText)) {
+          ..onFocus.listen(onEditorFocus); // close other dropdowns
+        name = col.name;
+        if (!checkLineValue(editor, cellText)) {
           valid = false;
         }
       }
+      // cell
+      LTableCell cell = addCell(new SpanElement()..text = cellText,
+          name, null, null, null, dataColumn, fieldEdit:false, addStatistics: false);
+      if (editor != null) {
+        cell.cellElement
+          ..append(new BRElement())
+          ..append(editor.element);
+      }
+      editorList.add(editor);
       _overrideList.add(null);
     } // cols
     data.selected = valid;
-    _select.checked = valid;
-    tr.addCell(); // addColumn
-    //
-    _select.value = data.selected.toString();
+    selectCb.checked = valid;
   } // createLine
 
   /// check line - select only if valid
   void onSelectClick(MouseEvent evt) {
     bool valid = checkLine();
-    _log.config("onSelectClick ${lineNo} valid=${valid}");
-    if (_select.checked) {
+    _log.config("onSelectClick ${rowIndex} valid=${valid}");
+    if (selectCb.checked) {
       if (valid)
         data.selected = true;
       else
-        _select.checked = false;
+        selectCb.checked = false;
     } else {
       data.selected = false;
     }
@@ -119,7 +106,7 @@ class ObjectImportLine {
       }
       DColumn col = _columnList[i];
       if (col != null) {
-        LEditor ed = _editorList[i];
+        LEditor ed = editorList[i];
         String overwrite = _overrideList[i];
         if (overwrite == null && ed != null) {
           if (!checkLineValue(ed, cellText)) {
@@ -147,8 +134,8 @@ class ObjectImportLine {
 
   /// editor change - mark overwrite
   void onEditorChange(String name, String newValue, DEntry entry, var details) {
-    for (int i = 0; i < _editorList.length; i++) {
-      LEditor ed = _editorList[i];
+    for (int i = 0; i < editorList.length; i++) {
+      LEditor ed = editorList[i];
       if (ed != null && name == ed.name) {
         _log.fine("onEditorChange ${name} ${newValue}");
         _overrideList[i] = newValue;
@@ -159,19 +146,5 @@ class ObjectImportLine {
     }
     _log.warning("onEditorChange ${name} ${newValue} NotFound");
   }
-  /// Editor Focused - close other editor dropdowns
-  void onEditorFocus(Event evt) {
-    String id = "";
-    if (evt != null) {
-      Element target = evt.target;
-      id = target.id;
-    }
-    for (LEditor ed in _editorList) {
-      // _log.fine("onEditorFocus ${id} - ${ed.id}");
-      if (ed != null && id != ed.id) {
-        ed.showDropdown = false;
-      }
-    }
-  } // onEditorFocus
 
 } // ObjectImportLine

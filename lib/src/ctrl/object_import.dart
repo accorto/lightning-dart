@@ -8,7 +8,6 @@ part of lightning_ctrl;
 
 /**
  * Import
- * TODO line editor dropdown check
  */
 class ObjectImport {
 
@@ -23,8 +22,8 @@ class ObjectImport {
   /// File Editor
   LInputFile _fileInput;
   /// the table
-  final TableElement _table = new TableElement()
-    ..classes.addAll([LTable.C_TABLE, LTable.C_TABLE__BORDERED, LTable.C_TABLE__FIXED_LAYOUT]);
+  final LTable _table = new LTable("imp", rowSelect: true)
+    ..setResponsiveScroll(600);
   final DivElement _feedback = new DivElement()
     ..classes.addAll([LMargin.C_TOP__MEDIUM, LScrollable.C_SCROLLABLE__Y])
     ..style.maxHeight = "150px";
@@ -66,12 +65,7 @@ class ObjectImport {
       ..append(_todo);
     _modal.append(fileDiv);
     // table
-    DivElement tableDiv = new DivElement()
-      ..classes.add(LScrollable.C_SCROLLABLE__X)
-      ..style.maxHeight = "600px"
-      ..style.overflowY = "auto"
-      ..append(_table);
-    _modal.append(tableDiv);
+    _modal.append(_table.element);
     _modal.append(_feedback);
 
     _modal.addFooterButtons(saveLabelOverride: "Import", hideOnSave: false)
@@ -122,73 +116,26 @@ class ObjectImport {
 
   /// create table
   void _createTable() {
-    _table.children.clear();
     _headerColumnPicks.clear();
     _headerColumnList.clear();
+    _table.clear();
+
     // header row
-    _headTr = _table.createTHead().addRow()
-      ..classes.add(LText.C_TEXT_HEADING__LABEL);
-    // select
-    _selectAll = new LCheckbox("selectAll")
-      ..title = "Check Lines for Import"
-      ..element.onClick.listen(onHeaderSelectClick);
-    Element th = new Element.th()
-      ..classes.add(LTable.C_CELL_SHRINK)
-      ..append(_selectAll.element);
-    _headTr.append(th);
-    // columns
-    for (String headingCol in _csv.headingColumns) {
-      th = _createTh(headingCol)
-        ..append(new BRElement())
-        ..append(_createHeaderColumnPick(headingCol).element)
-        ..append(new BRElement());
-      _headTr.append(th); // see onClickAddColumn
+    _headerRow = _table.addHeadRow(false);
+    // header columns
+    for (int i = 0; i < _csv.headingColumns.length; i++) {
+      String headingCol = _csv.headingColumns[i];
+      LTableHeaderCell cell = _headerRow.addHeaderCell(i.toString(), headingCol);
+      cell.cellElement.append(new BRElement());
+      cell.cellElement.append(_createHeaderColumnPick(headingCol).element);
+      cell.cellElement.append(new BRElement());
     }
     _headColumnButton();
     diagnostics();
     //
-    _tbody = _table.createTBody();
     _createTableLines(true);
   } // createTable
-  LCheckbox _selectAll;
-  TableRowElement _headTr;
-  TableSectionElement _tbody;
-
-  /// create header cell
-  Element _createTh(String headingCol) {
-    InputElement resizeInput = new InputElement(type: EditorI.TYPE_RANGE)
-    //..id =
-      ..classes.add(LText.C_ASSISTIVE_TEXT)
-      ..min = "20"
-      ..max = "500";
-    SpanElement resizeHandle = new SpanElement()
-      ..classes.add(LTable.C_RESIZABLE__HANDLE)
-      ..append(new SpanElement()..classes.add(LTable.C_RESIZABLE__DIVIDER));
-    DivElement resizeDiv1 = new DivElement()
-      ..classes.addAll([LGrid.C_SHRINK_NONE, LTable.C_RESIZABLE])
-      ..append(new LabelElement()
-        ..classes.add(LText.C_ASSISTIVE_TEXT)
-      //..htmlFor =
-        ..text = "click and drag to resize")
-      ..append(resizeInput)
-      ..append(resizeHandle);
-    DivElement resizeDiv = new DivElement()
-      ..classes.add(LText.C_TRUNCATE)
-      ..appendText(headingCol)
-      ..append(resizeDiv1);
-
-    Element th = new Element.th()
-      ..classes.add(LTable.C_IS_RESIZABLE)
-      ..attributes["scope"] = "col"
-      ..append(resizeDiv);
-    int colWidth = 200;
-    resizeInput.value = colWidth.toString();
-    th.style.width = "${colWidth}px";
-    resizeInput.onInput.listen((Event evt) {
-      th.style.width = "${resizeInput.value}px";
-    });
-    return th;
-  } // createTh
+  LTableHeaderRow _headerRow;
 
   // create Column Lookup Editor
   LEditor _createHeaderColumnPick(String headingCol) {
@@ -222,20 +169,20 @@ class ObjectImport {
 
   /// add column button to head row
   void _headColumnButton() {
-    Element th = new Element.th()
-      ..appendHtml("&nbsp;")
-      ..append(_addColumnButton.element);
-    _headTr.append(th);
+    LTableHeaderCell cell = _headerRow.addHeaderCell("add", "-");
+    cell.cellElement.append(new BRElement());
+    cell.cellElement.append(_addColumnButton.element);
   }
 
   /// add a new column
   void onAddColumnClick(Event evt) {
-    _headTr.children.last.remove();
-    Element th = _createTh("-")
-      ..append(new BRElement())
-      ..append(_createHeaderColumnPick("-").element)
-      ..append(new BRElement());
-    _headTr.append(th);
+    _headerRow.rowElement.children.last.remove();
+
+    LTableHeaderCell cell = _headerRow.addHeaderCell("a", "-");
+    cell.cellElement.append(new BRElement());
+    cell.cellElement.append(_createHeaderColumnPick("-").element);
+    cell.cellElement.append(new BRElement());
+
     _headColumnButton();
     _createTableLines(false);
     diagnostics();
@@ -295,33 +242,36 @@ class ObjectImport {
 
   /// re-create lines
   void _createTableLines(bool reset) {
-    _tbody.children.clear();
+    _table.clearRecords();
+
     feedbackClear();
     int start = _firstLineIsHeading ? 1 : 0;
     if (reset) {
-      lineList.clear();
+      _table.clearBody();
       for (int lineNo = start; lineNo < _csv.cells.length; lineNo++) {
         DataRecord data = new DataRecord(datasource.tableDirect, null)
           ..newRecord(null, rowNo: lineNo);
-        lineList.add(new ObjectImportLine(this, data, _csv.cells[lineNo], lineNo));
+        _table.addBodyRow(row: new ObjectImportLine(this, _table, _table.createBodyRow(),
+            lineNo, data, _csv.cells[lineNo]));
       }
     }
     // for each line
-    for (ObjectImportLine line in lineList) {
-      line.createLine(_tbody.addRow(), datasource.tableDirect, _headerColumnList);
+    for (LTableRow line in _table.i_bodyRows) {
+      if (line is ObjectImportLine)
+        line.createLine(datasource.tableDirect, _headerColumnList);
     } // lines
     diagnostics();
   } // createTableLines
-  final List<ObjectImportLine> lineList = new List<ObjectImportLine>();
 
 
   /// check all lines
   void onHeaderSelectClick(MouseEvent evt) {
     _log.config("onHeaderSelectClick");
-    for (ObjectImportLine line in lineList) {
-      line.checkLine();
+    for (LTableRow line in _table.i_bodyRows) {
+      if (line is ObjectImportLine)
+        line.checkLine();
     }
-    _selectAll.checked = false;
+    //_selectAll.checked = false;
     diagnostics();
   }
 
@@ -352,13 +302,16 @@ class ObjectImport {
 
     // row
     String rowInfo = "Check values";
-    if (lineList.isNotEmpty) {
-      int selected = 0;
-      for (ObjectImportLine line in lineList) {
-        if (line.data.selected)
-          selected++; // valid
+    if (_table.i_bodyRows.isNotEmpty) {
+      for (LTableRow line in _table.i_bodyRows) {
+        int selected = 0;
+        if (line is ObjectImportLine) {
+          if (line.data.selected)
+            selected++; // valid
+
+        }
+        rowInfo = "${selected} rows selected for import";
       }
-      rowInfo = "${selected} rows selected";
     }
 
     _todo.children.clear();

@@ -372,12 +372,16 @@ class LModal
       _backdrop.classes.add(C_BACKDROP__OPEN);
       content.focus();
       _openModals.add(this);
+      document.body.classes.add("modal-open");
     } else {
       _dialog.classes.remove(C_FADE_IN_OPEN);
       _backdrop.classes.remove(C_BACKDROP__OPEN);
       _openModals.remove(this);
+      if (_openModals.isEmpty)
+        document.body.classes.remove("modal-open");
+      element.remove();
     }
-  }
+  } // show
 
   /// Show Center Screen - or left/below evt target
   void showInComponent(LComponent parent, {MouseEvent evt}) {
@@ -452,15 +456,13 @@ class LModal
   /// Hide and Remove Modal
   void onClickCancel(MouseEvent ignored) {
     show = false;
-    element.remove();
     if (onModalClose != null)
-      onModalClose();
+      onModalClose(); // info callback
   }
 
   /// Hide and Remove Modal
   void onClickRemove(MouseEvent ignored) {
     show = false;
-    element.remove();
   }
 
   /// Move start screen (based on center screen)

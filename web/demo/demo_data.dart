@@ -19,6 +19,7 @@ class DemoData extends Datasource {
   static const COL_AGE = "age";
   static const COL_AMOUNT = "amount";
   static const COL_DATE = "date";
+  static const COL_REFERENCE = "reference";
 
 
   /// Prefilled Data Source
@@ -65,10 +66,11 @@ class DemoData extends Datasource {
       ..name = COL_STATUS
       ..label = "Status"
       ..dataType = DataType.PICK;
-    col.pickValueList.add(new DOption()..value ="new" ..label="New");
-    col.pickValueList.add(new DOption()..value ="due" ..label="Due");
-    col.pickValueList.add(new DOption()..value ="paid" ..label="Paid");
-    col.pickValueList.add(new DOption()..value ="default" ..label="In Default");
+    col
+      ..pickValueList.add(new DOption()..value ="new" ..label="New")
+      ..pickValueList.add(new DOption()..value ="due" ..label="Due")
+      ..pickValueList.add(new DOption()..value ="paid" ..label="Paid")
+      ..pickValueList.add(new DOption()..value ="default" ..label="In Default");
     uiu.addColumn(col);
 
     col = new DColumn()
@@ -97,6 +99,18 @@ class DemoData extends Datasource {
       ..name = COL_DATE
       ..label = "Date"
       ..dataType = DataType.DATE;
+    uiu.addColumn(col);
+
+    col = new DColumn()
+      ..columnId = nextId()
+      ..name = COL_REFERENCE
+      ..label = "Reference"
+      ..dataType = DataType.FK;
+    for (int i = 1; i < 15; i++) {
+      col.pickValueList.add(new DOption()
+        ..value = "r${i}"
+        ..label = "Reference ${i}");
+    }
     uiu.addColumn(col);
 
     return ui;

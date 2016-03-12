@@ -51,12 +51,6 @@ class LTable
   static const String C_HINT_PARENT = "slds-hint-parent";
 
 
-  static const String C_ROW_SELECT = "slds-row-select";
-  static const String C_ROW_ACTION = "slds-row-action";
-
-  static const String C_TEXT_CENTER = "slds-text-center";
-  static const String C_TEXT_RIGHT = "slds-text-right";
-
   static const String C_RESIZABLE = "slds-resizable";
   static const String C_RESIZABLE__HANDLE = "slds-resizable__handle";
   static const String C_RESIZABLE__DIVIDER = "slds-resizable__divider";
@@ -68,14 +62,14 @@ class LTable
 
   /// Table Edit Mode - Read Only
   static const String EDIT_RO = "ro";
+  /// Table Edit Mode - R/O Select Multiple Rows
+  static const String EDIT_RO_SELECT_MULTI = "roSelX";
+  /// Table Edit Mode - R/O Select Single Rows
+  static const String EDIT_RO_SELECT_SINGLE = "roSel1";
   /// Table Edit Mode - Field Click
   static const String EDIT_FIELD = "field";
   /// Table Edit Mode - Selected Rows
   static const String EDIT_SEL = "sel";
-  /// Table Edit Mode - R/O Select Multiple Rows
-  static const String EDIT_SELECT_MULTI = "roSelX";
-  /// Table Edit Mode - R/O Select Single Rows
-  static const String EDIT_SELECT_SINGLE = "roSel1";
   /// Table Edit Mode - All Rows
   static const String EDIT_ALL = "all";
 
@@ -197,8 +191,6 @@ class LTable
           _tableHead = new TableElement()
             ..classes.add("r-table-head")
             ..classes.addAll(_table.classes)
-            //..style.position = "absolute"
-            //..style.zIndex = "1"
             ..style.top = "0"
             ..style.left = "0";
         }
@@ -208,12 +200,14 @@ class LTable
           _thead.remove();
           _tableHead.append(_thead);
         }
+        _table.style.margin = "36px 0";
       } else {
         if (_thead != null) {
           _thead.remove();
           _table.append(_thead);
         }
         _tableHead = null;
+        _table.style.removeProperty("margin");
       }
 
       // body
@@ -247,7 +241,7 @@ class LTable
     }
     if (_info != null)
       infoText = infoText; // re-attach
-    _overflowSync();
+    _fixWidth(null);
   } // set responsiveOverflow
   LTableResponsive _overflow = LTableResponsive.NONE;
 
@@ -289,7 +283,7 @@ class LTable
     }
     _wrapper.style.overflowY = "auto";
     _wrapper.style.height = "${height}px";
-    _overflowSync();
+    _fixWidth(null);
   } // showingNow
 
   /// scroll body with fixed header
@@ -303,7 +297,7 @@ class LTable
       _tableFoot.style.bottom = "-${top}px";
     }
     if (_lastWidth != width) {
-      _overflowSync();
+      _fixWidth(null);
       _lastWidth = width;
     }
     //_log.finer("onScrollTableWrapper"
@@ -313,15 +307,18 @@ class LTable
   int _lastWidth;
 
   /// sync column width
-  void _overflowSync() {
+  void _fixWidth(Timer timer) {
     // count
+    int rowTypeCount = 0;
     int rowCount = 0;
     int colCount = 0;
+    // body
     Element tr = null;
     _table.style.tableLayout = "auto";
     if (_tbody != null && _tbody.children.isNotEmpty) {
       tr = _tbody.children.first;
-      rowCount++;
+      rowTypeCount++;
+      rowCount = _tbody.children.length;
       colCount = tr.children.length;
     }
     Element tr_h = null;
@@ -329,63 +326,71 @@ class LTable
       _tableHead.style.tableLayout = "auto";
       if (_thead != null && _thead.children.isNotEmpty) {
         tr_h = _thead.children.first;
-        rowCount++;
+        rowTypeCount++;
         if (colCount == 0) {
           colCount = tr_h.children.length;
         } else if (colCount != tr_h.children.length) {
           tr_h = null;
-          rowCount--;
+          rowTypeCount--;
         }
       }
     }
     Element tr_f = null;
-    if (_tableHead != null) {
-      _tableHead.style.tableLayout = "auto";
+    if (_tableFoot != null) {
+      _tableFoot.style.tableLayout = "auto";
       if (_tfoot != null && _tfoot.children.isNotEmpty) {
         tr_f = _tfoot.children.first;
-        rowCount++;
+        rowTypeCount++;
         if (colCount == 0) {
           colCount = tr_f.children.length;
         } else if (colCount != tr_f.children.length) {
           tr_f = null;
-          rowCount--;
+          rowTypeCount--;
         }
       }
     }
-    if (rowCount < 2) {
+    String info = "fixWidth ${id} (${colCount}x${rowCount})#${_fixWidthCount}";
+    if ((_tableHead == null && _tableFoot == null) || rowTypeCount < 2) {
+      _log.fine(info + " auto");
+      if (_timer != null) {
+        _timer.cancel();
+        _timer = null;
+      }
       return; // nothing to do
     }
     // for each column
-    String info = "overflowSync";
     for (int c = 0; c < colCount; c++) {
       int width = 0;
       Element td = null;
       if (tr != null) {
         td = tr.children[c];
-        td.style.removeProperty("width");
-        int w = td.offsetWidth;
-        if (w > width)
-          width = w;
+        width = _fixWidthTd(td, width);
       }
       Element td_h = null;
       if (tr_h != null) {
         td_h = tr_h.children[c];
-        td_h.style.removeProperty("width");
-        int w = td_h.offsetWidth;
-        if (w > width)
-          width = w;
+        width = _fixWidthTd(td_h, width);
       }
       Element td_f = null;
       if (tr_f != null) {
         td_f = tr_f.children[c];
-        td_f.style.removeProperty("width");
-        int w = td_f.offsetWidth;
-        if (w > width)
-          width = w;
+        width = _fixWidthTd(td_f, width);
       }
       info += " " + width.toString();
       if (width == 0) {
         _lastWidth = null;
+        if (timer == null && _timer == null) {
+          info += " timer";
+          _timer = new Timer.periodic(new Duration(milliseconds: 250), _fixWidth);
+          _fixWidthCount = 0;
+        } else if (timer != null) {
+          _fixWidthCount++;
+          if (_fixWidthCount > 2) {
+            timer.cancel();
+            _timer = null;
+          }
+        }
+        _log.fine(info);
         return;
       }
       String widthString = "${width}px";
@@ -404,8 +409,25 @@ class LTable
       _tableHead.style.tableLayout = "fixed";
     if (_tableFoot != null)
       _tableFoot.style.tableLayout = "fixed";
+    if (_timer != null) {
+      _timer.cancel();
+      _timer = null;
+    }
+    _fixWidthCount = 0;
     _log.fine(info);
-  } // overflowSync
+  } // fixWith
+  int _fixWidthCount = 0;
+  Timer _timer;
+
+  /// return max width
+  int _fixWidthTd(Element td, int width) {
+    int w = width;
+    td.style.removeProperty("width");
+    int ow = td.offsetWidth;
+    if (ow > w)
+      w = ow;
+    return w;
+  } // fixWidthTx
 
   /// Table bordered
   bool get bordered => element.classes.contains(C_TABLE__BORDERED);
@@ -732,7 +754,7 @@ class LTable
     _log.config("onActionRowReset ${actionVar}");
     if (actionVar is LTableRow) {
       actionVar.data.resetRecord();
-      actionVar.display();
+      actionVar.display(true);
     } else {
       data.resetRecord();
     }
@@ -891,7 +913,28 @@ class LTable
     }
   } // setRecords
 
-  /// clear all records
+  /// clear table
+  void clear() {
+    _thead.children.clear();
+    _tbody.children.clear();
+    _tfoot.children.clear();
+    _theadRows.clear();
+    _tbodyRows.clear();
+    _tfootRows.clear();
+
+    nameLabelMap.clear();
+    nameList.clear();
+    recordList.clear();
+  } // clear
+
+  /// clear body
+  void clearBody() {
+    _tbody.children.clear();
+    _tbodyRows.clear();
+    recordList.clear();
+  }
+
+  /// clear all records + display
   void clearRecords() {
     setRecords(new List<DRecord>());
     displayFoot();
@@ -929,7 +972,7 @@ class LTable
         _tfootRows.remove(_statisticsRow);
       }
     }
-    _overflowSync();
+    _fixWidth(null);
   } // display
   LTableSumRow _statisticsRow;
 
@@ -937,7 +980,7 @@ class LTable
   /// - [LTableRow#setRecord] [LTableRow#onRecordChange]
   void displayFoot() {
     for (LTableRow row in _tfootRows) {
-      row.display();
+      row.display(false);
     }
   } // displayFooter
 

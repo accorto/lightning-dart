@@ -27,8 +27,8 @@ class FkCtrl
         return new FkMulti.from(dataColumn, idPrefix: idPrefix, inGrid: inGrid);
       return new FkCtrl.from(dataColumn, idPrefix: idPrefix, inGrid: inGrid);
     }
-    _log.warning("createLookup ${dataColumn.name}: NoFkReference");
-    return null;
+    //_log.warning("createLookup ${dataColumn.name}: NoFkReference");
+    return new LLookup.from(dataColumn, idPrefix: idPrefix, inGrid: inGrid);
   }
 
   static final Logger _log = new Logger("FkCtrl");
