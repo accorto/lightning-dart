@@ -55,10 +55,10 @@ class LTableHeaderRow
 
     TableCellElement tc = new Element.th()
       ..attributes["scope"] = "col";
-    if (_actionCell == null || !ltable.rowSelect) {
+    if (actionCellElement == null || !ltable.rowSelect) {
       rowElement.append(tc);
     } else {
-      rowElement.insertBefore(tc, _actionCellElement);
+      rowElement.insertBefore(tc, actionCellElement);
     }
     if (dataColumn == null) {
       dataColumn = findColumn(name);

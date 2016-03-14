@@ -95,10 +95,9 @@ class LTable
   TableSectionElement _thead;
   TableSectionElement _tbody;
   TableSectionElement _tfoot;
-  final List<LTableHeaderRow> _theadRows = new List<LTableHeaderRow>();
-  final List<LTableRow> _tbodyRows = new List<LTableRow>();
-  List<LTableRow> get i_bodyRows => _tbodyRows;
-  final List<LTableRow> _tfootRows = new List<LTableRow>();
+  final List<LTableHeaderRow> theadRows = new List<LTableHeaderRow>();
+  final List<LTableRow> tbodyRows = new List<LTableRow>();
+  final List<LTableRow> tfootRows = new List<LTableRow>();
 
 
   /// Column Name-Label Map - required for responsive
@@ -241,7 +240,7 @@ class LTable
     }
     if (_info != null)
       infoText = infoText; // re-attach
-    _fixWidth(null);
+    fixWidth(null);
   } // set responsiveOverflow
   LTableResponsive _overflow = LTableResponsive.NONE;
 
@@ -283,7 +282,7 @@ class LTable
     }
     _wrapper.style.overflowY = "auto";
     _wrapper.style.height = "${height}px";
-    _fixWidth(null);
+    fixWidth(null);
   } // showingNow
 
   /// scroll body with fixed header
@@ -297,7 +296,7 @@ class LTable
       _tableFoot.style.bottom = "-${top}px";
     }
     if (_lastWidth != width) {
-      _fixWidth(null);
+      fixWidth(null);
       _lastWidth = width;
     }
     //_log.finer("onScrollTableWrapper"
@@ -307,7 +306,17 @@ class LTable
   int _lastWidth;
 
   /// sync column width
-  void _fixWidth(Timer timer) {
+  void fixWidth(Timer timer) {
+    // fix height
+    if (_tableHead != null && _thead != null) {
+      int height = 37;
+      if (_thead != null) {
+        if (_thead.clientHeight > height)
+          height = _thead.clientHeight;
+      }
+      _table.style.margin = "${height-1}px 0";
+    }
+
     // count
     int rowTypeCount = 0;
     int rowCount = 0;
@@ -321,6 +330,7 @@ class LTable
       rowCount = _tbody.children.length;
       colCount = tr.children.length;
     }
+    String info = "fixWidth ${id} (${colCount}x${rowCount})#${_fixWidthCount}";
     Element tr_h = null;
     if (_tableHead != null) {
       _tableHead.style.tableLayout = "auto";
@@ -329,7 +339,8 @@ class LTable
         rowTypeCount++;
         if (colCount == 0) {
           colCount = tr_h.children.length;
-        } else if (colCount != tr_h.children.length) {
+        } else if (colCount > tr_h.children.length) { // addl cols are ok
+          info += " header cols=${tr_h.children.length}";
           tr_h = null;
           rowTypeCount--;
         }
@@ -343,13 +354,13 @@ class LTable
         rowTypeCount++;
         if (colCount == 0) {
           colCount = tr_f.children.length;
-        } else if (colCount != tr_f.children.length) {
+        } else if (colCount > tr_f.children.length) { // addl ok
+          info += " footer cols=${tr_f.children.length}";
           tr_f = null;
           rowTypeCount--;
         }
       }
     }
-    String info = "fixWidth ${id} (${colCount}x${rowCount})#${_fixWidthCount}";
     if ((_tableHead == null && _tableFoot == null) || rowTypeCount < 2) {
       _log.fine(info + " auto");
       if (_timer != null) {
@@ -381,7 +392,7 @@ class LTable
         _lastWidth = null;
         if (timer == null && _timer == null) {
           info += " timer";
-          _timer = new Timer.periodic(new Duration(milliseconds: 250), _fixWidth);
+          _timer = new Timer.periodic(new Duration(milliseconds: 250), fixWidth);
           _fixWidthCount = 0;
         } else if (timer != null) {
           _fixWidthCount++;
@@ -454,7 +465,7 @@ class LTable
           LText.C_TEXT_HEADING__LABEL,
           enableSort ? onTableSortClicked : null,
           tableActions);
-      if (rowSelect && _theadRows.isEmpty) {
+      if (rowSelect && theadRows.isEmpty) {
         row.selectCb.onClick.listen((MouseEvent evt) {
           selectAll(row.selectCb.checked);
         });
@@ -470,7 +481,7 @@ class LTable
           null);
     } */
     row.editMode = _editMode;
-    _theadRows.add(row);
+    theadRows.add(row);
     // add urv
     if (recordAction != null && _ui != null) {
       row.addHeaderCell(DataRecord.URV, _ui.table.label);
@@ -548,7 +559,7 @@ class LTable
   /// Sort Table body Rows
   /// - local: sort LTableRow then recreate tbody/rows
   void _sort(bool sortRemoteOk, bool redisplay) {
-    if (_tbodyRows.length > 1) {
+    if (tbodyRows.length > 1) {
       if (sortRemoteOk && recordSorting.sortRemote()) {
         for (AppsAction action in tableActions) {
           if (action.value == AppsAction.REFRESH) {
@@ -561,12 +572,12 @@ class LTable
         if (redisplay) {
           display(); //
         }
-        _log.fine("sort local #${_tbodyRows.length}");
-        _tbodyRows.sort((LTableRow one, LTableRow two) {
+        _log.fine("sort local #${tbodyRows.length}");
+        tbodyRows.sort((LTableRow one, LTableRow two) {
           return recordSorting.recordSortCompare(one.record, two.record);
         });
         _tbody.children.clear();
-        for (LTableRow row in _tbodyRows) {
+        for (LTableRow row in tbodyRows) {
           _tbody.children.add(row.rowElement);
         }
       }
@@ -589,13 +600,13 @@ class LTable
     int count = 0;
     RegExp regEx = LUtil.createRegExp(findString);
     if (regEx == null) {
-      for (LTableRow row in _tbodyRows) {
+      for (LTableRow row in tbodyRows) {
         row.record.clearIsMatchFind();
         row.show = true;
       }
       count = recordList.length;
     } else {
-      for (LTableRow row in _tbodyRows) {
+      for (LTableRow row in tbodyRows) {
         bool match = false;
         for (DEntry entry in row.record.entryList) {
           if (entry.hasValueDisplay()) {
@@ -629,7 +640,7 @@ class LTable
   int graphSelect(bool graphMatch(DRecord record)) {
     // show all
     if (graphMatch == null) {
-      for (LTableRow row in _tbodyRows) {
+      for (LTableRow row in tbodyRows) {
         row.record.clearIsMatchFind();
         row.show = true;
       }
@@ -643,7 +654,7 @@ class LTable
     }
     // show matching
     int count = 0;
-    for (LTableRow row in _tbodyRows) {
+    for (LTableRow row in tbodyRows) {
       bool match = graphMatch(row.record);
       row.record.isMatchFind = match;
       row.show = match;
@@ -666,10 +677,10 @@ class LTable
   /// Set Edit Mode
   void set editMode (String newValue) {
     _editMode = newValue;
-    for (LTableRow row in _theadRows) {
+    for (LTableRow row in theadRows) {
       row.editMode = newValue;
     }
-    for (LTableRow row in _tbodyRows) {
+    for (LTableRow row in tbodyRows) {
       row.editMode = newValue;
     }
   }
@@ -680,8 +691,8 @@ class LTable
    */
   void addTableAction(AppsAction action) {
     tableActions.add(action);
-    if (_theadRows.isNotEmpty) {
-      _theadRows.first.addActions([action]);
+    if (theadRows.isNotEmpty) {
+      theadRows.first.addActions([action]);
     }
   } // addTableAction
 
@@ -707,10 +718,10 @@ class LTable
     }
     row.editMode = _editMode;
     row.tableSelectClicked = onTableRowSelectClicked;
-    _tbodyRows.add(row);
+    tbodyRows.add(row);
     if (record != null) {
       if (rowNo == null)
-        rowNo = _tbodyRows.length - 1;
+        rowNo = tbodyRows.length - 1;
       row.setRecord(record, rowNo);
     }
     return row;
@@ -727,12 +738,12 @@ class LTable
 
   /// Delete Body Row with [record]
   LTableRow deleteBodyRow(DRecord record) {
-    for (int i = 0; i < _tbodyRows.length; i++) {
-      LTableRow row = _tbodyRows[i];
+    for (int i = 0; i < tbodyRows.length; i++) {
+      LTableRow row = tbodyRows[i];
       if (row.record == record) {
         String info = "deleteBodyRow ${record.urv} #${i}";
         row.rowElement.remove(); // dom
-        _tbodyRows.removeAt(i); // table row
+        tbodyRows.removeAt(i); // table row
         if (!recordList.remove(record))
           info += " NOT found in recordList";
         displayFoot();
@@ -763,7 +774,7 @@ class LTable
 
   /// get Body Row with record
   LTableRow getBodyRow(DRecord record) {
-    for (LTableRow row in _tbodyRows) {
+    for (LTableRow row in tbodyRows) {
       if (row.record == record)
         return row;
     }
@@ -782,7 +793,7 @@ class LTable
           LTableRow.TYPE_FOOT,
           null); // rowAction
     }
-    _tfootRows.add(row);
+    tfootRows.add(row);
     return row;
   }
 
@@ -818,17 +829,17 @@ class LTable
         record == null ? LTableRow.TYPE_FOOT : LTableRow.TYPE_BODY);
     //
     if (record == null) {
-      _tfootRows.add(row);
+      tfootRows.add(row);
     } else {
-      _tbodyRows.add(row);
-      row.setRecord(record, _tbodyRows.length - 1);
+      tbodyRows.add(row);
+      row.setRecord(record, tbodyRows.length - 1);
     }
     return row;
   } // addStatRow
 
   /// Select/Unselect All Body Rows
   void selectAll(bool select) {
-    for (LTableRow row in _tbodyRows) {
+    for (LTableRow row in tbodyRows) {
       row.selected = select;
     }
   }
@@ -890,9 +901,9 @@ class LTable
     _tbody = null;
     _tfoot = null;
     //
-    _theadRows.clear();
-    _tbodyRows.clear();
-    _tfootRows.clear();
+    theadRows.clear();
+    tbodyRows.clear();
+    tfootRows.clear();
     _headRowIndex = -1;
     _bodyRowIndex = -1;
     _footRowIndex = -1;
@@ -915,12 +926,15 @@ class LTable
 
   /// clear table
   void clear() {
-    _thead.children.clear();
-    _tbody.children.clear();
-    _tfoot.children.clear();
-    _theadRows.clear();
-    _tbodyRows.clear();
-    _tfootRows.clear();
+    if (_thead != null)
+      _thead.children.clear();
+    if (_tbody != null)
+      _tbody.children.clear();
+    if (_tfoot != null)
+      _tfoot.children.clear();
+    theadRows.clear();
+    tbodyRows.clear();
+    tfootRows.clear();
 
     nameLabelMap.clear();
     nameList.clear();
@@ -929,8 +943,9 @@ class LTable
 
   /// clear body
   void clearBody() {
-    _tbody.children.clear();
-    _tbodyRows.clear();
+    if (_tbody != null)
+      _tbody.children.clear();
+    tbodyRows.clear();
     recordList.clear();
   }
 
@@ -944,7 +959,7 @@ class LTable
   void display() {
     if (_tbody != null) {
       _tbody.children.clear();
-      _tbodyRows.clear();
+      tbodyRows.clear();
       _bodyRowIndex = -1;
     }
     bool needSort = _displayCalculateStatistics();
@@ -969,17 +984,17 @@ class LTable
     } else {
       if (_statisticsRow != null) {
         _statisticsRow.rowElement.remove();
-        _tfootRows.remove(_statisticsRow);
+        tfootRows.remove(_statisticsRow);
       }
     }
-    _fixWidth(null);
+    fixWidth(null);
   } // display
   LTableSumRow _statisticsRow;
 
   /// update / display footer
   /// - [LTableRow#setRecord] [LTableRow#onRecordChange]
   void displayFoot() {
-    for (LTableRow row in _tfootRows) {
+    for (LTableRow row in tfootRows) {
       row.display(false);
     }
   } // displayFooter
@@ -988,7 +1003,7 @@ class LTable
   /// Table selected row count
   int get selectedRowCount {
     int count = 0;
-    for (LTableRow row in _tbodyRows) {
+    for (LTableRow row in tbodyRows) {
       if (row.selected)
         count++;
     }
@@ -998,7 +1013,7 @@ class LTable
   /// Table selected row records
   List<DRecord> get selectedRecords {
     List<DRecord> records = new List<DRecord>();
-    for (LTableRow row in _tbodyRows) {
+    for (LTableRow row in tbodyRows) {
       if (row.selected && row.record != null) {
         records.add(row.record);
       }

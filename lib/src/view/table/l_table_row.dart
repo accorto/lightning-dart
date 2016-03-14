@@ -105,9 +105,9 @@ class LTableRow
         rowElement.append(tc);
         tc.append(_label);
       } else {
-        _selectCellElement = rowElement.addCell()
+        selectCellElement = rowElement.addCell()
           ..classes.add(LTable.C_CELL_SHRINK);
-        _selectCellElement.append(_label);
+        selectCellElement.append(_label);
         selectCb.onClick.listen(onSelectClick);
       }
     }
@@ -115,7 +115,7 @@ class LTableRow
       addActions(rowActions);
     }
   } // LTableRow
-  TableCellElement _selectCellElement;
+  TableCellElement selectCellElement;
 
   String get id => rowElement.id;
 
@@ -295,10 +295,10 @@ class LTableRow
       } else {
         tc = new Element.td();
       }
-      if (_actionCell == null || !ltable.rowSelect) {
+      if (actionCellElement == null || !ltable.rowSelect) {
         rowElement.append(tc);
       } else {
-        rowElement.insertBefore(tc, _actionCellElement);
+        rowElement.insertBefore(tc, actionCellElement);
       }
     }
     if (fieldEdit) {
@@ -316,14 +316,14 @@ class LTableRow
     if (_actionCell == null) {
       bool atEnd = ltable.rowSelect;
       if (type == TYPE_HEAD) {
-        _actionCellElement = new Element.th()
+        actionCellElement = new Element.th()
           ..attributes["scope"] = "col";
-        rowElement.append(_actionCellElement);
-        _actionCell = new LTableActionCell(this, _actionCellElement,
+        rowElement.append(actionCellElement);
+        _actionCell = new LTableActionCell(this, actionCellElement,
             LTableActionCell._createButton(rowElement.id), atEnd);
       } else {
-        _actionCellElement = rowElement.addCell();
-        _actionCell = new LTableActionCell(this, _actionCellElement,
+       actionCellElement = rowElement.addCell();
+        _actionCell = new LTableActionCell(this, actionCellElement,
             LTableActionCell._createButton(rowElement.id), atEnd);
       }
     }
@@ -332,7 +332,7 @@ class LTableRow
       _actionCell.addAction(action);
     }
   }
-  TableCellElement _actionCellElement;
+  TableCellElement actionCellElement;
   LTableActionCell _actionCell;
 
 
@@ -355,10 +355,10 @@ class LTableRow
     if (redisplay) {
       editorList = new List<LEditor>();
       rowElement.children.clear();
-      if (_selectCellElement != null)
-        rowElement.append(_selectCellElement);
-      if (_actionCellElement != null)
-        rowElement.append(_actionCellElement);
+      if (selectCellElement != null)
+        rowElement.append(selectCellElement);
+      if (actionCellElement != null)
+        rowElement.append(actionCellElement);
     }
     // for all columns
     for (String name in ltable.nameList) {
@@ -522,13 +522,13 @@ class LTableRow
     }
     for (LEditor ed in editorList) {
       // _log.fine("onEditorFocus ${id} - ${ed.id}");
-      if (cellId != ed.id) {
+      if (ed != null && cellId != ed.id) {
         ed.showDropdown = false;
       }
     }
     // close other row dropdowns
     String rowId = rowElement.id;
-    for (LTableRow row in ltable._tbodyRows) {
+    for (LTableRow row in ltable.tbodyRows) {
       if (row.rowElement.id != rowId)
         row._removeDropdowns();
     }
@@ -537,7 +537,8 @@ class LTableRow
   /// remove dropdowns
   void _removeDropdowns() {
     for (LEditor ed in editorList) {
-      ed.showDropdown = false;
+      if (ed != null)
+        ed.showDropdown = false;
     }
   }
 

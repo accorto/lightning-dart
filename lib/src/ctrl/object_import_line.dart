@@ -22,6 +22,8 @@ class ObjectImportLine
 
   /// overwite per column
   final List<String> _overrideList = new List<String>();
+  /// table meta data
+  DTable _table;
   /// column meta data
   List<DColumn> _columnList;
 
@@ -29,19 +31,34 @@ class ObjectImportLine
   ObjectImportLine(ObjectImport this.parent, LTable ltable, TableRowElement rowElement,
       int lineNo,
       DataRecord this.data, List<String> this.cellLine)
-      : super(ltable, rowElement, lineNo, lineNo.toString(), null, LTableRow.TYPE_BODY, null) {
-
+      : super(ltable, rowElement,
+          lineNo, lineNo.toString(), LButton.C_HINT_PARENT, LTableRow.TYPE_BODY, null) {
     // select
     selectCb
       ..onClick.listen(onSelectClick)
       ..attributes[Html0.DATA_ID] = lineNo.toString();
   } // ObjectImportLine
 
+
   /// re-create TR line
   void createLine(DTable table, List<DColumn> columnList) {
+    _table = table;
     _columnList = columnList;
-    editorList = new List<LEditor>();
-    _overrideList.clear();
+    display(true);
+  }
+
+  /// display line
+  void display(bool redisplay){
+    if (redisplay) {
+      editorList = new List<LEditor>(); // see display
+      rowElement.children.clear();
+      if (selectCellElement != null)
+        rowElement.append(selectCellElement);
+      if (actionCellElement != null)
+        rowElement.append(actionCellElement);
+      _overrideList.clear();
+    }
+    //
     bool valid = true;
     for (int i = 0; i < _columnList.length; i++) {
       String cellText = "";
@@ -53,7 +70,7 @@ class ObjectImportLine
       String name = null;
       DColumn col = _columnList[i];
       if (col != null) {
-        dataColumn = new DataColumn(table, col, null, null);
+        dataColumn = new DataColumn(_table, col, null, null);
         editor = EditorUtil.createFromColumn("", dataColumn, true,
             idPrefix:rowElement.id, data: data)
           ..editorChange = onEditorChange
@@ -64,11 +81,14 @@ class ObjectImportLine
         }
       }
       // cell
-      LTableCell cell = addCell(new SpanElement()..text = cellText,
+      DivElement content = new DivElement()
+        ..classes.add(LText.C_TRUNCATE)
+        ..text = cellText;
+      LTableCell cell = addCell(content,
           name, null, null, null, dataColumn, fieldEdit:false, addStatistics: false);
       if (editor != null) {
         cell.cellElement
-          ..append(new BRElement())
+        //  ..append(new BRElement())
           ..append(editor.element);
       }
       editorList.add(editor);
@@ -145,6 +165,10 @@ class ObjectImportLine
       }
     }
     _log.warning("onEditorChange ${name} ${newValue} NotFound");
+  }
+
+  String toString() {
+    return "ObjectImportLine@${rowElement.id}[${data.recordId} selected=${data.selected}]";
   }
 
 } // ObjectImportLine

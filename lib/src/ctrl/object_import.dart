@@ -23,6 +23,7 @@ class ObjectImport {
   LInputFile _fileInput;
   /// the table
   final LTable _table = new LTable("imp", rowSelect: true)
+    ..bordered = true
     ..setResponsiveScroll(600);
   final DivElement _feedback = new DivElement()
     ..classes.addAll([LMargin.C_TOP__MEDIUM, LScrollable.C_SCROLLABLE__Y])
@@ -128,7 +129,6 @@ class ObjectImport {
       LTableHeaderCell cell = _headerRow.addHeaderCell(i.toString(), headingCol);
       cell.cellElement.append(new BRElement());
       cell.cellElement.append(_createHeaderColumnPick(headingCol).element);
-      cell.cellElement.append(new BRElement());
     }
     _headColumnButton();
     diagnostics();
@@ -176,15 +176,15 @@ class ObjectImport {
 
   /// add a new column
   void onAddColumnClick(Event evt) {
+    _log.fine("onAddColumnClick");
     _headerRow.rowElement.children.last.remove();
 
     LTableHeaderCell cell = _headerRow.addHeaderCell("a", "-");
     cell.cellElement.append(new BRElement());
     cell.cellElement.append(_createHeaderColumnPick("-").element);
-    cell.cellElement.append(new BRElement());
 
-    _headColumnButton();
-    _createTableLines(false);
+    _headColumnButton(); // re-create
+    _createTableLines(true);
     diagnostics();
   } // onClickAddColumn
 
@@ -195,11 +195,11 @@ class ObjectImport {
       return null;
     });
     if (index == null) {
-      _log.config("onEditorChange ${name} ${newValue} Index NotFound");
+      _log.config("onHeaderEditorChange ${name} ${newValue} Index NotFound");
       return;
     }
-    if (index < 0 || index+1 >= _headerColumnList.length) {
-      _log.config("onEditorChange ${name} ${newValue} index=${index} error max=${_headerColumnList.length}");
+    if (index < 0 || index >= _headerColumnList.length) {
+      _log.config("onHeaderEditorChange ${name} ${newValue} index=${index} error max=${_headerColumnList.length}");
       return;
     }
     DColumn column = null;
@@ -210,7 +210,7 @@ class ObjectImport {
       }
     }
     if (column == null) {
-      _log.config("onEditorChange ${name} ${newValue} Column NotFound");
+      _log.config("onHeaderEditorChange ${name} ${newValue} Column NotFound");
       return;
     }
     for (int i = 0; i < _headerColumnList.length; i++) {
@@ -220,9 +220,9 @@ class ObjectImport {
         return;
       }
     }
-    _log.config("onEditorChange ${name} ${newValue}");
+    _log.config("onHeaderEditorChange ${name} ${newValue}");
     _headerColumnList[index] = column;
-    _createTableLines(false);
+    _createTableLines(true);
   } // onEditorChange
 
   /// Header Editor Focused - close other editor dropdowns
@@ -242,8 +242,6 @@ class ObjectImport {
 
   /// re-create lines
   void _createTableLines(bool reset) {
-    _table.clearRecords();
-
     feedbackClear();
     int start = _firstLineIsHeading ? 1 : 0;
     if (reset) {
@@ -251,15 +249,19 @@ class ObjectImport {
       for (int lineNo = start; lineNo < _csv.cells.length; lineNo++) {
         DataRecord data = new DataRecord(datasource.tableDirect, null)
           ..newRecord(null, rowNo: lineNo);
-        _table.addBodyRow(row: new ObjectImportLine(this, _table, _table.createBodyRow(),
-            lineNo, data, _csv.cells[lineNo]));
+        ObjectImportLine line = new ObjectImportLine(this, _table, _table.createBodyRow(),
+            lineNo, data, _csv.cells[lineNo]);
+        line.createLine(datasource.tableDirect, _headerColumnList); // display
+        _table.addBodyRow(row: line);
       }
+    } else {
+      for (LTableRow line in _table.tbodyRows) {
+        if (line is ObjectImportLine) {
+          line.createLine(datasource.tableDirect, _headerColumnList); // display
+        }
+      } // lines
     }
-    // for each line
-    for (LTableRow line in _table.i_bodyRows) {
-      if (line is ObjectImportLine)
-        line.createLine(datasource.tableDirect, _headerColumnList);
-    } // lines
+    _table.fixWidth(null);
     diagnostics();
   } // createTableLines
 
@@ -267,7 +269,7 @@ class ObjectImport {
   /// check all lines
   void onHeaderSelectClick(MouseEvent evt) {
     _log.config("onHeaderSelectClick");
-    for (LTableRow line in _table.i_bodyRows) {
+    for (LTableRow line in _table.tbodyRows) {
       if (line is ObjectImportLine)
         line.checkLine();
     }
@@ -302,16 +304,13 @@ class ObjectImport {
 
     // row
     String rowInfo = "Check values";
-    if (_table.i_bodyRows.isNotEmpty) {
-      for (LTableRow line in _table.i_bodyRows) {
-        int selected = 0;
-        if (line is ObjectImportLine) {
-          if (line.data.selected)
-            selected++; // valid
-
-        }
-        rowInfo = "${selected} rows selected for import";
+    for (LTableRow line in _table.tbodyRows) {
+      int selected = 0;
+      if (line is ObjectImportLine) {
+        if (line.data.selected)
+          selected++; // valid
       }
+      rowInfo = "${selected} rows selected for import";
     }
 
     _todo.children.clear();
