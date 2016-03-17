@@ -3,7 +3,7 @@
 /// messages from the main program should be duplicated here with the same
 /// function name.
 
-//import 'package:intl/intl.dart';
+import 'package:intl/intl.dart';
 import 'package:intl/message_lookup_by_library.dart';
 
 final messages = new MessageLookup();
@@ -11,7 +11,17 @@ final messages = new MessageLookup();
 class MessageLookup extends MessageLookupByLibrary {
 
   get localeName => 'es';
-  static tableCtrlRecords(count) => "{Count, plural, = 0 {} no hay registros = 1 {${count}} récord otras {${count}}} registros";
+  static objectImportColumnAlreadyMapped(columnName, columnNumber) => "${columnName} ya en la columna de ${columnNumber}";
+
+  static objectImportColumnNotMapped(columnName) => "${columnName} es obligatoria y no está asignada";
+
+  static objectImportColumnsMapped(mapCount) => "${mapCount} columnas mapeadas";
+
+  static objectImportMandatoryMissing(missingCount) => "${missingCount} columnas obligatorias que faltan";
+
+  static objectImportRowsSelected(rowCount) => "${rowCount} seleccionada para la importación";
+
+  static tableCtrlRecords(count) => "${Intl.plural(count, zero: 'no records', one: '${count} record', other: '${count} records')}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => {
@@ -20,6 +30,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "appsActionDeleteSelected" : MessageLookupByLibrary.simpleMessage("Eliminar seleccionado"),
     "appsActionDown" : MessageLookupByLibrary.simpleMessage("Abajo"),
     "appsActionEdit" : MessageLookupByLibrary.simpleMessage("Editar"),
+    "appsActionImport" : MessageLookupByLibrary.simpleMessage("Importar"),
     "appsActionInfo" : MessageLookupByLibrary.simpleMessage("información"),
     "appsActionLayout" : MessageLookupByLibrary.simpleMessage("Diseño"),
     "appsActionNew" : MessageLookupByLibrary.simpleMessage("Nuevo"),
@@ -168,19 +179,30 @@ class MessageLookup extends MessageLookupByLibrary {
     "objectEditEdit" : MessageLookupByLibrary.simpleMessage("Editar"),
     "objectEditError" : MessageLookupByLibrary.simpleMessage("Error de comunicación"),
     "objectEditNew" : MessageLookupByLibrary.simpleMessage("Nuevo"),
-    "objectFilter" : MessageLookupByLibrary.simpleMessage("Filtrar"),
-    "objectFilterDescription" : MessageLookupByLibrary.simpleMessage("Descripción"),
-    "objectFilterName" : MessageLookupByLibrary.simpleMessage("Nombre"),
-    "objectFilterSort" : MessageLookupByLibrary.simpleMessage("Ordenar"),
-    "objectFilterSortAsc" : MessageLookupByLibrary.simpleMessage("ascendente"),
-    "objectFilterSortColumnName" : MessageLookupByLibrary.simpleMessage("Nombre de la columna"),
-    "objectFilterSortGrp" : MessageLookupByLibrary.simpleMessage("Agrupar por"),
     "objectHomeFilterPanel" : MessageLookupByLibrary.simpleMessage("Filtrar"),
     "objectHomeFilterPanelAddFilter" : MessageLookupByLibrary.simpleMessage("Agregar filtro"),
     "objectHomeFilterPanelExecute" : MessageLookupByLibrary.simpleMessage("Ejecutar"),
     "objectHomeFilterPanelSave" : MessageLookupByLibrary.simpleMessage("Guardar + Ejecutar"),
     "objectHomeFilterPanelSaveName" : MessageLookupByLibrary.simpleMessage("Nombre del filtro"),
     "objectHomeFilterPanelSyncTable" : MessageLookupByLibrary.simpleMessage("Sincronizar con el cuadro"),
+    "objectImportAddColumn" : MessageLookupByLibrary.simpleMessage("Añadir columna"),
+    "objectImportButton" : MessageLookupByLibrary.simpleMessage("Importar"),
+    "objectImportCheckValues" : MessageLookupByLibrary.simpleMessage("Comprobar los valores"),
+    "objectImportColumnAlreadyMapped" : objectImportColumnAlreadyMapped,
+    "objectImportColumnNotMapped" : objectImportColumnNotMapped,
+    "objectImportColumnsMapped" : objectImportColumnsMapped,
+    "objectImportDuplicate" : MessageLookupByLibrary.simpleMessage("Duplicar"),
+    "objectImportFileLabel" : MessageLookupByLibrary.simpleMessage("Seleccione un archivo para importar"),
+    "objectImportLineCheck" : MessageLookupByLibrary.simpleMessage("Comprobar"),
+    "objectImportLineEmpty" : MessageLookupByLibrary.simpleMessage("vacío"),
+    "objectImportLineLine" : MessageLookupByLibrary.simpleMessage("Línea"),
+    "objectImportLineValueNotFound" : MessageLookupByLibrary.simpleMessage("El valor no encontrado"),
+    "objectImportMandatoryMissing" : objectImportMandatoryMissing,
+    "objectImportMap" : MessageLookupByLibrary.simpleMessage("Mapa de la columna"),
+    "objectImportMapColumns" : MessageLookupByLibrary.simpleMessage("columnas mapa!"),
+    "objectImportRowsSelected" : objectImportRowsSelected,
+    "objectImportSelectCsv" : MessageLookupByLibrary.simpleMessage("Seleccionar archivo cvs"),
+    "objectImportTitle" : MessageLookupByLibrary.simpleMessage("Importar"),
     "optionUtilNo" : MessageLookupByLibrary.simpleMessage("No"),
     "optionUtilYes" : MessageLookupByLibrary.simpleMessage("Sí"),
     "preferenceGlobalSave" : MessageLookupByLibrary.simpleMessage("Guardar preferencias como Global"),

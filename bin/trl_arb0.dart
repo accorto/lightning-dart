@@ -47,6 +47,7 @@ class TranslateArb {
   // translate map
   Map<String, dynamic> map;
 
+  /// Translate
   TranslateArb(String this.targetLanguage, String this.fileName) {
     File theFile = new File(fileName);
     String jsonString = theFile.readAsStringSync();
@@ -73,10 +74,16 @@ class TranslateArb {
     */
     List<Future<bool>> processes = new List<Future<bool>>();
     map.forEach((String key, value){
-      if (!key.contains("@")) {
-        if (value.contains("{}"))
-          print("${key}=${value} xxxx");
-        processes.add(doTranslate(key, value));
+      if (!key.contains("@")) { // meta-data
+        if (value is String) {
+          if (value.startsWith("{") && value.endsWith("}}")) {
+            print("- ignored: " + value);
+          } else {
+            processes.add(doTranslate(key, value));
+          }
+        } else {
+          print("- skipped: " + value);
+        }
       }
     });
     // wait for complete
@@ -92,6 +99,20 @@ class TranslateArb {
    * https://cloud.google.com/translate/v2/using_rest
    */
   Future<bool> doTranslate(String key, String value) {
+    // replace {variableName} with [0]
+    String valueMasked = value;
+    List<String> parameterNames = new List<String>();
+    int indexOpen = valueMasked.indexOf("{");
+    while (indexOpen != -1) {
+      int indexClose = valueMasked.indexOf("}");
+      if (indexClose != -1) {
+        String param = valueMasked.substring(indexOpen, indexClose+1);
+        valueMasked = valueMasked.replaceAll(param, "[${parameterNames.length}]");
+        parameterNames.add(param);
+      }
+      indexOpen = valueMasked.indexOf("{");
+    }
+
     Completer<bool> c = new Completer<bool>();
     HttpClient client = new HttpClient();
     client.getUrl(getUri(value))
@@ -104,8 +125,18 @@ class TranslateArb {
         json.write(contents);
       }, onDone: () {
         String translation = processGoogleResponse(json.toString());
-        if (translation != null)
-          map[key] = translation;
+        if (translation != null) {
+          if (parameterNames.isEmpty) {
+            map[key] = translation;
+          } else {
+            String unmasked = translation;
+            for (int i = 0; i < parameterNames.length; i++) {
+              String parameterName = parameterNames[i];
+              unmasked = unmasked.replaceAll("[${i}]", parameterName);
+            }
+            map[key] = unmasked;
+          }
+        } // translation
         client.close();
         c.complete(translation != null);
       });
