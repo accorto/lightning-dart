@@ -9,8 +9,10 @@ part of lightning_dart;
 /// Sort Clicked
 typedef void TableSortClicked(String name, bool asc, DataType dataType, MouseEvent evt);
 
-/// Select Clicked (select or unselect)
-typedef void TableSelectClicked(DataRecord data);
+/// Row Select Clicked (select or unselect)
+typedef void TableRowSelectClicked(DataRecord data);
+/// Head Select Clicked may return null if no row select all
+typedef bool TableHeadSelectClicked(bool newValue);
 
 /// Graph Selection Changed with selection [count] or null if no selection
 typedef void GraphSelectionChange(int count);
@@ -113,8 +115,10 @@ class LTable
   final List<DRecord> recordList = new List<DRecord>();
   /// Record action (click on drv) - display urv
   final AppsActionTriggered recordAction;
+  /// Table Head Select callback
+  TableHeadSelectClicked tableHeadSelectClicked;
   /// Table Row Select callback
-  TableSelectClicked tableSelectClicked;
+  TableRowSelectClicked tableRowSelectClicked;
 
   /// Row Select
   final bool rowSelect;
@@ -467,7 +471,9 @@ class LTable
           tableActions);
       if (rowSelect && theadRows.isEmpty) {
         row.selectCb.onClick.listen((MouseEvent evt) {
-          selectAll(row.selectCb.checked);
+          bool selValue = onTableHeadSelectClicked(row.selectCb);
+          if (selValue != null)
+            row.selectCb.checked = selValue;
         });
       }
     }
@@ -590,9 +596,26 @@ class LTable
    */
   void onTableRowSelectClicked(DataRecord data) {
     // _log.config("onTableRowSelectClicked ${data.selected}");
-    if (tableSelectClicked != null) {
-      tableSelectClicked(data);
+    if (tableRowSelectClicked != null) {
+      tableRowSelectClicked(data);
     }
+  }
+
+  /// table header
+  bool onTableHeadSelectClicked(InputElement selectCb) {
+    bool newValue = selectCb.checked;
+    _log.config("onTableHeadSelectClicked ${newValue}");
+    if (tableHeadSelectClicked == null) {
+      selectAll(newValue);
+    } else {
+      bool selValue = tableHeadSelectClicked(newValue);
+      if (selValue == null) {
+        selectCb.checked = false;
+      } else {
+        selectAll(selValue);
+      }
+    }
+    return null; // no change
   }
 
   /// Find In Table

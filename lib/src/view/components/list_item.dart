@@ -220,8 +220,9 @@ class ListItem
     // Description
     String description = option.description;
     if (description != null && description.isNotEmpty) {
+      element.title = description;
       Element descriptionElement = new Element.tag("small")
-        ..classes.add("description");
+        ..classes.add("list-description");
       if (exp == null) {
         descriptionElement.text = description;
       } else {

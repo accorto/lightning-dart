@@ -163,9 +163,8 @@ class FkMultiDialog {
     }
     _log.config("onSaveClick ${valueList}");
     multi.setValues(valueList);
-
     // close
-    _modal.onClickRemove(evt);
+    _modal.show = false;;
   }
 
 

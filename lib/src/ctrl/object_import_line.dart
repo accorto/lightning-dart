@@ -35,7 +35,6 @@ class ObjectImportLine
           lineNo, lineNo.toString(), LButton.C_HINT_PARENT, LTableRow.TYPE_BODY, null) {
     // select
     selectCb
-      ..onClick.listen(onSelectClick)
       ..attributes[Html0.DATA_ID] = lineNo.toString();
   } // ObjectImportLine
 
@@ -60,6 +59,7 @@ class ObjectImportLine
     }
     //
     bool valid = true;
+    int editorCount = 0;
     for (int i = 0; i < _columnList.length; i++) {
       String cellText = "";
       if (i < cellLine.length)
@@ -79,6 +79,7 @@ class ObjectImportLine
         if (!checkLineValue(editor, cellText)) {
           valid = false;
         }
+        editorCount++;
       }
       // cell
       DivElement content = new DivElement()
@@ -88,37 +89,45 @@ class ObjectImportLine
           name, null, null, null, dataColumn, fieldEdit:false, addStatistics: false);
       if (editor != null) {
         cell.cellElement
-        //  ..append(new BRElement())
           ..append(editor.element);
       }
       editorList.add(editor);
       _overrideList.add(null);
     } // cols
-    data.selected = valid;
-    selectCb.checked = valid;
+    data.selected = valid && editorCount > 0;
+    selectCb.checked = valid && editorCount > 0;
   } // createLine
+
+  /// focus - close other dropdowns
+  void onEditorFocus(Event evt) {
+    super.onEditorFocus(evt);
+    parent._removeHeaderDropdowns();
+  }
 
   /// check line - select only if valid
   void onSelectClick(MouseEvent evt) {
-    bool valid = checkLine();
-    _log.config("onSelectClick ${rowIndex} valid=${valid}");
+    String error = checkLine();
+    _log.config("onSelectClick ${rowIndex} error=${error}");
     if (selectCb.checked) {
-      if (valid)
+      if (error == null) {
         data.selected = true;
-      else
+      } else {
         selectCb.checked = false;
+        PageSimple.instance.setStatusWarning("${objectImportLineLine()} ${rowIndex}: ${error}");
+      }
     } else {
       data.selected = false;
     }
     parent.diagnostics();
   } // onClickSelect
 
-  /// check line
-  bool checkLine() {
+  /// check line - return error message or null
+  String checkLine() {
     if (data.isEmpty) {
-      return false;
+      return "Record empty"; // unlikely
     }
-    bool valid = true;
+    String error = null;
+    int columnCount = 0;
     for (int i = 0; i < _columnList.length; i++) {
       String cellText = "";
       if (i < cellLine.length) {
@@ -126,29 +135,37 @@ class ObjectImportLine
       }
       DColumn col = _columnList[i];
       if (col != null) {
+        columnCount++;
         LEditor ed = editorList[i];
         String overwrite = _overrideList[i];
         if (overwrite == null && ed != null) {
           if (!checkLineValue(ed, cellText)) {
-            valid = false;
+            if (error == null)
+              error = "${objectImportLineCheck()}: ${col.label}";
+            else
+              error += ", ${col.label}";
           }
         }
       }
     } // cols
-    return valid;
+    if (columnCount == 0) {
+      return objectImportLineEmpty();
+    }
+    return error;
   } // checkLine
 
-  /// check line value
+  /// check line column value
   bool checkLineValue(LEditor ed, String cellText) {
     ed.value = cellText;
     bool valid = ed.setValueSynonym(cellText); // might be null
-    if (ed.value != cellText && ed.doValidate()) {
-      ed.setCustomValidity("value does not match");
-      if (!ed.doValidate())
-        valid = false;
-    }
     if (valid == null)
       return true;
+    if (valid) {
+      ed.setCustomValidity("");
+    } else {
+      ed.setCustomValidity(objectImportLineValueNotFound());
+    }
+    ed.doValidate();
     return valid;
   }
 
@@ -158,7 +175,7 @@ class ObjectImportLine
       LEditor ed = editorList[i];
       if (ed != null && name == ed.name) {
         _log.fine("onEditorChange ${name} ${newValue}");
-        _overrideList[i] = newValue;
+        _overrideList[i] = newValue == null ? "" : newValue;
         ed.setCustomValidity("");
         ed.doValidate();
         return;
@@ -170,5 +187,10 @@ class ObjectImportLine
   String toString() {
     return "ObjectImportLine@${rowElement.id}[${data.recordId} selected=${data.selected}]";
   }
+
+  static String objectImportLineLine() => Intl.message("Line", name: "objectImportLineLine");
+  static String objectImportLineCheck() => Intl.message("Check", name: "objectImportLineCheck");
+  static String objectImportLineEmpty() => Intl.message("empty", name: "objectImportLineEmpty");
+  static String objectImportLineValueNotFound() => Intl.message("value not found", name: "objectImportLineValueNotFound");
 
 } // ObjectImportLine

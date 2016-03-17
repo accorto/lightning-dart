@@ -638,9 +638,12 @@ abstract class EditorI {
     //
     ValidityState state = inputValidationState;
     if (state == null) {
+      statusText = inputValidationMsg;
       if (required && (vv == null || vv.isEmpty)) {
         statusValid = false;
         statusText = editorValidateRequired();
+      } else {
+        statusValid = statusText.isEmpty;
       }
     } else {
       statusValid = state.valid;

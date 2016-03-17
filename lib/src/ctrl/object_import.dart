@@ -49,6 +49,8 @@ class ObjectImport {
   OListElement _todo = new OListElement()
     ..classes.add(LGrid.C_COL__PADDED)
     ..classes.add(LList.C_LIST__ORDERED);
+  /// Import Button
+  LButton _buttonImport;
 
 
   /// Import
@@ -69,7 +71,7 @@ class ObjectImport {
     _modal.append(_table.element);
     _modal.append(_feedback);
 
-    _modal.addFooterButtons(saveLabelOverride: "Import", hideOnSave: false)
+    _buttonImport =_modal.addFooterButtons(saveLabelOverride: objectImportButton(), hideOnSave: false)
       ..onClick.listen(onSaveClick);
 
     // column list
@@ -86,7 +88,7 @@ class ObjectImport {
     }
     _optionList.sort(OptionUtil.compareLabel);
     //
-    _addColumnButton = new LButton.neutral("addColumn", "Add Column")
+    _addColumnButton = new LButton.neutral("addColumn", objectImportAddColumn())
       ..onClick.listen(onAddColumnClick);
     diagnostics();
   } // ObjectImport
@@ -113,7 +115,7 @@ class ObjectImport {
     _createTable();
   } // onInputFileResult
   FileCsv _csv;
-  String _csvInfo = "Select csv file";
+  String _csvInfo = objectImportSelectCsv();
 
   /// create table
   void _createTable() {
@@ -122,7 +124,8 @@ class ObjectImport {
     _table.clear();
 
     // header row
-    _headerRow = _table.addHeadRow(false);
+    _headerRow = _table.addHeadRow(false); // no sort
+    _table.tableHeadSelectClicked = onTableHeadSelectClicked;
     // header columns
     for (int i = 0; i < _csv.headingColumns.length; i++) {
       String headingCol = _csv.headingColumns[i];
@@ -142,7 +145,7 @@ class ObjectImport {
     int colNo = _headerColumnPicks.length;
     LLookup pl = new LLookup("col-${colNo}", idPrefix: id, inGrid: true)
       ..required = false
-      ..placeholder = "Map to Column"
+      ..placeholder = objectImportMap()
       ..dOptionList = _optionList
       ..editorChange = onHeaderEditorChange
       ..onFocus.listen(onHeaderEditorFocus);
@@ -216,7 +219,7 @@ class ObjectImport {
     for (int i = 0; i < _headerColumnList.length; i++) {
       DColumn col = _headerColumnList[i];
       if (col != null && col.name == column.name) {
-        feedbackSet(new LAlert.warning(label: "${column.label}: already in column #${i+1}"));
+        feedbackSet(new LAlert.warning(label: objectImportColumnAlreadyMapped(column.label, i+1)));
         return;
       }
     }
@@ -233,12 +236,18 @@ class ObjectImport {
       id = target.id;
     }
     for (LEditor ed in _headerColumnPicks) {
-      // _log.fine("onEditorFocus ${id} - ${ed.id}");
       if (id != ed.id) {
         ed.showDropdown = false;
       }
     }
   } // onEditorFocus
+
+  /// remove close header dropdowms
+  void _removeHeaderDropdowns() {
+    for (LEditor ed in _headerColumnPicks) {
+        ed.showDropdown = false;
+    }
+  }
 
   /// re-create lines
   void _createTableLines(bool reset) {
@@ -266,58 +275,78 @@ class ObjectImport {
   } // createTableLines
 
 
-  /// check all lines
-  void onHeaderSelectClick(MouseEvent evt) {
-    _log.config("onHeaderSelectClick");
+  bool onTableHeadSelectClicked(bool newValue) {
+    _log.config("onTableHeadSelectClicked ${newValue}");
     for (LTableRow line in _table.tbodyRows) {
-      if (line is ObjectImportLine)
-        line.checkLine();
+      if (line is ObjectImportLine) {
+        String error = line.checkLine();
+        if (error != null && error.isNotEmpty)
+          line.selected = false;
+      }
     }
-    //_selectAll.checked = false;
-    diagnostics();
+    PageSimple.instance.setStatusInfo(diagnostics());
+    return null; // no change
   }
 
   /// diagnostics
-  void diagnostics() {
-    String mapInfo = "Map columns!";
+  String diagnostics() {
+    String mapInfo = objectImportMapColumns();
+
     int mapCount = 0;
+    String duplicateInfo = null;
+    Set<String> columnNameSet = new Set<String>();
     for (DColumn col in _headerColumnList) {
-      if (col != null)
+      if (col != null) {
         mapCount++;
+        String columnName = col.name;
+        if (columnNameSet.contains(columnName)) {
+          if (duplicateInfo == null)
+            duplicateInfo = "${objectImportDuplicate()}: ${col.label}";
+          else
+            duplicateInfo += ", ${col.label}";
+        }
+        columnNameSet.add(columnName);
+      }
     }
+
+    int missingCount = -1;
     if (mapCount > 0) {
-      mapInfo = "${mapCount} columns mapped";
-      int mandatoryMissing = 0;
+      mapInfo = objectImportColumnsMapped(mapCount);
+      // mandatory missing
+      missingCount = 0;
       for (DColumn col in _columnListAll) {
         if (col.isCalculated || col.isReadOnly)
           continue;
         if (col.isMandatory) {
           if (!_headerColumnList.contains(col)) {
-            feedbackAdd(new LAlert.error(label: "Mandatory Column '${col.label}' not mapped"));
-            mandatoryMissing++;
+            feedbackAdd(new LAlert.error(label: objectImportColumnNotMapped(col.label)));
+            missingCount++;
           }
         }
       }
-      if (mandatoryMissing > 0)
-        mapInfo += " - ${mandatoryMissing} mandatory columns missing";
+      if (missingCount > 0)
+        mapInfo += " - ${objectImportMandatoryMissing(missingCount)}";
     }
 
     // row
-    String rowInfo = "Check values";
+    String rowInfo = objectImportCheckValues();
+    int selectedCount = 0;
     for (LTableRow line in _table.tbodyRows) {
-      int selected = 0;
       if (line is ObjectImportLine) {
         if (line.data.selected)
-          selected++; // valid
+          selectedCount++; // valid
       }
-      rowInfo = "${selected} rows selected for import";
     }
+    if (_table.tbodyRows.isNotEmpty)
+      rowInfo = objectImportRowsSelected(selectedCount);
+    _buttonImport.disabled = selectedCount == 0 || missingCount != 0;
 
     _todo.children.clear();
     _todo
       ..append(new LIElement()..text = _csvInfo)
       ..append(new LIElement()..text = mapInfo)
       ..append(new LIElement()..text = rowInfo);
+    return rowInfo;
   } // diagnostics
 
   void feedbackClear() {
@@ -331,13 +360,59 @@ class ObjectImport {
     _feedback.append(alert.element);
   }
 
+  /**
+   * Import
+   */
   void onSaveClick(MouseEvent evt) {
-    _log.info("onSaveClick");
-    // TODO save import
-  }
+    List<DRecord> records = new List<DRecord>();
+    for (LTableRow line in _table.tbodyRows) {
+      if (line is ObjectImportLine) {
+        if (line.data.selected)
+          records.add(line.data.record);
+      }
+    }
+    _log.info("onSaveClick ${records.length}");
+    if (records.isEmpty)
+      return;
+
+    // save import
+    _modal.busy = true;
+    datasource.saveAll(records)
+    .then((DataResponse response){
+      _modal.busy = false;
+      if (response.response.isSuccess)
+        _modal.show = false;
+    })
+    .catchError((error, stackTrace){
+      _modal.busy = false;
+    });
+  } // onSaveClick
 
 
   static String objectImportTitle() => Intl.message("Import", name: "objectImportTitle");
+  static String objectImportButton() => Intl.message("Import", name: "objectImportButton");
   static String objectImportFileLabel() => Intl.message("Select a file to import", name: "objectImportFileLabel");
+  static String objectImportAddColumn() => Intl.message("Add Column", name: "objectImportAddColumn");
+  static String objectImportSelectCsv() => Intl.message("Select cvs file", name: "objectImportSelectCsv");
+
+  static String objectImportMap() => Intl.message("Map to column", name: "objectImportMap");
+
+  static String objectImportColumnAlreadyMapped(String columnName, int columnNumber) => Intl.message("${columnName} already in column ${columnNumber}",
+      name: "objectImportColumnAlreadyMapped", args:[columnName, columnNumber]);
+
+  static String objectImportMapColumns() => Intl.message("Map columns!", name: "objectImportMapColumns");
+  static String objectImportDuplicate() => Intl.message("Duplicate", name: "objectImportDuplicate");
+
+  static String objectImportColumnsMapped(int mapCount) => Intl.message("${mapCount} columns mapped",
+      name: "objectImportColumnsMapped", args:[mapCount]);
+  static String objectImportColumnNotMapped(String columnName) => Intl.message("$columnName is mandatory and not mapped",
+      name: "objectImportColumnNotMapped", args:[columnName]);
+  static String objectImportMandatoryMissing(int missingCount) => Intl.message("$missingCount mandatory columns missing",
+      name: "objectImportMandatoryMissing", args:[missingCount]);
+
+  static String objectImportCheckValues() => Intl.message("Check values", name: "objectImportCheckValues");
+  static String objectImportRowsSelected(int rowCount) => Intl.message("$rowCount selected for import",
+      name: "objectImportRowsSelected", args:[rowCount]);
+
 
 } // ObjectImport

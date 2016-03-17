@@ -149,7 +149,7 @@ class LPath
   /// render [newValue]
   String renderSync(String newValue, bool setValidity) {
     if (setValidity) {
-      inputValidationMsg = "";
+      setCustomValidity("");
     }
     if (newValue == null || newValue.isEmpty) {
       return "";
@@ -160,7 +160,7 @@ class LPath
       }
     }
     if (setValidity) {
-      inputValidationMsg = "Invalid Value: ${newValue}";
+      setCustomValidity("Invalid Value: ${newValue}");
     }
     return "?${newValue}?";
   } // renderSync

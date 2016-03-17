@@ -351,8 +351,7 @@ class DataRecord {
   bool _cacheProcessed;
 
   /// Is the Record empty (no entities)
-  bool get isEmpty => _record.entryList.isEmpty
-      && !_record.hasTableName(); // not a new record
+  bool get isEmpty => _record.entryList.isEmpty;
 
   /// Is the record New (never saved)
   bool get isNew => _record.hasTableName() && !_record.hasRecordId();

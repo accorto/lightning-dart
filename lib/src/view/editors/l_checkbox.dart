@@ -12,6 +12,9 @@ part of lightning_dart;
 class LCheckbox
     extends LEditor with LFormElement {
 
+  static List<String> _TRUE_VALUES = ["TRUE", "YES", "Y", "T", "1"];
+  static List<String> _FALSE_VALUES = ["FALSE", "NO", "N", "F", "0"];
+
   /// The input
   final InputElement input = new InputElement()
     ..type = "checkbox";
@@ -55,14 +58,13 @@ class LCheckbox
   String get name => input.name;
   String get type => input.type;
 
-
   /// String Value
 
   String get value {
     return input.checked.toString();
   }
   void set value (String newValue) {
-    input.checked = newValue == "true";
+    input.checked = newValue == Html0.V_TRUE;
   }
 
   /// direct access
@@ -71,6 +73,25 @@ class LCheckbox
   void set checked (bool newValue) {
     input.checked = newValue;
   }
+
+  /// set value by synonym (alternative representations) - returns true if found
+  bool setValueSynonym (String newValue) {
+    if (newValue == null || newValue.isEmpty) {
+      value = Html0.V_TRUE;
+      return true;
+    }
+    String newValueUpper = newValue.toUpperCase();
+    if (_TRUE_VALUES.contains(newValueUpper)) {
+      value = Html0.V_TRUE;
+      return true;
+    }
+    if (_FALSE_VALUES.contains(newValueUpper)) {
+      value = Html0.V_FALSE;
+      return true;
+    }
+    return false;
+  }
+
 
   String get defaultValue => input.defaultValue;
   void set defaultValue (String newValue) {

@@ -82,12 +82,17 @@ abstract class LNotification extends LComponent {
 
   /**
    * Notification
+   * - z-index LTable foot=1 - model 9001
    */
-  LNotification(String idPrefix, String color) {
+  LNotification(String idPrefix, String color, int zIndex) {
     _color = color;
     if (_color != null && _color.isNotEmpty)
       notify.classes.add(color);
-    notify.style.zIndex = "2"; // LTable foot=1
+    if (zIndex == null){
+      notify.style.zIndex = "9999";
+    } else {
+      notify.style.zIndex = zIndex.toString(); // LTable foot=1
+    }
 
     // close
     close = new LButton(new ButtonElement(), "close", null, idPrefix:idPrefix,
@@ -233,8 +238,9 @@ class LAlert extends LNotification {
 
   /// blue background
   LAlert({String label, List<Element> headingElements, String idPrefix, LIcon icon,
-      String assistiveText, bool addDefaultIcon: false, bool inContainer: false, String color})
-    : super(idPrefix, color) {
+      String assistiveText, bool addDefaultIcon: false, bool inContainer: false,
+      String color, int zIndex})
+    : super(idPrefix, color, zIndex) {
     if (inContainer) {
       container = new DivElement();
       container.append(notify);
@@ -328,8 +334,8 @@ class LToast extends LNotification {
   LToast({String label, List<Element> headingElements, String idPrefix, LIcon icon,
       String text, List<Element> contentElements,
       String assistiveText, bool addDefaultIcon: false,
-      bool inContainer: false, String color})
-    : super(idPrefix, color) {
+      bool inContainer: false, String color, int zIndex})
+    : super(idPrefix, color, zIndex) {
     if (inContainer) {
       container = new DivElement()
         ..classes.add(LNotification.C_NOTIFY_CONTAINER);

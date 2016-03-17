@@ -72,7 +72,7 @@ class FkDialog {
     _table = new LTable(idPrefix)
       ..responsiveOverflow = LTableResponsive.OVERFLOW_X
       ..editMode = LTable.EDIT_RO_SELECT_SINGLE
-      ..tableSelectClicked = onTableSelectClicked;
+      ..tableRowSelectClicked = onTableSelectClicked;
     _modal.add(_table);
     _table.element.style // wrapper
       ..height = "300px" // ~7 records
@@ -196,7 +196,7 @@ class FkDialog {
     if (lookup != null && data.selected && data.recordId.isNotEmpty) {
       lookup.value = data.recordId;
       lookup.onInputChange(null);
-      _modal.onClickRemove(null); // fini
+      _modal.show = false; // fini
     }
   } // onTableSelectClicked
 

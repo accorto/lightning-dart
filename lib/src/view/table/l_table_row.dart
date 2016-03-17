@@ -50,7 +50,7 @@ class LTableRow
   /// Editors
   List<LEditor> editorList;
   /// On Table Row Select Clicked
-  TableSelectClicked tableSelectClicked;
+  TableRowSelectClicked tableSelectClicked;
   /// row select
   LabelElement _label;
 
@@ -534,7 +534,7 @@ class LTableRow
     }
   } // onEditorFocus
 
-  /// remove dropdowns
+  /// remove/close dropdowns
   void _removeDropdowns() {
     for (LEditor ed in editorList) {
       if (ed != null)
