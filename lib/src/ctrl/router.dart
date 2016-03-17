@@ -416,13 +416,15 @@ class Router {
   void updateWindow(String path, String title, {bool replace: false, bool clean: false}) {
     String thePath = cleanPath(path, addPrefix: true);
 
+    String theTitle = title;
     if (title != null && title.isNotEmpty) {
       if (ClientEnv.session != null && ClientEnv.session.hasTenantName()) {
-        document.title = "${title} - ${ClientEnv.session.tenantName} - ${LightningCtrl.productLabel}";
+        theTitle = "${title} - ${ClientEnv.session.tenantName} - ${LightningCtrl.productLabel}";
       } else {
-        document.title = "${title} - ${LightningCtrl.productLabel}";
+        theTitle = "${title} - ${LightningCtrl.productLabel}";
       }
     }
+    document.title = theTitle;
 
     if (replace) {
       if (clean) {
@@ -434,12 +436,12 @@ class Router {
         if (pos > 0)
           href = href.substring(0, pos);
         href += thePath;
-        window.history.replaceState(null, title, href);
+        window.history.replaceState(null, theTitle, href);
       } else {
-        window.history.replaceState(null, title, thePath);
+        window.history.replaceState(null, theTitle, thePath);
       }
     } else {
-      window.history.pushState(null, title, thePath);
+      window.history.pushState(null, theTitle, thePath);
     }
   } // updateWindow
 

@@ -48,7 +48,6 @@ class AppsHeader extends LComponent {
       ..classes.add(LText.C_TEXT_HEADING__MEDIUM)
       ..text = apps.label;
     center.append(h1);
-    document.title = apps.label;
     if (apps.labelSub != null && apps.labelSub.isNotEmpty) {
       DivElement sub = new DivElement()
         ..id = "a-label-sub"
