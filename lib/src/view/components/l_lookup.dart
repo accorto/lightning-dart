@@ -75,8 +75,6 @@ class LLookup
   // Value - Item Map
   //Map<String, LLookupItem> _lookupItemMap;
 
-  /// Displayed in Grid
-  final bool inGrid;
   bool isMobileUi = Settings.getAsBool(Settings.MOBILE_UI, defaultValue: ClientEnv.isMobileUserAgent);
 
   /**
@@ -90,8 +88,9 @@ class LLookup
       bool singleScope: true,
       bool typeahead: false,
       bool withClearValue:false,
-      bool this.inGrid:false}) {
-    _initEditor(name, idPrefix, multiple, singleScope, typeahead, withClearValue);
+      bool inGrid:false}) {
+    _initEditor(name, idPrefix,
+        multiple, singleScope, typeahead, withClearValue, inGrid);
   }
 
   // Base Lookup
@@ -106,10 +105,11 @@ class LLookup
       bool singleScope: true,
       bool typeahead: true,
       bool withClearValue,
-      bool this.inGrid:false}) {
+      bool inGrid:false}) {
     if (withClearValue == null)
       withClearValue = !inGrid && !dataColumn.tableColumn.isMandatory;
-    _initEditor(dataColumn.name, idPrefix, multiple, singleScope, typeahead, withClearValue);
+    _initEditor(dataColumn.name, idPrefix,
+        multiple, singleScope, typeahead, withClearValue, inGrid);
     this.dataColumn = dataColumn;
     if (dataColumn.tableColumn.pickValueList.isNotEmpty) {
       dOptionList = dataColumn.tableColumn.pickValueList;
@@ -119,7 +119,8 @@ class LLookup
   }
 
   /// Init Lookup
-  void _initEditor(String name, String idPrefix, bool multiple, bool singleScope, bool typeahead, bool withClearValue) {
+  void _initEditor(String name, String idPrefix,
+      bool multiple, bool singleScope, bool typeahead, bool withClearValue, bool inGrid) {
     _setAttributes(multiple, singleScope, typeahead);
     //
     _formElement.createStandard(this, leftElement: getLeftElement(), iconRight: icon,
@@ -145,6 +146,9 @@ class LLookup
     showDropdown = false;
     _lookupMenu.onKeyDown.listen(onMenuKeyDown);
   } // initEditor
+
+  /// Editor in Grid
+  bool get inGrid => _formElement.inGrid;
 
   /// Init for Base Lookup
   void _initEditor2(bool multiple, bool singleScope, bool typeahead) {

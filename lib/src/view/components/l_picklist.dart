@@ -48,10 +48,6 @@ class LPicklist
   /// The Dropdown
   LDropdownElement _dropdown;
 
-
-  /// Displayed in Grid
-  final bool inGrid;
-
   /**
    * Picklist
    * div  element .form_element
@@ -59,16 +55,16 @@ class LPicklist
    * -- button .form-element--label
    * -- div .dropdown
    */
-  LPicklist(String name, {String idPrefix, bool this.inGrid:false}) {
-    _initEditor(name, idPrefix, null);
+  LPicklist(String name, {String idPrefix, bool inGrid:false}) {
+    _initEditor(name, idPrefix, null, inGrid);
   } // LPicklist
 
   /// Picklist Editor
-  LPicklist.from(DataColumn dataColumn, {String idPrefix, bool this.inGrid:false}) {
-    _initEditor(dataColumn.name, idPrefix, dataColumn);
+  LPicklist.from(DataColumn dataColumn, {String idPrefix, bool inGrid:false}) {
+    _initEditor(dataColumn.name, idPrefix, dataColumn, inGrid);
   }
   /// initialize
-  void _initEditor(String name, String idPrefix, DataColumn dataColumn) {
+  void _initEditor(String name, String idPrefix, DataColumn dataColumn, bool inGrid) {
     _plButton = new LButton(new ButtonElement(), name, null, idPrefix:idPrefix,
       buttonClasses: [LButton.C_BUTTON__NEUTRAL, C_PICKLIST__LABEL],
       labelElement: _plButtonLabel,

@@ -14,20 +14,18 @@ class LTextArea
 
   /// Input Element
   final TextAreaElement input = new TextAreaElement();
-  /// Grid
-  final bool inGrid;
 
   /**
    * Text Area Input
    */
-  LTextArea(String name, {String idPrefix, bool this.inGrid:false, bool oneLine:false}) {
+  LTextArea(String name, {String idPrefix, bool inGrid:false, bool oneLine:false}) {
     createStandard(this, inGrid:inGrid);
     input.name = name;
     id = createId(idPrefix, name);
     _initEditor(oneLine);
   }
 
-  LTextArea.from(DataColumn dataColumn, {String idPrefix, bool this.inGrid:false, bool oneLine:false}) {
+  LTextArea.from(DataColumn dataColumn, {String idPrefix, bool inGrid:false, bool oneLine:false}) {
     createStandard(this, inGrid:inGrid);
     input.name = dataColumn.name;
     id = createId(idPrefix, input.name);

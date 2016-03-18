@@ -36,7 +36,8 @@ class LFormElement {
   /// Input element (select|textarea|input)
   Element _input;
   DivElement _inputWrapper = null;
-
+  /// editor displayed in Grid
+  bool inGrid = false;
 
   /**
    * Default Layout:
@@ -53,6 +54,7 @@ class LFormElement {
       bool withClearValue:false, bool inGrid:false}) {
     this.editor = editor;
     _input = editor.input;
+    this.inGrid = inGrid;
     if (inGrid) {
       _hintHide = true;
       _hintSpan.classes.add(LVisibility.C_HIDE);
@@ -197,6 +199,7 @@ class LFormElement {
     this.editor = editor;
     _input = editor.input;
     _labelElement.classes.add(LForm.C_CHECKBOX);
+    this.inGrid = inGrid;
     //
     SpanElement faux = new SpanElement()
       ..classes.add(LForm.C_CHECKBOX__FAUX);
@@ -330,6 +333,8 @@ class LFormElement {
    */
   void set help (String newValue) {
     _help = newValue;
+    if (inGrid)
+      return;
     if (_helpTip == null && _help != null && _help.isNotEmpty) {
       LButton _helpButton = new LButton.iconBare("${editor.name}-help",
         new LIconUtility(LIconUtility.INFO), "")

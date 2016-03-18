@@ -28,15 +28,13 @@ class LSelect
 
   /// Select Element
   final SelectElement input = new SelectElement();
-  /// Editor in Grid
-  final bool inGrid;
   /// all options
   final List<SelectOption> _selectOptionList = new List<SelectOption>();
 
   /**
    * Select Editor
    */
-  LSelect(String name, {String idPrefix, bool multiple:false, bool this.inGrid:false}) {
+  LSelect(String name, {String idPrefix, bool multiple:false, bool inGrid:false}) {
     createStandard(this, inGrid: inGrid);
     input.name = name;
     id = createId(idPrefix, name);
@@ -47,7 +45,7 @@ class LSelect
   }
 
   /// Select Editor
-  LSelect.from(DataColumn dataColumn, {String idPrefix, bool multiple:false, bool this.inGrid:false}) {
+  LSelect.from(DataColumn dataColumn, {String idPrefix, bool multiple:false, bool inGrid:false}) {
     createStandard(this, inGrid: inGrid);
     DColumn tableColumn = dataColumn.tableColumn;
     input.name = tableColumn.name;

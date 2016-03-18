@@ -101,7 +101,6 @@ abstract class LProcess
   bool get multiple => false;
   bool get required => true;
   void set required (bool ignored) {}
-  bool get inGrid => false;
 
   int get selectedCount => _value == null || _value.isEmpty ? 0 : 1;
   int get length => _itemList.length;

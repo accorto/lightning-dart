@@ -19,14 +19,11 @@ class LCheckbox
   final InputElement input = new InputElement()
     ..type = "checkbox";
 
-  /// Editor in Grid
-  final bool inGrid;
-
   /**
    * Checkbox
    * (note that if id is not unique, it does not work!)
    */
-  LCheckbox(String name, {String idPrefix, bool this.inGrid:false}) {
+  LCheckbox(String name, {String idPrefix, bool inGrid:false}) {
     createCheckbox(this, inGrid);
     input.name = name;
     input.id = createId(idPrefix, name);
@@ -36,7 +33,7 @@ class LCheckbox
   /**
    * Checkbox Editor
    */
-  LCheckbox.from(DataColumn dataColumn, {String idPrefix, bool this.inGrid:false}) {
+  LCheckbox.from(DataColumn dataColumn, {String idPrefix, bool inGrid:false}) {
     createCheckbox(this, inGrid);
     input.name = dataColumn.name;
     input.id = createId(idPrefix, input.name);

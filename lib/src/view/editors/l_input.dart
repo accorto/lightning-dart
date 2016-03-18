@@ -26,13 +26,10 @@ class LInput
   /// Input Element
   final InputElement input = new InputElement();
 
-  /// Editor in Grid
-  final bool inGrid;
-
   /**
    * Input Editor
    */
-  LInput(String name, String type, {String idPrefix, bool this.inGrid:false, bool withClearValue:false}) {
+  LInput(String name, String type, {String idPrefix, bool inGrid:false, bool withClearValue:false}) {
     createStandard(this, withClearValue:withClearValue, inGrid:inGrid);
     input.name = name;
     input.id = createId(idPrefix, name);
@@ -46,7 +43,7 @@ class LInput
    * Input Editor
    */
   LInput.from(DataColumn dataColumn, String type,
-      {String idPrefix, bool this.inGrid:false, bool withClearValue:false}) {
+      {String idPrefix, bool inGrid:false, bool withClearValue:false}) {
     createStandard(this, withClearValue:withClearValue, inGrid:inGrid);
     input.name = dataColumn.name;
     input.id = createId(idPrefix, input.name);
