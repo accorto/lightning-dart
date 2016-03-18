@@ -36,6 +36,8 @@ class ObjectImport {
   final Datasource datasource;
   /// callback
   final ObjectImportSaved objectImportSaved;
+  /// ignore manatory columns
+  final List<String> ignoreMandatoryColumns;
 
   /// all columns
   List<DColumn> _columnListAll;
@@ -58,9 +60,9 @@ class ObjectImport {
   /// Import Button
   LButton _buttonImport;
 
-
   /// Import
-  ObjectImport(Datasource this.datasource, ObjectImportSaved this.objectImportSaved) {
+  ObjectImport(Datasource this.datasource, ObjectImportSaved this.objectImportSaved,
+      List<String> this.ignoreMandatoryColumns) {
     _modal.setHeader("${objectImportTitle()}: ${datasource.tableDirect.label}",
         icon: new LIconUtility(LIconUtility.UPLOAD));
 
@@ -280,7 +282,7 @@ class ObjectImport {
     diagnostics();
   } // createTableLines
 
-
+  /// head select clicked - check lines
   bool onTableHeadSelectClicked(bool newValue) {
     _log.config("onTableHeadSelectClicked ${newValue}");
     for (LTableRow line in _table.tbodyRows) {
@@ -321,9 +323,14 @@ class ObjectImport {
       // mandatory missing
       missingCount = 0;
       for (DColumn col in _columnListAll) {
-        if (col.isCalculated || col.isReadOnly)
+        if (col.isCalculated || col.isReadOnly || col.isDocumentNo)
           continue;
         if (col.isMandatory) {
+          if (col.dataType == DataType.BOOLEAN // defaults to false
+            || col.defaultValue.isNotEmpty
+            || ignoreMandatoryColumns.contains(col.name)) {
+            continue;
+          }
           if (!_headerColumnList.contains(col)) {
             feedbackAdd(new LAlert.error(label: objectImportColumnNotMapped(col.label)));
             missingCount++;
