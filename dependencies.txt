@@ -1,4 +1,4 @@
-lightning 0.12.1
+lightning 1.0.0
 |-- browser 0.10.0+2
 |-- charted 0.3.0
 |   |-- browser...
