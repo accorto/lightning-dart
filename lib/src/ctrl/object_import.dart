@@ -6,6 +6,9 @@
 
 part of lightning_ctrl;
 
+/// callback when Import saved/complete
+typedef void ObjectImportSaved();
+
 /**
  * Import
  */
@@ -31,6 +34,9 @@ class ObjectImport {
 
   /// data source
   final Datasource datasource;
+  /// callback
+  final ObjectImportSaved objectImportSaved;
+
   /// all columns
   List<DColumn> _columnListAll;
   /// column options
@@ -54,7 +60,7 @@ class ObjectImport {
 
 
   /// Import
-  ObjectImport(Datasource this.datasource) {
+  ObjectImport(Datasource this.datasource, ObjectImportSaved this.objectImportSaved) {
     _modal.setHeader("${objectImportTitle()}: ${datasource.tableDirect.label}",
         icon: new LIconUtility(LIconUtility.UPLOAD));
 
@@ -380,8 +386,11 @@ class ObjectImport {
     datasource.saveAll(records)
     .then((DataResponse response){
       _modal.busy = false;
-      if (response.response.isSuccess)
+      if (response.response.isSuccess) {
         _modal.show = false;
+        if (objectImportSaved != null)
+          objectImportSaved();
+      }
     })
     .catchError((error, stackTrace){
       _modal.busy = false;

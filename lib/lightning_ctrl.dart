@@ -67,6 +67,7 @@ part 'src/ctrl/fk_service_request.dart';
 part 'src/ctrl/form_ctrl.dart';
 part 'src/ctrl/object_ctrl.dart';
 part 'src/ctrl/object_edit.dart';
+part 'src/ctrl/object_export.dart';
 part 'src/ctrl/object_import.dart';
 part 'src/ctrl/object_import_line.dart';
 

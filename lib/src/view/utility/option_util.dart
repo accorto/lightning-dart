@@ -138,7 +138,7 @@ class OptionUtil {
     return (option.valueSynonymList.contains(newValue));
   } // isSynonym
 
-  /// Get sorted [table] Column name/label list
+  /// Get sorted [table] Column name/label list based on label
   static List<DOption> columnOptions(DTable table) {
     if (table == null)
       return null;
@@ -148,17 +148,63 @@ class OptionUtil {
     _lastTableName = table.name;
     _lastColumnList = new List<DOption>();
     for (DColumn column in table.columnList) {
-      DOption op = new DOption()
-          ..value = column.name
-          ..label = column.label
-          ..iconImage = DataTypeUtil.getIconImage(column.dataType);
-      _lastColumnList.add(op);
+      if (!column.isActive)
+        continue;
+      _lastColumnList.add(_columnOption(column));
     }
     _lastColumnList.sort(compareLabel);
     return _lastColumnList;
   }
   static String _lastTableName;
   static List<DOption> _lastColumnList;
+
+  /// create option from Table Column with optional isActive
+  static DOption _columnOption(DColumn column, {bool isActive}) {
+    DOption option = new DOption()
+      ..value = column.name
+      ..label = column.label
+      ..iconImage = DataTypeUtil.getIconImage(column.dataType);
+    if (isActive != null)
+      option.isActive = isActive;
+    return option;
+  }
+
+  /// Get sorted [table] Column name/label list based on seqNo
+  static List<DOption> columnGridOptions(UI ui) {
+    if (ui == null)
+      return null;
+    List<DOption> options = new List<DOption>();
+    List<String> columnNames = new List<String>();
+    for (UIGridColumn gc in ui.gridColumnList) {
+      options.add(_columnOptionGridColumn(gc));
+      columnNames.add((gc.columnName));
+    }
+    for (DColumn column in ui.table.columnList) {
+      if (!column.isActive || columnNames.contains(column.name))
+        continue;
+      options.add(_columnOption(column, isActive: false));
+    }
+    return options;
+  }
+  /// create option from Grid Column - with seqNo and isActive
+  static DOption _columnOptionGridColumn(UIGridColumn gc) {
+    DOption option = new DOption()
+      ..value = gc.column.name
+      ..label = gc.column.label
+      ..iconImage = DataTypeUtil.getIconImage(gc.column.dataType);
+    if (gc.hasUiGridColumnId())
+      option.id = gc.uiGridColumnId;
+    if (gc.hasIsActive()) {
+      option.isActive = gc.isActive;
+    } else {
+      option.isActive = true;
+    }
+    if (gc.hasSeqNo())
+      option.seqNo = gc.seqNo;
+    return option;
+  }
+
+
 
   static String optionUtilYes() => Intl.message("Yes", name: "optionUtilYes");
   static String optionUtilNo() => Intl.message("No", name: "optionUtilNo");

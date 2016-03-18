@@ -474,7 +474,7 @@ class DataRecord {
     return getEntryValue(getEntry(null, name, false));
   }
   /**
-   * Get value as int by [id] or column [name] (key)
+   * Get value as int by column [name] (key)
    * Returns 0 if invalid or null
    */
   int getValueAsInt(String name) {
@@ -482,13 +482,26 @@ class DataRecord {
     return DataUtil.asInt(value);
   }
   /**
-   * Get value as int by [id] or column [name] (key)
+   * Get value as int by column [name] (key)
    * Returns false if invalid or null
    */
   bool getValueAsBool(String name) {
     String value = getEntryValue(getEntry(null, name, false));
     return DataUtil.asBool(value);
   }
+  /**
+   * get value as date by column [name]
+   * Returns date (in utc if DATE, otherwise local) or null
+   */
+  DateTime getValueAsDate(String name, {DataType dataType}) {
+    String value = getEntryValue(getEntry(null, name, false));
+    bool isUtc = false;
+    if (dataType != null) {
+      isUtc = dataType == DataType.DATE;
+    }
+    return DataUtil.toDate(value, isUtc: isUtc);
+  }
+
 
   /**
    * Get Display Info for [col] column

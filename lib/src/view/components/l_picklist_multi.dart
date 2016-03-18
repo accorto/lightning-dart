@@ -69,6 +69,9 @@ class LPicklistMulti
   /// Selected indicator in Option
   String selectedIndicator = SELECTED_INDICATOR_BOTH;
 
+  /// Callback
+  EditorChange editorChange;
+
   /**
    * Multi Pick List
    */
@@ -140,7 +143,7 @@ class LPicklistMulti
     _redisplay();
   } // setOptions
 
-  /// Get Options
+  /// Get All Options
   List<DOption> get options {
     List<DOption> options = new List<DOption>();
     for (LPicklistMultiItem item in _leftItems) {
@@ -157,6 +160,17 @@ class LPicklistMulti
     return options;
   } // getOptions
 
+  /// Get Selected Options
+  List<DOption> get optionsSelected {
+    List<DOption> options = new List<DOption>();
+    int seqNo = 1;
+    for (LPicklistMultiItem item in _rightItems) {
+      setOptionSelected(item.option, true);
+      item.option.seqNo = (seqNo++ * 10);
+      options.add(item.option);
+    }
+    return options;
+  } // getOptionsSelected
 
   /// is the option selected based on [selectedIndicator]
   bool isOptionSelected(DOption option) {
@@ -254,12 +268,18 @@ class LPicklistMulti
       return one.option.seqNo.compareTo(two.option.seqNo);
     });
     int seqNo = 1;
+    List<String> values = new List<String>();
     for (LPicklistMultiItem item in _rightItems) {
       _formRightPlList.append(item.element);
       item.option.seqNo = (seqNo++ * 10);
       item.dragOver = false;
+      values.add(item.value);
     }
     element.focus(); // remove focus from items
+    //
+    if (editorChange != null) {
+      editorChange(id, values.join(","), null, values);
+    }
   } // redisplay
 
 
