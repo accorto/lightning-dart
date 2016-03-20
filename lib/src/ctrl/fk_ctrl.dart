@@ -77,7 +77,7 @@ class FkCtrl
     // Init Data
     if (FkService.instance != null) {
       // Editor
-      icon.element.onClick.listen(onIconClick);
+      getIconRight().element.onClick.listen(onIconClick);
       // List
       List<DFK> complete = FkService.instance.getFkList(tableName, restrictionSql);
       if (complete != null) {

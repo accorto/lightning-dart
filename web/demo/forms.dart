@@ -53,13 +53,32 @@ class Forms extends DemoFeature {
     form.addEditor(check);
 
     LInput emailInput = new LInput("email1", EditorI.TYPE_EMAIL)
-      ..label = "Email Input"
+      ..label = "Email Input with hint"
       ..hint = "With basic email type validation"
       ..placeholder = "Email Placeholder"
       ..readOnly = fieldReadOnly // demo toggle
       ..disabled = fieldDisabled // demo toggle
       ..required = fieldRequired; // demo toggle
     form.addEditor(emailInput);
+
+    LInput textInput2 = new LInput("text2", EditorI.TYPE_TEXT)
+      ..label = "Text Input with Help and Hint"
+      ..placeholder = "Text Placeholder"
+      ..help = "This is the Help for the Text Input"
+      ..hint = "This is the Hint for the Text Input"
+      ..readOnly = fieldReadOnly // demo toggle
+      ..disabled = fieldDisabled // demo toggle
+      ..required = fieldRequired; // demo toggle
+    form.addEditor(textInput2);
+
+    LCheckbox check2 = new LCheckbox("check2")
+      ..label = "Checkbox Example with hint and help"
+      ..help = "This is the Help for the Checkbox"
+      ..hint = "This is the Hint for the Checkbox"
+      ..readOnly = fieldReadOnly // demo toggle
+      ..disabled = fieldDisabled // demo toggle
+      ..required = fieldRequired; // demo toggle
+    form.addEditor(check2);
 
     LSelect sel = new LSelect("sel1")
       ..label = "Select Example"
@@ -190,7 +209,7 @@ class Forms extends DemoFeature {
   }
   EditorI optionSmallCb() {
     LCheckbox cb = new LCheckbox("oSmall", idPrefix: id)
-      ..label = "Labels+Fields+Buttons small";
+      ..label = "Fields+Buttons small";
     cb.input.onClick.listen((MouseEvent evt){
       formSmall = cb.input.checked;
       optionChanged();

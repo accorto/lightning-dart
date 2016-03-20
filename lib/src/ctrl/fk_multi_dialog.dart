@@ -38,7 +38,7 @@ class FkMultiDialog {
       DColumn column = columnList[i];
       LLookup ll = new LLookup(column.name, idPrefix: idPrefix, withClearValue: true)
         ..label = column.label;
-      ll.icon.element.onClick.listen(onIconClick);
+      ll.getIconRight().element.onClick.listen(onIconClick);
       _lookupList.add(ll);
       form.addEditor(ll);
       //

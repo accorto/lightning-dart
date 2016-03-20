@@ -15,17 +15,13 @@ class LLookupTimezone
   static final Logger _log = new Logger("LLookupTimezone");
 
   /// Left Inside Input Element
-  static const String C_INPUT__DOCK = "slds-input__dock";
+  static const String C_INPUT__TZ = "slds-input__tz";
   /// Input has Left Inside Input Element
-  static const String C_INPUT_HAS_DOCK = "slds-input-has-dock";
+  static const String C_INPUT_HAS_TZ = "slds-input-has-tz";
 
-
-  /// Search Icon
-  LIcon get icon => new LIconUtility(LIconUtility.LOCATION)
-    ..title = lLookupTimezoneDefault();
 
   DivElement _dock = new DivElement()
-    ..classes.add(C_INPUT__DOCK)
+    ..classes.add(C_INPUT__TZ)
     ..title = lLookupTimezoneTimeTitle();
 
   /**
@@ -44,9 +40,13 @@ class LLookupTimezone
     _initTz();
   }
 
+  /// Search Icon
+  LIcon _iconRight = new LIconUtility(LIconUtility.LOCATION)
+    ..title = lLookupTimezoneDefault();
+
   /// init behaviour
   void _initTz() {
-    icon.element.onClick.listen(onDefaultClick);
+    _iconRight.element.onClick.listen(onDefaultClick);
 
     if (TZ.tzList == null || TZ.tzList.isEmpty) {
       _waitSeconds++;
@@ -64,7 +64,7 @@ class LLookupTimezone
     }
 
     // show + start clock
-    _formElement._inputWrapper.insertBefore(_dock, input);
+    _formElement.elementControl.insertBefore(_dock, input);
     clockRun = !inGrid && !disabled && !readOnly;
     onDefaultClick(null); // default TZ
   } // initTz
@@ -122,11 +122,11 @@ class LLookupTimezone
     clockRun = !readOnly && !disabled;
   }
 
-  bool get clockRun => input.classes.contains(C_INPUT_HAS_DOCK);
+  bool get clockRun => input.classes.contains(C_INPUT_HAS_TZ);
   void set clockRun (bool newValue) {
     if (newValue) {
       _clockTick(null);
-      input.classes.add(C_INPUT_HAS_DOCK);
+      input.classes.add(C_INPUT_HAS_TZ);
       _dock.classes.remove(LVisibility.C_HIDE);
       if (_clockTimer == null) {
         int ms = new DateTime.now().millisecond;
@@ -137,7 +137,7 @@ class LLookupTimezone
       }
     } else {
       _dock.classes.add(LVisibility.C_HIDE);
-      input.classes.remove(C_INPUT_HAS_DOCK);
+      input.classes.remove(C_INPUT_HAS_TZ);
       if (_clockTimer != null) {
         _clockTimer.cancel();
         _clockTimer = null;
@@ -157,6 +157,14 @@ class LLookupTimezone
     }
   } // _clockTick
 
+  String toString() {
+    String theValue = entry == null ? value : DataRecord.getEntryValue(entry);
+    bool theChange = entry == null ? changed : entry.isChanged;
+    int size = 0;
+    if (dataColumn != null && dataColumn.tableColumn != null)
+      size = dataColumn.tableColumn.pickListSize;
+    return "LLookupTimeZone[${name}=${theValue} changed=${theChange} #${_lookupItemList.length}(${size})]";
+  }
 
   //
   static String lLookupTimezoneTimeTitle() => Intl.message("Time in selected Timezone", name: "lLookupTimezoneTimeTitle");

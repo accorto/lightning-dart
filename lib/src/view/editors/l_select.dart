@@ -35,7 +35,7 @@ class LSelect
    * Select Editor
    */
   LSelect(String name, {String idPrefix, bool multiple:false, bool inGrid:false}) {
-    createStandard(this, inGrid: inGrid);
+    createSelectLayout(this, inGrid: inGrid);
     input.name = name;
     id = createId(idPrefix, name);
     input.multiple = multiple;
@@ -46,7 +46,7 @@ class LSelect
 
   /// Select Editor
   LSelect.from(DataColumn dataColumn, {String idPrefix, bool multiple:false, bool inGrid:false}) {
-    createStandard(this, inGrid: inGrid);
+    createSelectLayout(this, inGrid: inGrid);
     DColumn tableColumn = dataColumn.tableColumn;
     input.name = tableColumn.name;
     id = createId(idPrefix, input.name);

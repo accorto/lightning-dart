@@ -81,8 +81,9 @@ class FormsEditor extends DemoFeature {
     form.addEditor(number2, marginClass:marginClass);
 
     LInputRange rangeInput = new LInputRange("range")
-      ..label = "Range Input 7 - 7 - 182"
-      ..setMinStepMax(7, 7, 182);
+      ..label = "Range Input"
+      ..setMinStepMax(7, 7, 182)
+      ..hint = "Min=7 Step=7 Max=182";
     form.addEditor(rangeInput, marginClass:marginClass);
     rangeInput.valueAsInt = 35;
 
@@ -90,8 +91,8 @@ class FormsEditor extends DemoFeature {
       ..label = "Color";
     form.addEditor(colorInput, marginClass:marginClass);
 
-    LInputImage imageInput = new LInputImage("image")
-      ..label = "Image";
+    LInputImage imageInput = new LInputImage("image1")
+      ..label = "Image 1";
     form.addEditor(imageInput, marginClass:marginClass);
 
     LInputFile fileInput = new LInputFile("file")

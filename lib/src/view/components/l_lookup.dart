@@ -58,9 +58,6 @@ class LLookup
   /// Form Element Input
   final InputElement input = new InputElement(type: EditorI.TYPE_TEXT);
 
-  /// Search Icon
-  LIcon get icon => new LIconUtility(LIconUtility.SEARCH);
-
   /// Lookup form + menu
   final DivElement _lookupMenu = new DivElement()
     ..classes.add(C_LOOKUP__MENU)
@@ -123,8 +120,9 @@ class LLookup
       bool multiple, bool singleScope, bool typeahead, bool withClearValue, bool inGrid) {
     _setAttributes(multiple, singleScope, typeahead);
     //
-    _formElement.createStandard(this, leftElement: getLeftElement(), iconRight: icon,
-      withClearValue: withClearValue, inGrid:inGrid);
+    _formElement.createLookupLayout(this,
+        iconRight: _iconRight,
+        withClearValue: withClearValue, inGrid:inGrid);
     input
       ..attributes[Html0.ROLE] = Html0.ROLE_COMBOBOX
       ..attributes[Html0.ARIA_AUTOCOMPLETE] = Html0.ARIA_AUTOCOMPLETE_LIST
@@ -147,6 +145,10 @@ class LLookup
     _lookupMenu.onKeyDown.listen(onMenuKeyDown);
   } // initEditor
 
+  /// Search Icon
+  LIcon getIconRight() => _iconRight;
+  LIcon _iconRight = new LIconUtility(LIconUtility.SEARCH);
+
   /// Editor in Grid
   bool get inGrid => _formElement.inGrid;
 
@@ -155,7 +157,7 @@ class LLookup
     // show input with search icon
     input.onKeyUp.listen(onInputKeyUp);
     // toggle dropdown on click
-    _formElement._elementControl.onClick.listen(onClickInput);
+    _formElement.elementControl.onClick.listen(onClickInput);
   } // initEditor
 
   /// On Click on Input or Icon
@@ -187,7 +189,7 @@ class LLookup
   void set id(String newValue) {
     _formElement.id = newValue;
     element.id = "${newValue}-lookup";
-    icon.element.id = "${newValue}-icon";
+    getIconRight().element.id = "${newValue}-icon";
     _lookupMenu.attributes[Html0.DATA_NAME] = newValue;
   }
 

@@ -49,7 +49,7 @@ class LWizard
       ..append(_progressBar);
     input.append(progress);
     _progressBar.style.width = "0%";
-    createStandard(this);
+    createBaseLayout(this);
   }
 
   /// set value

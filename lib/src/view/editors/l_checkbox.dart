@@ -24,7 +24,7 @@ class LCheckbox
    * (note that if id is not unique, it does not work!)
    */
   LCheckbox(String name, {String idPrefix, bool inGrid:false}) {
-    createCheckbox(this, inGrid);
+    createCheckboxLayout(this, inGrid);
     input.name = name;
     input.id = createId(idPrefix, name);
     _initEditor();
@@ -34,7 +34,7 @@ class LCheckbox
    * Checkbox Editor
    */
   LCheckbox.from(DataColumn dataColumn, {String idPrefix, bool inGrid:false}) {
-    createCheckbox(this, inGrid);
+    createCheckboxLayout(this, inGrid);
     input.name = dataColumn.name;
     input.id = createId(idPrefix, input.name);
     //
@@ -44,7 +44,7 @@ class LCheckbox
 
   /// Initialize Editor
   void _initEditor() {
-    _labelElement.htmlFor = input.id;
+    labelElement.htmlFor = input.id;
     input.onClick.listen(onInputChange);
   }
 
@@ -142,9 +142,9 @@ class LCheckbox
     input.autofocus = newValue;
   }
 
-  String get title => _labelElement.title;
+  String get title => labelElement.title;
   void set title (String newValue) {
-    _labelElement.title = newValue; // input not displayed
+    labelElement.title = newValue; // input not displayed
   }
 
 

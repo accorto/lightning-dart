@@ -30,7 +30,8 @@ class LInput
    * Input Editor
    */
   LInput(String name, String type, {String idPrefix, bool inGrid:false, bool withClearValue:false}) {
-    createStandard(this, withClearValue:withClearValue, inGrid:inGrid);
+    createBaseLayout(this, iconLeft: getIconLeft(), iconRight: getIconRight(),
+        withClearValue:withClearValue, inGrid:inGrid);
     input.name = name;
     input.id = createId(idPrefix, name);
     input.type = _validateType(type);
@@ -44,7 +45,8 @@ class LInput
    */
   LInput.from(DataColumn dataColumn, String type,
       {String idPrefix, bool inGrid:false, bool withClearValue:false}) {
-    createStandard(this, withClearValue:withClearValue, inGrid:inGrid);
+    createBaseLayout(this, iconLeft: getIconLeft(), iconRight: getIconRight(),
+        withClearValue:withClearValue, inGrid:inGrid);
     input.name = dataColumn.name;
     input.id = createId(idPrefix, input.name);
     input.type = _validateType(type);
@@ -52,6 +54,11 @@ class LInput
     this.column = dataColumn; // base values
     _initEditor(type);
   } // LInput
+
+  /// Right side Icon
+  LIcon getIconRight() => null;
+  /// Left side Icon
+  LIcon getIconLeft() => null;
 
   /// check type
   String _validateType (String requestedType) {

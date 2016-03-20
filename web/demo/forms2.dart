@@ -90,15 +90,9 @@ class Forms2 extends DemoFeature {
     col = new DColumn()
       ..name = "DateCol"
       ..label = "Date Column"
-      ..dataType = DataType.DATE;
+      ..dataType = DataType.DATE
+      ..description = "Date (only)";
     uiu.addColumn(col);
-
-    //
-    UIProcess prc = new UIProcess()
-      ..name = "ProcessLink"
-      ..label = "Process (link)"
-      ..webLinkUrl = "https://www.accorto.com";
-    uiu.ui.processList.add(prc);
 
     // Currency
     col = new DColumn()
@@ -111,15 +105,22 @@ class Forms2 extends DemoFeature {
     col.pickValueList.add(new DOption()..value = "CAD" ..label = "CAD");
     col.pickValueList.add(new DOption()..value = "EUR" ..label = "EUR");
     uiu.table.columnList.add(col);
-
     /// Amount
     LInputNumber.currencyColumnName = "Currency";
     col = new DColumn()
       ..name = "CurrencyAmt"
       ..label = "Currency Amount"
       ..dataType = DataType.CURRENCY
-      ..isMandatory = true;
+      ..isMandatory = true
+      ..description = "Amount with currency";
     uiu.addColumn(col);
+
+    //
+    UIProcess prc = new UIProcess()
+      ..name = "ProcessLink"
+      ..label = "Process (link)"
+      ..webLinkUrl = "https://www.accorto.com";
+    uiu.ui.processList.add(prc);
 
     return uiu.ui;
   } // uiSavedQuery

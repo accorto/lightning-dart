@@ -236,6 +236,11 @@ class LInputNumber
     numberFormat.maximumFractionDigits = newValue;
   } // decimalDigits
 
+  /// Left Inside Input Element
+  static const String C_INPUT__CUR = "slds-input__cur";
+  /// Input has Left Inside Input Element
+  static const String C_INPUT_HAS_CUR = "slds-input-has-cur";
+
 
   // currency column
   void _columnCurrency() {
@@ -249,12 +254,13 @@ class LInputNumber
     _currencySelect = new SelectElement()
       ..name = currencyColumnName
       ..id = createId(id, currencyColumnName)
-      ..classes.addAll([LForm.C_INPUT__PREFIX, "currency"]);
+      ..classes.add(C_INPUT__CUR);
+    _input.classes.add(C_INPUT_HAS_CUR);
     // get currency values
     for (DOption op in curColumn.pickValueList) {
       _currencySelect.append(OptionUtil.element(op));
     }
-    createStandardLeftElement(null);
+    createAddon(_currencySelect, null);
     input.style
       ..marginLeft = "0" // "${space}px"
       ..width = "100%"; // """calc(100% - ${space}px)";
@@ -275,9 +281,6 @@ class LInputNumber
     }
   } // columnCurrency
 
-  /// Left Side Element (called early in constructor from LFormElement.createStandard)
-  Element getLeftElement() => _currencySelect;
-
   /// set value - also for currency
   void set entry (DEntry newValue) {
     super.entry = newValue;
@@ -286,16 +289,23 @@ class LInputNumber
     }
   }
 
-    /// currency or null
+  /// currency or null
   String get valueCurrency {
     if (_currencySelect != null)
       return _currencySelect.value;
     return null;
   }
 
+  /// set Currency
   void set valueCurrency (String newValue) {
-    if (_currencySelect != null && newValue != null)
-      _currencySelect.value = newValue;
+    if (_currencySelect != null) {
+      if (newValue == null || newValue.isEmpty) {
+        if (_currencySelect.options.isNotEmpty)
+          _currencySelect.selectedIndex = 0;
+      } else {
+        _currencySelect.value = newValue;
+      }
+    }
   }
 
   /// Currency Changed
@@ -311,6 +321,7 @@ class LInputNumber
         editorChange(name, theValue, entryC, null);
       }
     }
+    input.focus();
   } // onInputCurrency
 
   /// On Input Change

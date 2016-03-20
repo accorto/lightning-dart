@@ -7163,48 +7163,33 @@ a.slds-button--inverse:focus {
        -moz-user-select: none;
         -ms-user-select: none;
             user-select: none; }
-.slds-input-has-prefix {
-  position: relative; }
-  .slds-input-has-prefix .slds-input__prefix {
-    line-height: 2.125rem;
-    position: absolute;
-    top: 0;
-    tab-index: -1;
-    color: #9faab5; }
-    .slds-input-has-prefix .slds-input__prefix.currency {
-      border: none;
-      background: transparent;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      appearance: none;
-      left: 10px;
-      height: 2.125rem;
-      color: inherit; }
-      .slds-input-has-prefix .slds-input__prefix.currency select::-ms-expand {
-        display: none; }
-  .slds-input-has-prefix--left .slds-input__prefix {
-    left: 0.75rem; }
-  .slds-input-has-prefix--left .slds-input,
-  .slds-input-has-prefix--left .slds-input--bare {
-    margin-left: 3rem;
-    width: calc(100% - 3rem); }
-  .slds-input-has-prefix--right .slds-input__prefix {
-    right: 0.75rem; }
-  .slds-input-has-prefix--right .slds-input,
-  .slds-input-has-prefix--right .slds-input--bare {
-    margin-right: 3rem; }
-.slds-input__dock {
+.slds-input__tz {
+  line-height: 2.125rem;
   position: absolute;
   left: 0.5rem;
-  top: 25%;
-  color: #9faab5; }
-.slds-input-has-dock {
-  padding-left: 6.25rem; }
+  color: #9faab5;
+  tab-index: -1; }
+.slds-input-has-tz {
+  padding-left: 6.5rem; }
+.slds-input__cur {
+  height: 2.125rem;
+  position: absolute;
+  left: 0.5rem;
+  border: none;
+  background: transparent;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  color: inherit; }
+  .slds-input__cur select::-ms-expand {
+    display: none; }
+.slds-input-has-cur {
+  padding-left: 6.5rem; }
 .slds-input-has-icon--right2 .slds-input__icon2 {
   right: 2.5rem; }
 .slds-input-has-icon--right2 .slds-input,
 .slds-input-has-icon--right2 .slds-input--bare {
-  padding-right: 3rem; }
+  padding-right: 3.5rem; }
 input[type=number]::-webkit-outer-spin-button.decimal,
 input[type=number]::-webkit-inner-spin-button.decimal {
   -moz-appearance: textfield;

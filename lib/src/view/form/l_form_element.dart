@@ -17,17 +17,20 @@ class LFormElement {
     ..classes.add(LForm.C_FORM_ELEMENT);
 
   /// Label Element
-  final LabelElement _labelElement = new LabelElement();
+  final LabelElement labelElement = new LabelElement()
+    ..classes.add(LForm.C_FORM_ELEMENT__LABEL);
   /// Element control for std layout
-  DivElement _elementControl;
-  /// Label Span (cb)
+  final DivElement elementControl = new DivElement()
+    ..classes.add(LForm.C_FORM_ELEMENT__CONTROL);
+
+  /// Label Span
   final SpanElement _labelSpan = new SpanElement();
   /// required flag
   final Element _requiredElement = new Element.tag("abbr")
     ..classes.add(LForm.C_REQUIRED)
     ..title = lFormElementRequired();
   /// Hint (adds some px below input)
-  final SpanElement _hintSpan = new SpanElement()
+  final SpanElement _hintElement = new SpanElement()
     ..classes.add(LForm.C_FORM_ELEMENT__HELP);
   bool _hintHide = false;
 
@@ -35,12 +38,12 @@ class LFormElement {
   EditorI editor;
   /// Input element (select|textarea|input)
   Element _input;
-  DivElement _inputWrapper = null;
   /// editor displayed in Grid
   bool inGrid = false;
 
+
   /**
-   * Default Layout:
+   * Base Layout:
    *
    *    div       .from-element
    *      label   .form-element__label
@@ -49,40 +52,30 @@ class LFormElement {
    *        hint
    * [inGrid] if true no label
    */
-  void createStandard(EditorI editor, {LIcon iconLeft, LIcon iconRight,
-      Element leftElement,
+  void createBaseLayout(EditorI editor, {LIcon iconLeft, LIcon iconRight,
       bool withClearValue:false, bool inGrid:false}) {
     this.editor = editor;
     _input = editor.input;
     this.inGrid = inGrid;
     if (inGrid) {
       _hintHide = true;
-      _hintSpan.classes.add(LVisibility.C_HIDE);
+      _hintElement.classes.add(LVisibility.C_HIDE);
     } else {
-      _labelElement.classes.add(LForm.C_FORM_ELEMENT__LABEL);
-      _labelElement.append(_requiredElement);
-      _labelElement.append(_labelSpan);
-      element.append(_labelElement);
+      labelElement.append(_requiredElement);
+      labelElement.append(_labelSpan);
+      element.append(labelElement);
     }
     //
-    _elementControl = new DivElement()
-      ..classes.add(LForm.C_FORM_ELEMENT__CONTROL);
-    element.append(_elementControl);
+    element.append(elementControl);
 
     // input
     if (_input is InputElement) {
       _input.classes.add(LForm.C_INPUT);
     } else if (_input is TextAreaElement) {
       _input.classes.add(LForm.C_TEXTAREA);
-    } else if (_input is SelectElement) {
-      _input.classes.add(LForm.C_SELECT);
     }
 
-    _inputWrapper = null;
     // right side (clear or icon)
-    if (iconRight == null) {
-      iconRight = getIconRight();
-    }
     LIcon iconClear = null;
     if (withClearValue) {
       if (iconRight == null) {
@@ -98,92 +91,29 @@ class LFormElement {
       }
     }
     if (iconRight != null) {
-      _inputWrapper = new DivElement()
-        ..classes.add(LForm.C_INPUT_HAS_ICON)
-        ..classes.add(LForm.C_INPUT_HAS_ICON__RIGHT);
-      _elementControl.append(_inputWrapper);
+      elementControl.classes.addAll([LForm.C_INPUT_HAS_ICON, LForm.C_INPUT_HAS_ICON__RIGHT]);
       iconRight.classes.clear();
       iconRight.classes.addAll([LForm.C_INPUT__ICON, LIcon.C_ICON_TEXT_DEFAULT]);
       if (iconClear != null) {
-        _inputWrapper.classes.add(LForm.C_INPUT_HAS_ICON__RIGHT2);
-        _inputWrapper.append(iconClear.element);
+        elementControl.classes.add(LForm.C_INPUT_HAS_ICON__RIGHT2);
+        elementControl.append(iconClear.element);
       }
-      _inputWrapper.append(iconRight.element);
+      elementControl.append(iconRight.element);
     }
     // left side
-    if (iconLeft == null) {
-      iconLeft = getIconLeft();
-    }
     if (iconLeft != null) {
-      if (_inputWrapper == null) {
-        _inputWrapper = new DivElement()
-          ..classes.add(LForm.C_INPUT_HAS_ICON);
-        _elementControl.append(_inputWrapper);
-      }
-      _inputWrapper.classes.add(LForm.C_INPUT_HAS_ICON__LEFT);
+      elementControl.classes.add(LForm.C_INPUT_HAS_ICON__LEFT);
       iconLeft.classes.clear();
       iconLeft.classes.addAll([LForm.C_INPUT__ICON, LIcon.C_ICON_TEXT_DEFAULT]);
-      _inputWrapper.append(iconLeft.element);
+      elementControl.append(iconLeft.element);
       if (iconRight != null) {
         iconRight.element.style.left = "inherit";
         iconLeft.element.style.right = "inherit";
       }
     }
-    createStandardLeftElement(leftElement);
-  } // createStandard
-
-  /// create left element (before the field)
-  void createStandardLeftElement(Element leftElement) {
-    Element left = leftElement;
-    if (left == null) {
-      left = getLeftElement();
-    }
-    if (left != null) {
-      if (_inputWrapper == null) {
-        _inputWrapper = new DivElement();
-        _elementControl.append(_inputWrapper);
-      }
-      _inputWrapper.classes.add(LForm.C_INPUT_HAS_PREFIX);
-      _inputWrapper.classes.add(LForm.C_INPUT_HAS_PREFIX__LEFT);
-      _inputWrapper.append(left);
-    }
-    if (_inputWrapper == null) {
-      _inputWrapper = _elementControl;
-    }
-    if (_input is SelectElement) { // add select wrapper
-      DivElement wrapper = new DivElement()
-        ..classes.add(LForm.C_SELECT_CONTAINER)
-        ..append(_input);
-      _inputWrapper.append(wrapper);
-    } else {
-      _inputWrapper.append(_input);
-    }
-    _elementControl.append(_hintSpan); // __help
-  }
-
-  /// Create Layout for Lookup Select (pill)
-  void createLookupSelect(DivElement pillContainer, LIcon icon, bool multiple) {
-    element.children.clear();
-    _labelElement.append(_requiredElement);
-    _labelElement.append(_labelSpan);
-    element.append(_labelElement);
-    // element control
-    _elementControl.children.clear();
-    _elementControl.classes.addAll([LForm.C_INPUT_HAS_ICON, LForm.C_INPUT_HAS_ICON__RIGHT]);
-    _elementControl.append(icon.element);
-    /*
-    if (multiple) {
-      _elementControl.append(_input);
-      element.append(_elementControl);
-      element.append(pillContainer);
-    } else { // single
-      _elementControl.append(pillContainer);
-      _elementControl.append(_input);
-      element.append(_elementControl);
-    } */
-    _elementControl.append(pillContainer);
-    element.append(_elementControl);
-  } // createLookup
+    elementControl.append(_input);
+    elementControl.append(_hintElement);
+  } // createBaseLayout
 
   /**
    * Checkbox Layout
@@ -194,32 +124,174 @@ class LFormElement {
    *        input
    *        span  .checkbox--faux
    *        span  .form-element__label
+   *        hint
    */
-  void createCheckbox(EditorI editor, bool inGrid) {
+  void createCheckboxLayout(EditorI editor, bool inGrid) {
     this.editor = editor;
     _input = editor.input;
-    _labelElement.classes.add(LForm.C_CHECKBOX);
+    labelElement.classes.clear();
+    labelElement.classes.add(LForm.C_CHECKBOX);
     this.inGrid = inGrid;
     //
     SpanElement faux = new SpanElement()
       ..classes.add(LForm.C_CHECKBOX__FAUX);
     _labelSpan.classes.add(LForm.C_FORM_ELEMENT__LABEL);
-    _labelElement
-        ..append(_input)
-        ..append(faux)
-        ..append(_labelSpan);
-    _elementControl = new DivElement()
-      ..classes.add(LForm.C_FORM_ELEMENT__CONTROL)
-      ..append(_labelElement);
-    element.append(_elementControl);
+    labelElement
+      ..append(_input)
+      ..append(faux)
+      ..append(_labelSpan);
+    elementControl.append(labelElement);
+    element.append(elementControl);
 
     if (inGrid) {
       _labelSpan.remove();
       _hintHide = true;
-      _hintSpan.classes.add(LVisibility.C_HIDE);
+      _hintElement.classes.add(LVisibility.C_HIDE);
     }
-    element.append(_hintSpan); // __help
-  } // createCheckbox
+    elementControl.append(_hintElement); // __help
+  } // createCheckboxLayout
+
+  /**
+   * Select Layout:
+   *
+   *    div       .from-element
+   *      label   .form-element__label
+   *      div     .form-element__control
+   *        div   .select_container
+   *          select
+   *        hint
+   * [inGrid] if true no label
+   */
+  void createSelectLayout(EditorI editor, {bool inGrid:false}) {
+    this.editor = editor;
+    _input = editor.input;
+    this.inGrid = inGrid;
+    if (inGrid) {
+      _hintHide = true;
+      _hintElement.classes.add(LVisibility.C_HIDE);
+    } else {
+      labelElement.append(_requiredElement);
+      labelElement.append(_labelSpan);
+      element.append(labelElement);
+    }
+    //
+    element.append(elementControl);
+
+    _input.classes.add(LForm.C_SELECT);
+    Element inputWrapper = new DivElement()
+      ..classes.add (LForm.C_SELECT_CONTAINER)
+      ..append(_input);
+
+    elementControl.append(inputWrapper);
+    elementControl.append(_hintElement);
+  } // createSelectLayout
+
+
+  /**
+   * Lookup Layout:
+   *
+   *    div       .from-element
+   *      label   .form-element__label
+   *      div     .form-element__control
+   *        input
+   *        hint
+   * [inGrid] if true no label
+   */
+  void createLookupLayout(EditorI editor, {LIcon iconLeft, LIcon iconRight,
+      bool withClearValue:false, bool inGrid:false}) {
+    this.editor = editor;
+    _input = editor.input;
+    _input.classes.add(LForm.C_INPUT);
+    this.inGrid = inGrid;
+    if (inGrid) {
+      _hintHide = true;
+      _hintElement.classes.add(LVisibility.C_HIDE);
+    } else {
+      labelElement.append(_requiredElement);
+      labelElement.append(_labelSpan);
+      element.append(labelElement);
+    }
+    element.append(elementControl);
+
+    // right side (clear / icon)
+    LIcon iconClear = null;
+    if (withClearValue) {
+      if (iconRight == null) {
+        iconRight = new LIconUtility(LIconUtility.CLEAR)
+          ..title = lFormElementClear();
+        iconRight.element.onClick.listen(editor.onClearValue);
+      } else {
+        iconClear = new LIconUtility(LIconUtility.CLEAR)
+          ..title = lFormElementClear();
+        iconClear.classes.clear();
+        iconClear.classes.addAll([LForm.C_INPUT__ICON, LForm.C_INPUT__ICON2, LIcon.C_ICON_TEXT_DEFAULT]);
+        iconClear.element.onClick.listen(editor.onClearValue);
+      }
+    }
+    if (iconRight != null) {
+      elementControl.classes.addAll([LForm.C_INPUT_HAS_ICON, LForm.C_INPUT_HAS_ICON__RIGHT]);
+      iconRight.classes.clear();
+      iconRight.classes.addAll([LForm.C_INPUT__ICON, LIcon.C_ICON_TEXT_DEFAULT]);
+      if (iconClear != null) {
+        elementControl.classes.add(LForm.C_INPUT_HAS_ICON__RIGHT2);
+        elementControl.append(iconClear.element);
+      }
+      elementControl.append(iconRight.element);
+    }
+    // left side
+    if (iconLeft != null) {
+      elementControl.classes.add(LForm.C_INPUT_HAS_ICON__LEFT);
+      iconLeft.classes.clear();
+      iconLeft.classes.addAll([LForm.C_INPUT__ICON, LIcon.C_ICON_TEXT_DEFAULT]);
+      elementControl.append(iconLeft.element);
+      if (iconRight != null) {
+        iconRight.element.style.left = "inherit";
+        iconLeft.element.style.right = "inherit";
+      }
+    }
+    elementControl.append(_input);
+    elementControl.append(_hintElement); // __help
+    //createLeftElement(leftElement);
+  } // createStandard
+
+  /// create addon element
+  void createAddon(Element leftAddon, Element rightAddon) {
+    element.append(_hintElement); // move hint out of element-control
+    elementControl.classes.add(LForm.C_INPUT_HAS_FIXED_ADDON);
+    if (leftAddon != null) {
+      leftAddon.classes.add(LForm.C_FORM_ELEMENT__ADDON);
+      elementControl.insertBefore(leftAddon, _input);
+    }
+    if (rightAddon != null) {
+      rightAddon.classes.add(LForm.C_FORM_ELEMENT__ADDON);
+      elementControl.append(rightAddon);
+    }
+  } // createAddon
+
+  /// Create Layout for Lookup Select (pill)
+  void createLookupSelectLayout(DivElement pillContainer, LIcon icon, bool multiple) {
+    element.children.clear();
+    labelElement.append(_requiredElement);
+    labelElement.append(_labelSpan);
+    element.append(labelElement);
+    // element control
+    elementControl.children.clear();
+    elementControl.classes.addAll([LForm.C_INPUT_HAS_ICON, LForm.C_INPUT_HAS_ICON__RIGHT]);
+    elementControl.append(icon.element);
+    /*
+    if (multiple) {
+      _elementControl.append(_input);
+      element.append(_elementControl);
+      element.append(pillContainer);
+    } else { // single
+      _elementControl.append(pillContainer);
+      _elementControl.append(_input);
+      element.append(_elementControl);
+    } */
+    elementControl.append(pillContainer);
+    element.append(elementControl);
+  } // createLookupSelectLayout
+
 
   /// Get Id
   String get id => _input.id;
@@ -227,7 +299,7 @@ class LFormElement {
   void set id (String newValue) {
     if (newValue != null && newValue.isNotEmpty) {
       _input.id = newValue;
-      _labelElement.htmlFor = newValue;
+      labelElement.htmlFor = newValue;
     }
   }
 
@@ -346,17 +418,16 @@ class LFormElement {
 
       if (EditorI.isCheckbox(editor.type)) {
       //  element.insertBefore(_helpTip.element, _hintSpan);
-        _labelElement.append(_helpTip.element);
+        labelElement.append(_helpTip.element);
       } else { // standard
         DivElement _helpLabel = new DivElement()
           ..classes.addAll([LForm.C_FORM_ELEMENT__LABEL, LMargin.C_BOTTOM__X_SMALL])
           ..append(_helpTip.element);
         // replace label
-        _labelElement.replaceWith(_helpLabel);
-        _labelElement.classes.clear();
-        _labelElement.classes.add(LGrid.C_ALIGN_MIDDLE);
-        _helpLabel.append(_labelElement);
-        // add again
+        labelElement.replaceWith(_helpLabel);
+        labelElement.classes.clear();
+        labelElement.classes.add(LGrid.C_ALIGN_MIDDLE);
+        _helpLabel.append(labelElement); // add again
       }
     }
     if (_helpTip != null)
@@ -375,13 +446,13 @@ class LFormElement {
   String _hint;
   void _hintDisplay(String text) {
     if (text == null || text.isEmpty) {
-      _hintSpan.text = "";
+      _hintElement.text = "";
       if (_hintHide) {
-        _hintSpan.classes.add(LVisibility.C_HIDE);
+        _hintElement.classes.add(LVisibility.C_HIDE);
       }
     } else {
-      _hintSpan.text = text; // __help
-      _hintSpan.classes.remove(LVisibility.C_HIDE);
+      _hintElement.text = text; // __help
+      _hintElement.classes.remove(LVisibility.C_HIDE);
     }
   }
 
@@ -392,34 +463,31 @@ class LFormElement {
   }
   /// remove hint
   void hintRemove() {
-    _hintSpan.remove();
+    _hintElement.remove();
   }
 
 
   /// set max width of control (editor, hint, ..)
   void set maxWidth (String newValue) {
-    if (_elementControl != null) {
+    if (elementControl != null) {
       if (newValue == null || newValue.isEmpty) {
-        _elementControl.style.removeProperty("maxWidth");
+        elementControl.style.removeProperty("maxWidth");
       } else {
-        _elementControl.style.maxWidth = newValue;
+        elementControl.style.maxWidth = newValue;
       }
     }
   }
 
   /// set min width of control (editor, hint, ..)
   void set minWidth (String newValue) {
-    if (_elementControl != null) {
+    if (elementControl != null) {
       if (newValue == null || newValue.isEmpty) {
-        _elementControl.style.removeProperty("minWidth");
+        elementControl.style.removeProperty("minWidth");
       } else {
-        _elementControl.style.minWidth = newValue;
+        elementControl.style.minWidth = newValue;
       }
     }
   }
-
-  /// get element control directly (internal)
-  Element get i_formElementControl => _elementControl;
 
   /**
    * Update Field Status display
@@ -448,13 +516,6 @@ class LFormElement {
   void setMarginTopSmall() {
     element.style.marginTop = ".5rem"; // from 1
   }
-
-  /// Right side Icon
-  LIcon getIconRight() => null;
-  /// Left side Icon
-  LIcon getIconLeft() => null;
-  /// Left Element (called early in constructor)
-  Element getLeftElement() => null;
 
   /// trl
   static String lFormElementClear() => Intl.message("Clear Value", name: "lFormElementClear");

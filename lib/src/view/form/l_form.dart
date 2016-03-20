@@ -99,11 +99,6 @@ class LForm
   static final List<String> FORMTYPES = [C_FORM__HORIZONTAL, C_FORM__STACKED, C_FORM__INLINE];
 
 
-  /// slds-input__icon - Hook for .slds-input-has-prefix
-  static const String C_INPUT__PREFIX = "slds-input__prefix";
-  /// slds-input-has-icon - Lets text input know how to position .slds-input__prefix
-  static const String C_INPUT_HAS_PREFIX = "slds-input-has-prefix";
-
   /// Second right icon (clear)
   static const String C_INPUT_HAS_ICON__RIGHT2 = "slds-input-has-icon--right2";
   static const String C_INPUT__ICON2 = "slds-input__icon2";

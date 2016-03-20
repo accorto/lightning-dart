@@ -58,7 +58,7 @@ class LInputImage extends LInput {
         _icon = LIcon.create(_value, // size: 32px
             color: LIcon.C_ICON_TEXT_DEFAULT);
         _icon.element.style.border = "1px solid #d8dde6";
-        input.parent.insertBefore(_icon.element, input);
+        elementControl.append(_icon.element);
         input.classes.add(LVisibility.C_HIDE);
        }
     }

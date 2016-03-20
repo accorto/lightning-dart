@@ -14,8 +14,7 @@ class LInputRange
 
 
   /// Left Side Element
-  final SpanElement _text = new SpanElement()
-    ..classes.add(LForm.C_INPUT__PREFIX);
+  final SpanElement _text = new SpanElement();
 
   /// Range Input
   LInputRange(String name, {String idPrefix, bool inGrid:false, bool withClearValue:false})
@@ -30,10 +29,8 @@ class LInputRange
   @override
   void _initEditor(String type) {
     super._initEditor(type);
+    createAddon(_text, null);
   }
-
-  /// Left Side Element
-  Element getLeftElement() => _text;
 
   @override
   void set value (String newValue) {

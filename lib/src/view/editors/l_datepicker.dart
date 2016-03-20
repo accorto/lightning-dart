@@ -67,7 +67,7 @@ class LDatepicker
   @override
   void _initEditor(String type) {
     html5 = false;
-    _elementControl.onClick.listen(onInputClick); // not on wrapper
+    elementControl.onClick.listen(onInputClick); // not on wrapper
     //
     _firstDayOfWeek = _formatter.dateSymbols.FIRSTDAYOFWEEK + 1; // zero based
     super._initEditor(type);

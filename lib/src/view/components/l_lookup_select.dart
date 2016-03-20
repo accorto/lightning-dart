@@ -42,10 +42,10 @@ class LLookupSelect
   /// Init for Select Lookup
   void _initEditor2(bool multiple, bool singleScope, bool typeahead) {
     _pillContainer.classes.add(LVisibility.C_SHOW);
-    _formElement.createLookupSelect(_pillContainer, icon, multiple); // update
+    _formElement.createLookupSelectLayout(_pillContainer, getIconRight(), multiple); // update
 
     // toggle dropdown on click incl _pillContainer
-    _formElement._elementControl.onClick.listen(onClickInput);
+    _formElement.elementControl.onClick.listen(onClickInput);
   } // initEditor2
 
   /// focus on pill container

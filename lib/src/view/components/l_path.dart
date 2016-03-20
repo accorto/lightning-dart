@@ -50,7 +50,7 @@ class LPath
       ..classes.add(LProcess.C_TABS__PATH)
       ..attributes[Html0.ROLE] = Html0.ROLE_APPLICATION;
     input.append(_nav);
-    createStandard(this);
+    createBaseLayout(this);
     window.onResize.listen(onWindowResize, cancelOnError: true);
   }
 
