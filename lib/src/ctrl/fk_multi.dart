@@ -84,7 +84,7 @@ class FkMulti
   }
   String _value;
 
-  String get valueDisplay => _valueDisplay;
+  String get valueDisplay => _valueDisplayFirst;
   bool get isValueDisplay => true;
 
 
@@ -99,15 +99,65 @@ class FkMulti
     }
     _valueDisplay = _renderSync();
     input.value = _valueDisplay;
+
     super.entry = newValue; // calls value+valueDisplay
   } // setEntry
   final List<DEntry> _entryList = new List<DEntry>();
   String _valueDisplay;
+  String _valueDisplayFirst;
 
   /// render Sync
   String _renderSync() {
     if (_entryList.isEmpty)
       return "";
+    String display = null;
+    bool hasValue = false;
+    String parentColumnName = null;
+    String parentValue = null;
+    for (int i = 0; i < _entryList.length; i++) {
+      DEntry ee = _entryList[i];
+      String dd = "";
+      String vv = DataRecord.getEntryValue(ee);
+      if (vv != null && vv.isNotEmpty) {
+        hasValue = true;
+        if (ee.hasValueDisplay()) {
+          dd = ee.valueDisplay;
+        } else {
+          // sync lookup
+          DFK fk = FkService.instance.getFk(getFkTableName(i), vv);
+          if (fk == null) {
+            dd = KeyValueMap.keyNotFound(vv);
+            FkService.instance.getFkFuture(getFkTableName(i), vv,
+                parentColumnName: parentColumnName, parentValue: parentValue)
+            .then((DFK dfk){
+              _renderUpdate();
+            });
+          } else {
+            dd = fk.drv;
+            ee.valueDisplay = dd;
+          }
+        }
+        if (i == 0) {
+          _valueDisplayFirst = dd;
+          parentColumnName = ee.columnName;
+          parentValue = vv;
+        }
+      }
+      if (display == null) {
+        display = dd;
+      } else {
+        display += LUtil.DOT_SPACE + dd;
+      }
+    }
+    if (hasValue) {
+      _log.fine("renderSync ${name} = ${display}");
+      return display;
+    }
+    return "";
+  } // renderSync
+
+  /// update display
+  void _renderUpdate() {
     String display = null;
     bool hasValue = false;
     for (int i = 0; i < _entryList.length; i++) {
@@ -128,6 +178,9 @@ class FkMulti
             ee.valueDisplay = dd;
           }
         }
+        if (i == 0) {
+          _valueDisplayFirst = dd;
+        }
       }
       if (display == null) {
         display = dd;
@@ -135,10 +188,12 @@ class FkMulti
         display += LUtil.DOT_SPACE + dd;
       }
     }
-    if (hasValue)
-      return display;
-    return "";
-  } // renderSync
+    if (hasValue) {
+      _valueDisplay = display;
+      input.value = _valueDisplay;
+      _log.fine("renderUpdate ${name} = ${display}");
+    }
+  } // _renderUpdate
 
   /// render sync
   Future<String> render(String newValue, bool setValidity) {
@@ -167,9 +222,9 @@ class FkMulti
         else
           display += LUtil.DOT_SPACE + dd;
       }
+      _log.fine("render ${name} ${responseList} = ${display}");
       completer.complete(display);
     });
-
     return completer.future;
   } // render
 
@@ -246,7 +301,7 @@ class FkMulti
   }
   FkMultiDialog _dialog;
 
-  /// Set Values
+  /// Set Values (called from Dialog)
   void setValues(List<String> valueList) {
     for (int i = 0; i < _entryList.length; i++) {
       DEntry entry = _entryList[i];

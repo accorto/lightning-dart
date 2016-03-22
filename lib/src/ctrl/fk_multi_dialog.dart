@@ -71,7 +71,7 @@ class FkMultiDialog {
     }
   } // show
 
-  /// fill lookup and set value
+  /// fill lookup and set lookup value [lvalue]
   void fillLookup(int level, String lvalue) {
     String level0columnValue = null;
     String level1columnValue = null;
@@ -103,7 +103,7 @@ class FkMultiDialog {
     });
   } // fillLookup
 
-  /// fill lookup
+  /// fill lookup and set value [lvalue]
   void _fillLookupDetails(int level, String lvalue,
       LLookup lookup, List<DFK> fkList,
       String level0columnValue, String level1columnValue) {

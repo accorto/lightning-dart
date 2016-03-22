@@ -10,7 +10,6 @@ part of lightning_ctrl;
  * FK Search Dialog
  * - independent FK
  * - FK with (external) Parent value
- * TODO dependent/multiple FK's - parent/child/..
  */
 class FkDialog {
 
