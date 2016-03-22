@@ -64,7 +64,9 @@ class StatBy
       point = new StatPoint(key0, null);
       point.byPeriod = byPeriod;
       byValueList.add(point);
-      if (keyLabelMap != null) {
+      if (key0 == null || key0.isEmpty) {
+        point.label = "";
+      } else if (keyLabelMap != null) {
         if (keyLabelMap.containsKey(key0)) {
           point.label = keyLabelMap[key0];
         } else {
@@ -81,8 +83,9 @@ class StatBy
 
   /**
    * Update Labels + sort if required
+   * return true if labels need to be updated
    */
-  void updateLabels() {
+  bool updateLabels() {
     if (needLabelUpdate && byValueList.isNotEmpty) {
       bool labelMissing = false;
       for (StatPoint point in byValueList) {
@@ -112,6 +115,7 @@ class StatBy
       _log.fine("updateLabels ${key} keyLabelMap=${keyLabelMap} labelMissing=${labelMissing}");
       needLabelUpdate = labelMissing;
     }
+    return needLabelUpdate;
   } // updateLabels
 
   /// consolidate date labels

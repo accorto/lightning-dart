@@ -36,4 +36,7 @@ abstract class EngineBase {
   /// render pie chart - true if success
   bool renderPie(GraphCalc calc, bool displayHorizontal);
 
+  /// need label update
+  bool get needLabelUpdate;
+
 } // PanelBase

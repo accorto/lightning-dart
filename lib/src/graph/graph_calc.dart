@@ -23,15 +23,16 @@ class GraphCalc
 
 
   /// Display - horizontal/vertical or flow
-  void display(EngineBase engine, bool displayHorizontal) {
+  /// return true if needs to be re-rendered
+  bool display(EngineBase engine, bool displayHorizontal) {
     if ((dateColumn != null
         || (byList.isNotEmpty && byList.first.byValueList.isNotEmpty))
         && engine.renderStacked(this, displayHorizontal)) {
-      return;
+      return engine.needLabelUpdate;
     }
 
     if (engine.renderPie(this, displayHorizontal)) {
-      return;
+      return engine.needLabelUpdate;
     }
 
     if (count == 0) {
@@ -54,6 +55,7 @@ class GraphCalc
       }
     }
     //engine.element.style.minHeight = "inherit"; // 300px
+    return false;
   } // display
 
 } // GraphCalc

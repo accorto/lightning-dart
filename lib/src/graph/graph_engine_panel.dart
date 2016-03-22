@@ -149,8 +149,15 @@ class GraphEnginePanel
   void display(bool displayHorizontal) {
     engine.reset();
     for (GraphCalc calc in _calcList) {
-      calc.display(engine, displayHorizontal);
+      _log.config("display ${calc.key}");
+      if (calc.display(engine, displayHorizontal)) {
+        new Timer(new Duration(seconds: 2), (){
+          _log.config("display ${calc.key} (again)");
+          engine.reset();
+          calc.display(engine, displayHorizontal);
+        });
+      }
     }
-  }
+  } // display
 
 } // GraphPanel

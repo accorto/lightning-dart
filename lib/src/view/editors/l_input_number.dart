@@ -22,7 +22,9 @@ class LInputNumber
   NumberFormat numberFormat = new NumberFormat("#,###,##0", ClientEnv.localeName);
   /// Data Type
   DataType dataType;
-  /// Currency Selection
+  /// Currency Column;
+  DColumn _curColumn;
+  /// Currency Selection Element
   SelectElement _currencySelect;
 
   /**
@@ -247,8 +249,8 @@ class LInputNumber
     if (currencyColumnName == null || dataColumn == null)
       return;
     // get currency column
-    DColumn curColumn = dataColumn.getTableColumn(currencyColumnName);
-    if (curColumn == null || curColumn.pickValueList.isEmpty)
+    _curColumn = dataColumn.getTableColumn(currencyColumnName);
+    if (_curColumn == null || _curColumn.pickValueList.isEmpty)
       return;
     // Currency Select
     _currencySelect = new SelectElement()
@@ -257,8 +259,16 @@ class LInputNumber
       ..classes.add(C_INPUT__CUR);
     _input.classes.add(C_INPUT_HAS_CUR);
     // get currency values
-    for (DOption op in curColumn.pickValueList) {
+    String currencyDefault = null;
+    for (DOption op in _curColumn.pickValueList) {
       _currencySelect.append(OptionUtil.element(op));
+      if (op.hasIsDefault() && op.isDefault)
+        currencyDefault = op.value;
+    }
+    if (_curColumn.hasDefaultValue()) {
+      valueCurrency = _curColumn.defaultValue;
+    } else {
+      valueCurrency = currencyDefault;
     }
     createAddon(_currencySelect, null);
     input.style
@@ -271,9 +281,6 @@ class LInputNumber
       _currencySelect.disabled = true;
     } else {
       _currencySelect.onInput.listen(onInputCurrency);
-      if (curColumn.hasDefaultValue()) {
-        _currencySelect.value = curColumn.defaultValue;
-      }
     }
     if (data != null) {
       DEntry entryC = data.getEntry(null, currencyColumnName, true);
@@ -300,7 +307,9 @@ class LInputNumber
   void set valueCurrency (String newValue) {
     if (_currencySelect != null) {
       if (newValue == null || newValue.isEmpty) {
-        if (_currencySelect.options.isNotEmpty)
+        if (_curColumn != null && _curColumn.hasDefaultValue())
+          _currencySelect.value = _curColumn.defaultValue;
+        else if (_currencySelect.options.isNotEmpty)
           _currencySelect.selectedIndex = 0;
       } else {
         _currencySelect.value = newValue;

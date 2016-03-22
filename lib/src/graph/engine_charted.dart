@@ -42,6 +42,8 @@ class EngineCharted
 
   List<StatPoint> _metaRowList = new List<StatPoint>();
   List<StatPoint> _metaColList = new List<StatPoint>();
+  /// need label update
+  bool needLabelUpdate = false;
 
   /**
    * Charted Engine Interface
@@ -95,6 +97,7 @@ class EngineCharted
    */
   bool renderStacked(GraphCalc calc, bool displayHorizontal) {
     _calc = calc;
+    needLabelUpdate = false;
     _numPrecision = _calc.decimalDigits;
     bool rendered = false;
     for (StatBy by in _calc.byList) {
@@ -149,7 +152,8 @@ class EngineCharted
   /// stacked columns (by values)
   List<ChartColumnSpec> _stackedColumns(StatBy by) {
     List<ChartColumnSpec> list = new List<ChartColumnSpec>();
-    by.updateLabels();
+    if (by.updateLabels())
+      needLabelUpdate = true;
     ChartColumnSpec column = new ChartColumnSpec(label:StatCalc.statCalcColumnDate(),
         type: ChartColumnSpec.TYPE_STRING);
     list.add(column);
@@ -195,6 +199,7 @@ class EngineCharted
    */
   bool renderBar(GraphCalc calc, bool displayHorizontal) {
     _calc = calc;
+    needLabelUpdate = false;
     if (_calc.byDateList != null && _calc.byDateList.isNotEmpty) { // .. no by
       _data = new ChartData(_pointColumns(_calc),
           _pointRows(_calc.byDateList));
@@ -271,6 +276,7 @@ class EngineCharted
    */
   bool renderPie(GraphCalc calc, bool displayHorizontal) {
     _calc = calc;
+    needLabelUpdate = false;
     _numPrecision = _calc.decimalDigits;
     bool rendered = false;
     bool isDonut = true;
@@ -282,7 +288,8 @@ class EngineCharted
       _graphType = _TYPE_PIE;
       int width = _createLayout(displayHorizontal);
       //
-      by.updateLabels();
+      if (by.updateLabels())
+        needLabelUpdate = true;
 
       ChartSeries series = new ChartSeries(_calc.tableName, [1],
           new PieChartRenderer(innerRadiusRatio: isDonut ? 0.5 : 0,
@@ -314,7 +321,8 @@ class EngineCharted
   /// pie column list
   List<ChartColumnSpec> _byColumns(String whatLabel, StatBy by) {
     List<ChartColumnSpec> list = new List<ChartColumnSpec>();
-    by.updateLabels();
+    if (by.updateLabels())
+      needLabelUpdate = true;
     ChartColumnSpec column = new ChartColumnSpec(label:by.label, type: ChartColumnSpec.TYPE_STRING);
     list.add(column);
     _metaColList.add(by);

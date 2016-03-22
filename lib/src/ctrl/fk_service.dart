@@ -167,9 +167,11 @@ class FkService
     if (fk != null) {
       completer.complete(fk);
     } else if (fkTableName == null || fkTableName.isEmpty) {
-      completer.completeError(new Exception("NoTable"));
+      _log.warning("getFkFuture No fkTableName");
+      completer.completeError(new Exception("NoFkTableName"));
     } else if (id == null || id.isEmpty) {
-      completer.completeError(new Exception("NoId"));
+      _log.warning("getFkFuture ${fkTableName} No fkId");
+      completer.completeError(new Exception("NoFkId"));
     }
     else {
       FkServiceRequest sr = new FkServiceRequest()

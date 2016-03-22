@@ -17,8 +17,11 @@ typedef void KeyValueFill(KeyValueMap map);
  */
 class KeyValueMap implements Map<String,String> {
 
+  /// not found on server ~ id ~
   static String keyNotFoundOnServer(String key) => "~${key}~";
+  /// not found in cache <- id ->
   static String keyNotFoundInCache(String key) => "<-${key}->";
+  /// not found < id >
   static String keyNotFound(String key) => "<${key}>";
 
 
@@ -95,7 +98,7 @@ class KeyValueMap implements Map<String,String> {
     if (_isComplete || value != null) {
       return value;
     }
-    return keyNotFoundInCache(key);
+    return keyNotFoundInCache(key); // <- id ->
   }
 
   /// get Value for [key]
@@ -109,7 +112,7 @@ class KeyValueMap implements Map<String,String> {
       return keyValueValue(name, key);
     }
     Completer<String> completer = new Completer<String>();
-    completer.complete(keyNotFoundInCache(key));
+    completer.complete(keyNotFoundInCache(key)); // <- id ->
     return completer.future;
   }
 
