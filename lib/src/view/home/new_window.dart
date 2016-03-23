@@ -35,6 +35,8 @@ class NewWindow {
   static const String TARGET_BLANK = "_blank";
   /// top frameset
   static const String TARGET_TOP = "_top";
+  /// default (_self)
+  static const String TARGET_DEFAUT = "_self";
 
   /// new window button
   LButton button;

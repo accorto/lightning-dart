@@ -222,6 +222,7 @@ class AppsMain
         }
       }
     }
+    _menu.setTitle();
   } // loggedIn
 
 

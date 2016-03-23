@@ -98,17 +98,20 @@ class FormCtrl
       // Web
       if (process.hasWebLocation() || process.hasWebLinkUrl()) {
         String href = process.webLocation;
-        if (href.isEmpty)
+        if (href.isEmpty) {
           href = process.webLinkUrl;
+        }
+        String target = NewWindow.TARGET_DEFAUT;
+        if (process.hasWebLinkUrl()) {
+          target = NewWindow.TARGET_BLANK;
+        }
         if (icon == null) {
           btn = new LButton.neutralAnchor(process.name, process.label, href:href,
-            idPrefix:id);
+            idPrefix:id, target: target);
         } else {
           btn = new LButton.neutralAnchorIcon(process.name, process.label, icon, href:href,
-            idPrefix:id, iconLeft: true);
+            idPrefix:id, iconLeft: true, target: target);
         }
-        if (process.hasWebLinkUrl())
-          (btn.element as AnchorElement).target = NewWindow.TARGET_BLANK;
       } else {
         if (icon == null) {
           btn = new LButton.neutral(process.name, process.label,

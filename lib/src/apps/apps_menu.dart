@@ -34,6 +34,7 @@ class AppsMenu
     ..id = "a-menu-show";
   /// Help Link
   AnchorElement _menuHelp;
+  String _label = "";
 
   /// Left Side Menu
   AppsMenu() {
@@ -50,12 +51,8 @@ class AppsMenu
    */
   void set(AppsCtrl apps) {
     element.children.clear();
-    _menuShow.title = apps.label;
-    if (ClientEnv.session == null) {
-      _menuShow.title = apps.label;
-    } else {
-      _menuShow.title = "${apps.label} - ${ClientEnv.session.tenantName}";
-    }
+    _label = apps.label;
+    setTitle();
     element.append(_menuShow);
     // entries
     for (AppsPage pe in apps.pageList) {
@@ -77,6 +74,14 @@ class AppsMenu
     if (_menuHelp != null)
       element.append(_menuHelp);
   } // set
+
+  /// Set Title
+  void setTitle() {
+    _menuShow.title = _label;
+    if (ClientEnv.session != null) {
+      _menuShow.title = "${_label} - ${ClientEnv.session.userName} - ${ClientEnv.session.tenantName}";
+    }
+  }
 
   /**
    * Menu Expanded
