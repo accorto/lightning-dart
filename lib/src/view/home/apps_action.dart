@@ -28,6 +28,7 @@ class AppsAction {
   static const String IMPORT = "import";
   static const String EXPORT = "export";
 
+  static const String SUBMIT = "submit";
   static const String LAYOUT = "layout";
   static const String INFO = "info";
 
@@ -85,6 +86,11 @@ class AppsAction {
       ..icon = new LIconUtility(LIconUtility.DOWNLOAD);
   }
 
+  /// Standard Submit Action
+  static AppsAction createSubmit(AppsActionTriggered callback) {
+    return new AppsAction(SUBMIT, appsActionLayout(), callback)
+      ..icon = new LIconUtility(LIconAction.SUBMIT_FOR_APPROVAL);
+  }
   /// Standard Layout Action
   static AppsAction createLayout(AppsActionTriggered callback) {
     return new AppsAction(LAYOUT, appsActionLayout(), callback)

@@ -160,6 +160,17 @@ class DataRecord {
     return fk;
   } // createFk
 
+  /// Create (partial) record from fk
+  static DRecord createRecord(DFK fk) {
+    DRecord record = new DRecord()
+        ..tableName = fk.tableName
+        ..recordId = fk.id
+        ..urv = fk.urv
+        ..drv = fk.drv;
+    record.entryList.addAll(fk.entryList);
+    return record;
+  }
+
   /**
    * Get value (original) of entry - if [returnEmpty] returns "" for null
    */
