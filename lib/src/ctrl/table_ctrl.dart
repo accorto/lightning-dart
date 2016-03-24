@@ -32,8 +32,8 @@ class TableCtrl
    * Object Table
    * - provide [appsActionNewCallback] to overwrite creating new row (inline)
    */
-  TableCtrl({String idPrefix,
-      bool rowSelect:true,
+  TableCtrl(String idPrefix,
+      {bool rowSelect:true,
       RecordSortList recordSorting,
       AppsActionTriggered recordAction, // record urv click
       UI tableUi,
@@ -72,13 +72,17 @@ class TableCtrl
     if (optionLayout)
       addTableAction(AppsAction.createLayout(onActionTableLayout));
 
-    //
-    if (optionEdit && editMode != LTable.EDIT_RO)
+    // Row Actions
+    addRowAction(AppsAction.createExclude(onActionRowExclude));
+    if (optionEdit && editMode != LTable.EDIT_RO) {
       addRowAction(AppsAction.createEdit(onActionRowEdit));
-    if (editMode != LTable.EDIT_RO)
+      addRowAction(AppsAction.createReset(onActionRowReset));
+    }
+    if (editMode != LTable.EDIT_RO) {
       addRowAction(AppsAction.createDelete(onActionRowDelete));
+    }
     addRowAction(AppsAction.createInfo(onActionRowInfo));
-  }
+  } // addActions
 
   String get tableName => ui.tableName;
 

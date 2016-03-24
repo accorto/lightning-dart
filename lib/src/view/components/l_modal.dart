@@ -214,10 +214,11 @@ class LModal
     if (icon != null) {
       if (icon.linkPrefix.contains("utility")) {
         icon.classes.add(LIcon.C_ICON_TEXT_DEFAULT);
-      } else if (icon.linkPrefix.contains("action")) {
-        icon.element.style.padding = "0.25rem";
+        icon.classes.add(LIcon.C_ICON__SMALL);
+      } else { // }if (icon.linkPrefix.contains("action")) {
+        icon.element.style.padding = "0.25rem"; // colored space
       }
-      icon.classes.addAll([LIcon.C_ICON__SMALL, LMargin.C_RIGHT__SMALL]);
+      icon.classes.add(LMargin.C_RIGHT__SMALL);
       h2.append(icon.element);
     }
     h2.appendText(title);

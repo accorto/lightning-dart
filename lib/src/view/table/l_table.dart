@@ -759,6 +759,25 @@ class LTable
   int get bodyRowIndex => _bodyRowIndex;
   int _bodyRowIndex = -1;
 
+  /// Exclude Body Row with [record]
+  LTableRow excludeBodyRow(DRecord record) {
+    for (int i = 0; i < tbodyRows.length; i++) {
+      LTableRow row = tbodyRows[i];
+      if (row.record == record) {
+        String info = "excludeBodyRow ${record.urv} #${i}";
+        record.isExcluded = true;
+        row.rowElement.remove(); // dom
+        tbodyRows.removeAt(i); // table row
+        if (!recordList.remove(record))
+          info += " NOT found in recordList";
+        displayFoot();
+        _log.config(info);
+        return row;
+      }
+    }
+    return null;
+  } // deleteBodyRow
+
   /// Delete Body Row with [record]
   LTableRow deleteBodyRow(DRecord record) {
     for (int i = 0; i < tbodyRows.length; i++) {
@@ -794,6 +813,12 @@ class LTable
     }
     displayFoot();
   }
+
+  /// action row exclude
+  void onActionRowExclude(String value, DataRecord data, DEntry entry, var actionVar) {
+    LTableRow row = excludeBodyRow(data.record);
+    _log.config("onActionRowExclude row=${row}");
+  } // onLineActionExclude
 
   /// get Body Row with record
   LTableRow getBodyRow(DRecord record) {
@@ -988,6 +1013,8 @@ class LTable
     bool needSort = _displayCalculateStatistics();
     //_log.fine("display records=${recordList.length}");
     for (DRecord record in recordList) {
+      if (record.hasIsExcluded() && record.isExcluded)
+        continue;
       if (record.hasIsGroupBy()) {
         addStatRow(record);
       } else {

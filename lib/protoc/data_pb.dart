@@ -82,6 +82,7 @@ class DRecord extends GeneratedMessage {
     ..a(11, 'svrMsg', PbFieldType.OS)
     ..a(12, 'isChanged', PbFieldType.OB)
     ..a(13, 'isReadOnly', PbFieldType.OB)
+    ..a(15, 'isExcluded', PbFieldType.OB)
     ..a(16, 'isReadOnlyCalc', PbFieldType.OB)
     ..a(17, 'isMandatoryCalc', PbFieldType.OB)
     ..a(18, 'isSelected', PbFieldType.OB)
@@ -176,43 +177,48 @@ class DRecord extends GeneratedMessage {
   bool hasIsReadOnly() => $_has(12, 13);
   void clearIsReadOnly() => clearField(13);
 
-  bool get isReadOnlyCalc => $_get(13, 16, false);
-  void set isReadOnlyCalc(bool v) { $_setBool(13, 16, v); }
-  bool hasIsReadOnlyCalc() => $_has(13, 16);
+  bool get isExcluded => $_get(13, 15, false);
+  void set isExcluded(bool v) { $_setBool(13, 15, v); }
+  bool hasIsExcluded() => $_has(13, 15);
+  void clearIsExcluded() => clearField(15);
+
+  bool get isReadOnlyCalc => $_get(14, 16, false);
+  void set isReadOnlyCalc(bool v) { $_setBool(14, 16, v); }
+  bool hasIsReadOnlyCalc() => $_has(14, 16);
   void clearIsReadOnlyCalc() => clearField(16);
 
-  bool get isMandatoryCalc => $_get(14, 17, false);
-  void set isMandatoryCalc(bool v) { $_setBool(14, 17, v); }
-  bool hasIsMandatoryCalc() => $_has(14, 17);
+  bool get isMandatoryCalc => $_get(15, 17, false);
+  void set isMandatoryCalc(bool v) { $_setBool(15, 17, v); }
+  bool hasIsMandatoryCalc() => $_has(15, 17);
   void clearIsMandatoryCalc() => clearField(17);
 
-  bool get isSelected => $_get(15, 18, false);
-  void set isSelected(bool v) { $_setBool(15, 18, v); }
-  bool hasIsSelected() => $_has(15, 18);
+  bool get isSelected => $_get(16, 18, false);
+  void set isSelected(bool v) { $_setBool(16, 18, v); }
+  bool hasIsSelected() => $_has(16, 18);
   void clearIsSelected() => clearField(18);
 
-  bool get isMatchFind => $_get(16, 19, false);
-  void set isMatchFind(bool v) { $_setBool(16, 19, v); }
-  bool hasIsMatchFind() => $_has(16, 19);
+  bool get isMatchFind => $_get(17, 19, false);
+  void set isMatchFind(bool v) { $_setBool(17, 19, v); }
+  bool hasIsMatchFind() => $_has(17, 19);
   void clearIsMatchFind() => clearField(19);
 
-  List<DEntry> get entryList => $_get(17, 20, null);
+  List<DEntry> get entryList => $_get(18, 20, null);
 
-  DRecord get parent => $_get(18, 21, null);
+  DRecord get parent => $_get(19, 21, null);
   void set parent(DRecord v) { setField(21, v); }
-  bool hasParent() => $_has(18, 21);
+  bool hasParent() => $_has(19, 21);
   void clearParent() => clearField(21);
 
-  bool get isGroupBy => $_get(19, 22, false);
-  void set isGroupBy(bool v) { $_setBool(19, 22, v); }
-  bool hasIsGroupBy() => $_has(19, 22);
+  bool get isGroupBy => $_get(20, 22, false);
+  void set isGroupBy(bool v) { $_setBool(20, 22, v); }
+  bool hasIsGroupBy() => $_has(20, 22);
   void clearIsGroupBy() => clearField(22);
 
-  List<DStatistics> get statList => $_get(20, 23, null);
+  List<DStatistics> get statList => $_get(21, 23, null);
 
-  List<List<int>> get attachmentList => $_get(21, 24, null);
+  List<List<int>> get attachmentList => $_get(22, 24, null);
 
-  List<String> get attachmentNameList => $_get(22, 25, null);
+  List<String> get attachmentNameList => $_get(23, 25, null);
 }
 
 class _ReadonlyDRecord extends DRecord with ReadonlyMessageMixin {}
@@ -737,6 +743,7 @@ const DRecord$json = const {
     const {'1': 'svr_msg', '3': 11, '4': 1, '5': 9},
     const {'1': 'is_changed', '3': 12, '4': 1, '5': 8, '7': 'false'},
     const {'1': 'is_read_only', '3': 13, '4': 1, '5': 8, '7': 'false'},
+    const {'1': 'is_excluded', '3': 15, '4': 1, '5': 8},
     const {'1': 'is_read_only_calc', '3': 16, '4': 1, '5': 8},
     const {'1': 'is_mandatory_calc', '3': 17, '4': 1, '5': 8},
     const {'1': 'is_selected', '3': 18, '4': 1, '5': 8},

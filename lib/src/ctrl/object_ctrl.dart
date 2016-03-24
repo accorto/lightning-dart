@@ -283,7 +283,7 @@ class ObjectCtrl
    */
   void _displayTable() {
     if (_table == null) {
-      _table = new TableCtrl(idPrefix: id,
+      _table = new TableCtrl(id,
           rowSelect: true,
           recordSorting: datasource.recordSorting,
           recordAction: onAppsActionRecord, // urv click

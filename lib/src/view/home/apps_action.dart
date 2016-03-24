@@ -28,6 +28,7 @@ class AppsAction {
   static const String IMPORT = "import";
   static const String EXPORT = "export";
 
+  static const String EXCLUDE = "exclude";
   static const String SUBMIT = "submit";
   static const String LAYOUT = "layout";
   static const String INFO = "info";
@@ -86,10 +87,15 @@ class AppsAction {
       ..icon = new LIconUtility(LIconUtility.DOWNLOAD);
   }
 
+  /// Standard Exclude Action
+  static AppsAction createExclude(AppsActionTriggered callback) {
+    return new AppsAction(EXCLUDE, appsActionExclude(), callback)
+      ..icon = new LIconUtility(LIconUtility.CLOSE); // clear
+  }
   /// Standard Submit Action
   static AppsAction createSubmit(AppsActionTriggered callback) {
-    return new AppsAction(SUBMIT, appsActionLayout(), callback)
-      ..icon = new LIconUtility(LIconAction.SUBMIT_FOR_APPROVAL);
+    return new AppsAction(SUBMIT, appsActionSubmit(), callback)
+      ..icon = new LIconAction(LIconAction.SUBMIT_FOR_APPROVAL);
   }
   /// Standard Layout Action
   static AppsAction createLayout(AppsActionTriggered callback) {
@@ -258,6 +264,8 @@ class AppsAction {
   static String appsActionDelete() => Intl.message("Delete", name: "appsActionDelete");
   static String appsActionDeleteSelected() => Intl.message("Delete Selected", name: "appsActionDeleteSelected");
 
+  static String appsActionExclude() => Intl.message("Exclude", name: "appsActionExclude");
+  static String appsActionSubmit() => Intl.message("Submit", name: "appsActionSubmit");
   static String appsActionLayout() => Intl.message("Layout", name: "appsActionLayout");
   static String appsActionInfo() => Intl.message("Info", name: "appsActionInfo");
 

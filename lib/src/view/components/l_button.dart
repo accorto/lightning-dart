@@ -211,15 +211,22 @@ class LButton
       else if (_label != null)
         element.appendText(_label);
     } else {
+      // save general icon classes
+      List<String> list = new List<String>();
+      _icon.classes.forEach((String iconClass){
+        if (_ICON_ATTRIB.contains(iconClass) // statefulLmodal, hint
+            || _ICON_SIZES.contains(iconClass))
+          list.add(iconClass);
+      });
+      _icon.classes.clear(); // remove colors
+      _icon.classes.addAll(list);
+      // set classes
       if (_iconButton) {
         _icon.classes.add(C_BUTTON__ICON); // 1rem gray
-        _icon.classes.remove(LIcon.C_ICON); // 2rem white
       } else {
-        _icon.classes.remove(C_BUTTON__ICON); // 1rem gray
         _icon.classes.add(LIcon.C_ICON); // 2rem white
       }
-      _icon.classes.remove(C_BUTTON__ICON__LEFT);
-      _icon.classes.remove(C_BUTTON__ICON__RIGHT);
+      // left/right
       if (_label == null && _labelElement == null) {
         element.append(_icon.element);
       } else {
@@ -257,6 +264,7 @@ class LButton
       element.append(more.element);
     }
   } // rebuild
+  List<String> _ICON_ATTRIB = [C_BUTTON__ICON__STATEFUL, C_BUTTON__ICON__HINT];
 
   /// Default Button
   LButton.base(String name, String label, {String idPrefix})
@@ -454,17 +462,17 @@ class LButton
   bool get small => element.classes.contains(C_BUTTON__SMALL);
   /// Button Size
   void set small (bool newValue) {
+    element.classes.removeAll(_ELEMENT_SIZES);
     if (newValue) {
       String ll = label;
-      if (icon != null && (ll == null || ll.isEmpty))
+      if (_icon != null && (ll == null || ll.isEmpty))
         element.classes.add(C_BUTTON__ICON_SMALL);
       else
         element.classes.add(C_BUTTON__SMALL);
-    } else {
-      element.classes.remove(C_BUTTON__SMALL);
-      element.classes.remove(C_BUTTON__ICON_SMALL);
     }
   }
+  List<String> _ELEMENT_SIZES = [C_BUTTON__SMALL, C_BUTTON__ICON_SMALL, C_BUTTON__ICON_X_SMALL];
+  List<String> _ICON_SIZES = [C_BUTTON__ICON__LARGE, C_BUTTON__ICON__SMALL, C_BUTTON__ICON__X_SMALL];
 
   /// button icon is 1rem gray (default) - icon is 2rem white
   void set iconButton (bool newValue) {
@@ -474,8 +482,10 @@ class LButton
 
   /// Set Icon Size e.g. C_BUTTON__ICON__X_SMALL
   void set iconSize(String newValue) {
-    if (_icon != null)
+    if (_icon != null) {
+      _icon.classes.removeAll(_ICON_SIZES);
       _icon.classes.add(newValue);
+    }
   }
   /// Icon Size
   void iconSizeXSmall() {
@@ -491,7 +501,7 @@ class LButton
   }
   /// Icon Inverse
   void iconInverse() {
-    _icon.classes.add(C_BUTTON__ICON_INVERSE);
+    element.classes.add(C_BUTTON__ICON_INVERSE);
   }
 
   /// Button in selected state

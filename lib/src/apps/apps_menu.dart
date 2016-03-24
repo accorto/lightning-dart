@@ -77,9 +77,10 @@ class AppsMenu
 
   /// Set Title
   void setTitle() {
-    _menuShow.title = _label;
+    _menuShow.title = "${_label} \n- ${LightningDart.devTimestamp}";
     if (ClientEnv.session != null) {
-      _menuShow.title = "${_label} - ${ClientEnv.session.userName} - ${ClientEnv.session.tenantName}";
+      _menuShow.title = "${_label} \n- ${ClientEnv.session.userName} "
+          "- ${ClientEnv.session.tenantName} \n- ${LightningDart.devTimestamp}";
     }
   }
 
