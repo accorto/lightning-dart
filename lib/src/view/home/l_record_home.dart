@@ -7,34 +7,13 @@
 part of lightning_dart;
 
 /**
- * Record Home
- *
+ * (Individual) Record Home
+ * - icon  | recordType/recordTitle | follow | center | actions
+ * - fieldLabel1/fieldValue1 | ..
  * header element has data-id/value/name (from record)
  */
 class LRecordHome
-    extends LPageHeader {
-
-  /// Top Row - Icon - Title - Label - Follow - Actions
-  final DivElement _header = new DivElement()
-    ..classes.add(LGrid.C_GRID);
-
-  /// Top row left
-  final DivElement _headerLeft = new DivElement()
-    ..classes.addAll([LGrid.C_COL, LGrid.C_HAS_FLEXI_TRUNCATE]);
-  /// Media
-  final LMedia _headerLeftMedia = new LMedia();
-  /// Record Type
-  final ParagraphElement _headerLeftRecordType = new ParagraphElement()
-    ..classes.add(LText.C_TEXT_HEADING__LABEL);
-  final HeadingElement _headerLeftRecordTitle = new HeadingElement.h1()
-    ..classes.addAll([LPageHeader.C_PAGE_HEADER__TITLE, LMargin.C_RIGHT__SMALL, LText.C_TRUNCATE, LGrid.C_ALIGN_MIDDLE]);
-  // Follow Button
-  final LButton followButton;
-
-  /// Top row
-  final DivElement _headerRight = new DivElement()
-    ..classes.addAll([LGrid.C_COL, LGrid.C_NO_FLEX, LGrid.C_ALIGN_BOTTOM]);
-  final LButtonGroup _actionButtonGroup = new LButtonGroup();
+    extends LPageHome {
 
   //
   UI ui;
@@ -42,22 +21,20 @@ class LRecordHome
 
   /**
    * Record Home with optional button [followElement]
-   * and optional [centerElement] (grid column)
+   * e.g. new LButtonStateful.follow("follow").element
    */
-  LRecordHome({LButton this.followButton, Element centerElement, bool wrap:false, String idPrefix}) {
-    _initComponent(centerElement, wrap, idPrefix);
+  LRecordHome(String idPrefix,
+        {Element followElement, bool wrap:true})
+      : super(idPrefix, followElement:followElement, wrap:wrap) {
   } // LRecordHome
-
-  /// Record Home with Follow Button
-  LRecordHome.follow({String idPrefix})
-      : this(followButton: new LButtonStateful.follow("follow"), idPrefix: idPrefix);
 
   /**
    * Record Home from UI [homeIcon] large with padding and color
    * with optional button [followElement] and optional [centerElement]
    */
-  LRecordHome.from(UI this.ui, {LIcon homeIcon, LButton this.followButton, Element centerElement, bool wrap:false, String idPrefix}) {
-    _initComponent(centerElement, wrap, idPrefix);
+  LRecordHome.from(String idPrefix, UI this.ui,
+        {LIcon homeIcon, Element followElement, bool wrap:true})
+      : super(idPrefix, followElement:followElement, wrap:wrap) {
     element.attributes[Html0.DATA_VALUE] = ui.tableName;
     DTable table = ui.table;
     // image
@@ -102,91 +79,6 @@ class LRecordHome
     }
   } // LRecordHome.ui
 
-  /// Initialize Component Structure
-  void _initComponent(Element centerElement, bool wrap, String idPrefix) {
-    element.id = LComponent.createId(idPrefix, "home");
-    // Header Row
-    element.append(_header);
-    // div .slds-col
-    // - div .slds-media
-    _header.append(_headerLeft);
-    // Left: record type, title and follow button
-    _headerLeft.append(_headerLeftMedia.element);
-    _headerLeftRecordType.id = "${idPrefix}-record-type";
-    _headerLeftMedia.append(_headerLeftRecordType);
-    DivElement leftGrid = new DivElement()
-      ..classes.add(LGrid.C_GRID);
-    _headerLeftMedia.append(leftGrid);
-    _headerLeftRecordTitle.id = "${idPrefix}-record-title";
-    leftGrid.append(_headerLeftRecordTitle);
-    if (followButton != null) {
-      DivElement followDiv = new DivElement()
-        ..classes.addAll([LGrid.C_SHRINK_NONE, LGrid.C_ALIGN_BOTTOM]);
-      leftGrid.append(followDiv);
-      followDiv.append(followButton.element);
-    }
-    if (centerElement != null) {
-      centerElement.classes.addAll([LGrid.C_COL, LGrid.C_NO_FLEX, LGrid.C_ALIGN_BOTTOM, LMargin.C_RIGHT__SMALL]);
-      _header.append(centerElement);
-    }
-    // right - actions
-    _header.append(_headerRight);
-    _headerRight.append(_actionButtonGroup.element);
-    //
-    if (wrap) {
-      _header.classes.add(LGrid.C_WRAP);
-      _headerLeft.classes.remove(LGrid.C_HAS_FLEXI_TRUNCATE);
-      _header.style.justifyContent = "flex-end";
-    }
-  } // initComponent
-
-  /// Set Icon
-  void set icon (LIcon icon) {
-    icon.size = LIcon.C_ICON__LARGE;
-    _headerLeftMedia.setIcon(icon);
-  }
-  /// Record Type Text
-  String get recordType => _headerLeftRecordType.text;
-  /// Record Type Text
-  void set recordType(String newValue) {
-    _headerLeftRecordType.text = newValue;
-  }
-
-  /// Record Title Text
-  String get recordTitle => _headerLeftRecordTitle.text;
-  /// Record Title Text
-  void set recordTitle(String newValue) {
-    _headerLeftRecordTitle.title = newValue;
-    _headerLeftRecordTitle.text = newValue;
-  }
-
-  /// insert before Actions
-  void insertElement(Element div) {
-    _header.insertBefore(div, _headerRight);
-  }
-
-
-  /**
-   * Add Actions
-   */
-  void addAction(AppsAction action) {
-    _actionButtonGroup.addAction(action, id);
-  }
-
-  /// Show Action Group Buttons
-  void set showActions (bool newValue) {
-    if (newValue) {
-      _actionButtonGroup.classes.add(LVisibility.C_HIDE);
-    } else {
-      _actionButtonGroup.classes.remove(LVisibility.C_HIDE);
-    }
-  }
-
-  /// Action Group Show Count
-  void actionGroupLayout(int showCount) {
-    _actionButtonGroup.layout(showCount);
-  }
-
   /// current record
   DRecord get record => _record;
   /// set record and display
@@ -207,7 +99,7 @@ class LRecordHome
     } else if (ui != null) {
       recordTitle = ui.label;
     }
-    _headerLeftRecordTitle.title = _record.who;
+    _recordTitle.title = _record.who;
     //
     for (LRecordHomeDetail detail in _detailList) {
       detail.display(_record);

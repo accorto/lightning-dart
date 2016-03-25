@@ -52,9 +52,11 @@ class Buttons extends DemoFeature {
     div.appendHrSmall();
     div.add(new LButton.neutralIcon("b51", "neutral icon", new LIconUtility(LIconUtility.DOWNLOAD), iconLeft: false));
     div.add(new LButton.neutralIcon("b52", "icon neutral", new LIconUtility(LIconUtility.DOWNLOAD)));
-    div.appendText(" Toggle Buttons: ");
-    div.add(new LButtonStateful.follow("b53"));
-    div.add(new LButtonStatefulIcon("b53", "stateful icon", new LIconUtility(LIconUtility.LIKE)));
+    div.add(new LButton.neutralAnchorIcon("b52", "link icon neutral", new LIconUtility(LIconUtility.BOOKMARK)));
+
+    div.appendText("Toggle Buttons:").style.margin = "0 0.5rem";
+    div.add(new LButtonStateful.follow("b55"));
+    div.add(new LButtonStatefulIcon("b56", "stateful icon", new LIconUtility(LIconUtility.LIKE)));
 
     div.append(new LButton.neutralIcon("b58", "hint icon", new LIconUtility(LIconUtility.DOWNLOAD)).hintParent()
       ..classes.addAll([LMargin.C_VERTICAL__SMALL, LPadding.C_AROUND__X_SMALL])
@@ -68,6 +70,7 @@ class Buttons extends DemoFeature {
     div.add(new LButton.more("b65", null, new LIconUtility(LIconUtility.SETTINGS), "more"));
     div.add(new LButton.more("b66", "More", new LIconUtility(LIconUtility.SETTINGS), "more"));
     div.append(new NewWindow().element);
+    div.add(new LButton.iconBorderAnchor("a50", new LIconUtility(LIconUtility.BOOKMARK), "link border")..iconAnchorFix());
 
     div.appendHrSmall();
     div.add(new LButton.destructive("b71", "destructive button"));

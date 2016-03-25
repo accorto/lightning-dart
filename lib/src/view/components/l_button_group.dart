@@ -63,9 +63,16 @@ class LButtonGroup extends LComponent {
     }
   }
 
-  /// add and append button
+  /**
+   * Add and append button
+   * if icon button - iconBorder (transparent)
+   * - iconBorderFilled (white) - iconContainer (no border)
+   */
   void addButton(LButton button, {bool append:true}) {
-    button.classes.add(inverse ? LButton.C_BUTTON__INVERSE : LButton.C_BUTTON__NEUTRAL);
+    if (inverse) {
+      button.classes.add(LButton.C_BUTTON__INVERSE);
+      button.classes.remove(LButton.C_BUTTON__NEUTRAL);
+    }
     _buttonList.add(button);
     if (append)
       element.append(button.element);

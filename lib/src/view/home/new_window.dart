@@ -47,11 +47,15 @@ class NewWindow {
 
   /**
    * New Window
+   * [buttonClass] default: iconContainer (transparent, no border)
    */
-  NewWindow({String idPrefix}) {
-    button = new LButton.iconContainer("newWindow",
-        new LIconUtility(LIconUtility.NEW_WINDOW),
-        newWindowOpen(), idPrefix:idPrefix);
+  NewWindow({String idPrefix,
+      String buttonClass: LButton.C_BUTTON__ICON_CONTAINER}) {
+    button = new LButton(new ButtonElement(), "new-window", null,
+        idPrefix: idPrefix,
+        buttonClasses: [buttonClass],
+        icon: new LIconUtility(LIconUtility.NEW_WINDOW),
+        assistiveText: newWindowOpen());
     button.onClick.listen(onClick);
   } // NewButton
 

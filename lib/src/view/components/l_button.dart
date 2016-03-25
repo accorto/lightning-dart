@@ -357,9 +357,23 @@ class LButton
         buttonClasses: [C_BUTTON__ICON_BORDER_FILLED], assistiveText:assistiveText, idPrefix:idPrefix);
 
   /// Icon Only - border filled
-  LButton.iconBorderFilledAnchor(String name, LIcon icon, String assistiveText, {String href, String idPrefix})
-    : this(new AnchorElement(href: (href == null ? "#" : href)), name, null, icon:icon,
+  LButton.iconBorderFilledAnchor(String name, LIcon icon, String assistiveText,
+        {String href, String target:NewWindow.TARGET_BLANK, String idPrefix})
+    : this(new AnchorElement(href: (href == null ? "#" : href)) ..target = target,
+        name, null, icon:icon,
         buttonClasses: [C_BUTTON__ICON_BORDER_FILLED], assistiveText:assistiveText, idPrefix:idPrefix);
+  /// Icon Only - border
+  LButton.iconBorderAnchor(String name, LIcon icon, String assistiveText,
+        {String href, String target:NewWindow.TARGET_BLANK, String idPrefix})
+      : this(new AnchorElement(href: (href == null ? "#" : href)) ..target = target,
+        name, null, icon:icon,
+        buttonClasses: [C_BUTTON__ICON_BORDER], assistiveText:assistiveText, idPrefix:idPrefix);
+  /// Icon Only - container
+  LButton.iconContainerAnchor(String name, LIcon icon, String assistiveText,
+      {String href, String target:NewWindow.TARGET_BLANK, String idPrefix})
+      : this(new AnchorElement(href: (href == null ? "#" : href)) ..target = target,
+      name, null, icon:icon,
+      buttonClasses: [C_BUTTON__ICON_CONTAINER], assistiveText:assistiveText, idPrefix:idPrefix);
 
 
   /// Button id
@@ -516,6 +530,12 @@ class LButton
       element.classes.remove(C_IS_SELECTED);
       element.classes.add(C_NOT_SELECTED);
     }
+  }
+
+  /// Button Icon Anchor Fix
+  void iconAnchorFix() {
+    if (_icon != null)
+      _icon.element.style.marginTop = "0.5rem";
   }
 
   /**

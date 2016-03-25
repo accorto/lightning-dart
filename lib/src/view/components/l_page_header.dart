@@ -41,16 +41,19 @@ class LPageHeader
 
 /**
  * Base Page Header
+ * - icon | title/info
  */
-class LPageHeaderBase extends LPageHeader {
+class LPageHeaderBase
+    extends LPageHeader {
 
-  final LMedia media = new LMedia();
+  final LMedia _media = new LMedia();
 
   /**
    * Base Page Header
    */
-  LPageHeaderBase(LIcon icon, String title, String info) {
-    media.setIcon(icon);
+  LPageHeaderBase(LIcon icon, String title, String info, {String idPrefix}) {
+    element.id = LComponent.createId(idPrefix, "home");
+    _media.setIcon(icon);
     ParagraphElement _title = new ParagraphElement()
       ..classes.addAll([LPageHeader.C_PAGE_HEADER__TITLE, LText.C_TRUNCATE, LGrid.C_ALIGN_MIDDLE])
       ..title = title
@@ -58,11 +61,12 @@ class LPageHeaderBase extends LPageHeader {
     ParagraphElement _info = new ParagraphElement()
       ..classes.addAll([LPageHeader.C_PAGE_HEADER__INFO, LText.C_TEXT_BODY__SMALL])
       ..text = info;
-    media.body
+    _media.body
       ..append(_title)
       ..append(_info);
-    element.append(media.element);
+    element.append(_media.element);
   } // LPageHeaderBase
 
 
 } // LPageHeaderBase
+

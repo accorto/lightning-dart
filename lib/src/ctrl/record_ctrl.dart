@@ -60,7 +60,7 @@ class RecordCtrl
       element.classes.add(containerClass);
     }
     // Structure
-    _header = new LRecordHome.from(ui, idPrefix:idPrefix);
+    _header = new LRecordHome.from(idPrefix, ui);
     element.append(_header.element);
     //
     _breadcrumb = new LBreadcrumb(idPrefix:idPrefix);

@@ -33,6 +33,8 @@ class AppsAction {
   static const String LAYOUT = "layout";
   static const String INFO = "info";
 
+  static const String QUERY = "query";
+
   static const String UP = "up";
   static const String DOWN = "down";
 
@@ -106,6 +108,12 @@ class AppsAction {
   static AppsAction createInfo(AppsActionTriggered callback) {
     return new AppsAction(INFO, appsActionInfo(), callback)
       ..icon = new LIconUtility(LIconUtility.INFO);
+  }
+
+  /// Standard Query Action
+  static AppsAction createQuery(AppsActionTriggered callback) {
+    return new AppsAction(QUERY, appsActionQuery(), callback)
+      ..icon = new LIconUtility(LIconUtility.FILTERLIST);
   }
 
   /// Standard Seq Action
@@ -268,6 +276,8 @@ class AppsAction {
   static String appsActionSubmit() => Intl.message("Submit", name: "appsActionSubmit");
   static String appsActionLayout() => Intl.message("Layout", name: "appsActionLayout");
   static String appsActionInfo() => Intl.message("Info", name: "appsActionInfo");
+
+  static String appsActionQuery() => Intl.message("Query", name: "appsActionQuery");
 
   static String appsActionUp() => Intl.message("Up", name: "appsActionUp");
   static String appsActionDown() => Intl.message("Down", name: "appsActionDown");
