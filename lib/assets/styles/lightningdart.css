@@ -7208,6 +7208,8 @@ input[type=number]::-webkit-inner-spin-button.decimal {
   cursor: not-allowed; }
 .slds-textarea {
   padding: 0.4rem 0.75rem; }
+.slds-form-element__help {
+  margin-top: .25rem; }
 .slds-section-title {
   -webkit-user-select: none;
      -moz-user-select: none;

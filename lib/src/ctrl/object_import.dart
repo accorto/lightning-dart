@@ -141,17 +141,20 @@ class ObjectImport {
       cell.cellElement.append(new BRElement());
       cell.cellElement.append(_createHeaderColumnPick(headingCol).element);
     }
-    _headColumnButton();
+    _headColumnButton(); // add column button
     diagnostics();
     //
     _createTableLines(true);
   } // createTable
   LTableHeaderRow _headerRow;
 
-  // create Column Lookup Editor
+  /**
+   * Create Header Column Lookup Editor
+   * - find column - exact or partial
+   */
   LEditor _createHeaderColumnPick(String headingCol) {
     int colNo = _headerColumnPicks.length;
-    LLookup pl = new LLookup("col-${colNo}", idPrefix: id, inGrid: true)
+    LLookup pl = new LLookup("hdr-${colNo}", idPrefix: id, inGrid: true)
       ..required = false
       ..placeholder = objectImportMap()
       ..dOptionList = _optionList
@@ -166,12 +169,38 @@ class ObjectImport {
     // set value if name, label, extKey matches
     DColumn column = null;
     for (DColumn col in _columnListAll) {
-      if (col.name == headingCol || col.label == headingCol
-        || (col.hasExternalKey() && col.externalKey == headingCol)) {
+      if (col.name == headingCol
+          || col.label == headingCol
+          || (col.hasExternalKey() && col.externalKey == headingCol)) {
         column = col;
-        pl.value = col.name;
         break;
       }
+    }
+    // partial match
+    if (column == null) {
+      List<DColumn> candidates = new List<DColumn>();
+      // column name ends with
+      for (DColumn col in _columnListAll) {
+        if (col.name.endsWith(headingCol)) {
+          candidates.add(col);
+        }
+      }
+      if (candidates.length == 1) {
+        column = candidates.first;
+      } else {
+        candidates.clear();
+        for (DColumn col in _columnListAll) {
+          if (col.name.contains(headingCol)) {
+            candidates.add(col);
+          }
+        }
+        if (candidates.length == 1) {
+          column = candidates.first;
+        }
+      }
+    }
+    if (column != null) {
+      pl.value = column.name;
     }
     _headerColumnPicks.add(pl);
     _headerColumnList.add(column);

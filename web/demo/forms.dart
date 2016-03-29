@@ -21,6 +21,7 @@ class Forms extends DemoFeature {
   bool fieldRequired = false;
   bool fieldReadOnly = false;
   bool fieldDisabled = false;
+  String customValidity = "";
   DRecord record = new DRecord(); // to preserve state when options change
 
   LComponent get content {
@@ -31,6 +32,7 @@ class Forms extends DemoFeature {
     LInput textInput = new LInput("text1", EditorI.TYPE_TEXT)
       ..label = "Text Input"
       ..placeholder = "Text Placeholder"
+      ..setCustomValidity(customValidity)
       ..readOnly = fieldReadOnly // demo toggle
       ..disabled = fieldDisabled // demo toggle
       ..required = fieldRequired; // demo toggle
@@ -40,6 +42,7 @@ class Forms extends DemoFeature {
       ..label = "Password Input"
       ..placeholder = "Password Placeholder"
       ..help = "Well, we are not picky - anything goes"
+      ..setCustomValidity(customValidity)
       ..readOnly = fieldReadOnly // demo toggle
       ..disabled = fieldDisabled // demo toggle
       ..required = fieldRequired; // demo toggle
@@ -47,6 +50,7 @@ class Forms extends DemoFeature {
 
     LCheckbox check = new LCheckbox("check1")
       ..label = "Checkbox Example"
+      ..setCustomValidity(customValidity)
       ..readOnly = fieldReadOnly // demo toggle
       ..disabled = fieldDisabled // demo toggle
       ..required = fieldRequired; // demo toggle
@@ -56,6 +60,7 @@ class Forms extends DemoFeature {
       ..label = "Email Input with hint"
       ..hint = "With basic email type validation"
       ..placeholder = "Email Placeholder"
+      ..setCustomValidity(customValidity)
       ..readOnly = fieldReadOnly // demo toggle
       ..disabled = fieldDisabled // demo toggle
       ..required = fieldRequired; // demo toggle
@@ -66,6 +71,7 @@ class Forms extends DemoFeature {
       ..placeholder = "Text Placeholder"
       ..help = "This is the Help for the Text Input"
       ..hint = "This is the Hint for the Text Input"
+      ..setCustomValidity(customValidity)
       ..readOnly = fieldReadOnly // demo toggle
       ..disabled = fieldDisabled // demo toggle
       ..required = fieldRequired; // demo toggle
@@ -75,6 +81,7 @@ class Forms extends DemoFeature {
       ..label = "Checkbox Example with hint and help"
       ..help = "This is the Help for the Checkbox"
       ..hint = "This is the Hint for the Checkbox"
+      ..setCustomValidity(customValidity)
       ..readOnly = fieldReadOnly // demo toggle
       ..disabled = fieldDisabled // demo toggle
       ..required = fieldRequired; // demo toggle
@@ -83,6 +90,7 @@ class Forms extends DemoFeature {
     LSelect sel = new LSelect("sel1")
       ..label = "Select Example"
       ..listItemList = generateListItems(5)
+      ..setCustomValidity(customValidity)
       ..readOnly = fieldReadOnly // demo toggle
       ..disabled = fieldDisabled // demo toggle
       ..required = fieldRequired; // demo toggle
@@ -90,6 +98,7 @@ class Forms extends DemoFeature {
 
     LTextArea ta = new LTextArea("ta1")
       ..label = "Text Area"
+      ..setCustomValidity(customValidity)
       ..readOnly = fieldReadOnly // demo toggle
       ..disabled = fieldDisabled // demo toggle
       ..required = fieldRequired; // demo toggle
@@ -216,6 +225,17 @@ class Forms extends DemoFeature {
     });
     return cb;
   }
+  EditorI optionCustomValidityCb() {
+    LCheckbox cb = new LCheckbox("valid", idPrefix: id)
+      ..label = "Custom Validity";
+    cb.input.onClick.listen((MouseEvent evt){
+      customValidity = "";
+      if (cb.input.checked)
+        customValidity = "custom validation message";
+      optionChanged();
+    });
+    return cb;
+  }
 
 
   List<EditorI> get options {
@@ -225,6 +245,7 @@ class Forms extends DemoFeature {
     list.add(optionRequiredCb());
     list.add(optionReadonlyCb());
     list.add(optionDisabledCb());
+    list.add(optionCustomValidityCb());
     return list;
   }
 

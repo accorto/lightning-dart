@@ -630,15 +630,16 @@ abstract class EditorI {
       updateStatus(vv);
       return true;
     }
-    if (isCheckbox(type) || isButton(type)) {
+    if (isButton(type)) { // no special handling for isCheckbox(type)
       return true;
     }
-    if (vv == null)
+    if (vv == null) {
       vv = "";
+    }
     //
     ValidityState state = inputValidationState;
+    statusText = inputValidationMsg;
     if (state == null) {
-      statusText = inputValidationMsg;
       if (required && (vv == null || vv.isEmpty)) {
         statusValid = false;
         statusText = editorValidateRequired();
@@ -647,7 +648,6 @@ abstract class EditorI {
       }
     } else {
       statusValid = state.valid;
-      statusText = inputValidationMsg;
       if (state.patternMismatch) {
         statusText += " ${patternText}";
       }

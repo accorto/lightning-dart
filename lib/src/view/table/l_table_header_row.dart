@@ -61,7 +61,7 @@ class LTableHeaderRow
       rowElement.insertBefore(tc, actionCellElement);
     }
     if (dataColumn == null) {
-      dataColumn = findColumn(name);
+      dataColumn = findColumn(name); // exact match
     }
     LTableHeaderCell cell = new LTableHeaderCell(tc, span, name, label, title, value, align, tableSortClicked, dataColumn);
     _cells.add(cell);

@@ -70,7 +70,7 @@ class LInputDuration
   @override
   String get value {
     String display = input.value;
-    return parse(display, true);
+    return parse(display, false); // don't set validity
   } // get value
 
   /// Set new value

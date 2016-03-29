@@ -96,7 +96,7 @@ class LInputDate
   @override
   String get value {
     String v = input.value;
-    return parse(v, true);
+    return parse(v, false); // don't set validity
   } // value
 
   /// Set new value
@@ -237,6 +237,36 @@ class LInputDate
       input.defaultValue = newValue;
     }
   } // defaultValue
+
+  /// set value alternatives
+  @override
+  bool setValueSynonym(String newValue) {
+    if (newValue == null || newValue.isEmpty) {
+      value = newValue;
+      return true;
+    }
+    DateTime dt = null;
+    try {
+      // 2016-03-27T17:00:00.000
+      dt = DateTime.parse(newValue);
+      value = dt.millisecondsSinceEpoch.toString();
+      return true;
+    } catch (error) {}
+
+    dt = DataUtil.asDate(newValue, false, false, logWarning:false); // UTC
+    if (dt == null) {
+      dt = DataUtil.asDateTime(newValue, false, logWarning: false); // local
+      if (dt == null) {
+        dt = DataUtil.asTime(newValue, data, false, logWarning: false); // local
+      }
+    }
+    if (dt == null) {
+      return false;
+    }
+    value = dt.millisecondsSinceEpoch.toString();
+    return true;
+  } // setValueSynonym
+
 
   /// Is the value changed from original
   @override

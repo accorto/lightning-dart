@@ -112,7 +112,10 @@ class LFormElement {
       }
     }
     elementControl.append(_input);
-    elementControl.append(_hintElement);
+    if (iconLeft == null && iconRight == null)
+      elementControl.append(_hintElement); // __help
+    else
+      element.append(_hintElement); // __help
   } // createBaseLayout
 
   /**
@@ -194,7 +197,7 @@ class LFormElement {
    *      label   .form-element__label
    *      div     .form-element__control
    *        input
-   *        hint
+   *       hint
    * [inGrid] if true no label
    */
   void createLookupLayout(EditorI editor, {LIcon iconLeft, LIcon iconRight,
@@ -250,7 +253,7 @@ class LFormElement {
       }
     }
     elementControl.append(_input);
-    elementControl.append(_hintElement); // __help
+    element.append(_hintElement); // __help - outside element-control
     //createLeftElement(leftElement);
   } // createStandard
 

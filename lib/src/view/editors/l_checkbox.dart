@@ -72,9 +72,10 @@ class LCheckbox
   }
 
   /// set value by synonym (alternative representations) - returns true if found
+  @override
   bool setValueSynonym (String newValue) {
     if (newValue == null || newValue.isEmpty) {
-      value = Html0.V_TRUE;
+      value = Html0.V_FALSE;
       return true;
     }
     String newValueUpper = newValue.toUpperCase();
@@ -87,7 +88,7 @@ class LCheckbox
       return true;
     }
     return false;
-  }
+  } // setValueSynonym
 
 
   String get defaultValue => input.defaultValue;

@@ -46,7 +46,10 @@ class ObjectImportLine
     display(true);
   }
 
-  /// display line
+  /**
+   * display line
+   * - create editors
+   */
   void display(bool redisplay){
     if (redisplay) {
       editorList = new List<LEditor>(); // see display
@@ -73,6 +76,7 @@ class ObjectImportLine
         dataColumn = new DataColumn(_table, col, null, null);
         editor = EditorUtil.createFromColumn("", dataColumn, true,
             idPrefix:rowElement.id, data: data)
+          ..readOnly = false
           ..editorChange = onEditorChange
           ..onFocus.listen(onEditorFocus); // close other dropdowns
         name = col.name;
@@ -85,6 +89,9 @@ class ObjectImportLine
       DivElement content = new DivElement()
         ..classes.add(LText.C_TRUNCATE)
         ..text = cellText;
+      if (cellText == null || cellText.isEmpty) {
+        content.setInnerHtml("&nbsp;", treeSanitizer: NodeTreeSanitizer.trusted);
+      }
       LTableCell cell = addCell(content,
           name, null, null, null, dataColumn, fieldEdit:false, addStatistics: false);
       if (editor != null) {
@@ -156,10 +163,11 @@ class ObjectImportLine
 
   /// check line column value
   bool checkLineValue(LEditor ed, String cellText) {
-    ed.value = cellText;
     bool valid = ed.setValueSynonym(cellText); // might be null
-    if (valid == null)
+    if (valid == null) {
+      ed.value = cellText;
       return true;
+    }
     if (valid) {
       ed.setCustomValidity("");
     } else {
@@ -191,6 +199,6 @@ class ObjectImportLine
   static String objectImportLineLine() => Intl.message("Line", name: "objectImportLineLine");
   static String objectImportLineCheck() => Intl.message("Check", name: "objectImportLineCheck");
   static String objectImportLineEmpty() => Intl.message("empty", name: "objectImportLineEmpty");
-  static String objectImportLineValueNotFound() => Intl.message("value not found", name: "objectImportLineValueNotFound");
+  static String objectImportLineValueNotFound() => Intl.message("value not found or invalid", name: "objectImportLineValueNotFound");
 
 } // ObjectImportLine

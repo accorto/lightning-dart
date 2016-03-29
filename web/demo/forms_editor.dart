@@ -27,7 +27,8 @@ class FormsEditor extends DemoFeature {
 
     LInputSearch searchInput1 = new LInputSearch("search1")
       ..label = "Search Input 1"
-      ..placeholder = "Search Placeholder";
+      ..placeholder = "Search Placeholder - pattern: 3 [A-F]"
+      ..pattern = "[A-F]{3}";
     form.addEditor(searchInput1, marginClass:marginClass);
 
     LInputSearch searchInput2 = new LInputSearch("search2", withClearValue: true)
@@ -54,30 +55,38 @@ class FormsEditor extends DemoFeature {
 
     LInputNumber number1h = new LInputNumber("n1h")
       ..label = "Html5 Integer"
-      ..placeholder = "Number Placeholder"
+      ..placeholder = "Number Placeholder (2-8)"
       ..decimalDigits = 0
-      ..html5 = true;
+      ..html5 = true
+      ..min = "2"
+      ..max = "8";
     form.addEditor(number1h, marginClass:marginClass);
 
     LInputNumber number1 = new LInputNumber("n1")
       ..label = "Standard Integer"
-      ..placeholder = "Number Placeholder"
+      ..placeholder = "Number Placeholder (2-8)"
       ..html5 = false
-      ..decimalDigits = 0;
+      ..decimalDigits = 0
+      ..min = "2"
+      ..max = "8";
     form.addEditor(number1, marginClass:marginClass);
 
     LInputNumber number2h = new LInputNumber("n2h")
       ..label = "Html5 Number(2)"
-      ..placeholder = "Number Placeholder"
+      ..placeholder = "Number Placeholder (2-8)"
       ..html5 = true
-      ..decimalDigits = 2;
+      ..decimalDigits = 2
+      ..min = "2"
+      ..max = "8";
     form.addEditor(number2h, marginClass:marginClass);
 
     LInputNumber number2 = new LInputNumber("n2")
       ..label = "Standard Number(2)"
-      ..placeholder = "Number Placeholder"
+      ..placeholder = "Number Placeholder (2-8"
       ..html5 = false
-      ..decimalDigits = 2;
+      ..decimalDigits = 2
+      ..min = "2"
+      ..max = "8";
     form.addEditor(number2, marginClass:marginClass);
 
     LInputRange rangeInput = new LInputRange("range")

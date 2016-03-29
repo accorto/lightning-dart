@@ -81,7 +81,7 @@ class LInputNumber
   @override
   String get value {
     String vv = input.value; // will be "" if html5 invalid
-    return parse(vv, true);
+    return parse(vv, false);
   } // get value
 
   /// Set new value

@@ -19,13 +19,16 @@ class Datepickers extends DemoFeature {
   issues: ["css: week select with crossing month boundary"],
   plans: ["independent date ranges"]);
 
+  String customValidation = "";
+
   LComponent get content {
     LForm form = new LForm.stacked("date-form")
       ..classes.add(LMargin.C_HORIZONTAL__MEDIUM);
     form.setSection(new FormSection(2));
 
     LDatepicker dp = new LDatepicker("date-pick")
-      ..label = "Date Picker";
+      ..label = "Date Picker"
+      ..setCustomValidity(customValidation);
     if (optionWeekSelect)
       dp.mode = LDatepicker.MODE_WEEK_FIRST;
     dp.value = null;
@@ -33,13 +36,15 @@ class Datepickers extends DemoFeature {
 
     LInputDate id1 = new LInputDate("date-html")
       ..label = "Date Input Html5 (falls back if not supported)"
-      ..html5 = true;
+      ..html5 = true
+      ..setCustomValidity(customValidation);
     id1.value = null;
     form.addEditor(id1);
 
     LInputDate id2 = new LInputDate("date-plain")
       ..label = "Date Input (plain)"
-      ..html5 = false;
+      ..html5 = false
+      ..setCustomValidity(customValidation);
     id2.value = null;
     form.addEditor(id2);
 

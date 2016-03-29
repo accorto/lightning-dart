@@ -237,11 +237,15 @@ class LLookup
       _valueItem.selected = false;
     }
     _valueItem = null;
-    //validateOptions();
-    render(newValue, true)
-    .then((String display){
-      input.value = display;
-    });
+    if (newValue == null || newValue.isEmpty) {
+      input.value = "";
+    } else {
+      //validateOptions();
+      render(newValue, true)
+      .then((String display) {
+        input.value = display;
+      });
+    }
   }
   String _value = "";
   LLookupItem _valueItem = null;
