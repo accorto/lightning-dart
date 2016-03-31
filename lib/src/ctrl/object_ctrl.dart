@@ -408,8 +408,9 @@ class ObjectCtrl
     new ObjectImport(datasource, onObjectImportSaved, []).show();
   }
   /// callback Import Saved
-  void onObjectImportSaved() {
-    _doQuery();
+  void onObjectImportSaved(List<DRecord> recordsImported) {
+    _log.config("onObjectImportSaved ${tableName} #${recordsImported.length}");
+    display(); // updated via datasource
   }
   /// Application Action Export
   void onAppsActionExport(String value, DataRecord data, DEntry entry, var actionVar) {

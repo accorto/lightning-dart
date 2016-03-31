@@ -121,11 +121,7 @@ class LTableRow
 
   /// clicked on selectCb
   void onSelectClick(MouseEvent evt) {
-    if (selectCb.checked) {
-      rowElement.classes.add(LTable.C_IS_SELECTED);
-    } else {
-      rowElement.classes.remove(LTable.C_IS_SELECTED);
-    }
+    rowElement.classes.toggle(LTable.C_IS_SELECTED, selectCb.checked);
     data.selected = selectCb.checked;
     if (tableSelectClicked != null)
       tableSelectClicked(data);
@@ -138,11 +134,7 @@ class LTableRow
   bool get selected => rowElement.classes.contains(LTable.C_IS_SELECTED);
   /// Row Selected
   void set selected (bool newValue) {
-    if (newValue) {
-      rowElement.classes.add(LTable.C_IS_SELECTED);
-    } else {
-      rowElement.classes.remove(LTable.C_IS_SELECTED);
-    }
+    rowElement.classes.toggle(LTable.C_IS_SELECTED, newValue);
     data.selected = newValue;
     if (selectCb != null)
       selectCb.checked = newValue;
@@ -152,10 +144,13 @@ class LTableRow
   bool get show => !rowElement.classes.contains(LVisibility.C_HIDE);
   /// Show/Hide Row
   void set show (bool newValue) {
-    if (newValue)
-      rowElement.classes.remove(LVisibility.C_HIDE);
-    else
-      rowElement.classes.add(LVisibility.C_HIDE);
+    rowElement.classes.toggle(LVisibility.C_HIDE, !newValue);
+  }
+
+  /// Show/hide Column with index
+  void showColumn(int index, bool newValue) {
+    if (rowElement.children.length > index)
+      rowElement.children[index].classes.toggle(LVisibility.C_HIDE, !newValue);
   }
 
   /// clicked on something else than selectCb
@@ -406,7 +401,14 @@ class LTableRow
         }
       }
     } // for all column names
+    display_hideColumns();
   } // display
+  /// hide hidden columns
+  void display_hideColumns() {
+    for (int index in ltable.hideColumnIndexList) {
+      showColumn(index, false);
+    }
+  }
 
   /// display Read Only
   void _displayRo(String name, String value, String align,

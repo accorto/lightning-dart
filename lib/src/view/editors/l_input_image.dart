@@ -96,7 +96,7 @@ class LInputImage extends LInput {
     _log.config("onInputClick ${name}");
     if (readOnly || disabled)
       return;
-    // TODO edit Image
+    // TODO edit Image source
   }
 
   /// set readOnly via disabled

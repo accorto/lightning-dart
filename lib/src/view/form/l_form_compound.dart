@@ -96,8 +96,8 @@ class LFormCompoundFieldSet extends LComponent {
         ..classes.add(LForm.C_FORM_ELEMENT__CONTROL)
         ..classes.add(size);
       row.append(label);
-      // TODO label.append(editor.labelSmall); slds-form-element__helper
-      // TODO label.append(editor.input);
+      // PLAN label.append(editor.labelSmall); slds-form-element__helper
+      // PLAN label.append(editor.input);
     } */
   } // addRow
 

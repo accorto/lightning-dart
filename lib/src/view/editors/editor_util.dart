@@ -79,7 +79,7 @@ class EditorUtil {
         editor = new LInputNumber.from(dataColumn, EditorI.TYPE_NUMBER,
             idPrefix: idPrefix, inGrid: inGrid);
       } else if (dataType == DataType.DATA) {
-        // TODO data editor
+        // PLAN data editor
       } else if (dataType == DataType.DATE) {
         if (html5) {
           editor = new LInputDate.from(dataColumn, EditorI.TYPE_DATE,
@@ -169,7 +169,7 @@ class EditorUtil {
         editor = new LInputNumber.from(dataColumn, EditorI.TYPE_NUMBER,
             idPrefix: idPrefix, inGrid: inGrid);
       } else if (dataType == DataType.RATING) {
-        // TODO rating editor
+        // PLAN rating editor
       } else if (dataType == DataType.TAG) {
         editor = new LLookupSelect.multiFrom(dataColumn,
             idPrefix: idPrefix, inGrid: inGrid);

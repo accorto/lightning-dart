@@ -113,9 +113,9 @@ class LFormElement {
     }
     elementControl.append(_input);
     if (iconLeft == null && iconRight == null)
-      elementControl.append(_hintElement); // __help
+      elementControl.append(_hintElement); // __help - no icon pulled down if displayed
     else
-      element.append(_hintElement); // __help
+      element.append(_hintElement); // __help - display horizontal below label!
   } // createBaseLayout
 
   /**
@@ -356,8 +356,8 @@ class LFormElement {
   }
   bool _required = false;
 
-
-  // bool get readOnly => false; // TODO ro
+  // PLAN readOnly form element - convert to span?
+  // bool get readOnly => false;
   // void set readOnly (bool newValue) {
     // https://www.lightningdesignsystem.com/components/forms/#read-only-state&role=regular&status=all
     // convert label+input to span

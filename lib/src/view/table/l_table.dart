@@ -1050,6 +1050,51 @@ class LTable
   } // displayFooter
 
 
+  /// show/hide column
+  void showColumn(String columnName, bool newValue) {
+    int index = nameList.indexOf(columnName);
+    if (index < 0) {
+      _log.config("showColumn ${columnName} NotFound");
+      return;
+    }
+    if (newValue) {
+      _hideColumnNameSet.remove(columnName);
+    } else {
+      _hideColumnNameSet.add(columnName);
+    }
+    if (rowSelect || rowActions.isNotEmpty) {
+      index++; // first column
+    }
+    _hideColumnIndexList = null; // recalc
+    _log.fine("showColumn ${columnName} #${index} ${newValue}");
+    for (LTableHeaderRow row in theadRows) {
+      row.showColumn(index, newValue);
+    }
+    for (LTableRow row in tbodyRows) {
+      row.showColumn(index, newValue);
+    }
+    for (LTableRow row in tfootRows) {
+      row.showColumn(index, newValue);
+    }
+  } // showColumn
+  final Set<String> _hideColumnNameSet = new Set<String>();
+
+  /// hidden column index list
+  List<int> get hideColumnIndexList {
+    if (_hideColumnIndexList == null) {
+      _hideColumnIndexList = new List<int>();
+      for (String columnName in _hideColumnNameSet) {
+        int index = nameList.indexOf(columnName);
+        if (rowSelect || rowActions.isNotEmpty) {
+          index++; // first column
+        }
+        _hideColumnIndexList.add(index);
+      }
+    }
+    return _hideColumnIndexList;
+  }
+  List<int> _hideColumnIndexList = new List<int>();
+
   /// Table selected row count
   int get selectedRowCount {
     int count = 0;

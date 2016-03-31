@@ -103,6 +103,7 @@ class ObjectImportLine
     } // cols
     data.selected = valid && editorCount > 0;
     selectCb.checked = valid && editorCount > 0;
+    //display_hideColumns();
   } // createLine
 
   /// focus - close other dropdowns

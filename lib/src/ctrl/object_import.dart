@@ -7,7 +7,7 @@
 part of lightning_ctrl;
 
 /// callback when Import saved/complete
-typedef void ObjectImportSaved();
+typedef void ObjectImportSaved(List<DRecord> recordsImported);
 
 /**
  * Import
@@ -425,7 +425,7 @@ class ObjectImport {
       if (response.response.isSuccess) {
         _modal.show = false;
         if (objectImportSaved != null)
-          objectImportSaved();
+          objectImportSaved(response.recordList);
       }
     })
     .catchError((error, stackTrace){

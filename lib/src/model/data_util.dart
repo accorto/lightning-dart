@@ -395,7 +395,6 @@ class DataUtil {
               pc.columnName = col.name;
               if (pc.hasExternalKey())
                 col.tempExternalKey = pc.externalKey; // backlink
-              // TODO overwrites
               pc.label = col.label;
               found = true;
               break;

@@ -115,6 +115,7 @@ class LTableSumRow
         new LTableSumCell(tc, name, label, value, align, calc);
       } // statistics
     } // for all column names
+    display_hideColumns();
   } // display
 
 
