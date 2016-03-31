@@ -82,7 +82,8 @@ class AppsSettingsMessages
   /// recreate - refresh
   void showingNow() {
     element.children.clear();
-    LTable table = new LTable(ID);
+    LTable table = new LTable(ID)
+      ..classes.add("d-table");
     element.classes.add(LScrollable.C_SCROLLABLE__X);
     element.append(table.element);
     // data

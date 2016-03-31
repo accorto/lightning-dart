@@ -7338,6 +7338,10 @@ input[type=number]::-webkit-inner-spin-button.decimal {
   bottom: 0;
   left: 0;
   z-index: 1; }
+.d-table td {
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word; }
 .text-error {
   color: #c23934;
   stroke: #c23934; }
