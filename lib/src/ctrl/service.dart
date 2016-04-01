@@ -113,14 +113,17 @@ class Service {
   CRequest createCRequest(String serverUri, String info, {bool withGeo: false}) {
     trxNo++;
     DateTime now = new DateTime.now();
+    String timeZone = now.timeZoneName;
+    int offset = now.timeZoneOffset.inMinutes;
     //
     CEnv env = new CEnv()
       ..clientUrl = window.location.href
       ..serverUrl= serverUrl
       ..locale = ClientEnv.localeName
-      ..timeZone = now.timeZoneName // initial guess
-      ..timeZoneUtcOffset = now.timeZoneOffset.inMinutes
       ..isDevMode = ClientEnv.testMode;
+      if (timeZone != null) // NewRelic Synthetics
+        env.timeZone = now.timeZoneName;// initial guess
+      env.timeZoneUtcOffset = offset;
     // geo
     try {
       if (addGeo || withGeo) {
