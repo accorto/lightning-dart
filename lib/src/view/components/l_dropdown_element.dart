@@ -105,10 +105,9 @@ class LDropdownElement
 
   bool get show => !element.classes.contains(LVisibility.C_HIDE);
   void set show (bool newValue) {
-    if (newValue)
-      element.classes.remove(LVisibility.C_HIDE);
-    else
-      element.classes.add(LVisibility.C_HIDE);
+    element.classes.toggle(LVisibility.C_HIDE, !newValue);
+    element.parent.classes.toggle(LDropdown.C_IS_OPEN, newValue); // TRIGGER__CLICK
+    element.parent.attributes[Html0.ARIA_EXPANED] = newValue.toString();
   }
 
 
@@ -254,13 +253,13 @@ class LDropdownElement
       }
     }
     _log.finer("onItemClick ${name} = ${selectedItem == null ? "null" : selectedItem.value}");
+    show = false; // hide
     if (editorChange != null) {
       if (selectedItem == null)
         editorChange(name, null, null, null);
       else
         editorChange(name, selectedItem.value, null, selectedItem);
     }
-    show = false; // hide
   } // onItemClick (dropdown)
 
 

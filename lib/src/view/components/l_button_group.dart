@@ -63,6 +63,13 @@ class LButtonGroup extends LComponent {
     }
   }
 
+  /// remove all children
+  void clear() {
+    element.children.clear();
+    _buttonList.clear();
+    _actionList.clear();
+  }
+
   /**
    * Add and append button
    * if icon button - iconBorder (transparent)
@@ -90,8 +97,8 @@ class LButtonGroup extends LComponent {
   /// Buttons
   List<LButton> get buttonList => _buttonList;
 
-  /// layout with [showCount] 0 for all -1 for dropdown
-  void layout(int showCount) {
+  /// overflow layout with [showCount] 0 for all -1 for dropdown
+  void layout(int showCount, {bool autoDropdown:true}) {
     element.children.clear();
     List<LDropdownItem> dropdownItems = new List<LDropdownItem>();
     int items = 0;
@@ -123,31 +130,36 @@ class LButtonGroup extends LComponent {
     } // for all buttons
 
     // add dropdown
+    addMore(dropdownItems, autoDropdown:autoDropdown);
+  } // layout
+
+  /// Add More Button with DropDown
+  void addMore(List<LDropdownItem> dropdownItems, {bool autoDropdown:false}) {
     if (dropdownItems.isEmpty) {
       _more.disabled = true;
       element.classes.remove(LDropdown.C_DROPDOWN_TRIGGER);
       element.attributes.remove(Html0.ARIA_HASPOPUP);
-    } else { // dropdown
-      element.append(_more.element);
-      _more.disabled = false;
-      _more.classes.add(C_BUTTON__LAST);
-      //
-      element.classes.add(LDropdown.C_DROPDOWN_TRIGGER);
-    //  element.classes.add(LDropdown.C_CLICK_TO_SHOW);
-      element.attributes[Html0.ARIA_HASPOPUP] = "true";
-
-      String name = element.id;
-      if (name == null || name.isEmpty)
-        name = "button-group";
-      DivElement dd = new DivElement()
-        ..classes.addAll([LDropdown.C_DROPDOWN, LDropdown.C_DROPDOWN__RIGHT, LDropdown.C_DROPDOWN__ACTIONS]);
-      _dropdown = new LDropdownElement(dd, name:name);
-      element.append(_dropdown.element);
-      for (LDropdownItem ddi in dropdownItems) {
-        _dropdown.addDropdownItem(ddi);
-      }
+      return;
     }
-  } // layout
+    element.append(_more.element);
+    _more.disabled = false;
+    _more.classes.add(C_BUTTON__LAST);
+    //
+    //if (autoDropdown)
+    element.classes.add(LDropdown.C_DROPDOWN_TRIGGER);
+    element.attributes[Html0.ARIA_HASPOPUP] = "true";
+
+    String name = element.id;
+    if (name == null || name.isEmpty)
+      name = "button-group";
+    DivElement dd = new DivElement()
+      ..classes.addAll([LDropdown.C_DROPDOWN, LDropdown.C_DROPDOWN__RIGHT, LDropdown.C_DROPDOWN__ACTIONS]);
+    _dropdown = new LDropdownElement(dd, name:name);
+    element.append(_dropdown.element);
+    for (LDropdownItem ddi in dropdownItems) {
+      _dropdown.addDropdownItem(ddi);
+    }
+  } // addMore
 
   /// Trl
   static String lButtonGroupMore() => Intl.message("More", name: "lButtonGroupMore", args: []);

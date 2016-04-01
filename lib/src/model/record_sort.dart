@@ -151,8 +151,6 @@ class RecordSortList {
 
 
 
-
-
 /**
  * Record Sort Info
  */
@@ -168,10 +166,17 @@ class RecordSort {
   RecordSort(DSort this.sort);
 
   /// Record Sort
-  RecordSort.create(String columnName, bool isAscending, {bool isGroupBy}) {
+  RecordSort.create(String columnName, bool isAscending) {
     sort = new DSort()
       ..columnName = columnName
       ..isAscending = isAscending;
+  }
+  /// Record sort
+  RecordSort.fromColumn(DColumn column, {bool isAscending:true}) {
+    sort = new DSort()
+      ..columnName = column.name
+      ..isAscending = isAscending;
+    _columnLabel = column.label;
   }
 
 

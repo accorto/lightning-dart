@@ -311,8 +311,8 @@ class LDropdown
   bool get showDropdown => dropdown.show;
   void set showDropdown (bool newValue) {
     dropdown.show = newValue;
-    element.classes.toggle(C_IS_OPEN, dropdown.show); // TRIGGER__CLICK
-    element.attributes[Html0.ARIA_EXPANED] = dropdown.show.toString();
+    element.classes.toggle(C_IS_OPEN, newValue); // TRIGGER__CLICK
+    element.attributes[Html0.ARIA_EXPANED] = newValue.toString();
   }
 
 

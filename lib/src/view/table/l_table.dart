@@ -61,6 +61,9 @@ class LTable
   /// space below edit table for dropdowns
   static const String C_INFO_BOTTOM = "r-table-info";
 
+  static const String _LAYOUT_FIXED = "fixed";
+  static const String _LAYOUT_AUTO = "auto";
+
 
   /// Table Edit Mode - Read Only
   static const String EDIT_RO = "ro";
@@ -327,7 +330,7 @@ class LTable
     int colCount = 0;
     // body
     Element tr = null;
-    _table.style.tableLayout = "auto";
+    _table.style.tableLayout = _LAYOUT_AUTO;
     if (_tbody != null && _tbody.children.isNotEmpty) {
       tr = _tbody.children.first;
       rowTypeCount++;
@@ -337,7 +340,7 @@ class LTable
     String info = "fixWidth ${id} (${colCount}x${rowCount})#${_fixWidthCount}";
     Element tr_h = null;
     if (_tableHead != null) {
-      _tableHead.style.tableLayout = "auto";
+      _tableHead.style.tableLayout = _LAYOUT_AUTO;
       if (_thead != null && _thead.children.isNotEmpty) {
         tr_h = _thead.children.first;
         rowTypeCount++;
@@ -352,7 +355,7 @@ class LTable
     }
     Element tr_f = null;
     if (_tableFoot != null) {
-      _tableFoot.style.tableLayout = "auto";
+      _tableFoot.style.tableLayout = _LAYOUT_AUTO;
       if (_tfoot != null && _tfoot.children.isNotEmpty) {
         tr_f = _tfoot.children.first;
         rowTypeCount++;
@@ -419,11 +422,11 @@ class LTable
         td_f.style.width = widthString;
       }
     }
-    _table.style.tableLayout = "fixed";
+    _table.style.tableLayout = _LAYOUT_FIXED;
     if (_tableHead != null)
-      _tableHead.style.tableLayout = "fixed";
+      _tableHead.style.tableLayout = _LAYOUT_FIXED;
     if (_tableFoot != null)
-      _tableFoot.style.tableLayout = "fixed";
+      _tableFoot.style.tableLayout = _LAYOUT_FIXED;
     if (_timer != null) {
       _timer.cancel();
       _timer = null;
@@ -433,6 +436,7 @@ class LTable
   } // fixWith
   int _fixWidthCount = 0;
   Timer _timer;
+  bool get fixedLayout => _table.style.tableLayout == _LAYOUT_FIXED ;
 
   /// return max width
   int _fixWidthTd(Element td, int width) {
@@ -575,6 +579,7 @@ class LTable
         }
         _log.warning("sort NO_Action sortRemote");
       } else { // local
+        // TODO convert to recordList
         if (redisplay) {
           display(); //
         }
@@ -586,6 +591,8 @@ class LTable
         for (LTableRow row in tbodyRows) {
           _tbody.children.add(row.rowElement);
         }
+        if (fixedLayout)
+          fixWidth(null);
       }
     }
   } // sport
@@ -628,7 +635,12 @@ class LTable
         row.show = true;
       }
       count = recordList.length;
+      if (_pager != null)
+        _pager.disabled = false;
     } else {
+      if (_pager != null)
+        _pager.disabled = true;
+      // TODO convert to recordList
       for (LTableRow row in tbodyRows) {
         bool match = false;
         for (DEntry entry in row.record.entryList) {
@@ -966,6 +978,8 @@ class LTable
   void setRecords(List<DRecord> records) {
     recordList.clear();
     recordList.addAll(records);
+    if (_pager != null)
+      _pager.updatePager();
     display();
     if (_headerRow != null) {
       _headerRow.setSorting(recordSorting);
@@ -1011,8 +1025,18 @@ class LTable
       _bodyRowIndex = -1;
     }
     bool needSort = _displayCalculateStatistics();
-    //_log.fine("display records=${recordList.length}");
-    for (DRecord record in recordList) {
+    //
+    int start = 0;
+    int end = recordList.length-1;
+    if (_pager == null) {
+      _log.fine("display #${recordList.length}");
+    } else {
+      start = _pager.startIndex;
+      end = _pager.endIndex;
+      _log.fine("display #${start}-${end}");
+    }
+    for (int i = start; i <= end; i++) {
+      DRecord record = recordList[i];
       if (record.hasIsExcluded() && record.isExcluded)
         continue;
       if (record.hasIsGroupBy()) {
@@ -1049,6 +1073,18 @@ class LTable
     }
   } // displayFooter
 
+  /// get pager
+  LTablePager updatePager() {
+    if (_pager == null)
+      _pager = new LTablePager(this);
+    _pager.updatePager();
+    return _pager;
+  }
+  LTablePager _pager;
+
+  /// total number of rows
+  int totalRows = -1;
+  int offset = 0;
 
   /// show/hide column
   void showColumn(String columnName, bool newValue) {

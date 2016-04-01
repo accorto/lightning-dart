@@ -364,6 +364,15 @@ class Datasource
         req.querySortList.add(sort.sort);
       }
     }
+    // default sort
+    if (req.querySortList.isEmpty) {
+      List<DColumn> drvs = DataUtil.getDrvColumns(tableDirect);
+      for (DColumn col in drvs) {
+        RecordSort sort = new RecordSort.fromColumn(col);
+        recordSorting.add(sort);
+        req.querySortList.add(sort.sort);
+      }
+     }
 
     // Context - windowId
     req.windowNo = windowNo.toString();

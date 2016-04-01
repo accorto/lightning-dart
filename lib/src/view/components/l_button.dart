@@ -523,13 +523,8 @@ class LButton
 
   /// Set Selected State
   void set selected (bool newValue) {
-    if (newValue) {
-      element.classes.remove(C_NOT_SELECTED);
-      element.classes.add(C_IS_SELECTED);
-    } else {
-      element.classes.remove(C_IS_SELECTED);
-      element.classes.add(C_NOT_SELECTED);
-    }
+    element.classes.toggle(C_NOT_SELECTED, !newValue);
+    element.classes.toggle(C_IS_SELECTED, newValue);
   }
 
   /// Button Icon Anchor Fix
@@ -555,10 +550,7 @@ class LButton
     /// Set Hint (needs to be in hint-parent)
   void set hint(bool newValue) {
     if (_icon != null) {
-      if (newValue)
-        _icon.classes.add(C_BUTTON__ICON__HINT);
-      else
-        _icon.classes.remove(C_BUTTON__ICON__HINT);
+      _icon.classes.toggle(C_BUTTON__ICON__HINT, newValue);
     }
   }
 

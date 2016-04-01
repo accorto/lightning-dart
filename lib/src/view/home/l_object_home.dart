@@ -172,6 +172,21 @@ class LObjectHome
       ..text = error);
   }
 
+  /// add Pager
+  void addPager(LTablePager pager) {
+    removePager();
+    _pager = pager;
+    element.append(_pager.element);
+  }
+  LTablePager _pager;
+
+  /// remove Pager
+  void removePager() {
+    if (_pager != null)
+      _pager.element.remove();
+    _pager = null;
+  }
+
   /// Sort Dropdown selected
   void onSortChange(String name, String newValue, DEntry entry, var details) {
     _log.config("onSortChange ${newValue}");

@@ -641,6 +641,31 @@ class DataUtil {
   }
 
   /**
+   * Display Columns (drv)
+   */
+  static List<DColumn> getDrvColumns(DTable table) {
+    List<DColumn> list = new  List<DColumn>();
+    DColumn nameColumn;
+    for (DColumn col in table.columnList) {
+      if (col.hasDisplaySeqNo() && col.displaySeqNo > 0) {
+        list.add(col);
+      } else if (col.name == "Name") {
+        nameColumn = col;
+      }
+    }
+    if (list.isEmpty && nameColumn != null) {
+      list.add(nameColumn);
+    }
+    if (list.length > 1) {
+      list.sort((DColumn one, DColumn two){
+        return one.displaySeqNo.compareTo(two.displaySeqNo);
+      });
+    }
+    return list;
+  } // getDrvColumns
+
+
+  /**
    * Print UI
    */
   static void dumpUi(UI ui) {

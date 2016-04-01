@@ -127,6 +127,7 @@ part 'src/view/table/l_table_action_cell.dart';
 part 'src/view/table/l_table_cell.dart';
 part 'src/view/table/l_table_header_cell.dart';
 part 'src/view/table/l_table_header_row.dart';
+part 'src/view/table/l_table_pager.dart';
 part 'src/view/table/l_table_row.dart';
 part 'src/view/table/l_table_sum_cell.dart';
 part 'src/view/table/l_table_sum_row.dart';

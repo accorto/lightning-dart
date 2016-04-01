@@ -29,8 +29,11 @@ class LUtil {
   // inverse bullet
   static const String INV_BULLET ="\u{25D8}";
 
-  // double left arrow
+  // double left arrow <=
   static const String ARROW_LEFT_D = "\u{21D0}";
+
+  // ellipsis ...
+  static const String ELLIPSIS = "\u{2026}";
 
   // downwards single arrow
   static const String SORT_ASC = "\u{2193}";

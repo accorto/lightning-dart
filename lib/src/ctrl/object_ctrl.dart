@@ -301,10 +301,14 @@ class ObjectCtrl
       _table.recordsDeleted = onRecordsDeleted;
       _table.graphSelectionChange = onGraphSelectionChange;
       _content.add(_table);
+      _header.addPager(_table.updatePager());
     }
     if (_table.element.parent == null) {
       _content.add(_table);
     }
+    _table.totalRows = datasource.totalRows;
+    _table.offset = datasource.cacheStart;
+    //
     _table.setRecords(datasource.recordList);
     _table.setResponsiveScroll(0);
   } // displayTable

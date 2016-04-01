@@ -61,7 +61,6 @@ class TableCtrl
     resetContent();
   } // ObjectTable
 
-
   /// Add Table/Row Actions
   void addActions() {
     // Table Actions
