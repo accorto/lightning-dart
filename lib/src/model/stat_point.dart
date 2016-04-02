@@ -60,7 +60,7 @@ class StatPoint {
 
   /// update
   void calculate(num valueNum, String valueString, DateTime date) {
-    if (valueString == null) {
+    if (valueString == null || valueString.isEmpty) {
       _nullCount++;
     } else {
       _count++;

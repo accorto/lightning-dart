@@ -90,7 +90,7 @@ class TableCtrl
     recordList.clear(); // override
     if (alwaysOneEmptyLine)
       addBodyRow(record: createNewRecord());
-    display();
+    display(true, true);
   }
 
   /// Application Action New
@@ -160,11 +160,23 @@ class TableCtrl
       if (recordDeleted != null) {
         recordDeleted(record)
         .then((SResponse response) {
-          deleteBodyRow(record);
-          if (alwaysOneEmptyLine && recordList.isEmpty) {
-            addBodyRow(record: createNewRecord());
+          if (response.isSuccess) {
+            int index = recordList.indexOf(record);
+            if (index == -1) {
+              _log.warning("onAppsActionDeleteConfirmed ${tableName} NotFound ${record.recordId}");
+              return;
+            } else {
+              recordList.removeAt(index);
+            }
+            if (alwaysOneEmptyLine && recordList.isEmpty) {
+              addBodyRow(record: createNewRecord());
+            }
+            displayList = recordList;
+            _log.config("onAppsActionDeleteConfirmed ${tableName} #${recordList.length}");
+            display(true, true); // Stat+Pager
+          } else {
+            _log.config("onAppsActionDeleteConfirmed ${tableName} Error ${response.msg}");
           }
-          _log.config("onAppsActionDeleteConfirmed ${tableName} ${value}  #${recordList.length}");
         });
       }
     }
@@ -205,14 +217,25 @@ class TableCtrl
       if (recordsDeleted != null) {
         recordsDeleted(records)
         .then((SResponse response) {
-          for (DRecord sel in records) {
-            deleteBodyRow(sel);
+          if (response.isSuccess) {
+            for (DRecord sel in records) {
+              int index = recordList.indexOf(sel);
+              if (index == -1) {
+                _log.warning("onAppsActionDeleteSelectedConfirmed ${tableName} NotFound ${sel.recordId}");
+              } else {
+                recordList.removeAt(index);
+              }
+            }
+            if (alwaysOneEmptyLine && recordList.isEmpty) {
+              addBodyRow(record: createNewRecord());
+            }
+            displayList = recordList;
+            _log.config("onAppsActionDeleteSelectedConfirmed ${tableName} deleted=${records.length}  #${recordList.length}");
+            display(true, true); // Stat+Pager
+          } else {
+            // delete error
+            _log.warning("onAppsActionDeleteSelectedConfirmed ${tableName} NotFound ${response.msg}");
           }
-          if (alwaysOneEmptyLine && recordList.isEmpty) {
-            addBodyRow(record: createNewRecord());
-          }
-          _log.config("onAppsActionDeleteSelectedConfirmed ${tableName} ${value} deleted=${records.length}  #${recordList.length}");
-          display();
         });
       }
     }
@@ -231,7 +254,7 @@ class TableCtrl
     resetStructure();
     setUi(ui);
     // TODO save ui
-    display();
+    display(true, true); // Stat+Pager
   }
 
   /// move record up
@@ -244,7 +267,7 @@ class TableCtrl
       recordList[index] = previousRecord;
       //
       onActionSequence();
-      display();
+      display(false, true); // noStat, Pager
     }
   }
   /// move record down
@@ -257,7 +280,7 @@ class TableCtrl
       recordList[index] = nextRecord;
       //
       onActionSequence();
-      display();
+      display(false, true); // noStat, Pager
     }
   }
   /// notify subclass - could call resequence

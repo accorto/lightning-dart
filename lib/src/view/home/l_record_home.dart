@@ -63,16 +63,21 @@ class LRecordHome
         UIGridColumn gc = UiUtil.findGridColumn(ui, columnName);
         UIPanelColumn pc = UiUtil.findPanelColumn(ui, columnName, gc);
         DataColumn dataColumn = new DataColumn(ui.table, qc.column, pc, gc);
-        if (dataColumn.tableColumn.displaySeqNo > 0)
+        if (dataColumn.tableColumn.displaySeqNo > 0) {
           continue; // already displayed
-        String label = qc.columnLabel;
-        if (label.isEmpty)
-          label = dataColumn.label;
-        LRecordHomeDetail d = new LRecordHomeDetail(columnName, label, dataColumn);
+        }
+        LRecordHomeDetail d = new LRecordHomeDetail(columnName, dataColumn);
         _detailList.add(d);
+      }
+
+      int sizeOf = _detailList.length;
+      if (sizeOf > 6) // 1-6, 12
+        sizeOf = 6;
+      for (int i = 0; i < sizeOf; i++) {
+        LRecordHomeDetail d = _detailList[i];
         DivElement div = new DivElement()
           ..classes.add(LGrid.C_COL__PADDED)
-          ..classes.add(LSizing.size1ofY(ui.queryColumnList.length));
+          ..classes.add(LSizing.size1ofY(sizeOf));
         div.append(d.element);
         detail.append(div);
       }
@@ -123,7 +128,8 @@ class LRecordHomeDetail {
   LEditor _editor;
 
   /// Record Home Detail
-  LRecordHomeDetail(String this.columnName, String label, DataColumn this.dataColumn) {
+  LRecordHomeDetail(String this.columnName, DataColumn this.dataColumn) {
+    String label = dataColumn.label;
     ParagraphElement p = new ParagraphElement()
       ..classes.add(LText.C_TEXT_HEADING__LABEL)
       ..classes.add(LText.C_TRUNCATE)

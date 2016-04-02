@@ -419,9 +419,9 @@ class Router {
     String theTitle = title;
     if (title != null && title.isNotEmpty) {
       if (ClientEnv.session != null && ClientEnv.session.hasTenantName()) {
-        theTitle = "${title} - ${ClientEnv.session.tenantName} - ${LightningCtrl.productLabel}";
+        theTitle = "${title} - ${ClientEnv.session.tenantName} | ${LightningCtrl.productLabel}";
       } else {
-        theTitle = "${title} - ${LightningCtrl.productLabel}";
+        theTitle = "${title} | ${LightningCtrl.productLabel}";
       }
     }
     document.title = theTitle;

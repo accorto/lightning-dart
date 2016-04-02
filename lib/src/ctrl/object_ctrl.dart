@@ -301,7 +301,7 @@ class ObjectCtrl
       _table.recordsDeleted = onRecordsDeleted;
       _table.graphSelectionChange = onGraphSelectionChange;
       _content.add(_table);
-      _header.addPager(_table.updatePager());
+      _header.addPager(_table.pager);
     }
     if (_table.element.parent == null) {
       _content.add(_table);
@@ -311,6 +311,7 @@ class ObjectCtrl
     //
     _table.setRecords(datasource.recordList);
     _table.setResponsiveScroll(0);
+    _table.pagerShow(20);
   } // displayTable
   TableCtrl _table;
 
@@ -430,8 +431,8 @@ class ObjectCtrl
     datasource.save(record)
     .then((DataResponse response) {
       completer.complete(response.response);
-      display();
       _content.loading = false;
+      display();
     });
     return completer.future;
   }
@@ -444,8 +445,8 @@ class ObjectCtrl
     datasource.delete(record)
     .then((DataResponse response) {
       completer.complete(response.response);
-      display();
       _content.loading = false;
+      display();
     });
     return completer.future;
   }
@@ -458,8 +459,8 @@ class ObjectCtrl
     datasource.deleteAll(records)
     .then((DataResponse response) {
       completer.complete(response.response);
-      display();
       _content.loading = false;
+      display();
     });
     return completer.future;
   }

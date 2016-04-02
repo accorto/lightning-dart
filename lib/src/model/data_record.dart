@@ -135,6 +135,22 @@ class DataRecord {
     return null;
   } // columnValueFk
 
+  /**
+   * Get display as String for [columnName] or null if not found
+   */
+  static String getColumnDisplay(DRecord record, String columnName) {
+    if (columnName != null && record != null && record.entryList.isNotEmpty) {
+      for (DEntry entry in record.entryList) {
+        if (columnName == entry.columnName) {
+          if (entry.hasValueDisplay())
+            return entry.valueDisplay;
+          return getEntryValue(entry);
+        }
+      }
+    }
+    return null;
+  } // columnDisplay
+
   /// Create FK from Record
   static DFK createFk(DRecord record, {DTable table}) {
     DFK fk = new DFK()

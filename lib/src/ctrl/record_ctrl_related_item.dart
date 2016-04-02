@@ -44,7 +44,7 @@ class RecordCtrlRelatedItem {
   /// Init Display
   void setParent(DRecord parent) {
     if (relatedList != null) {
-      relatedList.loading = true;
+    //  relatedList.loading = true;
       // query+display
     }
   } // display

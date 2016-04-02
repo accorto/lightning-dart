@@ -46,9 +46,9 @@ class TableStatistics {
    * Calculate Value
    * see [GraphEnginePanel.calculate]
    * adds group by records to [recordList]
-   * returns true if records were added
+   * returns number of records added
    */
-  bool calculate(List<DRecord> recordList,
+  int calculate(List<DRecord> recordList,
       List<StatBy> byList,
       DColumn dateColumn, ByPeriod byPeriod,
       {bool matchOnly:false}) {
@@ -78,7 +78,7 @@ class TableStatistics {
       }
     }
     if (matchOnly) {
-      return false;
+      return 0;
     }
 
     // group records
@@ -121,7 +121,7 @@ class TableStatistics {
       recordList.add(record);
     });
     _log.fine("calculate records=${recordList.length} added=${groupRecords.length}");
-    return groupRecords.isNotEmpty;
+    return groupRecords.length;
   } // calculate
 
   static String tableStatisticsGroupBy() => Intl.message("Group by", name: "tableStatisticsGroupBy");

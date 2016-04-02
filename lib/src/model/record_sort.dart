@@ -54,10 +54,20 @@ class RecordSortList {
   /// Set Sort
   void set(RecordSort sort) {
     _sortList.clear();
-    _sortList.add(sort);
+    if (sort != null)
+      _sortList.add(sort);
   }
 
-  /// Set as first
+  /// Set Sort
+  void setColumnName(String columnName, {bool isAscending:true}) {
+    RecordSort sort = null;
+    if (columnName != null) {
+      sort = new RecordSort.create(columnName, isAscending);
+    }
+    set(sort);
+  }
+
+  /// Set as first (add)
   void setFirst(RecordSort sort) {
     _sortList.remove(sort);
     _sortList.insert(0, sort);

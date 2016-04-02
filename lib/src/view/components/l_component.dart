@@ -116,16 +116,16 @@ abstract class LComponent {
   void set busy(bool newValue) {
     if (newValue) {
       _busyCount++;
-      if (busy) {
-        return; // parallel
+      if (_busyCount == 1) {
+        LSpinner spinner = new LSpinner.brand(size: LSpinner.C_SPINNER__LARGE);
+        _busy = new DivElement()
+          ..classes.add("busy-backdrop")
+          ..classes.add("busy-backdrop--open")
+          ..append(spinner.element);
+        element
+          ..classes.add(_C_BUSY)
+          ..append(_busy);
       }
-      element.classes.add(_C_BUSY);
-      LSpinner spinner = new LSpinner.brand(size: LSpinner.C_SPINNER__LARGE);
-      _busy = new DivElement()
-        ..classes.add("busy-backdrop")
-        ..classes.add("busy-backdrop--open")
-        ..append(spinner.element);
-      element.append(_busy);
     }
     else {
       _busyCount--;
@@ -148,18 +148,26 @@ abstract class LComponent {
   bool get loading => element.classes.contains(_C_LOADING);
   void set loading (bool newValue) {
     if (newValue) {
-      element.classes.add(_C_LOADING);
-      _loading = new LSpinner.base(size: LSpinner.C_SPINNER__SMALL);
-      element.append(_loading.element);
-    } else {
-      element.classes.remove(_C_LOADING);
-      if (_loading != null) {
-        _loading.element.remove();
+      _loadingCount++;
+      if (_loadingCount == 1) {
+        element.classes.add(_C_LOADING);
+        _loading = new LSpinner.base(size: LSpinner.C_SPINNER__SMALL);
+        element.append(_loading.element);
       }
-      _loading = null;
+    } else {
+      _loadingCount--;
+      if (_loadingCount <= 0) {
+        element.classes.remove(_C_LOADING);
+        if (_loading != null) {
+          _loading.element.remove();
+        }
+        _loading = null;
+        _loadingCount = 0;
+      }
     }
-  }
+  } // loading
   LSpinner _loading;
+  int _loadingCount = 0;
 
   /// Focus
   void focus() {

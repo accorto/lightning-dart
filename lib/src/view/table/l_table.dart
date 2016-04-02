@@ -114,8 +114,10 @@ class LTable
   final List<AppsAction> tableActions = new List<AppsAction>();
   final List<AppsAction> rowActions = new List<AppsAction>();
 
-  /// Record Sort List
+  /// Record Sorted List
   final List<DRecord> recordList = new List<DRecord>();
+  /// Record Display List (paging)
+  List<DRecord> displayList = new List<DRecord>();
   /// Record action (click on drv) - display urv
   final AppsActionTriggered recordAction;
   /// Table Head Select callback
@@ -278,6 +280,8 @@ class LTable
         _wrapper.style.removeProperty("height");
       }
       Rectangle wrapRect = _wrapper.getBoundingClientRect();
+      if (wrapRect.height == 0)
+        return; // not displayed
       int winHeight = window.innerHeight;
       int docHeight = document.body.getBoundingClientRect().height;
       int hdr = wrapRect.top;
@@ -536,23 +540,22 @@ class LTable
     recordSorting.add(sort);
 
     // group by
-    bool redisplay = false;
     if (_groupByColumnName == null) {
-      redisplay = clearRecordListGroupBy();
+      clearRecordListGroupBy();
     } else {
       RecordSort group = recordSorting.getSort(_groupByColumnName);
       if (group == null) {
         _groupByColumnName = null;
-        redisplay = clearRecordListGroupBy();
-        display();
+        clearRecordListGroupBy();
       } else {
         recordSorting.setFirst(group);
       }
     }
-    _sort(true, redisplay);
+    _sort(true); // updates  pager
+    display(false, false); // NoStat,NoPager
   } // onTableSortClicked
 
-  /// Sort Group by local only
+  /// Sort Group by local only (called from display)
   void _sortGroupBy() {
     if (_groupByColumnName == null) {
       return;
@@ -563,13 +566,13 @@ class LTable
     }
     group.isGroupBy = true;
     recordSorting.setFirst(group);
-    _sort(false, false);
+    _sort(false);
   }
 
   /// Sort Table body Rows
-  /// - local: sort LTableRow then recreate tbody/rows
-  void _sort(bool sortRemoteOk, bool redisplay) {
-    if (tbodyRows.length > 1) {
+  /// - local: sort recordList
+  void _sort(bool sortRemoteOk) {
+    if (recordList.length > 1) {
       if (sortRemoteOk && recordSorting.sortRemote()) {
         for (AppsAction action in tableActions) {
           if (action.value == AppsAction.REFRESH) {
@@ -579,20 +582,14 @@ class LTable
         }
         _log.warning("sort NO_Action sortRemote");
       } else { // local
-        // TODO convert to recordList
-        if (redisplay) {
-          display(); //
-        }
-        _log.fine("sort local #${tbodyRows.length}");
-        tbodyRows.sort((LTableRow one, LTableRow two) {
-          return recordSorting.recordSortCompare(one.record, two.record);
+        _log.fine("sort local #${recordList.length}");
+        recordList.sort((DRecord one, DRecord two) {
+          return recordSorting.recordSortCompare(one, two);
         });
-        _tbody.children.clear();
-        for (LTableRow row in tbodyRows) {
-          _tbody.children.add(row.rowElement);
+        displayList = recordList;
+        if (_pager != null) {
+          _pager.updatePager();
         }
-        if (fixedLayout)
-          fixWidth(null);
       }
     }
   } // sport
@@ -625,25 +622,21 @@ class LTable
     return null; // no change
   }
 
-  /// Find In Table
+  /// Find In Table - sets displayList
   int findInTable(String findString) {
     int count = 0;
     RegExp regEx = LUtil.createRegExp(findString);
     if (regEx == null) {
-      for (LTableRow row in tbodyRows) {
-        row.record.clearIsMatchFind();
-        row.show = true;
+      for (DRecord record in recordList) {
+        record.clearIsMatchFind();
       }
       count = recordList.length;
-      if (_pager != null)
-        _pager.disabled = false;
-    } else {
-      if (_pager != null)
-        _pager.disabled = true;
-      // TODO convert to recordList
-      for (LTableRow row in tbodyRows) {
+      displayList = recordList;
+    } else { // find - match
+      displayList = new List<DRecord>();
+      for (DRecord record in recordList) {
         bool match = false;
-        for (DEntry entry in row.record.entryList) {
+        for (DEntry entry in record.entryList) {
           if (entry.hasValueDisplay()) {
             if (entry.valueDisplay.contains(regEx)) {
               match = true;
@@ -661,48 +654,54 @@ class LTable
             }
           }
         }
-        row.record.isMatchFind = match;
-        row.show = match;
-        if (match)
+        record.isMatchFind = match;
+        if (match) {
           count++;
+          displayList.add(record);
+        }
       } // for record
     }
+    display(false, true); // noStat, Pager
     return count;
   } // findInTable
 
   /// show rows based on selected Graph portion
   /// returns matched row count
   int graphSelect(bool graphMatch(DRecord record)) {
-    // show all
+    int count = recordList.length;
     if (graphMatch == null) {
-      for (LTableRow row in tbodyRows) {
-        row.record.clearIsMatchFind();
-        row.show = true;
+      // show all
+      for (DRecord record in recordList) {
+        record.clearIsMatchFind();
       }
+      displayList = recordList;
       if (_withStatistics && _statisticsRow != null) {
         _statisticsRow.setStatistics(_statistics, lTableStatisticTotal(),
             rowSelect && tableActions.isNotEmpty);
       }
-      if (graphSelectionChange != null)
-        graphSelectionChange(null);
-      return recordList.length;
+    } else {
+      // show matching
+      count = 0;
+      displayList = new List<DRecord>();
+      for (DRecord record in recordList) {
+        bool match = graphMatch(record);
+        record.isMatchFind = match;
+        if (match) {
+          displayList.add(record);
+          if (!record.isGroupBy)
+            count++;
+        }
+      }
+      if (_withStatistics && _statisticsRow != null) {
+        TableStatistics temp = _statistics.summary(recordList);
+        _statisticsRow.setStatistics(temp, lTableStatisticGraphSelect(),
+            rowSelect && tableActions.isNotEmpty);
+      }
     }
-    // show matching
-    int count = 0;
-    for (LTableRow row in tbodyRows) {
-      bool match = graphMatch(row.record);
-      row.record.isMatchFind = match;
-      row.show = match;
-      if (match && !row.record.isGroupBy)
-        count++;
-    }
-    if (_withStatistics && _statisticsRow != null) {
-      TableStatistics temp = _statistics.summary(recordList);
-      _statisticsRow.setStatistics(temp, lTableStatisticGraphSelect(),
-          rowSelect && tableActions.isNotEmpty);
-    }
-    if (graphSelectionChange != null)
+    if (graphSelectionChange != null) {
       graphSelectionChange(count);
+    }
+    display(false, true); // noStat, Pager
     return count;
   } // graphSelect
 
@@ -738,7 +737,7 @@ class LTable
     rowActions.add(action);
   }
 
-  /// Create and Add Table Body Row and set [record]
+  /// Create and Add Table Body Row and set/display [record]
   /// - with optionally existing [row]
   LTableRow addBodyRow({String rowValue, LTableRow row, DRecord record, int rowNo}) {
     if (rowValue == null && record != null)
@@ -757,7 +756,7 @@ class LTable
     if (record != null) {
       if (rowNo == null)
         rowNo = tbodyRows.length - 1;
-      row.setRecord(record, rowNo);
+      row.setRecord(record, rowNo); // display
     }
     return row;
   }
@@ -788,30 +787,25 @@ class LTable
       }
     }
     return null;
-  } // deleteBodyRow
-
-  /// Delete Body Row with [record]
-  LTableRow deleteBodyRow(DRecord record) {
-    for (int i = 0; i < tbodyRows.length; i++) {
-      LTableRow row = tbodyRows[i];
-      if (row.record == record) {
-        String info = "deleteBodyRow ${record.urv} #${i}";
-        row.rowElement.remove(); // dom
-        tbodyRows.removeAt(i); // table row
-        if (!recordList.remove(record))
-          info += " NOT found in recordList";
-        displayFoot();
-        _log.config(info);
-        return row;
-      }
-    }
-    return null;
-  } // deleteBodyRow
+  } // excludeBodyRow
 
   /// action row delete - override for server delete
   void onActionRowDelete(String value, DataRecord data, DEntry entry, var actionVar) {
-    LTableRow row = deleteBodyRow(data.record);
-    _log.config("onActionRowDelete row=${row}");
+    int index = recordList.indexOf(data.record);
+    int indexDisplay = displayList.indexOf(data.record);
+    if (index != -1 && indexDisplay != -1) {
+      recordList.remove(index);
+      displayList.remove(indexDisplay);
+      _log.config("onActionRowDelete ${data.recordId} row=${index}/${indexDisplay}");
+      display(true, true); // Stat+Pager
+    } else if (index != -1) {
+      recordList.remove(index);
+      displayList = recordList;
+      _log.config("onActionRowDelete ${data.recordId} row=${index}");
+      display(true, true); // Stat+Pager
+    } else {
+      _log.warning("onActionRowDelete ${data.recordId} NotFound");
+    }
   } // onLineActionDelete
 
   /// action row reset
@@ -978,9 +972,8 @@ class LTable
   void setRecords(List<DRecord> records) {
     recordList.clear();
     recordList.addAll(records);
-    if (_pager != null)
-      _pager.updatePager();
-    display();
+    displayList = recordList;
+    display(true, true); // Stat+Pager
     if (_headerRow != null) {
       _headerRow.setSorting(recordSorting);
     }
@@ -1001,6 +994,10 @@ class LTable
     nameLabelMap.clear();
     nameList.clear();
     recordList.clear();
+    displayList = recordList;
+    if (_pager != null) {
+      _pager.updatePager();
+    }
   } // clear
 
   /// clear body
@@ -1017,26 +1014,44 @@ class LTable
     displayFoot();
   }
 
-  /// Display Records (calculates statistics)
-  void display() {
+  /// display async
+  void display(bool calcStatistics, bool updatePager) {
+    loading = true;
+    new Timer(_displayDelay, () {
+      if (calcStatistics) {
+        if (_displayCalculateStatistics()) {
+          _sortGroupBy();
+          updatePager = true;
+        }
+      }
+      if (updatePager && _pager != null) {
+        _pager.updatePager();
+      }
+      displaySync();
+      loading = false;
+    });
+  } // display
+  static final Duration _displayDelay = new Duration(milliseconds: 10);
+
+  /// Display Records - create tbodyRows
+  void displaySync() {
     if (_tbody != null) {
       _tbody.children.clear();
       tbodyRows.clear();
       _bodyRowIndex = -1;
     }
-    bool needSort = _displayCalculateStatistics();
     //
     int start = 0;
-    int end = recordList.length-1;
+    int end = displayList.length-1;
     if (_pager == null) {
-      _log.fine("display #${recordList.length}");
+      _log.fine("display #${displayList.length}");
     } else {
       start = _pager.startIndex;
       end = _pager.endIndex;
       _log.fine("display #${start}-${end}");
     }
     for (int i = start; i <= end; i++) {
-      DRecord record = recordList[i];
+      DRecord record = displayList[i];
       if (record.hasIsExcluded() && record.isExcluded)
         continue;
       if (record.hasIsGroupBy()) {
@@ -1044,9 +1059,6 @@ class LTable
       } else {
         addBodyRow(record: record); // adds to _tbodyRows
       }
-    }
-    if (needSort) {
-      _sortGroupBy(); // LTableRow
     }
 
     // Statistics
@@ -1074,13 +1086,20 @@ class LTable
   } // displayFooter
 
   /// get pager
-  LTablePager updatePager() {
-    if (_pager == null)
+  LTablePager get pager {
+    if (_pager == null) {
       _pager = new LTablePager(this);
+    }
     _pager.updatePager();
     return _pager;
   }
   LTablePager _pager;
+  /// show pager if more than [maxRows] - if pager previously created
+  void pagerShow(int maxRows) {
+    if (_pager != null) {
+      _pager.show = recordList.length > maxRows || _pager.needDisplay;
+    }
+  }
 
   /// total number of rows
   int totalRows = -1;
@@ -1286,12 +1305,12 @@ class LTable
     ByPeriod byPeriod = null;
 
     if (byList.isNotEmpty || _withStatistics) {
-      return _statistics.calculate(recordList,
-            byList, dateColumn, byPeriod); // add group by records
+      _groupByRecordCount = _statistics.calculate(recordList,
+            byList, dateColumn, byPeriod); // create+add group by records
     }
-    return false;
+    return _groupByRecordCount > 0;
   } // calculateStatistics
-
+  int _groupByRecordCount = 0;
 
   /// Set Group By Column
   String get groupByColumnName => _groupByColumnName;
@@ -1304,11 +1323,12 @@ class LTable
     if (newValue == _groupByColumnName) {
       return; // no change
     }
-    // remove old sort
+    // update sort
     recordSorting.removeColumnName(_groupByColumnName);
-    //
     _groupByColumnName = newValue;
-    display();
+    recordSorting.setColumnName(_groupByColumnName);
+    //
+    display(true, true); // Stat+Pager
     if (graphSelectionChange != null)
       graphSelectionChange(null);
   }
@@ -1330,6 +1350,7 @@ class LTable
       bool ok = (recordList.length == origLength-removeList.length);
       _log.log(ok ? Level.CONFIG : Level.WARNING, "clearRecordListGroupBy ${recordList.length}=${origLength}-${removeList.length}");
     }
+    _groupByRecordCount = 0;
     if (graphSelectionChange != null)
       graphSelectionChange(null);
     return removeList.isNotEmpty;

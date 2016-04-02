@@ -82,7 +82,7 @@ class LTablePager {
         item.selected = item.value == newValue.toString();
       }
       updatePager();
-      ltable.display();
+      ltable.display(false, false); // noStat,noPager
     }
   }
   int get pageSize => _pageSize;
@@ -100,30 +100,28 @@ class LTablePager {
   } // onPagesizeEditorChange
 
 
-  /// start index in table recordList
+  /// start index in table displayList
   int startIndex = 0;
-  /// end index in table recordList
+  /// end index in table displayList
   int endIndex = 0;
 
-  /// re-create pager with table recordList and pageSize
+  /// re-create pager with table displayList and pageSize
   void updatePager() {
     _buttonGroup.clear();
     _buttons.clear();
     //
-    int size = ltable.recordList.length;
-    int totalRows = ltable.totalRows;
-    if (totalRows < size)
-      totalRows = size;
+    int displaySize = ltable.displayList.length;
     int offset = ltable.offset;
 
     // previous
     if (offset > 0) {
       _buttonGroup.addButton(_prev);
     }
-    for (int index = 0; index < size; index += _pageSize) {
+    int rowFrom = 0;
+    for (int index = 0; index < displaySize; index += _pageSize) {
       int indexTo = index + _pageSize - 1;
-      if (indexTo >= size)
-        indexTo = size-1;
+      if (indexTo >= displaySize)
+        indexTo = displaySize-1;
       //
       String labelFrom = null;
       String labelTo = null;
@@ -131,66 +129,82 @@ class LTablePager {
           && ltable.recordSorting.isNotEmpty) {
         RecordSort sort = ltable.recordSorting.list.first;
         String columnName = sort.columnName;
-        DRecord record = ltable.recordList[index];
-        labelFrom = DataRecord.getColumnValue(record, columnName);
-        record = ltable.recordList[indexTo];
-        labelTo = DataRecord.getColumnValue(record, columnName);
+        DRecord record = ltable.displayList[index];
+        labelFrom = DataRecord.getColumnDisplay(record, columnName);
+        record = ltable.displayList[indexTo];
+        labelTo = DataRecord.getColumnDisplay(record, columnName);
       }
-      LTablePagerButton btn = new LTablePagerButton(this, index, indexTo, labelFrom, labelTo);
+      //
+      int rowTo = rowFrom;
+      for (int row = index; row <= indexTo; row++) {
+        if (ltable.displayList[row].hasIsGroupBy() || ltable.displayList[row].hasIsExcluded())
+          continue;
+        rowTo++;
+      }
+      LTablePagerButton btn = new LTablePagerButton(this, index, indexTo,
+          rowFrom, rowTo, labelFrom, labelTo);
+      rowFrom = rowTo;
+      //
       btn.selected = _buttons.isEmpty;
       _buttonGroup.addButton(btn.button);
       _buttons.add(btn);
     }
     // next
-    if (offset+size < totalRows) {
+    int totalRows = ltable.totalRows;
+    int recordSize = ltable.recordList.length - ltable._groupByRecordCount;
+    if (offset+recordSize < totalRows) {
       _buttonGroup.addButton(_next);
     }
-    //
+    // table display instructions
     startIndex = 0;
     endIndex = startIndex + _pageSize - 1;
-    if (endIndex >= size)
-      endIndex = size-1;
+    if (endIndex >= displaySize)
+      endIndex = displaySize-1;
 
-    // display
-    if (offset == 0 && _buttons.length == 1) {
-      show = false; // one page only
-    } else {
-      show = true;
-      // dropdown
-      bool showIt = true;
-      for (int i = 0; i < _PAGESIZES.length; i++) {
-        bool over = _PAGESIZES[i] > size;
-        if (over) {
-          _pageSizeButton.dropdown._dropdownItemList[i].disabled = !showIt;
-          showIt = false;
-        } else {
-          _pageSizeButton.dropdown._dropdownItemList[i].disabled = false;
-        }
-      }
-      // second line
-      for (int i = 0; i < _buttons.length; i++) {
-        _buttons[i].fixSecondLine(i);
+    // pagesize dropdown
+    bool showIt = true;
+    for (int i = 0; i < _PAGESIZES.length; i++) {
+      bool over = _PAGESIZES[i] > displaySize;
+      if (over) {
+        _pageSizeButton.dropdown._dropdownItemList[i].disabled = !showIt;
+        showIt = false;
+      } else {
+        _pageSizeButton.dropdown._dropdownItemList[i].disabled = false;
       }
     }
+    // second line
+    for (int i = 0; i < _buttons.length; i++) {
+      _buttons[i].fixSecondLine(i);
+    }
   } // update
+
+  /// pager needs to be displayed (after updatePager call)
+  bool get needDisplay => ltable.offset != 0 || _buttons.length > 1;
 
   /// Button Click - call LTable
   void buttonClicked(LTablePagerButton button) {
     for (LTablePagerButton btn in _buttons) {
       btn.selected = btn.indexFrom == button.indexFrom;
     }
+    // ltable display instructions
     startIndex = button.indexFrom;
     endIndex = button.indexTo;
-    ltable.display();
+    ltable.display(false, false); // noStat, noPager
   } // buttonClicked
 
-  /// show if more than one button
+  /// show pager
   void set show (bool newValue) {
     element.classes.toggle(LVisibility.C_HIDE, !newValue);
   }
 
+  /// set disabled
   void set disabled (bool newValue) {
-
+    _prev.disabled = newValue;
+    for (LTablePagerButton btn in _buttons) {
+      btn.button.disabled = newValue;
+    }
+    _next.disabled = newValue;
+    _pageSizeButton.show = !newValue;
   }
 
   static String lTablePagerPrevious() => Intl.message("Previous", name: "lTablePagerPrevious");
@@ -217,10 +231,12 @@ class LTablePagerButton {
   /**
    * Table Pager button
    */
-  LTablePagerButton(LTablePager this.pager, int this.indexFrom, int this.indexTo,
+  LTablePagerButton(LTablePager this.pager,
+      int this.indexFrom, int this.indexTo,
+      int rowFrom, int rowTo,
       String this.labelFrom, String this.labelTo) {
     button = new LButton.neutral("tp-${indexFrom}",
-        "${indexFrom+1} - ${indexTo+1}", idPrefix: pager.ltable.idPrefix);
+        "${rowFrom+1} - ${rowTo}", idPrefix: pager.ltable.idPrefix);
     //  ..small = true;
     button.element.attributes[Html0.DATA_VALUE] = indexFrom.toString();
     if (labelFrom != null) {
@@ -251,32 +267,47 @@ class LTablePagerButton {
   void fixSecondLine(int myIndex) {
     if (_secondLine == null)
       return;
-    String from = labelFrom;
-    String to = labelTo;
+    String from = _cleanLabel(labelFrom);
+    String to = _cleanLabel(labelTo);
     if (myIndex == 0) { // first
+      if (from == to) {
+        _secondLine.text = "${from}";
+        return;
+      }
       if (from.isNotEmpty)
         from = from[0];
     } else {
-      String otherTo = pager._buttons[myIndex-1].labelTo; // previous To
+      String otherTo = _cleanLabel(pager._buttons[myIndex-1].labelTo); // previous To
       from = _copyDiff(from, otherTo);
     }
     if (myIndex == pager._buttons.length-1) { // last
-      to = _copyDiff(to, labelFrom);
+      if (to == from) {
+          _secondLine.text = "${from}";
+          return;
+      }
+      to = _copyDiff(to, from);
     } else {
-      String otherFrom = pager._buttons[myIndex+1].labelFrom; // next from
+      String otherFrom = _cleanLabel(pager._buttons[myIndex+1].labelFrom); // next from
       to = _copyDiff(to, otherFrom);
     }
     if (from.length > _CUTOFF)
       from = from.substring(0,_CUTOFF-1) + LUtil.ELLIPSIS;
     if (to.length > _CUTOFF)
       to = to.substring(0,_CUTOFF-1) + LUtil.ELLIPSIS;
-    _secondLine.text = "${from} - ${to}";
+    if (to == from)
+      _secondLine.text = "${from}";
+    else
+      _secondLine.text = "${from} - ${to}";
   }
   static const int _CUTOFF = 10;
 
+  /// copy until no difference
   String _copyDiff (String str, String other) {
     if (str.isEmpty)
       return "";
+    if (other == null || other.isEmpty) {
+      return str[0];
+    }
     String retValue = "";
     for (int i = 0; i < str.length && i < other.length; i++) {
       retValue += str[i];
@@ -284,6 +315,13 @@ class LTablePagerButton {
         return retValue;
     }
     return retValue;
+  }
+
+  /// clean input
+  String _cleanLabel(String input) {
+    if (input == null || input.isEmpty)
+      return "";
+    return input.toLowerCase();
   }
 
 } // LTablePagerButton
