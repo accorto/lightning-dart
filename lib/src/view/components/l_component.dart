@@ -169,6 +169,25 @@ abstract class LComponent {
   LSpinner _loading;
   int _loadingCount = 0;
 
+  /// remove loading return loadingCount
+  int loadingRemove() {
+    int retValue = _loadingCount;
+    if (_loadingCount > 0) {
+      _loadingCount = 0;
+      loading = false;
+    }
+    return retValue;
+  }
+  /// add loading with [count]
+  void loadingAdd(int count) {
+    if (count <= 0) {
+      loadingRemove();
+    } else {
+      loading = true;
+      _loadingCount = count;
+    }
+  }
+
   /// Focus
   void focus() {
     if (_firstComponent != null)

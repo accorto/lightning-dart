@@ -256,16 +256,16 @@ class DataContext {
    * Evaluate [logic] (not empty) - thows Exception
    * - default false, e.g. record.IsApi
    */
-  static bool evaluateBool(final DataRecord data, final String logic) {
+  static bool evaluateBool(final DataRecord data, final String logic, {bool errorValue:false}) {
     try {
       Object retValue = evaluateBoolEx(data, logic);
       bool rr = retValue is bool ? retValue : "true" == retValue;
       _log.finer("evaluateBool urv=${data.record.urv} logic=${logic} = ${rr}");
       return rr;
     } catch (e) {
-      _log.warning("evaluateBool ${e}: urv=${data.record.urv} logoc=${logic}");
+      _log.warning("evaluateBool ${e}: urv=${data.record.urv} logic=${logic}");
     }
-    return false;
+    return errorValue;
   }
   /// execute evaluation
   static Object evaluateBoolEx(final DataRecord data, final String logic) {

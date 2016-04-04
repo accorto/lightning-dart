@@ -166,9 +166,18 @@ class DataColumn {
       if (isReadOnlyDynamic()) {
         if (data.table == null)
           data.table = table;
-        bool result = DataContext.evaluateBool(data, uiPanelColumn.readOnlyLogic);
+        DEntry entry = null;
+        if (!data.changed) {
+          entry = getEntry(data);
+          if (entry != null && entry.hasIsReadOnlyCalc()) {
+            return entry.isReadOnlyCalc;
+          }
+        }
+        bool result = DataContext.evaluateBool(data, uiPanelColumn.readOnlyLogic, errorValue: null);
+        if (entry != null && result != null)
+          entry.isReadOnlyCalc = result;
         _log.fine("isReadOnly ${tableColumn.name} ${result} - ${uiPanelColumn.readOnlyLogic}");
-        return result;
+        return result == null ? true : result;
       }
     }
     return false;
@@ -200,9 +209,18 @@ class DataColumn {
       if (isMandatoryDynamic()) {
         if (data.table == null)
           data.table = table;
-        bool result = DataContext.evaluateBool(data, uiPanelColumn.mandatoryLogic);
+        DEntry entry = null;
+        if (!data.changed) {
+          entry = getEntry(data);
+          if (entry != null && entry.hasIsMandatoryCalc()) {
+            return entry.isMandatoryCalc;
+          }
+        }
+        bool result = DataContext.evaluateBool(data, uiPanelColumn.mandatoryLogic, errorValue: null);
+        if (entry != null && result != null)
+          entry.isMandatoryCalc = result;
         _log.warning("isMandatory ${tableColumn.name} ${result} - ${uiPanelColumn.mandatoryLogic}");
-        return result;
+        return result == null ? true : result; // mandatory when error
       }
     }
     return false;
@@ -229,9 +247,18 @@ class DataColumn {
       if (isDisplayedDynamic()) {
         if (data.table == null)
           data.table = table;
-        bool result = DataContext.evaluateBoolEx(data, uiPanelColumn.displayLogic);
+        DEntry entry = null;
+        if (!data.changed) {
+          entry = getEntry(data);
+          if (entry != null && entry.hasIsDisplayCalc()) {
+            return entry.isDisplayCalc;
+          }
+        }
+        bool result = DataContext.evaluateBool(data, uiPanelColumn.displayLogic, errorValue: null);
+        if (entry != null && result != null)
+          entry.isDisplayCalc = result;
         // _log.warning("isDisplayed ${tableColumn.name} ${result} - ${uiPanelColumn.displayLogic}");
-        return result;
+        return result == null ? true : result; // display when error
       }
     }
     return true;

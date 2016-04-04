@@ -147,22 +147,22 @@ class LTable
   } // LTable
 
   /// Responsive Stacked (not horizontal)
-  bool get responsiveStacked => element.classes.contains(C_MAX_MEDIUM_TABLE__STACKED);
+  bool get responsiveStacked => _table.classes.contains(C_MAX_MEDIUM_TABLE__STACKED);
   void set responsiveStacked (bool newValue) {
-    element.classes.remove(C_MAX_MEDIUM_TABLE__STACKED_HORIZONTAL);
+    _table.classes.remove(C_MAX_MEDIUM_TABLE__STACKED_HORIZONTAL);
     if (newValue)
-      element.classes.add(C_MAX_MEDIUM_TABLE__STACKED);
+      _table.classes.add(C_MAX_MEDIUM_TABLE__STACKED);
     else
-      element.classes.remove(C_MAX_MEDIUM_TABLE__STACKED);
+      _table.classes.remove(C_MAX_MEDIUM_TABLE__STACKED);
   }
   /// Responsive Stacked Horizontal (not responsive)
-  bool get responsiveStackedHorizontal => element.classes.contains(C_MAX_MEDIUM_TABLE__STACKED_HORIZONTAL);
+  bool get responsiveStackedHorizontal => _table.classes.contains(C_MAX_MEDIUM_TABLE__STACKED_HORIZONTAL);
   void set responsiveStackedHorizontal (bool newValue) {
-    element.classes.remove(C_MAX_MEDIUM_TABLE__STACKED);
+    _table.classes.remove(C_MAX_MEDIUM_TABLE__STACKED);
     if (newValue)
-      element.classes.add(C_MAX_MEDIUM_TABLE__STACKED_HORIZONTAL);
+      _table.classes.add(C_MAX_MEDIUM_TABLE__STACKED_HORIZONTAL);
     else
-      element.classes.remove(C_MAX_MEDIUM_TABLE__STACKED_HORIZONTAL);
+      _table.classes.remove(C_MAX_MEDIUM_TABLE__STACKED_HORIZONTAL);
   }
 
   /// responsive overflow scrollable-x wrapper with table
@@ -172,7 +172,13 @@ class LTable
     _overflow = newValue;
     if (_overflow == LTableResponsive.NONE) {
       _table.remove();
-      _wrapper = null;
+      if (_wrapper != null && loading) {
+        int llevel = loadingRemove();
+        _wrapper = null;
+        loadingAdd(llevel); // transfer to table
+      } else {
+        _wrapper = null;
+      }
       //_wrapper2 = null;
       if (_tableHead != null && _thead != null) {
         _thead.remove();
@@ -186,11 +192,13 @@ class LTable
       _tableFoot = null;
     } else {
       if (_wrapper == null) {
+        int llevel = loadingRemove();
         _wrapper = new DivElement()
           ..classes.add("r-table-wrap")
           ..classes.add(LScrollable.C_SCROLLABLE__X)
           //..style.position = "relative"
           ..append(_table);
+        loadingAdd(llevel); // transfer to wrapper
       }
 
       // head
@@ -453,16 +461,16 @@ class LTable
   } // fixWidthTx
 
   /// Table bordered
-  bool get bordered => element.classes.contains(C_TABLE__BORDERED);
+  bool get bordered => _table.classes.contains(C_TABLE__BORDERED);
   /// Table bordered
   void set bordered (bool newValue) {
-    element.classes.toggle(C_TABLE__BORDERED, newValue);
+    _table.classes.toggle(C_TABLE__BORDERED, newValue);
   }
   /// Table striped
-  bool get striped => element.classes.contains(C_TABLE__STRIPED);
+  bool get striped => _table.classes.contains(C_TABLE__STRIPED);
   /// Table striped
   void set striped (bool newValue) {
-    element.classes.toggle(C_TABLE__STRIPED, newValue);
+    _table.classes.toggle(C_TABLE__STRIPED, newValue);
   }
 
 

@@ -63,8 +63,6 @@ class RecordInfo {
     String flags = record.isReadOnly ? "ReadOnly" : "ReadWrite";
     if (record.hasIsReadOnlyCalc())
       flags += record.isReadOnlyCalc ? " (CalcRO)" : " (NotCalcRO)";
-    if (record.hasIsMandatoryCalc())
-      flags += record.isMandatoryCalc ? " [MandatoryCalc]" : " [NotMandatoryCalc]";
     dl.add("Access", flags);
 
     flags = record.isChanged ? "Changed" : "NotChanged";

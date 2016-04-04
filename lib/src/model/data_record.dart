@@ -318,7 +318,8 @@ class DataRecord {
 
   /// reset cached values
   void resetCached() {
-    _cacheRO = null;
+    if (_record != null)
+      _record.clearIsReadOnlyCalc();
     _cacheActive = null;
     _cacheProcessed = null;
   }
@@ -334,20 +335,25 @@ class DataRecord {
         return true;
       if (_record.hasIsReadOnly() && _record.isReadOnly)
         return true;
-      if (_record.hasIsReadOnlyCalc() && _record.isReadOnlyCalc)
-        return true;
+      if (!changed && _record.hasIsReadOnlyCalc())
+        return _record.isReadOnlyCalc;
     }
     if (table == null) {
       _log.warning("isReadOnly #${rowNo} - table not set");
     } else if (table.hasReadOnlyLogic()) {
-      if (_cacheRO == null || changed)
-        _cacheRO = DataContext.evaluateBool(this, table.readOnlyLogic);
-      if (_cacheRO)
-        return true;
+      bool result = DataContext.evaluateBool(this, table.readOnlyLogic, errorValue: null);
+      if (result != null) {
+        if (changed)
+          _record.clearIsReadOnlyCalc();
+        else
+          _record.isReadOnlyCalc = result;
+        return result;
+      }
+      _record.clearIsReadOnlyCalc();
+      return true; // readonly when error
     }
     return !isActive || isProcessed;
   } // isReadOnly
-  bool _cacheRO;
 
   /// Record active (default: true)
   bool get isActive {

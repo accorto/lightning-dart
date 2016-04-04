@@ -84,7 +84,6 @@ class DRecord extends GeneratedMessage {
     ..a(13, 'isReadOnly', PbFieldType.OB)
     ..a(15, 'isExcluded', PbFieldType.OB)
     ..a(16, 'isReadOnlyCalc', PbFieldType.OB)
-    ..a(17, 'isMandatoryCalc', PbFieldType.OB)
     ..a(18, 'isSelected', PbFieldType.OB)
     ..a(19, 'isMatchFind', PbFieldType.OB)
     ..pp(20, 'entry', PbFieldType.PM, DEntry.$checkItem, DEntry.create)
@@ -187,38 +186,33 @@ class DRecord extends GeneratedMessage {
   bool hasIsReadOnlyCalc() => $_has(14, 16);
   void clearIsReadOnlyCalc() => clearField(16);
 
-  bool get isMandatoryCalc => $_get(15, 17, false);
-  void set isMandatoryCalc(bool v) { $_setBool(15, 17, v); }
-  bool hasIsMandatoryCalc() => $_has(15, 17);
-  void clearIsMandatoryCalc() => clearField(17);
-
-  bool get isSelected => $_get(16, 18, false);
-  void set isSelected(bool v) { $_setBool(16, 18, v); }
-  bool hasIsSelected() => $_has(16, 18);
+  bool get isSelected => $_get(15, 18, false);
+  void set isSelected(bool v) { $_setBool(15, 18, v); }
+  bool hasIsSelected() => $_has(15, 18);
   void clearIsSelected() => clearField(18);
 
-  bool get isMatchFind => $_get(17, 19, false);
-  void set isMatchFind(bool v) { $_setBool(17, 19, v); }
-  bool hasIsMatchFind() => $_has(17, 19);
+  bool get isMatchFind => $_get(16, 19, false);
+  void set isMatchFind(bool v) { $_setBool(16, 19, v); }
+  bool hasIsMatchFind() => $_has(16, 19);
   void clearIsMatchFind() => clearField(19);
 
-  List<DEntry> get entryList => $_get(18, 20, null);
+  List<DEntry> get entryList => $_get(17, 20, null);
 
-  DRecord get parent => $_get(19, 21, null);
+  DRecord get parent => $_get(18, 21, null);
   void set parent(DRecord v) { setField(21, v); }
-  bool hasParent() => $_has(19, 21);
+  bool hasParent() => $_has(18, 21);
   void clearParent() => clearField(21);
 
-  bool get isGroupBy => $_get(20, 22, false);
-  void set isGroupBy(bool v) { $_setBool(20, 22, v); }
-  bool hasIsGroupBy() => $_has(20, 22);
+  bool get isGroupBy => $_get(19, 22, false);
+  void set isGroupBy(bool v) { $_setBool(19, 22, v); }
+  bool hasIsGroupBy() => $_has(19, 22);
   void clearIsGroupBy() => clearField(22);
 
-  List<DStatistics> get statList => $_get(21, 23, null);
+  List<DStatistics> get statList => $_get(20, 23, null);
 
-  List<List<int>> get attachmentList => $_get(22, 24, null);
+  List<List<int>> get attachmentList => $_get(21, 24, null);
 
-  List<String> get attachmentNameList => $_get(23, 25, null);
+  List<String> get attachmentNameList => $_get(22, 25, null);
 }
 
 class _ReadonlyDRecord extends DRecord with ReadonlyMessageMixin {}
@@ -231,6 +225,9 @@ class DEntry extends GeneratedMessage {
     ..a(4, 'isChanged', PbFieldType.OB)
     ..a(5, 'valueOriginal', PbFieldType.OS)
     ..a(6, 'valueDisplay', PbFieldType.OS)
+    ..a(7, 'isReadOnlyCalc', PbFieldType.OB)
+    ..a(8, 'isMandatoryCalc', PbFieldType.OB)
+    ..a(9, 'isDisplayCalc', PbFieldType.OB)
     ..hasRequiredFields = false
   ;
 
@@ -279,6 +276,21 @@ class DEntry extends GeneratedMessage {
   void set valueDisplay(String v) { $_setString(5, 6, v); }
   bool hasValueDisplay() => $_has(5, 6);
   void clearValueDisplay() => clearField(6);
+
+  bool get isReadOnlyCalc => $_get(6, 7, false);
+  void set isReadOnlyCalc(bool v) { $_setBool(6, 7, v); }
+  bool hasIsReadOnlyCalc() => $_has(6, 7);
+  void clearIsReadOnlyCalc() => clearField(7);
+
+  bool get isMandatoryCalc => $_get(7, 8, false);
+  void set isMandatoryCalc(bool v) { $_setBool(7, 8, v); }
+  bool hasIsMandatoryCalc() => $_has(7, 8);
+  void clearIsMandatoryCalc() => clearField(8);
+
+  bool get isDisplayCalc => $_get(8, 9, false);
+  void set isDisplayCalc(bool v) { $_setBool(8, 9, v); }
+  bool hasIsDisplayCalc() => $_has(8, 9);
+  void clearIsDisplayCalc() => clearField(9);
 }
 
 class _ReadonlyDEntry extends DEntry with ReadonlyMessageMixin {}
@@ -745,7 +757,6 @@ const DRecord$json = const {
     const {'1': 'is_read_only', '3': 13, '4': 1, '5': 8, '7': 'false'},
     const {'1': 'is_excluded', '3': 15, '4': 1, '5': 8},
     const {'1': 'is_read_only_calc', '3': 16, '4': 1, '5': 8},
-    const {'1': 'is_mandatory_calc', '3': 17, '4': 1, '5': 8},
     const {'1': 'is_selected', '3': 18, '4': 1, '5': 8},
     const {'1': 'is_match_find', '3': 19, '4': 1, '5': 8},
     const {'1': 'entry', '3': 20, '4': 3, '5': 11, '6': '.DEntry'},
@@ -766,6 +777,9 @@ const DEntry$json = const {
     const {'1': 'is_changed', '3': 4, '4': 1, '5': 8, '7': 'false'},
     const {'1': 'value_original', '3': 5, '4': 1, '5': 9},
     const {'1': 'value_display', '3': 6, '4': 1, '5': 9},
+    const {'1': 'is_read_only_calc', '3': 7, '4': 1, '5': 8},
+    const {'1': 'is_mandatory_calc', '3': 8, '4': 1, '5': 8},
+    const {'1': 'is_display_calc', '3': 9, '4': 1, '5': 8},
   ],
 };
 

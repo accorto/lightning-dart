@@ -664,6 +664,21 @@ class DataUtil {
     return list;
   } // getDrvColumns
 
+  /// clear local info
+  static void clearLocal(DRecord record) {
+    record
+        ..clearIsReadOnlyCalc()
+        ..clearIsExcluded()
+        ..clearIsMatchFind();
+    for (DEntry entry in record.entryList) {
+      entry
+        ..clearValueDisplay()
+        ..clearIsDisplayCalc()
+        ..clearIsReadOnlyCalc()
+        ..clearIsMandatoryCalc();
+    }
+  } // clearLocal
+
 
   /**
    * Print UI
