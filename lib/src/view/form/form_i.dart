@@ -7,13 +7,13 @@
 part of lightning_dart;
 
 /// Record Saved returning error
-typedef Future<SResponse> RecordSaved(DRecord record);
+typedef Future<SResponse> RecordSave(DRecord record);
 
 /// Record Deleted returning error
-typedef Future<SResponse> RecordDeleted(DRecord record);
+typedef Future<SResponse> RecordDelete(DRecord record);
 
 /// Record Deleted returning error
-typedef Future<SResponse> RecordsDeleted(List<DRecord> records);
+typedef Future<SResponse> RecordsDelete(List<DRecord> records);
 
 /**
  * Form Interface
@@ -27,8 +27,8 @@ abstract class FormI {
   void onRecordChange(DRecord record, DEntry columnChanged, int rowNo);
 
   /// Callback when save
-  RecordSaved recordSaved;
+  RecordSave recordSave;
   /// Callback when delete
-  RecordDeleted recordDeleted;
+  RecordDelete recordDelete;
 
 } // FormI

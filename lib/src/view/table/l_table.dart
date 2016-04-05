@@ -748,8 +748,9 @@ class LTable
   /// Create and Add Table Body Row and set/display [record]
   /// - with optionally existing [row]
   LTableRow addBodyRow({String rowValue, LTableRow row, DRecord record, int rowNo}) {
-    if (rowValue == null && record != null)
+    if (record != null && rowValue == null) {
       rowValue = record.recordId;
+    }
     if (row == null) {
       row = new LTableRow(this, createBodyRow(),
           bodyRowIndex,
@@ -767,7 +768,7 @@ class LTable
       row.setRecord(record, rowNo); // display
     }
     return row;
-  }
+  } // addBodyRow
   /// create/add body row
   TableRowElement createBodyRow() {
     if (_tbody == null)
@@ -778,43 +779,55 @@ class LTable
   int get bodyRowIndex => _bodyRowIndex;
   int _bodyRowIndex = -1;
 
-  /// Exclude Body Row with [record]
-  LTableRow excludeBodyRow(DRecord record) {
-    for (int i = 0; i < tbodyRows.length; i++) {
-      LTableRow row = tbodyRows[i];
-      if (row.record == record) {
-        String info = "excludeBodyRow ${record.urv} #${i}";
-        record.isExcluded = true;
-        row.rowElement.remove(); // dom
-        tbodyRows.removeAt(i); // table row
-        if (!recordList.remove(record))
-          info += " NOT found in recordList";
-        displayFoot();
-        _log.config(info);
-        return row;
-      }
-    }
-    return null;
-  } // excludeBodyRow
-
   /// action row delete - override for server delete
   void onActionRowDelete(String value, DataRecord data, DEntry entry, var actionVar) {
-    int index = recordList.indexOf(data.record);
-    int indexDisplay = displayList.indexOf(data.record);
+    removeRecord(data.record);
+  } // onLineActionDelete
+
+  /// Remove [record] from lists and redisplay - return true if removed
+  bool removeRecord(DRecord record) {
+    bool foundIt = true;
+    int index = recordList.indexOf(record);
+    int indexDisplay = displayList.indexOf(record);
     if (index != -1 && indexDisplay != -1) {
-      recordList.remove(index);
-      displayList.remove(indexDisplay);
-      _log.config("onActionRowDelete ${data.recordId} row=${index}/${indexDisplay}");
+      recordList.removeAt(index);
+      displayList.removeAt(indexDisplay);
+      _log.config("removeRecord ${record.recordId} row=${index}/${indexDisplay}");
       display(true, true); // Stat+Pager
     } else if (index != -1) {
-      recordList.remove(index);
-      displayList = recordList;
-      _log.config("onActionRowDelete ${data.recordId} row=${index}");
+      recordList.removeAt(index);
+      // displayList = recordList;
+      _log.config("removeRecord ${record.recordId} row=${index}");
       display(true, true); // Stat+Pager
     } else {
-      _log.warning("onActionRowDelete ${data.recordId} NotFound");
+      _log.warning("removeRecord ${record.recordId} NotFound");
+      foundIt = false;
     }
-  } // onLineActionDelete
+    return foundIt;
+  } // removeRecord
+
+  /// Remove [records] from lists and redisplay - return true if all removed
+  /// Remove [records] from lists and redisplay - return true if all removed
+  bool removeRecords(List<DRecord> records) {
+    bool foundAll = true;
+    for (DRecord record in records) {
+      int index = recordList.indexOf(record);
+      int indexDisplay = displayList.indexOf(record);
+      if (index != -1 && indexDisplay != -1) {
+        recordList.removeAt(index);
+        displayList.removeAt(indexDisplay);
+        _log.config("removeRecords ${record.recordId} row=${index}/${indexDisplay}");
+      } else if (index != -1) {
+        recordList.removeAt(index);
+        _log.config("removeRecords ${record.recordId} row=${index}");
+      } else {
+        _log.warning("removeRecords ${record.recordId} NotFound");
+        foundAll = false;
+      }
+    }
+    display(true, true); // Stat+Pager
+    return foundAll;
+  } // removeRecords
 
   /// action row reset
   void onActionRowReset(String value, DataRecord data, DEntry entry, var actionVar) {
@@ -830,9 +843,11 @@ class LTable
 
   /// action row exclude
   void onActionRowExclude(String value, DataRecord data, DEntry entry, var actionVar) {
-    LTableRow row = excludeBodyRow(data.record);
-    _log.config("onActionRowExclude row=${row}");
+    data.record.isExcluded = true;
+    _log.config("onActionRowExclude");
+    removeRecord(data.record);
   } // onLineActionExclude
+
 
   /// get Body Row with record
   LTableRow getBodyRow(DRecord record) {
@@ -1022,7 +1037,7 @@ class LTable
     displayFoot();
   }
 
-  /// display async
+  /// display [displayList] records async
   void display(bool calcStatistics, bool updatePager) {
     loading = true;
     new Timer(_displayDelay, () {
@@ -1041,7 +1056,7 @@ class LTable
   } // display
   static final Duration _displayDelay = new Duration(milliseconds: 10);
 
-  /// Display Records - create tbodyRows
+  /// Display [displayList] records - creates [tbodyRows]
   void displaySync() {
     if (_tbody != null) {
       _tbody.children.clear();
@@ -1423,6 +1438,10 @@ class LTable
     }
   } // info size
 
+
+  String toString() {
+    return "LTable[records=${recordList.length} display=${displayList == null ? "-" : displayList.length}]";
+  }
 
   static String lTableRowSelectAll() => Intl.message("Select All", name: "lTableRowSelectAll", args: []);
   static String lTableRowSelectRow() => Intl.message("Select Row", name: "lTableRowSelectRow", args: []);

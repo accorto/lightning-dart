@@ -292,13 +292,13 @@ class ObjectCtrl
           optionLayout: true,
           optionEdit: true,
           editMode: LTable.EDIT_FIELD,
-          alwaysOneEmptyLine: false)
+          alwaysEmptyLines: 0)
         ..bordered = true
         ..responsiveOverflow = LTableResponsive.OVERFLOW_HEAD_FOOT
         ..withStatistics = true;
-      _table.recordSaved = onRecordSaved;
-      _table.recordDeleted = onRecordDeleted;
-      _table.recordsDeleted = onRecordsDeleted;
+      _table.recordSave = onRecordSave;
+      _table.recordDelete = onRecordDelete;
+      _table.recordsDelete = onRecordsDelete;
       _table.graphSelectionChange = onGraphSelectionChange;
       _content.add(_table);
       _header.addPager(_table.pager);
@@ -396,7 +396,7 @@ class ObjectCtrl
     //
     ObjectEdit oe = new ObjectEdit(datasource.ui);
     oe.setRecord(newRecord, -1);
-    oe.recordSaved = onRecordSaved;
+    oe.recordSave = onRecordSave;
     oe.modal.showInElement(element);
   } // onAppsActionNew
 
@@ -423,9 +423,9 @@ class ObjectCtrl
     new ObjectExport(datasource).show();
   }
 
-  /// Record Saved (from new/table)
-  Future<SResponse> onRecordSaved(DRecord record) {
-    _log.config("onRecordSaved ${tableName}");
+  /// Record Saved (called from new/table)
+  Future<SResponse> onRecordSave(DRecord record) {
+    _log.config("onRecordSave ${tableName}");
     Completer<SResponse> completer = new Completer<SResponse>();
     _content.loading = true;
     datasource.save(record)
@@ -437,9 +437,9 @@ class ObjectCtrl
     return completer.future;
   }
 
-  /// Record Deleted (from table)
-  Future<SResponse> onRecordDeleted(DRecord record) {
-    _log.config("onRecordDeleted ${tableName}");
+  /// Record Deleted (called from table)
+  Future<SResponse> onRecordDelete(DRecord record) {
+    _log.config("onRecordDelete ${tableName}");
     Completer<SResponse> completer = new Completer<SResponse>();
     _content.loading = true;
     datasource.delete(record)
@@ -451,9 +451,9 @@ class ObjectCtrl
     return completer.future;
   }
 
-  /// Records Deleted (from table)
-  Future<SResponse> onRecordsDeleted(List<DRecord> records) {
-    _log.config("onRecordsDeleted ${tableName}");
+  /// Records Deleted (called from table)
+  Future<SResponse> onRecordsDelete(List<DRecord> records) {
+    _log.config("onRecordsDelete ${tableName}");
     Completer<SResponse> completer = new Completer<SResponse>();
     _content.loading = true;
     datasource.deleteAll(records)
@@ -492,7 +492,7 @@ class ObjectCtrl
     if (actionVar is DRecord && value == AppsAction.YES) {
       DRecord record = actionVar;
       _log.info("onAppsActionDeleteConfirmed ${tableName} ${value} id=${record.recordId}");
-      onRecordDeleted(record);
+      onRecordDelete(record);
     }
   } // onAppsActionDeleteConfirmed
 
@@ -527,7 +527,7 @@ class ObjectCtrl
     if (actionVar is List<DRecord> && value == AppsAction.YES) {
       List<DRecord> records = actionVar;
       _log.info("onAppsActionDeleteSelectedConfirmed ${tableName} ${value} #${records.length}");
-      onRecordsDeleted(records);
+      onRecordsDelete(records);
     }
   }
 
@@ -546,7 +546,7 @@ class ObjectCtrl
   void _switchRecordCtrl(DataRecord data, String editMode) {
     if (recordCtrl == null) {
       recordCtrl = new RecordCtrl(datasource.ui);
-      recordCtrl._details.recordSaved = onRecordSaved;
+      recordCtrl._details.recordSave = onRecordSave;
 
       AnchorElement back = new AnchorElement(href: "#")
         ..id = "${id}-back"

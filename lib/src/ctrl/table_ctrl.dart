@@ -20,13 +20,13 @@ class TableCtrl
   final bool optionLayout;
   final bool optionEdit;
   /// always one empty line
-  final bool alwaysOneEmptyLine;
-  /// Callback when save
-  RecordSaved recordSaved;
-  /// Callback when delete
-  RecordDeleted recordDeleted;
-  /// Callback when delete
-  RecordsDeleted recordsDeleted;
+  final int alwaysEmptyLines;
+  /// Callback when save e.g. [ObjectCtrl#onRecordSave]
+  RecordSave recordSave;
+  /// Callback when delete e.g. [ObjectCtrl#onRecordDelete]
+  RecordDelete recordDelete;
+  /// Callback when delete e.g. [ObjectCtrl#onRecordsDelete]
+  RecordsDelete recordsDelete;
 
   /**
    * Object Table
@@ -41,7 +41,7 @@ class TableCtrl
       bool this.optionLayout:true,
       bool this.optionEdit:true,
       String editMode: LTable.EDIT_RO,
-      bool this.alwaysOneEmptyLine:false
+      int this.alwaysEmptyLines:0
       })
       : super(idPrefix,
           rowSelect:rowSelect,
@@ -87,28 +87,55 @@ class TableCtrl
 
   /// Reset Content
   void resetContent() {
-    recordList.clear(); // override
-    if (alwaysOneEmptyLine)
-      addBodyRow(record: createNewRecord());
+    recordList.clear();
+    displayList.clear();
     display(true, true);
   }
 
-  /// Application Action New
+  /// display after creating new records
+  void display(bool calcStatistics, bool updatePager) {
+    if (alwaysEmptyLines > 0) {
+      int emptyLines = 0;
+      for (DRecord record in displayList.reversed) {
+        if (isRecordEmpty(record)) {
+          emptyLines++;
+          if (emptyLines == alwaysEmptyLines)
+            break;
+        }
+      }
+      for (int i = emptyLines; i < alwaysEmptyLines; i++) {
+        DRecord record = createNewRecord();
+        recordList.add(record);
+        if (recordList != displayList)
+          displayList.add(record);
+      }
+    }
+    super.display(calcStatistics, updatePager);
+  } // display
+
+  /// is the record empty - see [createNewRecord]
+  bool isRecordEmpty(DRecord record) {
+    return record.entryList.isEmpty;
+  }
+
+    /// Application Action New
   void onActionNew(String value, DataRecord data, DEntry entry, var actionVar) {
-    _log.config("onAppsActionNew ${tableName} ${value}  #${recordList.length}");
+    _log.config("onActionNew ${tableName} ${value}  #${recordList.length}");
+    DRecord record = createNewRecord();
+    recordList.add(record);
+    if (recordList != displayList)
+      displayList.add(record);
     if (editMode == LTable.EDIT_ALL || editMode == LTable.EDIT_SEL)
-      addBodyRow(record: createNewRecord());
+      addBodyRow(record: record);
     else { // display Form
-      DRecord record = createNewRecord();
-      recordList.add(record);
       ObjectEdit oe = new ObjectEdit(ui);
       oe.setRecord(record, -1);
-      oe.recordSaved = recordSaved;
+      oe.recordSave = recordSave;
       oe.modal.showInElement(element);
     }
   }
 
-  /// create new Record
+  /// create new Record - see [isRecordEmpty]
   DRecord createNewRecord() {
     DataRecord data = new DataRecord(ui.table, null);
     DRecord parentRecord = null;
@@ -118,16 +145,16 @@ class TableCtrl
 
   /// Row Action Edit
   void onActionRowEdit(String value, DataRecord data, DEntry entry, var actionVar) {
-    _log.config("onAppsActionEdit ${tableName} ${value} ${data}");
+    _log.config("onActionEdit ${tableName} ${value} ${data}");
      ObjectEdit oe = new ObjectEdit(ui);
      oe.setRecord(data.record, 0);
-     oe.recordSaved = recordSaved;
+     oe.recordSave = recordSave;
      oe.modal.showInElement(element);
   }
 
   /// Row Action Info
   void onActionRowInfo(String value, DataRecord data, DEntry entry, var actionVar) {
-    _log.config("onAppsActionInfo ${tableName} ${value} ${data}");
+    _log.config("onActionRowInfo ${tableName} ${value} ${data}");
     RecordInfo info = new RecordInfo(ui, data);
     info.modal.showInElement(element);
   }
@@ -138,6 +165,8 @@ class TableCtrl
       _log.config("onActionRowDelete ${tableName} ${value}");
       LIElement li = new LIElement()
         ..text = data.record.drv;
+      if (!data.record.hasDrv() && !data.record.hasRecordId())
+        li.text = tableCtrlNewRecord();
       UListElement ul = new UListElement()
         ..classes.add(LList.C_LIST__DOTTED)
         ..append(li);
@@ -156,26 +185,18 @@ class TableCtrl
   void onActionRowDeleteConfirmed(String value, DataRecord data, DEntry entry, var actionVar) {
     if (actionVar is DRecord && value == AppsAction.YES) {
       DRecord record = actionVar;
-      _log.info("onAppsActionDeleteConfirmed ${tableName} ${value} id=${record.recordId}");
-      if (recordDeleted != null) {
-        recordDeleted(record)
+      int index = recordList.indexOf(record);
+      _log.info("onActionDeleteConfirmed ${tableName} ${value} id=${record.recordId} index=${index}");
+      if (!record.hasRecordId()) {
+        removeRecord(record); // displays
+      } else if (recordDelete != null) {
+        recordDelete(record)
         .then((SResponse response) {
           if (response.isSuccess) {
-            int index = recordList.indexOf(record);
-            if (index == -1) {
-              _log.warning("onAppsActionDeleteConfirmed ${tableName} NotFound ${record.recordId}");
-              return;
-            } else {
-              recordList.removeAt(index);
-            }
-            if (alwaysOneEmptyLine && recordList.isEmpty) {
-              addBodyRow(record: createNewRecord());
-            }
-            displayList = recordList;
-            _log.config("onAppsActionDeleteConfirmed ${tableName} #${recordList.length}");
-            display(true, true); // Stat+Pager
+            removeRecord(record); // displays
+            _log.config("onActionDeleteConfirmed ${tableName} #${recordList.length}");
           } else {
-            _log.config("onAppsActionDeleteConfirmed ${tableName} Error ${response.msg}");
+            _log.config("onActionDeleteConfirmed ${tableName} Error ${response.msg}");
           }
         });
       }
@@ -185,7 +206,7 @@ class TableCtrl
 
   /// Application Action Delete Selected Records
   void onActionDeleteSelected(String value, DataRecord data, DEntry entry, var actionVar) {
-    _log.config("onAppsActionDeleteSelected ${tableName} ${value}");
+    _log.config("onActionDeleteSelected ${tableName} ${value}");
     List<DRecord> records = selectedRecords;
     if (records == null || records.isEmpty) {
       LToast toast = new LToast(label: "No rows selected");
@@ -213,33 +234,22 @@ class TableCtrl
   void onActionDeleteSelectedConfirmed(String value, DataRecord data, DEntry entry, var actionVar) {
     if (actionVar is List<DRecord> && value == AppsAction.YES) {
       List<DRecord> records = actionVar;
-      _log.info("onAppsActionDeleteSelectedConfirmed ${tableName} ${value} #${records.length}");
-      if (recordsDeleted != null) {
-        recordsDeleted(records)
+      _log.info("onActionDeleteSelectedConfirmed ${tableName} ${value} #${records.length}");
+      if (recordsDelete != null) {
+        recordsDelete(records)
         .then((SResponse response) {
           if (response.isSuccess) {
-            for (DRecord sel in records) {
-              int index = recordList.indexOf(sel);
-              if (index == -1) {
-                _log.warning("onAppsActionDeleteSelectedConfirmed ${tableName} NotFound ${sel.recordId}");
-              } else {
-                recordList.removeAt(index);
-              }
-            }
-            if (alwaysOneEmptyLine && recordList.isEmpty) {
-              addBodyRow(record: createNewRecord());
-            }
-            displayList = recordList;
-            _log.config("onAppsActionDeleteSelectedConfirmed ${tableName} deleted=${records.length}  #${recordList.length}");
+            removeRecords(records); // displays
+            _log.config("onActionDeleteSelectedConfirmed ${tableName} deleted=${records.length}  #${recordList.length}");
             display(true, true); // Stat+Pager
           } else {
             // delete error
-            _log.warning("onAppsActionDeleteSelectedConfirmed ${tableName} NotFound ${response.msg}");
+            _log.warning("onActionDeleteSelectedConfirmed ${tableName} NotFound ${response.msg}");
           }
         });
       }
     }
-  } // onAppsActionDeleteSelectedConfirmed
+  } // onActionDeleteSelectedConfirmed
 
 
 
@@ -331,8 +341,15 @@ class TableCtrl
     }
   } // resequence
 
+  String toString() {
+    return "TableCtrl@${tableName}[records=${recordList.length} display=${displayList == null ? "-" : displayList.length}]";
+  }
+
+
   /// not correctly translated
   static String tableCtrlRecords(int count) => Intl.plural(count, zero: "no records", one: "${count} record", other: "${count} records", args:["count"], name: "tableCtrlRecords");
+
+  static String tableCtrlNewRecord() => Intl.message("new", name: "tableCtrlNewRecord");
 
   // delete confirmation
   static String tableCtrlDelete1Record() => Intl.message("Delete current record", name: "tableCtrlDelete1Record");

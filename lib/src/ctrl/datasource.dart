@@ -203,7 +203,7 @@ class Datasource
     return completer.future;
   }
 
-  /// delete
+  /// delete single record
   Future<DataResponse> delete(DRecord record) {
     Completer<DataResponse> completer = new Completer<DataResponse>();
     //
@@ -212,7 +212,11 @@ class Datasource
     //
     execute_data(req)
     .then((DataResponse response) {
-      setRecords(response.totalRows, response.recordList, response.statisticList);
+      if (response.recordList.isNotEmpty) {
+        setRecords(response.totalRows, response.recordList, response.statisticList);
+      } else if (response.response.isSuccess) {
+        recordList.remove(record);
+      }
       completer.complete(response);
     })
     .catchError((error, stackTrace) {

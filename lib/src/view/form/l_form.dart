@@ -125,9 +125,9 @@ class LForm
   final List<LEditor> editorList = new List<LEditor>();
 
   /// Calback when Record saved
-  RecordSaved recordSaved;
+  RecordSave recordSave;
   /// Callback when Record deleted
-  RecordDeleted recordDeleted;
+  RecordDelete recordDelete;
   /// Callback when Form submitted - allows to prevent submitting form
   FormSubmitPre formSubmitPre;
   /// Callback when Form submitted and [recordSaved] complete
@@ -451,8 +451,8 @@ class LForm
     }
     _debug("onFormSubmit valid=${valid}:");
 
-    if (valid && recordSaved != null) {
-      recordSaved(record)
+    if (valid && recordSave != null) {
+      recordSave(record)
       .then((SResponse response){
         _log.fine("onFormSubmit success=${response.isSuccess} ${response.msg}");
         if (formSubmitPost != null) {

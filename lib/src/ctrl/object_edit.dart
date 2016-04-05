@@ -24,7 +24,7 @@ class ObjectEdit {
   /// Base UI
   final UI ui;
   /// Callback when save
-  RecordSaved recordSaved;
+  RecordSave recordSave;
 
   /**
    * New|Edit Dialog
@@ -33,7 +33,7 @@ class ObjectEdit {
     form = new FormCtrl(ui.table.name, ui,
       element: new DivElement(), idPrefix:_ID);
     form.buildPanels();
-    form.recordSaved = onFormRecordSaved;
+    form.recordSave = onFormRecordSave;
     // form.formSubmitPre
     form.formSubmitPost = onFormSubmitPost;
     modal.addForm(form);
@@ -50,10 +50,10 @@ class ObjectEdit {
   }
 
   /// close Modal
-  Future<SResponse> onFormRecordSaved(DRecord record) {
+  Future<SResponse> onFormRecordSave(DRecord record) {
     Completer<SResponse> completer = new Completer<SResponse>();
-    if (recordSaved != null) {
-      recordSaved(record)
+    if (recordSave != null) {
+      recordSave(record)
       .then((SResponse response) {
         completer.complete(response); // calls onFormSubmitPost
       });

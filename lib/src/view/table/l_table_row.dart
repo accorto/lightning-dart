@@ -43,10 +43,10 @@ class LTableRow
   InputElement selectCb;
   /// Data Container
   DataRecord data;
-  /// FormI Callback when save
-  RecordSaved recordSaved;
-  /// FormI Callback when delete
-  RecordDeleted recordDeleted;
+  /// FormI Callback (ise: TableCtrl.recordSave)
+  RecordSave recordSave;
+  /// FormI Callback (use: TableCtrl.recordDelete)
+  RecordDelete recordDelete;
   /// Editors
   List<LEditor> editorList;
   /// On Table Row Select Clicked
