@@ -113,17 +113,12 @@ class Service {
   CRequest createCRequest(String serverUri, String info, {bool withGeo: false}) {
     trxNo++;
     DateTime now = new DateTime.now();
-    String timeZone = now.timeZoneName;
-    int offset = now.timeZoneOffset.inMinutes;
     //
     CEnv env = new CEnv()
       ..clientUrl = window.location.href
       ..serverUrl= serverUrl
       ..locale = ClientEnv.localeName
       ..isDevMode = ClientEnv.testMode;
-      if (timeZone != null) // NewRelic Synthetics
-        env.timeZone = now.timeZoneName;// initial guess
-      env.timeZoneUtcOffset = offset;
     // geo
     try {
       if (addGeo || withGeo) {
@@ -135,10 +130,22 @@ class Service {
       _log.config("geo", error, stackTrace);
     }
     // tz
-    if (ClientEnv.timeZone == null)
-      env.timeZone = TzRef.alias(now.timeZoneName);
-    else
+    if (ClientEnv.timeZone == null) {
+      String timeZone = now.timeZoneName; // initial guess
+      String alias = TzRef.alias(timeZone);
+      if (alias != null && alias.isNotEmpty) {
+        env.timeZone = alias;
+      } else if (timeZone != null && timeZone.isNotEmpty) {
+        env.timeZone = timeZone;
+      }
+      //
+      if (now.timeZoneOffset != null) {
+        int offset = now.timeZoneOffset.inMinutes;
+        env.timeZoneUtcOffset = offset;
+      }
+    } else {
       env.timeZone = ClientEnv.timeZone.id; // user selection
+    }
     //
     CRequest request = new CRequest()
       ..trxType = serverUri
