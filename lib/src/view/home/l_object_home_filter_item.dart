@@ -62,7 +62,6 @@ class ObjectHomeFilterItem
     board = true;
     element.classes.add(LButton.C_HINT_PARENT);
 
-
     LButton delete = new LButton.iconContainer("delete",
         new LIconUtility(LIconUtility.DELETE),
         lObjectHomeFilterItemDelete(),
@@ -109,15 +108,15 @@ class ObjectHomeFilterItem
     _detail.append(_operationDateEditor.element);
     _detail.append(_operationEditor.element);
 
-    // data
-    columnName = filter.columnName;
-    if (filter.hasOperation())
-      operation = filter.operation;
-    //if (filter.hasFilterValue())
-
-
+    _setFilter(filter);
     _isError = false;
   } // ObjectFilterItem
+
+  /// set Filter Value
+  void _setFilter(DFilter filter) {
+    // triggers columnName, operation, value
+    columnName = filter.columnName;
+  }
 
   /// Detail div - (body) .tile__detail
   DivElement get detail => _detail;
@@ -243,6 +242,7 @@ class ObjectHomeFilterItem
     _log.fine("columnName=${column == null ? "-" : column.name} (${_columnNameEditor.value})");
     _columnNameSet();
   } // setColumnName
+  String get columnName => filter.columnName;
 
   /// set operations options
   void _columnNameSet() {
@@ -322,27 +322,32 @@ class ObjectHomeFilterItem
         ..label = "\u2203\u2003 ${filterOpNotNull()}");
     }
     _operationEditor.show = true;
-    _operationEditor.dOptionList = _operationList;
+    _settingValue = true;
+    _operationEditor.dOptionList = _operationList; // sets first op otherwise
+    _settingValue = false;
 
     // set value
-    if (defaultOperation != null) {
-      operation = defaultOperation;
-    } else if (filter.hasOperation()) {
+    if (filter.hasOperation()) {
       operation = filter.operation;
+    } else if (defaultOperation != null) {
+      operation = defaultOperation;
     } else {
       operation = DOP.EQ;
     }
   } // columnNameSet
 
 
-  /// column name change
+  /// operation change change
   void onOperationChange(String name, String newValue, DEntry entry, var details) {
+    if (_settingValue)
+      return;
     _log.config("onOperationChange ${newValue}");
     DOP oo = opFromString(newValue);
     if (oo != null) {
       operation = oo;
     }
   }
+  bool _settingValue = false;
 
   /**
    * set operation
@@ -358,6 +363,7 @@ class ObjectHomeFilterItem
     _log.fine("operation=${op} (${_operationEditor.value})");
     _operationSet();
   }
+  DOP get operation => filter.operation;
 
   /// set value options
   void _operationSet() {
@@ -376,6 +382,9 @@ class ObjectHomeFilterItem
     }
     if (DATE_OPERATIONS.contains(op)) {
       _operationDateEditor.show = true;
+      if (filter.hasOperationDate()) {
+        _operationDateEditor.value = filter.operationDate.name;
+      }
       return;
     }
 
@@ -417,6 +426,10 @@ class ObjectHomeFilterItem
       ..value = DOP.D_NEXT.name
       ..label = filterOpDateNext());
     return list;
+  }
+
+  String toString() {
+    return "PbjectHomeFilterItem ${table.name}.${filter.columnName} ${filter.operation} ${filter.filterValue}";
   }
 
   static String lObjectHomeFilterItemDelete() => Intl.message("Delete", name: "lObjectHomeFilterItemDelete");
