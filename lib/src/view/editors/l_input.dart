@@ -27,7 +27,7 @@ class LInput
   final InputElement input = new InputElement();
 
   /**
-   * Input Editor
+   * Input Editor with [type] e.g. EditorI.TYPE_TEXT
    */
   LInput(String name, String type, {String idPrefix, bool inGrid:false, bool withClearValue:false}) {
     createBaseLayout(this, iconLeft: getIconLeft(), iconRight: getIconRight(),

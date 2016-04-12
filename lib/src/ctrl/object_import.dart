@@ -10,7 +10,8 @@ part of lightning_ctrl;
 typedef void ObjectImportSaved(List<DRecord> recordsImported);
 
 /**
- * Import
+ * Import.
+ * Editors use the [EditorI.setValueSynonym] method to parse the value.
  */
 class ObjectImport {
 
@@ -57,6 +58,9 @@ class ObjectImport {
   OListElement _todo = new OListElement()
     ..classes.add(LGrid.C_COL__PADDED)
     ..classes.add(LList.C_LIST__ORDERED);
+
+  LInput _dateFormat;
+
   /// Import Button
   LButton _buttonImport;
 
@@ -70,11 +74,22 @@ class ObjectImport {
       ..label = objectImportFileLabel()
       ..accept = ".csv, text/plain"
       ..inputFileResult = onInputFileResult;
-    DivElement fileDiv = new DivElement()
-      ..classes.addAll([LGrid.C_GRID, LGrid.C_WRAP])
+    //
+    _dateFormat = new LInput("df", EditorI.TYPE_TEXT, idPrefix: id)
+      ..label = objectImportDateFormatLabel()
+      ..placeholder = "e.g. MM/dd/yyyy (US), dd-MM-yyyy (FR)" // not translated
+      ..help = objectImportDateFormatLabel()
+      ..editorChange = onDateFormatEditorChange;
+    DivElement dateFormatDiv = new DivElement()
+      ..classes.addAll([LGrid.C_COL__PADDED])
+      ..append(_dateFormat.element);
+    //
+    DivElement headerDiv = new DivElement()
+      ..classes.addAll([LGrid.C_GRID, LGrid.C_WRAP, LMargin.C_BOTTOM__SMALL])
       ..append(_fileInput.element)
-      ..append(_todo);
-    _modal.append(fileDiv);
+      ..append(_todo)
+      ..append(dateFormatDiv);
+    _modal.append(headerDiv);
     // table
     _modal.append(_table.element);
     _modal.append(_feedback);
@@ -98,11 +113,12 @@ class ObjectImport {
     //
     _addColumnButton = new LButton.neutral("addColumn", objectImportAddColumn())
       ..onClick.listen(onAddColumnClick);
-    diagnostics();
+    diagnostics(true); // checkLines
   } // ObjectImport
 
   String get id => _modal.id;
 
+  /// Show (modal)
   void show() {
     _modal.showModal();
   }
@@ -125,6 +141,29 @@ class ObjectImport {
   FileCsv _csv;
   String _csvInfo = objectImportSelectCsv();
 
+
+  /// date format change
+  void onDateFormatEditorChange(String name, String newValue, DEntry entry, var details) {
+    _log.config("onDateFormatEditorChange ${newValue}");
+    if (newValue == null || newValue.isEmpty) {
+      _dateFormat.hint = "";
+      LInputDate.synonymFormat = null;
+    } else {
+      String pattern = newValue;
+      try {
+        DateFormat df = new DateFormat(pattern);
+        String example = df.format(new DateTime.now());
+        _dateFormat.hint = "Format is valid - now is: ${example}";
+        LInputDate.synonymFormat = df; // editor.setValueSynonym(String)
+      } catch (error) {
+        _dateFormat.hint = "Format invalid - ${error}";
+        LInputDate.synonymFormat = null;
+      }
+    }
+    // re-parse
+    diagnostics(true); // checkLines
+  } // onDateFormatEditorChange
+
   /// create table
   void _createTable() {
     _headerColumnPicks.clear();
@@ -142,7 +181,7 @@ class ObjectImport {
       cell.cellElement.append(_createHeaderColumnPick(headingCol).element);
     }
     _headColumnButton(); // add column button
-    diagnostics();
+    diagnostics(false); // no checkLines
     //
     _createTableLines(true);
   } // createTable
@@ -169,9 +208,7 @@ class ObjectImport {
     // set value if name, label, extKey matches
     DColumn column = null;
     for (DColumn col in _columnListAll) {
-      if (col.name == headingCol
-          || col.label == headingCol
-          || (col.hasExternalKey() && col.externalKey == headingCol)) {
+      if (_isColumnMatch(col, headingCol)) {
         column = col;
         break;
       }
@@ -207,6 +244,16 @@ class ObjectImport {
     return pl;
   } // createColPick
 
+  /// does string match column?
+  bool _isColumnMatch(DColumn col, String stringMatch) {
+    if (stringMatch == null || stringMatch.isEmpty)
+      return false;
+    return col.name == stringMatch
+        || col.label == stringMatch
+        || (col.hasExternalKey() && col.externalKey == stringMatch);
+  }
+
+
   /// add column button to head row
   void _headColumnButton() {
     LTableHeaderCell cell = _headerRow.addHeaderCell("add", "-");
@@ -225,12 +272,12 @@ class ObjectImport {
 
     _headColumnButton(); // re-create
     _createTableLines(true);
-    diagnostics();
+    diagnostics(false); // no checkLines
   } // onClickAddColumn
 
   /// header editor change - create editors
   void onHeaderEditorChange(String name, String newValue, DEntry entry, var details) {
-    String no = name.replaceAll("col-", "");
+    String no = name.replaceAll("hdr-", "");
     int index = int.parse(no, onError: (String s){
       return null;
     });
@@ -242,25 +289,28 @@ class ObjectImport {
       _log.config("onHeaderEditorChange ${name} ${newValue} index=${index} error max=${_headerColumnList.length}");
       return;
     }
+    // find column
     DColumn column = null;
-    for (DColumn col in _columnListAll) {
-      if (col.name == newValue) {
-        column = col;
-        break;
+    if (newValue != null && newValue.isNotEmpty) {
+      for (DColumn col in _columnListAll) {
+        if (_isColumnMatch(col, newValue)) {
+          column = col;
+          break;
+        }
       }
-    }
-    if (column == null) {
-      _log.config("onHeaderEditorChange ${name} ${newValue} Column NotFound");
-      return;
-    }
-    for (int i = 0; i < _headerColumnList.length; i++) {
-      DColumn col = _headerColumnList[i];
-      if (col != null && col.name == column.name) {
-        feedbackSet(new LAlert.warning(label: objectImportColumnAlreadyMapped(column.label, i+1)));
-        return;
-      }
-    }
-    _log.config("onHeaderEditorChange ${name} ${newValue}");
+      if (column == null) {
+        _log.config("onHeaderEditorChange ${name} ${newValue} Column NotFound");
+      } else {
+        for (int i = 0; i < _headerColumnList.length; i++) {
+          DColumn col = _headerColumnList[i];
+          if (col != null && col.name == column.name) {
+            feedbackSet(new LAlert.warning(label: objectImportColumnAlreadyMapped(column.label, i + 1)));
+            return; // no change
+          }
+        } // duplicateCheck
+      } // column found
+    } // newValue != null
+    _log.config("onHeaderEditorChange ${name} ${newValue} ${column == null ? "-" : column.name}");
     _headerColumnList[index] = column;
     _createTableLines(true);
   } // onEditorChange
@@ -308,7 +358,7 @@ class ObjectImport {
       } // lines
     }
     _table.fixWidth(null);
-    diagnostics();
+    diagnostics(false); // no checkLines
   } // createTableLines
 
   /// head select clicked - check lines
@@ -317,16 +367,22 @@ class ObjectImport {
     for (LTableRow line in _table.tbodyRows) {
       if (line is ObjectImportLine) {
         String error = line.checkLine();
-        if (error != null && error.isNotEmpty)
+        if (error != null && error.isNotEmpty) {
+          line.selectCb.title = error;
           line.selected = false;
+        }
       }
     }
-    PageSimple.instance.setStatusInfo(diagnostics());
+    PageSimple.instance.setStatusInfo(diagnostics(false)); // checkLine above
     return null; // no change
   }
 
-  /// diagnostics
-  String diagnostics() {
+  /**
+   * Diagnostics
+   * - mandatory columns
+   * - check row values (select if row can be imported)
+   */
+  String diagnostics(bool checkLines) {
     String mapInfo = objectImportMapColumns();
 
     int mapCount = 0;
@@ -375,8 +431,16 @@ class ObjectImport {
     int selectedCount = 0;
     for (LTableRow line in _table.tbodyRows) {
       if (line is ObjectImportLine) {
-        if (line.data.selected)
+        if (checkLines) {
+          String error = line.checkLine();
+          if (error != null && error.isNotEmpty) {
+            line.selectCb.title = error;
+            line.selected = false;
+          }
+        }
+        if (line.data.selected) {
           selectedCount++; // valid
+        }
       }
     }
     if (_table.tbodyRows.isNotEmpty)
@@ -437,6 +501,10 @@ class ObjectImport {
   static String objectImportTitle() => Intl.message("Import", name: "objectImportTitle");
   static String objectImportButton() => Intl.message("Import", name: "objectImportButton");
   static String objectImportFileLabel() => Intl.message("Select a file to import", name: "objectImportFileLabel");
+
+  static String objectImportDateFormatLabel() => Intl.message("Custom Date/Time Format", name: "objectImportDateFormatLabel");
+  static String objectImportDateFormatHelp() => Intl.message("Java style date and type pattern (SimpleDateFormat) - if defined used first for date fields", name: "objectImportDateFormatHelp");
+
   static String objectImportAddColumn() => Intl.message("Add Column", name: "objectImportAddColumn");
   static String objectImportSelectCsv() => Intl.message("Select cvs file", name: "objectImportSelectCsv");
 

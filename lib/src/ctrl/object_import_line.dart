@@ -116,6 +116,7 @@ class ObjectImportLine
   void onSelectClick(MouseEvent evt) {
     String error = checkLine();
     _log.config("onSelectClick ${rowIndex} error=${error}");
+    selectCb.title = error == null ? "" : error;
     if (selectCb.checked) {
       if (error == null) {
         data.selected = true;
@@ -126,7 +127,7 @@ class ObjectImportLine
     } else {
       data.selected = false;
     }
-    parent.diagnostics();
+    parent.diagnostics(false);
   } // onClickSelect
 
   /// check line - return error message or null

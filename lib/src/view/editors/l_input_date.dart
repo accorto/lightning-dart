@@ -18,6 +18,9 @@ class LInputDate
 
   static final Logger _log = new Logger("LInputDate");
 
+  /// Synonym date/time format
+  static DateFormat synonymFormat;
+
   /// Min width of date editor
   static const String MIN_WIDTH = "150px";
   /// Min width of html5 date editor
@@ -246,6 +249,13 @@ class LInputDate
       return true;
     }
     DateTime dt = null;
+    if (synonymFormat != null) {
+      try {
+        dt = synonymFormat.parseLoose(newValue);
+        value = dt.millisecondsSinceEpoch.toString();
+        return true;
+      } catch (error) {}
+    }
     try {
       // 2016-03-27T17:00:00.000
       dt = DateTime.parse(newValue);

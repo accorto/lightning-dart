@@ -153,7 +153,7 @@ class LTableRow
       rowElement.children[index].classes.toggle(LVisibility.C_HIDE, !newValue);
   }
 
-  /// clicked on something else than selectCb
+  /// clicked on something other than selectCb
   void onRowSelectClick(MouseEvent evt) {
     _log.fine("onRowSelectClick ${rowIndex}");
     evt.preventDefault();
