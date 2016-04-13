@@ -199,13 +199,13 @@ class TzRef {
       TZ tz = TZ.findTimeZone(tzIdD);
       if (tz != null && tz.dayLight && tz.day == delta.inMilliseconds)
         return tz.id;
-      _log.warning("NoMatch Day ${tzName} - ${tzIdD} - delta=${delta} - ${tz}");
+      _log.warning("NoMatch (Day) ${tzName} - ${tzIdD} - delta=${delta} - ${tz}");
     }
     if (tzIdS != null) {
       TZ tz = TZ.findTimeZone(tzIdS);
       if (tz != null && !tz.dayLight && tz.std == delta.inMilliseconds)
         return tz.id;
-      _log.warning("NoMatch Std ${tzName} - ${tzIdD} - delta=${delta} - ${tz}");
+      _log.warning("NoMatch (Std) ${tzName} - ${tzIdS} - delta=${delta} - ${tz}");
     }
     if (tzIdD != null)
       return tzIdD;
@@ -216,7 +216,7 @@ class TzRef {
   /// The references
   static List<TzRef> _refs = new List<TzRef>();
   /// add reference list
-  static void _buildTzRef() {
+  static void _buildTzRef() { // Std - Day
     // -7
     _refs.add(new TzRef("America/Los_Angeles", ["PST", "PDT", "Pacific Standard Time", "Pacific Daylight Time"], -28800000, -25200000));
     // -6
@@ -226,7 +226,7 @@ class TzRef {
     // -4
     _refs.add(new TzRef("America/New_York", ["EST", "EDT", "Eastern Standard Time", "Eastern Daylight Time"], -18000000, -14400000));
     // 0
-    _refs.add(new TzRef("UTC", ["UCT", "Zulu", "Coordinated Universal Time"], -1, -1));
+    _refs.add(new TzRef("UTC", ["UTC", "Zulu", "Coordinated Universal Time"], -1, -1));
     // +1
     _refs.add(new TzRef("Europe/London", ["GMT", "Greenwich Mean Time"], 0, 3600000));
     // +2
