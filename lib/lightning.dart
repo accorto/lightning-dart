@@ -202,7 +202,7 @@ class LightningDart {
     if (rec.stackTrace != null) {
       // logObject += "\n${rec.stackTrace}";
       Trace t = new Trace.from(rec.stackTrace);
-      logObject += "\n${t}";
+      logObject += "\nTrace:\n${t}";
     }
 
     if (rec.level == Level.SHOUT)

@@ -195,10 +195,10 @@ class LUtil {
   static Element helpReference(String url, bool topRight) {
     AnchorElement a = new AnchorElement(href: url)
         ..target = NewWindow.TARGET_BLANK
-        ..classes.add(topRight ? "topRight-help" : "text-help")
+        ..classes.add(topRight ? "help-top-right" : "help-text")
         ..title = "Help";
     LIcon icon = new LIconUtility(LIconUtility.HELP,
-        size: LIcon.C_ICON__X_SMALL, color: "icon-help");
+        size: LIcon.C_ICON__X_SMALL, color: "help-icon");
     a.append(icon.element);
     return a;
   }

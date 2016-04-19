@@ -13,7 +13,7 @@ class Notifications extends DemoFeature {
   Notifications(PageSimple this.wrap) : super ("notifications", "Notifications",
   sldsStatus: DemoFeature.SLDS_DEV_READY,
   devStatus: DemoFeature.STATUS_COMPLETE,
-  hints: ["click x to dismiss"],
+  hints: ["Click x to dismiss", "Notifications dislay above Modals"],
   issues: [],
   plans: ["callback that user dismissed"]);
 

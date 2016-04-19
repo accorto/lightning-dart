@@ -22,7 +22,7 @@ class Modals extends DemoFeature {
   LComponent get content {
     CDiv div = new CDiv()
       ..classes.add(LMargin.C_HORIZONTAL__MEDIUM);
-    LModal modal = new LModal("m")
+    LModal modal = new LModal("m", touch: optionTouch)
       ..setHeader("The Modal", tagLine: "You can drag me!",
           icon: new LIconStandard(LIconStandard.CAMPAIGN))
       ..addContentText("Notifications have higher z-index than Modals. Some Text to add - you can also add any components or elements")
@@ -34,7 +34,8 @@ class Modals extends DemoFeature {
     div.add(trigger);
 
     // nested
-    LModal modal2 = new LModal("m2")
+    LModal modal2 = new LModal("m2", touch: optionTouch)
+      ..helpHref = "https://support.accorto.com"
       ..setHeader("The Second Modal", tagLine: "You can drag me!",
           icon: new LIconUtility(LIconUtility.ADDUSER))
       ..addContentText("Some Text to add - you can also add any components or elements. There is a small and large modal.")
@@ -62,6 +63,24 @@ class Modals extends DemoFeature {
     });
     div.add(trigger);
     ''';
+  }
+
+  bool optionTouch = false;
+
+  EditorI optionTouchCb() {
+    LCheckbox cb = new LCheckbox("oTouch", idPrefix: id)
+      ..label = "Touch";
+    cb.input.onClick.listen((MouseEvent evt){
+      optionTouch = cb.input.checked;
+      optionChanged();
+    });
+    return cb;
+  }
+
+  List<EditorI> get options {
+    List<EditorI> list = new List<EditorI>();
+    list.add(optionTouchCb());
+    return list;
   }
 
 }

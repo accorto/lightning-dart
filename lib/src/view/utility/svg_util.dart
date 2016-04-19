@@ -65,16 +65,20 @@ class SvgUtil {
   static void _svgDirectProcess(String symbolSvgUrl) {
     HttpRequest.getString(symbolSvgUrl)
     .then((String svgSymbolCode){
-      _log.fine("received ${symbolSvgUrl}");
+      _log.fine("svgDirectProcess received ${symbolSvgUrl}");
       Element e = new DivElement()
         ..setInnerHtml(svgSymbolCode, treeSanitizer: NodeTreeSanitizer.trusted);
       Element sym = e.children.first;
-      _symbolMap[symbolSvgUrl] = sym;
+      if (sym == null) {
+        _log.warning("svgDirectProcess NoSym ${symbolSvgUrl} code=${svgSymbolCode} children=${e.children}");
+      } else {
+        _symbolMap[symbolSvgUrl] = sym;
+      }
 
       // existing requests
       List<SvgUtilDirect> list = _requestMap[symbolSvgUrl];
       if (list != null) {
-        _log.fine("requests=${list.length}");
+        _log.fine("svgDirectProcess requests=${list.length}");
         for (SvgUtilDirect dir in list) {
           svgDirectUpdate(dir.svgElement, sym, dir.symbolName);
         }
@@ -82,7 +86,7 @@ class SvgUtil {
       }
     })
     .catchError((error, stackTrace){
-      _log.warning(symbolSvgUrl, error, stackTrace);
+      _log.warning("svgDirectProcess symbolUrl=${symbolSvgUrl}", error, stackTrace);
     });
   }
 
@@ -114,7 +118,7 @@ class SvgUtil {
           }
         }
       } catch (error, stackTrace) {
-        _log.warning(symbolName, error, stackTrace);
+        _log.warning("svgDirectUpdate symbolName=${symbolName}", error, stackTrace);
       }
     }
   } // svgDirectUpdate

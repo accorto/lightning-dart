@@ -14,6 +14,9 @@ typedef void ModalClose();
  * - width: 50%, min: 20rem, max: 40rem
  * - small: width: 90%, max: 580px
  * - large: width: 90%, min: 40rem (if > 48em)
+ *
+ * Modal - www.lightningdesignsystem.com/components/modals/
+ * - or edit dialog - www.lightningdesignsystem.com/components/forms/
  */
 class LModal
     extends LComponent {
@@ -115,14 +118,19 @@ class LModal
 
   /// Outer Element
   final DivElement element = new DivElement();
+  /// Touch
+  bool touch;
 
   final DivElement _dialog = new DivElement()
     ..classes.add(C_MODAL)
     ..attributes[Html0.ROLE] = Html0.ROLE_DIALOG;
   final DivElement _container = new DivElement()
     ..classes.add(C_MODAL__CONTAINER);
+
   final DivElement header = new DivElement()
     ..classes.add(C_MODAL__HEADER);
+  HeadingElement _header_h2;
+
   final CDiv content = new CDiv()
     ..classes.addAll([C_MODAL__CONTENT, LPadding.C_AROUND__MEDIUM]);
   final DivElement footer = new DivElement()
@@ -140,8 +148,23 @@ class LModal
 
   /**
    * Modal Dialog
+   * element
+   * _dialog        .slds_modal       .slds-fade-in-open
+   *   _container   .slds-modal__container
+   *     header     .slds-modal__header
+   *     content    .slds-modal__content
+   *     footer     .slds-modal__footer
+   * _backdrop      .slds-backdrop    .slds-backdrop--open
+   *
+   * touch:
+   * element
+   * _dialog        .slds-modal .slds-modal--form .slds-fade-in-open
+   *   _container   .slds-modl__container  .slds-modal--form
+   *     header     .slds-modal__header
+   *     content    .slds-modal__content
+   * _backdrop      .slds-backdrop    .slds-backdrop--open
    */
-  LModal(String idPrefix) {
+  LModal(String idPrefix, {bool this.touch:false}) {
     element.id = idPrefix == null || idPrefix.isEmpty ? LComponent.createId("modal", null) : idPrefix;
     element.append(_dialog);
     _dialog.append(_container);
@@ -150,9 +173,17 @@ class LModal
     _container.append(footer);
     element.append(_backdrop);
     //
+    //
     if (ClientEnv.isPhone) {
-      _container.style.width = "100%";
-      _container.style.margin = "0 auto";
+      touch = true;
+      //_container.style.width = "100%";
+      //_container.style.margin = "0 auto";
+    }
+    if (touch) {
+      // header buttons - first float left other float right
+      _dialog.classes.add(C_MODAL__FORM);
+      _container.classes.add(C_MODAL__FORM);
+      footer.remove();
     }
     // enter(parent) - over(+child) - move - out - leave
     header.onMouseEnter.listen(onHeaderMouseEnter);
@@ -190,23 +221,42 @@ class LModal
    */
   void setHeaderComponents(HeadingElement h2, Element tagLine) {
     header.children.clear();
-    h2.classes.add(LText.C_TEXT_HEADING__MEDIUM);
-    h2.id = "${id}-h2";
-    header.append(h2);
+    if (touch) {
+      if (buttonCancel != null)
+        header.append(buttonCancel.element);
+      if (buttonSave != null)
+        header.append(buttonSave.element);
+    }
+    _header_h2 = h2;
+    _header_h2.classes.add(LText.C_TEXT_HEADING__MEDIUM);
+    _header_h2.id = "${id}-h2";
+    header.append(_header_h2);
     if (tagLine != null)
       header.append(tagLine);
     //
     if (_helpHref != null) {
-      header.append(LUtil.helpReference(_helpHref, true));
+      if (touch) { // buttons on top
+        if (tagLine == null) {
+          header.append(LUtil.helpReference(_helpHref, false));
+        } else {
+          tagLine.append(LUtil.helpReference(_helpHref, false));
+        }
+      } else {
+        header.append(LUtil.helpReference(_helpHref, true)); // top-right
+      }
     }
     // Close
-    LButton buttonClose = new LButton(new ButtonElement(), "close", null, idPrefix: id,
-        buttonClasses: [C_MODAL__CLOSE],
-        icon: new LIconAction("close", className: LButton.C_BUTTON__ICON,
-          colorOverride: LButton.C_BUTTON__ICON_INVERSE, size: LButton.C_BUTTON__ICON__LARGE),
-        assistiveText: lModalClose());
-    buttonClose.onClick.listen(onClickCancel);
-    header.append(buttonClose.element);
+    if (!touch) {
+      LButton buttonClose = new LButton(
+          new ButtonElement(), "close", null, idPrefix: id,
+          buttonClasses: [C_MODAL__CLOSE],
+          icon: new LIconAction("close", className: LButton.C_BUTTON__ICON,
+              colorOverride: LButton.C_BUTTON__ICON_INVERSE,
+              size: LButton.C_BUTTON__ICON__LARGE),
+          assistiveText: lModalClose());
+      buttonClose.onClick.listen(onClickCancel);
+      header.append(buttonClose.element);
+    }
   }
   /// Set header
   void setHeader(String title, {String tagLine, LIcon icon}) {
@@ -287,8 +337,17 @@ class LModal
     ///
     if (footerElements != null) {
       for (Element fe in footerElements) {
-        if (fe != null)
-          footer.append(fe);
+        if (fe != null) {
+          if (touch) {
+            if (_header_h2 == null) {
+              header.append(fe);
+            } else {
+              header.insertBefore(fe, _header_h2);
+            }
+          } else { // !touch
+            footer.append(fe);
+          }
+        }
       }
     }
   } // setFooter
@@ -300,14 +359,22 @@ class LModal
    */
   LButton addFooterButtons({String saveLabelOverride, bool hideOnSave: true,
       bool addCancel: true, String cancelLabelOverride}) {
-    buttonSave = createSaveButton(label: saveLabelOverride, idPrefix: id);
-    if (hideOnSave)
-      buttonSave.onClick.listen(onClickRemove);
-
-    if (addCancel) {
+    if (addCancel || touch) {
       addFooterCancel(cancelLabel: cancelLabelOverride);
     }
-    footer.append(buttonSave.element);
+    buttonSave = createSaveButton(label: saveLabelOverride, idPrefix: id);
+    if (hideOnSave) {
+      buttonSave.onClick.listen(onClickRemove);
+    }
+    if (touch) {
+      if (_header_h2 == null) {
+        header.append(buttonSave.element);
+      } else {
+        header.insertBefore(buttonSave.element, _header_h2);
+      }
+    } else { // !touch
+      footer.append(buttonSave.element);
+    }
     return buttonSave;
   } // setFooterButtons
 
@@ -319,6 +386,14 @@ class LModal
       footer.append(buttonCancel.element);
       footer.classes.add(C_MODAL__FOOTER__DIRECTIONAL);
     }
+    if (touch) {
+      buttonCancel.element.remove();
+      if (header.children.isEmpty) {
+        header.append(buttonCancel.element);
+      } else {
+        header.insertBefore(buttonCancel.element, header.children.first);
+      }
+    }
   } // addFooterCancel
 
   /**
@@ -326,7 +401,7 @@ class LModal
    */
   void addFooterActions(List<AppsAction> actions,
       {bool addCancel:false, String cancelLabelOverride, bool hideOnAction:true}) {
-    if (addCancel) {
+    if (addCancel || touch) {
       addFooterCancel(cancelLabel:cancelLabelOverride);
     }
     if (actions != null) {
@@ -335,7 +410,15 @@ class LModal
         LButton btn = action.asButton(true, idPrefix: id);
         if (hideOnAction)
           btn.onClick.listen(onClickRemove);
-        footer.append(btn.element);
+        if (touch) {
+          if (_header_h2 == null) {
+            header.append(btn.element);
+          } else {
+            header.insertBefore(btn.element, _header_h2);
+          }
+        } else { // !touch
+          footer.append(btn.element);
+        }
       }
     }
   } // setFooterActions
@@ -346,14 +429,25 @@ class LModal
 
     LButton reset = form.addResetButton();
     reset.element.id = "${id}-reset";
-    footer.append(reset.element);
     LPopover error = form.addErrorIndicator();
     error.element.id = "${id}-error";
-    footer.append(error.element);
     LButton save = form.addSaveButton();
     save.element.id = "${id}-save";
-    footer.append(save.element);
-
+    if (touch) {
+      if (_header_h2 == null) {
+        header.append(error.element);
+        header.append(reset.element);
+        header.append(save.element);
+      } else {
+        header.insertBefore(error.element, _header_h2);
+        header.insertBefore(reset.element, _header_h2);
+        header.insertBefore(save.element, _header_h2);
+      }
+    } else { // !touch
+      footer.append(error.element);
+      footer.append(reset.element);
+      footer.append(save.element);
+    }
     // remove button div
     if (form.buttonDiv != null) {
       form.buttonDiv.remove();
@@ -369,10 +463,10 @@ class LModal
     _dialog.attributes[Html0.ARIA_HIDDEN] = newValue ? "false" : "true";
     if (newValue) {
       _nestedModal(this);
+      _openModals.add(this);
       _dialog.classes.add(C_FADE_IN_OPEN);
       _backdrop.classes.add(C_BACKDROP__OPEN);
       content.focus();
-      _openModals.add(this);
       document.body.classes.add("modal-open");
     } else {
       _dialog.classes.remove(C_FADE_IN_OPEN);
