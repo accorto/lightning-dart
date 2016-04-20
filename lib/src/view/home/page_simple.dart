@@ -57,6 +57,9 @@ class PageSimple
   static const String STATUS_ID_OK = "status-ok";
   static const String STATUS_ID_ERROR = "status-error";
 
+  static const String C_IS_PHONE = "isPhone";
+  static const String C_IS_MOBILE = "isMobile";
+
   /// Outer Page Element
   final Element element;
   /// Status Element
@@ -88,6 +91,11 @@ class PageSimple
       element.parent.append(_statusElement);
     }
     updateTestMode();
+    if (ClientEnv.isPhone)
+      element.classes.add(C_IS_PHONE);
+    if (ClientEnv.isMobileUserAgent)
+      element.classes.add(C_IS_MOBILE);
+
     //
     window.onResize.listen(onWindowResize);
   } // PageSimple

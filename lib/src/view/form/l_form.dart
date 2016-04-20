@@ -347,8 +347,9 @@ class LForm
   }
   LButton _buttonReset;
 
-  /// Add Save Button - use [formSubmitted] to listen to submit events
-  LButton addSaveButton({String label, String title, String name:"save", LIcon icon, bool buttonSaveChangeOnly:true}) {
+  /// Add Save Button (brand) - use [formSubmitted] to listen to submit events
+  LButton addSaveButton({String label, String title, String name:"save",
+      LIcon icon, bool buttonSaveChangeOnly:true}) {
     if (_buttonSave == null) {
       LIcon theIcon = icon;
       if (theIcon == null)

@@ -56,6 +56,8 @@ class LModal
 
   /// slds-modal--small default 50% - 90% max=580
   static const String C_MODAL__SMALL = "slds-modal--small";
+  /// slds-modal--mobile 100%
+  static const String C_MODAL__MOBILE = "slds-modal--mobile";
 
   /// Modal Form (Touch) square header
   static const String C_MODAL__FORM = "slds-modal--form";
@@ -115,11 +117,14 @@ class LModal
     }
   } // nestedModals
 
+  /// touch default
+  static bool touchDefault;
+
 
   /// Outer Element
   final DivElement element = new DivElement();
   /// Touch
-  bool touch;
+  bool touch = false;
 
   final DivElement _dialog = new DivElement()
     ..classes.add(C_MODAL)
@@ -130,6 +135,7 @@ class LModal
   final DivElement header = new DivElement()
     ..classes.add(C_MODAL__HEADER);
   HeadingElement _header_h2;
+  DivElement _header_buttons;
 
   final CDiv content = new CDiv()
     ..classes.addAll([C_MODAL__CONTENT, LPadding.C_AROUND__MEDIUM]);
@@ -164,7 +170,7 @@ class LModal
    *     content    .slds-modal__content
    * _backdrop      .slds-backdrop    .slds-backdrop--open
    */
-  LModal(String idPrefix, {bool this.touch:false}) {
+  LModal(String idPrefix, {bool useTouch}) {
     element.id = idPrefix == null || idPrefix.isEmpty ? LComponent.createId("modal", null) : idPrefix;
     element.append(_dialog);
     _dialog.append(_container);
@@ -173,11 +179,16 @@ class LModal
     _container.append(footer);
     element.append(_backdrop);
     //
-    //
+    if (useTouch == null) {
+      if (touchDefault != null)
+        touch = touchDefault;
+    } else {
+      touch = useTouch;
+    }
     if (ClientEnv.isPhone) {
-      touch = true;
-      //_container.style.width = "100%";
-      //_container.style.margin = "0 auto";
+      mobile = true;
+      if (useTouch == null && touchDefault == null)
+        touch = true;
     }
     if (touch) {
       // header buttons - first float left other float right
@@ -198,9 +209,12 @@ class LModal
   bool get large => _dialog.classes.contains(C_MODAL__LARGE);
   /// Large Modal - 90% 960/640 - default 50%
   void set large (bool newValue) {
+    if (mobile && ClientEnv.isPhone)
+      return;
     if (newValue) {
       _dialog.classes.add(C_MODAL__LARGE);
       _dialog.classes.remove(C_MODAL__SMALL);
+      _dialog.classes.remove(C_MODAL__MOBILE);
     } else
       _dialog.classes.remove(C_MODAL__LARGE);
   }
@@ -209,12 +223,28 @@ class LModal
   bool get small => _dialog.classes.contains(C_MODAL__SMALL);
   /// Small Modal - 90% max=550 - default 50%
   void set small (bool newValue) {
+    if (mobile && ClientEnv.isPhone)
+      return;
     if (newValue) {
       _dialog.classes.add(C_MODAL__SMALL);
       _dialog.classes.remove(C_MODAL__LARGE);
+      _dialog.classes.remove(C_MODAL__MOBILE);
     } else
       _dialog.classes.remove(C_MODAL__SMALL);
   }
+
+  /// Mobile Modal - 100%
+  bool get mobile => _dialog.classes.contains(C_MODAL__MOBILE);
+  /// Mobile Modal
+  void set mobile (bool newValue) {
+    if (newValue) {
+      _dialog.classes.add(C_MODAL__MOBILE);
+      _dialog.classes.remove(C_MODAL__LARGE);
+      _dialog.classes.remove(C_MODAL__SMALL);
+    } else
+      _dialog.classes.remove(C_MODAL__MOBILE);
+  }
+
 
   /**
    * Set Header (and close)
@@ -226,6 +256,8 @@ class LModal
         header.append(buttonCancel.element);
       if (buttonSave != null)
         header.append(buttonSave.element);
+      if (_header_buttons != null)
+        header.append(_header_buttons);
     }
     _header_h2 = h2;
     _header_h2.classes.add(LText.C_TEXT_HEADING__MEDIUM);
@@ -434,18 +466,19 @@ class LModal
     LButton save = form.addSaveButton();
     save.element.id = "${id}-save";
     if (touch) {
+      _header_buttons = new DivElement()
+        ..classes.add("buttons")
+        ..append(reset.element)
+        ..append(error.element)
+        ..append(save.element);
       if (_header_h2 == null) {
-        header.append(error.element);
-        header.append(reset.element);
-        header.append(save.element);
+        header.append(_header_buttons);
       } else {
-        header.insertBefore(error.element, _header_h2);
-        header.insertBefore(reset.element, _header_h2);
-        header.insertBefore(save.element, _header_h2);
+        header.insertBefore(_header_buttons, _header_h2);
       }
     } else { // !touch
-      footer.append(error.element);
       footer.append(reset.element);
+      footer.append(error.element);
       footer.append(save.element);
     }
     // remove button div

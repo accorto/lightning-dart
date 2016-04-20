@@ -22,7 +22,7 @@ class Modals extends DemoFeature {
   LComponent get content {
     CDiv div = new CDiv()
       ..classes.add(LMargin.C_HORIZONTAL__MEDIUM);
-    LModal modal = new LModal("m", touch: optionTouch)
+    LModal modal = new LModal("m", useTouch: optionTouch)
       ..setHeader("The Modal", tagLine: "You can drag me!",
           icon: new LIconStandard(LIconStandard.CAMPAIGN))
       ..addContentText("Notifications have higher z-index than Modals. Some Text to add - you can also add any components or elements")
@@ -34,7 +34,7 @@ class Modals extends DemoFeature {
     div.add(trigger);
 
     // nested
-    LModal modal2 = new LModal("m2", touch: optionTouch)
+    LModal modal2 = new LModal("m2", useTouch: optionTouch)
       ..helpHref = "https://support.accorto.com"
       ..setHeader("The Second Modal", tagLine: "You can drag me!",
           icon: new LIconUtility(LIconUtility.ADDUSER))

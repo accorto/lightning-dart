@@ -7232,6 +7232,9 @@ input[type=number]::-webkit-inner-spin-button.decimal {
     display: inline-block;
     vertical-align: middle;
     margin-bottom: 0; } }
+.proc-static {
+  background-color: aliceblue;
+  border-width: 2px; }
 .rotate-right {
   -webkit-transform: rotate(90deg);
       -ms-transform: rotate(90deg);
@@ -7277,6 +7280,16 @@ input[type=number]::-webkit-inner-spin-button.decimal {
 .slds-modal--small .slds-modal__container {
   width: 90%;
   max-width: 580px; }
+.slds-modal--mobile .slds-modal__container {
+  width: 100%;
+  margin: 0; }
+.slds-modal--form .buttons {
+  float: right; }
+  .slds-modal--form .buttons .pop-wrapper {
+    margin-right: .5rem;
+    margin-left: .5rem; }
+.slds-modal--form .slds-modal__header .slds-button.slds-hide {
+  display: none; }
 .home-popin {
   position: absolute;
   right: 0;

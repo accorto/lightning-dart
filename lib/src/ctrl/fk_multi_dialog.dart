@@ -16,7 +16,7 @@ class FkMultiDialog {
   LModal _modal;
   DivElement _selectDiv = new DivElement()
     ..classes.add(LMargin.C_TOP__MEDIUM)
-    ..style.minHeight = "200px";
+    ..style.minHeight = "230px"; // full page on iP5
 
   final List<DColumn> columnList;
   final List<LLookup> _lookupList = new List<LLookup>();

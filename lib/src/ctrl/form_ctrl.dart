@@ -123,6 +123,8 @@ class FormCtrl
         btn.element.attributes[Html0.DATA_VALUE] = process.processId;
         btn.onClick.listen(onClickProcess);
       }
+      btn.classes.add(process.isInstanceMethod ? "proc-instance" : "proc-static");
+      btn.classes.add(process.isMultiRecord ? "proc-multi-rec" : "proc-single-rec");
       group.add(btn);
     }
     return group;
