@@ -126,7 +126,8 @@ class LLookup
     input
       ..attributes[Html0.ROLE] = Html0.ROLE_COMBOBOX
       ..attributes[Html0.ARIA_AUTOCOMPLETE] = Html0.ARIA_AUTOCOMPLETE_LIST
-      ..attributes[Html0.ARIA_EXPANED] = "false";
+      ..attributes[Html0.ARIA_EXPANED] = "false"
+      ..autocomplete = "off";
     _formElement.labelInputText = lLookupLabel();
     input.name = name;
     id = createId(idPrefix, input.name);
