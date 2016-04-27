@@ -44,7 +44,7 @@ class Settings {
         ..optional = true;
       add(ICON_IMAGE, VALUE_FALSE,
           label:"Icon Image",
-          description: "Icons use path rather than symbol",
+          description: "Icons use path rather than (use)symbol",
           dataType: EditorI.TYPE_CHECKBOX)
         ..optional = true;
       add(GEO_ENABLED, VALUE_FALSE,

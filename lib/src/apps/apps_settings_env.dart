@@ -80,12 +80,10 @@ class AppsSettingsEnvironment
         [ClientEnv.isMobileUserAgent,     ClientEnv.isPhone]);
     table.addRowHdrDataList("Edge/IE | IE11",
         [ClientEnv.isIE,                  ClientEnv.isIE11]);
-    table.addRowHdrDataList("Svg img | direct",
-        [SvgUtil.createImg(),             SvgUtil.createDirect(true)]);
-    table.addRowHdrDataList("Chrome | Svg direct",
-        [ClientEnv.isChrome,              SvgUtil.createDirect(false)]);
-    table.addRowHdrDataList("Icon path",
-        [Settings.getAsBool(Settings.ICON_IMAGE, defaultValue: SvgUtil.createDirect(false)), ""]);
+    table.addRowHdrDataList("Chrome",
+        [ClientEnv.isChrome,              ""]);
+    table.addRowHdrDataList("Icon Image | Svg Direct",
+        [Settings.getAsBool(Settings.ICON_IMAGE, defaultValue: SvgUtil.createIconImage()), SvgUtil.createIconImage()]);
     table.addRowHdrDataList("Iframe",
         [ClientEnv.inIFrame, "page=${window.pageXOffset}/${window.pageYOffset} scroll=${window.scrollX}/${window.scrollY}"]);
     table.addRowHdrDataList("Test Mode",

@@ -214,7 +214,7 @@ class LUtil {
     " border${dumpRectangle(e.borderEdge)}";
 
   /// dump mouse event position (x,y)
-  static String dumpMouse (MouseEvent e) => "(${e.which})"
+  static String dumpMouse (MouseEvent e) => "(${e.button})"
     " offset(${e.offset.x},${e.offset.y})"
     " client(${e.client.x},${e.client.y})"
     " screen(${e.screen.x},${e.screen.y})";

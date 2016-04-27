@@ -191,7 +191,7 @@ class LIcon {
     //
     element.append(_use);
     // replace use with cymbol content
-    if (Settings.getAsBool(Settings.ICON_IMAGE, defaultValue: SvgUtil.createDirect(false))) {
+    if (Settings.getAsBool(Settings.ICON_IMAGE, defaultValue: SvgUtil.createIconImage())) {
       SvgUtil.svgDirect(element, "${packagePrefix}${linkPrefix}", linkName);
     }
   } // LIcon

@@ -13,31 +13,17 @@ class SvgUtil {
 
   static final Logger _log = new Logger("SvgUtil");
 
-  /// Create Img vs. svg
-  static bool createImg() {
-    if (_createImg == null) {
-      _createImg = !document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#BasicStructure", "1.1");
-      if (_createImg) {
-        window.alert("Browser not capable displaying SVG - images not displayed");
-      }
-    }
-    return _createImg;
-  }
-  static bool _createImg;
-
   /// Create svg direct vs. use
-  static bool createDirect(bool implementationOnly) {
-    if (implementationOnly)
-      return !document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#Structure", "1.1");
-    if (_createDirect == null) {
-      _createDirect = !document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#Structure", "1.1");
-      if (!_createDirect) {
-        _createDirect = ClientEnv.isIE11  || ClientEnv.isChrome;
+  static bool createIconImage() {
+    if (_createIconImage == null) {
+      _createIconImage = false; //!document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#Structure", "1.1");
+      if (!_createIconImage) {
+      //  _createDirect = ClientEnv.isIE11  || ClientEnv.isChrome;
       }
     }
-    return _createDirect;
+    return _createIconImage;
   }
-  static bool _createDirect;
+  static bool _createIconImage;
 
   /**
    * Replace use in SVG by content of symbol
