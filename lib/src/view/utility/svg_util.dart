@@ -18,7 +18,7 @@ class SvgUtil {
     if (_createIconImage == null) {
       _createIconImage = false; //!document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#Structure", "1.1");
       if (!_createIconImage) {
-      //  _createDirect = ClientEnv.isIE11  || ClientEnv.isChrome;
+        _createIconImage = ClientEnv.isIE11  || ClientEnv.isChrome;
       }
     }
     return _createIconImage;
