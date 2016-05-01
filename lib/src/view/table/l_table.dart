@@ -276,31 +276,9 @@ class LTable
   StreamSubscription _onScrollSubscription;
   int _scrollHeight;
 
-  /// Showing now - sync
+  /// Showing now - sync height+width
   void showingNow() {
-    if (_overflow == LTableResponsive.NONE || _overflow == LTableResponsive.OVERFLOW_X) {
-      return;
-    }
-    int height = _scrollHeight;
-    if (height == 0) {
-      if (_onScrollSubscription != null) {
-        _wrapper.style.overflowY = "visible";
-        _wrapper.style.removeProperty("height");
-      }
-      Rectangle wrapRect = _wrapper.getBoundingClientRect();
-      if (wrapRect.height == 0)
-        return; // not displayed
-      int winHeight = window.innerHeight;
-      int docHeight = document.body.getBoundingClientRect().height;
-      int hdr = wrapRect.top;
-      int ftr = docHeight - hdr - wrapRect.height;
-      height = winHeight - hdr - ftr;
-      _log.config("showingNow height=${height} win=${winHeight} doc=${docHeight} wrap${wrapRect}");
-    } else {
-      _log.config("showingNow height=${height}");
-    }
-    _wrapper.style.overflowY = "auto";
-    _wrapper.style.height = "${height}px";
+    fixHeight();
     fixWidth(null);
   } // showingNow
 
@@ -410,12 +388,13 @@ class LTable
       if (width == 0) {
         _lastWidth = null;
         if (timer == null && _timer == null) {
-          info += " timer";
+          info += " timer start";
           _timer = new Timer.periodic(new Duration(milliseconds: 250), fixWidth);
           _fixWidthCount = 0;
-        } else if (timer != null) {
+        } else if (timer != null) { // called from timer
           _fixWidthCount++;
-          if (_fixWidthCount > 2) {
+          if (_fixWidthCount > 3) {
+            info += " timer cancel";
             timer.cancel();
             _timer = null;
           }
@@ -459,6 +438,37 @@ class LTable
       w = ow;
     return w;
   } // fixWidthTx
+
+  // fix table wrapper height
+  void fixHeight() {
+    if (_overflow == LTableResponsive.NONE || _overflow == LTableResponsive.OVERFLOW_X) {
+      return;
+    }
+    num height = _scrollHeight;
+    if (_scrollHeight == 0) { // calculate height
+      if (_onScrollSubscription != null) {
+        _wrapper.style.overflowY = "visible";
+        _wrapper.style.removeProperty("height");
+      }
+      Rectangle wrapRect = _wrapper.getBoundingClientRect();
+      if (wrapRect.height == 0) {
+        _log.config("fixHeight NotDisplayed");
+        return; // not displayed
+      }
+      num winHeight = window.innerHeight;
+      num docHeight = document.body.getBoundingClientRect().height;
+      num hdr = wrapRect.top;
+      num ftr = docHeight - hdr - wrapRect.height;
+      height = winHeight - hdr - ftr;
+      _log.config("fixHeight height=${height} win=${winHeight} doc=${docHeight} wrap${wrapRect}");
+    } else {
+      _log.config("fixHeight height=${height}");
+    }
+    _wrapper.style.overflowY = "auto";
+    _wrapper.style.height = "${height}px";
+  } // fixHeight
+
+
 
   /// Table bordered
   bool get bordered => _table.classes.contains(C_TABLE__BORDERED);
@@ -1096,6 +1106,7 @@ class LTable
         tfootRows.remove(_statisticsRow);
       }
     }
+    fixHeight();
     fixWidth(null);
   } // display
   LTableSumRow _statisticsRow;
