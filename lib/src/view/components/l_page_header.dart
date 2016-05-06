@@ -53,6 +53,7 @@ class LPageHeaderBase
    */
   LPageHeaderBase(LIcon icon, String title, String info, {String idPrefix}) {
     element.id = LComponent.createId(idPrefix, "home");
+    icon.classes.add(LIcon.C_ICON__LARGE);
     _media.setIcon(icon);
     ParagraphElement _title = new ParagraphElement()
       ..classes.addAll([LPageHeader.C_PAGE_HEADER__TITLE, LText.C_TRUNCATE, LGrid.C_ALIGN_MIDDLE])

@@ -147,6 +147,7 @@ class LFormElement {
     element.append(elementControl);
 
     if (inGrid) {
+      element.style.display = "inline-block";
       _labelSpan.remove();
       _hintHide = true;
       _hintElement.classes.add(LVisibility.C_HIDE);
@@ -470,7 +471,7 @@ class LFormElement {
   }
 
 
-  /// set max width of control (editor, hint, ..)
+  /// set max width of control (editor, hint, ..) - editors have min-width of 120px in table
   void set maxWidth (String newValue) {
     if (elementControl != null) {
       if (newValue == null || newValue.isEmpty) {
