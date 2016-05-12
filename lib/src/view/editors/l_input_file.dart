@@ -79,9 +79,9 @@ class LInputFile extends LInput {
           List<int> result = resultObject;
           double size = file.size / 1024;
           String info = "${file.name} ${size.toStringAsFixed(1)}k";
-          _log.info("onInputChange ${info}");
           hint = info;
           if (data != null) {
+            _log.info("onInputChange ${info} attachment length=${result.length}");
             data.record.attachmentList.clear();
             data.record.attachmentNameList.clear();
             data.record.attachmentList.add(result);
