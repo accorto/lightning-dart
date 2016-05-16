@@ -616,11 +616,18 @@ class DataRecord {
 
   /**
    * Set Entry [value] by column [id] or column [name] (key)
-   * Update changed + original
+   * Update changed + setOriginal
    */
-  DEntry setValue (String id, String name, String value) {
+  DEntry setValue (String id, String name, String value, {bool valueOriginal:false}) {
     DEntry dataEntry = getEntry(id, name, true);
-    updateEntry(dataEntry, value);
+    if (valueOriginal) { // set
+      dataEntry.valueOriginal = value == null ? NULLVALUE : value;
+      dataEntry.clearValueDisplay();
+      dataEntry.clearValue();
+      dataEntry.clearIsChanged();
+    } else {
+      updateEntry(dataEntry, value); // sets original to previous value
+    }
     return dataEntry;
   } // setValue
 
