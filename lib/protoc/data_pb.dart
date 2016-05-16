@@ -1,6 +1,6 @@
-/**
- * Generated Protocol Buffers code. Do not modify.
- */
+///
+//  Generated code. Do not modify.
+///
 library protoc.data;
 
 import 'package:fixnum/fixnum.dart';
@@ -58,8 +58,8 @@ class DOP extends ProtobufEnum {
     D_NEXT,
   ];
 
-  static final Map<int, DOP> _byValue = ProtobufEnum.initByValue(values);
-  static DOP valueOf(int value) => _byValue[value];
+  static final Map<int, dynamic> _byValue = ProtobufEnum.initByValue(values);
+  static DOP valueOf(int value) => _byValue[value] as DOP;
   static void $checkItem(DOP v) {
     if (v is !DOP) checkItemFailed(v, 'DOP');
   }
@@ -69,29 +69,29 @@ class DOP extends ProtobufEnum {
 
 class DRecord extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('DRecord')
-    ..a(1, 'recordId', PbFieldType.OS)
-    ..a(2, 'tableId', PbFieldType.OS)
-    ..a(3, 'tableName', PbFieldType.OS)
-    ..a(4, 'urv', PbFieldType.OS)
-    ..a(5, 'urvRest', PbFieldType.OS)
-    ..a(6, 'drv', PbFieldType.OS)
-    ..a(7, 'revision', PbFieldType.OS)
-    ..a(8, 'who', PbFieldType.OS)
-    ..a(9, 'query', PbFieldType.OS)
-    ..a(10, 'etag', PbFieldType.OS)
-    ..a(11, 'svrMsg', PbFieldType.OS)
-    ..a(12, 'isChanged', PbFieldType.OB)
-    ..a(13, 'isReadOnly', PbFieldType.OB)
-    ..a(15, 'isExcluded', PbFieldType.OB)
-    ..a(16, 'isReadOnlyCalc', PbFieldType.OB)
-    ..a(18, 'isSelected', PbFieldType.OB)
-    ..a(19, 'isMatchFind', PbFieldType.OB)
-    ..pp(20, 'entry', PbFieldType.PM, DEntry.$checkItem, DEntry.create)
-    ..a(21, 'parent', PbFieldType.OM, DRecord.getDefault, DRecord.create)
-    ..a(22, 'isGroupBy', PbFieldType.OB)
-    ..pp(23, 'stat', PbFieldType.PM, DStatistics.$checkItem, DStatistics.create)
-    ..p(24, 'attachment', PbFieldType.PY)
-    ..p(25, 'attachmentName', PbFieldType.PS)
+    ..a/*<String>*/(1, 'recordId', PbFieldType.OS)
+    ..a/*<String>*/(2, 'tableId', PbFieldType.OS)
+    ..a/*<String>*/(3, 'tableName', PbFieldType.OS)
+    ..a/*<String>*/(4, 'urv', PbFieldType.OS)
+    ..a/*<String>*/(5, 'urvRest', PbFieldType.OS)
+    ..a/*<String>*/(6, 'drv', PbFieldType.OS)
+    ..a/*<String>*/(7, 'revision', PbFieldType.OS)
+    ..a/*<String>*/(8, 'who', PbFieldType.OS)
+    ..a/*<String>*/(9, 'query', PbFieldType.OS)
+    ..a/*<String>*/(10, 'etag', PbFieldType.OS)
+    ..a/*<String>*/(11, 'svrMsg', PbFieldType.OS)
+    ..a/*<bool>*/(12, 'isChanged', PbFieldType.OB)
+    ..a/*<bool>*/(13, 'isReadOnly', PbFieldType.OB)
+    ..a/*<bool>*/(15, 'isExcluded', PbFieldType.OB)
+    ..a/*<bool>*/(16, 'isReadOnlyCalc', PbFieldType.OB)
+    ..a/*<bool>*/(18, 'isSelected', PbFieldType.OB)
+    ..a/*<bool>*/(19, 'isMatchFind', PbFieldType.OB)
+    ..pp/*<DEntry>*/(20, 'entry', PbFieldType.PM, DEntry.$checkItem, DEntry.create)
+    ..a/*<DRecord>*/(21, 'parent', PbFieldType.OM, DRecord.getDefault, DRecord.create)
+    ..a/*<bool>*/(22, 'isGroupBy', PbFieldType.OB)
+    ..pp/*<DStatistics>*/(23, 'stat', PbFieldType.PM, DStatistics.$checkItem, DStatistics.create)
+    ..p/*<List<int>>*/(24, 'attachment', PbFieldType.PY)
+    ..p/*<String>*/(25, 'attachmentName', PbFieldType.PS)
     ..hasRequiredFields = false
   ;
 
@@ -219,15 +219,15 @@ class _ReadonlyDRecord extends DRecord with ReadonlyMessageMixin {}
 
 class DEntry extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('DEntry')
-    ..a(1, 'columnId', PbFieldType.OS)
-    ..a(2, 'columnName', PbFieldType.OS)
-    ..a(3, 'value', PbFieldType.OS)
-    ..a(4, 'isChanged', PbFieldType.OB)
-    ..a(5, 'valueOriginal', PbFieldType.OS)
-    ..a(6, 'valueDisplay', PbFieldType.OS)
-    ..a(7, 'isReadOnlyCalc', PbFieldType.OB)
-    ..a(8, 'isMandatoryCalc', PbFieldType.OB)
-    ..a(9, 'isDisplayCalc', PbFieldType.OB)
+    ..a/*<String>*/(1, 'columnId', PbFieldType.OS)
+    ..a/*<String>*/(2, 'columnName', PbFieldType.OS)
+    ..a/*<String>*/(3, 'value', PbFieldType.OS)
+    ..a/*<bool>*/(4, 'isChanged', PbFieldType.OB)
+    ..a/*<String>*/(5, 'valueOriginal', PbFieldType.OS)
+    ..a/*<String>*/(6, 'valueDisplay', PbFieldType.OS)
+    ..a/*<bool>*/(7, 'isReadOnlyCalc', PbFieldType.OB)
+    ..a/*<bool>*/(8, 'isMandatoryCalc', PbFieldType.OB)
+    ..a/*<bool>*/(9, 'isDisplayCalc', PbFieldType.OB)
     ..hasRequiredFields = false
   ;
 
@@ -297,15 +297,15 @@ class _ReadonlyDEntry extends DEntry with ReadonlyMessageMixin {}
 
 class DStatistics extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('DStatistics')
-    ..a(1, 'columnId', PbFieldType.OS)
-    ..a(2, 'columnName', PbFieldType.OS)
-    ..a(3, 'isLocal', PbFieldType.OB)
-    ..a(5, 'countTotal', PbFieldType.O3)
-    ..a(6, 'countNotNull', PbFieldType.O3)
-    ..a(10, 'minValue', PbFieldType.OD)
-    ..a(11, 'maxValue', PbFieldType.OD)
-    ..a(15, 'sumValue', PbFieldType.OD)
-    ..a(16, 'avgValue', PbFieldType.OD)
+    ..a/*<String>*/(1, 'columnId', PbFieldType.OS)
+    ..a/*<String>*/(2, 'columnName', PbFieldType.OS)
+    ..a/*<bool>*/(3, 'isLocal', PbFieldType.OB)
+    ..a/*<int>*/(5, 'countTotal', PbFieldType.O3)
+    ..a/*<int>*/(6, 'countNotNull', PbFieldType.O3)
+    ..a/*<double>*/(10, 'minValue', PbFieldType.OD)
+    ..a/*<double>*/(11, 'maxValue', PbFieldType.OD)
+    ..a/*<double>*/(15, 'sumValue', PbFieldType.OD)
+    ..a/*<double>*/(16, 'avgValue', PbFieldType.OD)
     ..hasRequiredFields = false
   ;
 
@@ -375,15 +375,15 @@ class _ReadonlyDStatistics extends DStatistics with ReadonlyMessageMixin {}
 
 class DFilter extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('DFilter')
-    ..a(1, 'columnName', PbFieldType.QS)
-    ..e(2, 'operation', PbFieldType.QE, DOP.EQ, DOP.valueOf)
-    ..e(3, 'operationDate', PbFieldType.OE, DOP.EQ, DOP.valueOf)
-    ..e(4, 'dataType', PbFieldType.OE, DataType.STRING, DataType.valueOf)
-    ..a(5, 'filterValue', PbFieldType.OS)
-    ..a(6, 'filterValueTo', PbFieldType.OS)
-    ..p(7, 'filterIn', PbFieldType.PS)
-    ..a(10, 'isReadOnly', PbFieldType.OB)
-    ..a(11, 'filterDirectQuery', PbFieldType.OS)
+    ..a/*<String>*/(1, 'columnName', PbFieldType.QS)
+    ..e/*<DOP>*/(2, 'operation', PbFieldType.QE, DOP.EQ, DOP.valueOf)
+    ..e/*<DOP>*/(3, 'operationDate', PbFieldType.OE, DOP.EQ, DOP.valueOf)
+    ..e/*<DataType>*/(4, 'dataType', PbFieldType.OE, DataType.STRING, DataType.valueOf)
+    ..a/*<String>*/(5, 'filterValue', PbFieldType.OS)
+    ..a/*<String>*/(6, 'filterValueTo', PbFieldType.OS)
+    ..p/*<String>*/(7, 'filterIn', PbFieldType.PS)
+    ..a/*<bool>*/(10, 'isReadOnly', PbFieldType.OB)
+    ..a/*<String>*/(11, 'filterDirectQuery', PbFieldType.OS)
   ;
 
   DFilter() : super();
@@ -449,9 +449,9 @@ class _ReadonlyDFilter extends DFilter with ReadonlyMessageMixin {}
 
 class DSort extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('DSort')
-    ..a(1, 'columnName', PbFieldType.QS)
-    ..a(2, 'isAscending', PbFieldType.OB, true)
-    ..a(3, 'isGroupBy', PbFieldType.OB)
+    ..a/*<String>*/(1, 'columnName', PbFieldType.QS)
+    ..a/*<bool>*/(2, 'isAscending', PbFieldType.OB, true)
+    ..a/*<bool>*/(3, 'isGroupBy', PbFieldType.OB)
   ;
 
   DSort() : super();
@@ -490,11 +490,11 @@ class _ReadonlyDSort extends DSort with ReadonlyMessageMixin {}
 
 class DFK extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('DFK')
-    ..a(1, 'id', PbFieldType.QS)
-    ..a(2, 'drv', PbFieldType.OS)
-    ..a(3, 'urv', PbFieldType.OS)
-    ..a(4, 'tableName', PbFieldType.OS)
-    ..pp(10, 'entry', PbFieldType.PM, DEntry.$checkItem, DEntry.create)
+    ..a/*<String>*/(1, 'id', PbFieldType.QS)
+    ..a/*<String>*/(2, 'drv', PbFieldType.OS)
+    ..a/*<String>*/(3, 'urv', PbFieldType.OS)
+    ..a/*<String>*/(4, 'tableName', PbFieldType.OS)
+    ..pp/*<DEntry>*/(10, 'entry', PbFieldType.PM, DEntry.$checkItem, DEntry.create)
   ;
 
   DFK() : super();
@@ -540,17 +540,17 @@ class _ReadonlyDFK extends DFK with ReadonlyMessageMixin {}
 
 class SavedQuery extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('SavedQuery')
-    ..a(1, 'savedQueryId', PbFieldType.OS)
-    ..a(2, 'name', PbFieldType.QS)
-    ..a(3, 'description', PbFieldType.OS)
-    ..a(4, 'tableName', PbFieldType.QS)
-    ..a(5, 'userId', PbFieldType.OS)
-    ..a(6, 'isDefault', PbFieldType.OB)
-    ..a(9, 'sqlWhere', PbFieldType.OS)
-    ..pp(10, 'filter', PbFieldType.PM, DFilter.$checkItem, DFilter.create)
-    ..a(11, 'filterLogic', PbFieldType.OS)
-    ..pp(13, 'sort', PbFieldType.PM, DSort.$checkItem, DSort.create)
-    ..a(14, 'isUpsert', PbFieldType.OB)
+    ..a/*<String>*/(1, 'savedQueryId', PbFieldType.OS)
+    ..a/*<String>*/(2, 'name', PbFieldType.QS)
+    ..a/*<String>*/(3, 'description', PbFieldType.OS)
+    ..a/*<String>*/(4, 'tableName', PbFieldType.QS)
+    ..a/*<String>*/(5, 'userId', PbFieldType.OS)
+    ..a/*<bool>*/(6, 'isDefault', PbFieldType.OB)
+    ..a/*<String>*/(9, 'sqlWhere', PbFieldType.OS)
+    ..pp/*<DFilter>*/(10, 'filter', PbFieldType.PM, DFilter.$checkItem, DFilter.create)
+    ..a/*<String>*/(11, 'filterLogic', PbFieldType.OS)
+    ..pp/*<DSort>*/(13, 'sort', PbFieldType.PM, DSort.$checkItem, DSort.create)
+    ..a/*<bool>*/(14, 'isUpsert', PbFieldType.OB)
   ;
 
   SavedQuery() : super();
@@ -623,17 +623,17 @@ class _ReadonlySavedQuery extends SavedQuery with ReadonlyMessageMixin {}
 
 class Recent extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('Recent')
-    ..a(1, 'userRecentId', PbFieldType.OS)
-    ..a(2, 'userId', PbFieldType.OS)
-    ..a(3, 'isActive', PbFieldType.OB, true)
-    ..a(4, 'recentTime', PbFieldType.O6, Int64.ZERO)
-    ..a(5, 'recordId', PbFieldType.OS)
-    ..a(6, 'action', PbFieldType.QS)
-    ..a(7, 'label', PbFieldType.OS)
-    ..a(8, 'recentType', PbFieldType.OS)
-    ..a(9, 'recentTypeLabel', PbFieldType.OS)
-    ..a(10, 'iconImage', PbFieldType.OS)
-    ..a(11, 'isWriteAccess', PbFieldType.OB)
+    ..a/*<String>*/(1, 'userRecentId', PbFieldType.OS)
+    ..a/*<String>*/(2, 'userId', PbFieldType.OS)
+    ..a/*<bool>*/(3, 'isActive', PbFieldType.OB, true)
+    ..a/*<Int64>*/(4, 'recentTime', PbFieldType.O6, Int64.ZERO)
+    ..a/*<String>*/(5, 'recordId', PbFieldType.OS)
+    ..a/*<String>*/(6, 'action', PbFieldType.QS)
+    ..a/*<String>*/(7, 'label', PbFieldType.OS)
+    ..a/*<String>*/(8, 'recentType', PbFieldType.OS)
+    ..a/*<String>*/(9, 'recentTypeLabel', PbFieldType.OS)
+    ..a/*<String>*/(10, 'iconImage', PbFieldType.OS)
+    ..a/*<bool>*/(11, 'isWriteAccess', PbFieldType.OB)
   ;
 
   Recent() : super();

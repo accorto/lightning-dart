@@ -1,6 +1,6 @@
-/**
- * Generated Protocol Buffers code. Do not modify.
- */
+///
+//  Generated code. Do not modify.
+///
 library protoc.display;
 
 import 'package:protobuf/protobuf.dart';
@@ -22,8 +22,8 @@ class UILabelPosition extends ProtobufEnum {
     NONE,
   ];
 
-  static final Map<int, UILabelPosition> _byValue = ProtobufEnum.initByValue(values);
-  static UILabelPosition valueOf(int value) => _byValue[value];
+  static final Map<int, dynamic> _byValue = ProtobufEnum.initByValue(values);
+  static UILabelPosition valueOf(int value) => _byValue[value] as UILabelPosition;
   static void $checkItem(UILabelPosition v) {
     if (v is !UILabelPosition) checkItemFailed(v, 'UILabelPosition');
   }
@@ -44,8 +44,8 @@ class UIPanelType extends ProtobufEnum {
     HIDDEN,
   ];
 
-  static final Map<int, UIPanelType> _byValue = ProtobufEnum.initByValue(values);
-  static UIPanelType valueOf(int value) => _byValue[value];
+  static final Map<int, dynamic> _byValue = ProtobufEnum.initByValue(values);
+  static UIPanelType valueOf(int value) => _byValue[value] as UIPanelType;
   static void $checkItem(UIPanelType v) {
     if (v is !UIPanelType) checkItemFailed(v, 'UIPanelType');
   }
@@ -55,40 +55,40 @@ class UIPanelType extends ProtobufEnum {
 
 class UI extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('UI')
-    ..a(1, 'uiId', PbFieldType.OS)
-    ..a(2, 'name', PbFieldType.QS)
-    ..a(3, 'label', PbFieldType.OS)
-    ..a(4, 'description', PbFieldType.OS)
-    ..a(5, 'tenantId', PbFieldType.OS)
-    ..a(6, 'roleId', PbFieldType.OS)
-    ..a(7, 'userId', PbFieldType.OS)
-    ..a(8, 'etag', PbFieldType.OS)
-    ..pp(9, 'display', PbFieldType.PM, UIInfo.$checkItem, UIInfo.create)
-    ..a(10, 'table', PbFieldType.OM, DTable.getDefault, DTable.create)
-    ..a(11, 'tableId', PbFieldType.OS)
-    ..a(12, 'tableName', PbFieldType.OS)
-    ..a(13, 'externalKey', PbFieldType.OS)
-    ..a(15, 'isCanDelete', PbFieldType.OB, true)
-    ..a(16, 'isCanInsert', PbFieldType.OB, true)
-    ..a(17, 'isReadOnly', PbFieldType.OB)
-    ..a(20, 'isDefaultGridMode', PbFieldType.OB, true)
-    ..a(21, 'isShowIndicators', PbFieldType.OB)
-    ..a(22, 'gridType', PbFieldType.OS)
-    ..a(25, 'isShowGraph', PbFieldType.OB, true)
-    ..a(26, 'graphType', PbFieldType.OS)
-    ..a(27, 'graphWhat', PbFieldType.OS)
-    ..a(28, 'graphBy', PbFieldType.OS)
-    ..pp(30, 'gridColumn', PbFieldType.PM, UIGridColumn.$checkItem, UIGridColumn.create)
-    ..pp(31, 'panel', PbFieldType.PM, UIPanel.$checkItem, UIPanel.create)
-    ..pp(32, 'process', PbFieldType.PM, UIProcess.$checkItem, UIProcess.create)
-    ..pp(33, 'link', PbFieldType.PM, UILink.$checkItem, UILink.create)
-    ..pp(34, 'queryColumn', PbFieldType.PM, UIQueryColumn.$checkItem, UIQueryColumn.create)
-    ..pp(35, 'savedQuery', PbFieldType.PM, SavedQuery.$checkItem, SavedQuery.create)
-    ..a(40, 'isAlwaysQuery', PbFieldType.OB)
-    ..a(44, 'isGridFind', PbFieldType.OB, true)
-    ..a(45, 'isIncludeStats', PbFieldType.OB, true)
-    ..pp(50, 'filter', PbFieldType.PM, DFilter.$checkItem, DFilter.create)
-    ..pp(51, 'sort', PbFieldType.PM, DSort.$checkItem, DSort.create)
+    ..a/*<String>*/(1, 'uiId', PbFieldType.OS)
+    ..a/*<String>*/(2, 'name', PbFieldType.QS)
+    ..a/*<String>*/(3, 'label', PbFieldType.OS)
+    ..a/*<String>*/(4, 'description', PbFieldType.OS)
+    ..a/*<String>*/(5, 'tenantId', PbFieldType.OS)
+    ..a/*<String>*/(6, 'roleId', PbFieldType.OS)
+    ..a/*<String>*/(7, 'userId', PbFieldType.OS)
+    ..a/*<String>*/(8, 'etag', PbFieldType.OS)
+    ..pp/*<UIInfo>*/(9, 'display', PbFieldType.PM, UIInfo.$checkItem, UIInfo.create)
+    ..a/*<DTable>*/(10, 'table', PbFieldType.OM, DTable.getDefault, DTable.create)
+    ..a/*<String>*/(11, 'tableId', PbFieldType.OS)
+    ..a/*<String>*/(12, 'tableName', PbFieldType.OS)
+    ..a/*<String>*/(13, 'externalKey', PbFieldType.OS)
+    ..a/*<bool>*/(15, 'isCanDelete', PbFieldType.OB, true)
+    ..a/*<bool>*/(16, 'isCanInsert', PbFieldType.OB, true)
+    ..a/*<bool>*/(17, 'isReadOnly', PbFieldType.OB)
+    ..a/*<bool>*/(20, 'isDefaultGridMode', PbFieldType.OB, true)
+    ..a/*<bool>*/(21, 'isShowIndicators', PbFieldType.OB)
+    ..a/*<String>*/(22, 'gridType', PbFieldType.OS)
+    ..a/*<bool>*/(25, 'isShowGraph', PbFieldType.OB, true)
+    ..a/*<String>*/(26, 'graphType', PbFieldType.OS)
+    ..a/*<String>*/(27, 'graphWhat', PbFieldType.OS)
+    ..a/*<String>*/(28, 'graphBy', PbFieldType.OS)
+    ..pp/*<UIGridColumn>*/(30, 'gridColumn', PbFieldType.PM, UIGridColumn.$checkItem, UIGridColumn.create)
+    ..pp/*<UIPanel>*/(31, 'panel', PbFieldType.PM, UIPanel.$checkItem, UIPanel.create)
+    ..pp/*<UIProcess>*/(32, 'process', PbFieldType.PM, UIProcess.$checkItem, UIProcess.create)
+    ..pp/*<UILink>*/(33, 'link', PbFieldType.PM, UILink.$checkItem, UILink.create)
+    ..pp/*<UIQueryColumn>*/(34, 'queryColumn', PbFieldType.PM, UIQueryColumn.$checkItem, UIQueryColumn.create)
+    ..pp/*<SavedQuery>*/(35, 'savedQuery', PbFieldType.PM, SavedQuery.$checkItem, SavedQuery.create)
+    ..a/*<bool>*/(40, 'isAlwaysQuery', PbFieldType.OB)
+    ..a/*<bool>*/(44, 'isGridFind', PbFieldType.OB, true)
+    ..a/*<bool>*/(45, 'isIncludeStats', PbFieldType.OB, true)
+    ..pp/*<DFilter>*/(50, 'filter', PbFieldType.PM, DFilter.$checkItem, DFilter.create)
+    ..pp/*<DSort>*/(51, 'sort', PbFieldType.PM, DSort.$checkItem, DSort.create)
   ;
 
   UI() : super();
@@ -255,17 +255,17 @@ class _ReadonlyUI extends UI with ReadonlyMessageMixin {}
 
 class UIInfo extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('UIInfo')
-    ..a(1, 'uiId', PbFieldType.OS)
-    ..a(2, 'uiName', PbFieldType.OS)
-    ..a(3, 'label', PbFieldType.OS)
-    ..a(4, 'description', PbFieldType.OS)
-    ..a(5, 'tableName', PbFieldType.OS)
-    ..a(9, 'etag', PbFieldType.OS)
-    ..a(10, 'withTable', PbFieldType.OB, true)
-    ..a(15, 'iconImage', PbFieldType.OS)
-    ..a(16, 'tenantId', PbFieldType.OS)
-    ..a(17, 'roleId', PbFieldType.OS)
-    ..a(18, 'userId', PbFieldType.OS)
+    ..a/*<String>*/(1, 'uiId', PbFieldType.OS)
+    ..a/*<String>*/(2, 'uiName', PbFieldType.OS)
+    ..a/*<String>*/(3, 'label', PbFieldType.OS)
+    ..a/*<String>*/(4, 'description', PbFieldType.OS)
+    ..a/*<String>*/(5, 'tableName', PbFieldType.OS)
+    ..a/*<String>*/(9, 'etag', PbFieldType.OS)
+    ..a/*<bool>*/(10, 'withTable', PbFieldType.OB, true)
+    ..a/*<String>*/(15, 'iconImage', PbFieldType.OS)
+    ..a/*<String>*/(16, 'tenantId', PbFieldType.OS)
+    ..a/*<String>*/(17, 'roleId', PbFieldType.OS)
+    ..a/*<String>*/(18, 'userId', PbFieldType.OS)
     ..hasRequiredFields = false
   ;
 
@@ -345,16 +345,16 @@ class _ReadonlyUIInfo extends UIInfo with ReadonlyMessageMixin {}
 
 class UIGridColumn extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('UIGridColumn')
-    ..a(1, 'uiGridColumnId', PbFieldType.OS)
-    ..a(2, 'column', PbFieldType.OM, DColumn.getDefault, DColumn.create)
-    ..a(3, 'columnId', PbFieldType.OS)
-    ..a(4, 'columnName', PbFieldType.OS)
-    ..a(7, 'isActive', PbFieldType.OB, true)
-    ..a(10, 'seqNo', PbFieldType.O3)
-    ..a(11, 'label', PbFieldType.OS)
-    ..a(12, 'width', PbFieldType.O3)
-    ..a(15, 'panelColumn', PbFieldType.OM, UIPanelColumn.getDefault, UIPanelColumn.create)
-    ..a(50, 'updateFlag', PbFieldType.OS)
+    ..a/*<String>*/(1, 'uiGridColumnId', PbFieldType.OS)
+    ..a/*<DColumn>*/(2, 'column', PbFieldType.OM, DColumn.getDefault, DColumn.create)
+    ..a/*<String>*/(3, 'columnId', PbFieldType.OS)
+    ..a/*<String>*/(4, 'columnName', PbFieldType.OS)
+    ..a/*<bool>*/(7, 'isActive', PbFieldType.OB, true)
+    ..a/*<int>*/(10, 'seqNo', PbFieldType.O3)
+    ..a/*<String>*/(11, 'label', PbFieldType.OS)
+    ..a/*<int>*/(12, 'width', PbFieldType.O3)
+    ..a/*<UIPanelColumn>*/(15, 'panelColumn', PbFieldType.OM, UIPanelColumn.getDefault, UIPanelColumn.create)
+    ..a/*<String>*/(50, 'updateFlag', PbFieldType.OS)
   ;
 
   UIGridColumn() : super();
@@ -428,22 +428,22 @@ class _ReadonlyUIGridColumn extends UIGridColumn with ReadonlyMessageMixin {}
 
 class UIPanel extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('UIPanel')
-    ..a(1, 'uiPanelId', PbFieldType.OS)
-    ..a(2, 'name', PbFieldType.QS)
-    ..a(4, 'description', PbFieldType.OS)
-    ..a(5, 'help', PbFieldType.OS)
-    ..a(6, 'tutorialUrl', PbFieldType.OS)
-    ..a(7, 'isActive', PbFieldType.OB, true)
-    ..a(8, 'isExpert', PbFieldType.OB)
-    ..a(9, 'iconClass', PbFieldType.OS)
-    ..a(10, 'seqNo', PbFieldType.O3)
-    ..e(11, 'type', PbFieldType.OE, UIPanelType.DISPLAYED, UIPanelType.valueOf)
-    ..e(12, 'labelPosition', PbFieldType.OE, UILabelPosition.LEFT, UILabelPosition.valueOf)
-    ..a(13, 'fieldInputWidth', PbFieldType.O3, 8)
-    ..a(15, 'displayLogic', PbFieldType.OS)
-    ..a(16, 'panelColumnNumber', PbFieldType.O3, 2)
-    ..pp(20, 'panelColumn', PbFieldType.PM, UIPanelColumn.$checkItem, UIPanelColumn.create)
-    ..a(50, 'updateFlag', PbFieldType.OS)
+    ..a/*<String>*/(1, 'uiPanelId', PbFieldType.OS)
+    ..a/*<String>*/(2, 'name', PbFieldType.QS)
+    ..a/*<String>*/(4, 'description', PbFieldType.OS)
+    ..a/*<String>*/(5, 'help', PbFieldType.OS)
+    ..a/*<String>*/(6, 'tutorialUrl', PbFieldType.OS)
+    ..a/*<bool>*/(7, 'isActive', PbFieldType.OB, true)
+    ..a/*<bool>*/(8, 'isExpert', PbFieldType.OB)
+    ..a/*<String>*/(9, 'iconClass', PbFieldType.OS)
+    ..a/*<int>*/(10, 'seqNo', PbFieldType.O3)
+    ..e/*<UIPanelType>*/(11, 'type', PbFieldType.OE, UIPanelType.DISPLAYED, UIPanelType.valueOf)
+    ..e/*<UILabelPosition>*/(12, 'labelPosition', PbFieldType.OE, UILabelPosition.LEFT, UILabelPosition.valueOf)
+    ..a/*<int>*/(13, 'fieldInputWidth', PbFieldType.O3, 8)
+    ..a/*<String>*/(15, 'displayLogic', PbFieldType.OS)
+    ..a/*<int>*/(16, 'panelColumnNumber', PbFieldType.O3, 2)
+    ..pp/*<UIPanelColumn>*/(20, 'panelColumn', PbFieldType.PM, UIPanelColumn.$checkItem, UIPanelColumn.create)
+    ..a/*<String>*/(50, 'updateFlag', PbFieldType.OS)
   ;
 
   UIPanel() : super();
@@ -544,26 +544,26 @@ class _ReadonlyUIPanel extends UIPanel with ReadonlyMessageMixin {}
 
 class UIPanelColumn extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('UIPanelColumn')
-    ..a(1, 'uiPanelColumnId', PbFieldType.OS)
-    ..a(2, 'column', PbFieldType.OM, DColumn.getDefault, DColumn.create)
-    ..a(3, 'columnId', PbFieldType.OS)
-    ..a(4, 'columnName', PbFieldType.OS)
-    ..a(5, 'externalKey', PbFieldType.OS)
-    ..a(7, 'isActive', PbFieldType.OB, true)
-    ..a(8, 'isExpert', PbFieldType.OB)
-    ..a(10, 'seqNo', PbFieldType.O3)
-    ..a(11, 'label', PbFieldType.OS)
-    ..a(12, 'width', PbFieldType.O3, 1)
-    ..a(13, 'height', PbFieldType.O3, 1)
-    ..a(20, 'isNewRow', PbFieldType.OB)
-    ..a(21, 'isReadOnly', PbFieldType.OB)
-    ..a(22, 'isMandatory', PbFieldType.OB)
-    ..a(25, 'displayLogic', PbFieldType.OS)
-    ..a(26, 'readOnlyLogic', PbFieldType.OS)
-    ..a(27, 'mandatoryLogic', PbFieldType.OS)
-    ..a(28, 'isAlternativeDisplay', PbFieldType.OB)
-    ..a(29, 'defaultValue', PbFieldType.OS)
-    ..a(30, 'updateFlag', PbFieldType.OS)
+    ..a/*<String>*/(1, 'uiPanelColumnId', PbFieldType.OS)
+    ..a/*<DColumn>*/(2, 'column', PbFieldType.OM, DColumn.getDefault, DColumn.create)
+    ..a/*<String>*/(3, 'columnId', PbFieldType.OS)
+    ..a/*<String>*/(4, 'columnName', PbFieldType.OS)
+    ..a/*<String>*/(5, 'externalKey', PbFieldType.OS)
+    ..a/*<bool>*/(7, 'isActive', PbFieldType.OB, true)
+    ..a/*<bool>*/(8, 'isExpert', PbFieldType.OB)
+    ..a/*<int>*/(10, 'seqNo', PbFieldType.O3)
+    ..a/*<String>*/(11, 'label', PbFieldType.OS)
+    ..a/*<int>*/(12, 'width', PbFieldType.O3, 1)
+    ..a/*<int>*/(13, 'height', PbFieldType.O3, 1)
+    ..a/*<bool>*/(20, 'isNewRow', PbFieldType.OB)
+    ..a/*<bool>*/(21, 'isReadOnly', PbFieldType.OB)
+    ..a/*<bool>*/(22, 'isMandatory', PbFieldType.OB)
+    ..a/*<String>*/(25, 'displayLogic', PbFieldType.OS)
+    ..a/*<String>*/(26, 'readOnlyLogic', PbFieldType.OS)
+    ..a/*<String>*/(27, 'mandatoryLogic', PbFieldType.OS)
+    ..a/*<bool>*/(28, 'isAlternativeDisplay', PbFieldType.OB)
+    ..a/*<String>*/(29, 'defaultValue', PbFieldType.OS)
+    ..a/*<String>*/(30, 'updateFlag', PbFieldType.OS)
   ;
 
   UIPanelColumn() : super();
@@ -687,31 +687,31 @@ class _ReadonlyUIPanelColumn extends UIPanelColumn with ReadonlyMessageMixin {}
 
 class UIProcess extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('UIProcess')
-    ..a(1, 'uiProcessId', PbFieldType.OS)
-    ..a(2, 'processId', PbFieldType.OS)
-    ..a(3, 'name', PbFieldType.QS)
-    ..a(4, 'processExternalKey', PbFieldType.OS)
-    ..a(5, 'label', PbFieldType.OS)
-    ..a(6, 'description', PbFieldType.OS)
-    ..a(7, 'help', PbFieldType.OS)
-    ..a(8, 'tutorialUrl', PbFieldType.OS)
-    ..a(9, 'isActive', PbFieldType.OB, true)
-    ..a(10, 'isExpert', PbFieldType.OB)
-    ..a(11, 'seqNo', PbFieldType.O3)
-    ..a(12, 'isInstanceMethod', PbFieldType.OB, true)
-    ..a(13, 'isCallout', PbFieldType.OB)
-    ..a(14, 'isMultiRecord', PbFieldType.OB)
-    ..a(15, 'tableName', PbFieldType.OS)
-    ..a(16, 'processTypeName', PbFieldType.OS)
-    ..a(17, 'buttonStyle', PbFieldType.OS)
-    ..a(18, 'iconImage', PbFieldType.OS)
-    ..a(19, 'color', PbFieldType.OS)
-    ..a(20, 'logic', PbFieldType.OS)
-    ..a(21, 'webHookUrl', PbFieldType.OS)
-    ..a(22, 'webLinkUrl', PbFieldType.OS)
-    ..a(23, 'webLocation', PbFieldType.OS)
-    ..pp(29, 'parameter', PbFieldType.PM, DProperty.$checkItem, DProperty.create)
-    ..a(30, 'updateFlag', PbFieldType.OS)
+    ..a/*<String>*/(1, 'uiProcessId', PbFieldType.OS)
+    ..a/*<String>*/(2, 'processId', PbFieldType.OS)
+    ..a/*<String>*/(3, 'name', PbFieldType.QS)
+    ..a/*<String>*/(4, 'processExternalKey', PbFieldType.OS)
+    ..a/*<String>*/(5, 'label', PbFieldType.OS)
+    ..a/*<String>*/(6, 'description', PbFieldType.OS)
+    ..a/*<String>*/(7, 'help', PbFieldType.OS)
+    ..a/*<String>*/(8, 'tutorialUrl', PbFieldType.OS)
+    ..a/*<bool>*/(9, 'isActive', PbFieldType.OB, true)
+    ..a/*<bool>*/(10, 'isExpert', PbFieldType.OB)
+    ..a/*<int>*/(11, 'seqNo', PbFieldType.O3)
+    ..a/*<bool>*/(12, 'isInstanceMethod', PbFieldType.OB, true)
+    ..a/*<bool>*/(13, 'isCallout', PbFieldType.OB)
+    ..a/*<bool>*/(14, 'isMultiRecord', PbFieldType.OB)
+    ..a/*<String>*/(15, 'tableName', PbFieldType.OS)
+    ..a/*<String>*/(16, 'processTypeName', PbFieldType.OS)
+    ..a/*<String>*/(17, 'buttonStyle', PbFieldType.OS)
+    ..a/*<String>*/(18, 'iconImage', PbFieldType.OS)
+    ..a/*<String>*/(19, 'color', PbFieldType.OS)
+    ..a/*<String>*/(20, 'logic', PbFieldType.OS)
+    ..a/*<String>*/(21, 'webHookUrl', PbFieldType.OS)
+    ..a/*<String>*/(22, 'webLinkUrl', PbFieldType.OS)
+    ..a/*<String>*/(23, 'webLocation', PbFieldType.OS)
+    ..pp/*<DProperty>*/(29, 'parameter', PbFieldType.PM, DProperty.$checkItem, DProperty.create)
+    ..a/*<String>*/(30, 'updateFlag', PbFieldType.OS)
   ;
 
   UIProcess() : super();
@@ -857,27 +857,27 @@ class _ReadonlyUIProcess extends UIProcess with ReadonlyMessageMixin {}
 
 class UILink extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('UILink')
-    ..a(1, 'uiLinkId', PbFieldType.OS)
-    ..a(2, 'uiRelatedId', PbFieldType.OS)
-    ..a(3, 'uiRelatedName', PbFieldType.OS)
-    ..a(4, 'isActive', PbFieldType.OB, true)
-    ..a(5, 'seqNo', PbFieldType.O3)
-    ..a(8, 'isExpert', PbFieldType.OB)
-    ..a(9, 'isChild', PbFieldType.OB)
-    ..a(10, 'isPrimaryChild', PbFieldType.OB)
-    ..a(12, 'isDisplayRecords', PbFieldType.OB)
-    ..a(13, 'restrictionSql', PbFieldType.OS)
-    ..a(20, 'uiName', PbFieldType.OS)
-    ..a(21, 'label', PbFieldType.OS)
-    ..a(22, 'description', PbFieldType.OS)
-    ..a(23, 'tableName', PbFieldType.OS)
-    ..a(24, 'etag', PbFieldType.OS)
-    ..a(25, 'linkColumnName', PbFieldType.OS)
-    ..a(26, 'iconImage', PbFieldType.OS)
-    ..a(27, 'tenantId', PbFieldType.OS)
-    ..a(28, 'roleId', PbFieldType.OS)
-    ..a(29, 'userId', PbFieldType.OS)
-    ..a(30, 'updateFlag', PbFieldType.OS)
+    ..a/*<String>*/(1, 'uiLinkId', PbFieldType.OS)
+    ..a/*<String>*/(2, 'uiRelatedId', PbFieldType.OS)
+    ..a/*<String>*/(3, 'uiRelatedName', PbFieldType.OS)
+    ..a/*<bool>*/(4, 'isActive', PbFieldType.OB, true)
+    ..a/*<int>*/(5, 'seqNo', PbFieldType.O3)
+    ..a/*<bool>*/(8, 'isExpert', PbFieldType.OB)
+    ..a/*<bool>*/(9, 'isChild', PbFieldType.OB)
+    ..a/*<bool>*/(10, 'isPrimaryChild', PbFieldType.OB)
+    ..a/*<bool>*/(12, 'isDisplayRecords', PbFieldType.OB)
+    ..a/*<String>*/(13, 'restrictionSql', PbFieldType.OS)
+    ..a/*<String>*/(20, 'uiName', PbFieldType.OS)
+    ..a/*<String>*/(21, 'label', PbFieldType.OS)
+    ..a/*<String>*/(22, 'description', PbFieldType.OS)
+    ..a/*<String>*/(23, 'tableName', PbFieldType.OS)
+    ..a/*<String>*/(24, 'etag', PbFieldType.OS)
+    ..a/*<String>*/(25, 'linkColumnName', PbFieldType.OS)
+    ..a/*<String>*/(26, 'iconImage', PbFieldType.OS)
+    ..a/*<String>*/(27, 'tenantId', PbFieldType.OS)
+    ..a/*<String>*/(28, 'roleId', PbFieldType.OS)
+    ..a/*<String>*/(29, 'userId', PbFieldType.OS)
+    ..a/*<String>*/(30, 'updateFlag', PbFieldType.OS)
     ..hasRequiredFields = false
   ;
 
@@ -1007,15 +1007,15 @@ class _ReadonlyUILink extends UILink with ReadonlyMessageMixin {}
 
 class UIQueryColumn extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('UIQueryColumn')
-    ..a(1, 'uiQueryColumnId', PbFieldType.OS)
-    ..a(2, 'column', PbFieldType.OM, DColumn.getDefault, DColumn.create)
-    ..a(3, 'columnId', PbFieldType.OS)
-    ..a(4, 'columnName', PbFieldType.OS)
-    ..a(5, 'columnLabel', PbFieldType.OS)
-    ..a(6, 'isActive', PbFieldType.OB, true)
-    ..a(10, 'seqNo', PbFieldType.O3)
-    ..a(11, 'isParent', PbFieldType.OB)
-    ..a(50, 'updateFlag', PbFieldType.OS)
+    ..a/*<String>*/(1, 'uiQueryColumnId', PbFieldType.OS)
+    ..a/*<DColumn>*/(2, 'column', PbFieldType.OM, DColumn.getDefault, DColumn.create)
+    ..a/*<String>*/(3, 'columnId', PbFieldType.OS)
+    ..a/*<String>*/(4, 'columnName', PbFieldType.OS)
+    ..a/*<String>*/(5, 'columnLabel', PbFieldType.OS)
+    ..a/*<bool>*/(6, 'isActive', PbFieldType.OB, true)
+    ..a/*<int>*/(10, 'seqNo', PbFieldType.O3)
+    ..a/*<bool>*/(11, 'isParent', PbFieldType.OB)
+    ..a/*<String>*/(50, 'updateFlag', PbFieldType.OS)
   ;
 
   UIQueryColumn() : super();

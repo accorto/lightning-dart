@@ -1,6 +1,6 @@
-/**
- * Generated Protocol Buffers code. Do not modify.
- */
+///
+//  Generated code. Do not modify.
+///
 library protoc.rr;
 
 import 'package:fixnum/fixnum.dart';
@@ -8,15 +8,15 @@ import 'package:protobuf/protobuf.dart';
 
 class CRequest extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('CRequest')
-    ..a(1, 'trxNo', PbFieldType.Q3)
-    ..a(2, 'trxType', PbFieldType.QS)
-    ..a(3, 'clientRequestTime', PbFieldType.Q6, Int64.ZERO)
-    ..a(5, 'sid', PbFieldType.OS)
-    ..a(6, 'info', PbFieldType.OS)
-    ..a(7, 'env', PbFieldType.OM, CEnv.getDefault, CEnv.create)
-    ..a(8, 'clientId', PbFieldType.OS)
-    ..a(10, 'sfEndpoint', PbFieldType.OS)
-    ..a(11, 'sfToken', PbFieldType.OS)
+    ..a/*<int>*/(1, 'trxNo', PbFieldType.Q3)
+    ..a/*<String>*/(2, 'trxType', PbFieldType.QS)
+    ..a/*<Int64>*/(3, 'clientRequestTime', PbFieldType.Q6, Int64.ZERO)
+    ..a/*<String>*/(5, 'sid', PbFieldType.OS)
+    ..a/*<String>*/(6, 'info', PbFieldType.OS)
+    ..a/*<CEnv>*/(7, 'env', PbFieldType.OM, CEnv.getDefault, CEnv.create)
+    ..a/*<String>*/(8, 'clientId', PbFieldType.OS)
+    ..a/*<String>*/(10, 'sfEndpoint', PbFieldType.OS)
+    ..a/*<String>*/(11, 'sfToken', PbFieldType.OS)
   ;
 
   CRequest() : super();
@@ -85,18 +85,18 @@ class _ReadonlyCRequest extends CRequest with ReadonlyMessageMixin {}
 
 class CEnv extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('CEnv')
-    ..a(1, 'clientUrl', PbFieldType.OS)
-    ..a(2, 'locale', PbFieldType.OS)
-    ..a(3, 'timeZone', PbFieldType.OS)
-    ..a(4, 'timeZoneUtcOffset', PbFieldType.O3)
-    ..a(5, 'serverUrl', PbFieldType.OS)
-    ..a(9, 'isDevMode', PbFieldType.OB)
-    ..a(10, 'lat', PbFieldType.OD)
-    ..a(11, 'lon', PbFieldType.OD)
-    ..a(12, 'alt', PbFieldType.OD)
-    ..a(13, 'dir', PbFieldType.OD)
-    ..a(14, 'speed', PbFieldType.OD)
-    ..a(15, 'geoError', PbFieldType.O3)
+    ..a/*<String>*/(1, 'clientUrl', PbFieldType.OS)
+    ..a/*<String>*/(2, 'locale', PbFieldType.OS)
+    ..a/*<String>*/(3, 'timeZone', PbFieldType.OS)
+    ..a/*<int>*/(4, 'timeZoneUtcOffset', PbFieldType.O3)
+    ..a/*<String>*/(5, 'serverUrl', PbFieldType.OS)
+    ..a/*<bool>*/(9, 'isDevMode', PbFieldType.OB)
+    ..a/*<double>*/(10, 'lat', PbFieldType.OD)
+    ..a/*<double>*/(11, 'lon', PbFieldType.OD)
+    ..a/*<double>*/(12, 'alt', PbFieldType.OD)
+    ..a/*<double>*/(13, 'dir', PbFieldType.OD)
+    ..a/*<double>*/(14, 'speed', PbFieldType.OD)
+    ..a/*<int>*/(15, 'geoError', PbFieldType.O3)
     ..hasRequiredFields = false
   ;
 
@@ -181,16 +181,16 @@ class _ReadonlyCEnv extends CEnv with ReadonlyMessageMixin {}
 
 class SResponse extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('SResponse')
-    ..a(1, 'trxNo', PbFieldType.Q3)
-    ..a(2, 'trxType', PbFieldType.QS)
-    ..a(3, 'clientRequestTime', PbFieldType.Q6, Int64.ZERO)
-    ..a(4, 'clientReceiptTime', PbFieldType.O6, Int64.ZERO)
-    ..a(5, 'serverQueueMs', PbFieldType.O3)
-    ..a(6, 'serverDurationMs', PbFieldType.Q3)
-    ..a(7, 'remoteMs', PbFieldType.O3)
-    ..a(8, 'isSuccess', PbFieldType.QB)
-    ..a(9, 'msg', PbFieldType.QS)
-    ..a(10, 'info', PbFieldType.OS)
+    ..a/*<int>*/(1, 'trxNo', PbFieldType.Q3)
+    ..a/*<String>*/(2, 'trxType', PbFieldType.QS)
+    ..a/*<Int64>*/(3, 'clientRequestTime', PbFieldType.Q6, Int64.ZERO)
+    ..a/*<Int64>*/(4, 'clientReceiptTime', PbFieldType.O6, Int64.ZERO)
+    ..a/*<int>*/(5, 'serverQueueMs', PbFieldType.O3)
+    ..a/*<int>*/(6, 'serverDurationMs', PbFieldType.Q3)
+    ..a/*<int>*/(7, 'remoteMs', PbFieldType.O3)
+    ..a/*<bool>*/(8, 'isSuccess', PbFieldType.QB)
+    ..a/*<String>*/(9, 'msg', PbFieldType.QS)
+    ..a/*<String>*/(10, 'info', PbFieldType.OS)
   ;
 
   SResponse() : super();
@@ -264,25 +264,25 @@ class _ReadonlySResponse extends SResponse with ReadonlyMessageMixin {}
 
 class LoginInfo extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('LoginInfo')
-    ..a(1, 'un', PbFieldType.OS)
-    ..a(2, 'pw', PbFieldType.OS)
-    ..a(3, 'sid', PbFieldType.OS)
-    ..a(4, 'tenant', PbFieldType.OS)
-    ..a(5, 'externalKey', PbFieldType.OS)
-    ..a(6, 'ssoId', PbFieldType.OS)
-    ..a(7, 'isRestOrSoap', PbFieldType.OB)
-    ..a(8, 'redirect', PbFieldType.OS)
-    ..a(10, 'sfCode', PbFieldType.OS)
-    ..a(11, 'sfSid', PbFieldType.OS)
-    ..a(12, 'sfRefresh', PbFieldType.OS)
-    ..a(13, 'sfEndpoint', PbFieldType.OS)
-    ..a(14, 'sfOrgId', PbFieldType.OS)
-    ..a(15, 'sfUserId', PbFieldType.OS)
-    ..a(16, 'sfState', PbFieldType.OS)
-    ..a(17, 'sfClientId', PbFieldType.OS)
-    ..a(18, 'sfUn', PbFieldType.OS)
-    ..a(19, 'sfPw', PbFieldType.OS)
-    ..a(20, 'token', PbFieldType.OS)
+    ..a/*<String>*/(1, 'un', PbFieldType.OS)
+    ..a/*<String>*/(2, 'pw', PbFieldType.OS)
+    ..a/*<String>*/(3, 'sid', PbFieldType.OS)
+    ..a/*<String>*/(4, 'tenant', PbFieldType.OS)
+    ..a/*<String>*/(5, 'externalKey', PbFieldType.OS)
+    ..a/*<String>*/(6, 'ssoId', PbFieldType.OS)
+    ..a/*<bool>*/(7, 'isRestOrSoap', PbFieldType.OB)
+    ..a/*<String>*/(8, 'redirect', PbFieldType.OS)
+    ..a/*<String>*/(10, 'sfCode', PbFieldType.OS)
+    ..a/*<String>*/(11, 'sfSid', PbFieldType.OS)
+    ..a/*<String>*/(12, 'sfRefresh', PbFieldType.OS)
+    ..a/*<String>*/(13, 'sfEndpoint', PbFieldType.OS)
+    ..a/*<String>*/(14, 'sfOrgId', PbFieldType.OS)
+    ..a/*<String>*/(15, 'sfUserId', PbFieldType.OS)
+    ..a/*<String>*/(16, 'sfState', PbFieldType.OS)
+    ..a/*<String>*/(17, 'sfClientId', PbFieldType.OS)
+    ..a/*<String>*/(18, 'sfUn', PbFieldType.OS)
+    ..a/*<String>*/(19, 'sfPw', PbFieldType.OS)
+    ..a/*<String>*/(20, 'token', PbFieldType.OS)
     ..hasRequiredFields = false
   ;
 
@@ -402,43 +402,43 @@ class _ReadonlyLoginInfo extends LoginInfo with ReadonlyMessageMixin {}
 
 class Session extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('Session')
-    ..a(1, 'sid', PbFieldType.QS)
-    ..a(2, 'soapUrl', PbFieldType.OS)
-    ..a(3, 'description', PbFieldType.OS)
-    ..a(4, 'locale', PbFieldType.OS)
-    ..a(5, 'languageIsoCode', PbFieldType.OS)
-    ..a(6, 'currencyIsoCode', PbFieldType.OS)
-    ..a(7, 'dateFormatLong', PbFieldType.OS)
-    ..a(8, 'dateFormatShort', PbFieldType.OS)
-    ..a(9, 'timeFormatLong', PbFieldType.OS)
-    ..a(10, 'timeFormatShort', PbFieldType.OS)
-    ..a(11, 'isDecimalPoint', PbFieldType.OB)
-    ..a(12, 'timeZone', PbFieldType.OS)
-    ..a(13, 'timeZoneUtcOffset', PbFieldType.O3)
-    ..a(15, 'googleAnalytics', PbFieldType.OS)
-    ..a(16, 'customCss', PbFieldType.OS)
-    ..a(20, 'tenantId', PbFieldType.OS)
-    ..a(21, 'tenantName', PbFieldType.QS)
-    ..a(22, 'tenantLogo', PbFieldType.OS)
-    ..a(23, 'isTenantMultiCurrency', PbFieldType.OB)
-    ..a(24, 'isTenantSystem', PbFieldType.OB)
-    ..a(25, 'userId', PbFieldType.OS)
-    ..a(26, 'userEmail', PbFieldType.OS)
-    ..a(27, 'userName', PbFieldType.OS)
-    ..a(28, 'userFullName', PbFieldType.OS)
-    ..a(29, 'userResourceId', PbFieldType.OS)
-    ..a(30, 'isUserExpert', PbFieldType.OB)
-    ..pp(31, 'roles', PbFieldType.PM, Role.$checkItem, Role.create)
-    ..pp(32, 'context', PbFieldType.PM, DKeyValue.$checkItem, DKeyValue.create)
-    ..a(40, 'nrLicense', PbFieldType.OS)
-    ..a(41, 'nrApplication', PbFieldType.OS)
-    ..a(45, 'sfEndpoint', PbFieldType.OS)
-    ..a(46, 'sfRefreshToken', PbFieldType.OS)
-    ..a(47, 'sfToken', PbFieldType.OS)
-    ..a(50, 'awsAccessKey', PbFieldType.OS)
-    ..a(51, 'awsSecretKey', PbFieldType.OS)
-    ..a(52, 'awsSnsArnInfo', PbFieldType.OS)
-    ..a(53, 'awsSnsArnWarn', PbFieldType.OS)
+    ..a/*<String>*/(1, 'sid', PbFieldType.QS)
+    ..a/*<String>*/(2, 'soapUrl', PbFieldType.OS)
+    ..a/*<String>*/(3, 'description', PbFieldType.OS)
+    ..a/*<String>*/(4, 'locale', PbFieldType.OS)
+    ..a/*<String>*/(5, 'languageIsoCode', PbFieldType.OS)
+    ..a/*<String>*/(6, 'currencyIsoCode', PbFieldType.OS)
+    ..a/*<String>*/(7, 'dateFormatLong', PbFieldType.OS)
+    ..a/*<String>*/(8, 'dateFormatShort', PbFieldType.OS)
+    ..a/*<String>*/(9, 'timeFormatLong', PbFieldType.OS)
+    ..a/*<String>*/(10, 'timeFormatShort', PbFieldType.OS)
+    ..a/*<bool>*/(11, 'isDecimalPoint', PbFieldType.OB)
+    ..a/*<String>*/(12, 'timeZone', PbFieldType.OS)
+    ..a/*<int>*/(13, 'timeZoneUtcOffset', PbFieldType.O3)
+    ..a/*<String>*/(15, 'googleAnalytics', PbFieldType.OS)
+    ..a/*<String>*/(16, 'customCss', PbFieldType.OS)
+    ..a/*<String>*/(20, 'tenantId', PbFieldType.OS)
+    ..a/*<String>*/(21, 'tenantName', PbFieldType.QS)
+    ..a/*<String>*/(22, 'tenantLogo', PbFieldType.OS)
+    ..a/*<bool>*/(23, 'isTenantMultiCurrency', PbFieldType.OB)
+    ..a/*<bool>*/(24, 'isTenantSystem', PbFieldType.OB)
+    ..a/*<String>*/(25, 'userId', PbFieldType.OS)
+    ..a/*<String>*/(26, 'userEmail', PbFieldType.OS)
+    ..a/*<String>*/(27, 'userName', PbFieldType.OS)
+    ..a/*<String>*/(28, 'userFullName', PbFieldType.OS)
+    ..a/*<String>*/(29, 'userResourceId', PbFieldType.OS)
+    ..a/*<bool>*/(30, 'isUserExpert', PbFieldType.OB)
+    ..pp/*<Role>*/(31, 'roles', PbFieldType.PM, Role.$checkItem, Role.create)
+    ..pp/*<DKeyValue>*/(32, 'context', PbFieldType.PM, DKeyValue.$checkItem, DKeyValue.create)
+    ..a/*<String>*/(40, 'nrLicense', PbFieldType.OS)
+    ..a/*<String>*/(41, 'nrApplication', PbFieldType.OS)
+    ..a/*<String>*/(45, 'sfEndpoint', PbFieldType.OS)
+    ..a/*<String>*/(46, 'sfRefreshToken', PbFieldType.OS)
+    ..a/*<String>*/(47, 'sfToken', PbFieldType.OS)
+    ..a/*<String>*/(50, 'awsAccessKey', PbFieldType.OS)
+    ..a/*<String>*/(51, 'awsSecretKey', PbFieldType.OS)
+    ..a/*<String>*/(52, 'awsSnsArnInfo', PbFieldType.OS)
+    ..a/*<String>*/(53, 'awsSnsArnWarn', PbFieldType.OS)
   ;
 
   Session() : super();
@@ -641,11 +641,11 @@ class _ReadonlySession extends Session with ReadonlyMessageMixin {}
 
 class Role extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('Role')
-    ..a(1, 'roleId', PbFieldType.OS)
-    ..a(2, 'tenantId', PbFieldType.OS)
-    ..a(3, 'name', PbFieldType.OS)
-    ..a(4, 'label', PbFieldType.OS)
-    ..a(5, 'isAdministrator', PbFieldType.OB)
+    ..a/*<String>*/(1, 'roleId', PbFieldType.OS)
+    ..a/*<String>*/(2, 'tenantId', PbFieldType.OS)
+    ..a/*<String>*/(3, 'name', PbFieldType.OS)
+    ..a/*<String>*/(4, 'label', PbFieldType.OS)
+    ..a/*<bool>*/(5, 'isAdministrator', PbFieldType.OB)
     ..hasRequiredFields = false
   ;
 
@@ -695,9 +695,9 @@ class _ReadonlyRole extends Role with ReadonlyMessageMixin {}
 
 class DValueDisplay extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('DValueDisplay')
-    ..a(1, 'id', PbFieldType.OS)
-    ..a(2, 'value', PbFieldType.QS)
-    ..a(3, 'display', PbFieldType.OS)
+    ..a/*<String>*/(1, 'id', PbFieldType.OS)
+    ..a/*<String>*/(2, 'value', PbFieldType.QS)
+    ..a/*<String>*/(3, 'display', PbFieldType.OS)
   ;
 
   DValueDisplay() : super();
@@ -736,9 +736,9 @@ class _ReadonlyDValueDisplay extends DValueDisplay with ReadonlyMessageMixin {}
 
 class DKeyValue extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('DKeyValue')
-    ..a(1, 'id', PbFieldType.OS)
-    ..a(2, 'key', PbFieldType.QS)
-    ..a(3, 'value', PbFieldType.OS)
+    ..a/*<String>*/(1, 'id', PbFieldType.OS)
+    ..a/*<String>*/(2, 'key', PbFieldType.QS)
+    ..a/*<String>*/(3, 'value', PbFieldType.OS)
   ;
 
   DKeyValue() : super();

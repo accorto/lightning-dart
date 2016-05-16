@@ -1,6 +1,6 @@
-/**
- * Generated Protocol Buffers code. Do not modify.
- */
+///
+//  Generated code. Do not modify.
+///
 library protoc.rr_login;
 
 import 'dart:async';
@@ -13,9 +13,9 @@ import 'structure_pb.dart';
 
 class LoginRequest extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('LoginRequest')
-    ..a(1, 'request', PbFieldType.QM, CRequest.getDefault, CRequest.create)
-    ..a(2, 'loginInfo', PbFieldType.OM, LoginInfo.getDefault, LoginInfo.create)
-    ..pp(10, 'param', PbFieldType.PM, DEntry.$checkItem, DEntry.create)
+    ..a/*<CRequest>*/(1, 'request', PbFieldType.QM, CRequest.getDefault, CRequest.create)
+    ..a/*<LoginInfo>*/(2, 'loginInfo', PbFieldType.OM, LoginInfo.getDefault, LoginInfo.create)
+    ..pp/*<DEntry>*/(10, 'param', PbFieldType.PM, DEntry.$checkItem, DEntry.create)
   ;
 
   LoginRequest() : super();
@@ -51,14 +51,14 @@ class _ReadonlyLoginRequest extends LoginRequest with ReadonlyMessageMixin {}
 
 class LoginResponse extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('LoginResponse')
-    ..a(1, 'response', PbFieldType.QM, SResponse.getDefault, SResponse.create)
-    ..a(2, 'session', PbFieldType.OM, Session.getDefault, Session.create)
-    ..a(3, 'sso', PbFieldType.OS)
-    ..pp(5, 'parameter', PbFieldType.PM, UIPanelColumn.$checkItem, UIPanelColumn.create)
-    ..a(10, 'tenantId', PbFieldType.OS)
-    ..a(11, 'tenantName', PbFieldType.OS)
-    ..a(12, 'tenantLogo', PbFieldType.OS)
-    ..a(13, 'googleAnalytics', PbFieldType.OS)
+    ..a/*<SResponse>*/(1, 'response', PbFieldType.QM, SResponse.getDefault, SResponse.create)
+    ..a/*<Session>*/(2, 'session', PbFieldType.OM, Session.getDefault, Session.create)
+    ..a/*<String>*/(3, 'sso', PbFieldType.OS)
+    ..pp/*<UIPanelColumn>*/(5, 'parameter', PbFieldType.PM, UIPanelColumn.$checkItem, UIPanelColumn.create)
+    ..a/*<String>*/(10, 'tenantId', PbFieldType.OS)
+    ..a/*<String>*/(11, 'tenantName', PbFieldType.OS)
+    ..a/*<String>*/(12, 'tenantLogo', PbFieldType.OS)
+    ..a/*<String>*/(13, 'googleAnalytics', PbFieldType.OS)
   ;
 
   LoginResponse() : super();

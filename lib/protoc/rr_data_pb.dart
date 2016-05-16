@@ -1,6 +1,6 @@
-/**
- * Generated Protocol Buffers code. Do not modify.
- */
+///
+//  Generated code. Do not modify.
+///
 library protoc.rr_data;
 
 import 'dart:async';
@@ -31,8 +31,8 @@ class DataRequestType extends ProtobufEnum {
     NEW,
   ];
 
-  static final Map<int, DataRequestType> _byValue = ProtobufEnum.initByValue(values);
-  static DataRequestType valueOf(int value) => _byValue[value];
+  static final Map<int, dynamic> _byValue = ProtobufEnum.initByValue(values);
+  static DataRequestType valueOf(int value) => _byValue[value] as DataRequestType;
   static void $checkItem(DataRequestType v) {
     if (v is !DataRequestType) checkItemFailed(v, 'DataRequestType');
   }
@@ -55,8 +55,8 @@ class DataExportType extends ProtobufEnum {
     HTML,
   ];
 
-  static final Map<int, DataExportType> _byValue = ProtobufEnum.initByValue(values);
-  static DataExportType valueOf(int value) => _byValue[value];
+  static final Map<int, dynamic> _byValue = ProtobufEnum.initByValue(values);
+  static DataExportType valueOf(int value) => _byValue[value] as DataExportType;
   static void $checkItem(DataExportType v) {
     if (v is !DataExportType) checkItemFailed(v, 'DataExportType');
   }
@@ -66,35 +66,35 @@ class DataExportType extends ProtobufEnum {
 
 class DataRequest extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('DataRequest')
-    ..a(1, 'request', PbFieldType.OM, CRequest.getDefault, CRequest.create)
-    ..e(3, 'type', PbFieldType.QE, DataRequestType.QUERY, DataRequestType.valueOf)
-    ..a(4, 'tableName', PbFieldType.QS)
-    ..a(5, 'windowNo', PbFieldType.OS)
-    ..pp(6, 'context', PbFieldType.PM, DKeyValue.$checkItem, DKeyValue.create)
-    ..a(7, 'uiExternalKey', PbFieldType.OS)
-    ..a(8, 'fieldExternalKey', PbFieldType.OS)
-    ..a(9, 'queryRef', PbFieldType.OS)
-    ..a(10, 'queryOffset', PbFieldType.O3)
-    ..a(11, 'queryLimit', PbFieldType.O3)
-    ..p(12, 'queryColumnName', PbFieldType.PS)
-    ..a(13, 'isQueryForce', PbFieldType.OB)
-    ..a(14, 'isIncludeStats', PbFieldType.OB, true)
-    ..pp(15, 'queryFilter', PbFieldType.PM, DFilter.$checkItem, DFilter.create)
-    ..a(16, 'queryFilterLogic', PbFieldType.OS)
-    ..pp(17, 'querySort', PbFieldType.PM, DSort.$checkItem, DSort.create)
-    ..a(18, 'savedQuery', PbFieldType.OM, SavedQuery.getDefault, SavedQuery.create)
-    ..a(25, 'fkId', PbFieldType.OS)
-    ..a(26, 'fkParentColumnName', PbFieldType.OS)
-    ..a(27, 'fkParentValue', PbFieldType.OS)
-    ..a(28, 'fkRestrictionSql', PbFieldType.OS)
-    ..pp(30, 'record', PbFieldType.PM, DRecord.$checkItem, DRecord.create)
-    ..a(31, 'validationCallout', PbFieldType.OS)
-    ..a(32, 'columnChanged', PbFieldType.OM, DEntry.getDefault, DEntry.create)
-    ..a(35, 'exportTitle', PbFieldType.OS)
-    ..p(36, 'exportColumnName', PbFieldType.PS)
-    ..e(37, 'exportType', PbFieldType.OE, DataExportType.PDF, DataExportType.valueOf)
-    ..p(38, 'emailRecipient', PbFieldType.PS)
-    ..a(39, 'emailMessage', PbFieldType.OS)
+    ..a/*<CRequest>*/(1, 'request', PbFieldType.OM, CRequest.getDefault, CRequest.create)
+    ..e/*<DataRequestType>*/(3, 'type', PbFieldType.QE, DataRequestType.QUERY, DataRequestType.valueOf)
+    ..a/*<String>*/(4, 'tableName', PbFieldType.QS)
+    ..a/*<String>*/(5, 'windowNo', PbFieldType.OS)
+    ..pp/*<DKeyValue>*/(6, 'context', PbFieldType.PM, DKeyValue.$checkItem, DKeyValue.create)
+    ..a/*<String>*/(7, 'uiExternalKey', PbFieldType.OS)
+    ..a/*<String>*/(8, 'fieldExternalKey', PbFieldType.OS)
+    ..a/*<String>*/(9, 'queryRef', PbFieldType.OS)
+    ..a/*<int>*/(10, 'queryOffset', PbFieldType.O3)
+    ..a/*<int>*/(11, 'queryLimit', PbFieldType.O3)
+    ..p/*<String>*/(12, 'queryColumnName', PbFieldType.PS)
+    ..a/*<bool>*/(13, 'isQueryForce', PbFieldType.OB)
+    ..a/*<bool>*/(14, 'isIncludeStats', PbFieldType.OB, true)
+    ..pp/*<DFilter>*/(15, 'queryFilter', PbFieldType.PM, DFilter.$checkItem, DFilter.create)
+    ..a/*<String>*/(16, 'queryFilterLogic', PbFieldType.OS)
+    ..pp/*<DSort>*/(17, 'querySort', PbFieldType.PM, DSort.$checkItem, DSort.create)
+    ..a/*<SavedQuery>*/(18, 'savedQuery', PbFieldType.OM, SavedQuery.getDefault, SavedQuery.create)
+    ..a/*<String>*/(25, 'fkId', PbFieldType.OS)
+    ..a/*<String>*/(26, 'fkParentColumnName', PbFieldType.OS)
+    ..a/*<String>*/(27, 'fkParentValue', PbFieldType.OS)
+    ..a/*<String>*/(28, 'fkRestrictionSql', PbFieldType.OS)
+    ..pp/*<DRecord>*/(30, 'record', PbFieldType.PM, DRecord.$checkItem, DRecord.create)
+    ..a/*<String>*/(31, 'validationCallout', PbFieldType.OS)
+    ..a/*<DEntry>*/(32, 'columnChanged', PbFieldType.OM, DEntry.getDefault, DEntry.create)
+    ..a/*<String>*/(35, 'exportTitle', PbFieldType.OS)
+    ..p/*<String>*/(36, 'exportColumnName', PbFieldType.PS)
+    ..e/*<DataExportType>*/(37, 'exportType', PbFieldType.OE, DataExportType.PDF, DataExportType.valueOf)
+    ..p/*<String>*/(38, 'emailRecipient', PbFieldType.PS)
+    ..a/*<String>*/(39, 'emailMessage', PbFieldType.OS)
   ;
 
   DataRequest() : super();
@@ -242,19 +242,19 @@ class _ReadonlyDataRequest extends DataRequest with ReadonlyMessageMixin {}
 
 class DataResponse extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('DataResponse')
-    ..a(1, 'response', PbFieldType.OM, SResponse.getDefault, SResponse.create)
-    ..a(4, 'tableName', PbFieldType.OS)
-    ..a(5, 'totalRows', PbFieldType.O3)
-    ..a(6, 'queryOffset', PbFieldType.O3)
-    ..a(9, 'queryRef', PbFieldType.OS)
-    ..pp(10, 'record', PbFieldType.PM, DRecord.$checkItem, DRecord.create)
-    ..a(11, 'recordsProcessed', PbFieldType.O3)
-    ..pp(12, 'contextChange', PbFieldType.PM, DKeyValue.$checkItem, DKeyValue.create)
-    ..pp(15, 'fks', PbFieldType.PM, DFK.$checkItem, DFK.create)
-    ..a(16, 'isFkComplete', PbFieldType.OB)
-    ..a(17, 'table', PbFieldType.OM, DTable.getDefault, DTable.create)
-    ..pp(20, 'statistic', PbFieldType.PM, DStatistics.$checkItem, DStatistics.create)
-    ..a(25, 'exportUrl', PbFieldType.OS)
+    ..a/*<SResponse>*/(1, 'response', PbFieldType.OM, SResponse.getDefault, SResponse.create)
+    ..a/*<String>*/(4, 'tableName', PbFieldType.OS)
+    ..a/*<int>*/(5, 'totalRows', PbFieldType.O3)
+    ..a/*<int>*/(6, 'queryOffset', PbFieldType.O3)
+    ..a/*<String>*/(9, 'queryRef', PbFieldType.OS)
+    ..pp/*<DRecord>*/(10, 'record', PbFieldType.PM, DRecord.$checkItem, DRecord.create)
+    ..a/*<int>*/(11, 'recordsProcessed', PbFieldType.O3)
+    ..pp/*<DKeyValue>*/(12, 'contextChange', PbFieldType.PM, DKeyValue.$checkItem, DKeyValue.create)
+    ..pp/*<DFK>*/(15, 'fks', PbFieldType.PM, DFK.$checkItem, DFK.create)
+    ..a/*<bool>*/(16, 'isFkComplete', PbFieldType.OB)
+    ..a/*<DTable>*/(17, 'table', PbFieldType.OM, DTable.getDefault, DTable.create)
+    ..pp/*<DStatistics>*/(20, 'statistic', PbFieldType.PM, DStatistics.$checkItem, DStatistics.create)
+    ..a/*<String>*/(25, 'exportUrl', PbFieldType.OS)
   ;
 
   DataResponse() : super();

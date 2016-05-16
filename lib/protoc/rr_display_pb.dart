@@ -1,6 +1,6 @@
-/**
- * Generated Protocol Buffers code. Do not modify.
- */
+///
+//  Generated code. Do not modify.
+///
 library protoc.rr_display;
 
 import 'dart:async';
@@ -22,8 +22,8 @@ class DisplayRequestType extends ProtobufEnum {
     UPDATE,
   ];
 
-  static final Map<int, DisplayRequestType> _byValue = ProtobufEnum.initByValue(values);
-  static DisplayRequestType valueOf(int value) => _byValue[value];
+  static final Map<int, dynamic> _byValue = ProtobufEnum.initByValue(values);
+  static DisplayRequestType valueOf(int value) => _byValue[value] as DisplayRequestType;
   static void $checkItem(DisplayRequestType v) {
     if (v is !DisplayRequestType) checkItemFailed(v, 'DisplayRequestType');
   }
@@ -33,23 +33,23 @@ class DisplayRequestType extends ProtobufEnum {
 
 class DisplayRequest extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('DisplayRequest')
-    ..a(1, 'request', PbFieldType.QM, CRequest.getDefault, CRequest.create)
-    ..e(5, 'type', PbFieldType.QE, DisplayRequestType.GET, DisplayRequestType.valueOf)
-    ..a(6, 'listPattern', PbFieldType.OS)
-    ..a(7, 'isNoCache', PbFieldType.OB)
-    ..pp(10, 'display', PbFieldType.PM, UIInfo.$checkItem, UIInfo.create)
-    ..pp(14, 'updatedUi', PbFieldType.PM, UI.$checkItem, UI.create)
-    ..a(15, 'uiId', PbFieldType.OS)
-    ..a(16, 'updatedLabel', PbFieldType.OS)
-    ..a(17, 'updatedTenantId', PbFieldType.OS)
-    ..a(18, 'updatedRoleId', PbFieldType.OS)
-    ..a(19, 'updatedUserId', PbFieldType.OS)
-    ..a(20, 'uiUpdateFlag', PbFieldType.OS)
-    ..pp(30, 'updatedGridColumn', PbFieldType.PM, UIGridColumn.$checkItem, UIGridColumn.create)
-    ..pp(31, 'updatedPanel', PbFieldType.PM, UIPanel.$checkItem, UIPanel.create)
-    ..pp(32, 'updatedProcess', PbFieldType.PM, UIProcess.$checkItem, UIProcess.create)
-    ..pp(33, 'updatedLink', PbFieldType.PM, UILink.$checkItem, UILink.create)
-    ..pp(34, 'updatedQueryColumn', PbFieldType.PM, UIQueryColumn.$checkItem, UIQueryColumn.create)
+    ..a/*<CRequest>*/(1, 'request', PbFieldType.QM, CRequest.getDefault, CRequest.create)
+    ..e/*<DisplayRequestType>*/(5, 'type', PbFieldType.QE, DisplayRequestType.GET, DisplayRequestType.valueOf)
+    ..a/*<String>*/(6, 'listPattern', PbFieldType.OS)
+    ..a/*<bool>*/(7, 'isNoCache', PbFieldType.OB)
+    ..pp/*<UIInfo>*/(10, 'display', PbFieldType.PM, UIInfo.$checkItem, UIInfo.create)
+    ..pp/*<UI>*/(14, 'updatedUi', PbFieldType.PM, UI.$checkItem, UI.create)
+    ..a/*<String>*/(15, 'uiId', PbFieldType.OS)
+    ..a/*<String>*/(16, 'updatedLabel', PbFieldType.OS)
+    ..a/*<String>*/(17, 'updatedTenantId', PbFieldType.OS)
+    ..a/*<String>*/(18, 'updatedRoleId', PbFieldType.OS)
+    ..a/*<String>*/(19, 'updatedUserId', PbFieldType.OS)
+    ..a/*<String>*/(20, 'uiUpdateFlag', PbFieldType.OS)
+    ..pp/*<UIGridColumn>*/(30, 'updatedGridColumn', PbFieldType.PM, UIGridColumn.$checkItem, UIGridColumn.create)
+    ..pp/*<UIPanel>*/(31, 'updatedPanel', PbFieldType.PM, UIPanel.$checkItem, UIPanel.create)
+    ..pp/*<UIProcess>*/(32, 'updatedProcess', PbFieldType.PM, UIProcess.$checkItem, UIProcess.create)
+    ..pp/*<UILink>*/(33, 'updatedLink', PbFieldType.PM, UILink.$checkItem, UILink.create)
+    ..pp/*<UIQueryColumn>*/(34, 'updatedQueryColumn', PbFieldType.PM, UIQueryColumn.$checkItem, UIQueryColumn.create)
   ;
 
   DisplayRequest() : super();
@@ -137,10 +137,10 @@ class _ReadonlyDisplayRequest extends DisplayRequest with ReadonlyMessageMixin {
 
 class DisplayResponse extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('DisplayResponse')
-    ..a(1, 'response', PbFieldType.QM, SResponse.getDefault, SResponse.create)
-    ..pp(10, 'ui', PbFieldType.PM, UI.$checkItem, UI.create)
-    ..pp(11, 'table', PbFieldType.PM, DTable.$checkItem, DTable.create)
-    ..pp(12, 'display', PbFieldType.PM, UIInfo.$checkItem, UIInfo.create)
+    ..a/*<SResponse>*/(1, 'response', PbFieldType.QM, SResponse.getDefault, SResponse.create)
+    ..pp/*<UI>*/(10, 'ui', PbFieldType.PM, UI.$checkItem, UI.create)
+    ..pp/*<DTable>*/(11, 'table', PbFieldType.PM, DTable.$checkItem, DTable.create)
+    ..pp/*<UIInfo>*/(12, 'display', PbFieldType.PM, UIInfo.$checkItem, UIInfo.create)
   ;
 
   DisplayResponse() : super();
