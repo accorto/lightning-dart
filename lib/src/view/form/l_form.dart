@@ -468,9 +468,13 @@ class LForm
 
     // Submit form if there is an action
     if (valid && element is FormElement) {
-      FormElement ff = element as FormElement;
-      if (ff.action.isNotEmpty)
-        ff.submit();
+      try {
+        FormElement ff = element as FormElement;
+        if (ff.action.isNotEmpty)
+          ff.submit();
+      } catch (error, stackTrace) { // type '_RadioNodeListImpl' is not a subtype of type 'String' of 'function result' where ...
+        _log.config("onFormSubmit action", error, stackTrace);
+      }
     }
   } // onFormSubmit
 
