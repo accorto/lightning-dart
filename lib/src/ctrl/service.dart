@@ -192,21 +192,32 @@ class Service {
    * Create+Send protocol buffers HttpRequest to [trx] with [data]
    * - [SimplePage.onServerStart]
    */
-  Future<HttpRequest> sendRequest(String serverUri, Uint8List data, String info, {bool setBusy: true}) {
+  Future<HttpRequest> sendRequest(String serverUri, Uint8List data, String info,
+      {bool setBusy: true, bool trackProgress:false}) {
     _setBusy = setBusy;
     if (_setBusy && onServerStart != null) {
       onServerStart(serverUri, info);
     }
+
     Uri uri = Uri.parse("${serverUrl}${serverUri}");
     String url = uri.toString();
-    return HttpRequest.request(url,
-      method: "POST",
-      withCredentials: false,
-      responseType: "arraybuffer",
-      mimeType: "application/x-google-protobuf",
-      requestHeaders: requestHeaders,
-      sendData: data);
+    try {
+      return HttpRequest.request(url,
+          method: "POST",
+          withCredentials: false,
+          responseType: "arraybuffer",
+          mimeType: "application/x-google-protobuf",
+          requestHeaders: requestHeaders,
+          sendData: data,
+          onProgress: trackProgress ? onProgress : null);
+    } catch (error, stackTrace) {
+      _log.severe("sendRequest", error, stackTrace);
+    }
   } // sendRequest
+
+  void onProgress(ProgressEvent e) {
+    _log.info("onProgress computable=${e.lengthComputable} ${e.loaded} of ${e.total}");
+  }
 
   /**
    * Handle Success - send notifications, unlock ui

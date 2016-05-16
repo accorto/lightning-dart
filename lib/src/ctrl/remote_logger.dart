@@ -74,14 +74,14 @@ class RemoteLogger {
    */
   static String _format(LogRecord rec) {
     // log local time
-    String s = "${rec.time} ${rec.level} ${rec.loggerName} ${rec.message}";
+    String recFormatted = "${rec.time} ${rec.level} ${rec.loggerName} ${rec.message}";
     // error
     if (rec.error != null) {
-      s += " error=${rec.error}";
+      recFormatted += " error=${rec.error}";
       if (rec.error is StackTrace) {
         try {
           Trace t = new Trace.from(rec.error); // js
-          s += " errorStack=${t}";
+          recFormatted += " errorStack=${t}";
         } catch (ex) {}
       }
       if (rec.error is Event) {
@@ -89,10 +89,10 @@ class RemoteLogger {
         if (evt.target is HttpRequest) {
           HttpRequest request = evt.target;
           try {
-            s += " errorText=${request.responseText}";
+            recFormatted += " errorText=${request.responseText}";
           } catch (ex) {}
           try {
-            s += " errorStatus=${request.statusText}";
+            recFormatted += " errorStatus=${request.statusText}";
           } catch (ex) {}
         }
       }
@@ -100,16 +100,16 @@ class RemoteLogger {
     if (rec.stackTrace != null) {
       if (rec.stackTrace is StackTrace) {
         Trace t = new Trace.from(rec.stackTrace); // js
-        s += " stack=${t}";
+        recFormatted += " stack=${t}";
       } else {
-        s += " stackString=${rec.stackTrace}";
+        recFormatted += " stackString=${rec.stackTrace}";
       }
     }
 
     // add context
-    s += ClientEnv.logInfo(" ");
-    s += " clientId=${Service.clientId}";
-    return s;
+    recFormatted += ClientEnv.logInfo(" ");
+    recFormatted += " clientId=${Service.clientId} cseq=${rec.sequenceNumber}";
+    return recFormatted;
   }
 
   /*
