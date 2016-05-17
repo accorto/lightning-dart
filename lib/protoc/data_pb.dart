@@ -90,8 +90,9 @@ class DRecord extends GeneratedMessage {
     ..a/*<DRecord>*/(21, 'parent', PbFieldType.OM, DRecord.getDefault, DRecord.create)
     ..a/*<bool>*/(22, 'isGroupBy', PbFieldType.OB)
     ..pp/*<DStatistics>*/(23, 'stat', PbFieldType.PM, DStatistics.$checkItem, DStatistics.create)
-    ..p/*<List<int>>*/(24, 'attachment', PbFieldType.PY)
-    ..p/*<String>*/(25, 'attachmentName', PbFieldType.PS)
+    ..a/*<List<int>>*/(24, 'attachment', PbFieldType.OY)
+    ..a/*<String>*/(25, 'attachmentName', PbFieldType.OS)
+    ..pp/*<DRecord>*/(28, 'child', PbFieldType.PM, DRecord.$checkItem, DRecord.create)
     ..hasRequiredFields = false
   ;
 
@@ -210,9 +211,17 @@ class DRecord extends GeneratedMessage {
 
   List<DStatistics> get statList => $_get(20, 23, null);
 
-  List<List<int>> get attachmentList => $_get(21, 24, null);
+  List<int> get attachment => $_get(21, 24, null);
+  void set attachment(List<int> v) { $_setBytes(21, 24, v); }
+  bool hasAttachment() => $_has(21, 24);
+  void clearAttachment() => clearField(24);
 
-  List<String> get attachmentNameList => $_get(22, 25, null);
+  String get attachmentName => $_get(22, 25, '');
+  void set attachmentName(String v) { $_setString(22, 25, v); }
+  bool hasAttachmentName() => $_has(22, 25);
+  void clearAttachmentName() => clearField(25);
+
+  List<DRecord> get childList => $_get(23, 28, null);
 }
 
 class _ReadonlyDRecord extends DRecord with ReadonlyMessageMixin {}
@@ -763,8 +772,9 @@ const DRecord$json = const {
     const {'1': 'parent', '3': 21, '4': 1, '5': 11, '6': '.DRecord'},
     const {'1': 'is_group_by', '3': 22, '4': 1, '5': 8, '7': 'false'},
     const {'1': 'stat', '3': 23, '4': 3, '5': 11, '6': '.DStatistics'},
-    const {'1': 'attachment', '3': 24, '4': 3, '5': 12},
-    const {'1': 'attachment_name', '3': 25, '4': 3, '5': 9},
+    const {'1': 'attachment', '3': 24, '4': 1, '5': 12},
+    const {'1': 'attachment_name', '3': 25, '4': 1, '5': 9},
+    const {'1': 'child', '3': 28, '4': 3, '5': 11, '6': '.DRecord'},
   ],
 };
 

@@ -100,7 +100,7 @@ class Service {
     }
 
     // first log
-    _log.info("href=${window.location.href} referrer=${document.referrer} serverUrl=${serverUrl} query=${LightningCtrl.router.queryParams}");
+    _log.info("init href=${window.location.href} referrer=${document.referrer} serverUrl=${serverUrl} query=${LightningCtrl.router.queryParams}");
   } // init
 
   // Busy
@@ -201,6 +201,9 @@ class Service {
 
     Uri uri = Uri.parse("${serverUrl}${serverUri}");
     String url = uri.toString();
+    if (trackProgress) {
+      _log.info("sendRequest ${info} url=${url} data=${data.length}");
+    }
     try {
       return HttpRequest.request(url,
           method: "POST",
@@ -211,7 +214,7 @@ class Service {
           sendData: data,
           onProgress: trackProgress ? onProgress : null);
     } catch (error, stackTrace) {
-      _log.severe("sendRequest", error, stackTrace);
+      _log.severe("sendRequest ${url}", error, stackTrace);
     }
   } // sendRequest
 
