@@ -264,7 +264,8 @@ class LButton
       element.append(more.element);
     }
   } // rebuild
-  List<String> _ICON_ATTRIB = [C_BUTTON__ICON__STATEFUL, C_BUTTON__ICON__HINT];
+  List<String> _ICON_ATTRIB = [C_BUTTON__ICON__STATEFUL, C_BUTTON__ICON__HINT,
+    LIcon.C_ROTATE_LEFT, LIcon.C_ROTATE_RIGHT];
 
   /// Default Button
   LButton.base(String name, String label, {String idPrefix})
