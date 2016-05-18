@@ -285,6 +285,10 @@ abstract class EditorI {
   void focus() {
     input.focus();
   }
+  /// blur input
+  void blur() {
+    input.blur();
+  }
 
 
   /// html5 Mode (date, number, ...)
