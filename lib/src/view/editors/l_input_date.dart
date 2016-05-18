@@ -105,6 +105,7 @@ class LInputDate
   /// Set new value
   @override
   void set value(String newValue) {
+    _valueDate = null;
     String display = renderSync(newValue, true);
     input.value = display;
     // check
@@ -141,6 +142,25 @@ class LInputDate
       defaultValue = renderSync(newValue, false); // variables;
     }
   } // valueOriginal
+
+  /// get value as date
+  DateTime get valueAsDate {
+    if (_valueDate == null) {
+      String v = input.value;
+      parse(v, false); // don't set validity
+    }
+    return _valueDate;
+  } // valueAsDate
+
+  /// set value as date
+  void set valueAsDate (DateTime newValue) {
+    _valueDate = newValue;
+    if (newValue == null) {
+      value = null;
+    } else {
+      value = newValue.millisecondsSinceEpoch.toString();
+    }
+  } // valueAsDate
 
   /**
    * Rendered Value (different from value)
@@ -193,22 +213,23 @@ class LInputDate
       input.setCustomValidity("");
     if (_isEmpty(newValue))
       return ""; // incomplete date string
-    DateTime dt = null;
+    _valueDate = null;
     if (type == EditorI.TYPE_DATE) {
-      dt = DataUtil.asDate(newValue, html5, isUtc, logWarning:false); // UTC
+      _valueDate = DataUtil.asDate(newValue, html5, isUtc, logWarning:false); // UTC
     } else if (type == EditorI.TYPE_DATETIME) {
-      dt = DataUtil.asDateTime(newValue, html5, logWarning:false); // local
+      _valueDate = DataUtil.asDateTime(newValue, html5, logWarning:false); // local
     } else if (type == EditorI.TYPE_TIME) {
-      dt = DataUtil.asTime(newValue, data, html5, logWarning:false); // local
+      _valueDate = DataUtil.asTime(newValue, data, html5, logWarning:false); // local
     }
-    if (dt == null) {
+    if (_valueDate == null) {
       if (setValidity)
         input.setCustomValidity("${_invalidInput}=${newValue} [${_formatter.pattern}]");
       return newValue; // invalid
     }
-    int time = dt.millisecondsSinceEpoch;
+    int time = _valueDate.millisecondsSinceEpoch;
     return time.toString();
   } // render
+  DateTime _valueDate = null;
 
 
   @override
