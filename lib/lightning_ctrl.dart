@@ -89,12 +89,17 @@ part 'src/ctrl/table_layout.dart';
 part 'src/ctrl/timezone.dart';
 part 'src/ctrl/ui_service.dart';
 
+part 'src/graph/engine_base.dart';
+part 'src/graph/engine_charted.dart';
+part 'src/graph/engine_charted_container.dart';
+part 'src/graph/engine_charted_theme.dart';
+part 'src/graph/engine_charted_time_series.dart';
+
 part 'src/graph/graph_calc.dart';
 part 'src/graph/graph_engine_panel.dart';
 part 'src/graph/graph_panel.dart';
-part 'src/graph/engine_base.dart';
-part 'src/graph/engine_charted.dart';
-part 'src/graph/engine_charted_theme.dart';
+part 'src/graph/time_series.dart';
+
 
 /**
  * Lightning Dart Controller main entry point
