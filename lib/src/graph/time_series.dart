@@ -7,6 +7,237 @@
 part of lightning_ctrl;
 
 /**
+ * Time Series
+ */
+class TimeSeries {
+
+  static final Logger _log = new Logger("TimeSeries");
+
+  /// Legend title
+  String title;
+  /// data record
+  DataRecord _dataRecord;
+
+  /// time series column list
+  final List<TimeSeriesColumn> _columnList = new List<TimeSeriesColumn>();
+  /// data rows
+  final List<List<num>> _dataRows = new List<List<num>>();
+
+  /// initialize
+  void init(String title, DTable table, String timeColumnName) {
+    this.title = title;
+
+    _dataRecord = new DataRecord(table, null);
+    DColumn col = DataUtil.getTableColumn(table, timeColumnName);
+    if (col == null)
+      throw new Exception("Column Not Found: ${timeColumnName}");
+
+    TimeSeriesColumn tsc = new TimeSeriesColumn(col, false, null, _columnList.length);
+    tsc.spec = new ChartColumnSpec(
+        label: col.label,
+        type: ChartColumnSpec.TYPE_DATE,
+        formatter: dateFormatFunction);
+    _columnList.add(tsc);
+  } // init
+
+  /// format date values
+  String dateFormatFunction(value) {
+    if (value == null) {
+      return "";
+    }
+    if (value is num) {
+      num numValue = value;
+      DateTime dt = new DateTime.fromMillisecondsSinceEpoch(numValue, isUtc: true);
+      return ClientEnv.dateFormat_ymd.format(dt);
+    }
+    return value.toString();
+  }
+
+  /// add column to time series
+  void addColumn(String columnName, bool accumulate,
+      TimeSeriesMeasure measure,
+      {String labelOverride}) {
+    DColumn col = DataUtil.getTableColumn(_dataRecord.table, columnName);
+    if (col == null) {
+      _log.warning("addColumn ${columnName} NotFound");
+    } else {
+      _columnList.add(new TimeSeriesColumn(col, accumulate, measure,
+          _columnList.length, labelOverride: labelOverride));
+    }
+  } // addColumn
+
+  /// render records
+  void load(List<DRecord> records) {
+    _dataRows.clear();
+    for (DRecord record in records) {
+      _addRecord(record);
+    }
+
+    // sort
+    _dataRows.sort((List<num> one, List<num> two){
+      return one.first.compareTo(two.first);
+    });
+    // accumulate
+    List<num> running = new List<num>.filled(_columnList.length, 0);
+    for (List<num> row in _dataRows) {
+      for (int i = 1; i < row.length; i++) {
+        if (_columnList[i].accumulate(row[i])) {
+          num no = running[i];
+          if (row[i] == null)
+            row[i] = no;
+          else
+            row[i] += no;
+        }
+      }
+      running = row;
+    } // accumulate
+  } // renderTimeSeries
+
+  /// add record to time series
+  void _addRecord(DRecord record) {
+    _dataRecord.setRecord(record, 0);
+    TimeSeriesPoint gtp = null;
+    for (TimeSeriesColumn tsc in _columnList) {
+      String value = tsc.getValue(_dataRecord);
+      if (tsc.index == 0) {
+        gtp = new TimeSeriesPoint.from(value);
+      } else {
+        gtp.addString(value);
+      }
+    }
+    _dataRows.add(gtp._data);
+  } // addRecord
+
+} // TimeSeries
+
+
+
+/**
+ * Time Series Measure
+ */
+class TimeSeriesMeasure {
+
+  /// name
+  final String name;
+  /// axis config
+  final ChartAxisConfig axisConfig = new ChartAxisConfig();
+  /// formatter
+  FormatFunction formatter = null;
+
+  /// measures
+  final List<int> measures = new List<int>();
+  final List<num> _domain = new List<num>();
+
+  /// Time Series Measure
+  TimeSeriesMeasure(String this.name, String label) {
+    axisConfig.title = label;
+    axisConfig.scale = new LinearScale();
+  }
+
+  /// update sale min/max
+  void updateScale(num min, num max) {
+    if (min != null && max != null) {
+      if (_domain.isEmpty) {
+        _domain.add(min);
+        _domain.add(max);
+      } else {
+        if (_domain[0] > min)
+          _domain[0] = min;
+        if (_domain[1] < max)
+          _domain[1] = max;
+      }
+      axisConfig.scale.domain = _domain;
+    }
+  } // updateScale
+
+  @override
+  String toString() {
+    return "TimeSeriesMeasure@${name}[measures=${measures} domain=${_domain}]";
+  }
+
+} // TimeSeriesMeasure
+
+
+
+/**
+ * Time Series Column
+ */
+class TimeSeriesColumn {
+
+  final DColumn column;
+  final bool _accumulate;
+  final TimeSeriesMeasure measure;
+  final int index;
+
+  String get name => column.name;
+
+  ChartColumnSpec spec;
+
+  int count = 0;
+  int countNull = 0;
+  num sum = 0;
+  num min;
+  num max;
+
+  /// Time Series Column
+  TimeSeriesColumn(DColumn this.column,
+      bool this._accumulate,
+      TimeSeriesMeasure this.measure,
+      int this.index,
+      {String labelOverride}) {
+
+    String label = labelOverride == null ? column.label : labelOverride;
+
+    spec = new ChartColumnSpec(
+        label: label,
+        type: ChartColumnSpec.TYPE_NUMBER,
+        formatter: measure == null ? null : measure.formatter);
+  } // TimeSeriesColumn
+
+  /// get Value from record
+  String getValue (DataRecord data) {
+    return data.getValue(name);
+  }
+
+  /// add up stats and return true if accumulate
+  bool accumulate(num value) {
+    if (value == null) {
+      countNull++;
+    } else {
+      count++;
+      sum += value;
+      if (min == null || value < min)
+        min = value;
+      if (max == null || value > max)
+        max = value;
+    }
+    return _accumulate;
+  }
+
+
+  /// update Measure
+  void updateMeasure() {
+    if (measure != null) {
+      measure.measures.add(index);
+      if (_accumulate) {
+        measure.updateScale(min, sum);
+      } else {
+        measure.updateScale(min, max);
+      }
+    }
+  } // updateMeasure
+
+  @override
+  String toString() {
+    return "TimeSeriesColumn@${name}#${index}[${measure == null ? '-' : measure.name}"
+        " null=${countNull} null=${count} min=${min} max=${max} sum=${sum}]";
+  }
+
+} // TimeSeriesColumn
+
+
+
+/**
  * Time Series Point with dimensions
  */
 class TimeSeriesPoint {
@@ -59,7 +290,7 @@ class TimeSeriesPoint {
 
 
   String toString() {
-    return "${new DateTime.fromMicrosecondsSinceEpoch(data[0].toInt(), isUtc: true)}: ${new List<num>.from(_data).removeAt(0)}";
+    return "${new DateTime.fromMillisecondsSinceEpoch(data[0].toInt(), isUtc: true)}: ${new List<num>.from(_data).removeAt(0)}";
   }
 
 } // TimeSeriesPoint

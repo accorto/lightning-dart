@@ -10,121 +10,87 @@ part of lightning_ctrl;
  * Time series for Table records
  */
 class EngineChartedTimeSeries
-    extends EngineChartedContainer {
+    extends EngineChartedContainer
+    with TimeSeries {
 
   static final Logger _log = new Logger("EngineChartedTimeSeries");
 
-  final String title;
-  final DTable table;
-  final String timeColumnName;
-  /// the columns
-  final List<DColumn> _columns = new List<DColumn>();
-  /// data record
-  DataRecord _dataRecord;
-
-  final List<int> _measures = new List<int>();
-  final List<ChartColumnSpec> _columnSpecs = new List<ChartColumnSpec>();
-  final List<bool> _accumulateList = new List<bool>();
-  final List<List<num>> _dataRows = new List<List<num>>();
-
 
   /// Chart Engine Charted Engine
-  EngineChartedTimeSeries(String this.title,
-      DTable this.table, String this.timeColumnName)
+  EngineChartedTimeSeries(String title,
+      DTable table, String timeColumnName)
       : super() {
-
-    _dataRecord = new DataRecord(table, null);
-    DColumn col = DataUtil.getTableColumn(table, timeColumnName);
-    if (col == null)
-      throw new Exception("Column Not Found: ${timeColumnName}");
-
-    ChartColumnSpec spec = new ChartColumnSpec(label: col.label,
-        type: ChartColumnSpec.TYPE_TIMESTAMP);
-    _columnSpecs.add(spec);
-    _accumulateList.add(false);
+    init(title, table, timeColumnName);
   } // EngineChartedTimeSeries
 
-  /// add column to time series
-  void addColumn(String columnName, bool accumulate) {
-    DColumn col = DataUtil.getTableColumn(table, timeColumnName);
-    if (col == null) {
-      _log.warning("addColumn ${columnName} NotFound");
-    } else {
-      _columns.add(col);
-      _measures.add(_columnSpecs.length); // 1,2,3,...
-      ChartColumnSpec spec = new ChartColumnSpec(label: col.label,
-          type: ChartColumnSpec.TYPE_NUMBER);
-      _columnSpecs.add(spec);
-      _accumulateList.add(accumulate);
-    }
-  } // addColumn
-
-  /// render records
-  void renderTimeSeries(List<DRecord> records,  bool displayHorizontal) {
-    _dataRows.clear();
-    for (DRecord record in records) {
-      _addRecord(record);
-    }
-
-    // sort
-    _dataRows.sort((List<num> one, List<num> two){
-      return one.first.compareTo(two.first);
-    });
-    // accumulate
-    List<num> running = new List<num>.filled(_columnSpecs.length, 0);
-    for (List<num> row in _dataRows) {
-      for (int i = 1; i < row.length; i++) {
-        if (_accumulateList[i]) {
-          num no = running[i];
-          if (row[i] == null)
-            row[i] = no;
-          else
-            row[i] += no;
-        }
-      }
-      running = row;
-    } // accumulate
-    _draw(displayHorizontal);
-  } // renderTimeSeries
-
-  /// add record to time series
-  void _addRecord(DRecord record) {
-    _dataRecord.setRecord(record, 0);
-    String time = _dataRecord.getValue(timeColumnName);
-    TimeSeriesPoint gtp = new TimeSeriesPoint.from(time);
-    if (gtp.valid) {
-      for (DColumn col in _columns) {
-        gtp.addString(_dataRecord.getValue(col.name));
-      }
-    }
-    _dataRows.add(gtp._data);
-  } // addRecord
-
+  /// render record values
+  bool renderTimeSeries(List<DRecord> records,  bool displayHorizontal) {
+    load(records);
+    return _draw(displayHorizontal);
+  }
 
   /// draw time series
-  void _draw( bool displayHorizontal) {
+  bool _draw( bool displayHorizontal) {
     int width = _createLayout(displayHorizontal);
-    //
-    ChartSeries series = new ChartSeries(table.name, _measures,
-        new LineChartRenderer());
-    Iterable<ChartSeries> seriesList = [series];
+    // a series per data type
+    List<ChartSeries> seriesList = new List<ChartSeries>();
+    List<TimeSeriesMeasure> measureList = new List<TimeSeriesMeasure>();
+    for (TimeSeriesColumn tsc in _columnList) {
+      if (tsc.measure != null) {
+        tsc.updateMeasure();
+        if (!measureList.contains(tsc.measure)) {
+          measureList.add(tsc.measure);
+        }
+      }
+    }
+
+
+    for (TimeSeriesMeasure tsm in measureList) {
+      ChartSeries series = new ChartSeries("ts_${tsm.name}",
+          tsm.measures,
+          new LineChartRenderer(
+              alwaysAnimate: true,
+              trackOnDimensionAxis: true),
+          measureAxisIds: [tsm.name]);
+      seriesList.add(series);
+    }
+
     Iterable<int> dimensionList = [0];
     ChartConfig config = new ChartConfig(seriesList, dimensionList)
           ..legend = new ChartLegend(_legendHost,
-          title: title);
+            title: title);
+    for (TimeSeriesMeasure tsm in measureList) {
+      config.registerMeasureAxis(tsm.name, tsm.axisConfig);
+    }
     _setChartSize(config, width);
     // data
-    _data = new ChartData(_columnSpecs, _dataRows);
+    List<ChartColumnSpec> columnSpecs = new List<ChartColumnSpec>();
+    for (TimeSeriesColumn tsc in _columnList) {
+      columnSpecs.add(tsc.spec);
+    }
+    _data = new ChartData(columnSpecs, _dataRows);
     // area
     ChartState state = new ChartState();
     CartesianArea area = new CartesianArea(_chartHost, _data, config,
         state: state);
     area.theme = new EngineChartedTheme();
-    _createDefaultCartesianBehaviors().forEach((behavior) {
-      area.addChartBehavior(behavior);
-    });
-    area.draw();
+    //
+    area.addChartBehavior(
+        new Hovercard(showDimensionTitle: true,
+          isMouseTracking: true,
+          isMultiValue: true));
+    area.addChartBehavior(
+        new AxisLabelTooltip());
+
+    // draw
+    try {
+      area.draw();
+      return true;
+    } catch (error) {
+      _log.warning("draw", error);
+      dumpData();
+      return false;
+    }
   } // draw
 
-} // GraphTimeSeries
-
+} // EngineChartedTimeSeries

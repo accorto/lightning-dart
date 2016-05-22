@@ -119,7 +119,9 @@ class EngineChartedContainer {
   /// Helper method to create default behaviors for cartesian chart demos.
   Iterable<ChartBehavior> _createDefaultCartesianBehaviors() =>
       new List.from([
-        new Hovercard(showDimensionTitle: true, isMouseTracking: true, isMultiValue: true),
+        new Hovercard(showDimensionTitle: true,
+            isMouseTracking: true,
+            isMultiValue: true),
         new AxisLabelTooltip()
       ]);
 
