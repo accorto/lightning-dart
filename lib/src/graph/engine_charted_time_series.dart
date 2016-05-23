@@ -17,14 +17,22 @@ class EngineChartedTimeSeries
 
 
   /// Chart Engine Charted Engine
-  EngineChartedTimeSeries(String title,
-      DTable table, String timeColumnName)
+  EngineChartedTimeSeries(DTable table, String timeColumnName)
       : super() {
-    init(title, table, timeColumnName);
+    init(table, timeColumnName);
   } // EngineChartedTimeSeries
 
   /// render record values
   bool renderTimeSeries(List<DRecord> records,  bool displayHorizontal) {
+    if (records == null || records.isEmpty) {
+      element.children.clear();
+      DivElement info = new DivElement()
+        ..classes.addAll([LMargin.C_VERTICAL__MEDIUM])
+        ..text = "- No Data -";
+      element.append(info);
+      return true;
+    }
+    reset();
     load(records);
     return _draw(displayHorizontal);
   }
@@ -44,7 +52,7 @@ class EngineChartedTimeSeries
       }
     }
 
-
+    // measure = series = axis
     for (TimeSeriesMeasure tsm in measureList) {
       ChartSeries series = new ChartSeries("ts_${tsm.name}",
           tsm.measures,
@@ -58,7 +66,8 @@ class EngineChartedTimeSeries
     Iterable<int> dimensionList = [0];
     ChartConfig config = new ChartConfig(seriesList, dimensionList)
           ..legend = new ChartLegend(_legendHost,
-            title: title);
+          //  title: "",
+              showValues: true);
     for (TimeSeriesMeasure tsm in measureList) {
       config.registerMeasureAxis(tsm.name, tsm.axisConfig);
     }

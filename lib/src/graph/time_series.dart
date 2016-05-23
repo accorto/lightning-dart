@@ -13,8 +13,6 @@ class TimeSeries {
 
   static final Logger _log = new Logger("TimeSeries");
 
-  /// Legend title
-  String title;
   /// data record
   DataRecord _dataRecord;
 
@@ -24,9 +22,7 @@ class TimeSeries {
   final List<List<num>> _dataRows = new List<List<num>>();
 
   /// initialize
-  void init(String title, DTable table, String timeColumnName) {
-    this.title = title;
-
+  void init(DTable table, String timeColumnName) {
     _dataRecord = new DataRecord(table, null);
     DColumn col = DataUtil.getTableColumn(table, timeColumnName);
     if (col == null)
@@ -68,7 +64,12 @@ class TimeSeries {
 
   /// render records
   void load(List<DRecord> records) {
+    // reset
     _dataRows.clear();
+    for (TimeSeriesColumn tsc in _columnList) {
+      tsc.reset();
+    }
+    // add
     for (DRecord record in records) {
       _addRecord(record);
     }
@@ -128,11 +129,38 @@ class TimeSeriesMeasure {
   final List<int> measures = new List<int>();
   final List<num> _domain = new List<num>();
 
-  /// Time Series Measure
-  TimeSeriesMeasure(String this.name, String label) {
+  /// Time Series Measure - amt=true false=h null=none
+  TimeSeriesMeasure(String this.name, String label, bool amt) {
     axisConfig.title = label;
     axisConfig.scale = new LinearScale();
+    if (amt != null) {
+      formatter = amt ? formatterAmt : formatterHours;
+    }
   }
+
+  /// reset
+  void reset() {
+    measures.clear();
+    _domain.clear();
+  }
+
+  /// Amount formatter (k)
+  String formatterAmt(value) {
+    if (value != null && value is num) {
+      return "${ClientEnv.numberFormat_1.format(value/1000)}k";
+    }
+    return value;
+  }
+
+  /// Hour formatter (h)
+  String formatterHours(value) {
+    if (value != null && value is num) {
+      return "${ClientEnv.numberFormat_int.format(value)}h";
+    }
+    return value;
+  }
+
+
 
   /// update sale min/max
   void updateScale(num min, num max) {
@@ -197,6 +225,17 @@ class TimeSeriesColumn {
   /// get Value from record
   String getValue (DataRecord data) {
     return data.getValue(name);
+  }
+
+  /// reset
+  void reset() {
+    count = 0;
+    countNull = 0;
+    sum = 0;
+    min = null;
+    max = null;
+    if (measure != null)
+      measure.reset();
   }
 
   /// add up stats and return true if accumulate
