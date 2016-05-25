@@ -25,6 +25,7 @@ sed -i '' -E 's/name="etag" content="(.*)"/name="etag" content="'$TS'"/g'  build
 sed -i '' 's/\${timestamp}/'$TS'/g' build/web/*.html
 cat build/web/demo.html | grep $TS
 
+echo "--build upload--"
 #  aws s3 cp build/web s3://lightningdart --recursive
 du -sh build/web
 aws s3 sync build/web s3://lightningdart --quiet
@@ -45,6 +46,7 @@ mkdir ${API}
 dartdoc
 # pub global activate simple_http_server
 #  --path /Users/jorg/Documents/BizPlatform/lightning/lightning-dart/doc/api
+echo "--doc upload--"
 du -sh ${API}
 aws s3 sync ${API} s3://lightningdart/api --quiet
 #aws s3 ls s3://lightningdart/api --recursive --summarize --human-readable

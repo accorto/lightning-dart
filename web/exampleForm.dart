@@ -4,7 +4,6 @@
  * License options+support:  https://lightningdart.com
  */
 
-
 import "package:lightning/lightning.dart";
 
 /**

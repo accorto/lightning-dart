@@ -142,9 +142,12 @@ class LightningCtrl {
 
   /**
    * Initialize Logging, Locale, Intl, Date
-   * [serverUri] e.g. "/"
    */
-  static Future<List<Future>> init(String productCode, String productLabel, String serverUri) {
+  static Future<List<Future>> init(
+      final String productCode,
+      final String productLabel,
+      {String productionUri, // override - end with /
+      String developmentUri}) {
     LightningCtrl.productCode = productCode;
     LightningCtrl.productLabel = productLabel;
     Completer<List<Future>> completer = new Completer<List<Future>>();
@@ -160,11 +163,11 @@ class LightningCtrl {
     futures.add(LightningDart.init()); // ClientEnv, Locale Intl, Date
     futures.add(Preference.init());
 
-    bool embedded = router.embedded;
-    if (router.hasParam(Router.P_SERVERURI)) {
-      serverUri = router.param(Router.P_SERVERURI);
+    if (productionUri == null
+      && router.hasParam(Router.P_SERVERURI)) { // from parameter or LINIT
+      productionUri = router.param(Router.P_SERVERURI);
     }
-    Service.init(serverUri, embedded:embedded);
+    Service.init(productionUri, developmentUri);
     futures.add(Timezone.init(false)); // requires server url
     // FK
     EditorUtil.createLookupCall = FkCtrl.createLookup;

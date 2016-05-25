@@ -12,7 +12,7 @@ import "demo.dart";
 void main() {
 
   // LightningDart.init() // client env
-  LightningCtrl.init("Lightning", "Lightning", "/") // server env
+  LightningCtrl.init("Lightning", "Lightning") // server env
   .then((_) {
     IntroPage intro = new IntroPage();
     //

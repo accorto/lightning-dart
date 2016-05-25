@@ -477,7 +477,7 @@ class Router {
   }
 
   String toString() {
-    return "Router useHash=${useHash} initialHref=${initialHref} "
+    return "Router useHash=${useHash} embedded=${embedded} initialHref=${initialHref} "
         " baseUrl=${_baseUrl} queryParams=${queryParams}"
         " currentPath=${_currentPath}" // currentPathTime=${_currentPathTime}""
         " routes=#${_routeList.length}"

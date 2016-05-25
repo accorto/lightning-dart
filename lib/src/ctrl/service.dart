@@ -59,24 +59,24 @@ class Service {
   static Logger _log;
 
   /**
-   * Initialize Services - optional set [serverUri] when testing
+   * Initialize Services
+   * - optional set [productionUri] or [developmentUri]
    * e.g. "http://localhost:6666/" updating [serverUrl]
    */
-  static void init(String serverUri, {bool embedded: false}) {
+  static void init(String productionUri,
+      String developmentUri) {
     _log = new Logger("Service");
     Service.clientPrefix = clientPrefix;
 
-    // DartEditor runs on http://localhost:8080/index.html
     // Redirect Server Url /
+    if (productionUri != null && productionUri.isNotEmpty) {
+      serverUrl = productionUri;
+    }
     String url = window.location.href;
-    if (serverUri != null && serverUri.isNotEmpty) {
-      if (url.contains("localhost")) {
-        serverUrl = serverUri;
-        ClientEnv.testMode = true;
-      }
-      if (embedded) {
-        serverUrl = serverUri;
-      }
+    if (url.contains("localhost")) {
+      if (developmentUri != null && developmentUri.isNotEmpty)
+        serverUrl = developmentUri;
+      ClientEnv.testMode = true;
     }
     //
     SettingItem si = Settings.setting(Settings.GEO_ENABLED);
@@ -110,7 +110,9 @@ class Service {
    * Create Client Request for [serverUri] with user [info].
    * Request GeoLocation [withGeo] for this - defaults to [addGeo]
    */
-  CRequest createCRequest(String serverUri, String info, {bool withGeo: false}) {
+  CRequest createCRequest(final String serverUri,
+      final String info,
+      {bool withGeo: false}) {
     trxNo++;
     DateTime now = new DateTime.now();
     //
@@ -189,11 +191,14 @@ class Service {
       } */
 
   /**
-   * Create+Send protocol buffers HttpRequest to [trx] with [data]
+   * Create+Send protocol buffers HttpRequest to [serverUri] with [data]
    * - [SimplePage.onServerStart]
    */
-  Future<HttpRequest> sendRequest(String serverUri, Uint8List data, String info,
-      {bool setBusy: true, bool trackProgress:false}) {
+  Future<HttpRequest> sendRequest(final String serverUri,
+      final Uint8List data,
+      final String info,
+      {bool setBusy: true,
+      bool trackProgress:false}) {
     _setBusy = setBusy;
     if (_setBusy && onServerStart != null) {
       onServerStart(serverUri, info);

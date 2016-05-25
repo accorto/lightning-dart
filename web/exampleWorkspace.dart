@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Accorto, Inc. All Rights Reserved
+ * Copyright (c) 2016 Accorto, Inc. All Rights Reserved
  * License: GPLv3  http://www.gnu.org/licenses/gpl-3.0.txt
  * License options+support:  https://lightningdart.com
  */
@@ -29,7 +29,7 @@ main() async {
   PageSimple page = null;
   Datasource dataSource = null;
   if (dataSource == null) {
-    LightningCtrl.init("LightningWorkspace", "Lightning", "/")
+    LightningCtrl.init("LightningWorkspace", "Lightning")
     .then((_){
       page = LightningCtrl.createPageSimple();
       return WorkspaceLogin.login();
