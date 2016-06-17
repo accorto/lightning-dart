@@ -72,7 +72,7 @@ class SvgUtil {
       }
     })
     .catchError((error, stackTrace){
-      _log.warning("svgDirectProcess symbolUrl=${symbolSvgUrl}", error, stackTrace);
+      _log.warning("svgDirectProcess symbolUrl=${symbolSvgUrl} location=${window.location.href}", error, stackTrace);
     });
   }
 
