@@ -95,6 +95,7 @@ class Service {
       clientId = param;
     } else {
       Random r = new Random(new DateTime.now().millisecondsSinceEpoch);
+      //String s = (r.nextDouble()*1e16).toInt().toRadixString(36); // length 11
       String s = r.nextInt(1<<32 -1).toRadixString(36) + r.nextInt(1<<32 -1).toRadixString(36);
       clientId = s.substring(0,8); // single int is 6
     }

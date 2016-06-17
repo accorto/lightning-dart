@@ -57,15 +57,17 @@ class ExampleForm2 {
     CheckRequest request = new CheckRequest();
     request.recordList.add(record);
 
-    String info = "ex2";
+    String info = "eForm2";
     ExampleService service = new ExampleService();
     try {
       service.send(request, info, level: Level.INFO)
       .then((CheckResponse response) {
         completer.complete(response.response); // update form
+        PageSimple.instance.setStatusInfo("${info} ${response.response.msg}", detail: "${info} works");
       });
     } catch (error, stackTrace) {
       _log.severe(info, error, stackTrace);
+      PageSimple.instance.setStatusError("${info} ${error}", detail: "${info} failed");
     }
 
     return completer.future;
