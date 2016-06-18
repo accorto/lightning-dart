@@ -39,9 +39,10 @@ class LPicklist
 
   /// Picklist Element
   final DivElement _plDiv = new DivElement()
-    ..classes.add(C_PICKLIST);
+    ..classes.addAll([C_PICKLIST, LDropdown.C_DROPDOWN_TRIGGER, LDropdown.C_DROPDOWN_TRIGGER__CLICK]);
   /// Button (proxy input)
-  LButton _plButton;
+  final ButtonElement _plButton = new ButtonElement()
+    ..classes.addAll([LButton.C_BUTTON__NEUTRAL, C_PICKLIST__LABEL]);
   /// Button Label
   final SpanElement _plButtonLabel = new SpanElement()
     ..classes.add(LText.C_TRUNCATE);
@@ -65,18 +66,21 @@ class LPicklist
   }
   /// initialize
   void _initEditor(String name, String idPrefix, DataColumn dataColumn, bool inGrid) {
-    _plButton = new LButton(new ButtonElement(), name, null, idPrefix:idPrefix,
-      buttonClasses: [LButton.C_BUTTON__NEUTRAL, C_PICKLIST__LABEL],
-      labelElement: _plButtonLabel,
-      icon: new LIconUtility(LIconUtility.DOWN)); // seta id
-    _plButton.element.attributes[Html0.ARIA_HASPOPUP] = "true";
-    _plButton.iconButton = false;
-    _plButton.onClick.listen(onButtonClick);
-    _plDiv.append(_plButton.element);
     _plButtonLabel.text = placeholder;
+    _plButton
+        ..name = name
+        ..id = LComponent.createId(idPrefix, name)
+        ..attributes[Html0.ARIA_HASPOPUP] = "true"
+        ..type = "button"
+        ..onClick.listen(onButtonClick);
+    // TODO aria-activedescendant
+    _plButton
+        ..append(_plButtonLabel)
+        ..append(new LIconUtility(LIconUtility.DOWN).element);
     //
-    createBaseLayout(this, inGrid:inGrid);
-    element.append(_plDiv);
+    createBaseLayout(this, inGrid:inGrid); // appends input(=button)
+    _plDiv.append(_plButton); // re-assign
+    elementControl.append(_plDiv);
     //
     _dropdown = new LDropdownElement(
         new DivElement()
@@ -86,7 +90,7 @@ class LPicklist
     _dropdown.selectMode = true;
     _plDiv.append(_dropdown.element);
 
-    _plButton.element.style.width = "100%"; // C_Picklist_Label has width=15rem
+    //_plButton.style.width = "100%"; // C_Picklist_Label has width=15rem
     _dropdown.element.style.width = "100%"; // C_Dropdown has width of 15rem
     //
     showDropdown = false;
@@ -116,7 +120,7 @@ class LPicklist
   String get id => _plButton.id;
   void set id (String newValue) {
     if (newValue != null && newValue.isNotEmpty) {
-      _plButton.element.id = newValue;
+      _plButton.id = newValue;
     //  if (_labelElement != null)
     //    _labelElement.htmlFor = newValue;
     }
@@ -127,19 +131,16 @@ class LPicklist
 
   String get name => _plButton.name;
   String get type => EditorI.TYPE_SELECT;
-  Element get input => _plButton.element;
+  Element get input => _plButton;
   bool get multiple => false;
 
   /// Small Editor/Label
   void set small (bool newValue) {
-    if (newValue)
-      _plButton.classes.add(LButton.C_BUTTON__SMALL);
-    else
-      _plButton.classes.remove(LButton.C_BUTTON__SMALL);
+  //  _plButton.small = newValue; // FIXME small
+  //  _plButton.iconSizeSmall();
   }
 
   /// String Value
-
   String get value => _dropdown.value;
   void set value (String newValue) {
     _settingValue = true;
@@ -320,8 +321,9 @@ class LPicklist
   bool get showDropdown => _plDiv.attributes[Html0.ARIA_EXPANED] == "true";
   /// PickList Expanded
   void set showDropdown (bool newValue) {
-    _plDiv.attributes[Html0.ARIA_EXPANED] = newValue.toString();
-    _dropdown.show = newValue;
+    _dropdown.show = newValue; // sets parent
+    //_plDiv.classes.toggle(LDropdown.C_IS_OPEN, newValue);
+    //_plDiv.attributes[Html0.ARIA_EXPANED] = newValue.toString();
   }
 
 

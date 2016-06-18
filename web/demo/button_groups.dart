@@ -38,21 +38,30 @@ class ButtonGroups extends DemoFeature {
 
     div.appendHrSmall();
     bg = new LButtonGroup();
-    bg.add(new LButton.neutralIcon("refresh", "Refresh", new LIconUtility(LIconUtility.REFRESH), iconLeft:true));
-    bg.add(new LButton.neutralIcon("edit", "Edit", new LIconUtility(LIconUtility.EDIT), iconLeft:true));
-    bg.add(new LButton.neutralIcon("delete", "Delete", new LIconUtility(LIconUtility.DELETE), iconLeft:true));
-    bg.add(new LButton.neutralIcon("save", "Save", new LIconUtility(LIconAction.CHECK), iconLeft:true));
+    bg.add(new LButton.neutralIcon("refresh", "Refresh", new LIconUtility(LIconUtility.REFRESH)));
+    bg.add(new LButton.neutralIcon("edit", "Edit", new LIconUtility(LIconUtility.EDIT)));
+    bg.add(new LButton.neutralIcon("delete", "Delete", new LIconUtility(LIconUtility.DELETE)));
+    bg.add(new LButton.neutralIcon("save", "Save", new LIconUtility(LIconAction.CHECK)));
     bg.layout(2); // show just two
     bg.layout(0); // show all
     div.add(bg);
 
     div.appendHrSmall();
     bg = new LButtonGroup();
-    bg.add(new LButton.neutralIcon("refresh", "Refresh", new LIconUtility(LIconUtility.REFRESH), iconLeft:true));
-    bg.add(new LButton.neutralIcon("edit", "Edit", new LIconUtility(LIconUtility.EDIT), iconLeft:true));
-    bg.add(new LButton.neutralIcon("delete", "Delete", new LIconUtility(LIconUtility.DELETE), iconLeft:true));
-    bg.add(new LButton.neutralIcon("save", "Save", new LIconUtility(LIconAction.CHECK), iconLeft:true));
+    bg.add(new LButton.neutralIcon("refresh", "Refresh", new LIconUtility(LIconUtility.REFRESH)));
+    bg.add(new LButton.neutralIcon("edit", "Edit", new LIconUtility(LIconUtility.EDIT)));
+    bg.add(new LButton.neutralIcon("delete", "Delete", new LIconUtility(LIconUtility.DELETE)));
+    bg.add(new LButton.neutralIcon("save", "Save", new LIconUtility(LIconAction.CHECK)));
     bg.layout(2); // show just two
+    div.add(bg);
+
+    div.appendHrSmall();
+    bg = new LButtonGroup();
+    bg.add(new LButton.iconBorder("refresh", new LIconUtility(LIconUtility.REFRESH), "Refresh"));
+    bg.add(new LButton.iconBorder("edit", new LIconUtility(LIconUtility.EDIT), "Edit"));
+    bg.add(new LButton.iconBorder("delete", new LIconUtility(LIconUtility.DELETE), "Delete"));
+    bg.add(new LButton.iconBorder("save", new LIconUtility(LIconAction.CHECK), "Save"));
+    //bg.layout(2); // show just two
     div.add(bg);
 
     return div;
@@ -80,20 +89,20 @@ class ButtonGroups extends DemoFeature {
 
     div.appendHrSmall();
     bg = new LButtonGroup();
-    bg.add(new LButton.neutralIcon("refresh", "Refresh", new LIconUtility(LIconUtility.REFRESH), iconLeft:true));
-    bg.add(new LButton.neutralIcon("edit", "Edit", new LIconUtility(LIconUtility.EDIT), iconLeft:true));
-    bg.add(new LButton.neutralIcon("delete", "Delete", new LIconUtility(LIconUtility.DELETE), iconLeft:true));
-    bg.add(new LButton.neutralIcon("save", "Save", new LIconUtility(LIconAction.CHECK), iconLeft:true));
+    bg.add(new LButton.neutralIcon("refresh", "Refresh", new LIconUtility(LIconUtility.REFRESH)));
+    bg.add(new LButton.neutralIcon("edit", "Edit", new LIconUtility(LIconUtility.EDIT)));
+    bg.add(new LButton.neutralIcon("delete", "Delete", new LIconUtility(LIconUtility.DELETE)));
+    bg.add(new LButton.neutralIcon("save", "Save", new LIconUtility(LIconAction.CHECK)));
     bg.layout(2); // show just two
     bg.layout(0); // show all
     div.add(bg);
 
     div.appendHrSmall();
     bg = new LButtonGroup();
-    bg.add(new LButton.neutralIcon("refresh", "Refresh", new LIconUtility(LIconUtility.REFRESH), iconLeft:true));
-    bg.add(new LButton.neutralIcon("edit", "Edit", new LIconUtility(LIconUtility.EDIT), iconLeft:true));
-    bg.add(new LButton.neutralIcon("delete", "Delete", new LIconUtility(LIconUtility.DELETE), iconLeft:true));
-    bg.add(new LButton.neutralIcon("save", "Save", new LIconUtility(LIconAction.CHECK), iconLeft:true));
+    bg.add(new LButton.neutralIcon("refresh", "Refresh", new LIconUtility(LIconUtility.REFRESH)));
+    bg.add(new LButton.neutralIcon("edit", "Edit", new LIconUtility(LIconUtility.EDIT)));
+    bg.add(new LButton.neutralIcon("delete", "Delete", new LIconUtility(LIconUtility.DELETE)));
+    bg.add(new LButton.neutralIcon("save", "Save", new LIconUtility(LIconAction.CHECK)));
     bg.layout(2); // show just two
     div.add(bg);
 

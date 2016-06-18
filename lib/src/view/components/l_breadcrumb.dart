@@ -11,8 +11,10 @@ part of lightning_dart;
  */
 class LBreadcrumb extends LComponent {
 
-  /// This class allows the .slds-list__item to display in the breadcrumb style
-  static const String C_BREADCRUMB  = "slds-breadcrumb";
+  /// slds-breadcrumb (ol): Initializes a breadcrumb component - This class allows the .slds-list__item to display in the breadcrumb style
+  static const String C_BREADCRUMB = "slds-breadcrumb";
+  /// slds-breadcrumb__item (li): Item of the breadcrumb list
+  static const String C_BREADCRUMB__ITEM = "slds-breadcrumb__item";
 
   /// Auto Id Numbering
   static int _autoId = 1;
@@ -21,8 +23,6 @@ class LBreadcrumb extends LComponent {
   final Element element = new Element.nav()
     ..attributes[Html0.ROLE] = Html0.ROLE_NAVIGATION ;
 
-  final ParagraphElement _p = new ParagraphElement()
-    ..classes.add(LText.C_ASSISTIVE_TEXT);
   final OListElement _list = new OListElement()
     ..classes.addAll([C_BREADCRUMB, LList.C_LIST__HORIZONTAL]);
 
@@ -31,13 +31,9 @@ class LBreadcrumb extends LComponent {
   /**
    * Breadcrumb
    */
-  LBreadcrumb({String this.idPrefix, String assistiveText}) {
+  LBreadcrumb({String this.idPrefix}) {
     if (idPrefix == null || idPrefix.isEmpty)
       this.idPrefix = "bc${_autoId++}";
-    _p.id = "${this.idPrefix}-label";
-    _p.text = assistiveText == null ? lBreadcrumbText() : assistiveText;
-    element.append(_p);
-    _list.attributes[Html0.ARIA_LABELLEDBY] = _p.id;
     element.append(_list);
   } // LBreadcrumb
 
@@ -88,15 +84,12 @@ class LBreadcrumb extends LComponent {
     if (li == null) {
       while (_list.children.length <= level) {
         li = new LIElement()
-          ..classes.addAll([LList.C_LIST__ITEM, LText.C_TEXT_HEADING__LABEL]);
+          ..classes.addAll([C_BREADCRUMB__ITEM, LText.C_TEXT_HEADING__LABEL]);
         _list.append(li);
       }
     }
     return li;
   } // getOrCreateLi
 
-
-
-  static String lBreadcrumbText() => Intl.message("You are here", name: "lBreadcrumbText", args: []);
 
 } // LBreadcrumb

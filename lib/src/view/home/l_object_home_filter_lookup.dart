@@ -28,7 +28,7 @@ class LObjectHomeFilterLookup {
   /// Drop down Button
   LButton _button = new LButton(new ButtonElement(), "more", null,
       icon: new LIconUtility(LIconUtility.DOWN),
-      buttonClasses: [LButton.C_BUTTON__ICON_BARE, LGrid.C_SHRINK_NONE, LGrid.C_ALIGN_MIDDLE, LMargin.C_LEFT__X_SMALL],
+      buttonClasses: [LButton.C_BUTTON__ICON, LGrid.C_SHRINK_NONE, LGrid.C_ALIGN_MIDDLE, LMargin.C_LEFT__X_SMALL],
       assistiveText:lObjectHomeLookupMore());
 
   DivElement _dropdown = new DivElement()

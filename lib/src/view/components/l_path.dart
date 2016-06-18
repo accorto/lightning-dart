@@ -316,7 +316,7 @@ class LPathButton extends LButton {
   /// Path Button (blue)
   LPathButton.markComplete(String name, String label, {String idPrefix})
       : super(new ButtonElement(), name, label, idPrefix:idPrefix,
-      buttonClasses:[LButton.C_BUTTON__BRAND, LButton.C_BUTTON__SMALL, LButton.C_BUTTON__ICON_BORDER_FILLED,
+      buttonClasses:[LButton.C_BUTTON__BRAND, LButton.C_BUTTON__ICON_SMALL, LButton.C_BUTTON__ICON_BORDER_FILLED,
       "slds-path__mark-complete", LGrid.C_NO_FLEX, LMargin.C_HORIZONTAL__SMALL],
       icon: new LIconUtility(LIconUtility.CHECK)) {
   }
@@ -324,7 +324,7 @@ class LPathButton extends LButton {
   /// Path Button (black)
   LPathButton.markCurrent(String name, String label, {String idPrefix})
       : super(new ButtonElement(), name, label, idPrefix:idPrefix,
-          buttonClasses:[LButton.C_BUTTON__BRAND, LButton.C_BUTTON__SMALL, LButton.C_BUTTON__ICON_BORDER_FILLED,
+          buttonClasses:[LButton.C_BUTTON__BRAND, LButton.C_BUTTON__ICON_SMALL, LButton.C_BUTTON__ICON_BORDER_FILLED,
           "slds-path__mark-complete", LGrid.C_NO_FLEX, LMargin.C_HORIZONTAL__SMALL,
           "slds-path__mark-current"]) {
   }

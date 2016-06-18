@@ -26,8 +26,8 @@ class Popovers extends DemoFeature {
     div.add(pop);
 
     div.appendHR();
-    CDiv buttonLine = new CDiv()
-      ..classes.add(LButton.C_X_SMALL_BUTTONS__HORIZONTAL);
+    CDiv buttonLine = new CDiv();
+    // FIXME  ..classes.add(LButton.C_X_SMALL_BUTTONS__HORIZONTAL);
     div.add(buttonLine);
     pop = new LPopover()
       ..headText = "Another Popover";
@@ -70,8 +70,8 @@ class Popovers extends DemoFeature {
     div.add(tt);
 
     div.appendHR();
-    buttonLine = new CDiv()
-      ..classes.add(LButton.C_X_SMALL_BUTTONS__HORIZONTAL);
+    buttonLine = new CDiv();
+    // FIXME  ..classes.add(LButton.C_X_SMALL_BUTTONS__HORIZONTAL);
     div.add(buttonLine);
     tt = new LTooltip();
     tt.body

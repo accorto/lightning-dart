@@ -57,7 +57,7 @@ class ObjectHomeFilterPanel {
         new LIconUtility(LIconUtility.TABLE),
         idPrefix: id,
         onButtonClick: onSyncButtonClick)
-      ..small = true
+      //..small = true
       ..selected = false
       ..element.style.verticalAlign = "top";
 
