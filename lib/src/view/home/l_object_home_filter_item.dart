@@ -31,7 +31,7 @@ class ObjectHomeFilterItem
 
   /// List Element
   final LIElement li = new LIElement()
-    ..classes.add(LList.C_LIST__ITEM);
+    ..classes.add(LList.C_ITEM);
 
   /// Detail Container
   DivElement _detail;

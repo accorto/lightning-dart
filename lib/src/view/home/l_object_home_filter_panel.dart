@@ -27,7 +27,7 @@ class ObjectHomeFilterPanel {
 
   /// Filter List
   UListElement _filters = new UListElement()
-    ..classes.addAll([LList.C_LIST__VERTICAL, LList.C_HAS_CARDS__SPACE, LMargin.C_VERTICAL__MEDIUM]);
+    ..classes.addAll([LList.C_HAS_DIVIDERS__AROUND_SPACE]);
   /// filter item list
   final List<ObjectHomeFilterItem> _filterItemList = new List<ObjectHomeFilterItem>();
 

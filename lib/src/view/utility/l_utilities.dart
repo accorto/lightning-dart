@@ -1,11 +1,22 @@
 /*
- * Copyright (c) 2015 Accorto, Inc. All Rights Reserved
+ * Copyright (c) 2016 Accorto, Inc. All Rights Reserved
  * License: GPLv3  http://www.gnu.org/licenses/gpl-3.0.txt
  * License options+support:  https://lightningdart.com
  */
 
 part of lightning_dart;
 
+
+// Lightning Dart Utilities
+
+
+/// Alignment
+class LAlignment {
+
+  /// slds-align--absolute-center: Class will absolutely center children content
+  static const String C_ALIGN__ABSOLUTE_CENTER = "slds-align--absolute-center";
+
+}
 
 /// Floats
 class LFloat {
@@ -18,6 +29,31 @@ class LFloat {
   static const String C_CLEARFIX = "slds-clearfix";
 
 } // LFloat
+
+
+/// Interactions
+class LInteraction {
+
+  /// .slds-has-blur-focus (a)
+  static const String C_HAS_BLUR_FOCUS = "slds-has-blur-focus";
+  /// slds-type-focus (container): Creates a faux link with interactions - This is used when an actual anchor element can not be used. For example — when a heading and button are next to each other and both need the text underline
+  static const String C_TYPE_FOCUS = "slds-type-focus";
+  /// slds-text-link--reset (a or .slds-button): Makes links and buttons appear as regular text
+  static const String C_TEXT_LINK__RESET = "slds-text-link--reset";
+
+}
+
+
+/// Position
+class LPosition {
+
+  /// slds-is-relative (any element): Used to contain children if children are absolutely positioned and out of flow. Also used to position element without changing layout.
+  static const String C_IS_RELATIVE = "slds-is-relative";
+  /// slds-is-static (any element): Reset positioning back to normal behavior
+  static const String C_IS_STATIC = "slds-is-static";
+
+}
+
 
 
 /// Sizing
@@ -77,7 +113,7 @@ class LSizing {
     return "slds-medium-size--${x}-of-${y}";
   }
   static String sizeLargeXofY(int x, int y) {
-    return "slds-medium-size--${x}-of-${y}";
+    return "slds-large-size--${x}-of-${y}";
   }
 
   static String size1ofY(int y) {
@@ -90,7 +126,7 @@ class LSizing {
     return "slds-medium-size--1-of-${y}";
   }
   static String sizeLarge1ofY(int y) {
-    return "slds-medium-size--y-of-${y}";
+    return "slds-large-size--y-of-${y}";
   }
 
 } // LSizing
@@ -109,6 +145,8 @@ class LMargin {
   static const String C_TOP__MEDIUM = "slds-m-top--medium";
   static const String C_TOP__LARGE = "slds-m-top--large";
   static const String C_TOP__X_LARGE = "slds-m-top--x-large";
+  static const String C_TOP__XX_LARGE = "slds-m-top--xx-large";
+
   static const String C_RIGHT__XXX_SMALL = "slds-m-right--xxx-small";
   static const String C_RIGHT__XX_SMALL = "slds-m-right--xx-small";
   static const String C_RIGHT__X_SMALL = "slds-m-right--x-small";
@@ -116,6 +154,8 @@ class LMargin {
   static const String C_RIGHT__MEDIUM = "slds-m-right--medium";
   static const String C_RIGHT__LARGE = "slds-m-right--large";
   static const String C_RIGHT__X_LARGE = "slds-m-right--x-large";
+  static const String C_RIGHT__XX_LARGE = "slds-m-right--xx-large";
+
   static const String C_BOTTOM__NONE = "slds-m-bottom--none";
   static const String C_BOTTOM__XXX_SMALL = "slds-m-bottom--xxx-small";
   static const String C_BOTTOM__XX_SMALL = "slds-m-bottom--xx-small";
@@ -124,6 +164,8 @@ class LMargin {
   static const String C_BOTTOM__MEDIUM = "slds-m-bottom--medium";
   static const String C_BOTTOM__LARGE = "slds-m-bottom--large";
   static const String C_BOTTOM__X_LARGE = "slds-m-bottom--x-large";
+  static const String C_BOTTOM__XX_LARGE = "slds-m-bottom--xx-large";
+
   static const String C_LEFT__NONE = "slds-m-left--none";
   static const String C_LEFT__XXX_SMALL = "slds-m-left--xxx-small";
   static const String C_LEFT__XX_SMALL = "slds-m-left--xx-small";
@@ -132,6 +174,8 @@ class LMargin {
   static const String C_LEFT__MEDIUM = "slds-m-left--medium";
   static const String C_LEFT__LARGE = "slds-m-left--large";
   static const String C_LEFT__X_LARGE = "slds-m-left--x-large";
+  static const String C_LEFT__XX_LARGE = "slds-m-left--xx-large";
+
   static const String C_VERTICAL__NONE = "slds-m-vertical--none";
   static const String C_VERTICAL__XXX_SMALL = "slds-m-vertical--xxx-small";
   static const String C_VERTICAL__XX_SMALL = "slds-m-vertical--xx-small";
@@ -140,6 +184,8 @@ class LMargin {
   static const String C_VERTICAL__MEDIUM = "slds-m-vertical--medium";
   static const String C_VERTICAL__LARGE = "slds-m-vertical--large";
   static const String C_VERTICAL__X_LARGE = "slds-m-vertical--x-large";
+  static const String C_VERTICAL__XX_LARGE = "slds-m-vertical--xx-large";
+
   static const String C_HORIZONTAL__NONE = "slds-m-horizontal--none";
   static const String C_HORIZONTAL__XXX_SMALL = "slds-m-horizontal--xxx-small";
   static const String C_HORIZONTAL__XX_SMALL = "slds-m-horizontal--xx-small";
@@ -148,6 +194,8 @@ class LMargin {
   static const String C_HORIZONTAL__MEDIUM = "slds-m-horizontal--medium";
   static const String C_HORIZONTAL__LARGE = "slds-m-horizontal--large";
   static const String C_HORIZONTAL__X_LARGE = "slds-m-horizontal--x-large";
+  static const String C_HORIZONTAL__XX_LARGE = "slds-m-horizontal--xx-large";
+
   static const String C_AROUND__NONE = "slds-m-around--none";
   static const String C_AROUND__XXX_SMALL = "slds-m-around--xxx-small";
   static const String C_AROUND__XX_SMALL = "slds-m-around--xx-small";
@@ -156,6 +204,7 @@ class LMargin {
   static const String C_AROUND__MEDIUM = "slds-m-around--medium";
   static const String C_AROUND__LARGE = "slds-m-around--large";
   static const String C_AROUND__X_LARGE = "slds-m-around--x-large";
+  static const String C_AROUND__XX_LARGE = "slds-m-around--xx-large";
 
 } // LMargin
 
@@ -173,6 +222,8 @@ class LPadding {
   static const String C_TOP__MEDIUM = "slds-p-top--medium";
   static const String C_TOP__LARGE = "slds-p-top--large";
   static const String C_TOP__X_LARGE = "slds-p-top--x-large";
+  static const String C_TOP__XX_LARGE = "slds-p-top--xx-large";
+
   static const String C_RIGHT__NONE = "slds-p-right--none";
   static const String C_RIGHT__XXX_SMALL = "slds-p-right--xxx-small";
   static const String C_RIGHT__XX_SMALL = "slds-p-right--xx-small";
@@ -181,6 +232,8 @@ class LPadding {
   static const String C_RIGHT__MEDIUM = "slds-p-right--medium";
   static const String C_RIGHT__LARGE = "slds-p-right--large";
   static const String C_RIGHT__X_LARGE = "slds-p-right--x-large";
+  static const String C_RIGHT__XX_LARGE = "slds-p-right--xx-large";
+
   static const String C_BOTTOM__NONE = "slds-p-bottom--none";
   static const String C_BOTTOM__XXX_SMALL = "slds-p-bottom--xxx-small";
   static const String C_BOTTOM__XX_SMALL = "slds-p-bottom--xx-small";
@@ -189,6 +242,8 @@ class LPadding {
   static const String C_BOTTOM__MEDIUM = "slds-p-bottom--medium";
   static const String C_BOTTOM__LARGE = "slds-p-bottom--large";
   static const String C_BOTTOM__X_LARGE = "slds-p-bottom--x-large";
+  static const String C_BOTTOM__XX_LARGE = "slds-p-bottom--xx-large";
+
   static const String C_LEFT__NONE = "slds-p-left--none";
   static const String C_LEFT__XXX_SMALL = "slds-p-left--xxx-small";
   static const String C_LEFT__XX_SMALL = "slds-p-left--xx-small";
@@ -197,6 +252,8 @@ class LPadding {
   static const String C_LEFT__MEDIUM = "slds-p-left--medium";
   static const String C_LEFT__LARGE = "slds-p-left--large";
   static const String C_LEFT__X_LARGE = "slds-p-left--x-large";
+  static const String C_LEFT__XX_LARGE = "slds-p-left--xx-large";
+
   static const String C_VERTICAL__NONE = "slds-p-vertical--none";
   static const String C_VERTICAL__XXX_SMALL = "slds-p-vertical--xxx-small";
   static const String C_VERTICAL__XX_SMALL = "slds-p-vertical--xx-small";
@@ -205,6 +262,8 @@ class LPadding {
   static const String C_VERTICAL__MEDIUM = "slds-p-vertical--medium";
   static const String C_VERTICAL__LARGE = "slds-p-vertical--large";
   static const String C_VERTICAL__X_LARGE = "slds-p-vertical--x-large";
+  static const String C_VERTICAL__XX_LARGE = "slds-p-vertical--xx-large";
+
   static const String C_HORIZONTAL__NONE = "slds-p-horizontal--none";
   static const String C_HORIZONTAL__XXX_SMALL = "slds-p-horizontal--xxx-small";
   static const String C_HORIZONTAL__XX_SMALL = "slds-p-horizontal--xx-small";
@@ -213,6 +272,8 @@ class LPadding {
   static const String C_HORIZONTAL__MEDIUM = "slds-p-horizontal--medium";
   static const String C_HORIZONTAL__LARGE = "slds-p-horizontal--large";
   static const String C_HORIZONTAL__X_LARGE = "slds-p-horizontal--x-large";
+  static const String C_HORIZONTAL__XX_LARGE = "slds-p-horizontal--xx-large";
+
   static const String C_AROUND__NONE = "slds-p-around--none";
   static const String C_AROUND__XXX_SMALL = "slds-p-around--xxx-small";
   static const String C_AROUND__XX_SMALL = "slds-p-around--xx-small";
@@ -221,6 +282,7 @@ class LPadding {
   static const String C_AROUND__MEDIUM = "slds-p-around--medium";
   static const String C_AROUND__LARGE = "slds-p-around--large";
   static const String C_AROUND__X_LARGE = "slds-p-around--x-large";
+  static const String C_AROUND__XX_LARGE = "slds-p-around--xx-large";
 
 } // LPadding
 

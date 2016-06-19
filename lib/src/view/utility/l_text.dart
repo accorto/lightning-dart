@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2015 Accorto, Inc. All Rights Reserved
- * License: GPLv3   http://www.gnu.org/licenses/gpl-3.0.txt
- * License options+support:  https://www.lightningdart.com
+ * Copyright (c) 2016 Accorto, Inc. All Rights Reserved
+ * License: GPLv3  http://www.gnu.org/licenses/gpl-3.0.txt
+ * License options+support:  https://lightningdart.com
  */
 
 part of lightning_dart;
@@ -13,27 +13,33 @@ part of lightning_dart;
  */
 class LText {
 
-  /// slds-text-body--regular: Creates the 14px regular body copy - This is the base body font size and is rarely needed
+  /// slds-text-body--regular: Creates the 13px regular body copy - This is the base body font size and is rarely needed
   static const String C_TEXT_BODY__REGULAR = "slds-text-body--regular";
   /// slds-text-body--small: Creates a more pale-colored 12px copy - Typically used as supportive text
   static const String C_TEXT_BODY__SMALL = "slds-text-body--small";
-  /// slds-text-heading--large (Any heading): Very large 32px heading - These are rarely used in the app and are reserved for extremely large text to showcase data (such as totals or stats).
+
+  /// slds-text-heading--large (Any heading): Very large 28px heading - These are rarely used in the app and are reserved for extremely large text to showcase data (such as totals or stats).
   static const String C_TEXT_HEADING__LARGE = "slds-text-heading--large";
-  /// slds-text-heading--medium (Any heading): Large 24px heading - Typically the largest heading on a page
+  /// slds-text-heading--medium (Any heading): Large 20px heading - Typically the largest heading on a page
   static const String C_TEXT_HEADING__MEDIUM = "slds-text-heading--medium";
-  /// slds-text-heading--small (Any heading): Smaller 18px heading - Used for smaller content areas such as list sections or card titles
+  /// slds-text-heading--small (Any heading): Smaller 16px heading - Used for smaller content areas such as list sections or card titles
   static const String C_TEXT_HEADING__SMALL = "slds-text-heading--small";
-  /// slds-text-heading--label (Any heading): All caps 12px heading - Usually labels small content areas like table columns and list sections
+  /// slds-text-heading--label (Any heading): All caps 12px heading - Usually labels small content areas like tabs and page header titles
   static const String C_TEXT_HEADING__LABEL = "slds-text-heading--label";
+  /// slds-text-heading--label-normal (Any heading): 12px heading that is not all caps - Usually labels small content areas like list sections.
+  static const String C_TEXT_HEADING__LABEL_NORMAL = "slds-text-heading--label-normal";
+
   /// slds-text-longform (div): Adds default spacing and list styling within a wrapper - Our application framework removes default text styling. This adds in margins to large areas
   static const String C_TEXT_LONGFORM = "slds-text-longform";
+
   /// slds-text-align--left (Any text): Aligns text left
   static const String C_TEXT_ALIGN__LEFT = "slds-text-align--left";
   /// slds-text-align--center (Any text): Aligns text center
   static const String C_TEXT_ALIGN__CENTER = "slds-text-align--center";
   /// slds-text-align--right (Any text): Aligns text right
   static const String C_TEXT_ALIGN__RIGHT = "slds-text-align--right";
-  /// slds-section: Container for a collapsable sub section through interaction with the section title - These are typically on a form, if content exists to be expanded, applying the .slds-is-open will expand .slds-section__body
+
+  /// slds-section: Container for a collapsable sub section through interaction with the section title - These are typically on a form, if content exists to be expanded, applying the .slds-is-open will expand .slds-section__content
   static const String C_SECTION = "slds-section";
   /// slds-section__title: Title of a section, can contain an interactive button icon to expand/collapse sub section(s)
   static const String C_SECTION__TITLE = "slds-section__title";
@@ -42,15 +48,13 @@ class LText {
   /// slds-section__content: Content of a section that can be expanded/collapse through interaction with the .slds-section__title-action
   static const String C_SECTION__CONTENT = "slds-section__content";
   /// slds-section-title (DEPRECATED): Interactive titles with icons that open and close sections - These are typically on a form
-  static const String C_SECTION_TITLE = "slds-section-title";
+  //static const String C_SECTION_TITLE = "slds-section-title";
   /// slds-section-title--divider (DEPRECATED): Titles that also act as a divider with a grey background - These are typically on a form
-  static const String C_SECTION_TITLE__DIVIDER = "slds-section-title--divider";
+  //static const String C_SECTION_TITLE__DIVIDER = "slds-section-title--divider";
+
   /// slds-type-focus (container): Creates a faux link with interactions - This is used when an actual anchor element can not be used. For example — when a heading and button are next to each other and both need the text underline
   static const String C_TYPE_FOCUS = "slds-type-focus";
 
-
-  static const String C_SECTION_GROUP__IS_OPEN = "section-group--is-open";
-  static const String C_SECTION_GROUP__IS_CLOSED = "slds-section-group--is-closed";
 
   /// Icon Text
   static const String C_ASSISTIVE_TEXT = "slds-assistive-text";
@@ -81,7 +85,7 @@ class LText {
  */
 class LSectionTitle {
 
-  /// The Section Container Element
+  /// The Section Title Element
   final Element element;
 
   /// Clickable Element
@@ -101,22 +105,22 @@ class LSectionTitle {
    * -- icon
    * -- label
    */
-  LSectionTitle(Element this.element, {bool open:true, String label,
-      String margin: LMargin.C_VERTICAL__SMALL,
+  LSectionTitle(Element this.element, {bool open:true, String label, String margin,
       Element sectionElement}) {
     // structure
     _sectionElement = sectionElement == null ? new DivElement() : sectionElement;
+    _sectionElement.classes.add(LText.C_SECTION__CONTENT);
     _sectionParts.add(_sectionElement);
     //
-    element.classes.add(LText.C_SECTION_TITLE);
+    element.classes.addAll([LText.C_SECTION__TITLE, LText.C_SECTION__TITLE_ACTION]);
     if (margin != null && margin.isNotEmpty) {
       element.classes.add(margin);
     }
+    LIcon icon = new LIconUtility(LIconUtility.SWITCH, className: LButton.C_BUTTON__ICON_);
+    sectionAnchor
+        ..append(icon.element)
+        ..append(_labelElement);
     element.append(sectionAnchor);
-    //
-    LIcon icon = new LIconUtility(LIconUtility.SWITCH);
-    sectionAnchor.append(icon.element);
-    sectionAnchor.append(_labelElement);
     //
     this.open = open;
     this.label = label;
@@ -135,15 +139,15 @@ class LSectionTitle {
       : this(new HeadingElement.h3(), open:open, label:label,
           margin: LMargin.C_VERTICAL__SMALL);
   LSectionTitle.legend({bool open: true, String label})
-      : this(new LegendElement(), open:open, label:label,
-          margin: LMargin.C_VERTICAL__SMALL);
+      : this(new LegendElement(), open:open, label:label);
 
   /// Current Element to show or hide
   Element get sectionElement => _sectionElement;
   Element _sectionElement;
 
-  /// add new Section Element Part
+  /// add new Section Element Part and make it current
   void addSectionElement(Element newElement) {
+    newElement.classes.add(LText.C_SECTION__CONTENT);
     _sectionParts.add(newElement);
     _sectionElement = newElement;
   }
@@ -172,17 +176,19 @@ class LSectionTitle {
   void set open (bool newValue) {
     _open = newValue;
     if (_open) {
-      element.classes.add(LText.C_SECTION_GROUP__IS_OPEN);
-      element.classes.remove(LText.C_SECTION_GROUP__IS_CLOSED);
-      for (Element part in _sectionParts)
-        part.classes.remove(LVisibility.C_HIDE);
+      for (Element part in _sectionParts) {
+        //part.classes.remove(LVisibility.C_HIDE);
+        part.classes.remove(LVisibility.C_IS_COLLAPSED);
+        part.classes.add(LVisibility.C_IS_EXPANDED);
+      }
     } else {
       if (!showLabel)
         showLabel = true; // ensure we can open again
-      element.classes.remove(LText.C_SECTION_GROUP__IS_OPEN);
-      element.classes.add(LText.C_SECTION_GROUP__IS_CLOSED);
-      for (Element part in _sectionParts)
-        part.classes.add(LVisibility.C_HIDE);
+      for (Element part in _sectionParts) {
+        //part.classes.add(LVisibility.C_HIDE);
+        part.classes.add(LVisibility.C_IS_COLLAPSED);
+        part.classes.remove(LVisibility.C_IS_EXPANDED);
+      }
     }
   }
   bool _open;

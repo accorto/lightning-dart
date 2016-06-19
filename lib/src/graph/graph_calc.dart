@@ -41,7 +41,7 @@ class GraphCalc
         ..text = "- ${StatCalc.statCalcNoData()} -";
       engine.element.append(p);
     } else {
-      DListUtil info = new DListUtil();
+      LDList info = new LDList();
       engine.element.append(info.element);
       info.add(LTableSumCell.tableSumCellCount(), count);
       info.add(LTableSumCell.tableSumCellNull(), nullCount);

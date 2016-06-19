@@ -90,8 +90,8 @@ abstract class LTile
 
   /// Detail ul
   UListElement get detailList;
-  /// Standard Tile Detail List Classes
-  static final List<String> CLASSES_DETAIL_LIST = [C_TILE__DETAIL, LList.C_LIST__HORIZONTAL, LList.C_HAS_DIVIDERS, LText.C_TEXT_BODY__SMALL];
+  /// Standard Tile Detail List Classes // FixMe divider left?
+  static final List<String> CLASSES_DETAIL_LIST = [C_TILE__DETAIL, LList.C_LIST__HORIZONTAL, LList.C_HAS_DIVIDER__LEFT, LText.C_TEXT_BODY__SMALL];
 
   /// Create UL
   UListElement createDetailList(List<String> classList) {
@@ -106,7 +106,7 @@ abstract class LTile
       return null;
     }
     LIElement li = new LIElement()
-      ..classes.addAll([LText.C_TRUNCATE, LList.C_LIST__ITEM])
+      ..classes.addAll([LText.C_TRUNCATE, LList.C_ITEM])
       ..text = text;
     detailList.append(li);
     return li;

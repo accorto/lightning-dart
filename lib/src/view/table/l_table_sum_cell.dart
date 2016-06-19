@@ -44,7 +44,7 @@ class LTableSumCell
     LPopover pop = new LPopover()
       ..popWidth = "10rem";
     pop.headText = statCalc.column.label;
-    DListUtil info = _info();
+    LDList info = _info();
     pop.body.append(info.element);
     content.remove();
     pop.showAboveElement(content);
@@ -55,8 +55,8 @@ class LTableSumCell
 
 
   /// Popup Info
-  DListUtil _info () {
-    DListUtil info = new DListUtil();
+  LDList _info () {
+    LDList info = new LDList();
     info.add(tableSumCellCount(), statCalc.count);
     info.add("- " + tableSumCellNull(), statCalc.nullCount);
 

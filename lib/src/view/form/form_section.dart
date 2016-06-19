@@ -87,10 +87,21 @@ class FormSection
   FieldSetElement createFieldSet (String sectionId) {
     sectionAnchor.id = "${sectionId}a";
     sectionElement.id = "${sectionId}b";
-    return new FieldSetElement()
+    _parent = new FieldSetElement()
       ..id = "${sectionId}"
+      ..classes.add(LText.C_SECTION)
+      ..classes.add(LVisibility.C_IS_OPEN)
       ..append(element)
       ..append(sectionElement);
+    return _parent;
+  }
+  FieldSetElement _parent;
+
+  /// Open
+  void set open (bool newValue) {
+    if (_parent != null)
+      _parent.classes.toggle(LVisibility.C_IS_OPEN, newValue);
+    super.open = newValue;
   }
 
 } // FormSection

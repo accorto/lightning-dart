@@ -9,7 +9,7 @@ part of lightning_dart;
 /**
  * Definition List Utility
  */
-class DListUtil {
+class LDList {
 
   /// dl
   DListElement element = new DListElement();
@@ -18,15 +18,15 @@ class DListUtil {
   List<String> defListClasses = ["dl", "dt", "dd"];
 
   /// Horizontal Definition List
-  DListUtil.horizontal()
+  LDList.horizontal()
       : this(dlClasses:[LList.C_DL__HORIZONTAL, LList.C_DL__HORIZONTAL__LABEL, LList.C_DL__HORIZONTAL__DETAIL]);
 
   /// Inline Definition List
-  DListUtil.inline()
+  LDList.inline()
       : this(dlClasses:[LList.C_DL__INLINE, LList.C_DL__INLINE__LABEL, LList.C_DL__INLINE__DETAIL]);
 
   /// Definition List
-  DListUtil({List<String> dlClasses}) {
+  LDList({List<String> dlClasses}) {
     if (dlClasses != null) {
       defListClasses = dlClasses;
     }

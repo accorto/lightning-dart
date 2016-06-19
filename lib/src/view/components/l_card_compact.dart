@@ -31,7 +31,8 @@ class LCardCompact
    */
   LCardCompact(String idPrefix)
   : super(idPrefix) {
-    element.classes.add(LCard.C_CARD__COMPACT);
+    element.classes.add(LCard.C_CARD__NARROW);
+    _body.classes.add(LCard.C_CARD__BODY__INNER);
     _body.append(_list);
   }
 

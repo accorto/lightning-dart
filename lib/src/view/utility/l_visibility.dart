@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2015 Accorto, Inc. All Rights Reserved
- * License: GPLv3   http://www.gnu.org/licenses/gpl-3.0.txt
- * License options+support:  https://www.lightningdart.com
+ * Copyright (c) 2016 Accorto, Inc. All Rights Reserved
+ * License: GPLv3  http://www.gnu.org/licenses/gpl-3.0.txt
+ * License options+support:  https://lightningdart.com
  */
 
 part of lightning_dart;
@@ -13,8 +13,24 @@ class LVisibility {
 
   /// slds-hide (any element): Hides an element from the page by setting display propery to none - An element hidden with this class will take up no space on the page and will not be announced by screenreaders.
   static const String C_HIDE = "slds-hide";
+
+  static const String C_HIDE_MAX_X_SMALL = "slds-max-x-small-hide";
+  static const String C_HIDE_MAX_SMALL = "slds-max-small-hide";
+  static const String C_HIDE_MAX_MEDIUM = "slds-max-medium-hide";
+
   /// slds-show (the hidden element): Shows the element by setting display property to block - This is toggled on the element. .slds-hide class is removed and .slds-show is added.
   static const String C_SHOW = "slds-show";
+
+  static const String C_SHOW_X_SMALL = "slds-x-small-show";
+  static const String C_SHOW_SMALL = "slds-small-show";
+  static const String C_SHOW_MEDIUM = "slds-medium-show";
+  static const String C_SHOW_LARGE = "slds-large-show";
+
+  static const String C_SHOW_X_SMALL_ONLY = "slds-x-small-show-only";
+  static const String C_SHOW_SMALL_ONLY = "slds-small-show-only";
+  static const String C_SHOW_MEDIUM_ONLY = "slds-medium-show-only";
+
+
   /// slds-show--inline-block (the hidden element): Shows the element by setting display to inline-block - This is toggled on the element. .slds-hide class is removed and .slds-show--inline-block is added.
   static const String C_SHOW__INLINE_BLOCK = "slds-show--inline-block";
   /// slds-hidden (any element): Hides an element from the page by setting the visibility property to hidden - An element hidden with this class will reserve the normal space on the page and will not be announced by screenreaders.
@@ -25,13 +41,20 @@ class LVisibility {
   static const String C_TRANSITION_HIDE = "slds-transition-hide";
   /// slds-transition-show (the hidden element): Shows the element using the opacity property set to 1 - This is toggled on the element. .slds-transition-hide class is removed and .slds-transition-show is added.
   static const String C_TRANSITION_SHOW = "slds-transition-show";
+  /// slds-is-collapsed (Any containing element): Hides elements inside a parent - This hides the elements contained inside the container by controlling the height and overflow properties.
+  static const String C_IS_COLLAPSED = "slds-is-collapsed";
+  /// slds-is-expanded (the collapsed element): Shows the elements inside the parent
+  static const String C_IS_EXPANDED = "slds-is-expanded";
   /// slds-collapsed (Any containing element): Hides elements inside a parent - This hides the elements contained inside the container by controlling the height and overflow properties.
-  static const String C_COLLAPSED = "slds-collapsed";
+  //static const String C_COLLAPSED = "slds-collapsed";
   /// slds-expanded (the collapsed element): Shows the elements inside the parent
-  static const String C_EXPANDED = "slds-expanded";
+  //static const String C_EXPANDED = "slds-expanded";
   /// slds-assistive-text (any element): Hides an element yet enables a screen reader to read the element that is hidden - This should be used over other methods when you don't want to hide from screenreaders
   static const String C_ASSISTIVE_TEXT = "slds-assistive-text";
 
+
+  /// trigger__click show/hide
+  static const String C_IS_OPEN = "slds-is-open";
 
   /// active selection
   static const String C_ACTIVE = "slds-active";

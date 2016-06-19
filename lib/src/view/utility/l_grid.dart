@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2015 Accorto, Inc. All Rights Reserved
- * License: GPLv3   http://www.gnu.org/licenses/gpl-3.0.txt
- * License options+support:  https://www.lightningdart.com
+ * Copyright (c) 2016 Accorto, Inc. All Rights Reserved
+ * License: GPLv3  http://www.gnu.org/licenses/gpl-3.0.txt
+ * License options+support:  https://lightningdart.com
  */
 
 part of lightning_dart;
@@ -90,12 +90,14 @@ class LGrid extends LComponent {
   static const String C_SHRINK = "slds-shrink";
   /// slds-shrink-none (slds-col): Prevents column from shrinking to children's content
   static const String C_SHRINK_NONE = "slds-shrink-none";
+
   /// slds-align-top (slds-col): Vertically aligns element to top of .slds-grid
   static const String C_ALIGN_TOP = "slds-align-top";
   /// slds-align-middle (slds-col): Vertically aligns element to middle of .slds-grid
   static const String C_ALIGN_MIDDLE = "slds-align-middle";
   /// slds-align-bottom (slds-col): Vertically aligns element to bottom of .slds-grid
   static const String C_ALIGN_BOTTOM = "slds-align-bottom";
+
   /// slds-container--small: Restrict width of containers to a maximum of 480px
   static const String C_CONTAINER__SMALL = "slds-container--small";
   /// slds-container--medium: Restrict width of containers to a maximum of 768px

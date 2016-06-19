@@ -51,7 +51,7 @@ class Cards extends DemoFeature {
     bg2.add(new LButton.neutral("btn", "Button"));
     bg2.add(new LButton.neutral("add", "Action"));
     bg2.layout(1);
-    cc.setHeader(new LIconStandard(LIconStandard.CONTACT), "Compact Card Header", action:bg2);
+    cc.setHeader(new LIconStandard(LIconStandard.CONTACT), "Narrow Card Header", action:bg2);
 
     LCardCompactEntry entry = new LCardCompactEntry("Adam");
     entry.addActions([AppsAction.createEdit(null)]);

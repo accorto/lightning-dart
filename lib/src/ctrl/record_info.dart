@@ -40,7 +40,7 @@ class RecordInfo {
       modal.setHeader("${recordInfoLabel()} ${ui.table.label}");
     //
 
-    DListUtil dl = new DListUtil.horizontal();
+    LDList dl = new LDList.horizontal();
     modal.append(dl.element);
 
     if (record.hasDrv())

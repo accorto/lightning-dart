@@ -45,6 +45,7 @@ class LIcon {
   static const String C_ICON_TEXT_DEFAULT = "slds-icon-text-default";
   /// slds-icon-text-warning (slds-icon): Creates a warning colored fill color
   static const String C_ICON_TEXT_WARNING = "slds-icon-text-warning";
+
   /// slds-icon--x-small (slds-icon): Creates a 1rem×1rem icon
   static const String C_ICON__X_SMALL = "slds-icon--x-small";
   /// slds-icon--small (slds-icon): Creates a 1.5rem×1.5rem icon
