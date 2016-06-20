@@ -36,24 +36,31 @@ class LForm
   static const String C_FORM_ELEMENT__CONTROL = "slds-form-element__control";
   /// slds-form-element__icon (div): The icon wrapper for an icon within a form element, this icon is usually used to indicate an error or field level help
   static const String C_FORM_ELEMENT__ICON = "slds-form-element__icon";
+
   /// slds-input (input): Initializes text input
   static const String C_INPUT = "slds-input";
-  /// slds-input--small (slds-input): Applies styles for a smaller text input
-  static const String C_INPUT__SMALL = "slds-input--small";
   /// slds-input--bare (slds-input): Removes background and border from text input
   static const String C_INPUT__BARE = "slds-input--bare";
   /// slds-input-has-icon (div around <input): Lets text input know how to position .slds-input__icon - The <div> contains both the <svg> and the <input>
   static const String C_INPUT_HAS_ICON = "slds-input-has-icon";
   /// slds-input__icon (svg): Hook for .slds-input-has-icon
   static const String C_INPUT__ICON = "slds-input__icon";
+  /// slds-input__icon--left (svg or <button): Hook for .slds-input-has-icon--left-right
+  static const String C_INPUT__ICON__LEFT = "slds-input__icon--left";
+  /// slds-input__icon--right (svg or <button): Hook for .slds-input-has-icon--left-right
+  static const String C_INPUT__ICON__RIGHT = "slds-input__icon--right";
   /// slds-input-has-icon--left (slds-input-has-icon): Positions .slds-input__icon to the left of the text input
   static const String C_INPUT_HAS_ICON__LEFT = "slds-input-has-icon--left";
   /// slds-input-has-icon--right (slds-input-has-icon): Positions .slds-input__icon to the right of the text input
   static const String C_INPUT_HAS_ICON__RIGHT = "slds-input-has-icon--right";
+  /// slds-input-has-icon--left-right (slds-input-has-icon): Positions .slds-input__icon--left to the left of the text input and .slds-input__icon--right to the right of the text input
+  static const String C_INPUT_HAS_ICON__LEFT_RIGHT = "slds-input-has-icon--left-right";
   /// slds-input-has-fixed-addon (The <div contains both the .slds-form-element__addon and the <input): Use on input container to let it know there is fixed text to the left or right of the input
   static const String C_INPUT_HAS_FIXED_ADDON = "slds-input-has-fixed-addon";
+
   /// slds-form-element__addon (any element): Class for fixed text that sits to the left or right of an <input>
   static const String C_FORM_ELEMENT__ADDON = "slds-form-element__addon";
+
   /// slds-textarea (textarea): Initializes textarea
   static const String C_TEXTAREA = "slds-textarea";
   /// slds-select (select): Initializes select
@@ -62,10 +69,19 @@ class LForm
   static const String C_CHECKBOX = "slds-checkbox";
   /// slds-checkbox--faux (span): Creates a custom styled checkbox - Apply to <span> inside .slds-checkbox
   static const String C_CHECKBOX__FAUX = "slds-checkbox--faux";
+  /// slds-checkbox--button-group (div): Container for a group of checkbox that look like a button group
+  static const String C_CHECKBOX__BUTTON_GROUP = "slds-checkbox--button-group";
+  /// slds-checkbox--button (label class="slds-button"): Customizes your checkbox to look like a button in a button group
+  static const String C_CHECKBOX__BUTTON = "slds-checkbox--button";
   /// slds-radio (label): Initializes radio button - Label wraps the faux radio and text, <input> requires [type=radio]
   static const String C_RADIO = "slds-radio";
   /// slds-radio--faux (span): Creates a custom styled radio button - Apply to <span> inside .slds-radio
   static const String C_RADIO__FAUX = "slds-radio--faux";
+  /// slds-radio--button-group (div): Container for a group of radio that look like a button group
+  static const String C_RADIO__BUTTON_GROUP = "slds-radio--button-group";
+  /// slds-radio--button (label class="slds-button"): Customizes your radio to look like a button in a button group
+  static const String C_RADIO__BUTTON = "slds-radio--button";
+
   /// slds-form--horizontal (form): Horizontally aligns a single form label and control on the same line
   static const String C_FORM__HORIZONTAL = "slds-form--horizontal";
   /// slds-form--stacked (form): Vertically aligns form label and control, provides spacing between form elements - This is the default
@@ -83,6 +99,7 @@ class LForm
   static const String C_REQUIRED = "slds-required";
   /// slds-has-error (slds-form-element): Applied to .slds-form-element when form element has errors
   static const String C_HAS_ERROR = "slds-has-error";
+
 
 
   /// select container
@@ -412,18 +429,6 @@ class LForm
   }
   LButton _errorBtn;
   LPopover _errorPop;
-
-
-  /// Small Editor/Label
-  void set small (bool newValue) {
-    for (LEditor editor in editorList) {
-      editor.small = newValue;
-    }
-    if (_buttonReset != null)
-      _buttonReset.small = newValue;
-    if (_buttonSave != null)
-      _buttonSave.small = newValue;
-  } // small
 
   /// On Form Reset
   void onFormReset(Event evt) {

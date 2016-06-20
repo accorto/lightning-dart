@@ -161,6 +161,15 @@ class LButtonGroup extends LComponent {
     }
   } // addMore
 
+  /// select button (unselect others)
+  void selectButton(int index) {
+    int ii = 0;
+    for (LButton btn in _buttonList) {
+      btn.selected = index == ii;
+      ii++;
+    }
+  }
+
   /// Trl
   static String lButtonGroupMore() => Intl.message("More", name: "lButtonGroupMore", args: []);
 

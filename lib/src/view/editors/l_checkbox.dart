@@ -71,6 +71,9 @@ class LCheckbox
     input.checked = newValue;
   }
 
+  /// Button Click
+  ElementStream<MouseEvent> get onClick => element.onClick;
+
   /// set value by synonym (alternative representations) - returns true if found
   @override
   bool setValueSynonym (String newValue) {

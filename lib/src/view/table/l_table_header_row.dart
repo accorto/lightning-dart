@@ -41,9 +41,6 @@ class LTableHeaderRow
    */
   LTableHeaderCell addHeaderCell(String name, String label,
       {String title, String value, String align, DataColumn dataColumn}) {
-    SpanElement span = new SpanElement()
-      ..classes.add(LText.C_TRUNCATE)
-      ..text = label == null ? "" : label;
 
     if (name != null && name.isNotEmpty && label != null && label.isNotEmpty) {
       //int index = rowElement.children.length -1;
@@ -63,7 +60,9 @@ class LTableHeaderRow
     if (dataColumn == null) {
       dataColumn = findColumn(name); // exact match
     }
-    LTableHeaderCell cell = new LTableHeaderCell(tc, span, name, label, title, value, align, tableSortClicked, dataColumn);
+    String idPrefix = "${id}_${name}";
+    LTableHeaderCell cell = new LTableHeaderCell(tc, new DivElement(), name, label, title, value, align,
+        tableSortClicked, dataColumn, idPrefix);
     _cells.add(cell);
     return cell;
   } // addHeaderCell

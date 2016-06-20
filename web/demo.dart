@@ -91,7 +91,8 @@ class DemoPage extends AppsPage {
 
   /// Demo Page
   DemoPage(String id, LIcon icon, String label, PageSimple wrap)
-      : super(id, id, icon, label, "Lightning Dart Component Demo ${label}") {
+      : super(id, id, icon, label,
+        "Lightning Dart Component Demo ${label}") {
     DivElement hdr = new DivElement()
       ..classes.addAll([LTheme.C_BOX, LTheme.C_THEME__SHADE]);
     element.append(hdr);
@@ -116,9 +117,30 @@ class DemoPage extends AppsPage {
       ..classes.addAll([LGrid.C_GRID, LGrid.C_WRAP]);
     element.append(toc);
     //
-    _onlySelectedCb.element.classes.add(LMargin.C_AROUND__SMALL);
-    element.append(_onlySelectedCb.element);
-    _onlySelectedCb.element.onClick.listen(onClickOnlySelected);
+    _sizes = new LButtonGroup();
+    _sizes.addButton(new LButton.iconBorder("small",
+        new LIconUtility(LIconUtility.PHONE_PORTRAIT), "Small 480px", idPrefix: "size")
+      ..onClick.listen((MouseEvent evt){setSizeIndex(0);}));
+    _sizes.addButton(new LButton.iconBorder("medium",
+        new LIconUtility(LIconUtility.TABLET_PORTRAIT), "Medium 768px", idPrefix: "size")
+      ..onClick.listen((MouseEvent evt){setSizeIndex(1);}));
+    _sizes.addButton(new LButton.iconBorder("large",
+        new LIconUtility(LIconUtility.TABLET_LANDSCAPE), "Large 1024px", idPrefix: "size")
+      ..onClick.listen((MouseEvent evt){setSizeIndex(2);}));
+    _sizes.addButton(new LButton.iconBorder("fluid",
+        new LIconUtility(LIconUtility.DESKTOP), "Fluid", idPrefix: "size")
+      ..onClick.listen((MouseEvent evt){setSizeIndex(3);}));
+    //
+    _onlySelectedCb.onClick.listen(onClickOnlySelected);
+    DivElement dd = new DivElement()
+      ..classes.addAll([LGrid.C_GRID, LMargin.C_HORIZONTAL__SMALL])
+      ..append(new DivElement()
+          ..classes.addAll([LGrid.C_COL])
+          ..append(_sizes.element))
+      ..append(new DivElement()
+          ..classes.addAll([LGrid.C_COL])
+          ..append(_onlySelectedCb.element));
+    element.append(dd);
 
     /* Individual parts */
     _addFeature(new ActivityTimeline()..toc(toc, onlySelectedHide));
@@ -141,7 +163,6 @@ class DemoPage extends AppsPage {
     _addFeature(new Icons()..toc(toc, onlySelectedHide));
     _addFeature(new Images()..toc(toc, onlySelectedHide));
     _addFeature(new Lookups()..toc(toc, onlySelectedHide));
-    _addFeature(new Media()..toc(toc, onlySelectedHide));
     _addFeature(new Menus()..toc(toc, onlySelectedHide));
     _addFeature(new Modals()..toc(toc, onlySelectedHide));
     _addFeature(new Notifications(wrap)..toc(toc, onlySelectedHide));
@@ -155,8 +176,12 @@ class DemoPage extends AppsPage {
     _addFeature(new Tiles()..toc(toc, onlySelectedHide));
     _addFeature(new Trees()..toc(toc, onlySelectedHide));
 
+    _addFeature(new Media()..toc(toc, onlySelectedHide));
     _addFeature(new Themes()..toc(toc, onlySelectedHide));
-  }
+    //
+    setSizeIndex(1); // medium
+  } // DemoPage
+  LButtonGroup _sizes;
 
   void _addFeature(DemoFeature feature) {
     _featureList.add(feature);
@@ -182,6 +207,14 @@ class DemoPage extends AppsPage {
       for (DemoFeature feature in _featureList) {
         feature.show = false;
       }
+    }
+  }
+
+  /// Set Size Tab Index
+  void setSizeIndex(int sizeIndex) {
+    _sizes.selectButton(sizeIndex);
+    for (DemoFeature feature in _featureList) {
+      feature.tabPos = sizeIndex;
     }
   }
 

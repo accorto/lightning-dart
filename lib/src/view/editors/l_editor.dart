@@ -57,10 +57,6 @@ abstract class LEditor
     return theId;
   }
 
-  /// Small Editor/Label
-  void set small(bool newValue);
-
-
   /// return true if [newValue] is null, empty or nullValue
   bool _isEmpty(String newValue) => DataUtil.isEmpty(newValue);
 

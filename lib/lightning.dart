@@ -172,7 +172,7 @@ part 'src/view/utility/svg_util.dart';
 class LightningDart {
 
   /// SLDS Version + rel
-  static const VERSION = "v1.0.3";
+  static const VERSION = "v2.0.2";
   /** Timestamp */
   static String devTimestamp = "-";
 

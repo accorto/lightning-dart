@@ -322,18 +322,6 @@ class LFormElement {
     _input.attributes["label"] = newValue;
   }
 
-  /// Small input size
-  void set small (bool newValue) {
-    if (newValue) {
-      _input.classes.add(LForm.C_INPUT__SMALL);
-    //  _labelElement.classes.add(LForm.C_FORM_ELEMENT__LABEL__SMALL);
-    } else {
-      _input.classes.remove(LForm.C_INPUT__SMALL);
-    //  _labelElement.classes.remove(LForm.C_FORM_ELEMENT__LABEL__SMALL);
-    }
-  }
-
-
   /// Required
   bool get required => _required;
   /// set required

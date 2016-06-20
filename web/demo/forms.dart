@@ -17,7 +17,6 @@ class Forms extends DemoFeature {
 
 
   String formType = LForm.C_FORM__STACKED;
-  bool formSmall = false;
   bool fieldRequired = false;
   bool fieldReadOnly = false;
   bool fieldDisabled = false;
@@ -106,7 +105,6 @@ class Forms extends DemoFeature {
     //
     form.addResetButton();
     form.addSaveButton();
-    form.small = formSmall; // demo toggle
     //
     form.setRecord(record, 0);
 
@@ -168,7 +166,6 @@ class Forms extends DemoFeature {
     //
     form.addResetButton();
     form.addSaveButton();
-    form.small = formSmall; // demo toggle
     //
     form.setRecord(record, 0);
     ''';
@@ -178,7 +175,6 @@ class Forms extends DemoFeature {
   EditorI optionTypeSelect() {
     LSelect select = new LSelect("oType", idPrefix: id)
       ..label = "Form Type"
-      ..small = true
       ..maxWidth = "8rem";
     select.addOption(new OptionElement(data: "Stacked", value: LForm.C_FORM__STACKED));
     select.addOption(new OptionElement(data: "Horizontal", value: LForm.C_FORM__HORIZONTAL));
@@ -216,15 +212,6 @@ class Forms extends DemoFeature {
     });
     return cb;
   }
-  EditorI optionSmallCb() {
-    LCheckbox cb = new LCheckbox("oSmall", idPrefix: id)
-      ..label = "Fields+Buttons small";
-    cb.input.onClick.listen((MouseEvent evt){
-      formSmall = cb.input.checked;
-      optionChanged();
-    });
-    return cb;
-  }
   EditorI optionCustomValidityCb() {
     LCheckbox cb = new LCheckbox("valid", idPrefix: id)
       ..label = "Custom Validity";
@@ -241,7 +228,6 @@ class Forms extends DemoFeature {
   List<EditorI> get options {
     List<EditorI> list = new List<EditorI>();
     list.add(optionTypeSelect());
-    list.add(optionSmallCb());
     list.add(optionRequiredCb());
     list.add(optionReadonlyCb());
     list.add(optionDisabledCb());

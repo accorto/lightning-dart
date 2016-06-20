@@ -13,14 +13,19 @@ class LTableCell {
 
   /// td/th
   final TableCellElement cellElement;
+
   /// content renderer
   final Element content;
+
   /// (Column)Name
   final String name;
+
   /// Data Value
   final String value;
+
   /// Alignment
   final String align;
+
   /// Meta Data
   final DataColumn dataColumn;
 
@@ -58,9 +63,16 @@ class LTableCell {
   void set contentText(String text) {
     if (content != null) {
       content.text = text;
-     } else {
+    } else {
       cellElement.text = text;
     }
+  }
+
+  /// data type
+  DataType get dataType {
+    if (dataColumn != null)
+      return dataColumn.tableColumn.dataType;
+    return null;
   }
 
   /// render Statistics

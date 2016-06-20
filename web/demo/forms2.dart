@@ -129,7 +129,6 @@ class Forms2 extends DemoFeature {
   EditorI optionCount() {
     LInput count = new LInput("oColumns", EditorI.TYPE_NUMBER, idPrefix: id)
       ..label = "Number of Columns"
-      ..small = true
       ..min = "0"
       ..max = "8"
       ..value = "1";

@@ -117,6 +117,7 @@ class Html0 {
   static const String ARIA_LIVE_ASSERTIVE = "assertive";
 
   static const String ARIA_ATOMIC = "aria-atomic";
+  static const String ARIA_SORT = "aria-sort";
 
   /// Attribute Aria
   static const String ARIA_EXPANED = "aria-expanded";

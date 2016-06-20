@@ -31,12 +31,32 @@ class LTable
   static const String C_TABLE__STRIPED = "slds-table--striped";
   /// slds-table--fixed-layout (slds-table): Styles for resizeable columns
   static const String C_TABLE__FIXED_LAYOUT = "slds-table--fixed-layout";
+
   /// slds-is-selected (tr): Changes row to selected state
   static const String C_IS_SELECTED = "slds-is-selected";
+
   /// slds-is-sortable (th): Enables user interactions for sorting a column
   static const String C_IS_SORTABLE = "slds-is-sortable";
+  /// slds-is-sortable__icon (svg): Arrow that indicates sorted direction
+  static const String C_IS_SORTABLE__ICON = "slds-is-sortable__icon";
+  /// slds-is-sorted--asc (th): Makes sortable icon point up
+  static const String C_IS_SORTED__ASC = "slds-is-sorted--asc";
+  /// Marker
+  static const String C_IS_SORTED__DESC = "slds-is-sorted--desc";
+
   /// slds-is-resizable (th): Enables table cell to be resized
   static const String C_IS_RESIZABLE = "slds-is-resizable";
+  /// slds-resizable (div): Resizing element within a table heading cell
+  static const String C_RESIZABLE = "slds-resizable";
+  /// slds-resizable__input (input type="range"): Input inside resizable element that is used for screen readers, value updates as the column width updates
+  static const String C_RESIZABLE__INPUT = "slds-resizable__input";
+  /// slds-resizable__handle (span): Handle the user interacts with to initiate a column resize
+  static const String C_RESIZABLE__HANDLE = "slds-resizable__handle";
+  /// slds-resizable__divider (span): Vertical indicator spanning down the table column
+  static const String C_RESIZABLE__DIVIDER = "slds-resizable__divider";
+
+  /// slds-th__action (a): Actionable area inside a table heading cell
+  static const String C_TH__ACTION = "slds-th__action";
   /// slds-cell-wrap (td): Forces text to wrap in a cell
   static const String C_CELL_WRAP = "slds-cell-wrap";
   /// slds-cell-shrink (th, <td): Shrinks cell to width of content - Use if cell contains a checkbox or action menu
@@ -53,10 +73,7 @@ class LTable
   static const String C_HINT_PARENT = "slds-hint-parent";
 
 
-  static const String C_RESIZABLE = "slds-resizable";
-  static const String C_RESIZABLE__HANDLE = "slds-resizable__handle";
-  static const String C_RESIZABLE__DIVIDER = "slds-resizable__divider";
-
+  static const String C_TABLE__CELL_BUFFER = "slds-table--cell-buffer";
 
   /// space below edit table for dropdowns
   static const String C_INFO_BOTTOM = "r-table-info";
@@ -481,6 +498,16 @@ class LTable
   /// Table striped
   void set striped (bool newValue) {
     _table.classes.toggle(C_TABLE__STRIPED, newValue);
+  }
+  /// no row hovers
+  bool get noRowHovers => _table.classes.contains(C_NO_ROW_HOVER);
+  void set noRowHovers (bool newValue) {
+    _table.classes.toggle(C_NO_ROW_HOVER, newValue);
+  }
+  /// space right/left of table
+  bool get cellBuffer => _table.classes.contains(C_TABLE__CELL_BUFFER);
+  void set cellBuffer (bool newValue) {
+    _table.classes.toggle(C_TABLE__CELL_BUFFER, newValue);
   }
 
 

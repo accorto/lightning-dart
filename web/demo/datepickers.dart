@@ -16,8 +16,7 @@ class Datepickers extends DemoFeature {
   sldsStatus: DemoFeature.SLDS_DEV_READY,
   devStatus: DemoFeature.STATUS_COMPLETE,
   hints: ["date constants (e.g. month names) are translated"],
-  issues: ["css: week select with crossing month boundary"],
-  plans: ["independent date ranges"]);
+  plans: ["independent date from/to ranges"]);
 
   String customValidation = "";
 

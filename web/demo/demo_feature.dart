@@ -127,43 +127,45 @@ abstract class DemoFeature
         ulist.append(new LIElement()..text = s);
     }
 
-
-
-
     // Content
-    LTab tab = new LTab(idPrefix: id);
+    _tab = new LTab(idPrefix: id);
     DivElement wrapper = new DivElement()
       ..classes.add(LMargin.C_LEFT__SMALL);
-    wrapper.append(tab.element);
+    wrapper.append(_tab.element);
     element.append(wrapper);
 
     //
     if (content != null) {
-      Element sc = tab.addTab("Small", name: "s");
+      Element sc = _tab.addTab("Small", name: "s");
       sc.style.width = "480px";
       sc.style.border = "1px solid lightgray";
-      Element mc = tab.addTab("Medium", name: "m");
+      Element mc = _tab.addTab("Medium", name: "m");
       mc.style.width = "768px";
       mc.style.border = "1px solid gray";
-      Element lc = tab.addTab("Large", name: "l");
+      Element lc = _tab.addTab("Large", name: "l");
       lc.style.width = "1024px";
       lc.style.border = "1px solid black";
-      Element xc = tab.addTab("Fluid", name: "x");
-      xc.style.width = "calc(100% - 10px)";
+      Element xc = _tab.addTab("Fluid", name: "x");
+      xc.style.width = "calc(100% - 15px)";
       xc.style.border = "1px solid black";
 
-      Element dc = tab.addTab("Source", name: "d");
+      Element dc = _tab.addTab("Source", name: "d");
       ParagraphElement src = new ParagraphElement()
         ..style.fontFamily = "monospace"
         ..style.whiteSpace = "pre"
         ..text = source;
       dc.append(src);
 
-      tab.onTabChanged.listen(onTabChanged); // init display on tab add
-      tab.selectTabByPos(3, false);
+      _tab.onTabChanged.listen(onTabChanged); // init display on tab add
+      _tab.selectTabByPos(3, false);
       // fluid
     }
   } // DemoFeature
+  LTab _tab;
+  /// set Tab Index 0..4
+  void set tabPos(int newValue) {
+    _tab.selectTabByPos(newValue, false);
+  }
 
   /// Link to Feature
   void toc(Element toc, void onlySelectedHide()) {

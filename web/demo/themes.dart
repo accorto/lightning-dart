@@ -8,7 +8,7 @@ part of lightning_dart.demo;
 
 class Themes extends DemoFeature {
 
-  Themes() : super("themes", "Utility - Themes", sldsPath: "utilities/themes",
+  Themes() : super("themes", "Utility: Themes", sldsPath: "utilities/themes",
   sldsStatus: DemoFeature.SLDS_DEV_READY,
   devStatus: DemoFeature.STATUS_COMPLETE,
   hints: ["themes are available in all LComponents"],

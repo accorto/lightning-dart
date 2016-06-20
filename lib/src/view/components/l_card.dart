@@ -89,7 +89,8 @@ class LCard extends LComponent {
     table.responsiveStackedHorizontal = true;
     table.element.classes.add(LTable.C_NO_ROW_HOVER);
     //
-    _body.classes.add(C_CARD__BODY__INNER);
+    //_body.classes.add(C_CARD__BODY__INNER);
+    table.classes.add(LTable.C_TABLE__CELL_BUFFER);
     _body.append(table.element);
   } // setBody
 

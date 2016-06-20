@@ -8,7 +8,7 @@ part of lightning_dart.demo;
 
 class Media extends DemoFeature {
 
-  Media() : super("media-objects", "Media Objects",
+  Media() : super("media-objects", "Utility: Media Objects",
   sldsStatus: DemoFeature.SLDS_DEV_READY,
   devStatus: DemoFeature.STATUS_COMPLETE,
   hints: ["image provided determines the size", "use images or icons"],

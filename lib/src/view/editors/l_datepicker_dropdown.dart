@@ -353,17 +353,22 @@ class LDatePickerDropdown {
           dayElement.classes.add(LDatepicker.C_IS_TODAY);
         }
         // Select
-        if (_dateTo != null && (mode == LDatepicker.MODE_WEEK_FIRST || mode == LDatepicker.MODE_WEEK_FIRST || mode == LDatepicker.MODE_RANGE)) {
+        if (_dateTo != null
+            && (mode == LDatepicker.MODE_WEEK_FIRST || mode == LDatepicker.MODE_WEEK_LAST || mode == LDatepicker.MODE_RANGE)) {
           if (theDay.millisecondsSinceEpoch >= _date.millisecondsSinceEpoch
           && theDay.millisecondsSinceEpoch <= _dateTo.millisecondsSinceEpoch) {
-            dayElement.classes.add(LDatepicker.C_IS_SELECTED);
-            dayElement.classes.add(LDatepicker.C_IS_SELECTED_MULTI);
-            dayElement.attributes[Html0.ARIA_SELECTED] = "true";
+          //  row.classes.add(LDatepicker.C_HAS_MULTI_ROW_SELECTION);
+            dayElement
+                ..classes.add(LDatepicker.C_IS_SELECTED)
+                ..classes.add(LDatepicker.C_IS_SELECTED_MULTI)
+                ..classes.remove(LDatepicker.C_DISABLED_TEXT)
+                ..attributes[Html0.ARIA_SELECTED] = "true";
           }
         } else {
           if (theDay.millisecondsSinceEpoch == _date.millisecondsSinceEpoch) {
-            dayElement.classes.add(LDatepicker.C_IS_SELECTED);
-            dayElement.attributes[Html0.ARIA_SELECTED] = "true";
+            dayElement
+                ..classes.add(LDatepicker.C_IS_SELECTED)
+                ..attributes[Html0.ARIA_SELECTED] = "true";
           }
         }
         theDay = theDay.add(DAY);

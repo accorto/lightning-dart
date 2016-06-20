@@ -99,7 +99,6 @@ class TablesGraphs extends DemoFeature {
   EditorI optionEditModeSelect() {
     LSelect select = new LSelect("eMode", idPrefix: id)
       ..label = "Edit Mode"
-      ..small = true
       ..maxWidth = "10rem";
     select.addOption(new OptionElement(data: "Read/Only", value: LTable.EDIT_RO));
     select.addOption(new OptionElement(data: "Edit All", value: LTable.EDIT_ALL));
