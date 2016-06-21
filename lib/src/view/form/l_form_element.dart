@@ -129,16 +129,25 @@ class LFormElement {
    *        span  .form-element__label
    *        hint
    */
-  void createCheckboxLayout(EditorI editor, bool inGrid) {
+  void createCheckboxLayout(EditorI editor, bool inGrid, bool asToggle) {
     this.editor = editor;
+    this.inGrid = inGrid;
     _input = editor.input;
     labelElement.classes.clear();
-    labelElement.classes.add(LForm.C_CHECKBOX);
-    this.inGrid = inGrid;
     //
     SpanElement faux = new SpanElement()
       ..classes.add(LForm.C_CHECKBOX__FAUX);
     _labelSpan.classes.add(LForm.C_FORM_ELEMENT__LABEL);
+    if (asToggle) {
+      labelElement.classes.addAll([LForm.C_CHECKBOX__TOGGLE,
+        LGrid.C_GRID, LGrid.C_GRID__VERTICAL_ALIGN_CENTER]);
+      faux.attributes["data-check-on"] = "On";
+      faux.attributes["data-check-off"] = "Off";
+      _labelSpan.classes.add(LMargin.C_AROUND__SMALL);
+    } else {
+      labelElement.classes.add(LForm.C_CHECKBOX);
+    }
+
     labelElement
       ..append(_input)
       ..append(faux)

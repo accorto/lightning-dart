@@ -69,6 +69,7 @@ class LForm
   static const String C_CHECKBOX = "slds-checkbox";
   /// slds-checkbox--faux (span): Creates a custom styled checkbox - Apply to <span> inside .slds-checkbox
   static const String C_CHECKBOX__FAUX = "slds-checkbox--faux";
+  static const String C_CHECKBOX__TOGGLE = "slds-checkbox--toggle";
   /// slds-checkbox--button-group (div): Container for a group of checkbox that look like a button group
   static const String C_CHECKBOX__BUTTON_GROUP = "slds-checkbox--button-group";
   /// slds-checkbox--button (label class="slds-button"): Customizes your checkbox to look like a button in a button group

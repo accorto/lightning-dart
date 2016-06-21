@@ -100,7 +100,7 @@ part 'src/view/editors/l_input_image.dart';
 part 'src/view/editors/l_input_number.dart';
 part 'src/view/editors/l_input_range.dart';
 part 'src/view/editors/l_input_search.dart';
-part 'src/view/editors/l_radio.dart';
+part 'src/view/editors/l_radio_group.dart';
 part 'src/view/editors/l_select.dart';
 part 'src/view/editors/l_select_i.dart';
 part 'src/view/editors/l_textarea.dart';

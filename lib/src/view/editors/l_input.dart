@@ -33,7 +33,7 @@ class LInput
     createBaseLayout(this, iconLeft: getIconLeft(), iconRight: getIconRight(),
         withClearValue:withClearValue, inGrid:inGrid);
     input.name = name;
-    input.id = createId(idPrefix, name);
+    id = createId(idPrefix, name);
     input.type = _validateType(type);
     //
     hint = null;
@@ -48,7 +48,7 @@ class LInput
     createBaseLayout(this, iconLeft: getIconLeft(), iconRight: getIconRight(),
         withClearValue:withClearValue, inGrid:inGrid);
     input.name = dataColumn.name;
-    input.id = createId(idPrefix, input.name);
+    id = createId(idPrefix, input.name);
     input.type = _validateType(type);
 
     this.column = dataColumn; // base values

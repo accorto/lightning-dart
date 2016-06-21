@@ -12,8 +12,8 @@ class Forms extends DemoFeature {
   sldsStatus: DemoFeature.SLDS_DEV_READY,
   devStatus: DemoFeature.STATUS_COMPLETE,
   hints: [],
-  issues: [],
-  plans: []);
+  issues: ["Radio Button read only / disabled issues"],
+  plans: ["Radio Buttons with full Select API"]);
 
 
   String formType = LForm.C_FORM__STACKED;
@@ -86,6 +86,14 @@ class Forms extends DemoFeature {
       ..required = fieldRequired; // demo toggle
     form.addEditor(check2);
 
+    LCheckbox check3 = new LCheckbox("check3", asToggle: true)
+      ..label = "Checkbox Toggle Example"
+      ..setCustomValidity(customValidity)
+      ..readOnly = fieldReadOnly // demo toggle
+      ..disabled = fieldDisabled // demo toggle
+      ..required = fieldRequired; // demo toggle
+    form.addEditor(check3);
+
     LSelect sel = new LSelect("sel1")
       ..label = "Select Example"
       ..listItemList = generateListItems(5)
@@ -94,6 +102,43 @@ class Forms extends DemoFeature {
       ..disabled = fieldDisabled // demo toggle
       ..required = fieldRequired; // demo toggle
     form.addEditor(sel);
+
+    LRadioGroup sel2 = new LRadioGroup("sel2")
+      ..label = "Select Example with Radio's"
+      ..listItemList = generateListItems(3)
+      ..setCustomValidity(customValidity)
+      ..readOnly = fieldReadOnly // demo toggle
+      ..disabled = fieldDisabled // demo toggle
+      ..required = fieldRequired; // demo toggle
+    form.addEditor(sel2);
+
+    LRadioGroup sel3 = new LRadioGroup("sel3", asButtons:true)
+      ..label = "Select Example with Radio Buttons"
+      ..listItemList = generateListItems(5)
+      ..setCustomValidity(customValidity)
+      ..readOnly = fieldReadOnly // demo toggle
+      ..disabled = fieldDisabled // demo toggle
+      ..required = fieldRequired; // demo toggle
+    form.addEditor(sel3);
+
+    LRadioGroup sel4 = new LRadioGroup("sel4", multiple:true)
+      ..label = "Multi Select Example with Checkbox's"
+      ..listItemList = generateListItems(3)
+      ..setCustomValidity(customValidity)
+      ..readOnly = fieldReadOnly // demo toggle
+      ..disabled = fieldDisabled // demo toggle
+      ..required = fieldRequired; // demo toggle
+    form.addEditor(sel4);
+
+    LRadioGroup sel5 = new LRadioGroup("sel5", multiple:true, asButtons: true)
+      ..label = "Multi Select Example with Buttons"
+      ..listItemList = generateListItems(5)
+      ..setCustomValidity(customValidity)
+      ..readOnly = fieldReadOnly // demo toggle
+      ..disabled = fieldDisabled // demo toggle
+      ..required = fieldRequired; // demo toggle
+    form.addEditor(sel5);
+
 
     LTextArea ta = new LTextArea("ta1")
       ..label = "Text Area"

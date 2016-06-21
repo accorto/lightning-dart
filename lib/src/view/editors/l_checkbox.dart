@@ -23,8 +23,8 @@ class LCheckbox
    * Checkbox
    * (note that if id is not unique, it does not work!)
    */
-  LCheckbox(String name, {String idPrefix, bool inGrid:false}) {
-    createCheckboxLayout(this, inGrid);
+  LCheckbox(String name, {String idPrefix, bool inGrid:false, bool asToggle:false}) {
+    createCheckboxLayout(this, inGrid, asToggle);
     input.name = name;
     input.id = createId(idPrefix, name);
     _initEditor();
@@ -33,8 +33,8 @@ class LCheckbox
   /**
    * Checkbox Editor
    */
-  LCheckbox.from(DataColumn dataColumn, {String idPrefix, bool inGrid:false}) {
-    createCheckboxLayout(this, inGrid);
+  LCheckbox.from(DataColumn dataColumn, {String idPrefix, bool inGrid:false, bool asToggle:false}) {
+    createCheckboxLayout(this, inGrid, asToggle);
     input.name = dataColumn.name;
     input.id = createId(idPrefix, input.name);
     //
