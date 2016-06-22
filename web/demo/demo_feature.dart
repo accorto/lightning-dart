@@ -67,10 +67,13 @@ abstract class DemoFeature
     col1.append(h2);
     LBadge slds = new LBadge(sldsStatus);
     slds.element.title ="SLDS Status";
-    col1.append(slds.element);
     LBadge status = new LBadge.info(devStatus);
     status.element.title ="Development/Implementation Status";
-    col1.append(status.element);
+    DivElement statusDiv = new DivElement()
+      ..classes.add(LMargin.C_VERTICAL__X_SMALL)
+      ..append(slds.element)
+      ..append(status.element);
+    col1.append(statusDiv);
     ParagraphElement ref = new ParagraphElement()
       ..classes.add(LText.C_TEXT_BODY__SMALL)
       ..text = "See: "
