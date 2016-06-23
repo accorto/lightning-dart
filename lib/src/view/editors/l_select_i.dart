@@ -11,6 +11,9 @@ part of lightning_dart;
  */
 abstract class LSelectI {
 
+  /// Multi List Separator
+  static const String MULTI_SEP = ",";
+
   String get name;
 
   String get value;

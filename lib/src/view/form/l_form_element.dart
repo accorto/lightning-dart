@@ -214,7 +214,7 @@ class LFormElement {
       bool withClearValue:false, bool inGrid:false}) {
     this.editor = editor;
     _input = editor.input;
-    _input.classes.add(LForm.C_INPUT);
+    _input.classes.addAll([LForm.C_INPUT, LLookup.C_LOOKUP__SEARCH_INPUT]);
     this.inGrid = inGrid;
     if (inGrid) {
       _hintHide = true;

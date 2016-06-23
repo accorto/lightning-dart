@@ -19,7 +19,7 @@ class Pills extends DemoFeature {
   LComponent get content {
     CDiv div = new CDiv()
       ..classes.add(LMargin.C_HORIZONTAL__MEDIUM)
-      ..classes.add(LPill.C_PILL__CONTAINER);
+      ..classes.add(LPill.C_PILL_CONTAINER);
 
     div.add(new LPill.base("Pill Base", "pb", null,
         (MouseEvent e){print("Pill Base clicked");},

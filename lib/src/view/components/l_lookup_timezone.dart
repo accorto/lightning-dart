@@ -64,7 +64,7 @@ class LLookupTimezone
     }
 
     // show + start clock
-    _formElement.elementControl.insertBefore(_dock, input);
+    elementControl.insertBefore(_dock, input);
     clockRun = !inGrid && !disabled && !readOnly;
     onDefaultClick(null); // default TZ
   } // initTz

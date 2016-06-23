@@ -14,7 +14,7 @@ part of lightning_dart;
  * https://www.getslds.com/components/lookups#role=regular&status=all
  */
 class LLookup
-    extends LEditor with LSelectI {
+    extends LEditor with LFormElement, LSelectI {
 
   /// slds-lookup (div): Initializes lookup - Accepts [data-select] and [data-scope] attributes with the values of single/multi
   static const String C_LOOKUP = "slds-lookup";
@@ -24,8 +24,19 @@ class LLookup
   static const String C_LOOKUP__LIST = "slds-lookup__list";
   /// slds-lookup__item (li): Results list item
   static const String C_LOOKUP__ITEM = "slds-lookup__item";
-  /// slds-form-element (div): Initializes lookup form element - Wraps <input> and .slds-pill-container
-  static const String C_FORM_ELEMENT = "slds-form-element";
+  /// slds-lookup__item--label (div): Non-actionable label inside of a lookup item
+  static const String C_LOOKUP__ITEM__LABEL = "slds-lookup__item--label";
+  /// slds-lookup__item-action (a): Actionable element inside of a lookup item
+  static const String C_LOOKUP__ITEM_ACTION = "slds-lookup__item-action";
+  /// slds-lookup__item-action--label (slds-lookup__item-action): Actionable element inside of a lookup item that's output is single line text
+  static const String C_LOOKUP__ITEM_ACTION__LABEL = "slds-lookup__item-action--label";
+  /// slds-lookup__result-text (span): Primary entity name within lookup item
+  static const String C_LOOKUP__RESULT_TEXT = "slds-lookup__result-text";
+  /// slds-lookup__result-meta (a): Secondary info of primary entity name within lookup item
+  static const String C_LOOKUP__RESULT_META = "slds-lookup__result-meta";
+  /// slds-lookup__search-input (input): Styles for a lookup's form input
+  static const String C_LOOKUP__SEARCH_INPUT = "slds-lookup__search-input";
+
 
 
   /// selection
@@ -36,7 +47,7 @@ class LLookup
   /// data select attribute
   static const String _DATA_SELECT = "data-select";
   /// data select value
-  static const String _DATA_SELECT_MULTI = "multi";
+  static const String _DATA_SELECT_MULTI = "multi2"; // inconistency
   /// data select value
   static const String _DATA_SELECT_SINGLE = "single";
 
@@ -47,13 +58,6 @@ class LLookup
 
   /// data type ahead attribure (true/false)
   static const String _DATA_TYPEAHEAD = "data-typeahead";
-
-  /// Lookup form + menu
-  final DivElement element = new DivElement()
-    ..classes.add(C_LOOKUP);
-
-  /// Form Element - lookup needs to be top element
-  final LFormElement _formElement = new LFormElement();
 
   /// Form Element Input
   final InputElement input = new InputElement(type: EditorI.TYPE_TEXT);
@@ -120,26 +124,27 @@ class LLookup
       bool multiple, bool singleScope, bool typeahead, bool withClearValue, bool inGrid) {
     _setAttributes(multiple, singleScope, typeahead);
     //
-    _formElement.createLookupLayout(this,
-        iconRight: _iconRight,
+    createLookupLayout(this, iconRight: _iconRight,
         withClearValue: withClearValue, inGrid:inGrid);
     input
       ..attributes[Html0.ROLE] = Html0.ROLE_COMBOBOX
       ..attributes[Html0.ARIA_AUTOCOMPLETE] = Html0.ARIA_AUTOCOMPLETE_LIST
       ..attributes[Html0.ARIA_EXPANED] = "false"
       ..autocomplete = "off";
-    _formElement.labelInputText = lLookupLabel();
+    labelInputText = lLookupLabel();
     input.name = name;
     id = createId(idPrefix, input.name);
 
     _initEditor2(multiple, singleScope, typeahead);
 
-    // div .lookup
-    // - div .form-element ... label...
-    // - div .menu
+    // div .lookup .form-element
+    // - label
+    // - div .form-element-control
+    // - div .lookup-menu
     // -- ul
-    element.append(_formElement.element);
-    element.append(_lookupMenu);
+    element
+        ..classes.add(C_LOOKUP)
+        ..append(_lookupMenu);
     _lookupMenu.append(_lookupList);
     //
     showDropdown = false;
@@ -151,14 +156,14 @@ class LLookup
   LIcon _iconRight = new LIconUtility(LIconUtility.SEARCH);
 
   /// Editor in Grid
-  bool get inGrid => _formElement.inGrid;
+  //bool get inGrid => _formElement.inGrid;
 
   /// Init for Base Lookup
   void _initEditor2(bool multiple, bool singleScope, bool typeahead) {
     // show input with search icon
     input.onKeyUp.listen(onInputKeyUp);
     // toggle dropdown on click
-    _formElement.elementControl.onClick.listen(onClickInput);
+    elementControl.onClick.listen(onClickInput);
   } // initEditor
 
   /// On Click on Input or Icon
@@ -184,14 +189,10 @@ class LLookup
   // data-scope single
   bool get singleScope => element.attributes[_DATA_SCOPE] == _DATA_SCOPE_SINGLE;
 
-  /// Editor Id
-  String get id => input.id;
-
   void set id(String newValue) {
-    _formElement.id = newValue;
-    element.id = "${newValue}-lookup";
-    getIconRight().element.id = "${newValue}-icon";
-    _lookupMenu.attributes[Html0.DATA_NAME] = newValue;
+    super.id = newValue;
+    getIconRight().element.id = "${id}-icon";
+    _lookupMenu.attributes[Html0.DATA_NAME] = id;
   }
 
   void updateId(String idPrefix) {
@@ -201,25 +202,6 @@ class LLookup
   String get name => input.name;
 
   String get type => input.type;
-
-  String get label => _formElement.label;
-
-  void set label(String newValue) {
-    _formElement.label = newValue;
-  }
-
-  String get help => _formElement.help;
-  void set help(String newValue) {
-    _formElement.help = newValue;
-  }
-
-  String get hint => _formElement.hint;
-  void set hint(String newValue) {
-    _formElement.hint = newValue;
-  }
-
-  void hintHide() => _formElement.hintHide();
-  void hintRemove() => _formElement.hintRemove();
 
   /// Small Editor/Label
   void set small(bool newValue) {
@@ -336,8 +318,8 @@ class LLookup
 
   bool get required => input.required;
   void set required (bool newValue) {
-    input.required = newValue;
-    _formElement.required = newValue;
+    super.required = newValue;
+    //_formElement.required = newValue;
     if (newValue) {
       if (_lookupItemList.isNotEmpty) {
         LLookupItem first = _lookupItemList.first;
@@ -396,11 +378,6 @@ class LLookup
 
   /// Get Left Element
   Element getLeftElement() => null;
-
-  String get title => _formElement.title;
-  void set title (String newValue) {
-    _formElement.title = title;
-  }
 
   /// Validation state from Input
   ValidityState get inputValidationState => input.validity;
@@ -693,15 +670,14 @@ class LLookup
       newValue = false;
     }
     _showDropdown = newValue;
+    element.classes.toggle(LVisibility.C_IS_OPEN, _showDropdown);
     input.attributes[Html0.ARIA_EXPANED] = newValue.toString();
     if (newValue) {
-      _lookupMenu.classes.remove(LVisibility.C_HIDE);
       if (_valueItem != null) {
         _valueItem.selected = true;
         _valueItem.element.scrollIntoView();
       }
     } else {
-      _lookupMenu.classes.add(LVisibility.C_HIDE);
       _itemsClearRestriction();
     }
   } // showDropdown
@@ -742,10 +718,6 @@ class LLookup
       */
     }
   } // validateOptions
-
-  void updateStatusValidationState() {
-    _formElement.updateStatusValidationState();
-  }
 
   /// fk table name
   String get fkTableName {

@@ -11,19 +11,20 @@ part of lightning_dart;
  */
 class LPill extends LComponent {
 
-  /// slds-pill - Initializes pill | Required
+  /// slds-pill (span): Initializes pill
   static const String C_PILL = "slds-pill";
-  /// slds-pill__label - Initializes pill label | Required
+  /// slds-pill__label (span or <a): Initializes pill label
   static const String C_PILL__LABEL = "slds-pill__label";
-  /// slds-pill__icon - Initializes pill icon that sits to the left of the label | Required
+  /// slds-pill__icon (svg class="slds-icon" or .slds-avatar): Initializes pill icon or avatar that sits to the left of the label
   static const String C_PILL__ICON = "slds-pill__icon";
-  /// slds-pill__remove - Initializes remove icon in pill that sits to the right of the label | Required
+  /// slds-pill__remove (slds-button): Initializes remove icon in pill that sits to the right of the label
   static const String C_PILL__REMOVE = "slds-pill__remove";
-  /// slds-pill__container - Container to hold pill(s) | Required
-  static const String C_PILL__CONTAINER = "slds-pill__container";
-  /// slds-pill--bare - Modifier that removes border and background from a pill
+  /// slds-pill_container (div): Container to hold pill(s) with borders
+  static const String C_PILL_CONTAINER = "slds-pill_container";
+  /// slds-pill_container--bare (div): Container to hold pill(s) with no borders
+  static const String C_PILL_CONTAINER__BARE = "slds-pill_container--bare";
+  /// slds-pill--bare (slds-pill): Modifier that removes border and background from a pill
   static const String C_PILL__BARE = "slds-pill--bare";
-
 
 
   /// Pill Element
@@ -34,6 +35,8 @@ class LPill extends LComponent {
   Element _content;
   /// Remove button
   LButton _remove;
+  SpanElement _assistive = new SpanElement()
+    ..classes.add(LText.C_ASSISTIVE_TEXT);
 
   /**
    * Pill
@@ -74,6 +77,8 @@ class LPill extends LComponent {
       _remove.onClick.listen(onRemoveClick);
       element.append(_remove.element);
     }
+    element.append(_assistive);
+    //
     this.label = label; // rebuilds
     this.value = value;
   } // LPill
@@ -82,10 +87,15 @@ class LPill extends LComponent {
   String get label => _label;
   void set label (String newValue) {
     _label = newValue;
+    _assistive.text = newValue;
     _rebuild();
   }
   String _label;
 
+  String get title => _content.title;
+  void set title (String newValue) {
+    _content.title = newValue;
+  }
 
   /// get value
   String get value => element.attributes[Html0.DATA_VALUE];

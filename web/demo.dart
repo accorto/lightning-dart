@@ -32,7 +32,6 @@ part 'demo/feeds.dart';
 part 'demo/forms.dart';
 part 'demo/forms2.dart';
 part 'demo/forms_editor.dart';
-part 'demo/gridsystem.dart';
 part 'demo/icons.dart';
 part 'demo/images.dart';
 part 'demo/lookups.dart';
@@ -159,7 +158,6 @@ class DemoPage extends AppsPage {
     _addFeature(new Forms()..toc(toc, onlySelectedHide));
     _addFeature(new Forms2()..toc(toc, onlySelectedHide));
     _addFeature(new FormsEditor()..toc(toc, onlySelectedHide));
-    _addFeature(new GridSystem()..toc(toc, onlySelectedHide));
     _addFeature(new Icons()..toc(toc, onlySelectedHide));
     _addFeature(new Images()..toc(toc, onlySelectedHide));
     _addFeature(new Lookups()..toc(toc, onlySelectedHide));

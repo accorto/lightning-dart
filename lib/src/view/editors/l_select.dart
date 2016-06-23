@@ -113,13 +113,26 @@ class LSelect
   String get value {
     if (multiple) {
       List<String> list = valueList;
-      return list.join(",");
+      return list.join(LSelectI.MULTI_SEP);
     }
     return input.value;
   }
   void set value (String newValue) {
     validateOptions();
-    input.value = newValue;
+    if (multiple && newValue != null && newValue.isNotEmpty) {
+      List<String> values = newValue.split(LSelectI.MULTI_SEP);
+      for (OptionElement oe in options) {
+        oe.selected = false;
+        for (String vv in values) {
+          if (oe.value == vv) {
+            oe.selected = true;
+            break;
+          }
+        }
+      }
+    } else {
+      input.value = newValue;
+    }
   }
 
   /// get values as list

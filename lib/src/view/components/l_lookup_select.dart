@@ -14,7 +14,7 @@ class LLookupSelect
 
   /// Pill Container
   final DivElement _pillContainer = new DivElement()
-    ..classes.add(LPill.C_PILL__CONTAINER);
+    ..classes.add(LPill.C_PILL_CONTAINER);
   final List<LPill> _pillList = new List<LPill>();
 
 
@@ -42,10 +42,10 @@ class LLookupSelect
   /// Init for Select Lookup
   void _initEditor2(bool multiple, bool singleScope, bool typeahead) {
     _pillContainer.classes.add(LVisibility.C_SHOW);
-    _formElement.createLookupSelectLayout(_pillContainer, getIconRight(), multiple); // update
+    createLookupSelectLayout(_pillContainer, getIconRight(), multiple); // update
 
     // toggle dropdown on click incl _pillContainer
-    _formElement.elementControl.onClick.listen(onClickInput);
+    elementControl.onClick.listen(onClickInput);
   } // initEditor2
 
   /// focus on pill container
@@ -110,7 +110,7 @@ class LLookupSelect
     String vv = "";
     for (LPill pill in _pillList) {
       if (vv.isNotEmpty)
-        vv += ",";
+        vv += LSelectI.MULTI_SEP;
       vv += pill.value;
     }
     return vv;
@@ -120,12 +120,12 @@ class LLookupSelect
   void set value (String newValue) {
     _pillList.clear();
     if (newValue != null && newValue.isNotEmpty) {
-      List<String> values = newValue.split(",");
+      List<String> values = newValue.split(LSelectI.MULTI_SEP);
       for (String vv in values) {
         LLookupItem item = null;
         if (vv.isNotEmpty) {
           for (LLookupItem ii in _lookupItemList) {
-            if (ii.value == newValue) {
+            if (ii.value == vv) {
               item = ii;
               break;
             }
@@ -142,11 +142,22 @@ class LLookupSelect
   /// add item to selected list
   void addSelectedItem(LLookupItem item) {
     // update list
-    if (!multiple) {
+    if (multiple) {
+      if (item != null) {
+        String newValue = item.value;
+        for (LPill pill in _pillList) {
+          if (pill.value == newValue) {
+            _pillList.remove(pill);
+            break;
+          }
+        }
+        _pillList.add(item.asPill(onItemRemoveClick)); // at the end
+      }
+    } else { // single
       _pillList.clear();
-    }
-    if (item != null) {
-      _pillList.add(item.asPill(onItemRemoveClick));
+      if (item != null) {
+        _pillList.add(item.asPill(onItemRemoveClick));
+      }
     }
     _updateContainer();
   } // addSelectedItem

@@ -12,8 +12,8 @@ class Forms extends DemoFeature {
   sldsStatus: DemoFeature.SLDS_DEV_READY,
   devStatus: DemoFeature.STATUS_COMPLETE,
   hints: [],
-  issues: ["Radio Button read only / disabled issues"],
-  plans: ["Radio Buttons with full Select API"]);
+  issues: ["Radio Button readOnly/disabled rendering"],
+  plans: []);
 
 
   String formType = LForm.C_FORM__STACKED;
@@ -102,6 +102,15 @@ class Forms extends DemoFeature {
       ..disabled = fieldDisabled // demo toggle
       ..required = fieldRequired; // demo toggle
     form.addEditor(sel);
+
+    LSelect sel9 = new LSelect("sel", multiple: true)
+      ..label = "Multi Select Example"
+      ..listItemList = generateListItems(3)
+      ..setCustomValidity(customValidity)
+      ..readOnly = fieldReadOnly // demo toggle
+      ..disabled = fieldDisabled // demo toggle
+      ..required = fieldRequired; // demo toggle
+    form.addEditor(sel9);
 
     LRadioGroup sel2 = new LRadioGroup("sel2")
       ..label = "Select Example with Radio's"
