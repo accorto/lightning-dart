@@ -11,21 +11,20 @@ part of lightning_dart;
  */
 abstract class LNotification extends LComponent {
 
-  /// slds-notify - Initializes notification | Required
+  /// slds-notify (div): Initializes notification - Applys to alerts and toasts
   static const String C_NOTIFY = "slds-notify";
-  /// slds-notify-container - Initializes notification container | Required
-  static const String C_NOTIFY_CONTAINER = "slds-notify-container";
-  /// slds-notify--toast - Initializes toast notification | Required
+  /// slds-notify_container (div): Initializes notification container - Wraps around notification for positioning
+  static const String C_NOTIFY_CONTAINER = "slds-notify_container";
+  /// slds-notify--toast (slds-notify): Initializes toast notification - Required for toast notifications
   static const String C_NOTIFY__TOAST = "slds-notify--toast";
-  /// slds-notify--alert - Initializes alert notification | Required
+  /// slds-notify--alert: Initializes alert notification - Required for alert notifications
   static const String C_NOTIFY__ALERT = "slds-notify--alert";
-  /// slds-notify__close - Positions close icon | Required
+  /// slds-notify__close (button): Positions close icon
   static const String C_NOTIFY__CLOSE = "slds-notify__close";
-  /// slds-modal--prompt - Initializes Prompt style notification | Required
+  /// slds-notify__content (div): Initializes notification content
+  static const String C_NOTIFY__CONTENT = "slds-notify__content";
+  /// slds-modal--prompt (slds-modal): Initializes Prompt style notification - Themes can be added to the .slds-modal__header to create the alert style required
   static const String C_MODAL__PROMPT = "slds-modal--prompt";
-
-  /// Marker
-  static const String C_NOTIFY__CONTENT = "notify__content";
 
 
   /**

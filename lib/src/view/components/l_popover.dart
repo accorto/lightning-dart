@@ -12,42 +12,41 @@ part of lightning_dart;
 class LPopover
     extends LPopbase {
 
-  /// slds-popover - Initializes popover | Required
+  /// slds-popover (div): Initializes popover
   static const String C_POPOVER = "slds-popover";
-  /// slds-popover__header - Applies styles for top area of popover
+  /// slds-popover__header (div): Applies styles for top area of popover
   static const String C_POPOVER__HEADER = "slds-popover__header";
-  /// slds-popover__body - Applies syles for primary content area of popover
+  /// slds-popover__body (div): Applies syles for primary content area of popover
   static const String C_POPOVER__BODY = "slds-popover__body";
-  /// slds-popover--tooltip - Modifier used to apply tooltip specific styles
+  /// slds-popover--tooltip (slds-popover): Modifier used to apply tooltip specific styles
   static const String C_POPOVER__TOOLTIP = "slds-popover--tooltip";
-  /// slds-popover--panel - Modifier used to apply panel specific styles
+  /// slds-popover--panel (slds-popover): Modifier used to apply panel specific styles
   static const String C_POPOVER__PANEL = "slds-popover--panel";
 
-  /// slds-nubbin--top - Triangle that points upwards which is horizontally centered
+  /// slds-nubbin--top (slds-popover): Triangle that points upwards which is horizontally centered
   static const String C_NUBBIN__TOP = "slds-nubbin--top";
-  /// slds-nubbin--top-left - Triangle that points upwards which is left aligned
+  /// slds-nubbin--top-left (slds-popover): Triangle that points upwards which is left aligned
   static const String C_NUBBIN__TOP_LEFT = "slds-nubbin--top-left";
-  /// slds-nubbin--top-right - Triangle that points upwards which is right aligned
+  /// slds-nubbin--top-right (slds-popover): Triangle that points upwards which is right aligned
   static const String C_NUBBIN__TOP_RIGHT = "slds-nubbin--top-right";
-  /// slds-nubbin--bottom - Triangle that points downwards which is horizontally centered
+  /// slds-nubbin--bottom (slds-popover): Triangle that points downwards which is horizontally centered
   static const String C_NUBBIN__BOTTOM = "slds-nubbin--bottom";
-  /// slds-nubbin--bottom-left - Triangle that points downwards which is left aligned
+  /// slds-nubbin--bottom-left (slds-popover): Triangle that points downwards which is left aligned
   static const String C_NUBBIN__BOTTOM_LEFT = "slds-nubbin--bottom-left";
-  /// slds-nubbin--bottom-right - Triangle that points downwards which is right aligned
+  /// slds-nubbin--bottom-right (slds-popover): Triangle that points downwards which is right aligned
   static const String C_NUBBIN__BOTTOM_RIGHT = "slds-nubbin--bottom-right";
-  /// slds-nubbin--left - Triangle that points to the left which is vertically centered
+  /// slds-nubbin--left (slds-popover): Triangle that points to the left which is vertically centered
   static const String C_NUBBIN__LEFT = "slds-nubbin--left";
-  /// slds-nubbin--left-top - Triangle that points to the left which is top aligned
+  /// slds-nubbin--left-top (slds-popover): Triangle that points to the left which is top aligned
   static const String C_NUBBIN__LEFT_TOP = "slds-nubbin--left-top";
-  /// slds-nubbin--left-bottom - Triangle that points to the right which is bottom aligned
+  /// slds-nubbin--left-bottom (slds-popover): Triangle that points to the right which is bottom aligned
   static const String C_NUBBIN__LEFT_BOTTOM = "slds-nubbin--left-bottom";
-  /// slds-nubbin--right - Triangle that points to the right which is vertically centered
+  /// slds-nubbin--right (slds-popover): Triangle that points to the right which is vertically centered
   static const String C_NUBBIN__RIGHT = "slds-nubbin--right";
-  /// slds-nubbin--right-top - Triangle that points to the right which is top aligned
+  /// slds-nubbin--right-top (slds-popover): Triangle that points to the right which is top aligned
   static const String C_NUBBIN__RIGHT_TOP = "slds-nubbin--right-top";
-  /// slds-nubbin--right-bottom - Triangle that points to the right which is bottom aligned
+  /// slds-nubbin--right-bottom (slds-popover): Triangle that points to the right which is bottom aligned
   static const String C_NUBBIN__RIGHT_BOTTOM = "slds-nubbin--right-bottom";
-
 
   /// Nubbin Positions
   static final List<String> _NUBBINS = [C_NUBBIN__TOP, C_NUBBIN__TOP_LEFT, C_NUBBIN__TOP_RIGHT,

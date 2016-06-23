@@ -1,16 +1,24 @@
-/// DO NOT EDIT. This is code generated via package:intl/generate_localized.dart
-/// This is a library that provides messages for a de locale. All the
-/// messages from the main program should be duplicated here with the same
-/// function name.
+// DO NOT EDIT. This is code generated via package:intl/generate_localized.dart
+// This is a library that provides messages for a de locale. All the
+// messages from the main program should be duplicated here with the same
+// function name.
 
 import 'package:intl/intl.dart';
 import 'package:intl/message_lookup_by_library.dart';
 
 final messages = new MessageLookup();
 
-class MessageLookup extends MessageLookupByLibrary {
+final _keepAnalysisHappy = Intl.defaultLocale;
 
+class MessageLookup extends MessageLookupByLibrary {
   get localeName => 'de';
+
+  static objectExportFile(type) => "${type} Datei";
+
+  static objectExportRecords(count) => "${count} Aufzeichnungen";
+
+  static objectExportRecordsSelected(selectedCount, totalCount) => "${selectedCount} von ${totalCount} Aufzeichnungen";
+
   static objectImportColumnAlreadyMapped(columnName, columnNumber) => "${columnName} bereits in der Spalte ${columnNumber}";
 
   static objectImportColumnNotMapped(columnName) => "${columnName} ist obligatorisch und nicht abgebildet";
@@ -30,14 +38,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "appsActionDeleteSelected" : MessageLookupByLibrary.simpleMessage("Ausgewählte löschen"),
     "appsActionDown" : MessageLookupByLibrary.simpleMessage("nach unten"),
     "appsActionEdit" : MessageLookupByLibrary.simpleMessage("Bearbeiten"),
-    "appsActionImport" : MessageLookupByLibrary.simpleMessage("Import"),
+    "appsActionExclude" : MessageLookupByLibrary.simpleMessage("Ausschließen"),
+    "appsActionExport" : MessageLookupByLibrary.simpleMessage("Export"),
+    "appsActionImport" : MessageLookupByLibrary.simpleMessage("Einführen"),
     "appsActionInfo" : MessageLookupByLibrary.simpleMessage("Info"),
     "appsActionLayout" : MessageLookupByLibrary.simpleMessage("Layout"),
     "appsActionNew" : MessageLookupByLibrary.simpleMessage("Neu"),
     "appsActionNo" : MessageLookupByLibrary.simpleMessage("Nein"),
+    "appsActionQuery" : MessageLookupByLibrary.simpleMessage("Abfrage"),
     "appsActionRefresh" : MessageLookupByLibrary.simpleMessage("auffrischen"),
     "appsActionReset" : MessageLookupByLibrary.simpleMessage("zurückstellen"),
     "appsActionSave" : MessageLookupByLibrary.simpleMessage("sparen"),
+    "appsActionSubmit" : MessageLookupByLibrary.simpleMessage("einreichen"),
     "appsActionUp" : MessageLookupByLibrary.simpleMessage("Oben"),
     "appsActionYes" : MessageLookupByLibrary.simpleMessage("ja"),
     "appsActions" : MessageLookupByLibrary.simpleMessage("Aktionen"),
@@ -87,13 +99,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "fkDialogTitle" : MessageLookupByLibrary.simpleMessage("Suche"),
     "graphElementSyncTable" : MessageLookupByLibrary.simpleMessage("Synchronisieren mit Tabelle"),
     "graphElementTitle" : MessageLookupByLibrary.simpleMessage("Graph"),
-    "lBreadcrumbText" : MessageLookupByLibrary.simpleMessage("Du bist da"),
     "lButtonGroupMore" : MessageLookupByLibrary.simpleMessage("Mehr"),
     "lDatePickerDropdownNext" : MessageLookupByLibrary.simpleMessage("Zum nächsten Monat"),
     "lDatePickerDropdownPrev" : MessageLookupByLibrary.simpleMessage("Zum Vormonat"),
     "lDatePickerDropdownToday" : MessageLookupByLibrary.simpleMessage("heute"),
     "lFormElementClear" : MessageLookupByLibrary.simpleMessage("Wert löschen"),
-    "lFormElementNotRequired" : MessageLookupByLibrary.simpleMessage("fakultativ"),
+    "lFormElementNotRequired" : MessageLookupByLibrary.simpleMessage("optional"),
     "lFormElementRequired" : MessageLookupByLibrary.simpleMessage("erforderlich"),
     "lFormError" : MessageLookupByLibrary.simpleMessage("Formfehler"),
     "lFormReset" : MessageLookupByLibrary.simpleMessage("zurückstellen"),
@@ -154,6 +165,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "lSpinnerWorking" : MessageLookupByLibrary.simpleMessage("Arbeiten"),
     "lTableColumnSortAsc" : MessageLookupByLibrary.simpleMessage("Aufsteigend sortieren"),
     "lTableColumnSortDec" : MessageLookupByLibrary.simpleMessage("Sortieren decending"),
+    "lTablePagerNext" : MessageLookupByLibrary.simpleMessage("Nächster"),
+    "lTablePagerPrevious" : MessageLookupByLibrary.simpleMessage("früher"),
+    "lTablePagerSize" : MessageLookupByLibrary.simpleMessage("Seitengröße"),
     "lTableRowSelectAll" : MessageLookupByLibrary.simpleMessage("Alles auswählen"),
     "lTableRowSelectRow" : MessageLookupByLibrary.simpleMessage("Wählen Row"),
     "lTableStatisticGraphSelect" : MessageLookupByLibrary.simpleMessage("Graph Auswahl"),
@@ -179,6 +193,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "objectEditEdit" : MessageLookupByLibrary.simpleMessage("Bearbeiten"),
     "objectEditError" : MessageLookupByLibrary.simpleMessage("Kommunikationsfehler"),
     "objectEditNew" : MessageLookupByLibrary.simpleMessage("Neu"),
+    "objectExportColumns" : MessageLookupByLibrary.simpleMessage("Spalten"),
+    "objectExportDownload" : MessageLookupByLibrary.simpleMessage("Herunterladen"),
+    "objectExportFile" : objectExportFile,
+    "objectExportFormat" : MessageLookupByLibrary.simpleMessage("Wählen Sie Format"),
+    "objectExportPreview" : MessageLookupByLibrary.simpleMessage("Vorschau"),
+    "objectExportRecords" : objectExportRecords,
+    "objectExportRecordsSelected" : objectExportRecordsSelected,
+    "objectExportSelectColumns" : MessageLookupByLibrary.simpleMessage("Spalten auswählen"),
+    "objectExportTitle" : MessageLookupByLibrary.simpleMessage("Export"),
     "objectHomeFilterPanel" : MessageLookupByLibrary.simpleMessage("Filter"),
     "objectHomeFilterPanelAddFilter" : MessageLookupByLibrary.simpleMessage("Filter hinzufügen"),
     "objectHomeFilterPanelExecute" : MessageLookupByLibrary.simpleMessage("Ausführen"),
@@ -186,30 +209,32 @@ class MessageLookup extends MessageLookupByLibrary {
     "objectHomeFilterPanelSaveName" : MessageLookupByLibrary.simpleMessage("Filter Name"),
     "objectHomeFilterPanelSyncTable" : MessageLookupByLibrary.simpleMessage("Sync mit Tabelle"),
     "objectImportAddColumn" : MessageLookupByLibrary.simpleMessage("Spalte hinzufügen"),
-    "objectImportButton" : MessageLookupByLibrary.simpleMessage("Import"),
+    "objectImportButton" : MessageLookupByLibrary.simpleMessage("Einführen"),
     "objectImportCheckValues" : MessageLookupByLibrary.simpleMessage("Werte überprüfen"),
     "objectImportColumnAlreadyMapped" : objectImportColumnAlreadyMapped,
     "objectImportColumnNotMapped" : objectImportColumnNotMapped,
     "objectImportColumnsMapped" : objectImportColumnsMapped,
+    "objectImportDateFormatHelp" : MessageLookupByLibrary.simpleMessage("Java-Stil Datum und Art-Muster (Simple) - falls definiert zunächst für Datumsfelder verwendet"),
+    "objectImportDateFormatLabel" : MessageLookupByLibrary.simpleMessage("Benutzerdefinierte Datums- / Uhrzeitformat"),
     "objectImportDuplicate" : MessageLookupByLibrary.simpleMessage("Duplikat"),
     "objectImportFileLabel" : MessageLookupByLibrary.simpleMessage("Wählen Sie eine Datei importieren"),
     "objectImportLineCheck" : MessageLookupByLibrary.simpleMessage("Prüfen"),
     "objectImportLineEmpty" : MessageLookupByLibrary.simpleMessage("leer"),
     "objectImportLineLine" : MessageLookupByLibrary.simpleMessage("Linie"),
-    "objectImportLineValueNotFound" : MessageLookupByLibrary.simpleMessage("Wert wurde nicht gefunden"),
+    "objectImportLineValueNotFound" : MessageLookupByLibrary.simpleMessage("Wert nicht oder ungültig befunden"),
     "objectImportMandatoryMissing" : objectImportMandatoryMissing,
     "objectImportMap" : MessageLookupByLibrary.simpleMessage("Karte zur Spalte"),
     "objectImportMapColumns" : MessageLookupByLibrary.simpleMessage("Karte Spalten!"),
     "objectImportRowsSelected" : objectImportRowsSelected,
     "objectImportSelectCsv" : MessageLookupByLibrary.simpleMessage("Wählen Sie cvs-Datei"),
-    "objectImportTitle" : MessageLookupByLibrary.simpleMessage("Import"),
+    "objectImportTitle" : MessageLookupByLibrary.simpleMessage("Einführen"),
     "optionUtilNo" : MessageLookupByLibrary.simpleMessage("Nein"),
     "optionUtilYes" : MessageLookupByLibrary.simpleMessage("ja"),
     "preferenceGlobalSave" : MessageLookupByLibrary.simpleMessage("Einstellungen speichern als globale"),
     "preferenceNothingToSave" : MessageLookupByLibrary.simpleMessage("Nichts zu retten"),
     "preferenceSaved" : MessageLookupByLibrary.simpleMessage("Einstellungen als globale Einstellungen gespeichert"),
     "recordInfoLabel" : MessageLookupByLibrary.simpleMessage("Info"),
-    "serviceComErrorButton" : MessageLookupByLibrary.simpleMessage("Seite neu laden"),
+    "serviceComErrorButton" : MessageLookupByLibrary.simpleMessage("Seite neuladen"),
     "serviceComErrorMsg" : MessageLookupByLibrary.simpleMessage("Tut mir leid, das - bitte versuchen Sie es später noch einmal."),
     "serviceComErrorTitle" : MessageLookupByLibrary.simpleMessage("Kommunikationsfehler"),
     "statByNone" : MessageLookupByLibrary.simpleMessage("Keiner"),
@@ -233,6 +258,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "tableCtrlDelete1RecordText" : MessageLookupByLibrary.simpleMessage("Wollen Sie den aktuellen Datensatz zu löschen?"),
     "tableCtrlDeleteRecords" : MessageLookupByLibrary.simpleMessage("Selektierte Datensätze löschen?"),
     "tableCtrlDeleteRecordsText" : MessageLookupByLibrary.simpleMessage("Möchten Sie die ausgewählten Datensätze zu löschen?"),
+    "tableCtrlNewRecord" : MessageLookupByLibrary.simpleMessage("neu"),
     "tableCtrlRecords" : tableCtrlRecords,
     "tableLayout" : MessageLookupByLibrary.simpleMessage("Tabellen-Layout"),
     "tableLayoutColumns" : MessageLookupByLibrary.simpleMessage("Spalten"),

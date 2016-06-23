@@ -15,6 +15,7 @@ class LSpinner {
   static const String C_SPINNER = "slds-spinner";
   /// slds-spinner_container (outer <div): This container creates a full overlay to dim the page when needed
   static const String C_SPINNER_CONTAINER = "slds-spinner_container";
+
   /// slds-spinner--small (slds-spinner): This is the small spinner
   static const String C_SPINNER__SMALL = "slds-spinner--small";
   /// slds-spinner--medium (slds-spinner): This is the medium spinner
@@ -25,6 +26,7 @@ class LSpinner {
   static const String C_SPINNER__BRAND = "slds-spinner--brand";
   /// slds-spinner--inverse (slds-spinner): This is the inverse spinner
   static const String C_SPINNER__INVERSE = "slds-spinner--inverse";
+
   /// slds-spinner__dot-a (div): This creates two of the circles
   static const String C_SPINNER__DOT_A = "slds-spinner__dot-a";
   /// slds-spinner__dot-b (div): This creates two of the circles

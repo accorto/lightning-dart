@@ -27,6 +27,7 @@ abstract class LProcess
   static const String C_TABS__PATH__STAGE = "slds-tabs--path__stage";
   /// slds-tabs--path__title (span): Contains the name of the stage - This class is only required in the sales path tabs and is contained inside the .slds-tabs--path__link
   static const String C_TABS__PATH__TITLE = "slds-tabs--path__title";
+
   /// slds-is-complete (slds-tabs--path__item): Creates the completed stage of the sales path
   static const String C_IS_COMPLETE = "slds-is-complete";
   /// slds-is-current (slds-tabs--path__item): Creates the current stage of the sales path
@@ -50,7 +51,7 @@ abstract class LProcess
   static const String C_WIZARD__LABEL = "slds-wizard__label";
   /// slds-wizard__progress (span): Container for progress bar - <span> sits outside of <ol>
   static const String C_WIZARD__PROGRESS = "slds-wizard__progress";
-  /// slds-wizard__progress-bar (span): Bar showcasing which step of the process a user is on - Inline width styles should be modified with Javascript
+  /// slds-wizard__progress-bar (span): Bar showcasing which step of the process a user is on - Inline width styles should be modified with JavaScript
   static const String C_WIZARD__PROGRESS_BAR = "slds-wizard__progress-bar";
 
 

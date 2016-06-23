@@ -113,7 +113,7 @@ class LTileGeneric
   /// Get Detail ul
   UListElement get detailList {
     if (_detailList == null) {
-      _detailList = createDetailList(LTile.CLASSES_DETAIL_LIST);
+      _detailList = createDetailList([LList.C_LIST__HORIZONTAL, LList.C_HAS_DIVIDERS__RIGHT]);
       if (_body == null)
         element.append(_detailList);
       else

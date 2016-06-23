@@ -7,18 +7,16 @@
 part of lightning_dart;
 
 /**
- * Tile
+ * Tile - see LTileGeneric, LTileBase/Icon
  */
 abstract class LTile
     extends LComponent {
 
-  /// slds-tile - Initializes tile | Required
+  /// slds-tile (div): Initializes tile
   static const String C_TILE = "slds-tile";
-  /// slds-tile__title -  | Required
-  static const String C_TILE__TITLE = "slds-tile__title";
-  /// slds-tile__detail -  | Required
+  /// slds-tile__detail (div or <ul):
   static const String C_TILE__DETAIL = "slds-tile__detail";
-  /// slds-tile__meta - Applies text color change
+  /// slds-tile__meta (Any element inside .slds-tile__detail): Applies text color change
   static const String C_TILE__META = "slds-tile__meta";
 
   /// tile board
@@ -30,7 +28,7 @@ abstract class LTile
 
   /// Tile Title
   final ParagraphElement _title = new ParagraphElement()
-    ..classes.addAll([C_TILE__TITLE, LText.C_TRUNCATE]);
+    ..classes.addAll([LText.C_TRUNCATE]);
   /// Tile Title Link
   final AnchorElement titleLink = new AnchorElement(href: "#");
 
@@ -90,8 +88,6 @@ abstract class LTile
 
   /// Detail ul
   UListElement get detailList;
-  /// Standard Tile Detail List Classes // FixMe divider left?
-  static final List<String> CLASSES_DETAIL_LIST = [C_TILE__DETAIL, LList.C_LIST__HORIZONTAL, LList.C_HAS_DIVIDER__LEFT, LText.C_TEXT_BODY__SMALL];
 
   /// Create UL
   UListElement createDetailList(List<String> classList) {
@@ -123,6 +119,7 @@ abstract class LTile
   }
 
 } // LTile
+
 
 
 /**
@@ -157,13 +154,14 @@ class LTileBase
   /// Get Detail ul
   UListElement get detailList {
     if (_detailList == null) {
-      _detailList = createDetailList(LTile.CLASSES_DETAIL_LIST);
+      _detailList = createDetailList([LList.C_LIST__HORIZONTAL, LList.C_HAS_DIVIDERS__RIGHT]);
       element.append(_detailList);
     }
     return _detailList;
   }
 
 } // LTileBase
+
 
 
 /**
@@ -225,7 +223,7 @@ class LTileIcon
   /// Get Detail ul
   UListElement get detailList {
     if (_detailList == null) {
-      _detailList = createDetailList(LTile.CLASSES_DETAIL_LIST);
+      _detailList = createDetailList([LList.C_LIST__HORIZONTAL, LList.C_HAS_DIVIDERS__RIGHT]);
       _body.append(_detailList);
     }
     return _detailList;

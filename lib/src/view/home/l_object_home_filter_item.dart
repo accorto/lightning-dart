@@ -71,7 +71,6 @@ class ObjectHomeFilterItem
         onItemDelete(this);
       });
     Element header = new DivElement()
-      ..classes.addAll([LTile.C_TILE__TITLE])
       ..appendText(Html0.SPACE_NB)
       ..append(delete.element);
     element.append(header);

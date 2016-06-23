@@ -68,6 +68,7 @@ part 'src/view/components/l_notification.dart';
 part 'src/view/components/l_page.dart';
 part 'src/view/components/l_page_header.dart';
 part 'src/view/components/l_page_home.dart';
+part 'src/view/components/l_panel.dart';
 part 'src/view/components/l_path.dart';
 part 'src/view/components/l_picklist.dart';
 part 'src/view/components/l_picklist_multi.dart';

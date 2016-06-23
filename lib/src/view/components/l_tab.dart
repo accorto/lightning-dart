@@ -24,6 +24,7 @@ class LTab
   static const String C_TABS__DEFAULT__LINK = "slds-tabs--default__link";
   /// slds-tabs--default__content (div): Styles each tab content wrapper
   static const String C_TABS__DEFAULT__CONTENT = "slds-tabs--default__content";
+
   /// slds-tabs--scoped (div): Initializes scoped tabset
   static const String C_TABS__SCOPED = "slds-tabs--scoped";
   /// slds-tabs--scoped__nav (ul): Creates the container for the tabs
@@ -36,6 +37,17 @@ class LTab
   static const String C_TABS__SCOPED__CONTENT = "slds-tabs--scoped__content";
   /// slds-tabs__item--overflow (slds-tabs__item): Styles an overflow tab item - This is used on a tab containing an overflow dropdown menu
   static const String C_TABS__ITEM__OVERFLOW = "slds-tabs__item--overflow";
+
+  /// slds-dropdown-trigger (slds-tabs__item--overflow): Initializes tab item as menu
+  static const String C_DROPDOWN_TRIGGER = "slds-dropdown-trigger";
+
+  /// slds-active (slds-tabs__item): Applies the active state to a tab list item - Required on the <li> element that is associated with the active tab panel
+  static const String C_ACTIVE = "slds-active";
+  /// slds-show (slds-tabs__content): Shows the tab panel
+  static const String C_SHOW = "slds-show";
+  /// slds-hide (slds-tabs__content): Hide the tab panel
+  static const String C_HIDE = "slds-hide";
+
 
 
   static final Logger _log = new Logger("LTab");

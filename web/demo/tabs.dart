@@ -11,7 +11,7 @@ class Tabs extends DemoFeature {
   Tabs() : super ("tabs", "Tabs",
   sldsStatus: DemoFeature.SLDS_DEV_READY,
   devStatus: DemoFeature.STATUS_COMPLETE,
-  hints: ["(Sales) Path has same API as Select"],
+  hints: [],
   issues: [],
   plans: ["overflow"]);
 
@@ -19,8 +19,7 @@ class Tabs extends DemoFeature {
 
     CDiv div = new CDiv();
 
-    LTab tab = new LTab(scoped: option1)
-      ..classes.add(LMargin.C_HORIZONTAL__MEDIUM);
+    LTab tab = new LTab(scoped: option1);
     DivElement c1 = tab.addTab("One");
     c1.text = "One Content";
     DivElement c2 = tab.addTab("Two");
