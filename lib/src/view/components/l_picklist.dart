@@ -42,7 +42,7 @@ class LPicklist
     ..classes.addAll([C_PICKLIST, LDropdown.C_DROPDOWN_TRIGGER, LDropdown.C_DROPDOWN_TRIGGER__CLICK]);
   /// Button (proxy input)
   final ButtonElement _plButton = new ButtonElement()
-    ..classes.addAll([LButton.C_BUTTON__NEUTRAL, C_PICKLIST__LABEL]);
+    ..classes.addAll([LButton.C_BUTTON, LButton.C_BUTTON__NEUTRAL, C_PICKLIST__LABEL]);
   /// Button Label
   final SpanElement _plButtonLabel = new SpanElement()
     ..classes.add(LText.C_TRUNCATE);
@@ -133,12 +133,6 @@ class LPicklist
   String get type => EditorI.TYPE_SELECT;
   Element get input => _plButton;
   bool get multiple => false;
-
-  /// Small Editor/Label
-  void set small (bool newValue) {
-  //  _plButton.small = newValue; // FIXME small
-  //  _plButton.iconSizeSmall();
-  }
 
   /// String Value
   String get value => _dropdown.value;

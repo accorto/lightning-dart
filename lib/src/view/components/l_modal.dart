@@ -41,14 +41,13 @@ class LModal
   static const String C_MODAL__FOOTER = "slds-modal__footer";
   /// slds-modal__footer--directional (slds-modal__footer): Makes buttons inside the footer spread to both left and right. - This is only needed when you have two buttons that indicate a back and forward navigation.
   static const String C_MODAL__FOOTER__DIRECTIONAL = "slds-modal__footer--directional";
+
   /// slds-backdrop (div): Creates the shaded backdrop used behind the modal. - This should follow after the .slds-modal as an empty element.
   static const String C_BACKDROP = "slds-backdrop";
   /// slds-modal-backdrop (div): Creates the shaded backdrop used behind the modal. - Deprecated
-  //static const String C_MODAL_BACKDROP = "slds-modal-backdrop";
+  static const String C_MODAL_BACKDROP = "slds-modal-backdrop";
   /// slds-backdrop--open (slds-modal-backdrop): Allows the backdrop to be visible. - Apply this class to a modal backdrop with JavaScript to make it visible.
   static const String C_BACKDROP__OPEN = "slds-backdrop--open";
-  /// slds-modal-backdrop--open (slds-modal-backdrop): Allows the backdrop to be visible. - Deprecated
-  //static const String C_MODAL_BACKDROP__OPEN = "slds-modal-backdrop--open";
 
 
   /// slds-modal--prompt - Initializes Prompt style notification | Required

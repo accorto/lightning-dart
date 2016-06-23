@@ -103,7 +103,6 @@ class GraphPanel {
 
     _whatPickList = new LPicklist(_NAME_WHAT, idPrefix: id)
       ..label = StatCalc.statCalcWhat()
-      ..small = true
       ..minWidth = "150px";
     _whatPickList.addDOption(new DOption()
       ..value = StatCalc.COUNT_COLUMN_NAME
@@ -113,7 +112,6 @@ class GraphPanel {
 
     _byPickList = new LPicklist(_NAME_BY, idPrefix: id)
       ..label = StatCalc.statCalcBy()
-      ..small = true
       ..placeholder = StatCalc.statCalcByTitle()
       ..minWidth = "150px";
     _byPickList.addDOption(new DOption()
@@ -123,8 +121,7 @@ class GraphPanel {
     form.addEditor(_byPickList);
 
     _datePickList = new LPicklist(_NAME_BYDATE, idPrefix: id)
-      ..label = StatCalc.statCalcDate()
-      ..small = true;
+      ..label = StatCalc.statCalcDate();
     _datePickList.addDOption(new DOption()
       ..value = _VALUE_NONE
       ..label = StatCalc.statCalcDateNone());
@@ -133,8 +130,7 @@ class GraphPanel {
 
     _periodPickList = new LPicklist(_NAME_PERIOD, idPrefix: id)
       ..label = StatCalc.statCalcPeriod()
-      ..title = StatCalc.statCalcPeriodTitle()
-      ..small = true;
+      ..title = StatCalc.statCalcPeriodTitle();
     form.addEditor(_periodPickList);
     _periodPickList.addDOption(new DOption()
       ..value = ByPeriod.Day.toString()

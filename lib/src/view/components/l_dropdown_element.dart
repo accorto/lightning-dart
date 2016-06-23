@@ -7,7 +7,7 @@
 part of lightning_dart;
 
 /**
- * Dropdown Element maintains list
+ * Dropdown Element maintains List
  */
 class LDropdownElement
     extends LSelectI {
@@ -16,7 +16,7 @@ class LDropdownElement
 
   /// Dropdown Element
   final DivElement element;
-  /// Dropdown Items
+  /// Dropdown Items (LI)
   final List<LDropdownItem> _dropdownItemList = new List<LDropdownItem>();
 
   /// Dropdown List
@@ -33,7 +33,8 @@ class LDropdownElement
 
   /// Dropdown Element
   LDropdownElement(DivElement this.element,
-      {String this.name: "dd", String this.idPrefix}) {
+      {String this.name: "dd", String this.idPrefix, String dropdownHeader}) {
+    addDropdownHeader(dropdownHeader);
     element.append(_dropdownList);
     element.id = LComponent.createId(idPrefix, "dd");
   }
@@ -81,7 +82,7 @@ class LDropdownElement
   /// Width Small
   bool get small => element.classes.contains(LDropdown.C_DROPDOWN__SMALL);
   void set small (bool newValue) {
-    element.classes.removeAll(LDropdown.C_SIZE_LIST);
+    element.classes.removeAll(LDropdown.C_WIDTH_LIST);
     if (newValue) {
       element.classes.add(LDropdown.C_DROPDOWN__SMALL);
     }
@@ -89,7 +90,7 @@ class LDropdownElement
   /// Width Medium
   bool get medium => element.classes.contains(LDropdown.C_DROPDOWN__MEDIUM);
   void set medium (bool newValue) {
-    element.classes.removeAll(LDropdown.C_SIZE_LIST);
+    element.classes.removeAll(LDropdown.C_WIDTH_LIST);
     if (newValue) {
       element.classes.add(LDropdown.C_DROPDOWN__MEDIUM);
     }
@@ -97,7 +98,7 @@ class LDropdownElement
   /// Width Large
   bool get large => element.classes.contains(LDropdown.C_DROPDOWN__LARGE);
   void set large (bool newValue) {
-    element.classes.removeAll(LDropdown.C_SIZE_LIST);
+    element.classes.removeAll(LDropdown.C_WIDTH_LIST);
     if (newValue) {
       element.classes.add(LDropdown.C_DROPDOWN__LARGE);
     }
@@ -216,6 +217,25 @@ class LDropdownElement
     _dropdownList.append(item.element);
     item.onClick.listen(onItemClick);
     item.selectMode = _selectMode;
+  }
+
+  /// add dropdown sub header
+  void addDropdownHeader(String headerValue) {
+    if (headerValue != null && headerValue.isNotEmpty) {
+      element.append(new DivElement()
+        ..classes.add(LDropdown.C_DROPDOWN__HEADER)
+        ..append(new SpanElement()
+          ..classes.add(LText.C_TEXT_HEADING__LABEL)
+          ..text = headerValue)
+      );
+    }
+  }
+
+  /// Set Height - e.g. LDropdown.C_DROPDOWN__LENGTH_5
+  void set height (String newValue) {
+    _dropdownList.classes.removeAll(LDropdown.C_HEIGHT_LIST);
+    if (newValue != null && newValue.isNotEmpty)
+      _dropdownList.classes.add(newValue);
   }
 
   /// Selection (toggle) mode - update value

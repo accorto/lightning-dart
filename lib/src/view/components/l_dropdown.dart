@@ -35,6 +35,13 @@ class LDropdown
   /// slds-dropdown__header: Adds padding to area above dropdown menu list
   static const String C_DROPDOWN__HEADER = "slds-dropdown__header";
 
+  /// slds-picklist (div): Initializes picklist
+  static const String C_PICKLIST = "slds-picklist";
+  /// slds-picklist--fluid (slds-picklist): Forces width of picklist and picklist dropdown to inherit width of its content
+  static const String C_PICKLIST__FLUID = "slds-picklist--fluid";
+  /// slds-picklist__label (button): Custom select
+  static const String C_PICKLIST__LABEL = "slds-picklist__label";
+
   /// slds-nubbin--top (slds-popover): Triangle that points upwards which is horizontally centered
   static const String C_NUBBIN__TOP = "slds-nubbin--top";
   /// slds-nubbin--top-left (slds-popover): Triangle that points upwards which is left aligned
@@ -47,6 +54,7 @@ class LDropdown
   static const String C_NUBBIN__BOTTOM_LEFT = "slds-nubbin--bottom-left";
   /// slds-nubbin--bottom-right (slds-popover): Triangle that points downwards which is right aligned
   static const String C_NUBBIN__BOTTOM_RIGHT = "slds-nubbin--bottom-right";
+
   /// slds-dropdown--length-5 (ul): Forces overflow scrolling after 5 list items
   static const String C_DROPDOWN__LENGTH_5 = "slds-dropdown--length-5";
   /// slds-dropdown--length-7 (ul): Forces overflow scrolling after 7 list items
@@ -59,18 +67,22 @@ class LDropdown
   static const String C_DROPDOWN__LENGTH_WITH_ICON_7 = "slds-dropdown--length-with-icon-7";
   /// slds-dropdown--length-with-icon-10 (ul): Forces overflow scrolling after 10 list items - Use if an icon is within the list items
   static const String C_DROPDOWN__LENGTH_WITH_ICON_10 = "slds-dropdown--length-with-icon-10";
+
   /// slds-is-selected (slds-dropdown__item): Applies selected state to dropdown item - Class modifies the visibility of .slds-icon-selected
   static const String C_IS_SELECTED = "slds-is-selected";
   /// slds-icon--selected (svg): Creates icon when a user selects a .slds-dropdown__item
   static const String C_ICON__SELECTED = "slds-icon--selected";
+
   /// slds-dropdown--nubbin-top (slds-dropdown): Applies triangle indicator pointing at content - Deprecated
   static const String C_DROPDOWN__NUBBIN_TOP = "slds-dropdown--nubbin-top";
+
   /// slds-has-icon (slds-dropdown__item): Lets dropdown item know how to position icon - Deprecated
   static const String C_HAS_ICON = "slds-has-icon";
   /// slds-has-icon--left (slds-dropdown__item): Position icon in dropdown item to the left - Deprecated
   static const String C_HAS_ICON__LEFT = "slds-has-icon--left";
   /// slds-has-icon--right (slds-dropdown__item): Position icon in dropdown item to the right - Deprecated
   static const String C_HAS_ICON__RIGHT = "slds-has-icon--right";
+
   /// slds-action-overflow--touch (div): Positions the Action overflow for touch to take up full screen
   static const String C_ACTION_OVERFLOW__TOUCH = "slds-action-overflow--touch";
   /// slds-action-overflow--touch__container (div): Pushes the menu to the bottom of the screen.
@@ -82,13 +94,17 @@ class LDropdown
   /// slds-action-overflow--touch__footer (div): Creates the footer for the Cancel button.
   static const String C_ACTION_OVERFLOW__TOUCH__FOOTER = "slds-action-overflow--touch__footer";
 
+
+
   /// trigger__click show/hide
   static const String C_IS_OPEN = "slds-is-open";
 
   //static const String C_DROPDOWN__MENU = "slds-dropdown--menu";
   static const String C_DROPDOWN__ACTIONS = "slds-dropdown--actions";
-
-  static final List<String> C_SIZE_LIST = [C_DROPDOWN__SMALL, C_DROPDOWN__MEDIUM, C_DROPDOWN__LARGE];
+  /// width
+  static final List<String> C_WIDTH_LIST = [C_DROPDOWN__SMALL, C_DROPDOWN__MEDIUM, C_DROPDOWN__LARGE];
+  /// height
+  static final List<String> C_HEIGHT_LIST = [C_DROPDOWN__LENGTH_5, C_DROPDOWN__LENGTH_7, C_DROPDOWN__LENGTH_10];
 
   // Marker class
   static const String C_DROPDOWN__LIST = "dropdown__list";
@@ -177,13 +193,13 @@ class LDropdown
       dropdownClasses: [C_DROPDOWN__RIGHT, C_DROPDOWN__ACTIONS]);
 
   /**
-   * Select Dropdown
+   * Select Dropdown (width small)
    */
-  LDropdown.selectIcon({String idPrefix})
+  LDropdown.selectIcon({String idPrefix, String width: C_DROPDOWN__SMALL})
     : this(new LButton(new ButtonElement(), "select", null,
         buttonClasses: [LButton.C_BUTTON__ICON_MORE], idPrefix:idPrefix),
       idPrefix,
-      dropdownClasses: [C_DROPDOWN__SMALL]);
+      dropdownClasses: [width]);
 
 
   /**

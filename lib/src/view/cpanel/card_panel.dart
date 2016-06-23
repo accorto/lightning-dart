@@ -62,8 +62,7 @@ class CardPanel
     _groupPicklist = new LPicklist("group", idPrefix:idPrefix)
       ..label = cardPanelGroupBy()
       ..title = cardPanelGroupByTitle()
-      ..placeholder = cardPanelGroupByTitle()
-      ..small = true;
+      ..placeholder = cardPanelGroupByTitle();
     form.addEditor(_groupPicklist);
 
     _showEmptyColumns = new LCheckbox("empty", idPrefix: idPrefix)

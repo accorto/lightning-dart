@@ -7,7 +7,7 @@
 part of lightning_dart;
 
 /**
- * Dropdown Item
+ * Dropdown Item (LI)
  */
 class LDropdownItem
     extends ListItem {
