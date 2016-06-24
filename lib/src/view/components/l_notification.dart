@@ -96,10 +96,10 @@ abstract class LNotification extends LComponent {
     // close
     close = new LButton(new ButtonElement(), "close", null, idPrefix:idPrefix,
       // button: slds-button slds-notify__close
-      buttonClasses:[C_NOTIFY__CLOSE],
-      icon: new LIconAction("close", colorOverride: LButton.C_BUTTON__ICON_INVERSE),
-        assistiveText: LNotification.lNotificationClose());
-    close.iconButton = false;
+      buttonClasses:[LButton.C_BUTTON__ICON_INVERSE, C_NOTIFY__CLOSE],
+      icon: new LIconAction("close",
+          size: LButton.C_BUTTON__ICON__LARGE),
+      assistiveText: LNotification.lNotificationClose());
     close.onClick.listen(onCloseClick);
   } // LNotification
 

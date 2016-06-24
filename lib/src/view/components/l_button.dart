@@ -164,9 +164,9 @@ class LButton
       _icon.classes.addAll(list);
       // set classes
       if (_iconButton) {
-        _icon.classes.add(C_BUTTON__ICON_); // 1rem gray
+        _icon.classes.add(C_BUTTON__ICON_); // 1rem gray - slds-button__icon
       } else {
-        _icon.classes.add(C_BUTTON__ICON); // 2rem white
+        _icon.classes.add(C_BUTTON__ICON); // 2rem white - slds-button--icon
       }
       // left/right
       if (_label == null && _labelElement == null) {
@@ -564,6 +564,10 @@ class LButton
   /// Focus on Button
   void focus() {
     element.focus();
+  }
+
+  String toString() {
+    return "LButton@${name}";
   }
 
 } // LButton

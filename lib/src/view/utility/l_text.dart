@@ -175,20 +175,13 @@ class LSectionTitle {
   bool get open => _open;
   void set open (bool newValue) {
     _open = newValue;
-    if (_open) {
-      for (Element part in _sectionParts) {
-        //part.classes.remove(LVisibility.C_HIDE);
-        part.classes.remove(LVisibility.C_IS_COLLAPSED);
-        part.classes.add(LVisibility.C_IS_EXPANDED);
-      }
-    } else {
-      if (!showLabel)
+    if (!_open && !showLabel) {
         showLabel = true; // ensure we can open again
-      for (Element part in _sectionParts) {
-        //part.classes.add(LVisibility.C_HIDE);
-        part.classes.add(LVisibility.C_IS_COLLAPSED);
-        part.classes.remove(LVisibility.C_IS_EXPANDED);
-      }
+    }
+    for (Element part in _sectionParts) {
+      part.classes.toggle(LVisibility.C_HIDE, !_open); // hight=0 does not reliably work
+      part.classes.toggle(LVisibility.C_IS_COLLAPSED, !_open);
+      part.classes.toggle(LVisibility.C_IS_EXPANDED, _open);
     }
   }
   bool _open;
