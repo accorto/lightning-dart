@@ -101,15 +101,16 @@ class DemoPage extends AppsPage {
     hdr.append(h2);
     ParagraphElement p = new ParagraphElement()
       ..classes.add(LText.C_TEXT_BODY__REGULAR)
-      ..text = "Check out the individual UI Components with their SLDS (Salesforce Lightning Design System) status and the Lightning Dart implementation status";
+      ..text = "Check out the individual UI Components with their SLDS (Salesforce Lightning Design System) status "
+          "and the Lightning Dart implementation status";
     hdr.append(p);
     p = new ParagraphElement()
-      ..classes.add(LText.C_TEXT_BODY__REGULAR)
+      ..classes.addAll([LText.C_TEXT_BODY__REGULAR, LMargin.C_VERTICAL__XX_SMALL])
       ..text = "The components are displayed without any horizontal/verical spacing, which is provided by the container.";
     hdr.append(p);
     p = new ParagraphElement()
       ..classes.add(LText.C_TEXT_BODY__SMALL)
-      ..text = "Version: ${LightningDart.VERSION} - ${LightningDart.devTimestamp}";
+      ..text = "Version: ${LightningDart.VERSION} - ${LightningDart.devTimestamp} (version number reflects SLDS version)";
     hdr.append(p);
 
     Element toc = new Element.nav()

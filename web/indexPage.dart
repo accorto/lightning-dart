@@ -12,16 +12,14 @@ import "demo.dart";
 main() async {
   // LightningDart.init() // client env
   await LightningCtrl.init("Lightning", "Lightning"); // server env
+  IntroPage intro = new IntroPage(); // get static content
   //
   AppsMain page = LightningCtrl.createAppsMain();
   AppsCtrl apps = new AppsCtrl("ldart", "Lightning Dart Demo",
       imageSrc: "packages/lightning/assets/images/LightningDartLogo.svg")
     ..info = "Lightning Experience in Dart"
     ..helpUrl = "http://lightning.accorto.com";
-
-  IntroPage intro = new IntroPage();
   apps.add(intro);
-
   apps.add(new DemoPage("desktop", new LIconUtility(LIconUtility.DESKTOP), "Desktop", page));
   apps.add(new DemoFrame("tablet", new LIconUtility(LIconUtility.TABLET_PORTRAIT), "Tablet", 768));
   apps.add(new DemoFrame("phone", new LIconUtility(LIconUtility.PHONE_PORTRAIT), "Phone", 480));
@@ -30,5 +28,4 @@ main() async {
   apps.add(new AppsSettings());
   //apps.add(new SupportLink());
   page.set(apps);
-
 } // main
