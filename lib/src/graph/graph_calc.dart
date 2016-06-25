@@ -25,6 +25,7 @@ class GraphCalc
   /// Display - horizontal/vertical or flow
   /// return true if needs to be re-rendered
   bool display(EngineBase engine, bool displayHorizontal) {
+    _log.fine("display ${key} ");
     if ((dateColumn != null
         || (byList.isNotEmpty && byList.first.byValueList.isNotEmpty))
         && engine.renderStacked(this, displayHorizontal)) {
@@ -40,6 +41,7 @@ class GraphCalc
         ..classes.add(LMargin.C_BOTTOM__SMALL)
         ..text = "- ${StatCalc.statCalcNoData()} -";
       engine.element.append(p);
+      _log.fine("display ${key} complete NoData");
     } else {
       LDList info = new LDList();
       engine.element.append(info.element);
@@ -53,6 +55,7 @@ class GraphCalc
         info.add(LTableSumCell.tableSumCellAvg(), avg.toStringAsFixed(1));
         info.add(LTableSumCell.tableSumCellSum(), this.sum.toStringAsFixed(1));
       }
+      _log.fine("display ${key} complete");
     }
     //engine.element.style.minHeight = "inherit"; // 300px
     return false;

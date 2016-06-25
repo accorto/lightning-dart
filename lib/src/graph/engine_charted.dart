@@ -39,12 +39,14 @@ class EngineCharted
    * Charted Engine
    */
   EngineCharted() {
+    element.attributes["data-no"] = no.toString();
   }
 
 
   /// reset elements
   void reset() {
-    super.reset();
+    _log.fine("reset");
+    super.reset(); // EngineChartedContainer
     _state = null;
     _metaRowList.clear();
     _metaColList.clear();
@@ -101,6 +103,7 @@ class EngineCharted
         area.addChartBehavior(behavior);
       });
       area.draw();
+      _log.fine("renderStacked ${calc.key} #${no} needLabel=${needLabelUpdate}");
     }
     if (!rendered && _calc.byDateList != null && _calc.byDateList.isNotEmpty) {
       return renderBar(_calc, displayHorizontal);
@@ -148,7 +151,7 @@ class EngineCharted
       _log.finer(row);
       list.add(row);
     }
-    _log.fine("stackedRows rows=${list.length}|${dateLabels.length}|${datePoints.length} cols=${by.byValueList.length}");
+    _log.fine("stackedRows #${no} rows=${list.length}|${dateLabels.length}|${datePoints.length} cols=${by.byValueList.length}");
     return list;
   } // stackedRows
 
@@ -193,6 +196,7 @@ class EngineCharted
       area.addChartBehavior(behavior);
     });
     area.draw();
+    _log.fine("renderBar ${calc.key} #${no} needLabel=${needLabelUpdate}");
     return true;
   } // renderBar
 
@@ -273,6 +277,7 @@ class EngineCharted
         area.addChartBehavior(behavior);
       });
       area.draw();
+      _log.fine("renderPie ${calc.key} #${no} needLabel=${needLabelUpdate}");
     }
     return rendered;
   } // renderPie
@@ -367,7 +372,7 @@ class EngineCharted
     String columnValue = null;
     //
     int id = change.add;
-    String info = "handleSelection id=${id} ${columnName}";
+    String info = "handleSelection #${no} id=${id} ${columnName}";
     StatPoint point = null;
     if (id < _metaRowList.length && _graphType == _TYPE_PIE) {
       point = _metaRowList[id];
@@ -436,7 +441,7 @@ class EngineCharted
     ByPeriod dateByPeriod;
 
     int col = change.add.first;
-    String info = "handleHighlight ${columnName} col=${col}";
+    String info = "handleHighlight #${no} ${columnName} col=${col}";
     StatPoint colPoint = null;
     if (col < _metaColList.length) {
       colPoint = _metaColList[col];

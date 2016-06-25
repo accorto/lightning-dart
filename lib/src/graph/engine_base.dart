@@ -11,6 +11,11 @@ part of lightning_ctrl;
  */
 abstract class EngineBase {
 
+  /// Engine counter
+  static int _engineNo = 1;
+  /// engine number
+  int no = _engineNo++;
+
   /// Graph Element
   Element get element;
 

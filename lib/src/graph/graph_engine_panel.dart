@@ -22,7 +22,6 @@ class GraphEnginePanel
   Element get element => engine.element;
 
   /// KPI / Element name/id
-  final String id;
   final String tableName;
 
   /// default date column
@@ -37,7 +36,7 @@ class GraphEnginePanel
   /**
    * Graph Engine Panel
    */
-  GraphEnginePanel(String this.id,
+  GraphEnginePanel(String id,
       String this.tableName,
       List<String> groupByColumnNames,
       {String title, String subTitle}) {
@@ -149,10 +148,10 @@ class GraphEnginePanel
   void display(bool displayHorizontal) {
     engine.reset();
     for (GraphCalc calc in _calcList) {
-      _log.config("display ${calc.key}");
+      _log.config("display ${calc.key} #${engine.no}");
       if (calc.display(engine, displayHorizontal)) {
-        new Timer(new Duration(seconds: 2), (){
-          _log.config("display ${calc.key} (again)");
+        new Timer(new Duration(seconds: 2), () {
+          _log.config("display ${calc.key} #${engine.no} (again)");
           engine.reset();
           calc.display(engine, displayHorizontal);
         });
