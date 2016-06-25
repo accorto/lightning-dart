@@ -399,7 +399,8 @@ class Datasource
   /**
    * Send Data Request to Server
    */
-  Future<DataResponse> execute_data(DataRequest request, {String info, bool setBusy:true}) {
+  Future<DataResponse> execute_data(DataRequest request,
+      {String info, bool setBusy:true}) {
     if (info == null) {
       info = "${request.type} ${request.tableName}";
     }
@@ -407,11 +408,11 @@ class Datasource
     request.request = createCRequest(dataUri, info);
     Completer<DataResponse> completer = new Completer<DataResponse>();
     //
-    sendRequest(dataUri, request.writeToBuffer(), info, setBusy: setBusy)
+    sendRequest(dataUri, request.writeToBuffer(), info, setBusy)
     .then((HttpRequest httpRequest) {
       List<int> buffer = new Uint8List.view(httpRequest.response);
       DataResponse response = new DataResponse.fromBuffer(buffer);
-      String details = handleSuccess(info, response.response, buffer.length);
+      String details = handleSuccess(info, response.response, buffer.length, setBusy);
       ServiceTracker track = new ServiceTracker(response.response, info, details);
       completer.complete(response);
       _log.info("received ${details}");

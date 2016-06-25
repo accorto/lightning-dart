@@ -15,6 +15,8 @@ abstract class LComponent {
   static const String _C_BUSY = "busy";
   /// loading indicator class
   static const String _C_LOADING = "loading";
+  /// Logger
+  static final Logger _log = new Logger("LComponent");
 
   /// Auto Id Numbering
   static int _autoId = 1;
@@ -24,6 +26,10 @@ abstract class LComponent {
 
   /// Get Element Id
   String get id => element.id;
+  /// Set Id
+  void set id (String newValue) {
+    element.id = newValue;
+  }
 
   /// append element
   void append(Element newValue) {
@@ -138,6 +144,7 @@ abstract class LComponent {
         _busyCount = 0;
       }
     }
+    _log.fine("busy ${id}=${newValue} #${_busyCount}");
   } // busy
   DivElement _busy;
   int _busyCount = 0;
@@ -165,12 +172,14 @@ abstract class LComponent {
         _loadingCount = 0;
       }
     }
+    _log.fine("loading ${id}=${newValue} #${_loadingCount}");
   } // loading
   LSpinner _loading;
   int _loadingCount = 0;
 
   /// remove loading return loadingCount
   int loadingRemove() {
+    _log.fine("loadingRemove ${id} #${_loadingCount}");
     int retValue = _loadingCount;
     if (_loadingCount > 0) {
       _loadingCount = 0;
@@ -180,6 +189,7 @@ abstract class LComponent {
   }
   /// add loading with [count]
   void loadingAdd(int count) {
+    _log.fine("loadingAdd ${id} ${count}");
     if (count <= 0) {
       loadingRemove();
     } else {

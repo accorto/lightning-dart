@@ -184,11 +184,6 @@ class LForm
   LForm.inline(String name, {String idPrefix})
     : this(new FormElement(), name, C_FORM__INLINE, idPrefix:idPrefix);
 
-  /// Set Id
-  void set id (String newValue) {
-    element.id = newValue;
-  }
-
   /* set data record [recordChange]
   void set recordChange(RecordChange recordChange) {
     data.onRecordChange = recordChange;
@@ -447,6 +442,7 @@ class LForm
   /// On Form Submit
   void onFormSubmit(Event evt) {
     evt.preventDefault(); // might be form or button event
+    evt.stopImmediatePropagation();
     //_log.info("onFormSubmit - ${record}");
     onEditorFocus(null); // hide all dropdowns
     bool valid = doValidate();
@@ -457,8 +453,11 @@ class LForm
       }
     }
     _debug("onFormSubmit valid=${valid}:");
-
-    if (valid && recordSave != null) {
+    if (!valid) {
+      return;
+    }
+    // Save
+    if (recordSave != null) {
       recordSave(record)
       .then((SResponse response){
         _log.fine("onFormSubmit success=${response.isSuccess} ${response.msg}");
@@ -473,11 +472,15 @@ class LForm
     }
 
     // Submit form if there is an action
-    if (valid && element is FormElement) {
+    if (element is FormElement) {
       try {
         FormElement ff = element as FormElement;
-        if (ff.action.isNotEmpty)
+        String action = ff.action;
+        if (action != null && action.isNotEmpty) {
+          _log.info("onFormSubmit action ${action}");
           ff.submit();
+          _log.config("onFormSubmit action subitted");
+        }
       } catch (error, stackTrace) { // type '_RadioNodeListImpl' is not a subtype of type 'String' of 'function result' where ...
         _log.config("onFormSubmit action", error, stackTrace);
       }

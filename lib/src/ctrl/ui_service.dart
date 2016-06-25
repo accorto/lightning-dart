@@ -127,11 +127,11 @@ class UiService
     Completer<DisplayResponse> completer = new Completer<DisplayResponse>();
 
     _log.config("submit ${info}");
-    sendRequest(uiUri, request.writeToBuffer(), info, setBusy:false)
+    sendRequest(uiUri, request.writeToBuffer(), info, false)
     .then((HttpRequest httpRequest) {
       List<int> buffer = new Uint8List.view(httpRequest.response);
       DisplayResponse response = new DisplayResponse.fromBuffer(buffer);
-      String details = handleSuccess(info, response.response, buffer.length);
+      String details = handleSuccess(info, response.response, buffer.length, false);
       ServiceTracker track = new ServiceTracker(response.response, info, details);
       if (response.response.isSuccess) {
         update(response); // update before complete

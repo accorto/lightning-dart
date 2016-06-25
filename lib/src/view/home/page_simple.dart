@@ -120,18 +120,21 @@ class PageSimple
 
   /// Server Start (busy)
   void onServerStart(String trxName, String info) {
+    //_log.info("onServerStart ${trxName} ${info}");
     _statusElement.id = STATUS_ID_BUSY;
     setStatus(StatusMessage.busy);
     busy = true;
   }
   /// Info Server Communication Success (busy/msg)
   void onServerSuccess(SResponse response, String details) {
+    //_log.info("onServerSuccess ${details}");
     busy = false;
     setStatus(new StatusMessage.response(response, details));
     _statusElement.id = STATUS_ID_OK;
   }
   /// Info Server Communication Error
   void onServerError(var error) {
+    //_log.info("onServerError ${error}");
     busy = false;
     setStatus(new StatusMessage.errorInfo(error));
     _statusElement.id = STATUS_ID_ERROR;

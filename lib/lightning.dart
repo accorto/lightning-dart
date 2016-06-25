@@ -194,7 +194,7 @@ class LightningDart {
   } // init
 
   /**
-   * Local Log Record
+   * Local Log Record - log up to config - or all if ClientEnv.testMode
    */
   static void onLogRecord(LogRecord rec) {
     String logObject = LUtil.formatLog(rec);

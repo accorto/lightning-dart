@@ -50,10 +50,6 @@ class LButtonGroup extends LComponent {
     });
   } // LButton
 
-  void set id (String newValue) {
-    element.id = newValue;
-  }
-
   /// add component
   void add(LComponent component) {
     if (component is LButton) {

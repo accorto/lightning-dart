@@ -31,11 +31,6 @@ class LPageHeader
     ..classes.add(C_PAGE_HEADER)
     ..attributes[Html0.ROLE] = Html0.ROLE_BANNER;
 
-  /// Set Id
-  void set id (String newValue) {
-    element.id = newValue;
-  }
-
 } // LPageHeader
 
 

@@ -133,7 +133,7 @@ class ExampleService extends Service {
     _log.log(level, "send ${info} size=${data.length}");
     bool trackProgress = level.value > Level.CONFIG.value;
 
-    sendRequest(TRX, data, info, setBusy:setBusy, trackProgress:trackProgress)
+    sendRequest(TRX, data, info, setBusy, trackProgress:trackProgress)
     .then((HttpRequest httpRequest) {
       _log.info("send ${info} received ${httpRequest.status} ${httpRequest.statusText}");
       DateTime now = new DateTime.now();
@@ -141,7 +141,7 @@ class ExampleService extends Service {
       CheckResponse response = new CheckResponse.fromBuffer(buffer);
       SResponse sresponse = response.response;
       sresponse.clientReceiptTime = new Int64(now.millisecondsSinceEpoch);
-      String details = handleSuccess(info, sresponse, buffer.length);
+      String details = handleSuccess(info, sresponse, buffer.length, setBusy);
       ServiceTracker track = new ServiceTracker(response.response, info, details);
       completer.complete(response);
       _log.info("send ${info} received ${details}");

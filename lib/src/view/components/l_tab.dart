@@ -73,11 +73,6 @@ class LTab
     element.id = idPrefix == null || idPrefix.isEmpty ? LComponent.createId("tab", null) : idPrefix;
   } // LTab
 
-  /// Set id (prefix)
-  void set id (String newValue) {
-    element.id = newValue;
-  }
-
   /**
    * Add Tab
    */

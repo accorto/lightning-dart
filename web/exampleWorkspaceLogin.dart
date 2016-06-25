@@ -40,14 +40,14 @@ class WorkspaceLogin
       return completer.future;
     }
 
-    sendRequest(TRX, data, info, setBusy:false)
+    sendRequest(TRX, data, info, false)
     .then((HttpRequest request) {
       DateTime now = new DateTime.now();
       List<int> buffer = new Uint8List.view(request.response);
       LoginResponse response = new LoginResponse.fromBuffer(buffer);
       SResponse sresponse = response.response;
       sresponse.clientReceiptTime = new Int64(now.millisecondsSinceEpoch);
-      String details = handleSuccess(info, sresponse, buffer.length);
+      String details = handleSuccess(info, sresponse, buffer.length, false);
       ServiceTracker track = new ServiceTracker(response.response, info, details);
       if (response.hasSession()) {
         ClientEnv.session = response.session;

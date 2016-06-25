@@ -104,9 +104,6 @@ class Service {
     _log.info("init href=${window.location.href} referrer=${document.referrer} serverUrl=${serverUrl} query=${LightningCtrl.router.queryParams}");
   } // init
 
-  // Busy
-  bool _setBusy = true;
-
   /**
    * Create Client Request for [serverUri] with user [info].
    * Request GeoLocation [withGeo] for this - defaults to [addGeo]
@@ -198,10 +195,9 @@ class Service {
   Future<HttpRequest> sendRequest(final String serverUri,
       final Uint8List data,
       final String info,
-      {bool setBusy: true,
-      bool trackProgress:false}) {
-    _setBusy = setBusy;
-    if (_setBusy && onServerStart != null) {
+      final bool setBusy,
+      {bool trackProgress:false}) {
+    if (setBusy && onServerStart != null) {
       onServerStart(serverUri, info);
     }
 
@@ -232,17 +228,20 @@ class Service {
    * Handle Success - send notifications, unlock ui
    * [PageSimple.onServerSuccess]
    */
-  String handleSuccess(String subject, SResponse sresponse, int length) {
+  String handleSuccess(final String info,
+      final SResponse sresponse,
+      int length,
+      bool setBusy) {
     sresponse.clientReceiptTime = new Int64(new DateTime.now().millisecondsSinceEpoch); // ${ClientEnv.numberFormat_1.format(length/1024)}k
-    String details = "${sresponse.trxType}=${sresponse.trxNo} ${subject} ${ServiceTracker.formatDuration(sresponse)} bytes=${length}";
-    if (_setBusy && onServerSuccess != null) {
+    String details = "${sresponse.trxType}=${sresponse.trxNo} ${info} ${ServiceTracker.formatDuration(sresponse)} bytes=${length}";
+    if (setBusy && onServerSuccess != null) {
       onServerSuccess(sresponse, details);
     } else {
       PageSimple.statusMessages.add(new StatusMessage.responseInfo(sresponse, details));
     }
     if (sendNotification != null) {
       sendNotification(sresponse.isSuccess ? ServiceResponse.Ok : ServiceResponse.Error,
-        subject, sresponse.msg, sresponse.clientReceiptTime, details);
+        info, sresponse.msg, sresponse.clientReceiptTime, details);
     }
     return details;
   } // handleSuccess
