@@ -129,15 +129,17 @@ class LModal
     ..classes.add(C_MODAL)
     ..attributes[Html0.ROLE] = Html0.ROLE_DIALOG;
   final DivElement _container = new DivElement()
-    ..classes.add(C_MODAL__CONTAINER);
+    ..classes.add(C_MODAL__CONTAINER)
+    ..attributes[Html0.ROLE] = Html0.ROLE_DOCUMENT
+    ..tabIndex = 0;
 
   final DivElement header = new DivElement()
     ..classes.add(C_MODAL__HEADER);
   HeadingElement _header_h2;
   DivElement _header_buttons;
 
-  final CDiv content = new CDiv()
-    ..classes.addAll([C_MODAL__CONTENT, LPadding.C_AROUND__MEDIUM]);
+  final CDiv content = new CDiv() //  AROUND__MEDIUM
+    ..classes.addAll([C_MODAL__CONTENT, LPadding.C_VERTICAL__LARGE, LPadding.C_HORIZONTAL__LARGE]);
   final DivElement footer = new DivElement()
     ..classes.add(C_MODAL__FOOTER);
   /// The backdrop
@@ -262,6 +264,7 @@ class LModal
     _header_h2.classes.add(LText.C_TEXT_HEADING__MEDIUM);
     _header_h2.id = "${id}-h2";
     header.append(_header_h2);
+    _dialog.attributes[Html0.ARIA_LABELLEDBY] = _header_h2.id;
     if (tagLine != null)
       header.append(tagLine);
     //

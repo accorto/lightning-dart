@@ -222,6 +222,8 @@ abstract class LNotification extends LComponent {
 
 /**
  * Alert
+ * - simple message
+ * - can be dismissed
  */
 class LAlert extends LNotification {
 
@@ -315,6 +317,8 @@ class LAlert extends LNotification {
 
 /**
  * Toast
+ * - simple message
+ * - can be dismissed or hides after timeout
  */
 class LToast extends LNotification {
 

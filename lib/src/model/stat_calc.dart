@@ -176,7 +176,7 @@ class StatCalc
     if (dateColumn != null)
       info += " ${dateColumn.name} ${byPeriod}";
     info += "\n${toStringX(linePrefix)}"; // updates by label
-    _log.fine(info);
+    _log.finer(info);
   } // dump
 
   /**

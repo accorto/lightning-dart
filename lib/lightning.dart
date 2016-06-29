@@ -190,6 +190,7 @@ class LightningDart {
     Logger.root.level = Level.ALL;
     // local Logger
     Logger.root.onRecord.listen(onLogRecord);
+    ClientEnv.testMode = true; // FIXME remove test mode
     return ClientEnv.init(); // Locale, Intl, Date
   } // init
 

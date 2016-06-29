@@ -45,7 +45,7 @@ class EngineCharted
 
   /// reset elements
   void reset() {
-    _log.fine("reset");
+    _log.fine("reset #${no}");
     super.reset(); // EngineChartedContainer
     _state = null;
     _metaRowList.clear();
@@ -102,8 +102,8 @@ class EngineCharted
       _createDefaultCartesianBehaviors().forEach((behavior) {
         area.addChartBehavior(behavior);
       });
-      area.draw();
-      _log.fine("renderStacked ${calc.key} #${no} needLabel=${needLabelUpdate}");
+      // area.draw(); // FixMe charted crashes
+      _log.fine("renderStacked ${calc.key} E${no} needLabel=${needLabelUpdate}");
     }
     if (!rendered && _calc.byDateList != null && _calc.byDateList.isNotEmpty) {
       return renderBar(_calc, displayHorizontal);
@@ -151,7 +151,7 @@ class EngineCharted
       _log.finer(row);
       list.add(row);
     }
-    _log.fine("stackedRows #${no} rows=${list.length}|${dateLabels.length}|${datePoints.length} cols=${by.byValueList.length}");
+    _log.fine("stackedRows E${no} rows=${list.length}|${dateLabels.length}|${datePoints.length} cols=${by.byValueList.length}");
     return list;
   } // stackedRows
 
@@ -195,8 +195,8 @@ class EngineCharted
     _createDefaultCartesianBehaviors().forEach((behavior) {
       area.addChartBehavior(behavior);
     });
-    area.draw();
-    _log.fine("renderBar ${calc.key} #${no} needLabel=${needLabelUpdate}");
+    //area.draw(); // FixMe: charted crashes
+    _log.fine("renderBar ${calc.key} E${no} needLabel=${needLabelUpdate}");
     return true;
   } // renderBar
 
@@ -277,7 +277,7 @@ class EngineCharted
         area.addChartBehavior(behavior);
       });
       area.draw();
-      _log.fine("renderPie ${calc.key} #${no} needLabel=${needLabelUpdate}");
+      _log.fine("renderPie ${calc.key} E${no} needLabel=${needLabelUpdate}");
     }
     return rendered;
   } // renderPie
@@ -372,7 +372,7 @@ class EngineCharted
     String columnValue = null;
     //
     int id = change.add;
-    String info = "handleSelection #${no} id=${id} ${columnName}";
+    String info = "handleSelection E${no} id=${id} ${columnName}";
     StatPoint point = null;
     if (id < _metaRowList.length && _graphType == _TYPE_PIE) {
       point = _metaRowList[id];
@@ -441,7 +441,7 @@ class EngineCharted
     ByPeriod dateByPeriod;
 
     int col = change.add.first;
-    String info = "handleHighlight #${no} ${columnName} col=${col}";
+    String info = "handleHighlight E${no} ${columnName} col=${col}";
     StatPoint colPoint = null;
     if (col < _metaColList.length) {
       colPoint = _metaColList[col];

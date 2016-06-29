@@ -153,6 +153,10 @@ class LTable
 
   /**
    * Table
+   * typicalTable
+   * ..bordered = true
+   * ..cellBuffer = true
+   * ..responsiveOverflow = LTableResponsive.OVERFLOW_HEAD_FOOT
    */
   LTable(String this.idPrefix,
       {bool this.rowSelect:true,

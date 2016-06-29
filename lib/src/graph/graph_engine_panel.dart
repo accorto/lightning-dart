@@ -148,10 +148,10 @@ class GraphEnginePanel
   void display(bool displayHorizontal) {
     engine.reset();
     for (GraphCalc calc in _calcList) {
-      _log.config("display ${calc.key} #${engine.no}");
+      _log.config("display ${calc.key} E${engine.no}");
       if (calc.display(engine, displayHorizontal)) {
         new Timer(new Duration(seconds: 2), () {
-          _log.config("display ${calc.key} #${engine.no} (again)");
+          _log.config("display ${calc.key} E${engine.no} (again)");
           engine.reset();
           calc.display(engine, displayHorizontal);
         });

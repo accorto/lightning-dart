@@ -55,9 +55,9 @@ class GraphPanel {
         new LIconUtility(LIconUtility.TABLE),
         idPrefix: id,
         onButtonClick: onSyncButtonClick)
-      ..small = true // TODO check!
+      ..small = true
       ..selected = !popIn
-      ..element.style.verticalAlign = "top";
+      ..element.style.verticalAlign = "text-top";
     LForm form = _initForm(id); // creates groupByColumns
 
     if (popIn) {

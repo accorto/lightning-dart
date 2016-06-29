@@ -27,7 +27,6 @@ class Popovers extends DemoFeature {
 
     div.appendHR();
     CDiv buttonLine = new CDiv();
-    // FIXME  ..classes.add(LButton.C_X_SMALL_BUTTONS__HORIZONTAL);
     div.add(buttonLine);
     pop = new LPopover()
       ..headText = "Another Popover";
@@ -35,7 +34,8 @@ class Popovers extends DemoFeature {
       ..appendText("Some text comes here ")
       ..append(new AnchorElement(href: "#")..text = "Some Link")
       ..appendText(" Additional Text");
-    LButton button = new LButton.neutral("btnA", "See Above");
+    LButton button = new LButton.neutral("btnA", "See Above")
+      ..classes.add(LMargin.C_RIGHT__MEDIUM);
     pop.showAbove(button);
     buttonLine.add(pop);
 
@@ -43,7 +43,8 @@ class Popovers extends DemoFeature {
       ..headText = "A Popbelow"
       ..bodyText = "Some Info Text, tell me what to show here, so that it is not that boring"
       ..theme = LTheme.C_THEME__INFO;
-    button = new LButton.neutral("btnB", "See Below");
+    button = new LButton.neutral("btnB", "See Below")
+      ..classes.add(LMargin.C_RIGHT__MEDIUM);
     pop.showBelow(button);
     buttonLine.add(pop);
 
@@ -51,7 +52,8 @@ class Popovers extends DemoFeature {
       ..headText = "Right Popover"
       ..bodyText = "Some Warning Text, tell me what to show here, so that it is not that boring"
       ..theme = LTheme.C_THEME__WARNING;
-    button = new LButton.neutral("btnR", "See Right");
+    button = new LButton.neutral("btnR", "See Right")
+      ..classes.add(LMargin.C_RIGHT__MEDIUM);
     pop.showRight(button);
     buttonLine.add(pop);
 
@@ -71,28 +73,30 @@ class Popovers extends DemoFeature {
 
     div.appendHR();
     buttonLine = new CDiv();
-    // FIXME  ..classes.add(LButton.C_X_SMALL_BUTTONS__HORIZONTAL);
     div.add(buttonLine);
     tt = new LTooltip();
     tt.body
       ..appendText("Another Tooltip Some text comes here ")
       ..append(new AnchorElement(href: "#")..text = "Some Link")
       ..appendText(" Additional Text");
-    button = new LButton.neutral("btnPA", "See Above");
+    button = new LButton.neutral("btnPA", "See Above")
+      ..classes.add(LMargin.C_RIGHT__MEDIUM);
     tt.showAbove(button);
     buttonLine.add(tt); // tooltip is wrapper for button
 
     tt = new LTooltip()
       ..bodyText = "Another Below Info Tooltip with some info"
       ..theme = LTheme.C_THEME__INFO;
-    button = new LButton.neutral("btnB", "See Below");
+    button = new LButton.neutral("btnB", "See Below")
+      ..classes.add(LMargin.C_RIGHT__MEDIUM);
     tt.showBelow(button);
     buttonLine.add(tt); // tooltip is wrapper for button
 
     tt = new LTooltip()
       ..bodyText = "Another Below Warning Tooltip with some info"
       ..theme = LTheme.C_THEME__WARNING;
-    button = new LButton.neutral("btnR", "See Right");
+    button = new LButton.neutral("btnR", "See Right")
+      ..classes.add(LMargin.C_RIGHT__MEDIUM);
     tt.showRight(button); // shows button
     buttonLine.add(tt);
 

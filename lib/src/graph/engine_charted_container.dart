@@ -141,7 +141,7 @@ class EngineChartedContainer {
       }
       i++;
     }
-    _log.config("dumpData " + info);
+    _log.finer("dumpData " + info);
   }
 
 } // EngineChartedContainer

@@ -198,19 +198,19 @@ class ObjectCtrl
       _displaySummary();
     } else {
       String viewLayout = _header.viewLayout;
-      if (viewLayout == LObjectHome.VIEW_LAYOUT_COMPACT) {
+      if (viewLayout == LObjectHome.VIEW_LAYOUT_COMPACT) { // Compact
         if (_table != null)
           _table.element.remove();
         if (_cardPanel != null)
           _cardPanel.element.remove();
         _displayCompact();
-      } else if (viewLayout == LObjectHome.VIEW_LAYOUT_CARDS) {
+      } else if (viewLayout == LObjectHome.VIEW_LAYOUT_CARDS) { // Cards
         if (_table != null)
           _table.element.remove();
         if (_cardCompact != null)
           _cardCompact.element.remove();
         _displayCards();
-      } else /* if (viewLayout == LObjectHome.VIEW_LAYOUT_TABLE) */ {
+      } else /* if (viewLayout == LObjectHome.VIEW_LAYOUT_TABLE) */ { // Table
         if (_cardCompact != null)
           _cardCompact.element.remove();
         if (_cardPanel != null)
@@ -294,6 +294,7 @@ class ObjectCtrl
           editMode: LTable.EDIT_FIELD,
           alwaysEmptyLines: 0)
         ..bordered = true
+        ..cellBuffer = true
         ..responsiveOverflow = LTableResponsive.OVERFLOW_HEAD_FOOT
         ..withStatistics = true;
       _table.recordSave = onRecordSave;
