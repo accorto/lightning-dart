@@ -76,7 +76,7 @@ class Service {
     if (url.contains("localhost")) {
       if (developmentUri != null && developmentUri.isNotEmpty)
         serverUrl = developmentUri;
-      ClientEnv.testMode = true;
+      ClientEnv.logLevel = Level.ALL;
     }
     //
     SettingItem si = Settings.setting(Settings.GEO_ENABLED);
@@ -118,7 +118,7 @@ class Service {
       ..clientUrl = window.location.href
       ..serverUrl= serverUrl
       ..locale = ClientEnv.localeName
-      ..isDevMode = ClientEnv.testMode;
+      ..isDevMode = ClientEnv.logLevel == Level.ALL;
     // geo
     try {
       if (addGeo || withGeo) {

@@ -172,8 +172,8 @@ class Router {
         queryParams[P_TEST] = config[P_TEST];
       }
     }
-    if (!ClientEnv.testMode) { // don't overwrite if test mode
-      ClientEnv.testMode = queryParams[P_TEST] == "true";
+    if (queryParams[P_TEST] == "true") {
+      ClientEnv.logLevel = Level.ALL;
     }
   } // loadConfig
   /// Embedded - use ServerUti

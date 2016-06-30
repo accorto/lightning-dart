@@ -4,7 +4,7 @@
  * License options+support:  https://lightningdart.com
  */
 
-part of lightning_dart.demo;
+part of lightning_demo;
 
 /**
  * Demo UiUtil

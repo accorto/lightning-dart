@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<!--
+  ~ Copyright (c) 2016 Accorto, Inc. All Rights Reserved
+  ~ License: GPLv3  http://www.gnu.org/licenses/gpl-3.0.txt
+  ~ License options+support:  https://lightningdart.com
+  -->
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Table Graph</title>
+
+  <link rel="stylesheet" type="text/css" href="packages/lightning/assets/styles/lightningdart.css" />
+  <link rel="stylesheet" type="text/css" href="packages/lightning/assets/styles/charted_theme.css">
+</head>
+<body>
+<div class="slds-container--center" data-timestamp="${timestamp}" id="wrap">
+
+</div><!-- container -->
+
+<script src="packages/lightning/assets/scripts/ldart.js"></script>
+<script type="text/javascript">
+  LINIT={serverUri: "https://psa.bizfabrik.net/"};
+</script>
+
+<script type="application/dart" src="tableGraph.dart"></script>
+<script src="packages/browser/dart.js"></script>
+</body>
+</html>

@@ -109,7 +109,7 @@ class PageSimple
   /// Test Mode Update
   void updateTestMode() {
     // status info
-    if (ClientEnv.testMode) {
+    if (ClientEnv.logLevel == Level.ALL) {
       _statusElement.classes.remove("status-info");
       _statusElement.classes.add("status-test");
     } else {

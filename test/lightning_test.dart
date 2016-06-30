@@ -13,8 +13,10 @@ library lightning.test;
 @TestOn("dartium")
 
 import 'package:test/test.dart';
-import 'package:lightning/lightning.dart';
 import 'package:intl/intl.dart';
+
+import 'package:lightning/lightning.dart';
+import "package:lightning/lightning_demo.dart";
 
 import '../web/demo.dart';
 

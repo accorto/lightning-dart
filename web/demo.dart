@@ -10,13 +10,11 @@ import 'dart:html';
 import 'dart:async';
 
 import "package:lightning/lightning_ctrl.dart";
-
 export "package:lightning/lightning_ctrl.dart";
+import "package:lightning/lightning_demo.dart";
 
 
 part 'demo/demo_feature.dart';
-part 'demo/demo_data.dart';
-part 'demo/ui_util_demo.dart';
 
 part 'demo/activity_timeline.dart';
 part 'demo/badges.dart';

@@ -10,6 +10,7 @@ import "dart:async";
 import "dart:html";
 
 import "package:lightning/lightning_ctrl.dart";
+import "package:lightning/lightning_demo.dart";
 import 'package:logging/logging.dart';
 
 import 'dart:typed_data';

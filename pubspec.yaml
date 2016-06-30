@@ -6,7 +6,7 @@ homepage: http://lightningdart.com
 documentation:
 
 environment:
-  sdk: '>=1.17.0'
+  sdk: '1.16.0' # Charted does not work with 1.17.x
 
 dependencies:
   browser: '>=0.10.0+2'
@@ -17,7 +17,7 @@ dependencies:
   stack_trace: '>=1.6.6'
   uuid: '>=0.5.3'
   charted: '>= 0.4.0'
-#    path: /Users/jorg/Documents/BizPlatform/lightning/charted
+  #  path: /Users/jorg/Documents/BizPlatform/lightning/charted # local copy
 
 dev_dependencies:
   test: '>=0.12.14'

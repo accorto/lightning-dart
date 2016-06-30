@@ -88,9 +88,11 @@ class EngineCharted
             showValues: true,
             title: tt);
       _setChartSize(config, width);
+      //window.console.dir(config);
 
       // data
       _data = new ChartData(_stackedColumns(by), _stackedRows(by));
+      //window.console.dir(_data);
 
       // area
       _createState();
@@ -102,7 +104,8 @@ class EngineCharted
       _createDefaultCartesianBehaviors().forEach((behavior) {
         area.addChartBehavior(behavior);
       });
-      // area.draw(); // FixMe charted crashes
+      window.console.dir(area);
+      area.draw(preRender: true); // TODO charted crashes with 1.17.1
       _log.fine("renderStacked ${calc.key} E${no} needLabel=${needLabelUpdate}");
     }
     if (!rendered && _calc.byDateList != null && _calc.byDateList.isNotEmpty) {
@@ -172,6 +175,7 @@ class EngineCharted
     if (_data == null) {
       return false; // no data
     }
+    //window.console.dir(_data);
     _graphType = _TYPE_BAR;
     int width = _createLayout(displayHorizontal);
 
@@ -183,6 +187,7 @@ class EngineCharted
       ..legend = new ChartLegend(_legendHost,
           showValues: true,
           title: _calc.label);
+    //window.console.dir(config);
     _setChartSize(config, width);
 
     // area
@@ -195,7 +200,8 @@ class EngineCharted
     _createDefaultCartesianBehaviors().forEach((behavior) {
       area.addChartBehavior(behavior);
     });
-    //area.draw(); // FixMe: charted crashes
+    //window.console.dir(area);
+    area.draw(); // TODO: charted crashes with 1.17.1
     _log.fine("renderBar ${calc.key} E${no} needLabel=${needLabelUpdate}");
     return true;
   } // renderBar

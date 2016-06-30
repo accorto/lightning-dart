@@ -86,8 +86,8 @@ class AppsSettingsEnvironment
         [Settings.getAsBool(Settings.ICON_IMAGE, defaultValue: SvgUtil.createIconImage()), SvgUtil.createIconImage()]);
     table.addRowHdrDataList("Iframe",
         [ClientEnv.inIFrame, "page=${window.pageXOffset}/${window.pageYOffset} scroll=${window.scrollX}/${window.scrollY}"]);
-    table.addRowHdrDataList("Test Mode",
-        [ClientEnv.testMode]);
+    table.addRowHdrDataList("Log Level",
+        [ClientEnv.logLevel]);
 
 
     // -- Session

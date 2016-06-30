@@ -44,7 +44,7 @@ class AppsSettingsTab
 
     for (SettingItem item in Settings.settingList) {
       if (item.name == Settings.TEST_MODE) {
-        item.value = ClientEnv.testMode; // triggers listener in LightningDart.init
+        item.value = (ClientEnv.logLevel == Level.ALL); // print in LightningDart.init
       }
 
       AppSettingsTabLine line = new AppSettingsTabLine(item);

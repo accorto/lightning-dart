@@ -174,7 +174,8 @@ class LightningCtrl {
     //
     SettingItem si = Settings.setting(Settings.TEST_MODE);
     si.onChange.listen((String newValue) {
-      ClientEnv.testMode = (newValue == Settings.VALUE_TRUE);
+      if (newValue == Settings.VALUE_TRUE)
+        ClientEnv.logLevel = Level.ALL;
       if (PageSimple.instance != null) {
         PageSimple.instance.updateTestMode();
       }

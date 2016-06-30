@@ -185,13 +185,10 @@ class LightningDart {
    * Initialize Logging, Locale, Intl, Date
    */
   static Future<bool> init() {
-    // Initialize Logging
-    // print("hierarchicalLoggingEnabled=${hierarchicalLoggingEnabled} recordStackTraceAtLevel=${recordStackTraceAtLevel}");
-    Logger.root.level = Level.ALL;
     // local Logger
     Logger.root.onRecord.listen(onLogRecord);
-    ClientEnv.testMode = true; // FIXME remove test mode
-    return ClientEnv.init(); // Locale, Intl, Date
+    // Locale, Intl, Date
+    return ClientEnv.init(Level.ALL);  // FixMe log level
   } // init
 
   /**
@@ -218,9 +215,11 @@ class LightningDart {
       window.console.info(logObject);
     else if (rec.level == Level.CONFIG)
       window.console.debug(logObject);
-    else if (ClientEnv.testMode)
+    else {
       window.console.log(logObject);
+    }
   } // onLogRecord
+
 
   /**
    * Create Page (slds-grid)

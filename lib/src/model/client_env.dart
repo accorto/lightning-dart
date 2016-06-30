@@ -26,8 +26,12 @@ class ClientEnv {
   /** Time Zone */
   static TZ timeZone;
 
-  /** Development/Test Mode */
-  static bool testMode = false;
+  /// set root log Level
+  static void set logLevel (Level newValue) {
+    Logger.root.level = newValue;
+  }
+  /// root log level
+  static Level get logLevel => Logger.root.level;
 
   /// Client Context (Session)
   static final Map<String, dynamic> ctx = new Map<String, dynamic>();
@@ -70,7 +74,11 @@ class ClientEnv {
    * Initialize locale, Intl, Date
    * - called from LightningDart.init()
    */
-  static Future<bool> init() {
+  static Future<bool> init(Level newLevel) {
+    // Initialize Logging
+    Logger.root.level = newLevel;
+    // print("hierarchicalLoggingEnabled=${hierarchicalLoggingEnabled} recordStackTraceAtLevel=${recordStackTraceAtLevel}");
+
     uriOriginal = Uri.parse(window.location.toString());
     uriBase = uriOriginal.replace(query: "").removeFragment();
     //
