@@ -1,17 +1,27 @@
 # Changelog
 
-Version numbers are based on the Salesforce Lightning Design System (SLDS) css Framework version numbers. 
+Version numbers are based on the Salesforce Lightning Design System (SLDS) css Framework version numbers.
 Intermediate Patches, Functionality improvements via +x prefix.
 
-## 1.0.0 (2015-03-08)
+## 2.0.2 (2016-06-29)
 
-- #21 FK Hierarchy Lookup 
-- #40 Data Graph
-- #38 Card Panel
-- #36 IE type restrictions
-- #35 svg compatibility edge/ie
-- #34 color editor
-- #17 timezone editor
+- SLDS v2.0.2 #48
+- Time Series #49
+- Table Layout enhancements #47
+- CSV import #46
+- Workspace Query Enhancements #45
+
+
+## 1.0.0 (2016-03-08)
+
+- SLDS v1.0.0 #44
+- FK Hierarchy Lookup #21
+- Data Graph #40
+- Card Panel #38
+- IE type restrictions #36
+- svg compatibility edge/ie #35
+- color editor #34
+- timezone editor #17
 - AppsAction disabled support
 - icon title, description, link
 - lookup enhancements
@@ -19,21 +29,21 @@ Intermediate Patches, Functionality improvements via +x prefix.
 
 ## 0.12.1 (2015-12-21)
 
-- #33 upgrade to SLDS 0.12.1
-- #29 (Sales) Path 
-- #31 Default Editor based on Platform
-- #30 Messages-Settings-Environment Tab
+- upgrade to SLDS 0.12.1 #33
+- (Sales) Path #29
+- Default Editor based on Platform #31
+- Messages-Settings-Environment Tab #30
 - lookup enhancements
 - stateful button improvements
 
 ## 0.12.0
 
-- #29 nested modals
+- nested modals #29
 - lookup completed/stabilized
-- #25 Upgrade to SLDS 0.12.0
-- #27 (remote) logging enhancements
-- #20 FK editor and dialog with parent values (e.g. contact of account)
-- #19 File editor (upload)
+- Upgrade to SLDS 0.12.0 #25
+- (remote) logging enhancements #27
+- FK editor and dialog with parent values (e.g. contact of account) #20
+- File editor (upload) #19
 - layout fixes
 
 ## 0.10.1
