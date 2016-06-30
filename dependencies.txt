@@ -1,6 +1,6 @@
 lightning 2.0.2
 |-- browser 0.10.0+2
-|-- charted 0.3.0
+|-- charted 0.4.0+1
 |   |-- browser...
 |   |-- intl...
 |   |-- logging...
@@ -136,7 +136,7 @@ lightning 2.0.2
 |       |-- source_span...
 |       '-- string_scanner...
 '-- uuid 0.5.3
-    |-- convert 2.0.0
+    |-- convert 1.1.1
     |   |-- charcode 1.1.0
     |   '-- typed_data 1.1.3
     '-- crypto 2.0.1

@@ -7,9 +7,9 @@ set -e
 pub --version
 pub deps > dependencies.txt
 
-dartanalyzer lib/lightning.dart
-dartanalyzer lib/lightning_ctrl.dart
-dartanalyzer web/demo.dart
+dartanalyzer --fatal-warnings lib/lightning.dart
+dartanalyzer --fatal-warnings lib/lightning_ctrl.dart
+dartanalyzer --fatal-warnings web/demo.dart
 
 # dart build
 echo "--build--"
