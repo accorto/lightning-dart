@@ -12,9 +12,8 @@ import "package:lightning/lightning_demo.dart";
 
 void main() {
 
-  LightningCtrl.init("TableGraph", "TableGraph") // server env
-      .then((_) {
-
+  LightningCtrl.init("TableGraph", "TableGraph", LightningDart.VERSION, uaCode: "UA-32129178-8") // server env
+  .then((_) {
     PageSimple page = LightningDart.createPageSimple();
     page.add(new TableGraphPage());
 

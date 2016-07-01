@@ -79,6 +79,8 @@ class Router {
   String initialHref;
   /// initial path list
   List<String> initialPathList = new List<String>();
+  /// Google Analytics
+  Analytics ga;
 
   // Routes
   final List<Route> _routeList = new List<Route>();
@@ -178,7 +180,6 @@ class Router {
   } // loadConfig
   /// Embedded - use ServerUti
   bool get embedded => context['LINIT'] != null;
-
 
   /**
    * Start listening (call route(null) to go to url)
@@ -366,7 +367,10 @@ class Router {
     bool result = routerPath.handler(routerPath); // might return null
     if (result != null && result) {
       updateWindow(thePath, routerPath.title);
-    //  GoogleAnalytics.gaSendPageview(theRoute.path);
+      if (ga != null) {
+        ga.setSessionValue("dt", routerPath.title); // DocumentTitle
+        ga.sendScreenView(thePath);
+      }
       //
       DateTime now = new DateTime.now();
       ServiceAnalytics.sendPage(now, thePath, _currentPath, _currentPathTime);

@@ -3,6 +3,11 @@
 Version numbers are based on the Salesforce Lightning Design System (SLDS) css Framework version numbers.
 Intermediate Patches, Functionality improvements via +x prefix.
 
+## next
+
+- Google Analysis option
+
+
 ## 2.0.2 (2016-06-29)
 
 - SLDS v2.0.2 #48

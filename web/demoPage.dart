@@ -11,7 +11,7 @@ import "demo.dart";
  */
 void main() {
 
-  LightningCtrl.init("LightningDemo", "Lightning") // server env
+  LightningCtrl.init("LightningDemo", "Lightning", LightningDart.VERSION, uaCode: "UA-32129178-8") // server env
   .then((_) {
 
     PageSimple page = LightningDart.createPageSimple();

@@ -11,7 +11,7 @@ import "demo.dart";
  */
 main() async {
   // LightningDart.init() // client env
-  await LightningCtrl.init("Lightning", "Lightning"); // server env
+  await LightningCtrl.init("Lightning", "Lightning", LightningDart.VERSION, uaCode: "UA-32129178-8"); // server env
   IntroPage intro = new IntroPage(); // get static content
   //
   AppsMain page = LightningCtrl.createAppsMain();

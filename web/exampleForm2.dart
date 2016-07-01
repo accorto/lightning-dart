@@ -20,9 +20,7 @@ import 'dart:html';
  */
 main() async {
 
-  await LightningCtrl.init("LightningExample", "Lightning"
-  //    productionUri: "https://psa.bizfabrik.net/"
-  );
+  await LightningCtrl.init("LightningExample", "Lightning", LightningDart.VERSION, uaCode: "UA-32129178-8");
 
   PageSimple page = LightningDart.createPageSimple();
   page.append(new ExampleForm2().element);

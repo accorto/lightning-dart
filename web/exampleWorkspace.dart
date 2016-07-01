@@ -30,7 +30,7 @@ main() async {
   PageSimple page = null;
   Datasource dataSource = null;
   if (dataSource == null) {
-    LightningCtrl.init("LightningWorkspace", "Lightning")
+    LightningCtrl.init("LightningWorkspace", "Lightning", LightningDart.VERSION, uaCode: "UA-32129178-8")
     .then((_){
       page = LightningCtrl.createPageSimple();
       return WorkspaceLogin.login();

@@ -243,6 +243,10 @@ class Service {
       sendNotification(sresponse.isSuccess ? ServiceResponse.Ok : ServiceResponse.Error,
         info, sresponse.msg, sresponse.clientReceiptTime, details);
     }
+    if (LightningCtrl.router.ga != null) {
+      int net = sresponse.clientReceiptTime.toInt() - sresponse.clientRequestTime.toInt();
+      LightningCtrl.router.ga.sendEvent("service", info, label: "net", value: net);
+    }
     return details;
   } // handleSuccess
 
@@ -266,6 +270,9 @@ class Service {
     if(sendNotification != null) {
       sendNotification(ServiceResponse.Failure,
           subject, message, null, null);
+    }
+    if (LightningCtrl.router.ga != null) {
+      LightningCtrl.router.ga.sendException(message);
     }
     return message;
   } // handleError

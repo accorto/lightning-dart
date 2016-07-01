@@ -188,7 +188,7 @@ class LightningDart {
     // local Logger
     Logger.root.onRecord.listen(onLogRecord);
     // Locale, Intl, Date
-    return ClientEnv.init(Level.ALL);  // FixMe log level
+    return ClientEnv.init(Level.CONFIG);
   } // init
 
   /**

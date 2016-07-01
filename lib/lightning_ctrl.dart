@@ -34,6 +34,7 @@ import 'dart:typed_data';
 import 'package:logging/logging.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:stack_trace/stack_trace.dart';
+import 'package:usage/usage.dart';
 
 import 'package:protobuf/protobuf.dart';
 import 'package:intl/intl.dart';
@@ -139,6 +140,7 @@ class LightningCtrl {
   static final Router router = new Router();
   static String productCode;
   static String productLabel;
+  static String productVersion;
 
   /**
    * Initialize Logging, Locale, Intl, Date
@@ -146,10 +148,14 @@ class LightningCtrl {
   static Future<List<Future>> init(
       final String productCode,
       final String productLabel,
+      final String productVersion,
       {String productionUri, // override - end with /
-      String developmentUri}) {
+      String developmentUri,
+      String uaCode}) {
     LightningCtrl.productCode = productCode;
     LightningCtrl.productLabel = productLabel;
+    LightningCtrl.productVersion = productVersion;
+    //
     Completer<List<Future>> completer = new Completer<List<Future>>();
     List<Future> futures = new List<Future>();
     if (Service.trxNo != -1) { // // already initialized
@@ -162,6 +168,12 @@ class LightningCtrl {
     new RemoteLogger();
     futures.add(LightningDart.init()); // ClientEnv, Locale Intl, Date
     futures.add(Preference.init());
+    if (uaCode != null) {
+      Analytics.create(uaCode, LightningCtrl.productCode, LightningCtrl.productVersion)
+      .then((Analytics ga){
+        router.ga = ga;
+      });
+    }
 
     if (productionUri == null
       && router.hasParam(Router.P_SERVERURI)) { // from parameter or LINIT
@@ -267,5 +279,13 @@ class LightningCtrl {
     _log.info("createAppsMain ${id} version=${LightningDart.VERSION} ts=${LightningDart.devTimestamp}");
     return main;
   } // createAppsMain
+
+
+  /// send GA event
+  static void sendEvent(String category, String action, {String label, int value}) {
+    if (router.ga != null) {
+      router.ga.sendEvent(category, action, label: label, value: value);
+    }
+  }
 
 } // LightningCtrl
