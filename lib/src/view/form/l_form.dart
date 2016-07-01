@@ -201,7 +201,8 @@ class LForm
       if (_sections == null)
         _sections = new List<FormSection>();
       _sections.add(_section);
-      element.append(_section.createFieldSet("${id}-s${_sections.length}"));
+      element.append(_section.createSectionParent("${id}-s${_sections.length}",
+          new FieldSetElement()));
     }
   }
   FormSection _section;

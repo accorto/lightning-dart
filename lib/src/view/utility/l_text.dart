@@ -83,7 +83,8 @@ class LText {
 /**
  * Section title with open/closed toggle
  */
-class LSectionTitle {
+class LSectionTitle
+    extends LComponent {
 
   /// The Section Title Element
   final Element element;
@@ -106,9 +107,9 @@ class LSectionTitle {
    * -- label
    */
   LSectionTitle(Element this.element, {bool open:true, String label, String margin,
-      Element sectionElement}) {
+      Element contentElement}) {
     // structure
-    _sectionElement = sectionElement == null ? new DivElement() : sectionElement;
+    _sectionElement = contentElement == null ? new DivElement() : contentElement;
     _sectionElement.classes.add(LText.C_SECTION__CONTENT);
     _sectionParts.add(_sectionElement);
     //
@@ -141,8 +142,8 @@ class LSectionTitle {
   LSectionTitle.legend({bool open: true, String label})
       : this(new LegendElement(), open:open, label:label);
 
-  /// Current Element to show or hide
-  Element get sectionElement => _sectionElement;
+  /// Content Element to show or hide
+  Element get sectionContent => _sectionElement;
   Element _sectionElement;
 
   /// add new Section Element Part and make it current
@@ -170,13 +171,31 @@ class LSectionTitle {
     }
   }
 
+  /// create section
+  Element createSectionParent(final String sectionId, final Element parentElement) {
+    sectionAnchor.id = "${sectionId}a";
+    sectionContent.id = "${sectionId}b";
+    _parent = parentElement
+      ..id = sectionId
+      ..classes.add(LText.C_SECTION)
+      ..classes.add(LVisibility.C_IS_OPEN)
+      ..append(element) // header
+      ..append(sectionContent); // content
+    open = _open; // set ui
+    return _parent;
+  }
+  Element _parent;
 
   /// State
   bool get open => _open;
+  /// Section open
   void set open (bool newValue) {
     _open = newValue;
     if (!_open && !showLabel) {
         showLabel = true; // ensure we can open again
+    }
+    if (_parent != null) {
+      _parent.classes.toggle(LVisibility.C_IS_OPEN, newValue);
     }
     for (Element part in _sectionParts) {
       part.classes.toggle(LVisibility.C_HIDE, !_open); // hight=0 does not reliably work
@@ -184,6 +203,6 @@ class LSectionTitle {
       part.classes.toggle(LVisibility.C_IS_EXPANDED, _open);
     }
   }
-  bool _open;
+  bool _open = true;
 
 } // LSectionTitle

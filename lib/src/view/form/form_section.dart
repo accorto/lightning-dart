@@ -28,18 +28,18 @@ class FormSection
   FormSection(int this.columnCount, {bool open:true, String label})
     : super.legend(open:open, label:label) {
     if (columnCount > 0) {
-      sectionElement.classes.addAll([LGrid.C_GRID, LGrid.C_WRAP]); // new section
+      sectionContent.classes.addAll([LGrid.C_GRID, LGrid.C_WRAP]); // new section
     }
   } // FormSection
 
 
   /// append element
   void append(Element newValue) {
-    sectionElement.append(newValue);
+    sectionContent.append(newValue);
   }
   /// add component
   void add(LComponent component) {
-    sectionElement.append(component.element);
+    sectionContent.append(component.element);
   }
 
   /// add editor
@@ -47,7 +47,7 @@ class FormSection
       int width, bool fillRemainingRow, int height) {
     _editors.add(editor);
     if (columnCount > 0) {
-      if (newRow && sectionElement.children.isNotEmpty) {
+      if (newRow && sectionContent.children.isNotEmpty) {
         DivElement div = new DivElement()
           ..classes.addAll([LGrid.C_GRID, LGrid.C_WRAP]); // new section
         formElement.append(div);
@@ -69,9 +69,9 @@ class FormSection
       } else {
         _columnsUsed++;
       }
-      sectionElement.append(div);
+      sectionContent.append(div);
     } else {
-      sectionElement.append(editor.element);
+      sectionContent.append(editor.element);
     }
   } // addEditor
 
@@ -81,27 +81,6 @@ class FormSection
     if (!open && _editors.contains(editor)) {
       open = true;
     }
-  }
-
-  /// Create Field Set
-  FieldSetElement createFieldSet (String sectionId) {
-    sectionAnchor.id = "${sectionId}a";
-    sectionElement.id = "${sectionId}b";
-    _parent = new FieldSetElement()
-      ..id = "${sectionId}"
-      ..classes.add(LText.C_SECTION)
-      ..classes.add(LVisibility.C_IS_OPEN)
-      ..append(element)
-      ..append(sectionElement);
-    return _parent;
-  }
-  FieldSetElement _parent;
-
-  /// Open
-  void set open (bool newValue) {
-    if (_parent != null)
-      _parent.classes.toggle(LVisibility.C_IS_OPEN, newValue);
-    super.open = newValue;
   }
 
 } // FormSection
