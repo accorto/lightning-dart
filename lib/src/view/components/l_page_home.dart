@@ -36,6 +36,7 @@ class LPageHome
   LPageHome(String this.idPrefix, {Element followElement, bool wrap:true}) {
     element.id = LComponent.createId(idPrefix, "home");
     // first line
+    _firstLine.id = "${element.id}-first";
     element.append(_firstLine);
 
     // - media with icon | recordType/recordTitle
@@ -95,6 +96,14 @@ class LPageHome
     _firstLine.append(column);
   } // addColumn
 
+  /// add element to (padded) column to first line
+  void addColumnElement (Element columnElement,
+      {String columnClass : LGrid.C_COL__PADDED}) {
+    DivElement column = new DivElement()
+      ..append(columnElement);
+    addColumn(column, columnClass: columnClass);
+  } // addColumn
+
   /**
    * Add Button Group (set after columns)
    * (alignBottom if there is a follow button)
@@ -145,6 +154,7 @@ class LPageHome
   void set info (String newValue) {
     if (_info == null) {
       _info = new ParagraphElement()
+          ..id = "${element.id}-info"
           ..classes.addAll([LText.C_TEXT_BODY__SMALL, LPageHeader.C_PAGE_HEADER__INFO]);
       element.append(_info);
     }
