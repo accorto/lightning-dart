@@ -20,6 +20,10 @@
   // font-family: Roboto, sans-serif;
   display: block;
   min-height: 300px;
+
+  &.empty {
+    min-height: initial;
+  }
 }
 
 // 1nd level

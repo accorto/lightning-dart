@@ -87,7 +87,7 @@ class EngineCharted
         ..legend = new ChartLegend(_legendHost,
             showValues: true,
             title: tt);
-      _setChartSize(config, width);
+      _setChartSize(config, width, false);
       //window.console.dir(config);
 
       // data
@@ -188,7 +188,7 @@ class EngineCharted
           showValues: true,
           title: _calc.label);
     //window.console.dir(config);
-    _setChartSize(config, width);
+    _setChartSize(config, width, false);
 
     // area
     _createState();
@@ -271,7 +271,7 @@ class EngineCharted
         ..legend = new ChartLegend(_legendHost,
             title: tt,
             showValues: true);
-      _setChartSize(config, width);
+      _setChartSize(config, width, false);
 
       _data = new ChartData(_byColumns(calc.label, by), _byRows(by));
 

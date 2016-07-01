@@ -40,7 +40,9 @@ class GraphCalc
       ParagraphElement p = new ParagraphElement()
         ..classes.add(LMargin.C_BOTTOM__SMALL)
         ..text = "- ${StatCalc.statCalcNoData()} -";
-      engine.element.append(p);
+      engine.element
+          ..classes.add("empty")
+          ..append(p);
       _log.fine("display ${key} complete NoData");
     } else {
       LDList info = new LDList();

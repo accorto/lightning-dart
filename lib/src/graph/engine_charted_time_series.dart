@@ -28,8 +28,10 @@ class EngineChartedTimeSeries
       element.children.clear();
       DivElement info = new DivElement()
         ..classes.addAll([LMargin.C_VERTICAL__MEDIUM])
-        ..text = "- No Data -";
-      element.append(info);
+        ..text = "- ${StatCalc.statCalcNoData()} -";
+      element
+          ..classes.add("empty")
+          ..append(info);
       return true;
     }
     reset();
@@ -71,7 +73,7 @@ class EngineChartedTimeSeries
     for (TimeSeriesMeasure tsm in measureList) {
       config.registerMeasureAxis(tsm.name, tsm.axisConfig);
     }
-    _setChartSize(config, width);
+    _setChartSize(config, width, true);
     // data
     List<ChartColumnSpec> columnSpecs = new List<ChartColumnSpec>();
     for (TimeSeriesColumn tsc in _columnList) {

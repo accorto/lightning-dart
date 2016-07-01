@@ -1,150 +1,122 @@
-/**
- * Charted Quantum components layout
- chart-wrapper
- - chart-title-wrapper
- -- chart-title
- -- chart-subtitle
- - chart-host-wrapper
- -- chart-host
- --- chart-canvas
- --- tooltip|hovercard
- -- chart-legend-host
- */
 .chart-wrapper {
   display: block;
   min-height: 300px; }
-
+  .chart-wrapper.empty {
+    min-height: initial; }
 .chart-title-wrapper {
   margin-bottom: 26px;
-  /* charts adds an extra 10px */ }
-
+   }
 .chart-title {
   font-size: 16px;
   color: #757575;
   margin-bottom: 8px; }
-
 .chart-subtitle {
   font-size: 14px;
   color: #BDBDBD; }
-
 .chart-host-wrapper {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
-  flex-wrap: wrap;
+  -webkit-flex-wrap: wrap;
+      -ms-flex-wrap: wrap;
+          flex-wrap: wrap;
   width: 100%; }
-
 .chart-host {
   display: block; }
-
 .chart-host-h {
   display: block;
   width: 70%; }
-
 .chart-host-v {
   display: block;
   width: 100%; }
-
 .chart-legend-host {
   display: block;
   min-width: 150px;
   overflow-y: auto; }
-
 .chart-legend-host-h {
   display: block;
   width: 30%;
   overflow-y: auto; }
-
 .chart-legend-host-v {
   display: block;
   width: 100%;
   margin: 5px 0 0 10px;
   max-height: 400px;
   overflow-y: auto; }
-
-/*
- * Styles for the SVG chart rendering
- */
 .chart-canvas {
   display: block; }
-
 .chart-axis-label {
   font-size: 12px;
   color: #424242; }
-
 .chart-axis-label-tooltip {
   color: white;
   opacity: 0;
-  transition: opacity .25s;
+  -webkit-transition: opacity .25s;
+          transition: opacity .25s;
   background-color: black;
   position: absolute;
   padding: 4px;
   border-radius: 2px;
   z-index: 9999; }
-
 .chart-axis-text,
 .dimension-axis-group text, .measure-axis-group text {
   font-size: 12px;
   fill: #757575;
   stroke: none; }
-
-/*
- * Styles for the legend.
- */
 .chart-legend-heading {
   font-size: 15px;
   color: #838383;
   margin-bottom: 6px; }
-
 .chart-legend-row,
 .chart-legend-more {
   width: 100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
   font-size: 14px;
   margin-bottom: 7px;
   position: relative;
   cursor: default; }
-
 .chart-legend-title {
   color: #838383; }
-
 .chart-legend-subtitle {
   color: #C1C1C1; }
-
 .chart-legend-selected,
 .chart-legend-hover {
   color: #434343;
   font-weight: bold; }
-
 .chart-legend-more-row {
   white-space: nowrap;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
   font-size: 14px;
   margin-top: 10px; }
-
 .chart-legend-more-row:first-child {
   margin-top: 0; }
-
 .chart-legend-label {
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 150px;
-  flex: 1; }
-
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1; }
 .chart-legend-value {
   margin-left: .5rem; }
-
 .chart-legend-color,
 .chart-legend-more-color {
   width: 12px;
   height: 12px;
   margin: auto 8px;
   border-radius: 2px; }
-
 .type-line-rdr > .chart-legend-color {
   height: 4px; }
-
 .type-pie-rdr > .chart-legend-color {
   border-radius: 6px; }
-
 .chart-legend-more-tooltip {
   position: absolute;
   left: 70px;
@@ -158,54 +130,44 @@
   font-size: 14px;
   pointer-events: none;
   opacity: 0;
-  transition: opacity .4s; }
-
-/*
- * Axes styles
- */
+  -webkit-transition: opacity .4s;
+          transition: opacity .4s; }
 .tick line, .domain {
   fill: none;
   stroke: #E0E0E0;
   stroke-width: 1px;
   shape-rendering: crispEdges; }
-
 .measure-axis-group .domain {
   stroke-width: 0; }
-
 .dimension-axis-group .domain {
   stroke: #9E9E9E; }
-
-/*
- * Axis markers
- */
 .axis-marker {
   stroke: #E0E0E0;
   stroke-dasharray: 3 3; }
-
-/*
- * Styles for LineChartRenderer
- */
 .line-rdr-line {
   stroke-width: 2px;
-  transition: stroke-width .2s;
+  -webkit-transition: stroke-width .2s;
+          transition: stroke-width .2s;
   stroke-linecap: round; }
-
 .line-rdr-line.col-selected,
 .line-rdr-line.col-previewed {
   stroke-width: 4px; }
-
 .line-rdr-point {
   opacity: 0;
-  transition: opacity .2s; }
-
-/*
- * Styles for the tooltip.
- */
+  -webkit-transition: opacity .2s;
+          transition: opacity .2s; }
 .tooltip,
 .hovercard {
   opacity: 0;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
   position: absolute;
   border-radius: 2px;
   border: 1px solid #C1C1C1;
@@ -214,56 +176,69 @@
   z-index: 9999;
   background-color: white;
   font-size: 14px;
-  transition: opacity .25s;
+  -webkit-transition: opacity .25s;
+          transition: opacity .25s;
   pointer-events: none; }
-
 .tooltip-title,
 .hovercard-title {
   color: #434343;
   font-weight: bold;
   margin-bottom: 16px; }
-
 .hovercard-measure {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
   color: #838383; }
-
 .hovercard-measure.hovercard-multi {
-  flex-direction: row;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
   margin-bottom: 16px; }
-
 .hovercard-measure.hovercard-single {
-  flex-direction: column; }
-
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column; }
 .hovercard-measure:last-child {
   margin-bottom: 0; }
-
 .hovercard-single .hovercard-measure-value {
   font-size: 24px; }
-
 .hovercard-multi .hovercard-measure-label {
   padding-right: 16px;
-  flex: 1; }
-
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1; }
 .tooltip-total {
   color: #636363;
   font-weight: bold;
   margin-bottom: 16px; }
-
 .tooltip-item {
   white-space: nowrap;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
   color: #838383;
   margin-bottom: 16px; }
-
 .tooltip-item:last-child {
   margin-bottom: 0; }
-
 .tooltip .tooltip-item-value {
   margin-left: 20px;
   margin-right: 0; }
-
 .tooltip.rtl .tooltip-item-value {
   margin-left: 0;
   margin-right: 20px; }

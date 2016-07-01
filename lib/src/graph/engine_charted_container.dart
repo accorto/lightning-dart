@@ -104,14 +104,24 @@ class EngineChartedContainer {
   DivElement _chartHost;
 
   /// set chart host size
-  void _setChartSize(ChartConfig config, int width) {
-    if (config.minimumSize.width > width) { // 400x300
-      int height = 300*(width~/400);
-      config.minimumSize = new Rect.size(width, height);
+  void _setChartSize(ChartConfig config, int width, bool useMaxWidth) {
+    if (width >= 0) {
+      if (config.minimumSize.width > width) { // 400x300
+        int height = 300 * (width ~/ 400);
+        config.minimumSize = new Rect.size(width, height);
+      } else if (useMaxWidth && width > 600) {
+        int height = config.minimumSize.height;
+        if (height == 0)
+          height = 300;
+        int legendWidth = 200;
+        _legendHost.style.maxWidth = "${legendWidth}px";
+        int graphWidth = width - legendWidth;
+        config.minimumSize = new Rect.size(graphWidth, height);
+      }
     }
     int height = config.minimumSize.height;
     if (height > 0) {
-      _legendHost.style.maxHeight = "${height}px";
+      _legendHost.style.maxHeight = "${height}px"; // sync legend height
     }
     _log.fine("setChartSize size=${config.minimumSize} hostWidth=${width} height=${height}"); // x y w h
   } // setChartSize
