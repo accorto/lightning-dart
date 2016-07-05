@@ -200,7 +200,7 @@ class Router {
         // /components.html#p2
         if (useHash) {
           //  path = window.location.hash;
-          //  _log.log(Level.CONFIG, "onPopState ${path} - ${window.location.href}");
+          _log.log(Level.CONFIG, "onPopState ${path} - ${window.location.href}");
           //  route(path); // duplicate
         } else {
           _log.log(Level.CONFIG, "onPopState ${path} - ${window.location.href}");
@@ -429,11 +429,14 @@ class Router {
       }
     }
     document.title = theTitle;
+    String href = window.location.href;
+    int pos = href.indexOf("?");
+    if (pos > 0) {
+      _log.warning("updateWindow href=${href} path=${path}");
+    }
 
     if (replace) {
       if (clean) {
-        String href = window.location.href;
-        int pos = href.indexOf("?");
         if (pos > 0)
           href = href.substring(0, pos);
         pos = href.indexOf("#");

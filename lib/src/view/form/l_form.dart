@@ -427,7 +427,7 @@ class LForm
   LButton _errorBtn;
   LPopover _errorPop;
 
-  /// On Form Reset
+  /// On Form Reset direct or Button
   void onFormReset(Event evt) {
     evt.preventDefault(); // resets to form default
     //_log.info("onFormReset");
@@ -440,10 +440,9 @@ class LForm
     _debug("reset:");
   } // onFormReset
 
-  /// On Form Submit
+  /// On Form Submit direct or via Button
   void onFormSubmit(Event evt) {
     evt.preventDefault(); // might be form or button event
-    evt.stopImmediatePropagation();
     //_log.info("onFormSubmit - ${record}");
     onEditorFocus(null); // hide all dropdowns
     bool valid = doValidate();
@@ -470,6 +469,7 @@ class LForm
         if (formSubmitPost != null)
           formSubmitPost(null);
       });
+      return;
     }
 
     // Submit form if there is an action
@@ -477,8 +477,10 @@ class LForm
       try {
         FormElement ff = element as FormElement;
         String action = ff.action;
-        if (action != null && action.isNotEmpty) {
-          _log.info("onFormSubmit action ${action}");
+        if (action == null || action.isEmpty) {
+          _log.config("onFormSubmit no action"); // likely: listen to button click
+        } else {
+          _log.info("onFormSubmit action=${action}");
           ff.submit();
           _log.config("onFormSubmit action subitted");
         }

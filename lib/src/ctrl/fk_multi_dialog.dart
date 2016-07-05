@@ -52,7 +52,7 @@ class FkMultiDialog {
     }
     form.formRecordChange = onRecordChange;
     form.addSaveButton(label: "Select", buttonSaveChangeOnly:false)
-      ..onClick.listen(onSaveClick);
+      ..onClick.listen(onSaveClick); // alternative: recordSave
     _modal.addForm(form);
     _modal.append(_selectDiv);
   } // FkMultiDialog
