@@ -430,13 +430,10 @@ class Router {
     }
     document.title = theTitle;
     String href = window.location.href;
-    int pos = href.indexOf("?");
-    if (pos > 0) {
-      _log.warning("updateWindow href=${href} path=${path}");
-    }
 
     if (replace) {
       if (clean) {
+        int pos = href.indexOf("?");
         if (pos > 0)
           href = href.substring(0, pos);
         pos = href.indexOf("#");
