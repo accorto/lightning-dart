@@ -22,11 +22,13 @@ class TimeSeries {
   final List<List<num>> _dataRows = new List<List<num>>();
 
   /// initialize
-  void init(DTable table, String timeColumnName) {
+  void init(final DTable table, String timeColumnName) {
+    if (table == null)
+      throw new Exception("Table NotFound for: ${timeColumnName}");
     _dataRecord = new DataRecord(table, null);
     DColumn col = DataUtil.getTableColumn(table, timeColumnName);
     if (col == null)
-      throw new Exception("Column Not Found: ${timeColumnName}");
+      throw new Exception("Column NotFound: ${timeColumnName} in ${table.name}");
 
     TimeSeriesColumn tsc = new TimeSeriesColumn(col, false, null, _columnList.length);
     tsc.spec = new ChartColumnSpec(

@@ -17,9 +17,9 @@ class EngineChartedTimeSeries
 
 
   /// Chart Engine Charted Engine
-  EngineChartedTimeSeries(DTable table, String timeColumnName)
+  EngineChartedTimeSeries(final DTable table, String timeColumnName)
       : super() {
-    init(table, timeColumnName);
+    init(table, timeColumnName); // throws Exception if no table
   } // EngineChartedTimeSeries
 
   /// render record values
