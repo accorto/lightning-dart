@@ -258,9 +258,14 @@ class LSelect
 
   /// Validation
 
-  int get maxlength => 60;
+  /// Select Length (default: 0 - unlimited)
+  int get maxlength => _maxlength;
+  /// Select Length (default: 0 - unlimited)
   void set maxlength (int newValue) {
+    _maxlength = newValue;
   }
+  int _maxlength = 0;
+
 
   String get pattern => null;
   void set pattern (String newValue) {
