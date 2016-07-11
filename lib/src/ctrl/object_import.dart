@@ -244,13 +244,14 @@ class ObjectImport {
     return pl;
   } // createColPick
 
-  /// does string match column?
+  /// does string match column (case insensitive)?
   bool _isColumnMatch(DColumn col, String stringMatch) {
     if (stringMatch == null || stringMatch.isEmpty)
       return false;
-    return col.name == stringMatch
-        || col.label == stringMatch
-        || (col.hasExternalKey() && col.externalKey == stringMatch);
+    RegExp exp = new RegExp(stringMatch, caseSensitive: false);
+    return exp.hasMatch(col.name)
+        || exp.hasMatch(col.label)
+        || (col.hasExternalKey() && exp.hasMatch(col.externalKey));
   }
 
 
@@ -477,9 +478,11 @@ class ObjectImport {
           records.add(line.data.record);
       }
     }
-    _log.info("onSaveClick ${records.length}");
+    _log.info("onSaveClick records=${records.length}");
     if (records.isEmpty)
       return;
+    //for (DRecord rec in records)
+    //  _log.fine(rec.toString());
 
     // save import
     _modal.busy = true;

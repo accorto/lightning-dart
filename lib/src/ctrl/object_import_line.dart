@@ -165,19 +165,25 @@ class ObjectImportLine
 
   /// check line column value
   bool checkLineValue(LEditor ed, String cellText) {
-    bool valid = ed.setValueSynonym(cellText); // might be null
-    if (valid == null) {
+    bool validSynonym = ed.setValueSynonym(cellText); // might be null
+    if (validSynonym == null) { // synonym not supported - set direct
       ed.value = cellText;
-      return true;
-    }
-    if (valid) {
-      ed.setCustomValidity("");
     } else {
-      ed.setCustomValidity(objectImportLineValueNotFound());
+      if (validSynonym) {
+        ed.setCustomValidity("");
+      } else {
+        ed.setCustomValidity(objectImportLineValueNotFound());
+      }
     }
-    ed.doValidate();
-    return valid;
-  }
+    // set data value
+    if (ed.doValidate()) {
+      ed.updateData(ed.value);
+      return true;
+    } else {
+      ed.updateData("");
+      return false;
+    }
+  } // checkLineValue
 
   /// editor change - mark overwrite
   void onEditorChange(String name, String newValue, DEntry entry, var details) {
