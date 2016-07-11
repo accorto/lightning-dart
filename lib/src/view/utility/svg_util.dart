@@ -49,14 +49,18 @@ class SvgUtil {
 
   /// process symbol request
   static void _svgDirectProcess(String symbolSvgUrl) {
+    String msg = "";
     HttpRequest.getString(symbolSvgUrl)
     .then((String svgSymbolCode){
-      _log.fine("svgDirectProcess received ${symbolSvgUrl}");
+      msg = "svgDirectProcess received symbolUrl=${symbolSvgUrl}";
+      _log.fine(msg);
       Element e = new DivElement()
         ..setInnerHtml(svgSymbolCode, treeSanitizer: NodeTreeSanitizer.trusted);
       Element sym = e.children.first;
-      if (sym == null) {
-        _log.warning("svgDirectProcess NoSym ${symbolSvgUrl} code=${svgSymbolCode} children=${e.children}");
+      if (sym == null || e.children.isEmpty) {
+        _log.warning("svgDirectProcess NoSym symbolUrl=${symbolSvgUrl} location=${window.location.href} referrer=${document.referrer} code=${svgSymbolCode}");
+        _requestMap.remove(symbolSvgUrl);
+        return;
       } else {
         _symbolMap[symbolSvgUrl] = sym;
       }
@@ -72,7 +76,8 @@ class SvgUtil {
       }
     })
     .catchError((error, stackTrace){
-      _log.warning("svgDirectProcess symbolUrl=${symbolSvgUrl} location=${window.location.href}", error, stackTrace);
+      _log.warning("svgDirectProcess symbolUrl=${symbolSvgUrl} location=${window.location.href} referrer=${document.referrer} ${window.location.href}",
+          error, stackTrace);
     });
   }
 
