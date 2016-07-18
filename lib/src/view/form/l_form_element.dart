@@ -12,6 +12,9 @@ part of lightning_dart;
  */
 class LFormElement {
 
+  /// Label Id Suffix (input + _label)
+  static const String LABEL_SUFFIX = "_label";
+
   /// Form Element
   final DivElement element = new DivElement()
     ..classes.add(LForm.C_FORM_ELEMENT);
@@ -313,6 +316,7 @@ class LFormElement {
     if (newValue != null && newValue.isNotEmpty) {
       _input.id = newValue;
       labelElement.htmlFor = newValue;
+      labelElement.id = _input.id + LABEL_SUFFIX;
     }
   }
 

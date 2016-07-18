@@ -8,6 +8,10 @@ part of lightning_dart;
 
 /**
  * Checkbox (handles input + presentation)
+ *
+ * The checkbox input element might not be visible
+ * and a click on the Id with automated test tools might error.
+ * Instead, click on the label (id + _label)
  */
 class LCheckbox
     extends LEditor with LFormElement {
@@ -45,6 +49,7 @@ class LCheckbox
   /// Initialize Editor
   void _initEditor() {
     labelElement.htmlFor = input.id;
+    labelElement.id = input.id + LFormElement.LABEL_SUFFIX; // click on label
     input.onClick.listen(onInputChange);
   }
 
