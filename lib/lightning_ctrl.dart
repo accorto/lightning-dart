@@ -40,7 +40,7 @@ import 'package:protobuf/protobuf.dart';
 import 'package:intl/intl.dart';
 
 import 'package:charted/charted.dart';
-import 'package:observe/observe.dart';
+import 'package:observable/observable.dart';
 
 import 'lightning.dart';
 export 'lightning.dart';
