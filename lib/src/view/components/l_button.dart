@@ -24,28 +24,6 @@ class LButton
   static const String C_BUTTON__DESTRUCTIVE = "slds-button--destructive";
   /// slds-button--inverse (slds-button): Creates the inverse style for dark backgrounds
   static const String C_BUTTON__INVERSE = "slds-button--inverse";
-  /// slds-button--icon (slds-button): Creates a button that looks like a plain icon - This is 1rem×1rem like an icon, not a regular button
-  static const String C_BUTTON__ICON = "slds-button--icon";
-  /// slds-button--icon-bare (slds-button): Creates a button that looks like a plain icon - This is 1rem×1rem like an icon, not a regular button
-  //static const String C_BUTTON__ICON_BARE = "slds-button--icon-bare";
-  /// slds-button--icon-container (slds-button): Creates a button that looks like a plain icon - This is 2rem×2rem (32px) like a button
-  static const String C_BUTTON__ICON_CONTAINER = "slds-button--icon-container";
-  /// slds-button--icon-border (slds-button): Creates an icon button with a border - This is 2rem×2rem (32px) like a button, there is no background color until hover for this style
-  static const String C_BUTTON__ICON_BORDER = "slds-button--icon-border";
-  /// slds-button--icon-border-filled (slds-button): Creates an icon button with a border - This is 2rem×2rem (32px) like a button
-  static const String C_BUTTON__ICON_BORDER_FILLED = "slds-button--icon-border-filled";
-  /// slds-button--icon-inverse (slds-button): Gives a white icon color on a dark background - When used alone it has a subtle hover. When used in a button-group it assumes the hover state of the buttons next to it.
-  static const String C_BUTTON__ICON_INVERSE = "slds-button--icon-inverse";
-  /// slds-button--icon-border-inverse (slds-button): Creates an icon button with a white border - There is no background color.
-  static const String C_BUTTON__ICON_BORDER_INVERSE = "slds-button--icon-border-inverse";
-  /// slds-button--icon-small (slds-button): Creates an icon button at the smaller 1.5rem (24px) size
-  static const String C_BUTTON__ICON_SMALL = "slds-button--icon-small";
-  /// slds-button--icon-x-small (slds-button): Creates an icon button at the smaller 1.25rem (20px) size
-  static const String C_BUTTON__ICON_X_SMALL = "slds-button--icon-x-small";
-  /// slds-button--icon-xx-small (slds-button): Creates an icon button at the smaller 1rem (16px) size
-  static const String C_BUTTON__ICON_XX_SMALL = "slds-button--icon-xx-small";
-  /// slds-button--icon-more (slds-button): Used for the style where only two icons are in a button - This is usually an icon with a down arrow icon next to it. Each svg within is sized separately
-  static const String C_BUTTON__ICON_MORE = "slds-button--icon-more";
 
   /// slds-button__icon (svg): Sets the size and color of the icon inside a button
   static const String C_BUTTON__ICON_ = "slds-button__icon";
@@ -68,6 +46,36 @@ class LButton
 
   /// slds-button-space-left (button parent): Adds space on the left of a button wrapped in a parent - Only required if the .slds-button is wrapped. ie- to include a dropdown
   static const String C_BUTTON_SPACE_LEFT = "slds-button-space-left";
+
+
+  /// slds-button--icon (slds-button): Creates a button that looks like a plain icon - This is 1rem×1rem like an icon, not a regular button
+  static const String C_BUTTON__ICON = "slds-button--icon";
+  /// slds-button--icon-bare (slds-button): Creates a button that looks like a plain icon - This is 1rem×1rem like an icon, not a regular button
+  //static const String C_BUTTON__ICON_BARE = "slds-button--icon-bare";
+  /// slds-button--icon-container (slds-button): Creates a button that looks like a plain icon - This is 2rem×2rem (32px) like a button
+  static const String C_BUTTON__ICON_CONTAINER = "slds-button--icon-container";
+  /// slds-button--icon-border (slds-button): Creates an icon button with a border - This is 2rem×2rem (32px) like a button, there is no background color until hover for this style
+  static const String C_BUTTON__ICON_BORDER = "slds-button--icon-border";
+  /// slds-button--icon-border-filled (slds-button): Creates an icon button with a border - This is 2rem×2rem (32px) like a button
+  static const String C_BUTTON__ICON_BORDER_FILLED = "slds-button--icon-border-filled";
+  /// slds-button--icon-inverse (slds-button): Gives a white icon color on a dark background - When used alone it has a subtle hover. When used in a button-group it assumes the hover state of the buttons next to it.
+  static const String C_BUTTON__ICON_INVERSE = "slds-button--icon-inverse";
+  /// slds-button--icon-border-inverse (slds-button): Creates an icon button with a white border - There is no background color.
+  static const String C_BUTTON__ICON_BORDER_INVERSE = "slds-button--icon-border-inverse";
+
+  // container sizes
+  /// slds-button--icon-small (slds-button): Creates an icon button at the smaller 1.5rem (24px) size
+  static const String C_BUTTON__ICON_SMALL = "slds-button--icon-small";
+  /// slds-button--icon-x-small (slds-button): Creates an icon button at the smaller 1.25rem (20px) size
+  static const String C_BUTTON__ICON_X_SMALL = "slds-button--icon-x-small";
+  /// slds-button--icon-xx-small (slds-button): Creates an icon button at the smaller 1rem (16px) size
+  static const String C_BUTTON__ICON_XX_SMALL = "slds-button--icon-xx-small";
+
+  /// slds-button--icon-more (slds-button): Used for the style where only two icons are in a button - This is usually an icon with a down arrow icon next to it. Each svg within is sized separately
+  static const String C_BUTTON__ICON_MORE = "slds-button--icon-more";
+
+  /// Red Icon
+  static const String C_BUTTON__ICON_ERROR = "slds-button--icon-error";
 
 
   /// slds-button--hint (slds-button):
@@ -156,7 +164,7 @@ class LButton
       // save general icon classes
       List<String> list = new List<String>();
       _icon.classes.forEach((String iconClass){
-        if (_ICON_ATTRIB.contains(iconClass) // statefulLmodal, hint
+        if (_ICON_ATTRIB.contains(iconClass) // stateful,modal,hint
             || _ICON_SIZES.contains(iconClass))
           list.add(iconClass);
       });
@@ -675,6 +683,7 @@ class LButtonStateful
   }
 
 } // LButtonStateful
+
 
 /// Button State
 class LButtonStatefulState {

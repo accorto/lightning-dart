@@ -11,6 +11,7 @@ part of lightning_dart;
  */
 class LBadge extends LComponent {
 
+  /// slds-badge (span): Initializes a Badge
   static const String C_BADGE = "slds-badge";
 
   /// Badge Element

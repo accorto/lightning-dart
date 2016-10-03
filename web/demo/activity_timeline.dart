@@ -10,7 +10,7 @@ class ActivityTimeline extends DemoFeature {
 
   ActivityTimeline()
     : super("activity-timeline", "Activity Timeline",
-      sldsStatus: DemoFeature.SLDS_PROTOTYPE,
+      sldsStatus: DemoFeature.SLDS_DEV_READY,
       devStatus: DemoFeature.STATUS_NIY,
       hints: [],
       issues: [],

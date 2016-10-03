@@ -17,6 +17,7 @@ import "package:lightning/lightning_demo.dart";
 part 'demo/demo_feature.dart';
 
 part 'demo/activity_timeline.dart';
+part 'demo/app_launcher.dart';
 part 'demo/badges.dart';
 part 'demo/breadcrumbs.dart';
 part 'demo/buttons.dart';
@@ -142,6 +143,7 @@ class DemoPage extends AppsPage {
 
     /* Individual parts */
     _addFeature(new ActivityTimeline()..toc(toc, onlySelectedHide));
+    _addFeature(new AppLauncher()..toc(toc, onlySelectedHide));
     _addFeature(new Badges()..toc(toc, onlySelectedHide));
     _addFeature(new Breadcrumbs()..toc(toc, onlySelectedHide));
     _addFeature(new Buttons()..toc(toc, onlySelectedHide));
