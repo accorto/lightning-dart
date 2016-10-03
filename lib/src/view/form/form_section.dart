@@ -56,7 +56,8 @@ class FormSection
       }
       // default size 100%
       DivElement div = new DivElement()
-        ..classes.addAll([LGrid.C_COL__PADDED, LGrid.C_GROW_NONE, LSizing.C_SIZE__1_OF_1])
+        ..classes.addAll([LPadding.C_HORIZONTAL__SMALL, // TODO check
+            LGrid.C_GROW_NONE, LSizing.C_SIZE__1_OF_1])
         ..append(editor.element);
       int remaining = columnCount - (_columnsUsed % columnCount);
       if (columnCount > 1 && columnCount != width) { // for medium or up

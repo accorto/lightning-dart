@@ -87,7 +87,7 @@ class LTableRow
           ..classes.add(LForm.C_CHECKBOX__FAUX));
       _label.append(new SpanElement()
         ..classes.add(LForm.C_FORM_ELEMENT__LABEL)
-        ..classes.add(LText.C_ASSISTIVE_TEXT)
+        ..classes.add(LVisibility.C_ASSISTIVE_TEXT)
         ..text = selectLabel);
       // name/id
       selectCb.name = "sel-${type}-${rowIndex}";
@@ -181,7 +181,7 @@ class LTableRow
       bool addStatistics:true,
       TableCellElement tc}) {
     DivElement div = new DivElement()
-      ..classes.add(LText.C_TRUNCATE);
+      ..classes.add(LTruncate.C_TRUNCATE);
     if (display == null || display.isEmpty) {
       div.appendHtml("&nbsp;");
     } else {
@@ -216,7 +216,7 @@ class LTableRow
       String value,
       String align,
       DataColumn dataColumn}) {
-    a.classes.add(LText.C_TRUNCATE);
+    a.classes.add(LTruncate.C_TRUNCATE);
     return addCell(a, name, label, value, align, dataColumn);
   }
 
@@ -248,7 +248,7 @@ class LTableRow
         return addCell(editor.getValueRenderElement(value), editor.name, editor.label, value, align, editor.dataColumn);
       }
       DivElement div = new DivElement()
-        ..classes.add(LText.C_TRUNCATE)
+        ..classes.add(LTruncate.C_TRUNCATE)
         ..text = display == null ? "" : display;
       return addCell(div, editor.name, editor.label, value, align, editor.dataColumn);
     }

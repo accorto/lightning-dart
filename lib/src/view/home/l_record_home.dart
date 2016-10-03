@@ -76,7 +76,7 @@ class LRecordHome
       for (int i = 0; i < sizeOf; i++) {
         LRecordHomeDetail d = _detailList[i];
         DivElement div = new DivElement()
-          ..classes.add(LGrid.C_COL__PADDED)
+          ..classes.add(LPadding.C_HORIZONTAL__SMALL) // TODO check
           ..classes.add(LSizing.size1ofY(sizeOf));
         div.append(d.element);
         detail.append(div);
@@ -131,8 +131,8 @@ class LRecordHomeDetail {
   LRecordHomeDetail(String this.columnName, DataColumn this.dataColumn) {
     String label = dataColumn.label;
     ParagraphElement p = new ParagraphElement()
-      ..classes.add(LText.C_TEXT_HEADING__LABEL)
-      ..classes.add(LText.C_TRUNCATE)
+      ..classes.add(LText.C_TEXT_TITLE__CAPS) // TODO check
+      ..classes.add(LTruncate.C_TRUNCATE)
       ..text = label
       ..title = label;
     Element dt = new Element.tag('dt')
@@ -171,7 +171,7 @@ class LRecordHomeDetail {
         // show value
         ParagraphElement pp = new ParagraphElement()
           ..classes.add(LText.C_TEXT_BODY__REGULAR)
-          ..classes.add(LText.C_TRUNCATE);
+          ..classes.add(LTruncate.C_TRUNCATE);
         _dd.append(pp);
         pp.text = value;
         // show display value

@@ -21,10 +21,10 @@ class LPageHome
   final LMedia _media = new LMedia();
   /// Record Type
   final ParagraphElement _recordType = new ParagraphElement()
-    ..classes.add(LText.C_TEXT_HEADING__LABEL);
+    ..classes.add(LText.C_TEXT_TITLE__CAPS); // TODO check
   /// Record Title
   final HeadingElement _recordTitle = new HeadingElement.h1()
-    ..classes.addAll([LPageHeader.C_PAGE_HEADER__TITLE, LMargin.C_RIGHT__SMALL, LText.C_TRUNCATE, LGrid.C_ALIGN_MIDDLE]);
+    ..classes.addAll([LPageHeader.C_PAGE_HEADER__TITLE, LMargin.C_RIGHT__SMALL, LTruncate.C_TRUNCATE, LGrid.C_ALIGN_MIDDLE]);
   /// Action Buttons
   LButtonGroup _actionButtonGroup;
   /// Header Info
@@ -89,7 +89,7 @@ class LPageHome
 
   /// add (padded) column to first line
   void addColumn (Element column,
-      {String columnClass : LGrid.C_COL__PADDED}) {
+      {String columnClass : LPadding.C_HORIZONTAL__SMALL}) { // TODO check
     if (columnClass != null && columnClass.isNotEmpty)
       column.classes.add(columnClass);
     _firstLine.children.last.classes.add(LMargin.C_BOTTOM__X_SMALL);
@@ -98,7 +98,7 @@ class LPageHome
 
   /// add element to (padded) column to first line
   void addColumnElement (Element columnElement,
-      {String columnClass : LGrid.C_COL__PADDED}) {
+      {String columnClass : LPadding.C_HORIZONTAL__SMALL}) { // TODO check
     DivElement column = new DivElement()
       ..append(columnElement);
     addColumn(column, columnClass: columnClass);

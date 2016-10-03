@@ -51,7 +51,7 @@ class LPageHeaderBase
     icon.classes.add(LIcon.C_ICON__LARGE);
     _media.setIcon(icon);
     ParagraphElement _title = new ParagraphElement()
-      ..classes.addAll([LPageHeader.C_PAGE_HEADER__TITLE, LText.C_TRUNCATE, LGrid.C_ALIGN_MIDDLE])
+      ..classes.addAll([LPageHeader.C_PAGE_HEADER__TITLE, LTruncate.C_TRUNCATE, LGrid.C_ALIGN_MIDDLE])
       ..title = title
       ..text = title;
     ParagraphElement _info = new ParagraphElement()

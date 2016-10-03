@@ -24,7 +24,7 @@ class LNavigation {
   LNavigationList addList({String header}) {
     if (header != null && header.isNotEmpty) {
       HeadingElement h2 = new HeadingElement.h2()
-          ..classes.addAll([LText.C_TEXT_HEADING__LABEL, LPadding.C_AROUND__SMALL])
+          ..classes.addAll([LText.C_TEXT_TITLE__CAPS, LPadding.C_AROUND__SMALL]) // TODO check
           ..text = header;
       element.append(h2);
     }

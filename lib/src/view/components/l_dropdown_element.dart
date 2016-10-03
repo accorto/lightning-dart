@@ -225,7 +225,7 @@ class LDropdownElement
       element.append(new DivElement()
         ..classes.add(LDropdown.C_DROPDOWN__HEADER)
         ..append(new SpanElement()
-          ..classes.add(LText.C_TEXT_HEADING__LABEL)
+          ..classes.add(LText.C_TEXT_TITLE__CAPS) // TODO check
           ..text = headerValue)
       );
     }

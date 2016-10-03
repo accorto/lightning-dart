@@ -59,9 +59,6 @@ class EngineChartedAxisTheme
   final verticalAxisWidth = 75;
 
   @override
-  final horizontalAxisAutoResize = false;
-
-  @override
   final horizontalAxisHeight = 50;
 
   @override

@@ -41,7 +41,7 @@ class AppsHeader extends LComponent {
 
     // Title
     DivElement center = new DivElement()
-      ..classes.addAll([LGrid.C_COL__PADDED_LARGE, LMargin.C_BOTTOM__X_SMALL]);
+      ..classes.addAll([LPadding.C_HORIZONTAL__LARGE, LMargin.C_BOTTOM__X_SMALL]); // TODO check
     element.append(center);
     HeadingElement h1 = new HeadingElement.h1()
       ..id = "a-label"

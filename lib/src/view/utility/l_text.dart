@@ -24,12 +24,11 @@ class LText {
   static const String C_TEXT_HEADING__MEDIUM = "slds-text-heading--medium";
   /// slds-text-heading--small (Any heading): Smaller 16px heading - Used for smaller content areas such as list sections or card titles
   static const String C_TEXT_HEADING__SMALL = "slds-text-heading--small";
-  /// slds-text-heading--label (Any heading): All caps 12px heading - Usually labels small content areas like tabs and page header titles
-  static const String C_TEXT_HEADING__LABEL = "slds-text-heading--label";
-  /// slds-text-heading--label-normal (Any heading): 12px heading that is not all caps - Usually labels small content areas like list sections.
-  static const String C_TEXT_HEADING__LABEL_NORMAL = "slds-text-heading--label-normal";
-
-  /// slds-text-longform (div): Adds default spacing and list styling within a wrapper - Our application framework removes default text styling. This adds in margins to large areas
+  /// slds-text-title (Any heading): 12px heading that is not all caps - Usually labels small content areas like list sections.
+  static const String C_TEXT_TITLE = "slds-text-title";
+  /// slds-text-title--caps (Any heading): All caps 12px heading - Usually labels small content areas like tabs and page header titles.
+  static const String C_TEXT_TITLE__CAPS = "slds-text-title--caps";
+  /// slds-text-longform (div): Adds default spacing and list styling within a wrapper - Our application framework removes default text styling. This adds in margins to large area
   static const String C_TEXT_LONGFORM = "slds-text-longform";
 
   /// slds-text-align--left (Any text): Aligns text left
@@ -39,6 +38,13 @@ class LText {
   /// slds-text-align--right (Any text): Aligns text right
   static const String C_TEXT_ALIGN__RIGHT = "slds-text-align--right";
 
+  /// slds-text-color--default (Any text): Default color of text
+  static const String C_TEXT_COLOR__DEFAULT = "slds-text-color--default";
+  /// slds-text-color--weak (Any text): Weak color of text
+  static const String C_TEXT_COLOR__WEAK = "slds-text-color--weak";
+  /// slds-text-color--error (Any text): Error color of text
+  static const String C_TEXT_COLOR__ERROR = "slds-text-color--error";
+
   /// slds-section: Container for a collapsable sub section through interaction with the section title - These are typically on a form, if content exists to be expanded, applying the .slds-is-open will expand .slds-section__content
   static const String C_SECTION = "slds-section";
   /// slds-section__title: Title of a section, can contain an interactive button icon to expand/collapse sub section(s)
@@ -47,6 +53,7 @@ class LText {
   static const String C_SECTION__TITLE_ACTION = "slds-section__title-action";
   /// slds-section__content: Content of a section that can be expanded/collapse through interaction with the .slds-section__title-action
   static const String C_SECTION__CONTENT = "slds-section__content";
+
   /// slds-section-title (DEPRECATED): Interactive titles with icons that open and close sections - These are typically on a form
   //static const String C_SECTION_TITLE = "slds-section-title";
   /// slds-section-title--divider (DEPRECATED): Titles that also act as a divider with a grey background - These are typically on a form
@@ -55,18 +62,20 @@ class LText {
   /// slds-type-focus (container): Creates a faux link with interactions - This is used when an actual anchor element can not be used. For example — when a heading and button are next to each other and both need the text underline
   static const String C_TYPE_FOCUS = "slds-type-focus";
 
+  /// slds-text-heading--label (Any heading): All caps 12px heading - Usually labels small content areas like tabs and page header titles
+  //static const String C_TEXT_HEADING__LABEL = "slds-text-heading--label";
+  /// slds-text-heading--label-normal (Any heading): 12px heading that is not all caps - Usually labels small content areas like list sections.
+  //static const String C_TEXT_HEADING__LABEL_NORMAL = "slds-text-heading--label-normal";
 
-  /// Icon Text
-  static const String C_ASSISTIVE_TEXT = "slds-assistive-text";
-  /// Truncate Text
-  static const String C_TRUNCATE = "slds-truncate";
 
-  static const String C_TEXT_NOT_SELECTED = "slds-text-not-selected";
-  static const String C_TEXT_SELECTED = "slds-text-selected";
-  static const String C_TEXT_SELECTED_FOCUS = "slds-text-selected-focus";
+
+  /// undocumented
+  static const String U_TEXT_NOT_SELECTED = "slds-text-not-selected";
+  static const String U_TEXT_SELECTED = "slds-text-selected";
+  static const String U_TEXT_SELECTED_FOCUS = "slds-text-selected-focus";
 
   /// Heading Sizes
-  static final List<String> HEADING_SIZES = [C_TEXT_HEADING__LABEL, C_TEXT_HEADING__LARGE, C_TEXT_HEADING__MEDIUM, C_TEXT_HEADING__SMALL];
+  static final List<String> HEADING_SIZES = [C_TEXT_HEADING__LARGE, C_TEXT_HEADING__MEDIUM, C_TEXT_HEADING__SMALL];
 
 
   /// Ext Text Color Error

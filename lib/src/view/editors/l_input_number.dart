@@ -92,7 +92,14 @@ class LInputNumber
 
   /// value as number or NaN
   num get valueAsNumber {
-    return input.valueAsNumber;
+    num nn = input.valueAsNumber;
+    if (nn.isNaN && type != EditorI.TYPE_NUMBER) { // e.g. text
+      try {
+        nn = numberFormat.parse(input.value);
+      } catch (error) {
+      }
+    }
+    return nn;
   }
   /// set value - call also: updateData(..) or onInputChange(..)
   void set valueAsNumber(num newValue) {

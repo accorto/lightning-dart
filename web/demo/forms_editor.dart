@@ -55,7 +55,7 @@ class FormsEditor extends DemoFeature {
 
     LInputNumber number1h = new LInputNumber("n1h")
       ..label = "Html5 Integer"
-      ..placeholder = "Number Placeholder (2-8)"
+      ..placeholder = "Number Placeholder (2..8)"
       ..decimalDigits = 0
       ..html5 = true
       ..min = "2"
@@ -64,7 +64,7 @@ class FormsEditor extends DemoFeature {
 
     LInputNumber number1 = new LInputNumber("n1")
       ..label = "Standard Integer"
-      ..placeholder = "Number Placeholder (2-8)"
+      ..placeholder = "Number Placeholder (2..8)"
       ..html5 = false
       ..decimalDigits = 0
       ..min = "2"
@@ -73,7 +73,7 @@ class FormsEditor extends DemoFeature {
 
     LInputNumber number2h = new LInputNumber("n2h")
       ..label = "Html5 Number(2)"
-      ..placeholder = "Number Placeholder (2-8)"
+      ..placeholder = "Number Placeholder (2..8)"
       ..html5 = true
       ..decimalDigits = 2
       ..min = "2"
@@ -82,7 +82,7 @@ class FormsEditor extends DemoFeature {
 
     LInputNumber number2 = new LInputNumber("n2")
       ..label = "Standard Number(2)"
-      ..placeholder = "Number Placeholder (2-8"
+      ..placeholder = "Number Placeholder (2..8)"
       ..html5 = false
       ..decimalDigits = 2
       ..min = "2"
@@ -113,7 +113,24 @@ class FormsEditor extends DemoFeature {
       ..value = "standard|client";
     form.addEditor(imageInput2, marginClass:marginClass);
 
-    return form;
+    LBox check = new LBox()
+      ..text = "Click for native Number values"
+      ..themeTexture();
+    check.element.onClick.listen((MouseEvent evt){
+      num n1h = number1h.valueAsNumber;
+      num n1 = number1.valueAsNumber;
+      num n2h = number2h.valueAsNumber;
+      num n2 = number2.valueAsNumber;
+      int ii = rangeInput.valueAsInt;
+      check.text = "Numbers: ${n1h} - ${n1} - ${n2h} - ${n2} Range: ${ii}";
+    });
+
+    //
+    CDiv div = new CDiv()
+      ..classes.add(LMargin.C_HORIZONTAL__MEDIUM)
+      ..add(form)
+      ..add(check);
+    return div;
   }
 
   String get source {

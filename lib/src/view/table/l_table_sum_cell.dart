@@ -36,7 +36,7 @@ class LTableSumCell
     LIconUtility icon = new LIconUtility(LIconUtility.INFO,
         size: LIcon.C_ICON__X_SMALL, addlCss: [LMargin.C_RIGHT__X_SMALL]);
     content
-      ..classes.addAll(["cell-sum", LText.C_TRUNCATE])
+      ..classes.addAll(["cell-sum", LTruncate.C_TRUNCATE])
       ..append(icon.element)
       ..appendText(value);
 

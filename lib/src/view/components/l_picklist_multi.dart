@@ -419,7 +419,7 @@ class LPicklistMultiItem {
     ..attributes[Html0.ARIA_SELECTED] = Html0.V_FALSE
     ..tabIndex = -1;
   final SpanElement _span = new SpanElement()
-    ..classes.add(LText.C_TRUNCATE);
+    ..classes.add(LTruncate.C_TRUNCATE);
   final SpanElement _label = new SpanElement();
 
   /// The item option

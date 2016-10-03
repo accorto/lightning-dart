@@ -32,7 +32,7 @@ class CardPanelColumn
     element.id = LComponent.createId(idPrefix, value);
     element.setAttribute(Html0.DATA_VALUE, value);
     Element header = new HeadingElement.h2()
-      ..classes.addAll([LText.C_TEXT_HEADING__MEDIUM, LText.C_TRUNCATE])
+      ..classes.addAll([LText.C_TEXT_HEADING__MEDIUM, LTruncate.C_TRUNCATE])
       ..text = label;
     element.append(header);
     //

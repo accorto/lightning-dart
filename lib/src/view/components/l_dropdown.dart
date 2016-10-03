@@ -231,14 +231,14 @@ class LDropdown
       ..classes.add(LForm.C_INPUT)
       ..id = LComponent.createId(idPrefix, "-search");
     LabelElement labelEle = new LabelElement()
-      ..classes.add(LText.C_ASSISTIVE_TEXT)
+      ..classes.add(LVisibility.C_ASSISTIVE_TEXT)
       ..htmlFor = input.id
       ..text = placeholder;
     searchDiv.append(labelEle);
     searchDiv.append(input);
     //
     _dropdownHeading = new SpanElement()
-      ..classes.add(LText.C_TEXT_HEADING__LABEL)
+      ..classes.add(LText.C_TEXT_TITLE__CAPS) // TODO Check
       ..text = placeholder;
     header.append(_dropdownHeading);
   } // search
@@ -265,7 +265,7 @@ class LDropdown
       DivElement dropdownHeading = new DivElement()
         ..classes.add(C_DROPDOWN__HEADER);
       _dropdownHeading = new SpanElement()
-        ..classes.add(LText.C_TEXT_HEADING__LABEL);
+        ..classes.add(LText.C_TEXT_TITLE__CAPS); // TODO Check
       dropdownHeading.append(_dropdownHeading);
       dropdown.element.insertBefore(dropdownHeading, dropdown._dropdownList);
     }

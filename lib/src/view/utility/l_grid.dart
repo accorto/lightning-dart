@@ -42,14 +42,15 @@ class LGrid extends LComponent {
   static const String C_GRID__PULL_PADDED_MEDIUM = "slds-grid--pull-padded-medium";
   /// slds-grid--pull-padded-large (slds-grid): Normalizes the 1.5rem of padding when nesting a grid in a .slds-col--padded-large
   static const String C_GRID__PULL_PADDED_LARGE = "slds-grid--pull-padded-large";
+
   /// slds-col (Grid items of .slds-grid): Initializes a grid column - This class is not required since all child nodes of a flex grid become columns. It can help with clarity.
   static const String C_COL = "slds-col";
   /// slds-col--padded (Grid items of .slds-grid): Initializes a grid column with 0.75rem of horizontal padding - This is used instead of .slds-col — not in addition to it
-  static const String C_COL__PADDED = "slds-col--padded";
+  //static const String C_COL__PADDED = "slds-col--padded";
   /// slds-col--padded-medium (Grid items of .slds-grid): Initializes a grid column with 1rem of horizontal padding - This is used instead of .slds-col — not in addition to it
-  static const String C_COL__PADDED_MEDIUM = "slds-col--padded-medium";
+  //static const String C_COL__PADDED_MEDIUM = "slds-col--padded-medium";
   /// slds-col--padded-large (Grid items of .slds-grid): Initializes a grid column with 1.5rem of horizontal padding - This is used instead of .slds-col — not in addition to it
-  static const String C_COL__PADDED_LARGE = "slds-col--padded-large";
+  //static const String C_COL__PADDED_LARGE = "slds-col--padded-large";
   /// slds-col--bump-left (Grid item(s) of .slds-grid): Bumps grid item(s) away from the other grid items to sit to the left, taking up the remaining white-space of the grid container
   static const String C_COL__BUMP_LEFT = "slds-col--bump-left";
   /// slds-col--bump-right (Grid item(s) of .slds-grid): Bumps grid item(s) away from the other grid items to sit to the right, taking up the remaining white-space of the grid container
@@ -58,6 +59,7 @@ class LGrid extends LComponent {
   static const String C_COL__BUMP_TOP = "slds-col--bump-top";
   /// slds-col--bump-bottom (Grid item(s) of .slds-grid): Bumps grid item(s) away from the other grid items to sit to the bottom, taking up the remaining white-space of the grid container
   static const String C_COL__BUMP_BOTTOM = "slds-col--bump-bottom";
+
   /// slds-wrap (slds-grid): Allows columns to wrap when they exceed 100% of their parent’s width
   static const String C_WRAP = "slds-wrap";
   /// slds-nowrap (slds-grid): Keeps columns on one line. Allows columns to stretch and fill 100% of the parent’s width and height.
@@ -68,6 +70,7 @@ class LGrid extends LComponent {
   static const String C_MEDIUM_NOWRAP = "slds-medium-nowrap";
   /// slds-large-nowrap (slds-grid): Allows columns to stretch and fill 100% of the parent’s width and height when viewport width is wider than 1024px.
   static const String C_LARGE_NOWRAP = "slds-large-nowrap";
+
   /// slds-col--rule-right (slds-col): Adds border to right side of column
   static const String C_COL__RULE_RIGHT = "slds-col--rule-right";
   /// slds-col--rule-left (slds-col): Adds border to left side of column
@@ -76,6 +79,7 @@ class LGrid extends LComponent {
   static const String C_COL__RULE_TOP = "slds-col--rule-top";
   /// slds-col--rule-bottom (slds-col): Adds border to bottom of column
   static const String C_COL__RULE_BOTTOM = "slds-col--rule-bottom";
+
   /// slds-has-flexi-truncate (slds-col): Needed when truncation is nested in a flexible container in a grid - This class is placed on a parent column that contains a flexbox element containing .slds-truncate. For example — for a media object that is nested in a grid column and contains truncation — the grid column would require this class.
   static const String C_HAS_FLEXI_TRUNCATE = "slds-has-flexi-truncate";
   /// slds-no-flex (slds-col): Removes flexbox from grid column - Using this class makes the column the same width as the children within and allows the other column to take up all the extra space. The outcome is very much like using .slds-grid--align-spread on a .slds-grid element with two columns.

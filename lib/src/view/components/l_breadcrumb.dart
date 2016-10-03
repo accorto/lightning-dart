@@ -22,7 +22,7 @@ class LBreadcrumb extends LComponent {
   /// Breadcrumb Nav element
   final Element element = new Element.nav()
     ..attributes[Html0.ROLE] = Html0.ROLE_NAVIGATION ;
-
+  /// Ordered List Parent
   final OListElement _list = new OListElement()
     ..classes.addAll([C_BREADCRUMB, LList.C_LIST__HORIZONTAL]);
 
@@ -84,7 +84,7 @@ class LBreadcrumb extends LComponent {
     if (li == null) {
       while (_list.children.length <= level) {
         li = new LIElement()
-          ..classes.addAll([C_BREADCRUMB__ITEM, LText.C_TEXT_HEADING__LABEL]);
+          ..classes.addAll([C_BREADCRUMB__ITEM, LText.C_TEXT_TITLE__CAPS]);
         _list.append(li);
       }
     }

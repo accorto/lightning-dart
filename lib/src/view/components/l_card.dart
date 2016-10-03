@@ -69,7 +69,7 @@ class LCard extends LComponent {
     }
     // Label
     HeadingElement h3 = new HeadingElement.h3()
-      ..classes.addAll([LText.C_TEXT_HEADING__SMALL, LText.C_TRUNCATE])
+      ..classes.addAll([LText.C_TEXT_HEADING__SMALL, LTruncate.C_TRUNCATE])
       ..text = label;
     media.append(h3);
     // Button

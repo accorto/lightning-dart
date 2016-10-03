@@ -165,6 +165,7 @@ class DataUtil {
     } catch (ex) {
       if (logWarning)
         _log.warning("asDateTime ${valueDisplay}", ex);
+      return null;
     }
   }
   /// DateTime - 2014-11-16T15:25:33 or "" (local)
@@ -181,6 +182,7 @@ class DataUtil {
       return dt.millisecondsSinceEpoch.toString();
     } catch (ex) {
       _log.warning("asDateTimeMs ${valueDisplay}", ex);
+      return null;
     }
   } // asDateTimeMs
 

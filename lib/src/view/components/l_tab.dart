@@ -250,7 +250,7 @@ class LTabContent
 
   /// internal Tab Header
   final LIElement _li = new LIElement()
-    ..classes.add(LText.C_TEXT_HEADING__LABEL)
+    ..classes.add(LText.C_TEXT_TITLE__CAPS) // TODO check
     ..attributes[Html0.ROLE] = Html0.ROLE_PRESENTATION;
 
   /// internal Tab Header Link

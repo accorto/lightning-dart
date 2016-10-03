@@ -45,7 +45,7 @@ class LPicklist
     ..classes.addAll([LButton.C_BUTTON, LButton.C_BUTTON__NEUTRAL, C_PICKLIST__LABEL]);
   /// Button Label
   final SpanElement _plButtonLabel = new SpanElement()
-    ..classes.add(LText.C_TRUNCATE);
+    ..classes.add(LTruncate.C_TRUNCATE);
   /// The Dropdown
   LDropdownElement _dropdown;
 

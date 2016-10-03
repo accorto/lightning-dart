@@ -46,7 +46,7 @@ class LTableHeaderCell
 
     if (tableSortClicked == null) {
       content
-          ..classes.add(LText.C_TRUNCATE)
+          ..classes.add(LTruncate.C_TRUNCATE)
           ..text = label;
     } else {
       _addSort();
@@ -106,10 +106,10 @@ class LTableHeaderCell
         ..classes.addAll([LTable.C_TH__ACTION, LInteraction.C_TEXT_LINK__RESET])
         ..id = LComponent.createId(idPrefix, "sort");
       _sort.append(new SpanElement()
-        ..classes.add(LText.C_ASSISTIVE_TEXT)
+        ..classes.add(LVisibility.C_ASSISTIVE_TEXT)
         ..text = label);
       _sort.append(new SpanElement()
-        ..classes.add(LText.C_TRUNCATE)
+        ..classes.add(LTruncate.C_TRUNCATE)
         ..title = (title == null || title.isEmpty) ? label : title
         ..text = label);
       LIcon icon = new LIconUtility(LIconUtility.ARROWDOWN, size: LIcon.C_ICON__X_SMALL,
@@ -150,12 +150,12 @@ class LTableHeaderCell
       _resizeDiv = new DivElement()
           ..classes.add(LTable.C_RESIZABLE);
       _resizeDiv.append(new LabelElement()
-        ..classes.add(LText.C_ASSISTIVE_TEXT)
+        ..classes.add(LVisibility.C_ASSISTIVE_TEXT)
         ..htmlFor = resizeId
         ..text = "click and drag to resize"
       );
       _resizeDiv.append(new InputElement(type:EditorI.TYPE_RANGE)
-        ..classes.addAll([LTable.C_RESIZABLE__INPUT, LText.C_ASSISTIVE_TEXT])
+        ..classes.addAll([LTable.C_RESIZABLE__INPUT, LVisibility.C_ASSISTIVE_TEXT])
         ..id = resizeId
         ..min = "20"
         ..max = "1000"

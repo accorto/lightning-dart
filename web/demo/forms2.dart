@@ -74,6 +74,13 @@ class Forms2 extends DemoFeature {
       ..columnSize = 255;
     uiu.addColumn(col);
 
+    // Column Description
+    col = new DColumn()
+      ..name = "Integer"
+      ..label = "Integer Column"
+      ..dataType = DataType.INT;
+    uiu.addColumn(col);
+
     // Column Pick
     col = new DColumn()
       ..name = "PickCol"

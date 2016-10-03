@@ -31,15 +31,26 @@ class LFloat {
 } // LFloat
 
 
+// Hyphenation
+class LHyphenation {
+
+  /// slds-hyphenate (any element): Creates hyphenated text - Hyphenation will occur at the parent width if a width is not specified
+  static const String C_HYPHENATE = "slds-hyphenate";
+
+}
+
+
 /// Interactions
 class LInteraction {
 
-  /// .slds-has-blur-focus (a)
+  /// slds-has-blur-focus (any element): Blur focus is an accessibility class that will add a blurred border to an element when it is focused.
   static const String C_HAS_BLUR_FOCUS = "slds-has-blur-focus";
   /// slds-type-focus (container): Creates a faux link with interactions - This is used when an actual anchor element can not be used. For example — when a heading and button are next to each other and both need the text underline
   static const String C_TYPE_FOCUS = "slds-type-focus";
   /// slds-text-link--reset (a or .slds-button): Makes links and buttons appear as regular text
   static const String C_TEXT_LINK__RESET = "slds-text-link--reset";
+  /// slds-text-link (any element): Makes text inside of .slds-text-link--reset to appear as a link.
+  static const String C_TEXT_LINK = "slds-text-link";
 
 }
 
@@ -101,6 +112,13 @@ class LSizing {
   static const String C_MEDIUM_SIZE__1_OF_ = "slds-medium-size--1-of-";
   /// 64rem / 1024px
   static const String C_LARGE_SIZE__1_OF_ = "slds-large-size--1-of-";
+
+  /// 30rem / 480px
+  static const String C_MAX_SMALL_SIZE__1_OF_ = "slds-max-small-size--1-of-";
+  /// 48rem / 768px
+  static const String C_MAX_MEDIUM_SIZE__1_OF_ = "slds-max-medium-size--1-of-";
+  /// 64rem / 1024px
+  static const String C_MAX_LARGE_SIZE__1_OF_ = "slds-max-large-size--1-of-";
 
 
   static String sizeXofY(int x, int y) {

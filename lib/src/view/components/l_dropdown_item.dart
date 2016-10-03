@@ -37,7 +37,7 @@ class LDropdownItem
       ..tabIndex = -1
       ..attributes[Html0.ROLE] = Html0.ROLE_MENUITEM + " " + Html0.ROLE_OPTION;
     a
-      ..classes.add(LText.C_TRUNCATE)
+      ..classes.add(LTruncate.C_TRUNCATE)
       ..tabIndex = -1;
   } // LDropdownItem
 

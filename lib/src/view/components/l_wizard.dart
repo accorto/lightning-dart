@@ -148,7 +148,7 @@ class LWizardItem
 
 
   final SpanElement _label = new SpanElement()
-    ..classes.addAll([LProcess.C_WIZARD__LABEL, LText.C_TEXT_HEADING__LABEL, LText.C_TRUNCATE]);
+    ..classes.addAll([LProcess.C_WIZARD__LABEL, LText.C_TEXT_TITLE__CAPS, LTruncate.C_TRUNCATE]); // TODO check
 
   /// Wizard Item
   LWizardItem(DOption option, ProcessItemChange processItemChange, {SelectOption so})

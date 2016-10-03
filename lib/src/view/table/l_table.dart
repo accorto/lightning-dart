@@ -523,7 +523,7 @@ class LTable
     if (row == null) {
       row = new LTableHeaderRow(this, createHeadRow(),
           headRowIndex,
-          LText.C_TEXT_HEADING__LABEL,
+          LText.C_TEXT_TITLE__CAPS, // TODO check
           enableSort ? onTableSortClicked : null,
           tableActions);
       if (rowSelect && theadRows.isEmpty) {

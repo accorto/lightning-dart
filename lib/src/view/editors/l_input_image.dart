@@ -84,7 +84,7 @@ class LInputImage extends LInput {
       }
       // fallback
       return new DivElement()
-        ..classes.add(LText.C_TRUNCATE)
+        ..classes.add(LTruncate.C_TRUNCATE)
         ..text = theValue;
     }
     return new DivElement();

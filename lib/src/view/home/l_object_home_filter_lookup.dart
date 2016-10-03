@@ -24,7 +24,7 @@ class LObjectHomeFilterLookup {
 
   /// label
   HeadingElement _h1 = new HeadingElement.h1()
-    ..classes.addAll([LPageHeader.C_PAGE_HEADER__TITLE, LText.C_TRUNCATE]);
+    ..classes.addAll([LPageHeader.C_PAGE_HEADER__TITLE, LTruncate.C_TRUNCATE]);
   /// Drop down Button
   LButton _button = new LButton(new ButtonElement(), "more", null,
       icon: new LIconUtility(LIconUtility.DOWN),
@@ -41,7 +41,7 @@ class LObjectHomeFilterLookup {
     ..classes.add(LForm.C_INPUT)
     ..placeholder = lObjectHomeLookupFindInList();
   SpanElement _dropdownHeaderLabel = new SpanElement()
-    ..classes.add(LText.C_TEXT_HEADING__LABEL)
+    ..classes.add(LText.C_TEXT_TITLE__CAPS) // TODO check
     ..text = lObjectHomeLookupList();
 
   LDropdownElement _dropdownElement;

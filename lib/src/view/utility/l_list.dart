@@ -15,8 +15,13 @@ class LList {
   static const String C_LIST__DOTTED = "slds-list--dotted";
   /// slds-list--ordered (ol): Creates an ordered list with decimals - Our application framework removes default list styling. This recreates it
   static const String C_LIST__ORDERED = "slds-list--ordered";
-  /// slds-list--horizontal (Any element): Causes list to display horizontally - This lists stacks in a mobile context
+  /// slds-list--vertical (Any element): Marks a vertical list
+  static const String C_LIST__VERTICAL = "slds-list--vertical";
+  /// slds-list--horizontal (Any element): Causes items of a list to display horizontally - This lists stacks in a mobile context. The output differs on the name-value variant, name-value display horizontally but stacks after each name-value
   static const String C_LIST__HORIZONTAL = "slds-list--horizontal";
+  /// slds-list--inline (Any element): Causes items of a list to display horizontally
+  static const String C_LIST__INLINE = "slds-list--inline";
+
   /// slds-item (Any element): Marks a list item - All lists use this class. Different CSS applies depending on the parent class.
   static const String C_ITEM = "slds-item";
 
@@ -33,7 +38,12 @@ class LList {
   /// slds-dl--horizontal__detail (dd): Marks a description
   static const String C_DL__HORIZONTAL__DETAIL = "slds-dl--horizontal__detail";
 
+  /// slds-item--label (div): Label of the name-value pair variant. Layout is modified by its parent class.
+  static const String C_ITEM__LABEL = "slds-item--label";
+  /// slds-item--detail (div): Detail of the name-value pair variant. Layout is modified by its parent class.
+  static const String C_ITEM__DETAIL = "slds-item--detail";
   /// slds-has-divider--top (Any element): Adds 1px border divider above an HTML element
+  ///
   static const String C_HAS_DIVIDER__TOP = "slds-has-divider--top";
   /// slds-has-divider--top-space (Any element): Adds 1px border divider above an HTML element with a 0.5rem separation between the item above it
   static const String C_HAS_DIVIDER__TOP_SPACE = "slds-has-divider--top-space";
@@ -68,8 +78,10 @@ class LList {
   /// slds-has-list-interactions (slds-item): Adds hover and selected styles to list items - the selected class .slds-is-selected needs to be applied via JavaScript
   static const String C_HAS_LIST_INTERACTIONS = "slds-has-list-interactions";
 
-  static const String C_HAS_DIVIDERS__AROUND = "slds-has-dividers--around";
-  static const String C_HAS_DIVIDERS__AROUND_SPACE = "slds-has-dividers--around-space";
+
+  /// undocumented
+  static const String U_HAS_DIVIDERS__AROUND = "slds-has-dividers--around";
+  static const String U_HAS_DIVIDERS__AROUND_SPACE = "slds-has-dividers--around-space";
 
   /// UList Element
   Element element = new UListElement();
@@ -92,7 +104,7 @@ class LList {
   }
 
   void setDividersAround({bool space:true}) {
-    element.classes.add(space ? C_HAS_DIVIDERS__AROUND_SPACE: C_HAS_DIVIDERS__AROUND);
+    element.classes.add(space ? U_HAS_DIVIDERS__AROUND_SPACE: U_HAS_DIVIDERS__AROUND);
   }
   void setBlockLinks({bool space:true}) {
     element.classes.add(space ? C_HAS_BLOCK_LINKS__SPACE: C_HAS_BLOCK_LINKS);

@@ -194,7 +194,7 @@ class LButton
     if (_assistiveText != null) {
       if (_assistive == null) {
         _assistive = new SpanElement()
-          ..classes.add(LText.C_ASSISTIVE_TEXT);
+          ..classes.add(LVisibility.C_ASSISTIVE_TEXT);
         element.append(_assistive);
       }
       _assistive.text = _assistiveText;
@@ -622,11 +622,11 @@ class LButtonStateful
         void onButtonClick(MouseEvent evt)})
     : this (name,
       new LButtonStatefulState(new LIconUtility(LIconUtility.ADD),
-          notSelected, LText.C_TEXT_NOT_SELECTED),
+          notSelected, LText.U_TEXT_NOT_SELECTED), // TODO check
       new LButtonStatefulState(new LIconUtility(LIconUtility.CHECK),
-          selected, LText.C_TEXT_SELECTED),
+          selected, LText.U_TEXT_SELECTED),
       new LButtonStatefulState(new LIconUtility(LIconUtility.CLOSE),
-          selectedFocus, LText.C_TEXT_SELECTED_FOCUS),
+          selectedFocus, LText.U_TEXT_SELECTED_FOCUS),
       idPrefix:idPrefix, onButtonClick:onButtonClick);
 
   /// Selected Toggle Button
@@ -637,11 +637,11 @@ class LButtonStateful
       String idPrefix, void onButtonClick(MouseEvent evt)})
     : this (name,
       new LButtonStatefulState(new LIconUtility(LIconUtility.CLEAR),
-          notSelected, LText.C_TEXT_NOT_SELECTED),
+          notSelected, LText.U_TEXT_NOT_SELECTED),
       new LButtonStatefulState(new LIconUtility(LIconUtility.SUCCESS),
-          selected, LText.C_TEXT_SELECTED),
+          selected, LText.U_TEXT_SELECTED),
       new LButtonStatefulState(new LIconUtility(LIconUtility.CLOSE),
-          selectedFocus, LText.C_TEXT_SELECTED_FOCUS),
+          selectedFocus, LText.U_TEXT_SELECTED_FOCUS),
       idPrefix:idPrefix, onButtonClick:onButtonClick);
 
   /// Edit/View Toggle Button
@@ -652,11 +652,11 @@ class LButtonStateful
       String idPrefix, void onButtonClick(MouseEvent evt)})
     : this (name,
       new LButtonStatefulState(new LIconUtility(LIconUtility.EDIT),
-          notSelected, LText.C_TEXT_NOT_SELECTED),
+          notSelected, LText.U_TEXT_NOT_SELECTED),
       new LButtonStatefulState(new LIconUtility(LIconUtility.LOCK),
-          selected, LText.C_TEXT_SELECTED),
+          selected, LText.U_TEXT_SELECTED),
       new LButtonStatefulState(new LIconUtility(LIconUtility.UNLOCK),
-          selectedFocus, LText.C_TEXT_SELECTED_FOCUS),
+          selectedFocus, LText.U_TEXT_SELECTED_FOCUS),
       idPrefix:idPrefix, onButtonClick:onButtonClick);
 
   /// add State

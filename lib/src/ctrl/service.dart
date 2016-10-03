@@ -217,6 +217,7 @@ class Service {
           onProgress: trackProgress ? onProgress : null);
     } catch (error, stackTrace) {
       _log.severe("sendRequest ${url}", error, stackTrace);
+      return null;
     }
   } // sendRequest
 

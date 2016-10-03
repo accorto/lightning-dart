@@ -214,7 +214,7 @@ class LPathItem
   SpanElement _stage = new SpanElement()
     ..classes.add(LProcess.C_TABS__PATH__STAGE);
   SpanElement _stageText = new SpanElement()
-    ..classes.add(LText.C_ASSISTIVE_TEXT);
+    ..classes.add(LVisibility.C_ASSISTIVE_TEXT);
   SpanElement _title = new SpanElement()
     ..classes.add(LProcess.C_TABS__PATH__TITLE);
 

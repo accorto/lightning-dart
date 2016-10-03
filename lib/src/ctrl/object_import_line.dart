@@ -87,7 +87,7 @@ class ObjectImportLine
       }
       // cell
       DivElement content = new DivElement()
-        ..classes.add(LText.C_TRUNCATE)
+        ..classes.add(LTruncate.C_TRUNCATE)
         ..text = cellText;
       if (cellText == null || cellText.isEmpty) {
         content.setInnerHtml("&nbsp;", treeSanitizer: NodeTreeSanitizer.trusted);

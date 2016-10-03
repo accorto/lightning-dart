@@ -195,7 +195,7 @@ class ListItem
     // Icon left
     if (_leftIcon != null) {
       p = new ParagraphElement()
-        ..classes.add(LText.C_TRUNCATE);
+        ..classes.add(LTruncate.C_TRUNCATE);
       a.append(p);
       p.append(_leftIcon.element);
     }

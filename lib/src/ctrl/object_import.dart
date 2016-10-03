@@ -56,7 +56,7 @@ class ObjectImport {
   final List<DColumn> _headerColumnList = new List<DColumn>();
 
   OListElement _todo = new OListElement()
-    ..classes.add(LGrid.C_COL__PADDED)
+    ..classes.add(LPadding.C_HORIZONTAL__SMALL) // TODO check
     ..classes.add(LList.C_LIST__ORDERED);
 
   LInput _dateFormat;
@@ -81,7 +81,7 @@ class ObjectImport {
       ..help = objectImportDateFormatLabel()
       ..editorChange = onDateFormatEditorChange;
     DivElement dateFormatDiv = new DivElement()
-      ..classes.addAll([LGrid.C_COL__PADDED])
+      ..classes.addAll([LPadding.C_HORIZONTAL__SMALL]) // TODO check
       ..append(_dateFormat.element);
     //
     DivElement headerDiv = new DivElement()

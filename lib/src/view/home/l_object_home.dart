@@ -25,7 +25,7 @@ class LObjectHome
 
   /// Top row left - Record Type
   final ParagraphElement _headerLeftRecordType = new ParagraphElement()
-    ..classes.add(LText.C_TEXT_HEADING__LABEL);
+    ..classes.add(LText.C_TEXT_TITLE__CAPS); // TODO check
 
   /// Home Filter
   LObjectHomeFilter homeFilter;

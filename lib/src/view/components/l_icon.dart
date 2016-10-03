@@ -342,7 +342,7 @@ class LIconSpan extends LComponent {
     //
     if (assistiveText != null && assistiveText.isNotEmpty) {
       SpanElement span = new SpanElement()
-        ..classes.add(LText.C_ASSISTIVE_TEXT)
+        ..classes.add(LVisibility.C_ASSISTIVE_TEXT)
         ..text = assistiveText;
       element.append(span);
     }

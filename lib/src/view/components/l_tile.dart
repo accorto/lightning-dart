@@ -28,7 +28,7 @@ abstract class LTile
 
   /// Tile Title
   final ParagraphElement _title = new ParagraphElement()
-    ..classes.addAll([LText.C_TRUNCATE]);
+    ..classes.addAll([LTruncate.C_TRUNCATE]);
   /// Tile Title Link
   final AnchorElement titleLink = new AnchorElement(href: "#");
 
@@ -48,7 +48,7 @@ abstract class LTile
       return null;
     }
     ParagraphElement p = new ParagraphElement()
-      ..classes.add(LText.C_TRUNCATE)
+      ..classes.add(LTruncate.C_TRUNCATE)
       ..text = text;
     detail.append(p);
     return p;
@@ -68,7 +68,7 @@ abstract class LTile
     if (addColonsToLabel)
       labelText += ":";
     ParagraphElement dte = new ParagraphElement()
-      ..classes.add(LText.C_TRUNCATE)
+      ..classes.add(LTruncate.C_TRUNCATE)
       ..text = labelText;
     Element dt = new Element.tag("dt")
       ..classes.add(LList.C_DL__HORIZONTAL__LABEL)
@@ -76,7 +76,7 @@ abstract class LTile
     _dl.append((dt));
     //
     ParagraphElement dde = new ParagraphElement()
-      ..classes.add(LText.C_TRUNCATE);
+      ..classes.add(LTruncate.C_TRUNCATE);
     if (value != null)
       dde.text = value;
     Element dd = new Element.tag("dd")
@@ -102,7 +102,7 @@ abstract class LTile
       return null;
     }
     LIElement li = new LIElement()
-      ..classes.addAll([LText.C_TRUNCATE, LList.C_ITEM])
+      ..classes.addAll([LTruncate.C_TRUNCATE, LList.C_ITEM])
       ..text = text;
     detailList.append(li);
     return li;

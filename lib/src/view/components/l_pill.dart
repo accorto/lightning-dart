@@ -36,7 +36,7 @@ class LPill extends LComponent {
   /// Remove button
   LButton _remove;
   SpanElement _assistive = new SpanElement()
-    ..classes.add(LText.C_ASSISTIVE_TEXT);
+    ..classes.add(LVisibility.C_ASSISTIVE_TEXT);
 
   /**
    * Pill
