@@ -80,7 +80,7 @@ class EngineChartedContainer {
 
       String vh = "";
       if (displayHorizontal != null)
-        displayHorizontal ? "-h" : "-v";
+        vh = displayHorizontal ? "-h" : "-v";
       _chartHost = new DivElement()
         ..classes.add("chart-host${vh}")
         ..dir = "ltr";

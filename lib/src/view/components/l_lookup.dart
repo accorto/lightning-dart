@@ -37,10 +37,12 @@ class LLookup
   /// slds-lookup__search-input (input): Styles for a lookup's form input
   static const String C_LOOKUP__SEARCH_INPUT = "slds-lookup__search-input";
 
-
+  /// slds-has-focus (slds-lookup__item): Lookup options aren't actionable so this class provides focus for keyboard interactions
+  static const String C_HAS_FOCUS = "slds-has-focus";
 
   /// selection
   static const String C_HAS_SELECTION = "slds-has-selection";
+
 
   static final Logger _log = new Logger("LLookup");
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env dart
 
 /*
- * Copyright (c) 2015 Accorto, Inc. All Rights Reserved
+ * Copyright (c) 2016 Accorto, Inc. All Rights Reserved
  * License: GPLv3   http://www.gnu.org/licenses/gpl-3.0.txt
  * License options+support:  https://www.lightningdart.com
  */
@@ -71,6 +71,8 @@ class TranslateArb {
         }
       }
     },
+    plural:
+    - ignored: {count,plural, =0{no records}=1{{count} record}other{{count} records}}
     */
     List<Future<bool>> processes = new List<Future<bool>>();
     map.forEach((String key, value){

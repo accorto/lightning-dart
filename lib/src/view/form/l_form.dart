@@ -65,6 +65,7 @@ class LForm
   static const String C_TEXTAREA = "slds-textarea";
   /// slds-select (select): Initializes select
   static const String C_SELECT = "slds-select";
+
   /// slds-checkbox (label): Initializes checkbox - Label wraps the faux checkbox and text, <input> requires [type=checkbox]
   static const String C_CHECKBOX = "slds-checkbox";
   /// slds-checkbox--faux (span): Creates a custom styled checkbox - Apply to <span> inside .slds-checkbox
@@ -74,6 +75,7 @@ class LForm
   static const String C_CHECKBOX__BUTTON_GROUP = "slds-checkbox--button-group";
   /// slds-checkbox--button (label class="slds-button"): Customizes your checkbox to look like a button in a button group
   static const String C_CHECKBOX__BUTTON = "slds-checkbox--button";
+
   /// slds-radio (label): Initializes radio button - Label wraps the faux radio and text, <input> requires [type=radio]
   static const String C_RADIO = "slds-radio";
   /// slds-radio--faux (span): Creates a custom styled radio button - Apply to <span> inside .slds-radio

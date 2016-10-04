@@ -5,6 +5,11 @@ Intermediate Patches, Functionality improvements via +x prefix.
 
 ## next
 
+-
+
+## 2.1.3 (2016-10-03)
+
+- SLDS 2.1.3
 - Google Analysis option
 
 

@@ -347,7 +347,12 @@ class TableCtrl
 
 
   /// not correctly translated
-  static String tableCtrlRecords(int count) => Intl.plural(count, zero: "no records", one: "${count} record", other: "${count} records", args:["count"], name: "tableCtrlRecords");
+  static String tableCtrlRecords(int count) => Intl.plural(count,
+      zero: "no records",
+      one: "${count} record",
+      other: "${count} records",
+      args:["count"],
+      name: "tableCtrlRecords");
 
   static String tableCtrlNewRecord() => Intl.message("new", name: "tableCtrlNewRecord");
 

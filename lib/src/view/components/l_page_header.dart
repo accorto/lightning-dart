@@ -18,7 +18,7 @@ class LPageHeader
   /// slds-page-header__title (p): Page title (header text).
   static const String C_PAGE_HEADER__TITLE = "slds-page-header__title";
   /// slds-page-header__info (p): For the small supporting info text after the heading
-  static const String C_PAGE_HEADER__INFO = "slds-page-header__info";
+  //static const String C_PAGE_HEADER__INFO = "slds-page-header__info";
   /// slds-page-header__detail-row (div): Creates margins around the detail section of record home - Only the record home page header contains this detail area
   static const String C_PAGE_HEADER__DETAIL_ROW = "slds-page-header__detail-row";
 
@@ -55,7 +55,7 @@ class LPageHeaderBase
       ..title = title
       ..text = title;
     ParagraphElement _info = new ParagraphElement()
-      ..classes.addAll([LPageHeader.C_PAGE_HEADER__INFO, LText.C_TEXT_BODY__SMALL])
+      ..classes.addAll([LText.C_TEXT_BODY__SMALL])
       ..text = info;
     _media.body
       ..append(_title)

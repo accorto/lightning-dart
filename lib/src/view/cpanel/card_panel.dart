@@ -24,7 +24,7 @@ class CardPanel
   final Element element = new Element.section()
     ..classes.add(C_CPANEL);
   final Element _header = new Element.header()
-    ..classes.add(LText.C_TEXT_ALIGN__RIGHT);
+    ..classes.addAll([LText.C_TEXT_ALIGN__RIGHT, LMargin.C_BOTTOM__SMALL]);
   /// Column Selector
   LPicklist _groupPicklist;
   /// Show All Columns

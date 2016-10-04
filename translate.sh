@@ -21,7 +21,7 @@ DIR=${TARGET}/tool/translation
 
 ## (1a) -- create cmd file
 # intl/bin/extract_to_arb
-echo "pub run intl:extract_to_arb --output-dir=$DIR lib/lightning_dart " > xx
+echo "pub run intl_translation:extract_to_arb --output-dir=$DIR lib/lightning_dart " > xx
 # local lib
 find lib -type f -name *.dart -exec echo "{}" >> xx  \;
 tr '\n' ' ' < xx > translate_to_arb.sh
@@ -31,7 +31,7 @@ rm xx
 # https://github.com/dart-lang/intl/blob/master/bin/extract_to_arb.dart
 sh translate_to_arb.sh
 echo "(1) ---- arb generated"
-ls -lsa tool/translation/*.arb
+ls -lh tool/translation/*.arb
 
 
 ## (2) -- translate arb files
@@ -41,12 +41,12 @@ pub run lightning:trl_arb $DIR fr
 pub run lightning:trl_arb $DIR es
 
 echo "(2) ---- arb translated"
-ls -lsa tool/translation
+ls -lh tool/translation
 
 
 ## (3a) -- create cmd file
 #echo "pub run intl:generate_from_arb --output-dir=lib/intl " > yy
-echo "pub run intl:generate_from_arb --output-dir=lib/intl --generated-file-prefix=ldart_ " > yy
+echo "pub run intl_translation:generate_from_arb --output-dir=lib/intl --generated-file-prefix=ldart_ " > yy
 find lib -type f -name *.dart -exec echo "{}" >> yy  \;
 # translated arb file names can only have _locale (no other _)
 # echo " tool/translation/messages_de.arb tool/translation/messages_fr.arb" >> yy
@@ -58,7 +58,7 @@ rm yy
 # https://github.com/dart-lang/intl/blob/master/bin/generate_from_arb.dart
 sh translate_from_arb.sh
 echo "(3) ---- intl generated"
-ls lib/intl
+ls -lh lib/intl
 
 # base-messages_all.dart 			-> library messages_all
 # base-messages_de.dart 			-> library messages_de;

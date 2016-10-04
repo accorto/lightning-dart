@@ -14,6 +14,7 @@ class LDropdown
 
   /// slds-dropdown (div): Initializes dropdown - Applies positioning and container styles, by default, dropdown appears below and center of target
   static const String C_DROPDOWN = "slds-dropdown";
+  // TODO dropdown-trigger deprecated
   /// slds-dropdown-trigger (div): Enables dropdown to show on hover - The target HTML element and dropdown need to be wrapped in this class
   static const String C_DROPDOWN_TRIGGER = "slds-dropdown-trigger";
   /// slds-dropdown-trigger--click (any element): Modifier that enables dropdown to show on click - Forces display:none on dropdown, applying .slds-is-open to .slds-dropdown-trigger will show the dropdown

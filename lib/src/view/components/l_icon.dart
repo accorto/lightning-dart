@@ -52,6 +52,7 @@ class LIcon {
   static const String C_ICON__SMALL = "slds-icon--small";
   /// slds-icon--large (slds-icon): Creates a 3rem×3rem icon
   static const String C_ICON__LARGE = "slds-icon--large";
+
   /// slds-icon_container (outer span): Creates the rounded square background - Used when an icon with a background color is accompanied by .slds-assistive-text and also receives a background-color class
   static const String C_ICON_CONTAINER = "slds-icon_container";
   /// slds-icon_container--circle (slds-icon_container): Creates a circular icon shape

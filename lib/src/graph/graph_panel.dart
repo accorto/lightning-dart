@@ -91,6 +91,9 @@ class GraphPanel {
     element.append(form.element);
     _enginePanel = new GraphEnginePanel(element.id, table.name, _groupByColumnNames);
     element.append(_enginePanel.element);
+
+    // show initial view
+    onFormRecordChange(form.record, null, 0);
   } // GraphElement
 
 
@@ -204,7 +207,7 @@ class GraphPanel {
     }
   }
 
-  /// Selection
+  /// Selection - display
   void onFormRecordChange(DRecord record, DEntry columnChanged, int rowNo) {
     String what = _whatPickList.value;
     String by = _byPickList.value;

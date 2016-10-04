@@ -27,6 +27,32 @@ class LImage extends LComponent {
   /// slds-avatar--large (slds-avatar): Creates a 5rem×5rem icon
   static const String C_AVATAR__LARGE = "slds-avatar--large";
 
+  /// slds-image (div): Image wrapper, not intended to wrap icons
+  static const String C_IMAGE = "slds-image";
+  /// slds-image--card (slds-image): Adds styles to give image a "card" look
+  static const String C_IMAGE__CARD = "slds-image--card";
+  /// slds-image__crop (div): Optional if you need to crop image at a specific ratio
+  static const String C_IMAGE__CROP = "slds-image__crop";
+  /// slds-image__crop--16x9 (slds-image__crop): Crop image at a 16x9 ratio, contrained to the parents width
+  static const String C_IMAGE__CROP__16X9 = "slds-image__crop--16x9";
+  /// slds-image__crop--4x3 (slds-image__crop): Crop image at a 4x3 ratio, contrained to the parents width
+  static const String C_IMAGE__CROP__4X3 = "slds-image__crop--4x3";
+  /// slds-image__crop--1x1 (slds-image__crop): Crop image at a 1x1 ratio, contrained to the parents width
+  static const String C_IMAGE__CROP__1X1 = "slds-image__crop--1x1";
+  /// slds-image__title (figcaption or div): Image title
+  static const String C_IMAGE__TITLE = "slds-image__title";
+  /// slds-image__title--overlay (slds-image__title): Text overlay on top of image, has opaque overlay
+  static const String C_IMAGE__TITLE__OVERLAY = "slds-image__title--overlay";
+  /// slds-image__icon (slds-icon_container): If file is missing an image, an icon should replace it. This class helps with the positioning of that icon.
+  static const String C_IMAGE__ICON = "slds-image__icon";
+  /// slds-image__actions (slds-button-group): If file has actions, then this class helps with the positioning of those actions
+  static const String C_IMAGE__ACTIONS = "slds-image__actions";
+  /// slds-image--overlay (div): Applies overlay to an image
+  static const String C_IMAGE__OVERLAY = "slds-image--overlay";
+  /// slds-image__text (span): Text inside of .slds-image__title
+  static const String C_IMAGE__TEXT = "slds-image__text";
+
+
   /// Image Sizes
   static final List<String> SIZES = [C_AVATAR__X_SMALL, C_AVATAR__SMALL, C_AVATAR__MEDIUM, C_AVATAR__LARGE];
 

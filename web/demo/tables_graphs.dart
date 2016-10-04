@@ -53,6 +53,7 @@ class TablesGraphs extends DemoFeature {
     GraphPanel graph = new GraphPanel(datasource, table, false);
     div.append(graph.element);
 
+
     return div;
   }
 

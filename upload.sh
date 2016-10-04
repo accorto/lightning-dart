@@ -25,6 +25,7 @@ sed -i '' -E 's/name="etag" content="(.*)"/name="etag" content="'$TS'"/g'  build
 sed -i '' 's/\${timestamp}/'$TS'/g' build/web/*.html
 cat build/web/demo.html | grep $TS
 
+
 echo "--build upload--"
 #  aws s3 cp build/web s3://lightningdart --recursive
 du -sh build/web

@@ -27,10 +27,14 @@ class LTable
   static const String C_TABLE = "slds-table";
   /// slds-table--bordered (slds-table): Adds borders to the table
   static const String C_TABLE__BORDERED = "slds-table--bordered";
-  /// slds-table--striped (slds-table): Adds stripes to alternating rows
+  /// slds-table--col-bordered (slds-table): Adds vertical lines between columns - Used in tables where each column represents a record, for example when mapping fields. Do not use for tables where a row is a record.
+  static const String C_TABLE__COL_BORDERED = "slds-table--col-bordered";
+  /// slds-table--striped (slds-table): Adds stripes to alternating rows - Used to increase the readability of some tables, especially when printing.
   static const String C_TABLE__STRIPED = "slds-table--striped";
   /// slds-table--fixed-layout (slds-table): Styles for resizeable columns
   static const String C_TABLE__FIXED_LAYOUT = "slds-table--fixed-layout";
+  /// slds-table--compact (slds-table): Styles for compact version
+  static const String C_TABLE__COMPACT = "slds-table--compact";
 
   /// slds-is-selected (tr): Changes row to selected state
   static const String C_IS_SELECTED = "slds-is-selected";

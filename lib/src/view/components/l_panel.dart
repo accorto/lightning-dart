@@ -11,12 +11,16 @@ part of lightning_dart;
  */
 class LPanel {
 
-  /// slds-panel: Container for slide out panels
+  /// slds-panel: Initiate panel
   static const String C_PANEL = "slds-panel";
+  /// slds-panel_container: Container for panels
+  static const String C_PANEL_CONTAINER = "slds-panel_container";
   /// slds-panel__section: Contains sub sections of a panel
   static const String C_PANEL__SECTION = "slds-panel__section";
   /// slds-panel__actions: Contains form actions at the bottom of a panel
   static const String C_PANEL__ACTIONS = "slds-panel__actions";
+
+  static const String C_IS_EDITING = "slds-is-editing";
 
   /// panel element
   Element element = new Element.article()

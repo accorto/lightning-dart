@@ -14,7 +14,7 @@ class Images extends DemoFeature {
   devStatus: DemoFeature.STATUS_COMPLETE,
   hints: [],
   issues: [],
-  plans: []);
+  plans: ["Figure"]);
 
   LComponent get content {
     CDiv div = new CDiv()

@@ -13,23 +13,23 @@ final _keepAnalysisHappy = Intl.defaultLocale;
 class MessageLookup extends MessageLookupByLibrary {
   get localeName => 'fr';
 
-  static objectExportFile(type) => "${type} Fichier";
+  static m0(type) => "${type} Fichier";
 
-  static objectExportRecords(count) => "${count} records";
+  static m1(count) => "${count} records";
 
-  static objectExportRecordsSelected(selectedCount, totalCount) => "${selectedCount} de ${totalCount} records";
+  static m2(selectedCount, totalCount) => "${selectedCount} de ${totalCount} records";
 
-  static objectImportColumnAlreadyMapped(columnName, columnNumber) => "${columnName} déjà dans la colonne ${columnNumber}";
+  static m3(columnName, columnNumber) => "${columnName} déjà dans la colonne ${columnNumber}";
 
-  static objectImportColumnNotMapped(columnName) => "${columnName} est obligatoire et non mappé";
+  static m4(columnName) => "${columnName} est obligatoire et non mappé";
 
-  static objectImportColumnsMapped(mapCount) => "${mapCount} colonnes mappées";
+  static m5(mapCount) => "${mapCount} colonnes mappées";
 
-  static objectImportMandatoryMissing(missingCount) => "${missingCount} colonnes obligatoires manquantes";
+  static m6(missingCount) => "${missingCount} colonnes obligatoires manquantes";
 
-  static objectImportRowsSelected(rowCount) => "${rowCount} sélectionné pour l&#39;importation";
+  static m7(rowCount) => "${rowCount} sélectionné pour l&#39;importation";
 
-  static tableCtrlRecords(count) => "${Intl.plural(count, zero: 'no records', one: '${count} record', other: '${count} records')}";
+  static m8(count) => "${Intl.plural(count, zero: 'no records', one: '${count} record', other: '${count} records')}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => {
@@ -195,11 +195,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "objectEditNew" : MessageLookupByLibrary.simpleMessage("Nouveau"),
     "objectExportColumns" : MessageLookupByLibrary.simpleMessage("Colonnes"),
     "objectExportDownload" : MessageLookupByLibrary.simpleMessage("Télécharger"),
-    "objectExportFile" : objectExportFile,
+    "objectExportFile" : m0,
     "objectExportFormat" : MessageLookupByLibrary.simpleMessage("Sélectionnez Format"),
     "objectExportPreview" : MessageLookupByLibrary.simpleMessage("Aperçu"),
-    "objectExportRecords" : objectExportRecords,
-    "objectExportRecordsSelected" : objectExportRecordsSelected,
+    "objectExportRecords" : m1,
+    "objectExportRecordsSelected" : m2,
     "objectExportSelectColumns" : MessageLookupByLibrary.simpleMessage("Sélectionner les colonnes"),
     "objectExportTitle" : MessageLookupByLibrary.simpleMessage("Exportation"),
     "objectHomeFilterPanel" : MessageLookupByLibrary.simpleMessage("Filtre"),
@@ -211,9 +211,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "objectImportAddColumn" : MessageLookupByLibrary.simpleMessage("Ajouter une colonne"),
     "objectImportButton" : MessageLookupByLibrary.simpleMessage("Importer"),
     "objectImportCheckValues" : MessageLookupByLibrary.simpleMessage("Vérifiez les valeurs"),
-    "objectImportColumnAlreadyMapped" : objectImportColumnAlreadyMapped,
-    "objectImportColumnNotMapped" : objectImportColumnNotMapped,
-    "objectImportColumnsMapped" : objectImportColumnsMapped,
+    "objectImportColumnAlreadyMapped" : m3,
+    "objectImportColumnNotMapped" : m4,
+    "objectImportColumnsMapped" : m5,
     "objectImportDateFormatHelp" : MessageLookupByLibrary.simpleMessage("Java date de style et le type motif (SimpleDateFormat) - si elle est définie d&#39;abord utilisé pour les champs de date"),
     "objectImportDateFormatLabel" : MessageLookupByLibrary.simpleMessage("Personnalisé Date / Heure Format"),
     "objectImportDuplicate" : MessageLookupByLibrary.simpleMessage("Dupliquer"),
@@ -222,10 +222,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "objectImportLineEmpty" : MessageLookupByLibrary.simpleMessage("vide"),
     "objectImportLineLine" : MessageLookupByLibrary.simpleMessage("Ligne"),
     "objectImportLineValueNotFound" : MessageLookupByLibrary.simpleMessage("Value not found ou invalide"),
-    "objectImportMandatoryMissing" : objectImportMandatoryMissing,
+    "objectImportMandatoryMissing" : m6,
     "objectImportMap" : MessageLookupByLibrary.simpleMessage("Carte à la colonne"),
     "objectImportMapColumns" : MessageLookupByLibrary.simpleMessage("Carte colonnes!"),
-    "objectImportRowsSelected" : objectImportRowsSelected,
+    "objectImportRowsSelected" : m7,
     "objectImportSelectCsv" : MessageLookupByLibrary.simpleMessage("Sélectionnez le fichier cvs"),
     "objectImportTitle" : MessageLookupByLibrary.simpleMessage("Importer"),
     "optionUtilNo" : MessageLookupByLibrary.simpleMessage("Non"),
@@ -259,7 +259,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "tableCtrlDeleteRecords" : MessageLookupByLibrary.simpleMessage("Effacer la sélection Records?"),
     "tableCtrlDeleteRecordsText" : MessageLookupByLibrary.simpleMessage("Voulez-vous supprimer les enregistrements sélectionnés?"),
     "tableCtrlNewRecord" : MessageLookupByLibrary.simpleMessage("Nouveau"),
-    "tableCtrlRecords" : tableCtrlRecords,
+    "tableCtrlRecords" : m8,
     "tableLayout" : MessageLookupByLibrary.simpleMessage("Tableau Disposition"),
     "tableLayoutColumns" : MessageLookupByLibrary.simpleMessage("Colonnes"),
     "tableStatisticsGroupBy" : MessageLookupByLibrary.simpleMessage("Par groupe"),

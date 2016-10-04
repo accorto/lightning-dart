@@ -155,7 +155,7 @@ class LPageHome
     if (_info == null) {
       _info = new ParagraphElement()
           ..id = "${element.id}-info"
-          ..classes.addAll([LText.C_TEXT_BODY__SMALL, LPageHeader.C_PAGE_HEADER__INFO]);
+          ..classes.addAll([LText.C_TEXT_BODY__SMALL]);
       element.append(_info);
     }
     _info.text = newValue;
