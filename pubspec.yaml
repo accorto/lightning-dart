@@ -5,6 +5,7 @@ author: Accorto Lightning <lightning@accorto.com>
 homepage: http://lightningdart.com
 documentation:
 
+# https://www.dartlang.org/install/archive
 environment:
   sdk: '1.19.1'
 
@@ -17,6 +18,7 @@ dependencies:
   stack_trace: any
   usage: any
   uuid: any
+# https://pub.dartlang.org/packages/charted 0.4.0+1
   charted:
     git: git@github.com:accorto/charted.git # observe breaking change fix
 
