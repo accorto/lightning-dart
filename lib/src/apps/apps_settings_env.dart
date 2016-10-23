@@ -78,8 +78,8 @@ class AppsSettingsEnvironment
 
     table.addRowHdrDataList("Mobile | Phone",
         [ClientEnv.isMobileUserAgent,     ClientEnv.isPhone]);
-    table.addRowHdrDataList("Edge/IE | IE11",
-        [ClientEnv.isIE,                  ClientEnv.isIE11]);
+    table.addRowHdrDataList("Edge   | IE",
+        [ClientEnv.isEdge,                ClientEnv.isIE11]);
     table.addRowHdrDataList("Chrome",
         [ClientEnv.isChrome,              ""]);
     table.addRowHdrDataList("Icon Image | Svg Direct",

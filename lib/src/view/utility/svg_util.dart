@@ -16,10 +16,8 @@ class SvgUtil {
   /// Create svg direct vs. use
   static bool createIconImage() {
     if (_createIconImage == null) {
-      _createIconImage = false; //!document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#Structure", "1.1");
-      if (!_createIconImage) {
-        _createIconImage = ClientEnv.isIE11  || ClientEnv.isChrome;
-      }
+      // _createIconImage = false; //!document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#Structure", "1.1");
+      _createIconImage = ClientEnv.isIE11; // Edge OK
     }
     return _createIconImage;
   }

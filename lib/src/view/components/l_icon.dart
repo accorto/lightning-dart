@@ -198,9 +198,9 @@ class LIcon {
     //
     element.append(_use);
     // replace use with symbol content
-    //if (Settings.getAsBool(Settings.ICON_IMAGE, defaultValue: SvgUtil.createIconImage())) {
-    //  SvgUtil.svgDirect(element, "${packagePrefix}${linkPrefix}", linkName);
-    //}
+    if (Settings.getAsBool(Settings.ICON_IMAGE, defaultValue: SvgUtil.createIconImage())) {
+      SvgUtil.svgDirect(element, "${packagePrefix}${linkPrefix}", linkName);
+    }
   } // LIcon
 
   /// Copy Icon
