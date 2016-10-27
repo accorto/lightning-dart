@@ -126,7 +126,7 @@ class LLookup
       bool multiple, bool singleScope, bool typeahead, bool withClearValue, bool inGrid) {
     _setAttributes(multiple, singleScope, typeahead);
     //
-    createLookupLayout(this, iconRight: _iconRight,
+    createLookupLayout(this, iconRight: getIconRight(),
         withClearValue: withClearValue, inGrid:inGrid);
     input
       ..attributes[Html0.ROLE] = Html0.ROLE_COMBOBOX
@@ -320,7 +320,7 @@ class LLookup
 
   bool get required => input.required;
   void set required (bool newValue) {
-    super.required = newValue;
+    input.required = newValue;
     //_formElement.required = newValue;
     if (newValue) {
       if (_lookupItemList.isNotEmpty) {

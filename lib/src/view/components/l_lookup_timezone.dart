@@ -41,7 +41,8 @@ class LLookupTimezone
   }
 
   /// Search Icon
-  LIcon _iconRight = new LIconUtility(LIconUtility.LOCATION)
+  LIcon getIconRight() => _iconRightTZ;
+  LIcon _iconRightTZ = new LIconUtility(LIconUtility.LOCATION)
     ..title = lLookupTimezoneDefault();
 
   /// init behaviour

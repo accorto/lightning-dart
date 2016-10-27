@@ -7,7 +7,7 @@ documentation:
 
 # https://www.dartlang.org/install/archive
 environment:
-  sdk: '1.19.1'
+  sdk: '1.20.1'
 
 dependencies:
   browser: any

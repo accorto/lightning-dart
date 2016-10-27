@@ -51,7 +51,12 @@ class TranslateArb {
   TranslateArb(String this.targetLanguage, String this.fileName) {
     File theFile = new File(fileName);
     String jsonString = theFile.readAsStringSync();
-    map = JSON.decode(jsonString);
+    var theJson = JSON.decode(jsonString);
+    if (theJson is Map<String, dynamic>) {
+      map = theJson;
+    } else {
+      throw new Exception("Json invalid " + theJson);
+    }
     //
     fileNameOut = fileName.replaceAll(TRL_FILE, "messages_${targetLanguage}.arb");
   } // TranslateArb

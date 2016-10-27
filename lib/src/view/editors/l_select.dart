@@ -225,9 +225,10 @@ class LSelect
   }
   bool _disabled = false;
 
+  bool get required => input.required;
   /// required - add/remove optional element
   void set required (bool newValue) {
-    super.required = newValue; // UI - LFormElement
+    input.required = newValue;
     if (listId != null && listId.isNotEmpty)
       return; // don't change data list
 

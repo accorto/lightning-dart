@@ -40,13 +40,13 @@ class GraphCalc
       ParagraphElement p = new ParagraphElement()
         ..classes.add(LMargin.C_BOTTOM__SMALL)
         ..text = "- ${StatCalc.statCalcNoData()} -";
-      engine.element
+      engine.getElement()
           ..classes.add("empty")
           ..append(p);
       _log.fine("display ${key} complete NoData");
     } else {
       LDList info = new LDList();
-      engine.element.append(info.element);
+      engine.getElement().append(info.element);
       info.add(LTableSumCell.tableSumCellCount(), count);
       info.add(LTableSumCell.tableSumCellNull(), nullCount);
       if (hasMinMax) {

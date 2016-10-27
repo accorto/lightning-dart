@@ -221,7 +221,7 @@ class LPicklist
 
   bool get required => _dropdown.required;
   void set required (bool newValue) {
-    super.required = newValue; // UI - FormElement
+    //super.required = newValue; // UI - FormElement
     String txt = _plButtonLabel.text;
     if (newValue) {
       if (txt == null || txt.isEmpty || txt == Html0.SPACE_NB) {

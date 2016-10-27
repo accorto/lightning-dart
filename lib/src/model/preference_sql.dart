@@ -93,11 +93,11 @@ class PreferenceSQL
     String sql = 'SELECT value FROM $storeName WHERE id = ?';
 
     _db.readTransaction((txn) {
-      txn.executeSql(sql, [key], (txn, resultSet) {
+      txn.executeSql(sql, [key], (txn, SqlResultSet resultSet) {
         if (resultSet.rows.isEmpty) {
           completer.complete(null);
         } else {
-          var row = resultSet.rows.item(0);
+          Map row = resultSet.rows.item(0);
           completer.complete(row['value']);
         }
       });
@@ -111,10 +111,10 @@ class PreferenceSQL
     var sql = 'SELECT id,value FROM $storeName';
 
     _db.transaction((txn) {
-      txn.executeSql(sql, [], (txn, resultSet) {
+      txn.executeSql(sql, [], (var txn, SqlResultSet resultSet) {
         Map<String,String> retValue = new Map<String,String>();
         for (var i = 0; i < resultSet.rows.length; ++i) {
-          var row = resultSet.rows.item(i);
+          Map row = resultSet.rows.item(i);
           String key = row['id'];
           String value = row['value'];
           retValue[key] = value;
@@ -132,10 +132,10 @@ class PreferenceSQL
     var sql = 'SELECT id,value FROM $storeName';
 
     _db.transaction((txn) {
-      txn.executeSql(sql, [], (txn, resultSet) {
+      txn.executeSql(sql, [], (txn, SqlResultSet resultSet) {
         Map<String,String> retValue = new Map<String,String>();
         for (var i = 0; i < resultSet.rows.length; ++i) {
-          var row = resultSet.rows.item(i);
+          Map row = resultSet.rows.item(i);
           String key = row['id'];
           if (keys.contains(key)) {
             String value = row['value'];
@@ -197,9 +197,9 @@ class PreferenceSQL
     String sql = 'SELECT id FROM $storeName';
     StreamController<String> controller = new StreamController<String>();
     _db.transaction((txn) {
-      txn.executeSql(sql, [], (txn, resultSet) {
+      txn.executeSql(sql, [], (txn, SqlResultSet resultSet) {
         for (var i = 0; i < resultSet.rows.length; ++i) {
-          var row = resultSet.rows.item(i);
+          Map row = resultSet.rows.item(i);
           controller.add(row['id']);
         }
       });
@@ -214,9 +214,9 @@ class PreferenceSQL
     var sql = 'SELECT value FROM $storeName';
     var controller = new StreamController<String>();
     _db.transaction((txn) {
-      txn.executeSql(sql, [], (txn, resultSet) {
+      txn.executeSql(sql, [], (txn, SqlResultSet resultSet) {
         for (var i = 0; i < resultSet.rows.length; ++i) {
-          var row = resultSet.rows.item(i);
+          Map row = resultSet.rows.item(i);
           controller.add(row['value']);
         }
       });

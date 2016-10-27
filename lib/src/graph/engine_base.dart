@@ -16,8 +16,8 @@ abstract class EngineBase {
   /// engine number
   int no = _engineNo++;
 
-  /// Graph Element
-  Element get element;
+  /// Graph Element (strong mode does not allow "get element")
+  Element getElement();
 
   /// Group By Column Names
   List<String> groupByColumnNames = new List<String>();

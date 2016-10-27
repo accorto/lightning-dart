@@ -346,8 +346,9 @@ class ObjectImport {
       for (int lineNo = start; lineNo < _csv.cells.length; lineNo++) {
         DataRecord data = new DataRecord(datasource.tableDirect, null)
           ..newRecord(null, rowNo: lineNo);
-        ObjectImportLine line = new ObjectImportLine(this, _table, _table.createBodyRow(),
-            lineNo, data, _csv.cells[lineNo]);
+        ObjectImportLine line = new ObjectImportLine(this,
+            _table, _table.createBodyRow(), lineNo,
+            data, _csv.cells[lineNo]);
         line.createLine(datasource.tableDirect, _headerColumnList); // display
         _table.addBodyRow(row: line);
       }

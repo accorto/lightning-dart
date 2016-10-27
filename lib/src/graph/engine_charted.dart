@@ -42,11 +42,15 @@ class EngineCharted
     element.attributes["data-no"] = no.toString();
   }
 
+  /// Graph Element
+  Element getElement() {
+    return element;
+  }
 
   /// reset elements
   void reset() {
     _log.fine("reset #${no}");
-    super.reset(); // EngineChartedContainer
+    // super.reset(); // EngineChartedContainer
     _state = null;
     _metaRowList.clear();
     _metaColList.clear();

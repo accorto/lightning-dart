@@ -589,7 +589,11 @@ class DataContext {
       String columnName = ref.substring(i2+1);
 
       // valueOf.fkColumnName
-      Map<String, dynamic> colMap = map[fkColumnName]; // strong-mode issue
+      Map<String, dynamic> colMap = null;
+      var fkInfo = map[fkColumnName]; // strong-mode issue
+      if (fkInfo is Map<String,dynamic>) {
+        colMap = fkInfo;
+      }
       if (colMap == null) {
         colMap = new Map<String, dynamic>();
         map[fkColumnName] = colMap;

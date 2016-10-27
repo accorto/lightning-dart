@@ -15,8 +15,6 @@ class ObjectImportLine
   static final Logger _log = new Logger("ObjectImportLine");
 
   final ObjectImport parent;
-  /// data result
-  final DataRecord data;
   /// csv source
   final List<String> cellLine;
 
@@ -28,11 +26,12 @@ class ObjectImportLine
   List<DColumn> _columnList;
 
   /// Import Line
-  ObjectImportLine(ObjectImport this.parent, LTable ltable, TableRowElement rowElement,
-      int lineNo,
-      DataRecord this.data, List<String> this.cellLine)
+  ObjectImportLine(ObjectImport this.parent,
+      LTable ltable, TableRowElement rowElement, int lineNo,
+      DataRecord dataI, List<String> this.cellLine)
       : super(ltable, rowElement,
           lineNo, lineNo.toString(), LButton.C_HINT_PARENT, LTableRow.TYPE_BODY, null) {
+    data = dataI; // overwrite data - no onRecordDataChange !
     // select
     selectCb
       ..attributes[Html0.DATA_ID] = lineNo.toString();

@@ -19,7 +19,7 @@ class GraphEnginePanel
   /// chart engine
   final EngineBase engine = new EngineCharted();
   /// engine element
-  Element get element => engine.element;
+  Element get element => engine.getElement();
 
   /// KPI / Element name/id
   final String tableName;

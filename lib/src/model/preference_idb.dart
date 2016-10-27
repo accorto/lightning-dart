@@ -75,9 +75,10 @@ class PreferenceIDB
 
   @override
   Future<String> _save(String key, String value) {
+    // ignore: strong_mode_static_type_error
     return _doCommand((ObjectStore store) { // strong-mode issue
       //_log.finest("IDB ${dbName}.${storeName} save ${key}=${value}");
-      return store.put(value, key);
+      return store.put(value, key); // ignore: strong_mode_down_cast_composite
     });
   }
 
@@ -94,9 +95,10 @@ class PreferenceIDB
 
   @override
   Future<String> _get(String key) {
+    // ignore: strong_mode_static_type_error
     return _doCommand((ObjectStore store) { // strong-mode issue
       // _log.fine("IDB ${dbName}.${storeName} get ${key}");
-      return store.getObject(key);
+      return store.getObject(key); // ignore: strong_mode_down_cast_composite
     }, 'readonly');
   }
 
@@ -139,9 +141,10 @@ class PreferenceIDB
 
 
   @override
-  Future _delete(String  key) {
+  Future<String> _delete(String  key) {
+    // ignore: strong_mode_static_type_error
     return _doCommand((ObjectStore store)
-    => store.delete(key));
+      => store.delete(key));
   }
 
   @override
@@ -155,9 +158,11 @@ class PreferenceIDB
   }
 
   @override
-  Future _clear() {
+  Future<String> _clear() {
     _log.config("${dbName}.${storeName} clear");
-    return _doCommand((ObjectStore store) => store.clear());
+    // ignore: strong_mode_static_type_error
+    return _doCommand((ObjectStore store)
+      => store.clear());
   }
 
   @override
@@ -184,12 +189,12 @@ class PreferenceIDB
   }
 
   // execute
-  Future _doCommand(Future requestCommand(ObjectStore store),
+  Future<String> _doCommand(Future<String> requestCommand(ObjectStore store),
       [String txnMode = 'readwrite']) {
     Transaction trans = _db.transaction(storeName, txnMode);
     ObjectStore store = trans.objectStore(storeName);
-    Future future = requestCommand(store);
-    return trans.completed.then((_) => future);
+    Future<String> future = requestCommand(store);
+    return trans.completed.then((Database _) => future);
   } // doCommand
 
   @override
