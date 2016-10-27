@@ -20,7 +20,8 @@ dependencies:
   uuid: any
 # https://pub.dartlang.org/packages/charted 0.4.0+1
   charted:
-    git: git@github.com:accorto/charted.git # observe breaking change fix
+    git: https://github.com/accorto/charted.git
+#   git: git@github.com:accorto/charted.git # observe breaking change fix
 
 dev_dependencies:
   test: any
