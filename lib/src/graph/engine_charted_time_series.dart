@@ -34,7 +34,7 @@ class EngineChartedTimeSeries
           ..append(info);
       return true;
     }
-    reset();
+    resetContainer(); // EngineChartedContainer
     load(records);
     return _draw(displayHorizontal);
   }

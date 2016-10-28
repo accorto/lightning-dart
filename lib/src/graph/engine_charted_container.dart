@@ -63,7 +63,7 @@ class EngineChartedContainer {
   }
 
   /// reset elements
-  void reset() {
+  void resetContainer() {
     element.children.clear();
     element.append(_wrapper);
     _legendHost = null;

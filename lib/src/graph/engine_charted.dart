@@ -50,7 +50,7 @@ class EngineCharted
   /// reset elements
   void reset() {
     _log.fine("reset #${no}");
-    // super.reset(); // EngineChartedContainer
+    resetContainer(); // EngineChartedContainer
     _state = null;
     _metaRowList.clear();
     _metaColList.clear();
