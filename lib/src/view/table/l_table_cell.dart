@@ -21,7 +21,11 @@ class LTableCell {
   final String name;
 
   /// Data Value
-  final String value;
+  String get value => _value;
+  void set value (String newValue) {
+    value = newValue;
+  }
+  String _value;
 
   /// Alignment
   final String align;
@@ -37,7 +41,7 @@ class LTableCell {
       Element this.content,
       String this.name,
       String label,
-      String this.value,
+      String value,
       String this.align,
       DataColumn this.dataColumn,
       bool addStatistics) {
@@ -48,8 +52,9 @@ class LTableCell {
       cellElement.attributes[Html0.DATA_NAME] = name;
     if (label != null)
       cellElement.attributes[Html0.DATA_LABEL] = label;
-    if (value != null)
-      cellElement.attributes[Html0.DATA_VALUE] = value;
+    _value = value;
+    if (_value != null)
+      cellElement.attributes[Html0.DATA_VALUE] = _value;
     if (content != null)
       cellElement.append(content);
     //
