@@ -3,13 +3,10 @@
 ///
 library protoc.rr_display;
 
-import 'dart:async';
-
 import 'package:protobuf/protobuf.dart';
 import 'rr_pb.dart';
 import 'display_pb.dart';
 import 'structure_pb.dart';
-import 'data_pb.dart';
 
 class DisplayRequestType extends ProtobufEnum {
   static const DisplayRequestType LIST = const DisplayRequestType._(1, 'LIST');
@@ -173,37 +170,6 @@ class DisplayResponse extends GeneratedMessage {
 
 class _ReadonlyDisplayResponse extends DisplayResponse with ReadonlyMessageMixin {}
 
-class DisplayServiceApi {
-  RpcClient _client;
-  DisplayServiceApi(this._client);
-
-  Future<DisplayResponse> display(ClientContext ctx, DisplayRequest request) {
-    var emptyResponse = new DisplayResponse();
-    return _client.invoke(ctx, 'DisplayService', 'Display', request, emptyResponse);
-  }
-}
-
-abstract class DisplayServiceBase extends GeneratedService {
-  Future<DisplayResponse> display(ServerContext ctx, DisplayRequest request);
-
-  GeneratedMessage createRequest(String method) {
-    switch (method) {
-      case 'Display': return new DisplayRequest();
-      default: throw new ArgumentError('Unknown method: $method');
-    }
-  }
-
-  Future<GeneratedMessage> handleCall(ServerContext ctx, String method, GeneratedMessage request) {
-    switch (method) {
-      case 'Display': return display(ctx, request);
-      default: throw new ArgumentError('Unknown method: $method');
-    }
-  }
-
-  Map<String, dynamic> get $json => DisplayService$json;
-  Map<String, dynamic> get $messageJson => DisplayService$messageJson;
-}
-
 const DisplayRequestType$json = const {
   '1': 'DisplayRequestType',
   '2': const [
@@ -244,36 +210,5 @@ const DisplayResponse$json = const {
     const {'1': 'table', '3': 11, '4': 3, '5': 11, '6': '.DTable'},
     const {'1': 'display', '3': 12, '4': 3, '5': 11, '6': '.UIInfo'},
   ],
-};
-
-const DisplayService$json = const {
-  '1': 'DisplayService',
-  '2': const [
-    const {'1': 'Display', '2': '.DisplayRequest', '3': '.DisplayResponse'},
-  ],
-};
-
-const DisplayService$messageJson = const {
-  '.DisplayRequest': DisplayRequest$json,
-  '.CRequest': CRequest$json,
-  '.CEnv': CEnv$json,
-  '.UIInfo': UIInfo$json,
-  '.UI': UI$json,
-  '.DTable': DTable$json,
-  '.DColumn': DColumn$json,
-  '.DOption': DOption$json,
-  '.DKeyValue': DKeyValue$json,
-  '.UIGridColumn': UIGridColumn$json,
-  '.UIPanelColumn': UIPanelColumn$json,
-  '.UIPanel': UIPanel$json,
-  '.UIProcess': UIProcess$json,
-  '.DProperty': DProperty$json,
-  '.UILink': UILink$json,
-  '.UIQueryColumn': UIQueryColumn$json,
-  '.SavedQuery': SavedQuery$json,
-  '.DFilter': DFilter$json,
-  '.DSort': DSort$json,
-  '.DisplayResponse': DisplayResponse$json,
-  '.SResponse': SResponse$json,
 };
 

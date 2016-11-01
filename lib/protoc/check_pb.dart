@@ -3,8 +3,6 @@
 ///
 library protoc.check;
 
-import 'dart:async';
-
 import 'package:fixnum/fixnum.dart';
 import 'package:protobuf/protobuf.dart';
 import 'rr_pb.dart';
@@ -212,37 +210,6 @@ class CheckResponse extends GeneratedMessage {
 
 class _ReadonlyCheckResponse extends CheckResponse with ReadonlyMessageMixin {}
 
-class CheckServiceApi {
-  RpcClient _client;
-  CheckServiceApi(this._client);
-
-  Future<CheckResponse> check(ClientContext ctx, CheckRequest request) {
-    var emptyResponse = new CheckResponse();
-    return _client.invoke(ctx, 'CheckService', 'Check', request, emptyResponse);
-  }
-}
-
-abstract class CheckServiceBase extends GeneratedService {
-  Future<CheckResponse> check(ServerContext ctx, CheckRequest request);
-
-  GeneratedMessage createRequest(String method) {
-    switch (method) {
-      case 'Check': return new CheckRequest();
-      default: throw new ArgumentError('Unknown method: $method');
-    }
-  }
-
-  Future<GeneratedMessage> handleCall(ServerContext ctx, String method, GeneratedMessage request) {
-    switch (method) {
-      case 'Check': return check(ctx, request);
-      default: throw new ArgumentError('Unknown method: $method');
-    }
-  }
-
-  Map<String, dynamic> get $json => CheckService$json;
-  Map<String, dynamic> get $messageJson => CheckService$messageJson;
-}
-
 const CheckRequest$json = const {
   '1': 'CheckRequest',
   '2': const [
@@ -281,23 +248,5 @@ const CheckResponse$json = const {
     const {'1': 'data_bytes', '3': 18, '4': 1, '5': 9},
     const {'1': 'data_string2', '3': 20, '4': 3, '5': 9},
   ],
-};
-
-const CheckService$json = const {
-  '1': 'CheckService',
-  '2': const [
-    const {'1': 'Check', '2': '.CheckRequest', '3': '.CheckResponse'},
-  ],
-};
-
-const CheckService$messageJson = const {
-  '.CheckRequest': CheckRequest$json,
-  '.CRequest': CRequest$json,
-  '.CEnv': CEnv$json,
-  '.DRecord': DRecord$json,
-  '.DEntry': DEntry$json,
-  '.DStatistics': DStatistics$json,
-  '.CheckResponse': CheckResponse$json,
-  '.SResponse': SResponse$json,
 };
 

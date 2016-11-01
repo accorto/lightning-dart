@@ -3,13 +3,10 @@
 ///
 library protoc.rr_login;
 
-import 'dart:async';
-
 import 'package:protobuf/protobuf.dart';
 import 'rr_pb.dart';
 import 'data_pb.dart';
 import 'display_pb.dart';
-import 'structure_pb.dart';
 
 class LoginRequest extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('LoginRequest')
@@ -117,37 +114,6 @@ class LoginResponse extends GeneratedMessage {
 
 class _ReadonlyLoginResponse extends LoginResponse with ReadonlyMessageMixin {}
 
-class LoginServiceApi {
-  RpcClient _client;
-  LoginServiceApi(this._client);
-
-  Future<LoginResponse> login(ClientContext ctx, LoginRequest request) {
-    var emptyResponse = new LoginResponse();
-    return _client.invoke(ctx, 'LoginService', 'Login', request, emptyResponse);
-  }
-}
-
-abstract class LoginServiceBase extends GeneratedService {
-  Future<LoginResponse> login(ServerContext ctx, LoginRequest request);
-
-  GeneratedMessage createRequest(String method) {
-    switch (method) {
-      case 'Login': return new LoginRequest();
-      default: throw new ArgumentError('Unknown method: $method');
-    }
-  }
-
-  Future<GeneratedMessage> handleCall(ServerContext ctx, String method, GeneratedMessage request) {
-    switch (method) {
-      case 'Login': return login(ctx, request);
-      default: throw new ArgumentError('Unknown method: $method');
-    }
-  }
-
-  Map<String, dynamic> get $json => LoginService$json;
-  Map<String, dynamic> get $messageJson => LoginService$messageJson;
-}
-
 const LoginRequest$json = const {
   '1': 'LoginRequest',
   '2': const [
@@ -169,28 +135,5 @@ const LoginResponse$json = const {
     const {'1': 'tenant_logo', '3': 12, '4': 1, '5': 9},
     const {'1': 'google_analytics', '3': 13, '4': 1, '5': 9},
   ],
-};
-
-const LoginService$json = const {
-  '1': 'LoginService',
-  '2': const [
-    const {'1': 'Login', '2': '.LoginRequest', '3': '.LoginResponse'},
-  ],
-};
-
-const LoginService$messageJson = const {
-  '.LoginRequest': LoginRequest$json,
-  '.CRequest': CRequest$json,
-  '.CEnv': CEnv$json,
-  '.LoginInfo': LoginInfo$json,
-  '.DEntry': DEntry$json,
-  '.LoginResponse': LoginResponse$json,
-  '.SResponse': SResponse$json,
-  '.Session': Session$json,
-  '.Role': Role$json,
-  '.DKeyValue': DKeyValue$json,
-  '.UIPanelColumn': UIPanelColumn$json,
-  '.DColumn': DColumn$json,
-  '.DOption': DOption$json,
 };
 

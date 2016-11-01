@@ -3,8 +3,6 @@
 ///
 library protoc.rr_data;
 
-import 'dart:async';
-
 import 'package:protobuf/protobuf.dart';
 import 'rr_pb.dart';
 import 'data_pb.dart';
@@ -329,37 +327,6 @@ class DataResponse extends GeneratedMessage {
 
 class _ReadonlyDataResponse extends DataResponse with ReadonlyMessageMixin {}
 
-class DataServiceApi {
-  RpcClient _client;
-  DataServiceApi(this._client);
-
-  Future<DataResponse> data(ClientContext ctx, DataRequest request) {
-    var emptyResponse = new DataResponse();
-    return _client.invoke(ctx, 'DataService', 'Data', request, emptyResponse);
-  }
-}
-
-abstract class DataServiceBase extends GeneratedService {
-  Future<DataResponse> data(ServerContext ctx, DataRequest request);
-
-  GeneratedMessage createRequest(String method) {
-    switch (method) {
-      case 'Data': return new DataRequest();
-      default: throw new ArgumentError('Unknown method: $method');
-    }
-  }
-
-  Future<GeneratedMessage> handleCall(ServerContext ctx, String method, GeneratedMessage request) {
-    switch (method) {
-      case 'Data': return data(ctx, request);
-      default: throw new ArgumentError('Unknown method: $method');
-    }
-  }
-
-  Map<String, dynamic> get $json => DataService$json;
-  Map<String, dynamic> get $messageJson => DataService$messageJson;
-}
-
 const DataRequestType$json = const {
   '1': 'DataRequestType',
   '2': const [
@@ -437,31 +404,5 @@ const DataResponse$json = const {
     const {'1': 'statistic', '3': 20, '4': 3, '5': 11, '6': '.DStatistics'},
     const {'1': 'export_url', '3': 25, '4': 1, '5': 9},
   ],
-};
-
-const DataService$json = const {
-  '1': 'DataService',
-  '2': const [
-    const {'1': 'Data', '2': '.DataRequest', '3': '.DataResponse'},
-  ],
-};
-
-const DataService$messageJson = const {
-  '.DataRequest': DataRequest$json,
-  '.CRequest': CRequest$json,
-  '.CEnv': CEnv$json,
-  '.DKeyValue': DKeyValue$json,
-  '.DFilter': DFilter$json,
-  '.DSort': DSort$json,
-  '.SavedQuery': SavedQuery$json,
-  '.DRecord': DRecord$json,
-  '.DEntry': DEntry$json,
-  '.DStatistics': DStatistics$json,
-  '.DataResponse': DataResponse$json,
-  '.SResponse': SResponse$json,
-  '.DFK': DFK$json,
-  '.DTable': DTable$json,
-  '.DColumn': DColumn$json,
-  '.DOption': DOption$json,
 };
 
