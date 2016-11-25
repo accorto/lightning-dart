@@ -31,11 +31,13 @@ class ServiceTracker {
 
   /// Server Response
   final SResponse response;
+  // User timing variable
   final String utv;
   final String details;
 
   /**
    * Service Performance Tracker
+   * [utv] user timing variable
    */
   ServiceTracker(SResponse this.response, String this.utv, String this.details) {
     if (!response.hasClientRequestTime())

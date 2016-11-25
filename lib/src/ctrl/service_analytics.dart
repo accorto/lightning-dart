@@ -39,6 +39,7 @@ class ServiceAnalytics {
     DateTime now = new DateTime.now();
     Map<String, String> data = _createMap(now);
     data["utv"] = utv;
+    data["method"] = utv;
     _timingResponse(data, response, now);
     if (details != null && details.isNotEmpty)
       data["details"] = details;
@@ -73,6 +74,7 @@ class ServiceAnalytics {
   static Map<String, String> _timingWeb(String utv, SResponse response, DateTime now) {
     Map<String, String> data = _createMap(now);
     data["utv"] = utv; // variable name
+    data["method"] = utv;
     if (response.hasInfo())
       data["info"] = response.info;
     Performance perf = window.performance;
@@ -86,6 +88,7 @@ class ServiceAnalytics {
 
     int utt = now.millisecondsSinceEpoch - timing.navigationStart;
     data["utt"] = utt.toString(); // user total time
+    data["ms"] = utt.toString(); // user total time
     int plt = timing.loadEventEnd - timing.navigationStart;
     data["plt"] = plt.toString(); // page load time
     //
@@ -106,24 +109,24 @@ class ServiceAnalytics {
 
     // request response
     if (response != null) {
-      _timingResponse(data, response, now, uttName: "ut2");
+      _timingResponse(data, response, now, uttName: "utt");
       int del = response.clientRequestTime.toInt() - timing.navigationStart;
-      data["del"] = del.toString();
-      // delay
+      data["del"] = del.toString(); // delay
     }
     // general
     data["ul"] = window.navigator.language;
-    data["ua"] = window.navigator.userAgent;
+    // data["ua"] = window.navigator.userAgent;
+    data["agent"] = window.navigator.userAgent;
     return data;
   } // timingWeb
 
   /**
    * Get Performance Map
    */
-  static void _timingResponse(Map<String, String> data, SResponse response, DateTime now, {String uttName: "utt"}) {
+  static void _timingResponse(Map<String, String> data, SResponse response, DateTime now, {String uttName: "ms"}) {
     // total
     int utt = now.millisecondsSinceEpoch - response.clientRequestTime.toInt();
-    data[uttName] = utt.toString();
+    data[uttName] = utt.toString(); // utt
     if (response.hasInfo())
       data["info"] = response.info;
 
@@ -134,13 +137,13 @@ class ServiceAnalytics {
     if (response.hasRemoteMs() && response.remoteMs > 0)  // remote time
       data["rem"] = response.remoteMs.toString();
     int net = response.clientReceiptTime.toInt() - response.clientRequestTime.toInt();
-    data["net"] = net.toString();   // net time
+    data["net"] = net.toString();  // net time
 
-    data["trx_type"] = response.trxType;
-    data["trx_no"] = response.trxNo.toString();
-    data["trx_msg"] = response.msg;
+    data["trx"] = response.trxType;
+    data["seq"] = response.trxNo.toString();
+    data["message"] = response.msg;
     if (!response.isSuccess)
-      data["trx"] = "error";
+      data["trx"] += "Error";
   } // timingResponse
 
 
@@ -191,10 +194,11 @@ class ServiceAnalytics {
     data["sd"] = "${scr.pixelDepth}-bits"; // screen colors
     //
     data["ul"] = window.navigator.language;
-    data["ua"] = window.navigator.userAgent;
+    //data["ua"] = window.navigator.userAgent;
+    data["agent"] = window.navigator.userAgent;
     //
     data["up"] = Service.upTime.toString(); // uptime
-    data["clientId"] = Service.clientId;
+    data["cid"] = Service.clientId;
     ClientEnv.logInfoMap(data);
     //
     String dataString = LUtil.toJsonString(data);
@@ -226,7 +230,7 @@ class ServiceAnalytics {
     data["up"] = Service.upTime.inSeconds.toString(); // uptime
     print("analytics ${data}");
     data["upd"] = Service.upTime.toString(); // uptime
-    data["clientId"] = Service.clientId;
+    data["cid"] = Service.clientId;
     ClientEnv.logInfoMap(data);
     String dataString = LUtil.toJsonString(data);
 

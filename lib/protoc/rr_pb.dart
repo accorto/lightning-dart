@@ -430,15 +430,9 @@ class Session extends GeneratedMessage {
     ..a/*<bool>*/(30, 'isUserExpert', PbFieldType.OB)
     ..pp/*<Role>*/(31, 'roles', PbFieldType.PM, Role.$checkItem, Role.create)
     ..pp/*<DKeyValue>*/(32, 'context', PbFieldType.PM, DKeyValue.$checkItem, DKeyValue.create)
-    ..a/*<String>*/(40, 'nrLicense', PbFieldType.OS)
-    ..a/*<String>*/(41, 'nrApplication', PbFieldType.OS)
     ..a/*<String>*/(45, 'sfEndpoint', PbFieldType.OS)
     ..a/*<String>*/(46, 'sfRefreshToken', PbFieldType.OS)
     ..a/*<String>*/(47, 'sfToken', PbFieldType.OS)
-    ..a/*<String>*/(50, 'awsAccessKey', PbFieldType.OS)
-    ..a/*<String>*/(51, 'awsSecretKey', PbFieldType.OS)
-    ..a/*<String>*/(52, 'awsSnsArnInfo', PbFieldType.OS)
-    ..a/*<String>*/(53, 'awsSnsArnWarn', PbFieldType.OS)
   ;
 
   Session() : super();
@@ -591,50 +585,20 @@ class Session extends GeneratedMessage {
 
   List<DKeyValue> get contextList => $_get(27, 32, null);
 
-  String get nrLicense => $_get(28, 40, '');
-  void set nrLicense(String v) { $_setString(28, 40, v); }
-  bool hasNrLicense() => $_has(28, 40);
-  void clearNrLicense() => clearField(40);
-
-  String get nrApplication => $_get(29, 41, '');
-  void set nrApplication(String v) { $_setString(29, 41, v); }
-  bool hasNrApplication() => $_has(29, 41);
-  void clearNrApplication() => clearField(41);
-
-  String get sfEndpoint => $_get(30, 45, '');
-  void set sfEndpoint(String v) { $_setString(30, 45, v); }
-  bool hasSfEndpoint() => $_has(30, 45);
+  String get sfEndpoint => $_get(28, 45, '');
+  void set sfEndpoint(String v) { $_setString(28, 45, v); }
+  bool hasSfEndpoint() => $_has(28, 45);
   void clearSfEndpoint() => clearField(45);
 
-  String get sfRefreshToken => $_get(31, 46, '');
-  void set sfRefreshToken(String v) { $_setString(31, 46, v); }
-  bool hasSfRefreshToken() => $_has(31, 46);
+  String get sfRefreshToken => $_get(29, 46, '');
+  void set sfRefreshToken(String v) { $_setString(29, 46, v); }
+  bool hasSfRefreshToken() => $_has(29, 46);
   void clearSfRefreshToken() => clearField(46);
 
-  String get sfToken => $_get(32, 47, '');
-  void set sfToken(String v) { $_setString(32, 47, v); }
-  bool hasSfToken() => $_has(32, 47);
+  String get sfToken => $_get(30, 47, '');
+  void set sfToken(String v) { $_setString(30, 47, v); }
+  bool hasSfToken() => $_has(30, 47);
   void clearSfToken() => clearField(47);
-
-  String get awsAccessKey => $_get(33, 50, '');
-  void set awsAccessKey(String v) { $_setString(33, 50, v); }
-  bool hasAwsAccessKey() => $_has(33, 50);
-  void clearAwsAccessKey() => clearField(50);
-
-  String get awsSecretKey => $_get(34, 51, '');
-  void set awsSecretKey(String v) { $_setString(34, 51, v); }
-  bool hasAwsSecretKey() => $_has(34, 51);
-  void clearAwsSecretKey() => clearField(51);
-
-  String get awsSnsArnInfo => $_get(35, 52, '');
-  void set awsSnsArnInfo(String v) { $_setString(35, 52, v); }
-  bool hasAwsSnsArnInfo() => $_has(35, 52);
-  void clearAwsSnsArnInfo() => clearField(52);
-
-  String get awsSnsArnWarn => $_get(36, 53, '');
-  void set awsSnsArnWarn(String v) { $_setString(36, 53, v); }
-  bool hasAwsSnsArnWarn() => $_has(36, 53);
-  void clearAwsSnsArnWarn() => clearField(53);
 }
 
 class _ReadonlySession extends Session with ReadonlyMessageMixin {}
@@ -880,15 +844,9 @@ const Session$json = const {
     const {'1': 'is_user_expert', '3': 30, '4': 1, '5': 8, '7': 'false'},
     const {'1': 'roles', '3': 31, '4': 3, '5': 11, '6': '.Role'},
     const {'1': 'context', '3': 32, '4': 3, '5': 11, '6': '.DKeyValue'},
-    const {'1': 'nr_license', '3': 40, '4': 1, '5': 9},
-    const {'1': 'nr_application', '3': 41, '4': 1, '5': 9},
     const {'1': 'sf_endpoint', '3': 45, '4': 1, '5': 9},
     const {'1': 'sf_refresh_token', '3': 46, '4': 1, '5': 9},
     const {'1': 'sf_token', '3': 47, '4': 1, '5': 9},
-    const {'1': 'aws_access_key', '3': 50, '4': 1, '5': 9},
-    const {'1': 'aws_secret_key', '3': 51, '4': 1, '5': 9},
-    const {'1': 'aws_sns_arn_info', '3': 52, '4': 1, '5': 9},
-    const {'1': 'aws_sns_arn_warn', '3': 53, '4': 1, '5': 9},
   ],
 };
 

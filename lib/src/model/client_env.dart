@@ -196,22 +196,18 @@ class ClientEnv {
   static void logInfoMap(Map<String,dynamic> map) {
     if (_session != null) {
       if (_session.hasTenantName())
-        map["tenantName"] = _session.tenantName;
-      else if (_session.hasTenantId())
-        map["tenantId"] = _session.tenantId;
-      if (_session.hasUserEmail())
-        map["userEmail"] = _session.userEmail;
-      else if (_session.hasUserId())
-        map["userId"] = _session.userId;
+        map["tnt"] = _session.tenantName;
+      if (_session.hasTenantId())
+        map["oid"] = _session.tenantId;
+      if (_session.hasUserName())
+        map["usr"] = _session.userName;
+      else if (_session.hasUserEmail())
+        map["usr"] = _session.userEmail;
+      if (_session.hasUserId())
+        map["uid"] = _session.userId;
       if (_session.hasSid())
         map["sid"] = _session.sid;
     }
-    // map["clientId"] = Service.clientId;
-    // map["clientHref"] = window.location.href;
-
-    // analytics
-    // if (document.referrer != null && document.referrer.isNotEmpty)
-    //   map["dr"] = document.referrer;
   } // addToLogRecord
 
   /// Log Context Info
@@ -222,13 +218,13 @@ class ClientEnv {
     if (_session.hasSid())
       retValue += " sid=${_session.sid}";
     if (_session.hasTenantName())
-      retValue += " tenantName=${_session.tenantName}";
+      retValue += " tnt=${_session.tenantName}";
     else if (_session.hasTenantId())
-      retValue += " tenantId=${_session.tenantId}";
+      retValue += " oid=${_session.tenantId}";
     if (_session.hasUserEmail())
-      retValue += " userEmail=${_session.userEmail}";
+      retValue += " usr=${_session.userEmail}";
     else if (_session.hasUserId())
-      retValue += " userId=${_session.userId}";
+      retValue += " uid=${_session.userId}";
     return retValue;
   } // logInfo
 

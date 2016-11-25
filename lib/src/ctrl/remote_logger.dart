@@ -21,21 +21,22 @@ class RemoteLogger {
 
   /**
    * Log Record to Map
-   *
+   */
   static Map<String,dynamic> _formatMap(LogRecord rec) {
     Map<String, dynamic> data = new Map<String, dynamic>();
     data['level'] = rec.level.toString();
-    data['logger'] = rec.loggerName;
-    data['event'] = rec.message;
-    // error
+    data['method'] = rec.loggerName;
+    data['message'] = rec.message;
+
+    // error -> thrown (type|msg|stack|cause)
     if (rec.error != null) {
-      data["error"] = rec.error.toString();
+      data["thrown.type"] = rec.error.toString();
       if (rec.error is StackTrace) {
         try {
           Trace t = new Trace.from(rec.error); // js
-          data["errorStack"] = t.toString();
+          data["thrown.stack"] = t.toString();
         } catch (error) {
-          data["errorError"] = "${error}";
+          data["thrown.msg"] = "${error}";
         }
       }
       if (rec.error is Event) {
@@ -43,10 +44,10 @@ class RemoteLogger {
         if (evt.target is HttpRequest) {
           HttpRequest request = evt.target;
           try {
-            data["errorText"] = request.responseText;
+            data["thrown.msg"] = request.responseText;
           } catch (ex) {}
           try {
-            data["errorStatus"] = request.statusText;
+            data["thrown.cause"] = request.statusText;
           } catch (ex) {}
         }
       }
@@ -54,9 +55,9 @@ class RemoteLogger {
     if (rec.stackTrace != null) {
       if (rec.stackTrace is StackTrace) {
         Trace t = new Trace.from(rec.stackTrace); // js
-        data["stack"] = t.toString();
+        data["thrown.stack"] = t.toString();
       } else {
-        data["stackString"] = rec.stackTrace.toString();
+        data["thrown.stack"] = rec.stackTrace.toString();
       }
     }
     //
@@ -64,10 +65,10 @@ class RemoteLogger {
     data["time"] = rec.time.millisecondsSinceEpoch;
     //
     // add context
-    data['clientId'] = Service.clientId;
+    data['cid'] = Service.clientId;
     ClientEnv.logInfoMap(data);
     return data;
-  } // _formatMap */
+  } // _formatMap
 
   /**
    * Log Record to String
@@ -77,7 +78,7 @@ class RemoteLogger {
     String recFormatted = "${rec.time} ${rec.level} ${rec.loggerName} ${rec.message}";
     // error
     if (rec.error != null) {
-      recFormatted += " error=${rec.error}";
+      recFormatted += " thrown=${rec.error}";
       if (rec.error is StackTrace) {
         try {
           Trace t = new Trace.from(rec.error); // js
@@ -156,7 +157,8 @@ class RemoteLogger {
   RemoteLogger._internal() {
     Logger.root.onRecord.listen((LogRecord record) {
       if (record.level.value >= Level.INFO.value) { // info and higher
-        appsLogger(record);
+      //appsLoggerString(record);
+        appsLoggerJson(record);
       }
     });
     // unload
@@ -170,15 +172,14 @@ class RemoteLogger {
    */
   void appsMsg(String subject, String message) {
     var map = {
-      "subject" : subject,
+      "class" : subject,
       "message" : message
     };
     sendWebLogMap(map);
   } // appsMsg
 
-  /// Publish [record] to /webLog
-  void appsLogger(LogRecord record) {
-    // Map<String, dynamic> data = _formatMap(record);
+  /// Publish [record] to /webLog as String
+  void appsLoggerString(LogRecord record) {
     String dataString = _format(record);
     // send
     try {
@@ -187,9 +188,21 @@ class RemoteLogger {
       print(new RequestResponse(TRX, error, stackTrace, popup: false).toStringX()
       + " (1) errors=${_sendWebLogErrors}");
     }
+  } // appsLoggerString
+
+  /// Publish [record] to /webLog as Json
+  void appsLoggerJson(LogRecord record) {
+    Map<String, dynamic> data = _formatMap(record);
+    // send
+    try {
+      sendWebLogMap(data);
+    } catch (error, stackTrace) {
+      print(new RequestResponse(TRX, error, stackTrace, popup: false).toStringX()
+          + " (2) errors=${_sendWebLogErrors}");
+    }
   } // appsLogger
 
-  /// Publish [data] to /webLog
+  /// Publish [data] to /webLog as Json
   void sendWebLogMap(Map<String, dynamic> data) {
     String dataString = LUtil.toJsonString(data);
     // send
@@ -197,7 +210,7 @@ class RemoteLogger {
       sendWebLog(dataString);
     } catch (error, stackTrace) {
       print(new RequestResponse(TRX, error, stackTrace, popup: false).toStringX()
-          + " (1) errors=${_sendWebLogErrors}");
+          + " (3) errors=${_sendWebLogErrors}");
     }
   }
 
@@ -214,9 +227,9 @@ class RemoteLogger {
     .catchError((Event error, StackTrace stackTrace) {
       _sendWebLogErrors++;
       print(new RequestResponse(TRX, error, stackTrace, popup: false).toStringX()
-      + " (2) errors=${_sendWebLogErrors}");
+      + " (4) errors=${_sendWebLogErrors}");
     });
-  } // toWebLog
+  } // sendWebLog
   int _sendWebLogErrors = 0;
 
 } // RemoteLogger
